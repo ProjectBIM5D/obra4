@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Puente Charanal 5D · Visor BIM</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233b82f6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 18h20M4 18v-6M20 18v-6M2 12c4-8 16-8 20 0M8 18v-7M12 18V8M16 18v-7'/%3E%3C/svg%3E" />
+  <script type="module" crossorigin src="./assets/index-DRGU1WJ4.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-DQvsWwM5.css">
+</head>
+<body>
+  <div id="app">
+    <aside id="side">
+      <header class="brand">
+        <div class="logo"><svg viewBox="0 0 24 24"><path d="M2 18h20M4 18v-6M20 18v-6M2 12c4-8 16-8 20 0M8 18v-7M12 18V8M16 18v-7"/></svg></div>
+        <div class="brand-t"><h1 id="pName">Puente Charanal 5D</h1><p><i class="dot ok"></i><span id="pSub">Control de Avance Técnico &amp; Financiero</span></p></div>
+        <span class="badge mono">BIM 4D/5D</span>
+      </header>
+
+      <nav class="tabs" id="tabs">
+        <button data-tab="resumen" class="on">Resumen</button>
+        <button data-tab="tareas">Tareas</button>
+        <button data-tab="modelo">Modelo</button>
+      </nav>
+
+      <div class="scroll">
+        <!-- ═══ RESUMEN ═══ -->
+        <section data-pane="resumen" class="pane on">
+          <div class="kpis">
+            <div class="card kpi"><div class="k-h"><span>Presupuesto Total</span><svg class="ic g" viewBox="0 0 24 24"><path d="M12 2v20M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div class="k-v mono" id="kTotal">—</div><div class="k-s" id="kMode">—</div></div>
+            <div class="card kpi"><div class="k-h"><span>Valor Valorizado</span><svg class="ic b" viewBox="0 0 24 24"><path d="m22 7-8.5 8.5-5-5L2 17M16 7h6v6"/></svg></div><div class="k-v mono blue" id="kEv">—</div><div class="k-s" id="kEvS">—</div></div>
+            <div class="card kpi"><div class="k-h"><span>Avance Físico</span><svg class="ic y" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div><div class="k-v mono amber" id="kPhys">—</div><div class="bar"><i id="kPhysBar"></i><b id="kPlanTick"></b></div><div class="k-s" id="kPhysS">—</div></div>
+            <div class="card kpi"><div class="k-h"><span>Estado Cronograma</span><svg class="ic v" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><div class="k-v" id="kHealth"><i class="dot"></i>—</div><div class="k-s" id="kTasks">—</div></div>
+          </div>
+
+          <div class="card sim">
+            <div class="sim-h"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span>Simulación de Cronograma 4D</span><span class="date mono" id="simDate">—</span></div>
+            <div class="sim-c">
+              <button id="play" class="play" title="Reproducir / pausar (espacio)"><svg viewBox="0 0 24 24" id="playIc"><path d="M6 4l14 8-14 8z"/></svg></button>
+              <div class="slider"><input type="range" id="slider" min="0" max="100" step="1" value="0" /><div class="cutmark" id="cutMark" title="Fecha de corte"></div></div>
+            </div>
+            <div class="sim-r mono"><span id="simMin">—</span><span id="simCut" class="cutlbl">—</span><span id="simMax">—</span></div>
+            <div class="sim-o">
+              <div class="seg" id="modeSeg"><button data-v="real" class="on">Real</button><button data-v="plan">Programado</button></div>
+              <div class="seg" id="speedSeg"><button data-v="4">1×</button><button data-v="12" class="on">3×</button><button data-v="30">8×</button></div>
+              <span id="simFlag" class="flag" hidden>Proyección</span>
+            </div>
+          </div>
+
+          <div class="card chart">
+            <div class="ch-h"><svg class="ic g" viewBox="0 0 24 24"><path d="M3 3v18h18M7 14l4-4 3 3 5-6"/></svg><span>Curva S de Costos (Acumulado S/.)</span></div>
+            <div class="ch-l"><i class="l-plan"></i>Programado (5D) <i class="l-real"></i>Ejecutado Real</div>
+            <div class="ch-w"><canvas id="sChart"></canvas></div>
+          </div>
+
+          <div class="card insp" id="insp">
+            <div class="i-h"><svg class="ic v" viewBox="0 0 24 24"><path d="M21 8 12 3 3 8v8l9 5 9-5zM3 8l9 5 9-5M12 13v8"/></svg><span>Inspección de Elemento BIM 3D</span><em id="iSel" class="mono">Seleccione un objeto</em></div>
+            <div id="iBody" class="i-b"><p class="muted">Haga clic sobre cualquier elemento del modelo para ver su información, tarea asociada, avance y costo.</p></div>
+          </div>
+        </section>
+
+        <!-- ═══ TAREAS ═══ -->
+        <section data-pane="tareas" class="pane">
+          <div class="filters">
+            <input id="q" type="search" placeholder="Buscar tarea, ID o ubicación…" />
+            <div class="chips" id="chips">
+              <button data-f="all" class="on">Todas</button><button data-f="prog">En proceso</button><button data-f="late">Atrasadas</button><button data-f="done">Terminadas</button><button data-f="pend">Pendientes</button>
+            </div>
+          </div>
+          <div id="taskList" class="tlist"></div>
+        </section>
+
+        <!-- ═══ MODELO ═══ -->
+        <section data-pane="modelo" class="pane">
+          <div class="card opt">
+            <h3>Elementos pendientes</h3>
+            <div class="seg wide" data-opt="pending"><button data-v="ghost" class="on">Fantasma</button><button data-v="hide">Ocultar</button><button data-v="solid">Sólido</button></div>
+            <h3>Color</h3>
+            <div class="seg wide" data-opt="colorMode"><button data-v="estado" class="on">Estado 5D</button><button data-v="original">Material original</button></div>
+            <label class="sw"><input type="checkbox" id="oSteel" /><i></i><span>Mostrar armadura y acopladores <small class="muted">(26 073 elementos)</small></span></label>
+            <label class="sw"><input type="checkbox" id="oGrid" checked /><i></i><span>Cuadrícula de terreno</span></label>
+            <label class="sw"><input type="checkbox" id="oWater" checked /><i></i><span>Cauce del río</span></label>
+            <h3>Opacidad del concreto <b class="mono" id="oOpV">100%</b></h3>
+            <input type="range" id="oOp" min="20" max="100" value="100" />
+            <h3>Nivel del terreno <b class="mono" id="oGrV">—</b></h3>
+            <input type="range" id="oGr" min="-20" max="40" step="0.5" value="15" />
+          </div>
+          <div class="card opt">
+            <h3>Datos</h3>
+            <div class="btns">
+              <button class="btn" id="bLoad"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>Cargar Excel</button>
+              <a class="btn" id="bTpl" href="data/Avance_Obra_Puente_Charanal.xlsx" download><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Descargar Excel</a>
+              <button class="btn" id="bShot"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>Captura PNG</button>
+            </div>
+            <input type="file" id="fileXlsx" accept=".xlsx,.xlsm" hidden />
+            <p class="muted small" id="dataInfo"></p>
+          </div>
+          <div class="card opt">
+            <h3>Aislamiento</h3>
+            <p class="muted small" id="isoInfo">Ninguna tarea aislada. Use el botón <b>Aislar</b> en la lista de tareas.</p>
+            <button class="btn" id="bIsoClear" hidden>Mostrar todo</button>
+          </div>
+        </section>
+      </div>
+    </aside>
+
+    <main id="view">
+      <div id="gl"></div>
+      <div class="ov info"><svg class="ic b" viewBox="0 0 24 24"><path d="m12 2 10 5-10 5L2 7zM2 12l10 5 10-5M2 17l10 5 10-5"/></svg><div><b>Visor de Geometría Ligera (Fragments/Three.js)</b><small id="fps">Renderizado por GPU · Sin servidores</small></div></div>
+      <div class="ov tools">
+        <button id="tHome" title="Vista isométrica"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/></svg></button>
+        <button id="tView" title="Vistas: planta / elevación / longitudinal"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg></button>
+        <button id="tGhost" title="Alternar pendientes (fantasma / ocultar)"><svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
+        <button id="tGantt" title="Mostrar / ocultar Gantt"><svg viewBox="0 0 24 24"><path d="M3 6h9M7 12h11M5 18h8"/></svg></button>
+        <button id="tFull" title="Pantalla completa"><svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/></svg></button>
+      </div>
+      <div class="ov viewmenu" id="viewMenu" hidden><button data-v="iso">Isométrica</button><button data-v="elev">Elevación</button><button data-v="top">Planta</button><button data-v="long">Longitudinal</button></div>
+
+      <div class="ov gantt" id="gantt" hidden>
+        <div class="g-h"><b>Cronograma Gantt · programado vs real</b><span class="muted small" id="gSub"></span><button id="gClose" title="Cerrar">×</button></div>
+        <div class="g-body" id="gBody"></div>
+      </div>
+
+      <div class="ov legend"><span>Leyenda Estado:</span>
+        <i class="lg" style="--c:#64748b"></i>Pendiente <i class="lg" style="--c:#3b82f6"></i>En Proceso <i class="lg" style="--c:#10b981"></i>Terminado <i class="lg" style="--c:#f43f5e"></i>Atrasado
+      </div>
+      <div class="ov hint" id="hint">Arrastre: orbitar · Rueda: zoom · Clic derecho: desplazar · Clic: inspeccionar</div>
+      <div id="loader"><div class="ld-c"><div class="spin"></div><b id="ldT">Cargando modelo BIM…</b><div class="ld-bar"><i id="ldB"></i></div><small id="ldS">Preparando…</small></div></div>
+      <div id="toast"></div>
+    </main>
+  </div>
+</body>
+</html>
