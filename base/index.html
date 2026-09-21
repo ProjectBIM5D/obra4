@@ -7,8 +7,8 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <title>Puente Charanal 5D · Visor BIM</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233b82f6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 18h20M4 18v-6M20 18v-6M2 12c4-8 16-8 20 0M8 18v-7M12 18V8M16 18v-7'/%3E%3C/svg%3E" />
-  <script type="module" crossorigin src="./assets/index-BgJgY-S8.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-BTWMB01t.css">
+  <script type="module" crossorigin src="./assets/index-DFf3JUGY.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-JGKxHS0P.css">
 </head>
 <body>
   <div id="app">
@@ -81,7 +81,6 @@
             <h3>Color</h3>
             <div class="seg wide" data-opt="colorMode"><button data-v="estado" class="on">Estado 5D</button><button data-v="original">Material original</button></div>
             <label class="sw"><input type="checkbox" id="oSteel" /><i></i><span>Mostrar armadura y acopladores <small class="muted">(26 073 elementos)</small></span></label>
-            <label class="sw"><input type="checkbox" id="oLite" /><i></i><span>Modelo ligero <small class="muted">(para tabletas o equipos básicos: más estable, sin armadura)</small></span></label>
             <label class="sw"><input type="checkbox" id="oGrid" checked /><i></i><span>Cuadrícula de terreno</span></label>
             <label class="sw"><input type="checkbox" id="oWater" checked /><i></i><span>Cauce del río</span></label>
             <h3>Opacidad del concreto <b class="mono" id="oOpV">100%</b></h3>
@@ -98,6 +97,16 @@
             </div>
             <input type="file" id="fileXlsx" accept=".xlsx,.xlsm" hidden />
             <p class="muted small" id="dataInfo"></p>
+          </div>
+          <div class="card opt">
+            <h3>Diagnóstico <b id="liteTag" class="mono"></b></h3>
+            <p class="muted small">Si el modelo no se ve en su equipo, active el modo ligero y envíe este informe.</p>
+            <div class="btns" style="margin-top:8px">
+              <button class="btn" id="bLite">Modo ligero</button>
+              <button class="btn" id="bDiag">Actualizar</button>
+              <button class="btn" id="bCopy">Copiar</button>
+            </div>
+            <pre id="diag" class="diag mono"></pre>
           </div>
           <div class="card opt">
             <h3>Aislamiento</h3>
