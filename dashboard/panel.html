@@ -1,0 +1,853 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Obra 04 · Panel de Control</title>
+<style>
+:root{
+  --bg:#f4f6fb; --panel:#ffffff; --card:#ffffff; --line:#e4e9f4; --line2:#d5deef;
+  --tx:#141b29; --tx2:#3f4c65; --mut:#5c6b85;
+  --blue:#2f6fed; --blue-tx:#1d4ed8; --green:#0e8f4f; --amber:#b45309; --red:#dc2626;
+  --input:#f5f7fc; --mono:'Consolas','JetBrains Mono',monospace;
+  --side-w:210px;
+  --shadow:0 1px 2px rgba(30,41,70,.05), 0 1px 8px rgba(30,41,70,.04);
+}
+html{-webkit-text-size-adjust:100%;}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.4 'Segoe UI',system-ui,sans-serif;overflow-x:hidden;}
+.mono{font-family:var(--mono);}
+a{color:inherit;}
+
+/* ── layout ── */
+#app{display:flex;min-height:100vh;}
+#side{width:var(--side-w);flex:0 0 var(--side-w);background:var(--panel);border-right:1px solid var(--line);
+  display:flex;flex-direction:column;position:sticky;top:0;height:100vh;}
+.brand{padding:20px 18px 14px;border-bottom:1px solid var(--line);}
+.brand b{font-size:15px;} .brand p{margin:3px 0 0;font-size:11.5px;color:var(--mut);}
+.nav{padding:14px 10px;display:flex;flex-direction:column;gap:4px;}
+.nav button{display:flex;align-items:center;gap:10px;text-align:left;background:transparent;border:0;color:var(--tx2);
+  padding:11px 12px;border-radius:8px;font-size:13.5px;cursor:pointer;font-family:inherit;}
+.nav button:hover{background:#eef2fa;}
+.nav button.on{background:var(--blue);color:#fff;font-weight:600;}
+.nav button.on small{color:#dbe6ff;}
+.nav button.disabled{opacity:.4;cursor:default;}
+.nav button.disabled:hover{background:transparent;}
+.nav small{display:block;font-size:10px;color:var(--mut);font-weight:400;}
+.side-foot{margin-top:auto;padding:14px 18px;font-size:11px;color:var(--mut);border-top:1px solid var(--line);}
+
+#main{flex:1;min-width:0;padding:22px 26px 40px;}
+h1{font-size:19px;margin:0 0 3px;} .sub{color:var(--mut);font-size:13px;margin:0 0 16px;}
+.topbar{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:18px;}
+
+.bridges{display:flex;flex-wrap:wrap;gap:8px;}
+.bpill{background:var(--card);border:1px solid var(--line2);color:var(--tx2);padding:7px 14px;border-radius:999px;
+  font-size:12.5px;cursor:pointer;display:flex;align-items:center;gap:6px;}
+.bpill.on{background:var(--blue);border-color:var(--blue);color:#fff;}
+.bpill.empty{opacity:.45;}
+.bpill i{width:7px;height:7px;border-radius:50%;background:var(--mut);}
+.bpill.on i{background:#cfe0ff;}
+
+.api{font-size:11px;color:var(--mut);display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;}
+.src-btn,.seg-btn{background:var(--input);border:1px solid var(--line2);color:var(--tx2);padding:6px 12px;border-radius:6px;font-size:11px;cursor:pointer;}
+.src-btn.on,.seg-btn.on{background:var(--blue);color:#fff;border-color:var(--blue);}
+
+.err{color:var(--red);background:#fdecec;border:1px solid #f3b4b8;padding:12px 16px;border-radius:10px;margin-bottom:16px;}
+.mes-chip{background:var(--input);border:1px solid var(--line2);border-radius:8px;padding:7px 12px;font-size:12px;}
+.mes-chip b{display:block;font-size:14.5px;margin-top:1px;}
+.mes-chip .lbl{color:var(--mut);font-size:11px;}
+.pane{display:none;} .pane.on{display:block;}
+
+/* ── kpis ── */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px;}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0;box-shadow:var(--shadow);}
+.card .label{font-size:11.5px;color:var(--mut);} .card .value{font-size:20px;font-weight:700;margin-top:7px;word-break:break-word;letter-spacing:-.2px;}
+.card .sub2{font-size:11px;color:var(--mut);margin-top:5px;}
+.bar{height:6px;background:#e9edf6;border-radius:3px;margin-top:8px;overflow:hidden;}
+.bar i{display:block;height:100%;background:var(--blue);}
+
+/* ── chart cards ── */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+.chart-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);}
+.chart-card h3{margin:0 0 3px;font-size:13.5px;} .chart-card p.hint{margin:0 0 12px;font-size:11.5px;color:var(--mut);}
+svg{display:block;width:100%;height:auto;}
+
+.pbar-row{display:flex;align-items:center;gap:10px;margin:10px 0;font-size:12.5px;}
+.pbar-row .lbl{width:74px;flex:0 0 74px;color:var(--tx2);}
+.pbar-track{flex:1;height:16px;background:#e9edf6;border-radius:4px;position:relative;overflow:hidden;}
+.pbar-fill{position:absolute;top:0;left:0;height:100%;border-radius:4px;}
+.pbar-fill.prog{background:#3b82f680;}
+.pbar-fill.ejec{background:var(--blue);}
+.pbar-val{width:44px;flex:0 0 44px;text-align:right;font-family:var(--mono);color:var(--tx2);font-size:11.5px;}
+.legend2{display:flex;gap:14px;font-size:11px;color:var(--mut);margin-top:8px;}
+.legend2 i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px;}
+
+.empty-note{font-size:12px;color:var(--mut);padding:24px;text-align:center;}
+
+/* ── tabla ── */
+.table-wrap{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow-x:auto;-webkit-overflow-scrolling:touch;box-shadow:var(--shadow);}
+table{width:100%;min-width:680px;border-collapse:collapse;font-size:13px;}
+th{text-align:left;font-size:11px;color:var(--mut);text-transform:uppercase;padding:10px 12px;border-bottom:1px solid var(--line);background:var(--panel);white-space:nowrap;}
+td{padding:10px 12px;border-bottom:1px solid var(--line);color:var(--tx2);white-space:nowrap;}
+tr:last-child td{border-bottom:0;}
+.mini-bar{width:80px;height:6px;background:#e9edf6;border-radius:3px;overflow:hidden;display:inline-block;vertical-align:middle;margin-right:8px;}
+.mini-bar i{display:block;height:100%;}
+.badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:600;}
+
+/* ── parte diario ── */
+.pform{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;max-width:640px;box-shadow:var(--shadow);}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+label{font-size:12.5px;color:var(--mut);font-weight:600;}
+input,select,textarea{background:var(--input);border:1px solid var(--line2);border-radius:8px;padding:10px 12px;color:var(--tx);font:inherit;font-size:14px;width:100%;}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--blue);outline-offset:-1px;}
+textarea{resize:vertical;min-height:70px;font-family:inherit;}
+.hint{font-size:11.5px;color:var(--mut);}
+.field-err{font-size:12px;color:var(--red);display:none;}
+.field.invalid input,.field.invalid select{border-color:var(--red);}
+.field.invalid .field-err{display:block;}
+.btn{background:var(--blue);color:#fff;border:0;padding:12px 20px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;}
+.btn:disabled{opacity:.55;cursor:default;}
+.msg{padding:12px 16px;border-radius:10px;margin-bottom:16px;font-size:13.5px;max-width:640px;}
+.msg.ok{background:#e9f9ef;border:1px solid #a7e3bd;color:#12793f;}
+.msg.err{background:#fdecec;border:1px solid #f3b4b8;color:#b8212f;}
+
+.soon{background:var(--card);border:1px dashed var(--line2);border-radius:12px;padding:40px 24px;text-align:center;color:var(--mut);}
+.soon b{color:var(--tx2);display:block;margin-bottom:6px;font-size:14px;}
+
+#menuBtn{display:none;background:var(--card);border:1px solid var(--line2);color:var(--tx);width:36px;height:36px;border-radius:8px;align-items:center;justify-content:center;cursor:pointer;font-size:16px;}
+#overlay{display:none;position:fixed;inset:0;background:#0009;z-index:15;}
+#overlay.on{display:block;}
+
+@media (max-width: 980px){
+  .kpis{grid-template-columns:repeat(2,1fr);}
+  .grid2{grid-template-columns:1fr;}
+}
+@media (max-width: 760px){
+  #side{position:fixed;left:0;top:0;bottom:0;z-index:20;transform:translateX(-100%);transition:transform .2s;box-shadow:0 0 30px #000a;}
+  #side.open{transform:translateX(0);}
+  #main{padding:16px 14px;}
+  #menuBtn{display:inline-flex;}
+  .kpis{grid-template-columns:1fr 1fr;gap:10px;}
+  .card{padding:12px 14px;} .card .value{font-size:16.5px;}
+  .row2{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <aside id="side">
+    <div class="brand">
+      <b id="obraNombre">Cargando obra…</b>
+      <p id="obraSub"></p>
+    </div>
+    <nav class="nav" id="nav">
+      <button data-pane="resumen" class="on">📊 Resumen<small>KPIs y avance general</small></button>
+      <button data-pane="parte">📝 Parte diario<small>Registrar avance</small></button>
+      <button data-pane="lookahead" class="disabled" title="Aún sin datos reales cargados">📅 Look Ahead<small>Próximamente</small></button>
+      <button data-pane="produccion" class="disabled" title="Aún sin datos reales cargados">⚙️ Producción<small>Próximamente</small></button>
+      <a href="../index.html" id="visorLink" style="display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:8px;font-size:13.5px;color:var(--tx2);text-decoration:none;">🧊 Visor 3D<small style="display:block;font-size:10px;color:var(--mut);">Modelo BIM del puente</small></a>
+    </nav>
+    <div class="side-foot">v1 · datos reales de obra_control</div>
+  </aside>
+  <div id="overlay"></div>
+
+  <main id="main">
+    <div class="topbar">
+      <div>
+        <button id="menuBtn">☰</button>
+        <h1 id="pageTitle">Resumen</h1>
+        <p class="sub" id="pageSub">Cargando…</p>
+      </div>
+      <div>
+        <p class="api">Fuente:
+          <button class="src-btn" data-src="local">PC local</button>
+          <button class="src-btn" data-src="cloud">Supabase (nube)</button>
+          — <span id="apiUrl" class="mono"></span>
+        </p>
+      </div>
+    </div>
+
+    <div id="errBox"></div>
+
+    <!-- ═══════════ RESUMEN ═══════════ -->
+    <section class="pane on" data-pane="resumen">
+      <div class="bridges" id="bridgeSel"></div>
+      <br>
+
+      <p class="hint" style="margin:-6px 0 10px" id="kpiMes"></p>
+      <div class="kpis">
+        <div class="card"><div class="label">Presupuesto total</div><div class="value mono" id="kPresu">—</div><div class="sub2" id="kPresuS"></div></div>
+        <div class="card"><div class="label">Programado a la fecha</div><div class="value mono" id="kProg" style="color:#5f86d6">—</div><div class="sub2" id="kProgS"></div></div>
+        <div class="card"><div class="label">Valorizado (ejecutado real)</div><div class="value mono" id="kValor" style="color:var(--blue-tx)">—</div><div class="sub2" id="kValorS"></div></div>
+        <div class="card"><div class="label">Estado del avance</div><div class="value" id="kPct">—</div><div class="bar"><i id="kBar"></i></div><div class="sub2" id="kEstadoS"></div></div>
+      </div>
+
+      <div class="chart-card" style="margin-bottom:16px">
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;align-items:center;">
+          <div>
+            <h3 style="margin:0" id="curvaTitulo">Curva S general (S/. acumulados)</h3>
+            <p class="hint" id="curvaHint">Datos reales de control de obra: programado vs. ejecutado (acumulado mensual)</p>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;">
+            <label for="curvaMesSel" style="font-size:11.5px;color:var(--mut);">Ver mes:</label>
+            <select id="curvaMesSel" style="background:var(--input);border:1px solid var(--line2);color:var(--tx);border-radius:6px;padding:5px 8px;font-size:12px;"></select>
+          </div>
+        </div>
+        <div id="curvaMesKpis" style="display:flex;flex-wrap:wrap;gap:10px;margin:10px 0 4px;"></div>
+        <div id="curvaWrap" style="position:relative;">
+          <svg id="curvaSvg" viewBox="0 0 900 340"></svg>
+          <div id="curvaPopup" style="display:none;position:absolute;background:#1c2536;color:#fff;border-radius:8px;padding:8px 10px;font-size:10.5px;box-shadow:0 8px 24px rgba(20,30,60,.25);pointer-events:none;width:172px;line-height:1.5;z-index:5;white-space:normal;"></div>
+        </div>
+        <div class="legend2"><span><i style="background:#93b4f6"></i>Programado</span><span><i style="background:var(--blue)"></i>Ejecutado real</span><span id="legendPlazo" style="display:none"><i style="background:repeating-linear-gradient(45deg,#94a3b8,#94a3b8 2px,#cbd5e1 2px,#cbd5e1 4px)"></i>Suspensión / ampliación de plazo</span></div>
+      </div>
+
+      <div class="grid2">
+        <div class="chart-card">
+          <h3>Avance por componente</h3>
+          <p class="hint">% programado vs % ejecutado real — <b id="avancePuenteMes"></b> (ligado al mes elegido en la Curva S)</p>
+          <svg id="avancePuenteSvg" viewBox="0 0 420 260"></svg>
+          <div class="legend2"><span><i style="background:#93b4f6"></i>Programado</span><span><i style="background:var(--blue)"></i>Ejecutado</span></div>
+        </div>
+        <div class="chart-card">
+          <h3>Control de acero (Ton) y concreto (m³)</h3>
+          <p class="hint">Metrado total vs. ejecutado, por componente</p>
+          <div id="materiales"></div>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Código</th><th>Partida</th><th>Unidad</th><th>Metrado</th><th>Avance</th><th>Presupuesto</th><th>Valor ganado</th></tr></thead>
+          <tbody id="tbody"><tr><td colspan="7" class="mono" style="color:var(--mut)">Consultando la API…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ═══════════ PARTE DIARIO ═══════════ -->
+    <section class="pane" data-pane="parte">
+      <div id="parteMsgBox"></div>
+      <form class="pform" id="parteForm">
+        <div class="row2">
+          <div class="field" id="f-partida">
+            <label for="p_partida">Partida</label>
+            <select id="p_partida" required><option value="">Cargando partidas…</option></select>
+            <span class="field-err">Elige una partida</span>
+          </div>
+          <div class="field" id="f-fecha">
+            <label for="p_fecha">Fecha</label>
+            <input id="p_fecha" type="date">
+            <span class="field-err">Ingresa la fecha</span>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label for="p_turno">Turno</label>
+            <select id="p_turno"><option value="dia">Día</option><option value="noche">Noche</option></select>
+          </div>
+          <div class="field">
+            <label for="p_clima">Clima</label>
+            <select id="p_clima"><option value="soleado">Soleado</option><option value="nublado">Nublado</option><option value="lluvia">Lluvia</option></select>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field" id="f-cantidad">
+            <label for="p_cantidad">Cantidad ejecutada <span class="hint mono" id="unidadLbl"></span></label>
+            <input id="p_cantidad" type="number" step="0.001" min="0" placeholder="0.00">
+            <span class="field-err">Ingresa una cantidad mayor a 0</span>
+          </div>
+          <div class="field">
+            <label for="p_ubicacion">Ubicación / frente</label>
+            <input id="p_ubicacion" type="text" placeholder="Margen Derecha">
+          </div>
+        </div>
+        <div class="field">
+          <label for="p_obs">Observaciones</label>
+          <textarea id="p_obs" placeholder="Sin incidencias."></textarea>
+        </div>
+        <button class="btn" id="btnGuardar" type="submit">Guardar parte diario</button>
+      </form>
+    </section>
+
+    <!-- ═══════════ LOOK AHEAD / PRODUCCIÓN ═══════════ -->
+    <section class="pane" data-pane="lookahead">
+      <div class="soon"><b>Look Ahead (Last Planner)</b>Todavía no hay compromisos semanales ni restricciones cargadas en la base de datos.<br>Se activa en cuanto empieces a registrarlos.</div>
+    </section>
+    <section class="pane" data-pane="produccion">
+      <div class="soon"><b>Producción</b>Falta cargar el APU (análisis de precios unitarios) y los partes de recursos para calcular rendimientos reales.</div>
+    </section>
+  </main>
+</div>
+
+<script>
+const FUENTES = {
+  local: { url: 'http://localhost:3000', headers: {} },
+  cloud: {
+    url: 'https://vtynfshkgkrempibnqjd.supabase.co/rest/v1',
+    headers: { apikey: 'sb_publishable_-g9cSWKmQc-EatM0IuSANQ_VHfZJmng', Authorization: 'Bearer sb_publishable_-g9cSWKmQc-EatM0IuSANQ_VHfZJmng' },
+  },
+};
+const esLocal = ['localhost', '127.0.0.1'].includes(location.hostname);
+let fuente = localStorage.getItem('obra-fuente') || (esLocal ? 'local' : 'cloud');
+let { url: API, headers } = FUENTES[fuente];
+
+const $ = (s) => document.querySelector(s);
+const fmt = (n, d=0) => 'S/. ' + Number(n||0).toLocaleString('es-PE', {minimumFractionDigits:d, maximumFractionDigits:d});
+const get = (path) => fetch(`${API}${path}`, { headers }).then(r => { if (!r.ok) throw new Error(`HTTP ${r.status} en ${path}`); return r.json(); });
+
+// ── componentes de la obra: NO se hardcodea "4 puentes" — se leen de la base.
+// Una obra futura puede tener otro número de componentes, y de otro tipo
+// (tramo_carretera, edificación, etc.) — ver tabla "obras" y columna proyectos.tipo.
+let COMPONENTES = [];       // [{id: codigo, nombre, tipo}, ...] de la obra activa
+let OBRA = null;
+const GENERAL = '__general__';
+let seleccionada = GENERAL; // selección ÚNICA: GENERAL (suma de todo) o el código de un componente
+
+// ── navegación por botones (una sola página) ──
+document.querySelectorAll('#nav button').forEach(b => {
+  if (b.classList.contains('disabled')) return;
+  b.addEventListener('click', () => {
+    document.querySelectorAll('#nav button').forEach(x => x.classList.remove('on'));
+    document.querySelectorAll('.pane').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    document.querySelector(`.pane[data-pane="${b.dataset.pane}"]`).classList.add('on');
+    const nComp = COMPONENTES.length;
+    const titles = { resumen: [`Resumen — ${OBRA ? OBRA.nombre : 'Obra'}`, `${nComp} componente${nComp===1?'':'s'} de la obra, en un solo lugar`],
+      parte: ['Nuevo parte diario', 'Registra el avance ejecutado en obra'] };
+    if (titles[b.dataset.pane]) { $('#pageTitle').textContent = titles[b.dataset.pane][0]; $('#pageSub').textContent = titles[b.dataset.pane][1]; }
+    $('#side').classList.remove('open'); $('#overlay').classList.remove('on');
+  });
+});
+$('#menuBtn').addEventListener('click', () => { $('#side').classList.toggle('open'); $('#overlay').classList.toggle('on'); });
+$('#overlay').addEventListener('click', () => { $('#side').classList.remove('open'); $('#overlay').classList.remove('on'); });
+
+// ── fuente local/nube ──
+document.querySelectorAll('.src-btn').forEach(b => {
+  b.classList.toggle('on', b.dataset.src === fuente);
+  b.addEventListener('click', () => { localStorage.setItem('obra-fuente', b.dataset.src); location.reload(); });
+});
+$('#apiUrl').textContent = API;
+
+// ============================================================================
+// RESUMEN
+// ============================================================================
+let DATA = null; // { proyectos, partidas, avance, programado }
+
+function tieneDatosReales(codigoComponente) {
+  const proy = DATA.proyectos.find(x => x.codigo === codigoComponente);
+  if (!proy) return false;
+  return DATA.partidas.some(p => p.proyecto_id === proy.id);
+}
+
+function renderBridgeSel() {
+  const items = [{ id: GENERAL, nombre: 'General (toda la obra)', general: true }, ...COMPONENTES];
+  $('#bridgeSel').innerHTML = items.map(p => {
+    const tieneDatos = p.general || tieneDatosReales(p.id);
+    const on = seleccionada === p.id;
+    return `<button class="bpill ${on?'on':''} ${tieneDatos?'':'empty'}" data-id="${p.id}" title="${tieneDatos?'':'Sin datos reales todavía'}">
+      <i></i>${p.nombre}${tieneDatos?'':' · sin datos'}</button>`;
+  }).join('');
+  document.querySelectorAll('.bpill').forEach(b => b.addEventListener('click', () => {
+    if (seleccionada === b.dataset.id) return; // ya está elegido, no hace nada
+    seleccionada = b.dataset.id;               // selección única: reemplaza, no se acumula
+    renderAll();
+  }));
+}
+
+const MESES_ES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Set','Oct','Nov','Dic'];
+
+// Curva S real (Programado/Ejecutado, parcial y acumulado, por mes) — viene de
+// curva_s_mensual, migrada directo del control de obra real (CURVA S TOTAL.xlsx /
+// AVANCE_FINAL), NO de un cálculo estimado. Sigue la ÚNICA selección de arriba:
+// "General" suma todos los componentes; un puente específico muestra solo el suyo.
+let curvaPeriodos = []; // se llena en cada render, lo usa el <select> de mes y el popup
+let curvaPopupFijo = null; // periodo que el usuario eligió explícitamente (select o clic)
+let curvaPorPeriodoActual = {}; // datos del último render, para volver a este popup al quitar el mouse
+
+function renderCurvaS() {
+  const hoy = new Date();
+  const todas = DATA.curvaMensual || [];
+
+  let filas;
+  if (seleccionada === GENERAL) {
+    $('#curvaTitulo').textContent = `Curva S general — ${OBRA ? OBRA.nombre : 'Obra'} (S/. acumulados)`;
+    $('#curvaHint').textContent = `Suma de los ${COMPONENTES.length} componentes de la obra`;
+    filas = todas;
+  } else {
+    const comp = COMPONENTES.find(c => c.id === seleccionada);
+    $('#curvaTitulo').textContent = comp ? `Curva S — ${comp.nombre} (S/. acumulados)` : 'Curva S por componente';
+    $('#curvaHint').textContent = comp ? `Mostrando solo ${comp.nombre}` : '';
+    filas = todas.filter(r => r.proyecto_id_codigo === seleccionada);
+  }
+
+  if (!filas.length) {
+    $('#curvaSvg').innerHTML = '<text x="450" y="150" fill="#8592a8" font-size="13" text-anchor="middle">Sin datos reales de Curva S todavía para esta selección</text>';
+    $('#curvaMesSel').innerHTML = ''; $('#curvaPopup').style.display = 'none';
+    return;
+  }
+
+  // suma programado/ejecutado (parcial y acumulado) por periodo
+  const porPeriodo = {};
+  for (const r of filas) {
+    const acc = porPeriodo[r.periodo] || (porPeriodo[r.periodo] = { progP: 0, progA: 0, ejecP: 0, ejecA: 0 });
+    acc.progP += Number(r.programado_parcial) || 0;
+    acc.progA += Number(r.programado_acumulado) || 0;
+    acc.ejecP += Number(r.ejecutado_parcial) || 0;
+    acc.ejecA += Number(r.ejecutado_acumulado) || 0;
+  }
+  const periodos = Object.keys(porPeriodo).sort();
+  curvaPeriodos = periodos;
+  curvaPorPeriodoActual = porPeriodo;
+  const progSeries = periodos.map(p => ({ x: new Date(p).getTime(), y: porPeriodo[p].progA }));
+  const ejecSeries = periodos.map(p => ({ x: new Date(p).getTime(), y: porPeriodo[p].ejecA }));
+  // base del 100%: el valor programado acumulado al final del cronograma (igual que usa
+  // "Avance por componente" y las tarjetas KPI de arriba, para que los % coincidan siempre)
+  const base = progSeries[progSeries.length - 1].y || 1;
+
+  const w=900, h=340, padL=52, padR=16, padT=30, padB=62;
+  const yMax = Math.max(...progSeries.map(p=>p.y), ...ejecSeries.map(p=>p.y), 1);
+  const xMin = progSeries[0].x, xMax = progSeries[progSeries.length-1].x;
+  const px = ts => padL + (ts - xMin) / ((xMax - xMin) || 1) * (w - padL - padR);
+  const py = y => (h - padB) - (y / yMax) * (h - padB - padT);
+  const baseline = h - padB;
+
+  let grid = '';
+  for (let i=0;i<=4;i++) {
+    const y = padT + (h-padT-padB)*(1-i/4);
+    grid += `<line x1="${padL}" y1="${y}" x2="${w-padR}" y2="${y}" stroke="#e4e9f4" stroke-width="1"/>
+      <text x="${padL-6}" y="${y+4}" fill="#8592a8" font-size="10" text-anchor="end">${fmt(yMax*i/4/1000,0)}k</text>`;
+  }
+
+  // meses en el eje X (cada corte mensual)
+  const fechas = periodos.map(p => new Date(p));
+  const paso = fechas.length > 18 ? 2 : 1; // si hay muchos meses, muestra 1 de cada 2 para que no se amontonen
+  let ejeX = '';
+  fechas.forEach((c, i) => {
+    if (i % paso !== 0 && i !== fechas.length-1) return;
+    const x = px(c.getTime());
+    ejeX += `<text x="${x}" y="${h-padB+22}" fill="#8592a8" font-size="10" text-anchor="middle">${MESES_ES[c.getUTCMonth()]}-${String(c.getUTCFullYear()).slice(2)}</text>`;
+  });
+  ejeX += `<line x1="${padL}" y1="${h-padB}" x2="${w-padR}" y2="${h-padB}" stroke="#d5deef" stroke-width="1"/>`;
+
+  // línea vertical de "fecha de corte" = hoy
+  let corteHoy = '';
+  if (hoy.getTime() >= xMin && hoy.getTime() <= xMax) {
+    const x = px(hoy.getTime());
+    corteHoy = `<line x1="${x}" y1="${padT}" x2="${x}" y2="${h-padB}" stroke="#d97706" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <text x="${x}" y="${padT-8}" fill="#d97706" font-size="10" font-weight="600" text-anchor="middle">corte ${hoy.getDate()}/${hoy.getMonth()+1}</text>`;
+  }
+
+  const pts = arr => arr.map(p => ({ x: px(p.x), y: py(p.y) }));
+  const ptsProg = pts(progSeries), ptsEjec = pts(ejecSeries);
+  const lineFrom = (points, color, dash) => {
+    if (!points.length) return '';
+    const d = points.map((p,i) => `${i===0?'M':'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ');
+    return `<path d="${d}" fill="none" stroke="${color}" stroke-width="2.5" ${dash?`stroke-dasharray="${dash}"`:''}/>`;
+  };
+  // sombra de área bajo cada línea (degradado hacia transparente) — mismo tono que su línea
+  const areaFrom = (points, fillId) => {
+    if (!points.length) return '';
+    const d = `M ${points[0].x.toFixed(1)} ${baseline} ` +
+      points.map(p => `L ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ') +
+      ` L ${points[points.length-1].x.toFixed(1)} ${baseline} Z`;
+    return `<path d="${d}" fill="url(#${fillId})" stroke="none"/>`;
+  };
+  // % de avance (contra "base") en cada punto, como en el Excel — 1 de cada `paso` para no
+  // amontonar. Se topa (clamp) para que nunca invada ni la franja de los meses abajo, ni
+  // la cuadrícula de arriba — antes, en los primeros meses (valores cerca de 0), el % de
+  // "ejecutado" quedaba pegado a los nombres de los meses.
+  const pctLabels = (arr, ptsArr, color, dy) => arr.map((p, i) => {
+    if (i % paso !== 0 && i !== arr.length-1) return '';
+    const pct = (p.y / base * 100).toFixed(1) + '%';
+    const yLabel = Math.min(Math.max(ptsArr[i].y + dy, padT + 8), baseline - 9);
+    return `<text x="${ptsArr[i].x}" y="${yLabel}" fill="${color}" font-size="9" font-weight="600" text-anchor="middle">${pct}</text>`;
+  }).join('');
+  // franjas "sensibles" de ancho completo (no puntitos chicos): cubren TODO el alto y el
+  // ancho de su mes, así el popup responde apenas el cursor entra al gráfico, sin tener
+  // que acertarle a un punto exacto (eso era lo que se sentía "lento").
+  const hotspots = periodos.map((per, i) => {
+    const cx = ptsEjec[i].x;
+    const xPrev = i > 0 ? (cx + ptsEjec[i-1].x) / 2 : padL;
+    const xNext = i < periodos.length-1 ? (cx + ptsEjec[i+1].x) / 2 : (w - padR);
+    const topY = Math.min(ptsProg[i].y, ptsEjec[i].y);
+    return `<rect class="curva-hot" x="${xPrev.toFixed(1)}" y="${padT}" width="${(xNext-xPrev).toFixed(1)}" height="${baseline-padT}" fill="transparent" data-periodo="${per}" data-px="${cx.toFixed(1)}" data-py="${topY.toFixed(1)}" style="cursor:pointer"/>`;
+  }).join('');
+
+  const defs = `<defs>
+    <linearGradient id="gradProg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#93b4f6" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#93b4f6" stop-opacity="0.02"/>
+    </linearGradient>
+    <linearGradient id="gradEjec" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2f6fed" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#2f6fed" stop-opacity="0.02"/>
+    </linearGradient>
+    <pattern id="hatchSuspension" width="6" height="6" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="0" y2="6" stroke="#94a3b8" stroke-width="2"/>
+    </pattern>
+  </defs>`;
+
+  // ── bandas de plazo: suspensión / ampliación / adicional, registradas en plazo_eventos.
+  // Se muestran si aplican a toda la obra, o al componente que se esté mirando. ──
+  const eventos = (DATA.eventosPlazo || []).filter(e =>
+    !e.proyecto_id_codigo || e.proyecto_id_codigo === seleccionada || seleccionada === GENERAL);
+  $('#legendPlazo').style.display = eventos.length ? '' : 'none';
+  const ETIQUETA_TIPO = { suspension: 'Suspensión', ampliacion: 'Ampliación de plazo', adicional: 'Adicional de plazo', otro: 'Evento de plazo' };
+  const bandasPlazo = eventos.map(ev => {
+    const eIni = new Date(ev.fecha_inicio).getTime(), eFin = new Date(ev.fecha_fin).getTime();
+    if (eFin < xMin || eIni > xMax) return ''; // fuera del rango visible
+    const x1 = px(Math.max(eIni, xMin)), x2 = px(Math.min(eFin, xMax));
+    const dias = Math.round((eFin - eIni) / 86400000) + 1;
+    return `<rect x="${x1.toFixed(1)}" y="${padT}" width="${Math.max(2,x2-x1).toFixed(1)}" height="${baseline-padT}" fill="url(#hatchSuspension)" opacity="0.5"/>
+      <rect x="${x1.toFixed(1)}" y="${padT}" width="${Math.max(2,x2-x1).toFixed(1)}" height="${baseline-padT}" fill="#64748b" opacity="0.08"/>
+      <line x1="${x1.toFixed(1)}" y1="${padT}" x2="${x1.toFixed(1)}" y2="${baseline}" stroke="#64748b" stroke-width="1" stroke-dasharray="2,2"/>
+      <line x1="${x2.toFixed(1)}" y1="${padT}" x2="${x2.toFixed(1)}" y2="${baseline}" stroke="#64748b" stroke-width="1" stroke-dasharray="2,2"/>
+      <text x="${((x1+x2)/2).toFixed(1)}" y="${padT+11}" fill="#475569" font-size="8.5" font-weight="700" text-anchor="middle">${ETIQUETA_TIPO[ev.tipo]||'Evento'} (${dias}d)</text>`;
+  }).join('');
+
+  $('#curvaSvg').setAttribute('viewBox', `0 0 ${w} ${h}`);
+  $('#curvaSvg').innerHTML = defs + grid + bandasPlazo + areaFrom(ptsProg, 'gradProg') + areaFrom(ptsEjec, 'gradEjec')
+    + ejeX + corteHoy
+    + lineFrom(ptsProg, '#93b4f6', '5,4')
+    + lineFrom(ptsEjec, '#2f6fed')
+    + pctLabels(progSeries, ptsProg, '#6b93e0', -16)
+    + pctLabels(ejecSeries, ptsEjec, '#2f6fed', 14)
+    + hotspots;
+
+  // ── filtro por mes + popup con el detalle (programado/ejecutado, parcial y acumulado) ──
+  $('#curvaMesSel').innerHTML = periodos.map(p => {
+    const d = new Date(p);
+    return `<option value="${p}">${MESES_ES[d.getUTCMonth()]}-${String(d.getUTCFullYear()).slice(2)}</option>`;
+  }).join('');
+  const porDefecto = periodos.filter(p => new Date(p).getTime() <= hoy.getTime()).pop() || periodos[periodos.length-1];
+  const activo = periodos.includes(curvaPopupFijo) ? curvaPopupFijo : porDefecto;
+  $('#curvaMesSel').value = activo;
+
+  document.querySelectorAll('.curva-hot').forEach(c => {
+    c.addEventListener('mouseenter', () => mostrarPopupMes(c.dataset.periodo, porPeriodo, +c.dataset.px, +c.dataset.py, false));
+    c.addEventListener('mouseleave', () => mostrarPopupMes(curvaPopupFijo, porPeriodo, null, null, false));
+    c.addEventListener('click', () => activarMes(c.dataset.periodo));
+  });
+  activarMes(activo, /*silencioso*/ true);
+}
+
+// Elige el mes "activo" (el del <select>, o el que se hace clic/toca en la curva):
+// mueve el popup, y ADEMÁS actualiza "Avance por componente" y los 4 KPI de arriba con
+// los montos de ESE mes — antes los tres quedaban desincronizados entre sí.
+function activarMes(periodo, silencioso) {
+  curvaPopupFijo = periodo;
+  if (!silencioso) $('#curvaMesSel').value = periodo;
+  mostrarPopupMes(periodo, curvaPorPeriodoActual, null, null, false);
+  renderAvancePuente(periodo);
+  renderKpisYTabla(DATA.partidas, DATA.avance, DATA.programado, periodo);
+}
+
+function mostrarPopupMes(periodo, porPeriodo, pxOverride, pyOverride, esVista) {
+  const d = porPeriodo[periodo];
+  const popup = $('#curvaPopup');
+  if (!d) { popup.style.display = 'none'; $('#curvaMesKpis').innerHTML = ''; return; }
+  const fecha = new Date(periodo);
+  const mesTxt = `${MESES_ES[fecha.getUTCMonth()]} ${fecha.getUTCFullYear()}`;
+  popup.innerHTML = `<b>${mesTxt}</b><br>
+    <span style="color:#93b4f6">●</span> Prog. mes ${fmt(d.progP,0)} <span style="opacity:.7">(acum ${fmt(d.progA,0)})</span><br>
+    <span style="color:#7fa3ff">●</span> Ejec. mes ${fmt(d.ejecP,0)} <span style="opacity:.7">(acum ${fmt(d.ejecA,0)})</span>`;
+
+  // el mismo dato, pero visible de forma FIJA (no solo al pasar el cursor) — esto
+  // responde "¿dónde veo el monto mensual, programado vs ejecutado?"
+  const gap = d.progP - d.ejecP;
+  $('#curvaMesKpis').innerHTML = `
+    <div class="mes-chip"><span class="lbl">Programado en ${mesTxt}</span><b style="color:#5f86d6">${fmt(d.progP)}</b></div>
+    <div class="mes-chip"><span class="lbl">Ejecutado en ${mesTxt}</span><b style="color:var(--blue-tx)">${fmt(d.ejecP)}</b></div>
+    <div class="mes-chip"><span class="lbl">Diferencia del mes</span><b style="color:${gap>0?'var(--red)':'var(--green)'}">${gap>0?'-':'+'}${fmt(Math.abs(gap))}</b></div>`;
+
+  // posición: justo ENCIMA del punto de ese mes en la curva (no fija), usando el tamaño
+  // real ya renderizado del SVG para convertir de "unidades del gráfico" a píxeles reales.
+  const svg = $('#curvaSvg'), wrap = $('#curvaWrap');
+  const vb = svg.viewBox.baseVal;
+  const svgRect = svg.getBoundingClientRect(), wrapRect = wrap.getBoundingClientRect();
+  const scaleX = svgRect.width / vb.width, scaleY = svgRect.height / vb.height;
+  let pxSvg = pxOverride, pySvg = pyOverride;
+  if (pxSvg == null) {
+    const hot = document.querySelector(`.curva-hot[data-periodo="${periodo}"]`);
+    if (hot) { pxSvg = +hot.dataset.px; pySvg = +hot.dataset.py; }
+  }
+  if (pxSvg == null) { popup.style.display = 'none'; return; }
+
+  popup.style.display = 'block';
+  const popupW = popup.offsetWidth || 175, popupH = popup.offsetHeight || 60;
+  const xPix = (svgRect.left - wrapRect.left) + pxSvg * scaleX;
+  const yPix = (svgRect.top - wrapRect.top) + pySvg * scaleY;
+  let left = xPix - popupW / 2;
+  left = Math.max(4, Math.min(left, wrapRect.width - popupW - 4));
+  popup.style.left = left + 'px';
+  // encima de la curva SIEMPRE — si no cabe dentro de la tarjeta, se sale por arriba
+  // (no hay overflow:hidden en el contenedor, así que se sigue viendo completo)
+  popup.style.top = (yPix - popupH - 10) + 'px';
+}
+$('#curvaMesSel').addEventListener('change', (e) => activarMes(e.target.value));
+
+// Columnas agrupadas (Programado vs Ejecutado, % al último corte real) — mismo estilo
+// que el Excel de control de obra. Usa curva_s_mensual (dato real), así que los 4
+// componentes muestran barra aunque todavía no tengan partidas/APU cargadas.
+// columna con efecto 3D (isométrico): cara frontal + cara superior + cara lateral,
+// como las barras 3D de Excel — mismo truco, hecho a mano en SVG (3 polígonos por barra).
+function bar3D(x, yTop, baseline, width, depth, front, top, side) {
+  const x2 = x + width;
+  return `
+    <polygon points="${x},${yTop} ${x+depth},${yTop-depth} ${x2+depth},${yTop-depth} ${x2},${yTop}" fill="${top}"/>
+    <polygon points="${x2},${yTop} ${x2+depth},${yTop-depth} ${x2+depth},${baseline-depth} ${x2},${baseline}" fill="${side}"/>
+    <rect x="${x}" y="${yTop}" width="${width}" height="${baseline-yTop}" fill="${front}"/>`;
+}
+
+function renderAvancePuente(periodo) {
+  const todas = DATA.curvaMensual || [];
+  const d = periodo ? new Date(periodo) : null;
+  $('#avancePuenteMes').textContent = d ? `Corte: ${MESES_ES[d.getUTCMonth()]} ${d.getUTCFullYear()}` : '';
+  const filas = COMPONENTES.map(pu => {
+    const rows = todas.filter(r => r.proyecto_id_codigo === pu.id).sort((a,b) => a.periodo < b.periodo ? -1 : 1);
+    if (!rows.length) return { ...pu, sinDatos: true };
+    const base = Math.max(...rows.map(r => Number(r.programado_acumulado) || 0), 1);
+    // si el mes elegido es ANTERIOR al primer registro de este componente, todavía no
+    // había arrancado: es 0% real (no "sin datos" ni, por error, el último corte = 100%)
+    if (periodo && periodo < rows[0].periodo) {
+      return { ...pu, sinDatos: false, pctProg: 0, pctEjec: 0 };
+    }
+    // la fila de ESE mes; si no hay registro exacto, usa el corte anterior más cercano
+    const fila = (periodo && rows.find(r => r.periodo === periodo))
+      || (periodo && [...rows].reverse().find(r => r.periodo < periodo))
+      || rows[rows.length - 1];
+    return {
+      ...pu, sinDatos: false,
+      pctProg: (Number(fila.programado_acumulado) || 0) / base,
+      pctEjec: (Number(fila.ejecutado_acumulado) || 0) / base,
+    };
+  });
+
+  const depth = 8;
+  const w = 420, h = 270, padL = 34, padR = 10 + depth, padT = 30, padB = 44;
+  const n = filas.length || 1;
+  const slot = (w - padL - padR) / n;
+  const barW = Math.min(26, slot * 0.3);
+  const baseline = h - padB;
+  const yFor = pct => baseline - Math.min(1, pct) * (h - padT - padB - depth);
+
+  let bars = '';
+  // líneas guía 0/50/100%
+  [0, .5, 1].forEach(f => {
+    const y = yFor(f);
+    bars += `<line x1="${padL}" y1="${y}" x2="${w-padR}" y2="${y}" stroke="#e4e9f4" stroke-width="1"/>
+      <text x="${padL-5}" y="${y+3}" fill="#8592a8" font-size="8" text-anchor="end">${(f*100).toFixed(0)}%</text>`;
+  });
+  // "piso" con perspectiva, para que las barras parezcan pararse sobre algo
+  bars += `<polygon points="${padL},${baseline} ${padL+depth},${baseline-depth} ${w-padR+depth},${baseline-depth} ${w-padR},${baseline}" fill="#e9edf6"/>`;
+
+  filas.forEach((f, i) => {
+    const cx = padL + slot * i + slot / 2;
+    bars += `<text x="${cx}" y="${h-padB+18}" fill="#4b5871" font-size="9.5" text-anchor="middle">${f.nombre.replace('Puente ','')}</text>`;
+    if (f.sinDatos) {
+      bars += `<text x="${cx}" y="${baseline-10}" fill="#8592a8" font-size="9" text-anchor="middle">sin datos</text>`;
+      return;
+    }
+    const x1 = cx - barW - 3, x2 = cx + 3;
+    const y1 = yFor(f.pctProg), y2 = yFor(f.pctEjec);
+    bars += bar3D(x1, y1, baseline, barW, depth, '#93b4f6', '#c3d6fb', '#6f93d9')
+      + `<text x="${x1+barW/2+depth/2}" y="${y1-depth-4}" fill="#5f86d6" font-size="8.5" font-weight="700" text-anchor="middle">${(f.pctProg*100).toFixed(0)}%</text>`
+      + bar3D(x2, y2, baseline, barW, depth, '#2f6fed', '#6f96f5', '#1e4fb8')
+      + `<text x="${x2+barW/2+depth/2}" y="${y2-depth-4}" fill="#2457bd" font-size="8.5" font-weight="700" text-anchor="middle">${(f.pctEjec*100).toFixed(0)}%</text>`;
+  });
+
+  $('#avancePuenteSvg').setAttribute('viewBox', `0 0 ${w} ${h}`);
+  $('#avancePuenteSvg').innerHTML = bars;
+}
+
+function renderMateriales(partidas, avanceRows) {
+  const avanceMap = Object.fromEntries(avanceRows.map(a => [a.partida_id, a]));
+  const filas = COMPONENTES.map(pu => {
+    const proy = DATA.proyectos.find(x => x.codigo === pu.id);
+    const partidasP = proy ? partidas.filter(p => p.proyecto_id === proy.id) : [];
+    if (!partidasP.length) return { ...pu, sinDatos: true };
+    const kg = partidasP.filter(p=>p.unidad==='kg');
+    const m3 = partidasP.filter(p=>p.unidad==='m3');
+    const sum = (arr, f) => arr.reduce((s,p)=>s+f(p),0);
+    const kgTotal = sum(kg, p=>Number(p.metrado||0));
+    const kgEjec = sum(kg, p => Number(p.metrado||0) * (Number((avanceMap[p.id]||{}).pct_avance)||0));
+    const m3Total = sum(m3, p=>Number(p.metrado||0));
+    const m3Ejec = sum(m3, p => Number(p.metrado||0) * (Number((avanceMap[p.id]||{}).pct_avance)||0));
+    return { ...pu, sinDatos:false, tonTotal: kgTotal/1000, tonEjec: kgEjec/1000, m3Total, m3Ejec };
+  });
+  $('#materiales').innerHTML = filas.map(f => {
+    if (f.sinDatos) return `<div class="pbar-row"><div class="lbl">${f.nombre}</div><div class="pbar-track"></div><div class="pbar-val" style="color:var(--mut)">sin datos</div></div>`;
+    const pctTon = f.tonTotal ? f.tonEjec/f.tonTotal : 0, pctM3 = f.m3Total ? f.m3Ejec/f.m3Total : 0;
+    return `
+      <div class="pbar-row"><div class="lbl">${f.nombre} acero</div><div class="pbar-track"><div class="pbar-fill ejec" style="width:${Math.min(100,pctTon*100)}%;background:var(--amber)"></div></div><div class="pbar-val">${f.tonEjec.toFixed(0)}/${f.tonTotal.toFixed(0)}t</div></div>
+      <div class="pbar-row"><div class="lbl">${f.nombre} concr.</div><div class="pbar-track"><div class="pbar-fill ejec" style="width:${Math.min(100,pctM3*100)}%"></div></div><div class="pbar-val">${f.m3Ejec.toFixed(0)}/${f.m3Total.toFixed(0)}m³</div></div>`;
+  }).join('');
+}
+
+function renderKpisYTabla(partidas, avanceRows, progRows, periodo) {
+  const proyIds = DATA.proyectos
+    .filter(p => seleccionada === GENERAL || p.codigo === seleccionada)
+    .map(p => p.id);
+  const partidasSel = partidas.filter(p => proyIds.includes(p.proyecto_id));
+  const avanceSel = avanceRows.filter(a => proyIds.includes(a.proyecto_id));
+  const avanceMap = Object.fromEntries(avanceSel.map(a => [a.partida_id, a]));
+
+  // ── KPIs de arriba: dinámicos, del mismo mes elegido en la Curva S (curva_s_mensual
+  // real) — antes se quedaban siempre en el estado actual, sin importar el filtro. ──
+  const todas = DATA.curvaMensual || [];
+  const porComponente = proyIds.map(pid => {
+    const rows = todas.filter(r => r.proyecto_id === pid).sort((a,b) => a.periodo < b.periodo ? -1 : 1);
+    if (!rows.length) return null;
+    const base = Math.max(...rows.map(r => Number(r.programado_acumulado) || 0), 0);
+    if (periodo && periodo < rows[0].periodo) return { base, prog: 0, ejec: 0 }; // aún no arrancaba
+    const fila = (periodo && rows.find(r => r.periodo === periodo))
+      || (periodo && [...rows].reverse().find(r => r.periodo < periodo))
+      || rows[rows.length - 1];
+    return { base, prog: Number(fila.programado_acumulado) || 0, ejec: Number(fila.ejecutado_acumulado) || 0 };
+  }).filter(Boolean);
+
+  const presu = porComponente.reduce((s,f) => s+f.base, 0);
+  const valor = porComponente.reduce((s,f) => s+f.ejec, 0);
+  const prog = porComponente.reduce((s,f) => s+f.prog, 0);
+  const pct = presu ? valor/presu : 0;
+  const pctProg = presu ? prog/presu : 0;
+
+  const fechaCorte = periodo ? new Date(periodo) : null;
+  $('#kpiMes').textContent = fechaCorte ? `Corte: ${MESES_ES[fechaCorte.getUTCMonth()]} ${fechaCorte.getUTCFullYear()} (Curva S real)` : '';
+  $('#kPresu').textContent = fmt(presu);
+  $('#kPresuS').textContent = `${porComponente.length} componente${porComponente.length===1?'':'s'} con datos`;
+  $('#kProg').textContent = fmt(prog);
+  $('#kProgS').textContent = `${(pctProg*100).toFixed(1)}% del total`;
+  $('#kValor').textContent = fmt(valor);
+  $('#kValorS').textContent = `${(pct*100).toFixed(1)}% del total`;
+  $('#kPct').textContent = (pct*100).toFixed(1) + '%';
+  $('#kBar').style.width = Math.min(100,pct*100) + '%';
+  const estado = pct >= pctProg ? 'Al día o adelantado' : `${((pctProg-pct)*100).toFixed(1)} pts atrás`;
+  $('#kEstadoS').textContent = estado;
+
+  const colorOf = (p) => p >= 1 ? 'var(--green)' : p > 0 ? 'var(--blue)' : 'var(--mut)';
+  const labelOf = (p) => p >= 1 ? 'Terminado' : p > 0 ? 'En proceso' : 'Pendiente';
+  const bgOf = (p) => p >= 1 ? '#10b98126' : p > 0 ? '#3b82f626' : '#8393b226';
+  $('#tbody').innerHTML = partidasSel.map(p => {
+    const a = avanceMap[p.id] || { pct_avance: 0, valor_ganado: 0 };
+    const pctA = Number(a.pct_avance);
+    return `<tr>
+      <td class="mono">${p.codigo}</td><td>${p.nombre}</td><td>${p.unidad}</td>
+      <td class="mono">${Number(p.metrado).toLocaleString('es-PE')}</td>
+      <td><span class="mini-bar"><i style="width:${pctA*100}%;background:${colorOf(pctA)}"></i></span>
+          <span class="badge" style="background:${bgOf(pctA)};color:${colorOf(pctA)}">${labelOf(pctA)} ${(pctA*100).toFixed(0)}%</span></td>
+      <td class="mono">${fmt(p.presupuesto)}</td>
+      <td class="mono" style="color:var(--blue-tx)">${fmt(a.valor_ganado)}</td>
+    </tr>`;
+  }).join('') || `<tr><td colspan="7" class="mono" style="color:var(--mut)">Sin partidas para los componentes seleccionados</td></tr>`;
+}
+
+function renderAll() {
+  renderBridgeSel();
+  renderMateriales(DATA.partidas, DATA.avance);
+  renderCurvaS(); // al final: ella misma llama a renderAvancePuente(mes activo) para que queden ligados
+}
+
+async function bootResumen() {
+  try {
+    // 1) la obra activa (hoy hay una sola; el selector de obra se puede agregar
+    //    después si algún día hay varias corriendo en paralelo)
+    const obras = await get('/obras?activo=eq.true&order=creado_en.asc&limit=1');
+    OBRA = obras[0] || null;
+    if (!OBRA) throw new Error('No hay ninguna obra registrada en la base de datos (tabla "obras").');
+    $('#obraNombre').textContent = OBRA.nombre;
+    $('#obraSub').textContent = [OBRA.entidad, OBRA.cliente].filter(Boolean).join(' · ') || 'Red Vial Nacional';
+
+    // 2) sus componentes (puentes, tramos, lo que sea — dinámico, sin lista fija)
+    const proyectos = await get(`/proyectos?obra_id=eq.${OBRA.id}&select=id,codigo,nombre,tipo`);
+    COMPONENTES = proyectos.map(p => ({ id: p.codigo, nombre: p.nombre, tipo: p.tipo }));
+    const nComp = COMPONENTES.length;
+    $('#pageTitle').textContent = `Resumen — ${OBRA.nombre}`;
+    $('#pageSub').textContent = `${nComp} componente${nComp===1?'':'s'} de la obra, en un solo lugar`;
+
+    // 3) datos de avance, acotados a los componentes de ESTA obra
+    const idList = proyectos.map(p => p.id).join(',');
+    const filtroProy = idList ? `proyecto_id=in.(${idList})` : 'proyecto_id=eq.00000000-0000-0000-0000-000000000000';
+    const [partidas, avance, programado, curvaMensualRaw, plazoEventos] = await Promise.all([
+      get(`/partidas?${filtroProy}&select=id,proyecto_id,codigo,nombre,unidad,metrado,presupuesto,fecha_inicio_prog,fecha_fin_prog`),
+      get(`/v_avance_partida?${filtroProy}&select=partida_id,proyecto_id,pct_avance,valor_ganado,presupuesto`),
+      get(`/v_valor_programado_partida?${filtroProy}&select=partida_id,proyecto_id,valor_programado,presupuesto`),
+      get(`/curva_s_mensual?${filtroProy}&select=proyecto_id,periodo,programado_parcial,programado_acumulado,ejecutado_parcial,ejecutado_acumulado&order=periodo`),
+      get(`/plazo_eventos?obra_id=eq.${OBRA.id}&select=id,proyecto_id,tipo,descripcion,fecha_inicio,fecha_fin`),
+    ]);
+    const idToCodigo = Object.fromEntries(proyectos.map(p => [p.id, p.codigo]));
+    const curvaMensual = curvaMensualRaw.map(r => ({ ...r, proyecto_id_codigo: idToCodigo[r.proyecto_id] }));
+    const eventosPlazo = plazoEventos.map(e => ({ ...e, proyecto_id_codigo: e.proyecto_id ? idToCodigo[e.proyecto_id] : null }));
+    DATA = { proyectos, partidas, avance, programado, curvaMensual, eventosPlazo };
+    renderAll();
+  } catch (err) {
+    $('#errBox').innerHTML = `<div class="err"><b>No se pudo conectar con la API.</b> ${fuente==='local' ? '¿Está corriendo iniciar_api.bat?' : ''} (${err.message})</div>`;
+  }
+}
+
+// ============================================================================
+// PARTE DIARIO (integrado)
+// ============================================================================
+let partidasForm = [], proyectoIdForm = null;
+function pmsg(text, ok) { $('#parteMsgBox').innerHTML = `<div class="msg ${ok?'ok':'err'}">${text}</div>`; }
+
+async function cargarPartidasForm() {
+  const r = await fetch(`${API}/partidas?select=id,codigo,nombre,unidad,ubicacion,proyecto_id&order=codigo`, { headers });
+  if (!r.ok) throw new Error(`No se pudo leer las partidas (HTTP ${r.status})`);
+  partidasForm = await r.json();
+  if (!partidasForm.length) { $('#p_partida').innerHTML = '<option value="">No hay partidas cargadas</option>'; return; }
+  proyectoIdForm = partidasForm[0].proyecto_id;
+  $('#p_partida').innerHTML = '<option value="">Seleccione…</option>' +
+    partidasForm.map(p => `<option value="${p.id}">${p.codigo} — ${p.nombre}</option>`).join('');
+}
+$('#p_fecha').value = new Date().toISOString().slice(0, 10);
+$('#p_partida').addEventListener('change', () => {
+  const p = partidasForm.find(x => x.id === $('#p_partida').value);
+  $('#unidadLbl').textContent = p ? `(${p.unidad})` : '';
+  if (p && !$('#p_ubicacion').value) $('#p_ubicacion').value = p.ubicacion || '';
+});
+function marcarError(id, on) { $('#' + id).classList.toggle('invalid', on); }
+
+$('#parteForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  $('#parteMsgBox').innerHTML = '';
+  let ok = true;
+  const partidaId = $('#p_partida').value, fecha = $('#p_fecha').value, cantidad = parseFloat($('#p_cantidad').value);
+  marcarError('f-partida', !partidaId); if (!partidaId) ok = false;
+  marcarError('f-fecha', !fecha); if (!fecha) ok = false;
+  marcarError('f-cantidad', !(cantidad > 0)); if (!(cantidad > 0)) ok = false;
+  if (!ok) return;
+
+  const btn = $('#btnGuardar'); btn.disabled = true; btn.textContent = 'Guardando…';
+  try {
+    const body = {
+      proyecto_id: proyectoIdForm, partida_id: partidaId, fecha,
+      turno: $('#p_turno').value, clima: $('#p_clima').value, cantidad_ejecutada: cantidad,
+      ubicacion: $('#p_ubicacion').value || null, observaciones: $('#p_obs').value || null,
+      estado: 'aprobado',
+    };
+    const r = await fetch(`${API}/partes_diarios`, {
+      method: 'POST', headers: { ...headers, 'Content-Type': 'application/json', Prefer: 'return=representation' },
+      body: JSON.stringify(body),
+    });
+    if (!r.ok) {
+      const detalle = await r.json().catch(() => ({}));
+      if (r.status === 409) throw new Error('Ya existe un parte para esta partida, fecha y turno.');
+      throw new Error(detalle.message || `HTTP ${r.status}`);
+    }
+    const p = partidasForm.find(x => x.id === partidaId);
+    pmsg(`Guardado: ${p.codigo} · ${cantidad} ${p.unidad} el ${fecha}. Ya se refleja en Resumen (recarga si no lo ves).`, true);
+    $('#p_cantidad').value = ''; $('#p_obs').value = '';
+    bootResumen(); // refresca Resumen en caliente
+  } catch (err) {
+    pmsg(`No se pudo guardar: ${err.message}`, false);
+  } finally {
+    btn.disabled = false; btn.textContent = 'Guardar parte diario';
+  }
+});
+
+bootResumen();
+cargarPartidasForm().catch(err => pmsg(`No se pudo conectar con la API (${err.message}).`, false));
+</script>
+</body>
+</html>
