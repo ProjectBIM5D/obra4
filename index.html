@@ -7,8 +7,8 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <title>Puente Charanal 5D · Visor BIM</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233b82f6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 18h20M4 18v-6M20 18v-6M2 12c4-8 16-8 20 0M8 18v-7M12 18V8M16 18v-7'/%3E%3C/svg%3E" />
-  <script type="module" crossorigin src="./assets/index-CvUITQ8W.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-BTWMB01t.css">
+  <script type="module" crossorigin src="./assets/index-DM-oAyiv.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-D93cJOjB.css">
 </head>
 <body>
   <div id="app">
@@ -16,8 +16,13 @@
       <button class="grab" id="grab" aria-label="Subir o bajar el panel"><i></i></button>
       <header class="brand">
         <div class="logo"><svg viewBox="0 0 24 24"><path d="M2 18h20M4 18v-6M20 18v-6M2 12c4-8 16-8 20 0M8 18v-7M12 18V8M16 18v-7"/></svg></div>
-        <div class="brand-t"><h1 id="pName">Puente Charanal 5D</h1><p><i class="dot ok"></i><span id="pSub">Control de Avance Técnico &amp; Financiero</span></p></div>
+        <button type="button" class="brand-t" id="projBtn" title="Cambiar de puente / frente">
+          <h1 id="pName">Puente Charanal 5D</h1>
+          <p><i class="dot ok"></i><span id="pSub">Control de Avance Técnico &amp; Financiero</span></p>
+        </button>
+        <svg class="chev" id="projChev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
         <span class="badge mono">BIM 4D/5D</span>
+        <div class="projmenu" id="projMenu" hidden></div>
       </header>
 
       <nav class="tabs" id="tabs">

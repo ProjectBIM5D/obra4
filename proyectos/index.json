@@ -1,0 +1,6 @@
+[
+  { "id": "charanal", "nombre": "Puente Charanal",  "km": "km 45+200",  "modelo": "modelo.frag", "modeloLigero": "modelo_ligero.frag", "excel": "avance.xlsx", "mapa": "element_map.json", "mapaLigero": "element_map_ligero.json", "infoLigero": "element_info_ligero.json" },
+  { "id": "bocana",   "nombre": "Puente Bocana",     "km": "km 58+900",  "modelo": "modelo.frag", "modeloLigero": "modelo_ligero.frag", "excel": "avance.xlsx", "mapa": "element_map.json", "mapaLigero": "element_map_ligero.json", "infoLigero": "element_info_ligero.json" },
+  { "id": "damas",    "nombre": "Puente Damas",      "km": "km 71+400",  "modelo": "modelo.frag", "modeloLigero": "modelo_ligero.frag", "excel": "avance.xlsx", "mapa": "element_map.json", "mapaLigero": "element_map_ligero.json", "infoLigero": "element_info_ligero.json" },
+  { "id": "pena",     "nombre": "Puente Peña",       "km": "km 84+050",  "modelo": "modelo.frag", "modeloLigero": "modelo_ligero.frag", "excel": "avance.xlsx", "mapa": "element_map.json", "mapaLigero": "element_map_ligero.json", "infoLigero": "element_info_ligero.json" }
+]
