@@ -8,7 +8,7 @@
 :root{
   --bg:#f4f6fb; --panel:#ffffff; --card:#ffffff; --line:#e4e9f4; --line2:#d5deef;
   --tx:#141b29; --tx2:#3f4c65; --mut:#5c6b85;
-  --blue:#2f6fed; --blue-tx:#1d4ed8; --green:#0e8f4f; --amber:#b45309; --red:#dc2626;
+  --blue:#2f6fed; --blue-tx:#1d4ed8; --green:#0e8f4f; --amber:#b45309; --red:#ef4444;
   --input:#f5f7fc; --mono:'Consolas','JetBrains Mono',monospace;
   --side-w:210px;
   --shadow:0 1px 2px rgba(30,41,70,.05), 0 1px 8px rgba(30,41,70,.04);
@@ -59,12 +59,15 @@ h1{font-size:19px;margin:0 0 3px;} .sub{color:var(--mut);font-size:13px;margin:0
 .pane{display:none;} .pane.on{display:block;}
 
 /* ── kpis ── */
-.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px;}
-.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0;box-shadow:var(--shadow);}
-.card .label{font-size:11.5px;color:var(--mut);} .card .value{font-size:20px;font-weight:700;margin-top:7px;word-break:break-word;letter-spacing:-.2px;}
-.card .sub2{font-size:11px;color:var(--mut);margin-top:5px;}
-.bar{height:6px;background:#e9edf6;border-radius:3px;margin-top:8px;overflow:hidden;}
-.bar i{display:block;height:100%;background:var(--blue);}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px;}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;min-width:0;box-shadow:var(--shadow);}
+.card .k-h{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.card .k-ic{width:24px;height:24px;flex:0 0 24px;border-radius:7px;display:flex;align-items:center;justify-content:center;}
+.card .k-ic svg{width:13px;height:13px;}
+.card .label{font-size:11.5px;color:var(--mut);} .card .value{font-size:18.5px;font-weight:700;margin-top:4px;word-break:break-word;letter-spacing:-.2px;}
+.card .sub2{font-size:11px;color:var(--mut);margin-top:3px;}
+.bar{height:5px;background:#e9edf6;border-radius:3px;margin-top:6px;overflow:hidden;}
+.bar i{display:block;height:100%;background:var(--red);}
 
 /* ── chart cards ── */
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
@@ -129,7 +132,7 @@ textarea{resize:vertical;min-height:70px;font-family:inherit;}
   #main{padding:16px 14px;}
   #menuBtn{display:inline-flex;}
   .kpis{grid-template-columns:1fr 1fr;gap:10px;}
-  .card{padding:12px 14px;} .card .value{font-size:16.5px;}
+  .card{padding:10px 12px;} .card .value{font-size:15.5px;} .card .k-ic{width:20px;height:20px;flex-basis:20px;} .card .k-ic svg{width:11px;height:11px;}
   .row2{grid-template-columns:1fr;}
 }
 </style>
@@ -177,10 +180,26 @@ textarea{resize:vertical;min-height:70px;font-family:inherit;}
 
       <p class="hint" style="margin:-6px 0 10px" id="kpiMes"></p>
       <div class="kpis">
-        <div class="card"><div class="label">Presupuesto total</div><div class="value mono" id="kPresu">—</div><div class="sub2" id="kPresuS"></div></div>
-        <div class="card"><div class="label">Programado a la fecha</div><div class="value mono" id="kProg" style="color:#5f86d6">—</div><div class="sub2" id="kProgS"></div></div>
-        <div class="card"><div class="label">Valorizado (ejecutado real)</div><div class="value mono" id="kValor" style="color:var(--blue-tx)">—</div><div class="sub2" id="kValorS"></div></div>
-        <div class="card"><div class="label">Estado del avance</div><div class="value" id="kPct">—</div><div class="bar"><i id="kBar"></i></div><div class="sub2" id="kEstadoS"></div></div>
+        <div class="card">
+          <div class="k-h"><div class="label">Presupuesto total</div>
+            <div class="k-ic" style="background:#eef2fa;color:#3f4c65"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div></div>
+          <div class="value mono" id="kPresu">—</div><div class="sub2" id="kPresuS"></div>
+        </div>
+        <div class="card">
+          <div class="k-h"><div class="label">Programado a la fecha</div>
+            <div class="k-ic" style="background:#e7effe;color:#2f6fed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div></div>
+          <div class="value mono" id="kProg" style="color:#2f6fed">—</div><div class="sub2" id="kProgS"></div>
+        </div>
+        <div class="card">
+          <div class="k-h"><div class="label">Valorizado (ejecutado real)</div>
+            <div class="k-ic" style="background:#fdecec;color:#ef4444"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 7-8.5 8.5-5-5L2 17M16 7h6v6"/></svg></div></div>
+          <div class="value mono" id="kValor" style="color:var(--red)">—</div><div class="sub2" id="kValorS"></div>
+        </div>
+        <div class="card">
+          <div class="k-h"><div class="label">Estado del avance</div>
+            <div class="k-ic" style="background:#fdf3e9;color:#b45309"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div></div>
+          <div class="value" id="kPct">—</div><div class="bar"><i id="kBar"></i></div><div class="sub2" id="kEstadoS"></div>
+        </div>
       </div>
 
       <div class="chart-card" style="margin-bottom:16px">
@@ -196,10 +215,9 @@ textarea{resize:vertical;min-height:70px;font-family:inherit;}
         </div>
         <div id="curvaMesKpis" style="display:flex;flex-wrap:wrap;gap:10px;margin:10px 0 4px;"></div>
         <div id="curvaWrap" style="position:relative;">
-          <svg id="curvaSvg" viewBox="0 0 900 340"></svg>
-          <div id="curvaPopup" style="display:none;position:absolute;background:#1c2536;color:#fff;border-radius:8px;padding:8px 10px;font-size:10.5px;box-shadow:0 8px 24px rgba(20,30,60,.25);pointer-events:none;width:172px;line-height:1.5;z-index:5;white-space:normal;"></div>
+          <svg id="curvaSvg" viewBox="0 0 900 320"></svg>
         </div>
-        <div class="legend2"><span><i style="background:#93b4f6"></i>Programado</span><span><i style="background:var(--blue)"></i>Ejecutado real</span><span id="legendPlazo" style="display:none"><i style="background:repeating-linear-gradient(45deg,#94a3b8,#94a3b8 2px,#cbd5e1 2px,#cbd5e1 4px)"></i>Suspensión / ampliación de plazo</span></div>
+        <div class="legend2"><span><i style="background:#2f6fed"></i>Programado</span><span><i style="background:var(--red)"></i>Ejecutado real</span><span><i style="background:#9db8ea"></i>Mes elegido</span><span><i style="background:#d97706"></i>Corte de hoy</span><span id="legendPlazo" style="display:none"><i style="background:#64748b;opacity:.35"></i>Suspensión / ampliación de plazo</span></div>
       </div>
 
       <div class="grid2">
@@ -207,7 +225,7 @@ textarea{resize:vertical;min-height:70px;font-family:inherit;}
           <h3>Avance por componente</h3>
           <p class="hint">% programado vs % ejecutado real — <b id="avancePuenteMes"></b> (ligado al mes elegido en la Curva S)</p>
           <svg id="avancePuenteSvg" viewBox="0 0 420 260"></svg>
-          <div class="legend2"><span><i style="background:#93b4f6"></i>Programado</span><span><i style="background:var(--blue)"></i>Ejecutado</span></div>
+          <div class="legend2"><span><i style="background:#2f6fed"></i>Programado</span><span><i style="background:var(--red)"></i>Ejecutado</span></div>
         </div>
         <div class="chart-card">
           <h3>Control de acero (Ton) y concreto (m³)</h3>
@@ -363,6 +381,7 @@ const MESES_ES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Set','Oct','N
 let curvaPeriodos = []; // se llena en cada render, lo usa el <select> de mes y el popup
 let curvaPopupFijo = null; // periodo que el usuario eligió explícitamente (select o clic)
 let curvaPorPeriodoActual = {}; // datos del último render, para volver a este popup al quitar el mouse
+let curvaPxPorPeriodo = {}; // posición x (en el SVG) de cada mes, para mover la línea sin redibujar todo
 
 function renderCurvaS() {
   const hoy = new Date();
@@ -382,7 +401,7 @@ function renderCurvaS() {
 
   if (!filas.length) {
     $('#curvaSvg').innerHTML = '<text x="450" y="150" fill="#8592a8" font-size="13" text-anchor="middle">Sin datos reales de Curva S todavía para esta selección</text>';
-    $('#curvaMesSel').innerHTML = ''; $('#curvaPopup').style.display = 'none';
+    $('#curvaMesSel').innerHTML = ''; $('#curvaMesKpis').innerHTML = '';
     return;
   }
 
@@ -404,7 +423,7 @@ function renderCurvaS() {
   // "Avance por componente" y las tarjetas KPI de arriba, para que los % coincidan siempre)
   const base = progSeries[progSeries.length - 1].y || 1;
 
-  const w=900, h=340, padL=52, padR=16, padT=30, padB=62;
+  const w=900, h=320, padL=52, padR=16, padT=54, padB=50;
   const yMax = Math.max(...progSeries.map(p=>p.y), ...ejecSeries.map(p=>p.y), 1);
   const xMin = progSeries[0].x, xMax = progSeries[progSeries.length-1].x;
   const px = ts => padL + (ts - xMin) / ((xMax - xMin) || 1) * (w - padL - padR);
@@ -429,13 +448,41 @@ function renderCurvaS() {
   });
   ejeX += `<line x1="${padL}" y1="${h-padB}" x2="${w-padR}" y2="${h-padB}" stroke="#d5deef" stroke-width="1"/>`;
 
-  // línea vertical de "fecha de corte" = hoy
+  // línea vertical de "fecha de corte" = hoy (fija, siempre la fecha real de hoy)
   let corteHoy = '';
   if (hoy.getTime() >= xMin && hoy.getTime() <= xMax) {
     const x = px(hoy.getTime());
     corteHoy = `<line x1="${x}" y1="${padT}" x2="${x}" y2="${h-padB}" stroke="#d97706" stroke-width="1.5" stroke-dasharray="4,3"/>
       <text x="${x}" y="${padT-8}" fill="#d97706" font-size="10" font-weight="600" text-anchor="middle">corte ${hoy.getDate()}/${hoy.getMonth()+1}</text>`;
+
+    // aviso de atraso EN la fecha de corte (globo de advertencia), si a hoy el ejecutado
+    // va por debajo de lo programado — mismo cálculo que la tarjeta "Estado del avance"
+    const periodoHoy = periodos.filter(p => new Date(p).getTime() <= hoy.getTime()).pop();
+    if (periodoHoy) {
+      const dHoy = porPeriodo[periodoHoy];
+      const gapPts = base ? ((dHoy.progA - dHoy.ejecA) / base) * 100 : 0;
+      if (gapPts > 1) {
+        const bw = 112, bh = 32, by = 2;
+        const bx = Math.min(Math.max(x - bw/2, padL), w - padR - bw);
+        const tipX = Math.min(Math.max(x, bx + 14), bx + bw - 14);
+        corteHoy += `<g>
+          <path d="M ${tipX-6} ${by+bh} L ${tipX+6} ${by+bh} L ${tipX} ${by+bh+8} Z" fill="#fdecec" stroke="#f0a3aa"/>
+          <rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="7" fill="#fdecec" stroke="#f0a3aa"/>
+          <text x="${bx+bw/2}" y="${by+14}" fill="#b91c1c" font-size="10" font-weight="700" text-anchor="middle">⚠ Atrasado</text>
+          <text x="${bx+bw/2}" y="${by+26}" fill="#b91c1c" font-size="8.5" text-anchor="middle">${gapPts.toFixed(1)} pts vs. programado</text>
+        </g>`;
+      }
+    }
   }
+
+  // línea vertical del MES ELEGIDO (distinta de "hoy") — se mueve con el <select> o al
+  // pasar el cursor por la curva; queda como grupo con id propio para poder moverla sola
+  // (sin redibujar todo el gráfico) cuando solo se está pre-visualizando con el mouse.
+  const xMesInicial = px(new Date(periodos.includes(curvaPopupFijo) ? curvaPopupFijo : periodos[periodos.length-1]).getTime());
+  const lineaMes = `<g id="curvaMesLine">
+      <line x1="${xMesInicial}" y1="${padT}" x2="${xMesInicial}" y2="${h-padB}" stroke="#9db8ea" stroke-width="1" opacity="0.85"/>
+      <circle cx="${xMesInicial}" cy="${padT}" r="2.5" fill="#9db8ea"/>
+    </g>`;
 
   const pts = arr => arr.map(p => ({ x: px(p.x), y: py(p.y) }));
   const ptsProg = pts(progSeries), ptsEjec = pts(ejecSeries);
@@ -452,16 +499,6 @@ function renderCurvaS() {
       ` L ${points[points.length-1].x.toFixed(1)} ${baseline} Z`;
     return `<path d="${d}" fill="url(#${fillId})" stroke="none"/>`;
   };
-  // % de avance (contra "base") en cada punto, como en el Excel — 1 de cada `paso` para no
-  // amontonar. Se topa (clamp) para que nunca invada ni la franja de los meses abajo, ni
-  // la cuadrícula de arriba — antes, en los primeros meses (valores cerca de 0), el % de
-  // "ejecutado" quedaba pegado a los nombres de los meses.
-  const pctLabels = (arr, ptsArr, color, dy) => arr.map((p, i) => {
-    if (i % paso !== 0 && i !== arr.length-1) return '';
-    const pct = (p.y / base * 100).toFixed(1) + '%';
-    const yLabel = Math.min(Math.max(ptsArr[i].y + dy, padT + 8), baseline - 9);
-    return `<text x="${ptsArr[i].x}" y="${yLabel}" fill="${color}" font-size="9" font-weight="600" text-anchor="middle">${pct}</text>`;
-  }).join('');
   // franjas "sensibles" de ancho completo (no puntitos chicos): cubren TODO el alto y el
   // ancho de su mes, así el popup responde apenas el cursor entra al gráfico, sin tener
   // que acertarle a un punto exacto (eso era lo que se sentía "lento").
@@ -475,16 +512,13 @@ function renderCurvaS() {
 
   const defs = `<defs>
     <linearGradient id="gradProg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#93b4f6" stop-opacity="0.45"/>
-      <stop offset="100%" stop-color="#93b4f6" stop-opacity="0.02"/>
-    </linearGradient>
-    <linearGradient id="gradEjec" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#2f6fed" stop-opacity="0.38"/>
+      <stop offset="0%" stop-color="#2f6fed" stop-opacity="0.32"/>
       <stop offset="100%" stop-color="#2f6fed" stop-opacity="0.02"/>
     </linearGradient>
-    <pattern id="hatchSuspension" width="6" height="6" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
-      <line x1="0" y1="0" x2="0" y2="6" stroke="#94a3b8" stroke-width="2"/>
-    </pattern>
+    <linearGradient id="gradEjec" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fca5a5" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#fca5a5" stop-opacity="0.02"/>
+    </linearGradient>
   </defs>`;
 
   // ── bandas de plazo: suspensión / ampliación / adicional, registradas en plazo_eventos.
@@ -498,8 +532,7 @@ function renderCurvaS() {
     if (eFin < xMin || eIni > xMax) return ''; // fuera del rango visible
     const x1 = px(Math.max(eIni, xMin)), x2 = px(Math.min(eFin, xMax));
     const dias = Math.round((eFin - eIni) / 86400000) + 1;
-    return `<rect x="${x1.toFixed(1)}" y="${padT}" width="${Math.max(2,x2-x1).toFixed(1)}" height="${baseline-padT}" fill="url(#hatchSuspension)" opacity="0.5"/>
-      <rect x="${x1.toFixed(1)}" y="${padT}" width="${Math.max(2,x2-x1).toFixed(1)}" height="${baseline-padT}" fill="#64748b" opacity="0.08"/>
+    return `<rect x="${x1.toFixed(1)}" y="${padT}" width="${Math.max(2,x2-x1).toFixed(1)}" height="${baseline-padT}" fill="#64748b" opacity="0.14"/>
       <line x1="${x1.toFixed(1)}" y1="${padT}" x2="${x1.toFixed(1)}" y2="${baseline}" stroke="#64748b" stroke-width="1" stroke-dasharray="2,2"/>
       <line x1="${x2.toFixed(1)}" y1="${padT}" x2="${x2.toFixed(1)}" y2="${baseline}" stroke="#64748b" stroke-width="1" stroke-dasharray="2,2"/>
       <text x="${((x1+x2)/2).toFixed(1)}" y="${padT+11}" fill="#475569" font-size="8.5" font-weight="700" text-anchor="middle">${ETIQUETA_TIPO[ev.tipo]||'Evento'} (${dias}d)</text>`;
@@ -507,14 +540,14 @@ function renderCurvaS() {
 
   $('#curvaSvg').setAttribute('viewBox', `0 0 ${w} ${h}`);
   $('#curvaSvg').innerHTML = defs + grid + bandasPlazo + areaFrom(ptsProg, 'gradProg') + areaFrom(ptsEjec, 'gradEjec')
-    + ejeX + corteHoy
-    + lineFrom(ptsProg, '#93b4f6', '5,4')
-    + lineFrom(ptsEjec, '#2f6fed')
-    + pctLabels(progSeries, ptsProg, '#6b93e0', -16)
-    + pctLabels(ejecSeries, ptsEjec, '#2f6fed', 14)
+    + ejeX + corteHoy + lineaMes
+    + lineFrom(ptsProg, '#2f6fed', '5,4')
+    + lineFrom(ptsEjec, '#ef4444')
     + hotspots;
+  curvaPxPorPeriodo = Object.fromEntries(periodos.map((p, i) => [p, ptsEjec[i].x]));
 
-  // ── filtro por mes + popup con el detalle (programado/ejecutado, parcial y acumulado) ──
+  // ── filtro por mes: los montos del mes elegido salen como texto fijo (#curvaMesKpis),
+  // no hace falta un globo/popup flotante encima. ──
   $('#curvaMesSel').innerHTML = periodos.map(p => {
     const d = new Date(p);
     return `<option value="${p}">${MESES_ES[d.getUTCMonth()]}-${String(d.getUTCFullYear()).slice(2)}</option>`;
@@ -524,65 +557,46 @@ function renderCurvaS() {
   $('#curvaMesSel').value = activo;
 
   document.querySelectorAll('.curva-hot').forEach(c => {
-    c.addEventListener('mouseenter', () => mostrarPopupMes(c.dataset.periodo, porPeriodo, +c.dataset.px, +c.dataset.py, false));
-    c.addEventListener('mouseleave', () => mostrarPopupMes(curvaPopupFijo, porPeriodo, null, null, false));
+    c.addEventListener('mouseenter', () => actualizarChipsMes(c.dataset.periodo, porPeriodo));
+    c.addEventListener('mouseleave', () => actualizarChipsMes(curvaPopupFijo, porPeriodo));
     c.addEventListener('click', () => activarMes(c.dataset.periodo));
   });
   activarMes(activo, /*silencioso*/ true);
 }
 
 // Elige el mes "activo" (el del <select>, o el que se hace clic/toca en la curva):
-// mueve el popup, y ADEMÁS actualiza "Avance por componente" y los 4 KPI de arriba con
-// los montos de ESE mes — antes los tres quedaban desincronizados entre sí.
+// actualiza los chips de montos, "Avance por componente" y los 4 KPI de arriba, todos
+// con los datos de ESE mes — antes quedaban desincronizados entre sí.
 function activarMes(periodo, silencioso) {
   curvaPopupFijo = periodo;
   if (!silencioso) $('#curvaMesSel').value = periodo;
-  mostrarPopupMes(periodo, curvaPorPeriodoActual, null, null, false);
+  actualizarChipsMes(periodo, curvaPorPeriodoActual);
   renderAvancePuente(periodo);
   renderKpisYTabla(DATA.partidas, DATA.avance, DATA.programado, periodo);
 }
 
-function mostrarPopupMes(periodo, porPeriodo, pxOverride, pyOverride, esVista) {
+// Monto programado vs ejecutado DE ESE MES (no acumulado), como texto fijo junto al
+// selector — no hace falta un globo/popup flotante encima de la curva para esto.
+// También mueve la línea vertical gris (#curvaMesLine) al mes elegido — sin redibujar
+// todo el gráfico, para que se sienta instantánea al pasar el cursor.
+function actualizarChipsMes(periodo, porPeriodo) {
+  const x = curvaPxPorPeriodo[periodo];
+  const grupo = document.getElementById('curvaMesLine');
+  if (grupo && x != null) {
+    grupo.querySelector('line').setAttribute('x1', x); grupo.querySelector('line').setAttribute('x2', x);
+    grupo.querySelector('circle').setAttribute('cx', x);
+    grupo.style.display = '';
+  } else if (grupo) { grupo.style.display = 'none'; }
+
   const d = porPeriodo[periodo];
-  const popup = $('#curvaPopup');
-  if (!d) { popup.style.display = 'none'; $('#curvaMesKpis').innerHTML = ''; return; }
+  if (!d) { $('#curvaMesKpis').innerHTML = ''; return; }
   const fecha = new Date(periodo);
   const mesTxt = `${MESES_ES[fecha.getUTCMonth()]} ${fecha.getUTCFullYear()}`;
-  popup.innerHTML = `<b>${mesTxt}</b><br>
-    <span style="color:#93b4f6">●</span> Prog. mes ${fmt(d.progP,0)} <span style="opacity:.7">(acum ${fmt(d.progA,0)})</span><br>
-    <span style="color:#7fa3ff">●</span> Ejec. mes ${fmt(d.ejecP,0)} <span style="opacity:.7">(acum ${fmt(d.ejecA,0)})</span>`;
-
-  // el mismo dato, pero visible de forma FIJA (no solo al pasar el cursor) — esto
-  // responde "¿dónde veo el monto mensual, programado vs ejecutado?"
   const gap = d.progP - d.ejecP;
   $('#curvaMesKpis').innerHTML = `
-    <div class="mes-chip"><span class="lbl">Programado en ${mesTxt}</span><b style="color:#5f86d6">${fmt(d.progP)}</b></div>
-    <div class="mes-chip"><span class="lbl">Ejecutado en ${mesTxt}</span><b style="color:var(--blue-tx)">${fmt(d.ejecP)}</b></div>
-    <div class="mes-chip"><span class="lbl">Diferencia del mes</span><b style="color:${gap>0?'var(--red)':'var(--green)'}">${gap>0?'-':'+'}${fmt(Math.abs(gap))}</b></div>`;
-
-  // posición: justo ENCIMA del punto de ese mes en la curva (no fija), usando el tamaño
-  // real ya renderizado del SVG para convertir de "unidades del gráfico" a píxeles reales.
-  const svg = $('#curvaSvg'), wrap = $('#curvaWrap');
-  const vb = svg.viewBox.baseVal;
-  const svgRect = svg.getBoundingClientRect(), wrapRect = wrap.getBoundingClientRect();
-  const scaleX = svgRect.width / vb.width, scaleY = svgRect.height / vb.height;
-  let pxSvg = pxOverride, pySvg = pyOverride;
-  if (pxSvg == null) {
-    const hot = document.querySelector(`.curva-hot[data-periodo="${periodo}"]`);
-    if (hot) { pxSvg = +hot.dataset.px; pySvg = +hot.dataset.py; }
-  }
-  if (pxSvg == null) { popup.style.display = 'none'; return; }
-
-  popup.style.display = 'block';
-  const popupW = popup.offsetWidth || 175, popupH = popup.offsetHeight || 60;
-  const xPix = (svgRect.left - wrapRect.left) + pxSvg * scaleX;
-  const yPix = (svgRect.top - wrapRect.top) + pySvg * scaleY;
-  let left = xPix - popupW / 2;
-  left = Math.max(4, Math.min(left, wrapRect.width - popupW - 4));
-  popup.style.left = left + 'px';
-  // encima de la curva SIEMPRE — si no cabe dentro de la tarjeta, se sale por arriba
-  // (no hay overflow:hidden en el contenedor, así que se sigue viendo completo)
-  popup.style.top = (yPix - popupH - 10) + 'px';
+    <div class="mes-chip"><span class="lbl">Programado en ${mesTxt}</span><b style="color:#2f6fed">${fmt(d.progP)}</b></div>
+    <div class="mes-chip"><span class="lbl">Ejecutado en ${mesTxt}</span><b style="color:var(--red)">${fmt(d.ejecP)}</b></div>
+    <div class="mes-chip"><span class="lbl">Diferencia del mes</span><b style="color:${gap>0?'var(--amber)':'var(--green)'}">${gap>0?'-':'+'}${fmt(Math.abs(gap))}</b></div>`;
 }
 $('#curvaMesSel').addEventListener('change', (e) => activarMes(e.target.value));
 
@@ -650,10 +664,10 @@ function renderAvancePuente(periodo) {
     }
     const x1 = cx - barW - 3, x2 = cx + 3;
     const y1 = yFor(f.pctProg), y2 = yFor(f.pctEjec);
-    bars += bar3D(x1, y1, baseline, barW, depth, '#93b4f6', '#c3d6fb', '#6f93d9')
-      + `<text x="${x1+barW/2+depth/2}" y="${y1-depth-4}" fill="#5f86d6" font-size="8.5" font-weight="700" text-anchor="middle">${(f.pctProg*100).toFixed(0)}%</text>`
-      + bar3D(x2, y2, baseline, barW, depth, '#2f6fed', '#6f96f5', '#1e4fb8')
-      + `<text x="${x2+barW/2+depth/2}" y="${y2-depth-4}" fill="#2457bd" font-size="8.5" font-weight="700" text-anchor="middle">${(f.pctEjec*100).toFixed(0)}%</text>`;
+    bars += bar3D(x1, y1, baseline, barW, depth, '#2f6fed', '#6f96f5', '#1e4fb8')
+      + `<text x="${x1+barW/2+depth/2}" y="${y1-depth-4}" fill="#1e4fb8" font-size="8.5" font-weight="700" text-anchor="middle">${(f.pctProg*100).toFixed(0)}%</text>`
+      + bar3D(x2, y2, baseline, barW, depth, '#ef4444', '#f7a3a3', '#b52a2a')
+      + `<text x="${x2+barW/2+depth/2}" y="${y2-depth-4}" fill="#c62828" font-size="8.5" font-weight="700" text-anchor="middle">${(f.pctEjec*100).toFixed(0)}%</text>`;
   });
 
   $('#avancePuenteSvg').setAttribute('viewBox', `0 0 ${w} ${h}`);
@@ -737,7 +751,7 @@ function renderKpisYTabla(partidas, avanceRows, progRows, periodo) {
       <td><span class="mini-bar"><i style="width:${pctA*100}%;background:${colorOf(pctA)}"></i></span>
           <span class="badge" style="background:${bgOf(pctA)};color:${colorOf(pctA)}">${labelOf(pctA)} ${(pctA*100).toFixed(0)}%</span></td>
       <td class="mono">${fmt(p.presupuesto)}</td>
-      <td class="mono" style="color:var(--blue-tx)">${fmt(a.valor_ganado)}</td>
+      <td class="mono" style="color:var(--red)">${fmt(a.valor_ganado)}</td>
     </tr>`;
   }).join('') || `<tr><td colspan="7" class="mono" style="color:var(--mut)">Sin partidas para los componentes seleccionados</td></tr>`;
 }
