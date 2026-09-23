@@ -268,13 +268,14 @@ textarea{resize:vertical;min-height:70px;font-family:inherit;}
         <div class="chart-card">
           <h3>Avance por componente</h3>
           <p class="hint">% programado vs % ejecutado real — <b id="avancePuenteMes"></b> (ligado al mes elegido en la Curva S)</p>
-          <svg id="avancePuenteSvg" viewBox="0 0 420 260"></svg>
+          <svg id="avancePuenteSvg" viewBox="0 0 420 190"></svg>
           <div class="legend2"><span><i style="background:#2f6fed"></i>Programado</span><span><i style="background:var(--red)"></i>Ejecutado</span></div>
         </div>
         <div class="chart-card">
           <h3>Control de acero (Ton) y concreto (m³)</h3>
           <p class="hint">Metrado total vs. ejecutado, por componente</p>
-          <div id="materiales"></div>
+          <svg id="materialesSvg" viewBox="0 0 420 226"></svg>
+          <div class="legend2"><span><i style="background:#0e8f4f"></i>Ejecutado</span><span><i style="background:#d7dee8"></i>Saldo</span></div>
         </div>
       </div>
 
@@ -692,8 +693,8 @@ function renderAvancePuente(periodo) {
     };
   });
 
-  const depth = 8;
-  const w = 420, h = 270, padL = 34, padR = 10 + depth, padT = 30, padB = 44;
+  const depth = 7;
+  const w = 420, h = 190, padL = 34, padR = 10 + depth, padT = 24, padB = 34;
   const n = filas.length || 1;
   const slot = (w - padL - padR) / n;
   const barW = Math.min(26, slot * 0.3);
@@ -729,6 +730,20 @@ function renderAvancePuente(periodo) {
   $('#avancePuenteSvg').innerHTML = bars;
 }
 
+// columna apilada al 100% (ejecutado abajo + saldo arriba = el total de esa barra),
+// igual al diseño del Excel real de control de obra — con el mismo efecto 3D que ya
+// usa "Avance por componente" (cara superior + lateral).
+function barApilada3D(cx, baseline, alto, barW, depth, pct, colorEjec, colorEjecTop, colorEjecSide, colorSaldo, colorSaldoTop, colorSaldoSide) {
+  const x = cx - barW / 2;
+  const hEjec = Math.max(0, Math.min(1, pct)) * alto;
+  const yMid = baseline - hEjec;
+  const yTop = baseline - alto;
+  let out = '';
+  if (hEjec > 0) out += bar3D(x, yMid, baseline, barW, depth, colorEjec, colorEjecTop, colorEjecSide);
+  if (hEjec < alto) out += bar3D(x, yTop, yMid, barW, depth, colorSaldo, colorSaldoTop, colorSaldoSide);
+  return out;
+}
+
 function renderMateriales(partidas, avanceRows) {
   const avanceMap = Object.fromEntries(avanceRows.map(a => [a.partida_id, a]));
   const filas = COMPONENTES.map(pu => {
@@ -744,13 +759,39 @@ function renderMateriales(partidas, avanceRows) {
     const m3Ejec = sum(m3, p => Number(p.metrado||0) * (Number((avanceMap[p.id]||{}).pct_avance)||0));
     return { ...pu, sinDatos:false, tonTotal: kgTotal/1000, tonEjec: kgEjec/1000, m3Total, m3Ejec };
   });
-  $('#materiales').innerHTML = filas.map(f => {
-    if (f.sinDatos) return `<div class="pbar-row"><div class="lbl">${f.nombre}</div><div class="pbar-track"></div><div class="pbar-val" style="color:var(--mut)">sin datos</div></div>`;
-    const pctTon = f.tonTotal ? f.tonEjec/f.tonTotal : 0, pctM3 = f.m3Total ? f.m3Ejec/f.m3Total : 0;
-    return `
-      <div class="pbar-row"><div class="lbl">${f.nombre} acero</div><div class="pbar-track"><div class="pbar-fill ejec" style="width:${Math.min(100,pctTon*100)}%;background:var(--amber)"></div></div><div class="pbar-val">${f.tonEjec.toFixed(0)}/${f.tonTotal.toFixed(0)}t</div></div>
-      <div class="pbar-row"><div class="lbl">${f.nombre} concr.</div><div class="pbar-track"><div class="pbar-fill ejec" style="width:${Math.min(100,pctM3*100)}%"></div></div><div class="pbar-val">${f.m3Ejec.toFixed(0)}/${f.m3Total.toFixed(0)}m³</div></div>`;
-  }).join('');
+
+  const w = 420, depth = 6, barW = 24, n = filas.length || 1, colW = w / n;
+  const filaH = 108; // alto de cada panel (acero / concreto), con su propio 0-100%
+  const h = filaH * 2 + 10;
+  const alto = 62; // alto de la barra en sí (100%)
+  const baseAcero = 30 + alto, baseConcreto = 30 + filaH + alto;
+
+  let svg = '';
+  [
+    { titulo: 'Acero (Ton)', base: baseAcero, campoTotal: 'tonTotal', campoEjec: 'tonEjec', unidad: 't' },
+    { titulo: 'Concreto (m³)', base: baseConcreto, campoTotal: 'm3Total', campoEjec: 'm3Ejec', unidad: 'm³' },
+  ].forEach(fila => {
+    svg += `<text x="4" y="${fila.base - alto - 10}" fill="${SVGC.axis}" font-size="9.5" font-weight="700">${fila.titulo}</text>
+      <line x1="0" y1="${fila.base}" x2="${w}" y2="${fila.base}" stroke="${SVGC.axisLine}" stroke-width="1"/>`;
+    filas.forEach((f, i) => {
+      const cx = colW * i + colW / 2;
+      svg += `<text x="${cx}" y="${fila.base + 14}" fill="${SVGC.axis}" font-size="9" text-anchor="middle">${f.nombre.replace('Puente ','')}</text>`;
+      if (f.sinDatos) {
+        svg += bar3D(cx - barW/2, fila.base - 6, fila.base, barW, depth, SVGC.grid, SVGC.grid, SVGC.grid)
+          + `<text x="${cx}" y="${fila.base - alto - 2}" fill="${SVGC.axis}" font-size="8" text-anchor="middle">sin datos</text>`;
+        return;
+      }
+      const total = f[fila.campoTotal], ejec = f[fila.campoEjec];
+      const pct = total ? ejec/total : 0;
+      svg += barApilada3D(cx, fila.base, alto, barW, depth, pct,
+          '#0e8f4f', '#5fd39a', '#0a6b3a',   // ejecutado: verde
+          '#d7dee8', '#eef1f6', '#aab4c4')   // saldo: gris claro
+        + `<text x="${cx}" y="${fila.base - alto - 2}" fill="${SVGC.axis}" font-size="8" font-weight="700" text-anchor="middle">${(pct*100).toFixed(0)}%</text>`;
+    });
+  });
+
+  $('#materialesSvg').setAttribute('viewBox', `0 0 ${w} ${h}`);
+  $('#materialesSvg').innerHTML = svg;
 }
 
 function renderKpisYTabla(partidas, avanceRows, progRows, periodo) {
