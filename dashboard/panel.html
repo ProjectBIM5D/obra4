@@ -72,6 +72,16 @@ h1{font-size:19px;margin:0 0 3px;} .sub{color:var(--mut);font-size:13px;margin:0
 .mes-chip b{display:block;font-size:14.5px;margin-top:1px;}
 .mes-chip .lbl{color:var(--mut);font-size:11px;}
 .pane{display:none;} .pane.on{display:block;}
+.mat-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;}
+.mat-wrap{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:6px;}
+.mat-donut{flex:0 0 168px;max-width:100%;margin:0 auto;}
+#matBars{flex:1 1 240px;min-width:240px;}
+.mat-alc{font-size:11.5px;font-weight:700;color:var(--tx);text-align:center;margin-bottom:5px;}
+.mat-li{display:flex;align-items:flex-start;gap:6px;font-size:11px;color:var(--tx2);margin:3px 0;line-height:1.3;}
+.mat-li i{flex:0 0 9px;height:9px;border-radius:50%;margin-top:3px;}
+.mat-li b{color:var(--tx);}
+.tag-demo{display:inline-block;background:#fff4d6;color:#8a5a00;border:1px solid #f3d58a;border-radius:999px;padding:1px 8px;font-size:10px;font-weight:600;margin-left:4px;}
+:root[data-theme="dark"] .tag-demo{background:#3a2c14;color:#fbbf24;border-color:#6b4f14;}
 
 /* ── kpis: bloques de color sólido, ícono grande "fantasma", poco espacio vacío ── */
 .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px;}
@@ -95,7 +105,7 @@ h1{font-size:19px;margin:0 0 3px;} .sub{color:var(--mut);font-size:13px;margin:0
 .bar i{display:block;height:100%;background:#fff;}
 
 /* ── chart cards ── */
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;align-items:start;}
 .chart-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);}
 .chart-card h3{margin:0 0 3px;font-size:13.5px;} .chart-card p.hint{margin:0 0 12px;font-size:11.5px;color:var(--mut);}
 svg{display:block;width:100%;height:auto;}
@@ -179,6 +189,7 @@ textarea{resize:vertical;min-height:70px;font-family:inherit;}
     <nav class="nav" id="nav">
       <button data-pane="resumen" class="on">📊 Resumen<small>KPIs y avance general</small></button>
       <button data-pane="parte">📝 Parte diario<small>Registrar avance</small></button>
+      <button data-pane="materiales">🧱 Materiales<small>Registrar metas y avance</small></button>
       <button data-pane="lookahead" class="disabled" title="Aún sin datos reales cargados">📅 Look Ahead<small>Próximamente</small></button>
       <button data-pane="produccion" class="disabled" title="Aún sin datos reales cargados">⚙️ Producción<small>Próximamente</small></button>
       <a href="../index.html" id="visorLink" style="display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:8px;font-size:13.5px;color:var(--tx2);text-decoration:none;">🧊 Visor 3D<small style="display:block;font-size:10px;color:var(--mut);">Modelo BIM del puente</small></a>
@@ -272,10 +283,20 @@ textarea{resize:vertical;min-height:70px;font-family:inherit;}
           <div class="legend2"><span><i style="background:#2f6fed"></i>Programado</span><span><i style="background:var(--red)"></i>Ejecutado</span></div>
         </div>
         <div class="chart-card">
-          <h3>Control de acero (Ton) y concreto (m³)</h3>
-          <p class="hint">Metrado total vs. ejecutado, por componente</p>
-          <svg id="materialesSvg" viewBox="0 0 420 226"></svg>
-          <div class="legend2"><span><i style="background:#0e8f4f"></i>Ejecutado</span><span><i style="background:#d7dee8"></i>Saldo</span></div>
+          <div class="mat-head">
+            <h3 style="margin:0">Control de materiales</h3>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <label for="matSel" style="font-size:11.5px;color:var(--mut);">Material:</label>
+              <select id="matSel" style="background:var(--input);border:1px solid var(--line2);color:var(--tx);border-radius:6px;padding:5px 8px;font-size:12px;"></select>
+            </div>
+          </div>
+          <p class="hint" style="margin-top:3px"><b id="matMes"></b> · cantidad total vs. ejecutado por componente <span id="matEjemplo" class="tag-demo" style="display:none">datos de ejemplo</span></p>
+          <p id="matVacio" class="hint" style="display:none">No hay materiales configurados en la base de datos todavía (tablas <code>materiales</code>, <code>material_metas</code>, <code>material_avance_mensual</code>).</p>
+          <div class="mat-wrap">
+            <div class="mat-donut"><svg id="matDonut" viewBox="0 0 200 200"></svg><div id="matDonutLeg"></div></div>
+            <svg id="matBars" viewBox="0 0 330 230"></svg>
+          </div>
+          <div class="legend2"><span><i style="background:#0e8f4f"></i>Ejecutado</span><span><i style="background:#d97706"></i>Saldo pendiente</span></div>
         </div>
       </div>
 
@@ -330,6 +351,89 @@ textarea{resize:vertical;min-height:70px;font-family:inherit;}
         </div>
         <button class="btn" id="btnGuardar" type="submit">Guardar parte diario</button>
       </form>
+    </section>
+
+    <!-- ═══════════ REGISTRO DE MATERIALES ═══════════ -->
+    <section class="pane" data-pane="materiales">
+      <div id="matMsgBox"></div>
+      <p id="matAvisoDemo" class="hint" style="display:none;margin-bottom:12px;max-width:640px">
+        <span class="tag-demo" style="margin:0 6px 0 0">datos de ejemplo</span>
+        Hoy hay datos de ejemplo cargados. Antes de registrar datos reales, bórralos (script <code>materiales_quitar_demo.sql</code>) para que no se mezclen con los tuyos.
+      </p>
+
+      <form class="pform" id="matMetaForm" style="margin-bottom:16px">
+        <h3 style="margin:0 0 4px;font-size:14px">1 · Meta total del material</h3>
+        <p class="hint" style="margin:0 0 14px">Cuánto hay que ejecutar en total en ese puente/tramo. Se registra una vez por componente y material (para corregirla, pídeselo al administrador).</p>
+        <div class="row2">
+          <div class="field" id="fm-comp">
+            <label for="mm_comp">Componente</label>
+            <select id="mm_comp"></select>
+            <span class="field-err">Elige un componente</span>
+          </div>
+          <div class="field" id="fm-mat">
+            <label for="mm_mat">Material</label>
+            <select id="mm_mat"></select>
+            <span class="field-err">Elige un material</span>
+          </div>
+        </div>
+        <div class="row2" id="mm_nuevoBox" style="display:none">
+          <div class="field" id="fm-nnombre">
+            <label for="mm_nnombre">Nombre del material nuevo</label>
+            <input id="mm_nnombre" type="text" placeholder="Ej. Pilotes">
+            <span class="field-err">Escribe el nombre</span>
+          </div>
+          <div class="field" id="fm-nunidad">
+            <label for="mm_nunidad">Unidad</label>
+            <input id="mm_nunidad" type="text" placeholder="Ej. und, m³, Ton">
+            <span class="field-err">Escribe la unidad</span>
+          </div>
+        </div>
+        <div class="field" id="fm-total" style="max-width:300px">
+          <label for="mm_total">Cantidad total <span class="hint mono" id="mm_unidadLbl"></span></label>
+          <input id="mm_total" type="number" step="0.01" min="0" placeholder="0.00">
+          <span class="field-err">Ingresa una cantidad mayor a 0</span>
+        </div>
+        <button class="btn" id="mm_btnMeta" type="submit">Guardar meta</button>
+      </form>
+
+      <form class="pform" id="matAvForm" style="margin-bottom:16px">
+        <h3 style="margin:0 0 4px;font-size:14px">2 · Avance ejecutado del mes</h3>
+        <p class="hint" style="margin:0 0 14px">Lo que se ejecutó en ESE mes (no el acumulado): el acumulado y el saldo se calculan solos.</p>
+        <div class="row2">
+          <div class="field" id="fa-comp">
+            <label for="ma_comp">Componente</label>
+            <select id="ma_comp"></select>
+            <span class="field-err">Elige un componente</span>
+          </div>
+          <div class="field" id="fa-mat">
+            <label for="ma_mat">Material</label>
+            <select id="ma_mat"></select>
+            <span class="field-err">Elige un material</span>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field" id="fa-mes">
+            <label for="ma_mes">Mes</label>
+            <input id="ma_mes" type="month">
+            <span class="field-err">Elige el mes</span>
+          </div>
+          <div class="field" id="fa-cant">
+            <label for="ma_cant">Cantidad ejecutada en el mes <span class="hint mono" id="ma_unidadLbl"></span></label>
+            <input id="ma_cant" type="number" step="0.01" min="0" placeholder="0.00">
+            <span class="field-err">Ingresa una cantidad (0 o más)</span>
+          </div>
+        </div>
+        <p class="hint" id="ma_resumen" style="margin:0 0 14px;min-height:16px"></p>
+        <button class="btn" id="ma_btn" type="submit">Guardar avance del mes</button>
+      </form>
+
+      <h3 style="margin:18px 0 8px;font-size:14px">Lo registrado hasta ahora</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Componente</th><th>Material</th><th>Meta total</th><th>Ejecutado acum.</th><th>Saldo</th><th>Avance</th><th>Origen</th></tr></thead>
+          <tbody id="matTbody"><tr><td colspan="7" class="mono" style="color:var(--mut)">—</td></tr></tbody>
+        </table>
+      </div>
     </section>
 
     <!-- ═══════════ LOOK AHEAD / PRODUCCIÓN ═══════════ -->
@@ -387,7 +491,8 @@ document.querySelectorAll('#nav button').forEach(b => {
     document.querySelector(`.pane[data-pane="${b.dataset.pane}"]`).classList.add('on');
     const nComp = COMPONENTES.length;
     const titles = { resumen: ['DASHBOARD - CONTROL DE OBRA', `${nComp} componente${nComp===1?'':'s'} de la obra, en un solo lugar`],
-      parte: ['Nuevo parte diario', 'Registra el avance ejecutado en obra'] };
+      parte: ['Nuevo parte diario', 'Registra el avance ejecutado en obra'],
+      materiales: ['Registro de materiales', 'Metas totales y avance mensual por componente'] };
     if (titles[b.dataset.pane]) { $('#pageTitle').textContent = titles[b.dataset.pane][0]; $('#pageSub').textContent = titles[b.dataset.pane][1]; }
     $('#side').classList.remove('open'); $('#overlay').classList.remove('on');
   });
@@ -628,6 +733,7 @@ function activarMes(periodo, silencioso) {
   if (!silencioso) $('#curvaMesSel').value = periodo;
   actualizarChipsMes(periodo, curvaPorPeriodoActual);
   renderAvancePuente(periodo);
+  renderMateriales(periodo);
   renderKpisYTabla(DATA.partidas, DATA.avance, DATA.programado, periodo);
 }
 
@@ -730,69 +836,109 @@ function renderAvancePuente(periodo) {
   $('#avancePuenteSvg').innerHTML = bars;
 }
 
-// columna apilada al 100% (ejecutado abajo + saldo arriba = el total de esa barra),
-// igual al diseño del Excel real de control de obra — con el mismo efecto 3D que ya
-// usa "Avance por componente" (cara superior + lateral).
-function barApilada3D(cx, baseline, alto, barW, depth, pct, colorEjec, colorEjecTop, colorEjecSide, colorSaldo, colorSaldoTop, colorSaldoSide) {
-  const x = cx - barW / 2;
-  const hEjec = Math.max(0, Math.min(1, pct)) * alto;
-  const yMid = baseline - hEjec;
-  const yTop = baseline - alto;
-  let out = '';
-  if (hEjec > 0) out += bar3D(x, yMid, baseline, barW, depth, colorEjec, colorEjecTop, colorEjecSide);
-  if (hEjec < alto) out += bar3D(x, yTop, yMid, barW, depth, colorSaldo, colorSaldoTop, colorSaldoSide);
-  return out;
+// ── Control de materiales ─────────────────────────────────────────────────────────
+// Todo sale de la base: `materiales` (catálogo: acero, concreto, encofrado, ...),
+// `material_metas` (cantidad total por componente) y `material_avance_mensual`
+// (ejecutado por mes). A la izquierda un anillo con el total (ejecutado vs saldo) y a la
+// derecha columnas apiladas por componente, en cantidades reales (no en %), ligadas al mes
+// elegido en la Curva S. El desplegable lista los materiales que existan en la base.
+let matSel = null; // código del material elegido en el desplegable
+const C_EJEC = '#0e8f4f', C_SALDO = '#d97706';
+const uniCorta = (u) => u === 'Ton' ? 'tn' : u;
+const fmtCant = (v) => Number(v).toLocaleString('es-PE', { maximumFractionDigits: v >= 100 ? 0 : 1 });
+function nicoMax(v) {
+  if (!(v > 0)) return 1;
+  const p = Math.pow(10, Math.floor(Math.log10(v))), f = v / p;
+  return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * p;
 }
 
-function renderMateriales(partidas, avanceRows) {
-  const avanceMap = Object.fromEntries(avanceRows.map(a => [a.partida_id, a]));
-  const filas = COMPONENTES.map(pu => {
-    const proy = DATA.proyectos.find(x => x.codigo === pu.id);
-    const partidasP = proy ? partidas.filter(p => p.proyecto_id === proy.id) : [];
-    if (!partidasP.length) return { ...pu, sinDatos: true };
-    const kg = partidasP.filter(p=>p.unidad==='kg');
-    const m3 = partidasP.filter(p=>p.unidad==='m3');
-    const sum = (arr, f) => arr.reduce((s,p)=>s+f(p),0);
-    const kgTotal = sum(kg, p=>Number(p.metrado||0));
-    const kgEjec = sum(kg, p => Number(p.metrado||0) * (Number((avanceMap[p.id]||{}).pct_avance)||0));
-    const m3Total = sum(m3, p=>Number(p.metrado||0));
-    const m3Ejec = sum(m3, p => Number(p.metrado||0) * (Number((avanceMap[p.id]||{}).pct_avance)||0));
-    return { ...pu, sinDatos:false, tonTotal: kgTotal/1000, tonEjec: kgEjec/1000, m3Total, m3Ejec };
+function renderMateriales(periodo) {
+  const mats = DATA.materiales || [], metas = DATA.matMetas || [], avance = DATA.matAvance || [];
+  const sel = $('#matSel');
+  const disponibles = mats.filter(m => metas.some(t => t.material_id === m.id));
+  const d = periodo ? new Date(periodo) : null;
+  $('#matMes').textContent = d ? `Corte: ${MESES_ES[d.getUTCMonth()]} ${d.getUTCFullYear()}` : '';
+
+  if (!disponibles.length) {
+    sel.innerHTML = '<option>—</option>';
+    $('#matDonut').innerHTML = ''; $('#matBars').innerHTML = ''; $('#matDonutLeg').innerHTML = '';
+    $('#matEjemplo').style.display = 'none'; $('#matVacio').style.display = '';
+    return;
+  }
+  $('#matVacio').style.display = 'none';
+  sel.innerHTML = disponibles.map(m => `<option value="${esc(m.codigo)}">${esc(m.nombre)} (${esc(m.unidad)})</option>`).join('');
+  if (!disponibles.some(m => m.codigo === matSel)) matSel = disponibles[0].codigo;
+  sel.value = matSel;
+  const mat = disponibles.find(m => m.codigo === matSel);
+  const u = esc(uniCorta(mat.unidad));
+
+  // por componente: meta total y ejecutado acumulado hasta el mes elegido
+  const filas = COMPONENTES.map(c => {
+    const proy = DATA.proyectos.find(x => x.codigo === c.id);
+    const meta = proy && metas.find(t => t.proyecto_id === proy.id && t.material_id === mat.id);
+    if (!meta) return { ...c, sinDatos: true };
+    const total = Number(meta.cantidad_total) || 0;
+    const ejec = Math.min(total, avance
+      .filter(a => a.proyecto_id === proy.id && a.material_id === mat.id && (!periodo || a.periodo <= periodo))
+      .reduce((s, a) => s + (Number(a.ejecutado_parcial) || 0), 0));
+    return { ...c, sinDatos: false, total, ejec, saldo: Math.max(0, total - ejec) };
   });
+  const hayEjemplo = [...metas, ...avance].some(r => r.material_id === mat.id && String(r.fuente || '').startsWith('demo'));
+  $('#matEjemplo').style.display = hayEjemplo ? '' : 'none';
 
-  const w = 420, depth = 6, barW = 24, n = filas.length || 1, colW = w / n;
-  const filaH = 108; // alto de cada panel (acero / concreto), con su propio 0-100%
-  const h = filaH * 2 + 10;
-  const alto = 62; // alto de la barra en sí (100%)
-  const baseAcero = 30 + alto, baseConcreto = 30 + filaH + alto;
+  // ── anillo: total del alcance elegido arriba (General = todos; o un solo componente) ──
+  const enAlcance = filas.filter(f => !f.sinDatos && (seleccionada === GENERAL || f.id === seleccionada));
+  const tTot = enAlcance.reduce((s, f) => s + f.total, 0);
+  const tEj = enAlcance.reduce((s, f) => s + f.ejec, 0);
+  const tSa = Math.max(0, tTot - tEj);
+  const pct = tTot ? tEj / tTot : 0;
+  const R = 62, SW = 26, C = 2 * Math.PI * R, dash = pct * C;
+  $('#matDonut').innerHTML = tTot ? `
+    <circle cx="100" cy="100" r="${R}" fill="none" stroke="${C_SALDO}" stroke-width="${SW}"/>
+    <circle cx="100" cy="100" r="${R}" fill="none" stroke="${C_EJEC}" stroke-width="${SW}"
+      stroke-dasharray="${dash.toFixed(2)} ${(C - dash).toFixed(2)}" transform="rotate(-90 100 100)"/>
+    <text x="100" y="94" text-anchor="middle" font-size="11" style="fill:var(--mut)">Total</text>
+    <text x="100" y="114" text-anchor="middle" font-size="15" font-weight="800" style="fill:var(--tx)">${fmtCant(tTot)} ${u}</text>`
+    : `<circle cx="100" cy="100" r="${R}" fill="none" stroke="${SVGC.grid}" stroke-width="${SW}"/>
+       <text x="100" y="104" text-anchor="middle" font-size="11" style="fill:var(--mut)">sin datos</text>`;
+  const alcance = seleccionada === GENERAL ? `Total ${enAlcance.length} componente${enAlcance.length === 1 ? '' : 's'}`
+    : (COMPONENTES.find(c => c.id === seleccionada) || {}).nombre || '';
+  $('#matDonutLeg').innerHTML = tTot ? `
+    <div class="mat-alc">${alcance}</div>
+    <div class="mat-li"><i style="background:${C_EJEC}"></i><span>Ejecutado <b>${fmtCant(tEj)} ${u}</b> (${(pct * 100).toFixed(1)}%)</span></div>
+    <div class="mat-li"><i style="background:${C_SALDO}"></i><span>Saldo pendiente <b>${fmtCant(tSa)} ${u}</b> (${((1 - pct) * 100).toFixed(1)}%)</span></div>`
+    : `<div class="mat-alc">${alcance}</div>`;
 
-  let svg = '';
-  [
-    { titulo: 'Acero (Ton)', base: baseAcero, campoTotal: 'tonTotal', campoEjec: 'tonEjec', unidad: 't' },
-    { titulo: 'Concreto (m³)', base: baseConcreto, campoTotal: 'm3Total', campoEjec: 'm3Ejec', unidad: 'm³' },
-  ].forEach(fila => {
-    svg += `<text x="4" y="${fila.base - alto - 10}" fill="${SVGC.axis}" font-size="9.5" font-weight="700">${fila.titulo}</text>
-      <line x1="0" y1="${fila.base}" x2="${w}" y2="${fila.base}" stroke="${SVGC.axisLine}" stroke-width="1"/>`;
-    filas.forEach((f, i) => {
-      const cx = colW * i + colW / 2;
-      svg += `<text x="${cx}" y="${fila.base + 14}" fill="${SVGC.axis}" font-size="9" text-anchor="middle">${f.nombre.replace('Puente ','')}</text>`;
-      if (f.sinDatos) {
-        svg += bar3D(cx - barW/2, fila.base - 6, fila.base, barW, depth, SVGC.grid, SVGC.grid, SVGC.grid)
-          + `<text x="${cx}" y="${fila.base - alto - 2}" fill="${SVGC.axis}" font-size="8" text-anchor="middle">sin datos</text>`;
-        return;
-      }
-      const total = f[fila.campoTotal], ejec = f[fila.campoEjec];
-      const pct = total ? ejec/total : 0;
-      svg += barApilada3D(cx, fila.base, alto, barW, depth, pct,
-          '#0e8f4f', '#5fd39a', '#0a6b3a',   // ejecutado: verde
-          '#d7dee8', '#eef1f6', '#aab4c4')   // saldo: gris claro
-        + `<text x="${cx}" y="${fila.base - alto - 2}" fill="${SVGC.axis}" font-size="8" font-weight="700" text-anchor="middle">${(pct*100).toFixed(0)}%</text>`;
-    });
+  // ── columnas apiladas por componente, en cantidades reales ──
+  const W = 330, H = 230, padL = 44, padR = 8, padT = 22, padB = 30;
+  const plotH = H - padT - padB, plotW = W - padL - padR, base = H - padB;
+  const top = nicoMax(Math.max(0, ...filas.filter(f => !f.sinDatos).map(f => f.total)));
+  const yv = v => base - (v / top) * plotH;
+  let s = `<text x="4" y="12" font-size="10" font-weight="600" style="fill:var(--mut)">${esc(mat.unidad)}</text>`;
+  for (let i = 0; i <= 4; i++) {
+    const v = top * i / 4, y = yv(v);
+    s += `<line x1="${padL}" y1="${y}" x2="${W - padR}" y2="${y}" stroke="${SVGC.grid}" stroke-width="1"/>
+      <text x="${padL - 5}" y="${y + 3}" font-size="9" text-anchor="end" fill="${SVGC.axis}">${fmtCant(v)}</text>`;
+  }
+  const n = filas.length || 1, colW = plotW / n, bw = Math.min(46, colW * 0.62);
+  // rótulo dentro del tramo si alcanza el alto: "95 tn" + "(79%)"
+  const rot = (hh, yc, cx, val, p) => hh >= 27
+    ? `<text x="${cx}" y="${yc - 1}" font-size="9" font-weight="700" text-anchor="middle" fill="#fff">${fmtCant(val)} ${u}</text>
+       <text x="${cx}" y="${yc + 10}" font-size="8" text-anchor="middle" fill="#fff">(${(p * 100).toFixed(0)}%)</text>`
+    : (hh >= 13 ? `<text x="${cx}" y="${yc + 3}" font-size="9" font-weight="700" text-anchor="middle" fill="#fff">${fmtCant(val)}</text>` : '');
+  filas.forEach((f, i) => {
+    const cx = padL + colW * i + colW / 2, x = cx - bw / 2;
+    s += `<text x="${cx}" y="${base + 16}" font-size="9.5" text-anchor="middle" fill="${SVGC.axis}">${f.nombre.replace('Puente ', '')}</text>`;
+    if (f.sinDatos) { s += `<text x="${cx}" y="${base - 8}" font-size="9" text-anchor="middle" fill="${SVGC.axis}">sin datos</text>`; return; }
+    const hE = (f.ejec / top) * plotH, hS = (f.saldo / top) * plotH;
+    s += `<rect x="${x}" y="${base - hE}" width="${bw}" height="${hE}" fill="${C_EJEC}"/>
+      <rect x="${x}" y="${base - hE - hS}" width="${bw}" height="${hS}" fill="${C_SALDO}" rx="2"/>`
+      + rot(hE, base - hE / 2, cx, f.ejec, f.total ? f.ejec / f.total : 0)
+      + rot(hS, base - hE - hS / 2, cx, f.saldo, f.total ? f.saldo / f.total : 0);
   });
-
-  $('#materialesSvg').setAttribute('viewBox', `0 0 ${w} ${h}`);
-  $('#materialesSvg').innerHTML = svg;
+  $('#matBars').innerHTML = s;
 }
+$('#matSel').addEventListener('change', (e) => { matSel = e.target.value; renderMateriales(curvaPopupFijo); });
 
 function renderKpisYTabla(partidas, avanceRows, progRows, periodo) {
   const proyIds = DATA.proyectos
@@ -854,8 +1000,7 @@ function renderKpisYTabla(partidas, avanceRows, progRows, periodo) {
 
 function renderAll() {
   renderBridgeSel();
-  renderMateriales(DATA.partidas, DATA.avance);
-  renderCurvaS(); // al final: ella misma llama a renderAvancePuente(mes activo) para que queden ligados
+  renderCurvaS(); // ella llama a activarMes(): avance por componente, materiales y KPIs quedan ligados al mismo mes
 }
 
 async function bootResumen() {
@@ -878,22 +1023,181 @@ async function bootResumen() {
     // 3) datos de avance, acotados a los componentes de ESTA obra
     const idList = proyectos.map(p => p.id).join(',');
     const filtroProy = idList ? `proyecto_id=in.(${idList})` : 'proyecto_id=eq.00000000-0000-0000-0000-000000000000';
-    const [partidas, avance, programado, curvaMensualRaw, plazoEventos] = await Promise.all([
+    // materiales: si esas tablas todavía no existen en esta base (p. ej. la nube antes de correr
+    // los scripts), no se rompe el panel: la tarjeta avisa que falta configurarlos
+    FILTRO_PROY = filtroProy;
+    const opcional = (p) => p.catch(() => []);
+    const [partidas, avance, programado, curvaMensualRaw, plazoEventos, materiales, matMetas, matAvance] = await Promise.all([
       get(`/partidas?${filtroProy}&select=id,proyecto_id,codigo,nombre,unidad,metrado,presupuesto,fecha_inicio_prog,fecha_fin_prog`),
       get(`/v_avance_partida?${filtroProy}&select=partida_id,proyecto_id,pct_avance,valor_ganado,presupuesto`),
       get(`/v_valor_programado_partida?${filtroProy}&select=partida_id,proyecto_id,valor_programado,presupuesto`),
       get(`/curva_s_mensual?${filtroProy}&select=proyecto_id,periodo,programado_parcial,programado_acumulado,ejecutado_parcial,ejecutado_acumulado&order=periodo`),
       get(`/plazo_eventos?obra_id=eq.${OBRA.id}&select=id,proyecto_id,tipo,descripcion,fecha_inicio,fecha_fin`),
+      opcional(get('/materiales?activo=eq.true&order=orden&select=id,codigo,nombre,unidad,orden')),
+      opcional(get(`/material_metas?${filtroProy}&select=proyecto_id,material_id,cantidad_total,fuente`)),
+      opcional(get(`/material_avance_mensual?${filtroProy}&select=proyecto_id,material_id,periodo,ejecutado_parcial,fuente&order=periodo`)),
     ]);
     const idToCodigo = Object.fromEntries(proyectos.map(p => [p.id, p.codigo]));
     const curvaMensual = curvaMensualRaw.map(r => ({ ...r, proyecto_id_codigo: idToCodigo[r.proyecto_id] }));
     const eventosPlazo = plazoEventos.map(e => ({ ...e, proyecto_id_codigo: e.proyecto_id ? idToCodigo[e.proyecto_id] : null }));
-    DATA = { proyectos, partidas, avance, programado, curvaMensual, eventosPlazo };
+    DATA = { proyectos, partidas, avance, programado, curvaMensual, eventosPlazo, materiales, matMetas, matAvance };
     renderAll();
+    fillMatForms();
   } catch (err) {
     $('#errBox').innerHTML = `<div class="err"><b>No se pudo conectar con la API.</b> ${fuente==='local' ? '¿Está corriendo iniciar_api.bat?' : ''} (${err.message})</div>`;
   }
 }
+
+// ============================================================================
+// REGISTRO DE MATERIALES (pantalla "Materiales": meta total + avance del mes)
+// ============================================================================
+let FILTRO_PROY = '';
+// los nombres de material los puede crear cualquiera desde el formulario: se escapan siempre
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+function mmsg(text, ok) { $('#matMsgBox').innerHTML = `<div class="msg ${ok?'ok':'err'}">${text}</div>`; }
+const matPorId = (id) => (DATA.materiales || []).find(m => m.id === id);
+
+async function enviarMat(path, body, upsert) {
+  const r = await fetch(`${API}${path}`, {
+    method: 'POST',
+    headers: { ...headers, 'Content-Type': 'application/json',
+      Prefer: upsert ? 'resolution=merge-duplicates,return=representation' : 'return=representation' },
+    body: JSON.stringify(body),
+  });
+  const d = await r.json().catch(() => null);
+  if (!r.ok) { const e = new Error((d && d.message) || `HTTP ${r.status}`); e.status = r.status; e.code = d && d.code; throw e; }
+  return d;
+}
+function textoErrorMat(err) {
+  if (err.status === 401 || err.status === 403 || err.code === '42501')
+    return 'Ese registro ya tiene datos reales y por ahora no se puede modificar desde aquí (falta el login). Pídele al administrador que lo corrija.';
+  if (err.status === 404) return 'Las tablas de materiales todavía no existen en esta base de datos.';
+  return esc(err.message);
+}
+
+async function refrescarMateriales() {
+  const op = (p) => p.catch(() => []);
+  const [materiales, matMetas, matAvance] = await Promise.all([
+    op(get('/materiales?activo=eq.true&order=orden&select=id,codigo,nombre,unidad,orden')),
+    op(get(`/material_metas?${FILTRO_PROY}&select=proyecto_id,material_id,cantidad_total,fuente`)),
+    op(get(`/material_avance_mensual?${FILTRO_PROY}&select=proyecto_id,material_id,periodo,ejecutado_parcial,fuente&order=periodo`)),
+  ]);
+  DATA.materiales = materiales; DATA.matMetas = matMetas; DATA.matAvance = matAvance;
+  renderMateriales(curvaPopupFijo);
+  fillMatForms();
+}
+
+function fillMatForms() {
+  const comp = '<option value="">Seleccione…</option>' + DATA.proyectos.map(p => `<option value="${esc(p.id)}">${esc(p.nombre)}</option>`).join('');
+  const mat = (nuevo) => '<option value="">Seleccione…</option>'
+    + (DATA.materiales || []).map(m => `<option value="${esc(m.id)}">${esc(m.nombre)} (${esc(m.unidad)})</option>`).join('')
+    + (nuevo ? '<option value="__nuevo__">➕ Material nuevo…</option>' : '');
+  [['mm_comp', comp], ['ma_comp', comp], ['mm_mat', mat(true)], ['ma_mat', mat(false)]].forEach(([id, html]) => {
+    const el = $('#' + id), prev = el.value; el.innerHTML = html;
+    if ([...el.options].some(o => o.value === prev)) el.value = prev;
+  });
+  const hayDemo = [...(DATA.matMetas || []), ...(DATA.matAvance || [])].some(r => String(r.fuente || '').startsWith('demo'));
+  $('#matAvisoDemo').style.display = hayDemo ? '' : 'none';
+  actualizarFormMat();
+  pintarTablaMateriales();
+}
+
+function actualizarFormMat() {
+  const esNuevo = $('#mm_mat').value === '__nuevo__';
+  $('#mm_nuevoBox').style.display = esNuevo ? '' : 'none';
+  const m1 = matPorId($('#mm_mat').value);
+  $('#mm_unidadLbl').textContent = m1 ? `(${m1.unidad})` : (esNuevo ? '(en la unidad que indiques)' : '');
+  const m2 = matPorId($('#ma_mat').value);
+  $('#ma_unidadLbl').textContent = m2 ? `(${m2.unidad})` : '';
+  const pid = $('#ma_comp').value, mid = $('#ma_mat').value;
+  if (pid && m2) {
+    const meta = (DATA.matMetas || []).find(t => t.proyecto_id === pid && t.material_id === mid);
+    const acum = (DATA.matAvance || []).filter(a => a.proyecto_id === pid && a.material_id === mid)
+      .reduce((s, a) => s + (Number(a.ejecutado_parcial) || 0), 0);
+    $('#ma_resumen').textContent = meta
+      ? `Meta: ${fmtCant(meta.cantidad_total)} ${m2.unidad} · Ejecutado acumulado: ${fmtCant(acum)} · Saldo: ${fmtCant(Math.max(0, meta.cantidad_total - acum))}`
+      : 'Ese componente todavía no tiene meta para este material: regístrala primero en el formulario 1.';
+  } else $('#ma_resumen').textContent = '';
+}
+['mm_mat', 'ma_mat', 'ma_comp'].forEach(id => $('#' + id).addEventListener('change', actualizarFormMat));
+$('#ma_mes').value = new Date().toISOString().slice(0, 7);
+
+function pintarTablaMateriales() {
+  const filas = [];
+  for (const t of (DATA.matMetas || [])) {
+    const p = DATA.proyectos.find(x => x.id === t.proyecto_id), m = matPorId(t.material_id);
+    if (!p || !m) continue;
+    const ej = (DATA.matAvance || []).filter(a => a.proyecto_id === t.proyecto_id && a.material_id === t.material_id)
+      .reduce((s, a) => s + (Number(a.ejecutado_parcial) || 0), 0);
+    filas.push({ p, m, tot: Number(t.cantidad_total) || 0, ej, demo: String(t.fuente || '').startsWith('demo') });
+  }
+  filas.sort((a, b) => a.p.nombre.localeCompare(b.p.nombre) || a.m.nombre.localeCompare(b.m.nombre));
+  $('#matTbody').innerHTML = filas.map(f => `<tr>
+      <td>${esc(f.p.nombre)}</td><td>${esc(f.m.nombre)}</td>
+      <td class="mono">${fmtCant(f.tot)} ${esc(f.m.unidad)}</td><td class="mono">${fmtCant(f.ej)}</td>
+      <td class="mono">${fmtCant(Math.max(0, f.tot - f.ej))}</td>
+      <td class="mono">${f.tot ? (Math.min(1, f.ej / f.tot) * 100).toFixed(1) : '0.0'}%</td>
+      <td>${f.demo ? '<span class="tag-demo" style="margin:0">ejemplo</span>' : 'registrado'}</td></tr>`).join('')
+    || '<tr><td colspan="7" class="mono" style="color:var(--mut)">Aún no hay metas registradas</td></tr>';
+}
+
+// 1) meta total
+$('#matMetaForm').addEventListener('submit', async (e) => {
+  e.preventDefault(); $('#matMsgBox').innerHTML = '';
+  const pid = $('#mm_comp').value; let mid = $('#mm_mat').value;
+  const nuevo = mid === '__nuevo__';
+  const nombre = $('#mm_nnombre').value.trim(), unidad = $('#mm_nunidad').value.trim();
+  const total = parseFloat($('#mm_total').value);
+  let ok = true;
+  marcarError('fm-comp', !pid); if (!pid) ok = false;
+  marcarError('fm-mat', !mid); if (!mid) ok = false;
+  if (nuevo) { marcarError('fm-nnombre', !nombre); marcarError('fm-nunidad', !unidad); if (!nombre || !unidad) ok = false; }
+  marcarError('fm-total', !(total > 0)); if (!(total > 0)) ok = false;
+  if (!ok) return;
+  const btn = $('#mm_btnMeta'); btn.disabled = true; btn.textContent = 'Guardando…';
+  try {
+    if (nuevo) {
+      const codigo = nombre.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '').slice(0, 30) || 'material';
+      const orden = (DATA.materiales || []).reduce((s, m) => Math.max(s, Number(m.orden) || 0), 0) + 1;
+      try { [{ id: mid }] = await enviarMat('/materiales', { codigo, nombre, unidad, orden }); }
+      catch (err) { if (err.status === 409) throw new Error('Ya existe un material con ese nombre: elígelo de la lista.'); throw err; }
+    }
+    await enviarMat('/material_metas?on_conflict=proyecto_id,material_id', { proyecto_id: pid, material_id: mid, cantidad_total: total, fuente: 'manual' }, true);
+    await refrescarMateriales();
+    $('#mm_mat').value = mid; $('#mm_total').value = ''; $('#mm_nnombre').value = ''; $('#mm_nunidad').value = '';
+    actualizarFormMat();
+    mmsg('Meta guardada. Ya aparece en la tabla de abajo y en el Resumen.', true);
+  } catch (err) { mmsg(`No se pudo guardar: ${textoErrorMat(err)}`, false); }
+  finally { btn.disabled = false; btn.textContent = 'Guardar meta'; }
+});
+
+// 2) avance ejecutado del mes
+$('#matAvForm').addEventListener('submit', async (e) => {
+  e.preventDefault(); $('#matMsgBox').innerHTML = '';
+  const pid = $('#ma_comp').value, mid = $('#ma_mat').value, mes = $('#ma_mes').value, cant = parseFloat($('#ma_cant').value);
+  let ok = true;
+  marcarError('fa-comp', !pid); if (!pid) ok = false;
+  marcarError('fa-mat', !mid); if (!mid) ok = false;
+  marcarError('fa-mes', !mes); if (!mes) ok = false;
+  marcarError('fa-cant', !(cant >= 0)); if (!(cant >= 0)) ok = false;
+  if (!ok) return;
+  const meta = (DATA.matMetas || []).find(t => t.proyecto_id === pid && t.material_id === mid);
+  if (!meta) { mmsg('Ese componente todavía no tiene meta para este material: regístrala primero en el formulario 1.', false); return; }
+  const periodo = mes + '-01';
+  const otros = (DATA.matAvance || []).filter(a => a.proyecto_id === pid && a.material_id === mid && a.periodo !== periodo)
+    .reduce((s, a) => s + (Number(a.ejecutado_parcial) || 0), 0);
+  if (otros + cant > Number(meta.cantidad_total)
+      && !confirm(`Con esto el acumulado (${fmtCant(otros + cant)}) supera la meta (${fmtCant(meta.cantidad_total)}). ¿Guardar igual?`)) return;
+  const btn = $('#ma_btn'); btn.disabled = true; btn.textContent = 'Guardando…';
+  try {
+    await enviarMat('/material_avance_mensual?on_conflict=proyecto_id,material_id,periodo',
+      { proyecto_id: pid, material_id: mid, periodo, ejecutado_parcial: cant, fuente: 'manual' }, true);
+    await refrescarMateriales();
+    $('#ma_cant').value = '';
+    mmsg(`Avance de ${esc(mes)} guardado. El acumulado y el saldo se actualizaron solos.`, true);
+  } catch (err) { mmsg(`No se pudo guardar: ${textoErrorMat(err)}`, false); }
+  finally { btn.disabled = false; btn.textContent = 'Guardar avance del mes'; }
+});
 
 // ============================================================================
 // PARTE DIARIO (integrado)
