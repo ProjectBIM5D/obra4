@@ -119,7 +119,7 @@ a{color:inherit;}
 /* jerarquía: la sangría crece con el nivel (--lvl) y unas guías verticales marcan el árbol */
 .la-tabla td.act .nom,.la-tabla td.act .cod{padding-left:calc(10px + var(--lvl,0) * 14px);}
 .la-tabla td.act::before{content:"";position:absolute;left:10px;top:0;bottom:0;width:calc(var(--lvl,0) * 14px);background-image:repeating-linear-gradient(to right,var(--la-l2) 0,var(--la-l2) 1px,transparent 1px,transparent 14px);opacity:.5;pointer-events:none;}
-.la-tabla tr.act-row td.act .nom{font-weight:600;font-size:12px;}
+.la-tabla tr.act-row td.act .nom{font-weight:400;font-size:11.5px;letter-spacing:.2px;color:var(--tx2);}   /* actividades: normal; los títulos van en negrita */
 /* títulos: mayúsculas y bandas de color cada vez más fuertes hacia arriba; el componente se nota y separa */
 .la-tabla tr.tit td{background-color:var(--card);background-image:linear-gradient(rgba(var(--ccr),var(--tint)),rgba(var(--ccr),var(--tint)));color:var(--tx);border-top:1px solid var(--line2);}
 .la-tabla tr.tit td.tl{background-image:linear-gradient(rgba(var(--ccr),var(--tint)),rgba(var(--ccr),var(--tint))),var(--tl-pat);}
@@ -381,6 +381,7 @@ html.cel h1{font-size:16px;margin:0;flex:1 1 0;min-width:0;line-height:1.2;}
 html.cel .sub{font-size:11.5px;margin:0;flex:0 0 100%;}
 /* tablas de Look Ahead y Plan semanal: la columna ACTIVIDAD deja de tapar la pantalla */
 html.cel .la-tabla th.act,html.cel .la-tabla td.act{min-width:var(--actw,150px);max-width:var(--actw,150px);}
+html.tab .la-tabla th.act,html.tab .la-tabla td.act{min-width:var(--actw,380px);max-width:var(--actw,380px);}   /* tablet: se abre y se encoge al deslizar */
 html.cel .la-tabla td.act .nom,html.cel .la-tabla td.act .cod{padding-left:calc(6px + var(--lvl,0) * 8px);}
 html.cel .la-tabla td.act::before{left:4px;width:calc(var(--lvl,0) * 8px);background-image:repeating-linear-gradient(to right,var(--la-l2) 0,var(--la-l2) 1px,transparent 1px,transparent 8px);}
 html.cel .la-tabla td.act .cod{display:none;}
@@ -421,6 +422,9 @@ html.cel .pt-sem{padding:6px 10px;}
 (function(){ try {
   var cel = (window.matchMedia('(pointer:coarse)').matches && Math.min(screen.width, screen.height) < 600) || /[?&]cel=1\b/.test(location.search);
   if (cel) document.documentElement.classList.add('cel');
+  // tablet = pantalla táctil con el lado corto entre 600 y 1100 px (?tab=1 lo fuerza para probar en PC)
+  var lado = Math.min(screen.width, screen.height);
+  if (!cel && ((window.matchMedia('(pointer:coarse)').matches && lado >= 600 && lado < 1100) || /[?&]tab=1\b/.test(location.search))) document.documentElement.classList.add('tab');
 } catch(e) {} })();
 </script>
 </head>
@@ -1074,15 +1078,19 @@ if (esCelular) {
   ['fullscreenchange', 'webkitfullscreenchange'].forEach(ev => document.addEventListener(ev, () => { if (!celEnFull()) { celEntroFull = false; celDesbloquear(); } }));
   $('#avisoCerrar').addEventListener('click', () => document.documentElement.classList.add('sin-aviso'));
 
-  // columna ACTIVIDAD elástica: con la tabla en el borde izquierdo se ve COMPLETA (hasta 2/3 de la pantalla) y, al deslizar a la
+}
+
+const esTablet = document.documentElement.classList.contains('tab');
+if (esCelular || esTablet) {
+  // columna ACTIVIDAD elástica: con la tabla en el borde izquierdo se ve COMPLETA (hasta 2/3 de la pantalla en celular, 62% en tablet) y, al deslizar a la
   // derecha, se encoge hasta 150 px y queda fija; al volver, vuelve a abrirse. El ancho depende solo de cuánto se desliza, sin saltos.
-  const ACT_MIN = 150;
+  const ACT_MIN = esTablet ? 190 : 150;
   const actAncho = (w) => Math.max(ACT_MIN, Math.min(w._actFull || ACT_MIN, (w._actFull || ACT_MIN) - w.scrollLeft));
   function celMedirAct() {
     document.querySelectorAll('.la-wrap').forEach(w => {
       if (!w.offsetParent) return;
       let ancho = 0; w.querySelectorAll('td.act .nom').forEach(n => { if (n.scrollWidth > ancho) ancho = n.scrollWidth; });
-      w._actFull = Math.max(ACT_MIN, Math.min(ancho + 22, Math.round(window.innerWidth * 0.66)));
+      w._actFull = Math.max(ACT_MIN, Math.min(ancho + 22, Math.min(esTablet ? 560 : 9999, Math.round(window.innerWidth * (esTablet ? 0.62 : 0.66)))));
       w.style.setProperty('--actw', actAncho(w) + 'px');
     });
   }
@@ -1095,8 +1103,7 @@ if (esCelular) {
   window.addEventListener('resize', celPlanear);
   window.addEventListener('orientationchange', celPlanear);
   ['#laApp', '#ptApp'].forEach(s => { const el = $(s); if (el) new MutationObserver(celPlanear).observe(el, { childList: true, subtree: true }); });
-  document.querySelectorAll('#nav button').forEach(b => b.addEventListener('click', () => setTimeout(celPlanear, 400)));
-}
+  document.querySelectorAll('#nav button').forEach(b => b.addEventListener('click', () => setTimeout(celPlanear, 400)));}
 
 // ── modo administrador: ventana de acceso y estado ──
 function authUI() {
@@ -2251,8 +2258,8 @@ function laRender() {
   tabla.style.setProperty('--nd', nd);
 
   const hoyLinea = (hoyIdx >= 0 && hoyIdx < nd) ? `<i class="la-hoy" style="left:${hoyIdx * LA_DW}px;width:${LA_DW}px;opacity:.2"></i>` : '';
-  const celdaAct = (f, nivel) => `<td class="act" style="--lvl:${nivel || 0}" title="${esc(f.partida)}"><span class="nom">${f.critico ? '<span class="dot" title="Crítica"></span>' : ''}${esc(laCaso(f.partida))}${f.concepto === 'adicional' ? '<span class="tag-adi">ADI</span>' : ''}</span>`
-    + `<span class="cod"><code class="chip">${esc(f.nodo_codigo)}</code>${f.codigo_esp ? esc(f.codigo_esp) : ''}${f.detalle ? ' · ' + esc(f.detalle) : ''}</span></td>`;
+  // solo el nombre de la actividad; el código único, el código de especificación y el detalle quedan en el texto al pasar el cursor
+  const celdaAct = (f, nivel) => `<td class="act" style="--lvl:${nivel || 0}" title="${esc(f.partida + (f.detalle ? ' — ' + f.detalle : '') + ' · ' + f.nodo_codigo + (f.codigo_esp ? ' · ' + f.codigo_esp : ''))}"><span class="nom">${f.critico ? '<span class="dot" title="Crítica"></span>' : ''}${esc(String(f.partida).toUpperCase())}${f.concepto === 'adicional' ? '<span class="tag-adi">ADI</span>' : ''}</span></td>`;
   const celda = (c, f, nivel) => ({
     wbs: () => `<td class="mono">${esc(f.nodo_codigo)}</td>`, crit: () => `<td class="c">${f.critico ? '<span class="dot"></span>' : ''}</td>`,
     puente: () => `<td>${esc(String(f.proyecto_nombre || '').replace('Puente ', ''))}</td>`, act: () => celdaAct(f, nivel),
@@ -2267,7 +2274,7 @@ function laRender() {
     const ini = arr.map(x => x.fecha_inicio).sort()[0], fin = arr.map(x => x.fecha_fin).sort().pop();
     const pl = arr.reduce((s, x) => s + Number(x.planeado || 0), 0), ej = arr.reduce((s, x) => s + Number(x.ejecutado || 0), 0);
     const dias = laDia(fin) - laDia(ini) + 1;
-    const cel = { act: `<td class="act" style="--lvl:${it.nivel}"><span class="nom">${esc(String(it.nodo.nombre).toUpperCase())}</span><span class="cod"><code class="chip">${esc(it.nodo.codigo)}</code>${arr.length} actividad${arr.length === 1 ? '' : 'es'}</span></td>`, dias: `<td class="n">${dias}</td>`,
+    const cel = { act: `<td class="act" style="--lvl:${it.nivel}" title="${esc(it.nodo.nombre + ' · ' + it.nodo.codigo + ' · ' + arr.length + ' actividad' + (arr.length === 1 ? '' : 'es'))}"><span class="nom">${esc(String(it.nodo.nombre).toUpperCase())}</span></td>`, dias: `<td class="n">${dias}</td>`,
       ini: `<td class="c">${laFmt(ini)}</td>`, fin: `<td class="c">${laFmt(fin)}</td>`, plan: `<td class="n">${laNum(pl, 2)}</td>`, ejec: `<td class="n">${laNum(ej, 2)}</td>` };
     return `<tr class="tit n${Math.min(it.nivel, 3)}" style="--cc:${laColor(it.cod)};--ccr:${laColorRgb(it.cod)}">${cols.map(c => cel[c.k] || '<td></td>').join('')}<td class="tl">${laResumenBarra(arr, d0, nd)}${hoyLinea}</td></tr>`;
   };
@@ -2571,8 +2578,7 @@ function ptRender() {
           return `<td class="${tipo === 'plan' ? 'pl' : 'rl'} ${k >= 5 ? 'fs' : ''} ${fuera ? 'fuera' : ''}"><input class="dia ${tipo}" type="number" min="0" step="0.01" ${dis ? 'disabled' : ''} value="${v ? v : ''}" data-fila="${f.fila_id}" data-tipo="${tipo}" data-k="${k}" data-act="${f.actividad_id}" data-fecha="${d}" title="${tipo === 'plan' ? 'Meta' : 'Ejecutado'} del ${LET_PT[k]} ${d.slice(8, 10)}/${d.slice(5, 7)}"></td>`;
         }).join('');
         html += `<tr class="fila-plan act-row" data-fila="${f.fila_id}"><td rowspan="2" class="mono itm" style="font-size:10.5px">${esc(f.nodo_codigo)}</td>`
-          + `<td rowspan="2" class="act" style="--lvl:${nivel}"><span class="nom">${f.critico ? '<span class="dot" title="Crítica"></span>' : ''}${esc(laCaso(f.partida))}${f.concepto === 'adicional' ? '<span class="tag-adi">ADI</span>' : ''}${editable ? ` <button class="quitar" title="Quitar del plan de la semana" data-quitar="${f.fila_id}">✕</button>` : ''}</span>`
-          + `<span class="cod">${esc(String(f.proyecto_nombre || '').replace('Puente ', ''))} · ${esc(f.codigo_esp || '')}${f.detalle ? ' · ' + esc(f.detalle) : ''}</span></td>`
+          + `<td rowspan="2" class="act" style="--lvl:${nivel}" title="${esc(f.partida + (f.detalle ? ' — ' + f.detalle : '') + ' · ' + f.nodo_codigo + (f.codigo_esp ? ' · ' + f.codigo_esp : ''))}"><span class="nom">${f.critico ? '<span class="dot" title="Crítica"></span>' : ''}${esc(String(f.partida).toUpperCase())}${f.concepto === 'adicional' ? '<span class="tag-adi">ADI</span>' : ''}${editable ? ` <button class="quitar" title="Quitar del plan de la semana" data-quitar="${f.fila_id}">✕</button>` : ''}</span></td>`
           + `<td rowspan="2" class="c">${esc(f.unidad || '')}</td><td rowspan="2" class="n" data-c="acum">${num2(f.acum_anterior)}</td>`
           + `<td class="medida">Plan</td>${celdas('plan')}<td class="n" data-c="plan_total" style="font-weight:700">${num2(f.plan_total)}</td>`
           + `<td rowspan="2" class="n" data-c="spi">${f.spi == null ? '' : (f.spi * 100).toFixed(0) + '%'}</td>`
