@@ -51,6 +51,14 @@ a{color:inherit;}
 .nav small{display:block;font-size:10px;color:var(--mut);font-weight:400;}
 .side-foot{margin-top:auto;padding:12px 14px 14px;font-size:11px;color:var(--mut);border-top:1px solid var(--line);}
 /* opciones del panel (tema, y fuente de datos solo en la PC de desarrollo): abajo del menú, no en el contenido */
+/* globo desplegable "Datos generales" de la Curva S */
+.dpop{position:absolute;right:16px;top:62px;z-index:30;width:min(460px,calc(100% - 32px));background:var(--card);border:1px solid var(--line2);border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.28);padding:12px 14px 14px;}
+.dpop[hidden]{display:none;}
+.dpop h4{margin:0 0 8px;font-size:12px;color:var(--tx);}
+.dp-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.dp-grid .mes-chip{min-width:0;}
+.dp-src{margin:0;font-size:11.5px;color:var(--mut);line-height:1.5;}
+#btnDatos b{font-weight:700;}
 .opt-row{display:flex;align-items:center;gap:6px;margin-bottom:8px;}
 .opt-row > span{flex:1;font-weight:600;}
 .opt-row .seg-btn,.opt-row .src-btn{padding:5px 9px;}
@@ -274,18 +282,27 @@ textarea{resize:vertical;min-height:70px;font-family:inherit;}
         </div>
       </div>
 
-      <div class="chart-card" style="margin-bottom:16px">
+      <div class="chart-card" style="margin-bottom:16px;position:relative">
         <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;align-items:center;">
           <div>
             <h3 style="margin:0" id="curvaTitulo">Curva S general (S/. acumulados)</h3>
-            <p class="hint" id="curvaHint">Datos reales de control de obra: programado vs. ejecutado (acumulado mensual)</p>
+            <p class="hint" id="curvaHint">Programado vs. ejecutado (acumulado mensual)</p>
           </div>
-          <div style="display:flex;align-items:center;gap:6px;">
-            <label for="curvaMesSel" style="font-size:11.5px;color:var(--mut);">Ver mes:</label>
-            <select id="curvaMesSel" style="background:var(--input);border:1px solid var(--line2);color:var(--tx);border-radius:6px;padding:5px 8px;font-size:12px;"></select>
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;">
+            <button type="button" id="btnDatos" class="seg-btn" aria-expanded="false" aria-controls="datosPop" title="Plazo y fuente de los montos">ⓘ Datos generales <b id="btnDatosTxt"></b></button>
+            <span style="display:flex;align-items:center;gap:6px;">
+              <label for="curvaMesSel" style="font-size:11.5px;color:var(--mut);">Ver mes:</label>
+              <select id="curvaMesSel" style="background:var(--input);border:1px solid var(--line2);color:var(--tx);border-radius:6px;padding:5px 8px;font-size:12px;"></select>
+            </span>
           </div>
         </div>
-        <div id="plazoInfo" style="display:flex;flex-wrap:wrap;gap:10px;margin:10px 0 0;"></div>
+        <!-- globo desplegable: el plazo y la fuente de los montos, sin ocupar espacio sobre la curva -->
+        <div id="datosPop" class="dpop" hidden role="dialog" aria-label="Datos generales">
+          <h4>Plazo</h4>
+          <div id="plazoInfo" class="dp-grid"></div>
+          <h4 style="margin-top:12px">Fuente de los montos</h4>
+          <p id="datosFuentes" class="dp-src"></p>
+        </div>
         <div id="curvaMesKpis" style="display:flex;flex-wrap:wrap;gap:10px;margin:10px 0 4px;"></div>
         <div id="curvaWrap" style="position:relative;">
           <svg id="curvaSvg" viewBox="0 0 900 320"></svg>
@@ -575,7 +592,7 @@ function plazoSeleccion() {
 // fila de datos del plazo, encima del gráfico: cómo se llega a la fecha de fin vigente
 function renderPlazoInfo(p, hoy) {
   const box = $('#plazoInfo');
-  if (!p) { box.innerHTML = ''; return; }
+  if (!p) { box.innerHTML = ''; $('#btnDatosTxt').textContent = ''; return; }
   const chip = (lbl, val, color) => `<div class="mes-chip"><span class="lbl">${lbl}</span><b${color ? ` style="color:${color}"` : ''}>${val}</b></div>`;
   const faltan = Math.ceil((new Date(p.finVigente) - hoy) / DIA_MS);
   const estado = faltan >= 0 ? `${faltan} día${faltan === 1 ? '' : 's'}` : `vencido hace ${-faltan} d`;
@@ -587,7 +604,21 @@ function renderPlazoInfo(p, hoy) {
     + (p.dOtros ? chip('Otros (adicionales)', `+${p.dOtros} d`, 'var(--amber)') : '')
     + chip(`Fin de plazo vigente${p.define ? ' · define ' + esc(p.define) : ''}`, dmy(p.finVigente), SVGC.plazo)
     + chip('Faltan', estado, faltan >= 0 ? 'var(--green)' : 'var(--red)');
+  // dato clave siempre a la vista, en el propio botón: cuántos días faltan para el fin de plazo vigente
+  $('#btnDatosTxt').textContent = faltan >= 0 ? `· faltan ${faltan} d` : `· vencido hace ${-faltan} d`;
 }
+
+// globo "Datos generales": se abre al tocar el botón; se cierra al tocar fuera o con Esc
+const dPop = $('#datosPop'), dBtn = $('#btnDatos');
+function abrirDatos(abrir) {
+  dPop.hidden = !abrir;
+  dBtn.setAttribute('aria-expanded', String(abrir));
+  dBtn.classList.toggle('on', abrir);
+  if (abrir) dPop.style.top = (dBtn.getBoundingClientRect().bottom - dPop.offsetParent.getBoundingClientRect().top + 8) + 'px';
+}
+dBtn.addEventListener('click', (e) => { e.stopPropagation(); abrirDatos(dPop.hidden); });
+document.addEventListener('click', (e) => { if (!dPop.hidden && !dPop.contains(e.target)) abrirDatos(false); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') abrirDatos(false); });
 document.querySelectorAll('[data-alc]').forEach(b => b.addEventListener('click', () => {
   if (alcance === b.dataset.alc) return;
   alcance = b.dataset.alc;
@@ -661,6 +692,10 @@ let curvaPeriodos = []; // se llena en cada render, lo usa el <select> de mes y 
 let curvaPopupFijo = null; // periodo que el usuario eligió explícitamente (select o clic)
 let curvaPorPeriodoActual = {}; // datos del último render, para volver a este popup al quitar el mouse
 let curvaPxPorPeriodo = {}; // posición x (en el SVG) de cada mes, para mover la línea sin redibujar todo
+let curvaAngosto = null;    // true si la curva se dibujó en modo angosto (tablet/celular); ver renderCurvaS
+{ let t; window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(() => {
+  if (typeof DATA !== 'undefined' && DATA && curvaAngosto !== null && (($('#curvaWrap').clientWidth || 900) < 640) !== curvaAngosto) renderAll();
+}, 200); }); }
 
 function renderCurvaS() {
   const hoy = new Date();
@@ -676,14 +711,16 @@ function renderCurvaS() {
     filas = todas.filter(r => r.proyecto_id_codigo === seleccionada);
   }
   const quien = seleccionada === GENERAL ? `Suma de los ${COMPONENTES.length} componentes` : `Solo ${(COMPONENTES.find(c => c.id === seleccionada) || {}).nombre || ''}`;
-  $('#curvaHint').innerHTML = `${quien} · ${ALCANCE_TXT[alcance]} · montos subtotal (sin IGV). Programado: `
-    + (DATA.version ? `cronograma vigente «${esc(DATA.version.nombre)}»` : 'curva de control de obra') + '. Ejecutado: control de obra.';
+  $('#curvaHint').textContent = `${quien} · ${ALCANCE_TXT[alcance]}`;
+  $('#datosFuentes').innerHTML = `Montos subtotal (sin IGV). <b>Programado:</b> `
+    + (DATA.version ? `cronograma vigente «${esc(DATA.version.nombre)}»` : 'curva de control de obra') + '. <b>Ejecutado:</b> control de obra.';
   document.querySelectorAll('[data-alc]').forEach(b => b.classList.toggle('on', b.dataset.alc === alcance));
 
   if (!filas.length) {
     const msg = alcance === 'adicional' ? 'Este componente no tiene adicional' : 'Sin datos reales de Curva S todavía para esta selección';
+    $('#curvaSvg').setAttribute('viewBox', '0 0 900 320');
     $('#curvaSvg').innerHTML = `<text x="450" y="150" fill="${SVGC.axis}" font-size="13" text-anchor="middle">${msg}</text>`;
-    $('#curvaMesSel').innerHTML = ''; $('#curvaMesKpis').innerHTML = ''; $('#plazoInfo').innerHTML = '';
+    $('#curvaMesSel').innerHTML = ''; $('#curvaMesKpis').innerHTML = ''; $('#plazoInfo').innerHTML = ''; $('#btnDatosTxt').textContent = '';
     $('#legendFinPlazo').style.display = 'none';
     // los KPI no deben quedarse con los valores de la selección anterior
     ['#kPresu', '#kProg', '#kValor', '#kPct'].forEach(s => { $(s).textContent = '—'; });
@@ -711,7 +748,10 @@ function renderCurvaS() {
   // "Avance por componente" y las tarjetas KPI de arriba, para que los % coincidan siempre)
   const base = progSeries[progSeries.length - 1].y || 1;
 
-  const w=900, h=320, padL=52, padR=16, padT=54, padB=50;
+  // en pantallas angostas (tablet/celular) el gráfico usa una proporción más alta: con la ancha (900×320) la curva
+  // quedaba aplastada. Se vuelve a dibujar solo si al girar/redimensionar cambia de modo.
+  curvaAngosto = ($('#curvaWrap').clientWidth || 900) < 640;
+  const w = curvaAngosto ? 640 : 900, h = curvaAngosto ? 400 : 320, padL=52, padR=16, padT=54, padB=50;
   const yMax = Math.max(...progSeries.map(p=>p.y), ...ejecSeries.map(p=>p.y), 1);
   const plazo = plazoSeleccion();
   const xMin = progSeries[0].x;
@@ -730,10 +770,11 @@ function renderCurvaS() {
 
   // meses en el eje X (cada corte mensual)
   const fechas = periodos.map(p => new Date(p));
-  const paso = fechas.length > 18 ? 2 : 1; // si hay muchos meses, muestra 1 de cada 2 para que no se amontonen
+  const paso = (fechas.length > 18 || w < 700) ? 2 : 1; // si hay muchos meses (o poco ancho), muestra 1 de cada 2 para que no se amontonen
   let ejeX = '';
   fechas.forEach((c, i) => {
     if (i % paso !== 0 && i !== fechas.length-1) return;
+    if (i !== fechas.length-1 && (fechas.length-1) - i < paso) return;   // no pegar la penúltima con la última (la última siempre se muestra)
     const x = px(c.getTime());
     const alBorde = x > w - padR - 16;   // la última etiqueta se alinea al borde para no salirse del gráfico
     ejeX += `<text x="${alBorde ? w - 2 : x}" y="${h-padB+22}" fill="${SVGC.axis}" font-size="10" text-anchor="${alBorde ? 'end' : 'middle'}">${MESES_ES[c.getUTCMonth()]}-${String(c.getUTCFullYear()).slice(2)}</text>`;
