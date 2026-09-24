@@ -37,7 +37,7 @@ a{color:inherit;}
 /* ── layout ── */
 #app{display:flex;min-height:100vh;}
 #side{width:var(--side-w);flex:0 0 var(--side-w);background:var(--panel);border-right:1px solid var(--line);
-  display:flex;flex-direction:column;position:sticky;top:0;height:100vh;}
+  display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;}
 .brand{padding:20px 18px 14px;border-bottom:1px solid var(--line);}
 .brand b{font-size:15px;} .brand p{margin:3px 0 0;font-size:11.5px;color:var(--mut);}
 .nav{padding:14px 10px;display:flex;flex-direction:column;gap:4px;}
@@ -49,7 +49,12 @@ a{color:inherit;}
 .nav button.disabled{opacity:.4;cursor:default;}
 .nav button.disabled:hover{background:transparent;}
 .nav small{display:block;font-size:10px;color:var(--mut);font-weight:400;}
-.side-foot{margin-top:auto;padding:14px 18px;font-size:11px;color:var(--mut);border-top:1px solid var(--line);}
+.side-foot{margin-top:auto;padding:12px 14px 14px;font-size:11px;color:var(--mut);border-top:1px solid var(--line);}
+/* opciones del panel (tema, y fuente de datos solo en la PC de desarrollo): abajo del menú, no en el contenido */
+.opt-row{display:flex;align-items:center;gap:6px;margin-bottom:8px;}
+.opt-row > span{flex:1;font-weight:600;}
+.opt-row .seg-btn,.opt-row .src-btn{padding:5px 9px;}
+.foot-txt{margin-top:2px;opacity:.85;}
 
 #main{flex:1;min-width:0;padding:22px 26px 40px;}
 h1{font-size:19px;margin:0 0 3px;} .sub{color:var(--mut);font-size:13px;margin:0 0 16px;}
@@ -201,7 +206,18 @@ textarea{resize:vertical;min-height:70px;font-family:inherit;}
       <button data-pane="produccion" class="disabled" title="Aún sin datos reales cargados">⚙️ Producción<small>Próximamente</small></button>
       <a href="../index.html" id="visorLink" style="display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:8px;font-size:13.5px;color:var(--tx2);text-decoration:none;">🧊 Visor 3D<small style="display:block;font-size:10px;color:var(--mut);">Modelo BIM del puente</small></a>
     </nav>
-    <div class="side-foot">v1 · datos reales de obra_control</div>
+    <div class="side-foot">
+      <div class="opt-row"><span>Tema</span>
+        <button class="seg-btn" data-tema="claro" title="Tema claro">☀ Claro</button>
+        <button class="seg-btn" data-tema="oscuro" title="Tema oscuro">🌙 Oscuro</button>
+      </div>
+      <!-- solo aparece al abrir el panel desde esta PC (localhost); en la página publicada siempre se usa la nube -->
+      <div class="opt-row" id="fuenteBox" style="display:none"><span>Datos</span>
+        <button class="src-btn" data-src="local" title="Base de datos de esta PC">Local</button>
+        <button class="src-btn" data-src="cloud" title="Supabase (nube)">Nube</button>
+      </div>
+      <div class="foot-txt">v1 · datos reales de obra<span id="apiUrl" class="mono" style="display:none"></span></div>
+    </div>
   </aside>
   <div id="overlay"></div>
 
@@ -211,17 +227,6 @@ textarea{resize:vertical;min-height:70px;font-family:inherit;}
         <button id="menuBtn">☰</button>
         <h1 id="pageTitle">DASHBOARD - CONTROL DE OBRA</h1>
         <p class="sub" id="pageSub">Cargando…</p>
-      </div>
-      <div>
-        <p class="api">Fuente:
-          <button class="src-btn" data-src="local">PC local</button>
-          <button class="src-btn" data-src="cloud">Supabase (nube)</button>
-          — <span id="apiUrl" class="mono"></span>
-        </p>
-        <p class="api" style="margin-top:6px">Tema:
-          <button class="seg-btn" data-tema="claro">☀ Claro</button>
-          <button class="seg-btn" data-tema="oscuro">🌙 Oscuro</button>
-        </p>
       </div>
     </div>
 
@@ -468,7 +473,9 @@ const FUENTES = {
   },
 };
 const esLocal = ['localhost', '127.0.0.1'].includes(location.hostname);
-let fuente = localStorage.getItem('obra-fuente') || (esLocal ? 'local' : 'cloud');
+// En la página publicada se usa SIEMPRE la nube (no hay selector); solo en esta PC se puede elegir local o nube.
+let fuente = esLocal ? (localStorage.getItem('obra-fuente') || 'local') : 'cloud';
+if (!FUENTES[fuente]) fuente = esLocal ? 'local' : 'cloud';
 let { url: API, headers } = FUENTES[fuente];
 
 // ── tema claro/oscuro (ya aplicado desde <head>; acá solo el botón y su estado) ──
@@ -612,7 +619,10 @@ document.querySelectorAll('.src-btn').forEach(b => {
   b.classList.toggle('on', b.dataset.src === fuente);
   b.addEventListener('click', () => { localStorage.setItem('obra-fuente', b.dataset.src); location.reload(); });
 });
-$('#apiUrl').textContent = API;
+if (esLocal) {                      // selector de fuente y URL de la API: solo para quien desarrolla en esta PC
+  $('#fuenteBox').style.display = '';
+  $('#apiUrl').textContent = ' · ' + API; $('#apiUrl').style.display = '';
+}
 
 // ============================================================================
 // RESUMEN
