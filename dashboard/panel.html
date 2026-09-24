@@ -24,6 +24,7 @@
   --ic-blue-bg:#e7effe;    --ic-blue-fg:#2f6fed;
   --ic-red-bg:#fdecec;     --ic-red-fg:#ef4444;
   --ic-amber-bg:#fdf3e9;   --ic-amber-fg:#b45309;
+  --sb-thumb:#c5d0e6; --sb-hover:#8fa6d6; --sb-track:#eef2fa;
 }
 :root[data-theme="dark"]{
   --bg:#0a0f1a; --panel:#111827; --card:#151d2e; --line:#232f45; --line2:#2c3a54;
@@ -35,8 +36,20 @@
   --ic-blue-bg:#1c2c4d;    --ic-blue-fg:#7ba2f8;
   --ic-red-bg:#3a1f22;     --ic-red-fg:#f87171;
   --ic-amber-bg:#3a2c14;   --ic-amber-fg:#fbbf24;
+  --sb-thumb:#34435f; --sb-hover:#5b7bc0; --sb-track:#0f1626;
 }
 html{-webkit-text-size-adjust:100%;}
+/* barras de desplazamiento: finas, redondeadas y con los colores del tema (Chrome, Edge, Safari y Firefox) */
+::-webkit-scrollbar{width:11px;height:11px;}
+::-webkit-scrollbar-track{background:var(--sb-track);border-radius:8px;}
+::-webkit-scrollbar-thumb{background:var(--sb-thumb);border-radius:8px;border:2.5px solid var(--sb-track);background-clip:padding-box;min-height:36px;min-width:36px;}
+::-webkit-scrollbar-thumb:hover{background:var(--sb-hover);border-width:2px;background-clip:padding-box;}
+::-webkit-scrollbar-thumb:active{background:var(--blue);background-clip:padding-box;}
+::-webkit-scrollbar-corner{background:var(--sb-track);}
+@supports (-moz-appearance:none){ *{scrollbar-width:thin;scrollbar-color:var(--sb-thumb) var(--sb-track);} }
+#side::-webkit-scrollbar{width:8px;} #side::-webkit-scrollbar-track{background:transparent;}
+#side::-webkit-scrollbar-thumb{border-color:transparent;}
+.la-wrap::-webkit-scrollbar-track{border-radius:0;} .la-wrap{scrollbar-gutter:auto;}
 *{box-sizing:border-box;}
 body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.4 'Segoe UI',system-ui,sans-serif;overflow-x:hidden;transition:background .15s,color .15s;}
 .mono{font-family:var(--mono);}
@@ -51,7 +64,8 @@ a{color:inherit;}
 .nav{padding:14px 10px;display:flex;flex-direction:column;gap:4px;}
 .nav button{display:flex;align-items:center;gap:10px;text-align:left;white-space:nowrap;background:transparent;border:0;color:var(--tx2);
   padding:11px 12px;border-radius:8px;font-size:13.5px;cursor:pointer;font-family:inherit;}
-.nav button:hover{background:#eef2fa;}
+.nav button:hover{background:var(--ic-neutral-bg);color:var(--tx);}   /* claro y oscuro: fondo y texto con contraste */
+#visorLink:hover{background:var(--ic-neutral-bg);color:var(--tx) !important;}
 .nav button.on{background:var(--blue);color:#fff;font-weight:600;}
 .nav button.on small{color:#dbe6ff;}
 .nav button.disabled{opacity:.4;cursor:default;}
