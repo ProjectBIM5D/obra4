@@ -223,6 +223,11 @@ textarea{resize:vertical;min-height:70px;font-family:inherit;}
     <!-- ═══════════ RESUMEN ═══════════ -->
     <section class="pane on" data-pane="resumen">
       <div class="bridges" id="bridgeSel"></div>
+      <p class="api" id="alcanceBox" style="display:none;margin:12px 0 0">Alcance:
+        <button class="seg-btn" data-alc="contrato">Contrato principal</button>
+        <button class="seg-btn" data-alc="adicional">Adicional</button>
+        <button class="seg-btn" data-alc="todo">Contrato + adicional</button>
+      </p>
       <br>
 
       <p class="hint" style="margin:-6px 0 10px" id="kpiMes"></p>
@@ -268,11 +273,12 @@ textarea{resize:vertical;min-height:70px;font-family:inherit;}
             <select id="curvaMesSel" style="background:var(--input);border:1px solid var(--line2);color:var(--tx);border-radius:6px;padding:5px 8px;font-size:12px;"></select>
           </div>
         </div>
+        <div id="plazoInfo" style="display:flex;flex-wrap:wrap;gap:10px;margin:10px 0 0;"></div>
         <div id="curvaMesKpis" style="display:flex;flex-wrap:wrap;gap:10px;margin:10px 0 4px;"></div>
         <div id="curvaWrap" style="position:relative;">
           <svg id="curvaSvg" viewBox="0 0 900 320"></svg>
         </div>
-        <div class="legend2"><span><i style="background:#2f6fed"></i>Programado</span><span><i style="background:var(--red)"></i>Ejecutado real</span><span><i style="background:#9db8ea"></i>Mes elegido</span><span><i style="background:#d97706"></i>Corte de hoy</span><span id="legendPlazo" style="display:none"><i style="background:#64748b;opacity:.35"></i>Suspensión / ampliación de plazo</span></div>
+        <div class="legend2"><span><i style="background:#2f6fed"></i>Programado</span><span><i style="background:var(--red)"></i>Ejecutado real</span><span><i style="background:#9db8ea"></i>Mes elegido</span><span><i style="background:#d97706"></i>Corte de hoy</span><span id="legendPlazo" style="display:none"><i style="background:#64748b;opacity:.35"></i>Suspensión / ampliación de plazo</span><span id="legendFinPlazo" style="display:none"><i style="background:#7c3aed"></i>Fin de plazo</span></div>
       </div>
 
       <div class="grid2">
@@ -466,8 +472,8 @@ document.querySelectorAll('[data-tema]').forEach(b => {
 });
 // colores de los gráficos SVG (se dibujan en JS, no leen el CSS) — un juego por tema
 const SVGC = tema === 'oscuro'
-  ? { grid:'#26324a', axis:'#8a97b5', axisLine:'#2c3a54', warnBg:'#3a2020', warnBorder:'#7a3030', warnText:'#f87171' }
-  : { grid:'#e4e9f4', axis:'#8592a8', axisLine:'#d5deef', warnBg:'#fdecec', warnBorder:'#f0a3aa', warnText:'#b91c1c' };
+  ? { grid:'#26324a', axis:'#8a97b5', axisLine:'#2c3a54', warnBg:'#3a2020', warnBorder:'#7a3030', warnText:'#f87171', halo:'#151d2e', plazo:'#a78bfa', plazoOrig:'#8a97b5' }
+  : { grid:'#e4e9f4', axis:'#8592a8', axisLine:'#d5deef', warnBg:'#fdecec', warnBorder:'#f0a3aa', warnText:'#b91c1c', halo:'#ffffff', plazo:'#7c3aed', plazoOrig:'#94a3b8' };
 
 const $ = (s) => document.querySelector(s);
 const fmt = (n, d=0) => 'S/. ' + Number(n||0).toLocaleString('es-PE', {minimumFractionDigits:d, maximumFractionDigits:d});
@@ -480,6 +486,100 @@ let COMPONENTES = [];       // [{id: codigo, nombre, tipo}, ...] de la obra acti
 let OBRA = null;
 const GENERAL = '__general__';
 let seleccionada = GENERAL; // selección ÚNICA: GENERAL (suma de todo) o el código de un componente
+
+// alcance: el contrato principal, el adicional (otra prestación, con su propio presupuesto) o ambos
+let alcance = 'contrato';
+try { const a = localStorage.getItem('obra-alcance'); if (['contrato', 'adicional', 'todo'].includes(a)) alcance = a; } catch (e) {}
+const ALCANCE_TXT = { contrato: 'Contrato principal', adicional: 'Adicional', todo: 'Contrato + adicional' };
+const enAlcance = (r) => alcance === 'todo' || (r.concepto || 'contrato') === alcance;
+const dmy = (f) => f ? `${f.slice(8, 10)}/${f.slice(5, 7)}/${f.slice(2, 4)}` : '';   // 'YYYY-MM-DD' -> 'dd/mm/aa'
+const DIA_MS = 86400000;
+
+// ── Curva S mensual = programado del cronograma valorizado VIGENTE (subtotal sin IGV, por
+// componente y por alcance) + ejecutado real de curva_s_mensual. Los periodos del cronograma no
+// son siempre meses exactos (parcial, suspensión, "1 de noviembre"): se reúnen por mes de su
+// fecha de fin. Si la base todavía no tiene el cronograma, se usa el programado que trae
+// curva_s_mensual (como antes), para que el panel nunca quede en blanco.
+function armarCurvaMensual(ejecRows, progRows, idToCodigo) {
+  const mesDe = (f) => String(f).slice(0, 7) + '-01';
+  const sigMes = (m) => { let y = +m.slice(0, 4), mo = +m.slice(5, 7) + 1; if (mo > 12) { y++; mo = 1; } return `${y}-${String(mo).padStart(2, '0')}-01`; };
+  const grupos = {};
+  const g = (pid, con) => grupos[pid + '|' + con] || (grupos[pid + '|' + con] = { pid, con, prog: {}, ejec: {} });
+  if (progRows.length) {
+    for (const r of progRows) { const x = g(r.proyecto_id, r.concepto || 'contrato'), m = mesDe(r.fecha_fin); x.prog[m] = (x.prog[m] || 0) + (Number(r.programado_parcial) || 0); }
+  } else {
+    for (const r of ejecRows) g(r.proyecto_id, r.concepto || 'contrato').prog[mesDe(r.periodo)] = Number(r.programado_parcial) || 0;
+  }
+  // el ejecutado puede ir ANTES que el programado (p. ej. el adicional se ejecutó en mayo y estaba programado
+  // en junio-julio): cada concepto arranca en su primer mes, sea de programado o de ejecutado
+  for (const r of ejecRows) g(r.proyecto_id, r.concepto || 'contrato').ejec[mesDe(r.periodo)] = { p: Number(r.ejecutado_parcial) || 0, a: Number(r.ejecutado_acumulado) || 0 };
+  const todosMeses = Object.values(grupos).flatMap(x => [...Object.keys(x.prog), ...Object.keys(x.ejec)]).sort();
+  if (!todosMeses.length) return [];
+  const ultimo = todosMeses[todosMeses.length - 1];
+  const filas = [];
+  for (const x of Object.values(grupos)) {
+    const propios = [...Object.keys(x.prog), ...Object.keys(x.ejec)].sort();
+    let progA = 0, ejecA = 0;
+    for (let m = propios[0]; m <= ultimo; m = sigMes(m)) {
+      const progP = x.prog[m] || 0; progA += progP;
+      const e = x.ejec[m];
+      if (e) ejecA = e.a;                      // sin registro ese mes: se arrastra el acumulado anterior
+      filas.push({ proyecto_id: x.pid, proyecto_id_codigo: idToCodigo[x.pid], concepto: x.con, periodo: m,
+        programado_parcial: progP, programado_acumulado: progA, ejecutado_parcial: e ? e.p : 0, ejecutado_acumulado: ejecA });
+    }
+  }
+  return filas;
+}
+
+// Una fila por periodo. Con alcance "contrato + adicional" un componente tiene dos filas por mes
+// (una de cada concepto): se SUMAN, para que los KPI y el avance por componente incluyan ambos.
+function unaFilaPorPeriodo(rows) {
+  const CAMPOS = ['programado_parcial', 'programado_acumulado', 'ejecutado_parcial', 'ejecutado_acumulado'];
+  const por = {};
+  for (const r of rows) {
+    const a = por[r.periodo] || (por[r.periodo] = { ...r, ...Object.fromEntries(CAMPOS.map(k => [k, 0])) });
+    for (const k of CAMPOS) a[k] += Number(r[k]) || 0;
+  }
+  return Object.values(por).sort((a, b) => a.periodo < b.periodo ? -1 : 1);
+}
+
+// plazo de lo que está seleccionado: un componente, o la obra (= el componente que termina último)
+function plazoSeleccion() {
+  const ps = DATA.plazos || [];
+  const filas = seleccionada === GENERAL ? ps : ps.filter(p => p.codigo === seleccionada);
+  if (!filas.length) return null;
+  const def = filas.reduce((a, b) => a.fecha_fin_vigente >= b.fecha_fin_vigente ? a : b);
+  const ini = filas.map(p => p.fecha_inicio).sort()[0];
+  const finOrig = filas.map(p => p.fecha_fin_original).sort().pop();
+  const nombre = (COMPONENTES.find(c => c.id === def.codigo) || {}).nombre;
+  return { inicio: ini, finOriginal: finOrig, finVigente: def.fecha_fin_vigente,
+    diasContrato: Math.round((new Date(finOrig) - new Date(ini)) / DIA_MS) + 1,
+    dSusp: def.dias_suspension, dAmp: def.dias_ampliacion, dOtros: def.dias_otros,
+    define: seleccionada === GENERAL ? nombre : null };
+}
+
+// fila de datos del plazo, encima del gráfico: cómo se llega a la fecha de fin vigente
+function renderPlazoInfo(p, hoy) {
+  const box = $('#plazoInfo');
+  if (!p) { box.innerHTML = ''; return; }
+  const chip = (lbl, val, color) => `<div class="mes-chip"><span class="lbl">${lbl}</span><b${color ? ` style="color:${color}"` : ''}>${val}</b></div>`;
+  const faltan = Math.ceil((new Date(p.finVigente) - hoy) / DIA_MS);
+  const estado = faltan >= 0 ? `${faltan} día${faltan === 1 ? '' : 's'}` : `vencido hace ${-faltan} d`;
+  box.innerHTML =
+    chip('Inicio', dmy(p.inicio))
+    + chip('Plazo contractual', `${p.diasContrato} d → ${dmy(p.finOriginal)}`)
+    + (p.dSusp ? chip('Suspensión', `+${p.dSusp} d`, 'var(--amber)') : '')
+    + (p.dAmp ? chip('Ampliaciones', `+${p.dAmp} d`, 'var(--amber)') : '')
+    + (p.dOtros ? chip('Otros (adicionales)', `+${p.dOtros} d`, 'var(--amber)') : '')
+    + chip(`Fin de plazo vigente${p.define ? ' · define ' + esc(p.define) : ''}`, dmy(p.finVigente), SVGC.plazo)
+    + chip('Faltan', estado, faltan >= 0 ? 'var(--green)' : 'var(--red)');
+}
+document.querySelectorAll('[data-alc]').forEach(b => b.addEventListener('click', () => {
+  if (alcance === b.dataset.alc) return;
+  alcance = b.dataset.alc;
+  try { localStorage.setItem('obra-alcance', alcance); } catch (e) {}
+  renderAll();
+}));
 
 // ── navegación por botones (una sola página) ──
 document.querySelectorAll('#nav button').forEach(b => {
@@ -513,9 +613,10 @@ $('#apiUrl').textContent = API;
 let DATA = null; // { proyectos, partidas, avance, programado }
 
 function tieneDatosReales(codigoComponente) {
+  // hay datos si el componente tiene curva S (cronograma o control de obra) o partidas cargadas
+  if ((DATA.curvaMensual || []).some(r => r.proyecto_id_codigo === codigoComponente)) return true;
   const proy = DATA.proyectos.find(x => x.codigo === codigoComponente);
-  if (!proy) return false;
-  return DATA.partidas.some(p => p.proyecto_id === proy.id);
+  return !!proy && DATA.partidas.some(p => p.proyecto_id === proy.id);
 }
 
 function renderBridgeSel() {
@@ -546,23 +647,32 @@ let curvaPxPorPeriodo = {}; // posición x (en el SVG) de cada mes, para mover l
 
 function renderCurvaS() {
   const hoy = new Date();
-  const todas = DATA.curvaMensual || [];
+  const todas = (DATA.curvaMensual || []).filter(enAlcance);
 
   let filas;
   if (seleccionada === GENERAL) {
     $('#curvaTitulo').textContent = `Curva S general (S/. acumulados)`;
-    $('#curvaHint').textContent = `Suma de los ${COMPONENTES.length} componentes de la obra`;
     filas = todas;
   } else {
     const comp = COMPONENTES.find(c => c.id === seleccionada);
     $('#curvaTitulo').textContent = comp ? `Curva S — ${comp.nombre} (S/. acumulados)` : 'Curva S por componente';
-    $('#curvaHint').textContent = comp ? `Mostrando solo ${comp.nombre}` : '';
     filas = todas.filter(r => r.proyecto_id_codigo === seleccionada);
   }
+  const quien = seleccionada === GENERAL ? `Suma de los ${COMPONENTES.length} componentes` : `Solo ${(COMPONENTES.find(c => c.id === seleccionada) || {}).nombre || ''}`;
+  $('#curvaHint').innerHTML = `${quien} · ${ALCANCE_TXT[alcance]} · montos subtotal (sin IGV). Programado: `
+    + (DATA.version ? `cronograma vigente «${esc(DATA.version.nombre)}»` : 'curva de control de obra') + '. Ejecutado: control de obra.';
+  document.querySelectorAll('[data-alc]').forEach(b => b.classList.toggle('on', b.dataset.alc === alcance));
 
   if (!filas.length) {
-    $('#curvaSvg').innerHTML = `<text x="450" y="150" fill="${SVGC.axis}" font-size="13" text-anchor="middle">Sin datos reales de Curva S todavía para esta selección</text>`;
-    $('#curvaMesSel').innerHTML = ''; $('#curvaMesKpis').innerHTML = '';
+    const msg = alcance === 'adicional' ? 'Este componente no tiene adicional' : 'Sin datos reales de Curva S todavía para esta selección';
+    $('#curvaSvg').innerHTML = `<text x="450" y="150" fill="${SVGC.axis}" font-size="13" text-anchor="middle">${msg}</text>`;
+    $('#curvaMesSel').innerHTML = ''; $('#curvaMesKpis').innerHTML = ''; $('#plazoInfo').innerHTML = '';
+    $('#legendFinPlazo').style.display = 'none';
+    // los KPI no deben quedarse con los valores de la selección anterior
+    ['#kPresu', '#kProg', '#kValor', '#kPct'].forEach(s => { $(s).textContent = '—'; });
+    ['#kPresuS', '#kProgS', '#kValorS', '#kEstadoS', '#kpiMes'].forEach(s => { $(s).textContent = ''; });
+    $('#kBar').style.width = '0';
+    renderAvancePuente(null);
     return;
   }
 
@@ -586,7 +696,10 @@ function renderCurvaS() {
 
   const w=900, h=320, padL=52, padR=16, padT=54, padB=50;
   const yMax = Math.max(...progSeries.map(p=>p.y), ...ejecSeries.map(p=>p.y), 1);
-  const xMin = progSeries[0].x, xMax = progSeries[progSeries.length-1].x;
+  const plazo = plazoSeleccion();
+  const xMin = progSeries[0].x;
+  // el eje llega hasta el fin de plazo vigente (p. ej. 1 nov por la ampliación), aunque la curva termine antes
+  const xMax = Math.max(progSeries[progSeries.length-1].x, plazo ? new Date(plazo.finVigente).getTime() : 0);
   const px = ts => padL + (ts - xMin) / ((xMax - xMin) || 1) * (w - padL - padR);
   const py = y => (h - padB) - (y / yMax) * (h - padB - padT);
   const baseline = h - padB;
@@ -595,7 +708,7 @@ function renderCurvaS() {
   for (let i=0;i<=4;i++) {
     const y = padT + (h-padT-padB)*(1-i/4);
     grid += `<line x1="${padL}" y1="${y}" x2="${w-padR}" y2="${y}" stroke="${SVGC.grid}" stroke-width="1"/>
-      <text x="${padL-6}" y="${y+4}" fill="${SVGC.axis}" font-size="10" text-anchor="end">${fmt(yMax*i/4/1000,0)}k</text>`;
+      <text x="${padL-6}" y="${y+4}" fill="${SVGC.axis}" font-size="10" text-anchor="end">${yMax >= 1e6 ? (yMax*i/4/1e6).toFixed(yMax >= 1e7 ? 0 : 1) + ' M' : Math.round(yMax*i/4/1000) + ' k'}</text>`;
   }
 
   // meses en el eje X (cada corte mensual)
@@ -605,7 +718,8 @@ function renderCurvaS() {
   fechas.forEach((c, i) => {
     if (i % paso !== 0 && i !== fechas.length-1) return;
     const x = px(c.getTime());
-    ejeX += `<text x="${x}" y="${h-padB+22}" fill="${SVGC.axis}" font-size="10" text-anchor="middle">${MESES_ES[c.getUTCMonth()]}-${String(c.getUTCFullYear()).slice(2)}</text>`;
+    const alBorde = x > w - padR - 16;   // la última etiqueta se alinea al borde para no salirse del gráfico
+    ejeX += `<text x="${alBorde ? w - 2 : x}" y="${h-padB+22}" fill="${SVGC.axis}" font-size="10" text-anchor="${alBorde ? 'end' : 'middle'}">${MESES_ES[c.getUTCMonth()]}-${String(c.getUTCFullYear()).slice(2)}</text>`;
   });
   ejeX += `<line x1="${padL}" y1="${h-padB}" x2="${w-padR}" y2="${h-padB}" stroke="${SVGC.axisLine}" stroke-width="1"/>`;
 
@@ -622,7 +736,7 @@ function renderCurvaS() {
     if (periodoHoy) {
       const dHoy = porPeriodo[periodoHoy];
       const gapPts = base ? ((dHoy.progA - dHoy.ejecA) / base) * 100 : 0;
-      if (gapPts > 1) {
+      if (gapPts > 1 && ejecSeries.some(p => p.y > 0)) {   // sin nada ejecutado registrado no se avisa "atrasado"
         const bw = 112, bh = 32, by = 2;
         const bx = Math.min(Math.max(x - bw/2, padL), w - padR - bw);
         const tipX = Math.min(Math.max(x, bx + 14), bx + bw - 14);
@@ -693,17 +807,40 @@ function renderCurvaS() {
     if (eFin < xMin || eIni > xMax) return ''; // fuera del rango visible
     const x1 = px(Math.max(eIni, xMin)), x2 = px(Math.min(eFin, xMax));
     const dias = Math.round((eFin - eIni) / 86400000) + 1;
+    // bandas angostas pegadas al borde (p. ej. una ampliación de 10 días): el rótulo se alinea al borde
+    // para no salirse del gráfico
+    const pegadoDerecha = (x1 + x2) / 2 > w - padR - 80;
+    const rotulo = pegadoDerecha
+      ? `<text x="${(x2 - 3).toFixed(1)}" y="${padT+11}" fill="${SVGC.axis}" font-size="8.5" font-weight="700" text-anchor="end">${ETIQUETA_TIPO[ev.tipo]||'Evento'} (${dias}d)</text>`
+      : `<text x="${((x1+x2)/2).toFixed(1)}" y="${padT+11}" fill="${SVGC.axis}" font-size="8.5" font-weight="700" text-anchor="middle">${ETIQUETA_TIPO[ev.tipo]||'Evento'} (${dias}d)</text>`;
     return `<rect x="${x1.toFixed(1)}" y="${padT}" width="${Math.max(2,x2-x1).toFixed(1)}" height="${baseline-padT}" fill="#64748b" opacity="0.14"/>
       <line x1="${x1.toFixed(1)}" y1="${padT}" x2="${x1.toFixed(1)}" y2="${baseline}" stroke="#64748b" stroke-width="1" stroke-dasharray="2,2"/>
       <line x1="${x2.toFixed(1)}" y1="${padT}" x2="${x2.toFixed(1)}" y2="${baseline}" stroke="#64748b" stroke-width="1" stroke-dasharray="2,2"/>
-      <text x="${((x1+x2)/2).toFixed(1)}" y="${padT+11}" fill="${SVGC.axis}" font-size="8.5" font-weight="700" text-anchor="middle">${ETIQUETA_TIPO[ev.tipo]||'Evento'} (${dias}d)</text>`;
+      ${rotulo}`;
   }).join('');
+
+  // ── marcas de plazo: fin contractual original (si hubo suspensiones/ampliaciones) y fin de plazo
+  // vigente. El texto va en vertical pegado a la línea, con un contorno del color del fondo. ──
+  const marcaPlazo = (fechaStr, texto, color, dash) => {
+    const t = new Date(fechaStr).getTime();
+    if (t < xMin || t > xMax) return '';
+    const x = px(t);
+    return `<line x1="${x.toFixed(1)}" y1="${padT}" x2="${x.toFixed(1)}" y2="${baseline}" stroke="${color}" stroke-width="1.4" ${dash ? `stroke-dasharray="${dash}"` : ''}/>
+      <text transform="translate(${(x-4).toFixed(1)},${baseline-6}) rotate(-90)" font-size="9" font-weight="700" fill="${color}" stroke="${SVGC.halo}" stroke-width="3" paint-order="stroke" text-anchor="start">${texto}</text>`;
+  };
+  const marcasPlazo = plazo
+    ? (plazo.finOriginal !== plazo.finVigente ? marcaPlazo(plazo.finOriginal, `Plazo original ${dmy(plazo.finOriginal)}`, SVGC.plazoOrig, '3,3') : '')
+      + marcaPlazo(plazo.finVigente, `Fin de plazo ${dmy(plazo.finVigente)}`, SVGC.plazo, '')
+    : '';
+  $('#legendFinPlazo').style.display = plazo ? '' : 'none';
+  renderPlazoInfo(plazo, hoy);
 
   $('#curvaSvg').setAttribute('viewBox', `0 0 ${w} ${h}`);
   $('#curvaSvg').innerHTML = defs + grid + bandasPlazo + areaFrom(ptsProg, 'gradProg') + areaFrom(ptsEjec, 'gradEjec')
     + ejeX + corteHoy + lineaMes
     + lineFrom(ptsProg, '#2f6fed', '5,4')
     + lineFrom(ptsEjec, '#ef4444')
+    + marcasPlazo
     + hotspots;
   curvaPxPorPeriodo = Object.fromEntries(periodos.map((p, i) => [p, ptsEjec[i].x]));
 
@@ -776,11 +913,11 @@ function bar3D(x, yTop, baseline, width, depth, front, top, side) {
 }
 
 function renderAvancePuente(periodo) {
-  const todas = DATA.curvaMensual || [];
+  const todas = (DATA.curvaMensual || []).filter(enAlcance);
   const d = periodo ? new Date(periodo) : null;
   $('#avancePuenteMes').textContent = d ? `Corte: ${MESES_ES[d.getUTCMonth()]} ${d.getUTCFullYear()}` : '';
   const filas = COMPONENTES.map(pu => {
-    const rows = todas.filter(r => r.proyecto_id_codigo === pu.id).sort((a,b) => a.periodo < b.periodo ? -1 : 1);
+    const rows = unaFilaPorPeriodo(todas.filter(r => r.proyecto_id_codigo === pu.id));
     if (!rows.length) return { ...pu, sinDatos: true };
     const base = Math.max(...rows.map(r => Number(r.programado_acumulado) || 0), 1);
     // si el mes elegido es ANTERIOR al primer registro de este componente, todavía no
@@ -950,9 +1087,9 @@ function renderKpisYTabla(partidas, avanceRows, progRows, periodo) {
 
   // ── KPIs de arriba: dinámicos, del mismo mes elegido en la Curva S (curva_s_mensual
   // real) — antes se quedaban siempre en el estado actual, sin importar el filtro. ──
-  const todas = DATA.curvaMensual || [];
+  const todas = (DATA.curvaMensual || []).filter(enAlcance);
   const porComponente = proyIds.map(pid => {
-    const rows = todas.filter(r => r.proyecto_id === pid).sort((a,b) => a.periodo < b.periodo ? -1 : 1);
+    const rows = unaFilaPorPeriodo(todas.filter(r => r.proyecto_id === pid));
     if (!rows.length) return null;
     const base = Math.max(...rows.map(r => Number(r.programado_acumulado) || 0), 0);
     if (periodo && periodo < rows[0].periodo) return { base, prog: 0, ejec: 0 }; // aún no arrancaba
@@ -978,7 +1115,8 @@ function renderKpisYTabla(partidas, avanceRows, progRows, periodo) {
   $('#kValorS').textContent = `${(pct*100).toFixed(1)}% del total`;
   $('#kPct').textContent = (pct*100).toFixed(1) + '%';
   $('#kBar').style.width = Math.min(100,pct*100) + '%';
-  const estado = pct >= pctProg ? 'Al día o adelantado' : `${((pctProg-pct)*100).toFixed(1)} pts atrás`;
+  const estado = (valor === 0 && prog > 0) ? 'Sin avance registrado'
+    : pct >= pctProg ? 'Al día o adelantado' : `${((pctProg-pct)*100).toFixed(1)} pts atrás`;
   $('#kEstadoS').textContent = estado;
 
   const colorOf = (p) => p >= 1 ? 'var(--green)' : p > 0 ? 'var(--blue)' : 'var(--mut)';
@@ -1027,20 +1165,31 @@ async function bootResumen() {
     // los scripts), no se rompe el panel: la tarjeta avisa que falta configurarlos
     FILTRO_PROY = filtroProy;
     const opcional = (p) => p.catch(() => []);
-    const [partidas, avance, programado, curvaMensualRaw, plazoEventos, materiales, matMetas, matAvance] = await Promise.all([
+    // cronograma valorizado vigente (si esta base ya lo tiene): de ahí sale el programado de la Curva S
+    const versiones = await opcional(get(`/cronograma_versiones?obra_id=eq.${OBRA.id}&vigente=eq.true&select=id,codigo,nombre`));
+    const version = versiones[0] || null;
+    const [partidas, avance, programado, curvaMensualRaw, plazoEventos, materiales, matMetas, matAvance, progRows, plazos] = await Promise.all([
       get(`/partidas?${filtroProy}&select=id,proyecto_id,codigo,nombre,unidad,metrado,presupuesto,fecha_inicio_prog,fecha_fin_prog`),
       get(`/v_avance_partida?${filtroProy}&select=partida_id,proyecto_id,pct_avance,valor_ganado,presupuesto`),
       get(`/v_valor_programado_partida?${filtroProy}&select=partida_id,proyecto_id,valor_programado,presupuesto`),
-      get(`/curva_s_mensual?${filtroProy}&select=proyecto_id,periodo,programado_parcial,programado_acumulado,ejecutado_parcial,ejecutado_acumulado&order=periodo`),
+      // "concepto" (contrato / adicional) existe si la base ya corrió curva_s_adicional.sql; si no, se lee sin él
+      get(`/curva_s_mensual?${filtroProy}&select=proyecto_id,concepto,periodo,programado_parcial,programado_acumulado,ejecutado_parcial,ejecutado_acumulado&order=periodo`)
+        .catch(() => get(`/curva_s_mensual?${filtroProy}&select=proyecto_id,periodo,programado_parcial,programado_acumulado,ejecutado_parcial,ejecutado_acumulado&order=periodo`)),
       get(`/plazo_eventos?obra_id=eq.${OBRA.id}&select=id,proyecto_id,tipo,descripcion,fecha_inicio,fecha_fin`),
       opcional(get('/materiales?activo=eq.true&order=orden&select=id,codigo,nombre,unidad,orden')),
       opcional(get(`/material_metas?${filtroProy}&select=proyecto_id,material_id,cantidad_total,fuente`)),
       opcional(get(`/material_avance_mensual?${filtroProy}&select=proyecto_id,material_id,periodo,ejecutado_parcial,fuente&order=periodo`)),
+      version ? opcional(get(`/v_curva_s_programada?version_id=eq.${version.id}&select=proyecto_id,concepto,periodo_orden,fecha_fin,programado_parcial&order=periodo_orden`)) : Promise.resolve([]),
+      opcional(get(`/v_plazo_componente?obra_id=eq.${OBRA.id}&select=codigo,fecha_inicio,plazo_dias,fecha_fin_original,dias_suspension,dias_ampliacion,dias_otros,fecha_fin_vigente`)),
     ]);
     const idToCodigo = Object.fromEntries(proyectos.map(p => [p.id, p.codigo]));
-    const curvaMensual = curvaMensualRaw.map(r => ({ ...r, proyecto_id_codigo: idToCodigo[r.proyecto_id] }));
+    const curvaMensual = armarCurvaMensual(curvaMensualRaw, progRows, idToCodigo);
     const eventosPlazo = plazoEventos.map(e => ({ ...e, proyecto_id_codigo: e.proyecto_id ? idToCodigo[e.proyecto_id] : null }));
-    DATA = { proyectos, partidas, avance, programado, curvaMensual, eventosPlazo, materiales, matMetas, matAvance };
+    const hayAdicional = progRows.some(r => r.concepto === 'adicional');
+    if (!hayAdicional && alcance !== 'contrato') alcance = 'contrato';
+    DATA = { proyectos, partidas, avance, programado, curvaMensual, eventosPlazo, materiales, matMetas, matAvance,
+             version: progRows.length ? version : null, plazos, hayAdicional };
+    $('#alcanceBox').style.display = hayAdicional ? '' : 'none';
     renderAll();
     fillMatForms();
   } catch (err) {
