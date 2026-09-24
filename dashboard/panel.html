@@ -6,6 +6,11 @@
 <!-- si se añade a la pantalla de inicio (tablet/celular) se abre sin la barra del navegador -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Obra 04">
+<meta name="theme-color" content="#2f6fed">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icono-180.png">
+<link rel="icon" type="image/png" href="icono-192.png">
 <title>Obra 04 · Panel de Control</title>
 <style>
 :root{
@@ -339,13 +344,57 @@ textarea{resize:vertical;min-height:70px;font-family:inherit;}
   .grid2{grid-template-columns:1fr;}
 }
 @media (max-width: 760px){
-  #side{position:fixed;left:0;top:0;bottom:0;z-index:20;transform:translateX(-100%);transition:transform .2s;box-shadow:0 0 30px #000a;}
-  #side.open{transform:translateX(0);}
+  #side{position:fixed;left:0;top:0;bottom:0;z-index:20;transform:translateX(-100%);transition:transform .2s;}
+  #side.open{transform:translateX(0);box-shadow:0 0 30px #000a;}
   #main{padding:16px 14px;}
   #menuBtn{display:inline-flex;}
   .kpis{grid-template-columns:1fr 1fr;gap:10px;}
   .card{padding:11px 13px;} .card .value{font-size:16px;} .card .k-ic-big{width:32px;height:32px;right:8px;}
   .row2{grid-template-columns:1fr;}
+}
+
+/* ═══ SOLO CELULAR (html.cel: pantalla táctil pequeña, vertical u horizontal). Tablet y PC no cambian ═══ */
+html.cel #side{position:fixed;left:0;top:0;bottom:0;z-index:20;transform:translateX(-100%);transition:transform .2s;}
+html.cel #side.open{transform:translateX(0);box-shadow:0 0 30px #000a;}
+html.cel #main{padding:12px 12px 28px;}
+html.cel #menuBtn{display:inline-flex;flex:0 0 auto;}
+html.cel .kpis{grid-template-columns:1fr 1fr;gap:10px;} html.cel .grid2,html.cel .row2{grid-template-columns:1fr;}
+/* cabecera en una línea: ☰ · título · ⛶ */
+html.cel .topbar{position:relative;margin-bottom:10px;display:block;}
+html.cel .topbar>div{display:flex;flex-wrap:wrap;align-items:center;gap:2px 10px;padding-right:48px;}
+html.cel #btnFull{position:absolute;top:0;right:0;}
+html.cel h1{font-size:16px;margin:0;flex:1 1 0;min-width:0;line-height:1.2;}
+html.cel .sub{font-size:11.5px;margin:0;flex:0 0 100%;}
+/* tablas de Look Ahead y Plan semanal: la columna ACTIVIDAD deja de tapar la pantalla */
+html.cel .la-tabla th.act,html.cel .la-tabla td.act{min-width:150px;max-width:150px;}
+html.cel .la-tabla td.act .nom,html.cel .la-tabla td.act .cod{padding-left:calc(6px + var(--lvl,0) * 8px);}
+html.cel .la-tabla td.act::before{left:4px;width:calc(var(--lvl,0) * 8px);background-image:repeating-linear-gradient(to right,var(--la-l2) 0,var(--la-l2) 1px,transparent 1px,transparent 8px);}
+html.cel .la-tabla td.act .cod{display:none;}
+html.cel .la-tabla tr.act-row td.act .nom{font-size:11px;}
+html.cel .la-tabla tr.tit.n0 .nom{font-size:12px;} html.cel .la-tabla tr.tit .nom{font-size:11px;letter-spacing:.2px;}
+html.cel .la-tabla tr.tit.n0 td{height:38px;}
+html.cel .pane[data-pane="lookahead"] .chart-card,html.cel .pane[data-pane="pts"] .chart-card,html.cel .pane[data-pane="ppc"] .chart-card{overflow-x:auto;}
+html.cel .pt-tabla .itm{display:none;}
+html.cel .pt-kpis{grid-template-columns:repeat(3,1fr);gap:8px;} html.cel .pt-kpi{padding:6px 9px;} html.cel .pt-kpi b{font-size:17px;} html.cel .pt-kpi span,html.cel .pt-kpi small{font-size:9.5px;}
+html.cel .pt-sem{padding:6px 10px;}
+/* aviso «gira el celular»: solo en vertical y en las vistas anchas */
+#avisoGiro{display:none;}
+@media (orientation:portrait){
+  html.cel.ancha #avisoGiro{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--amber-bg,#fff4dc);border:1px solid var(--amber,#d97706);color:var(--tx);border-radius:10px;padding:7px 10px;font-size:12px;font-weight:600;margin-bottom:10px;}
+  html.cel.ancha.sin-aviso #avisoGiro{display:none;}
+  #avisoGiro button{background:transparent;border:0;color:var(--tx2);font-size:14px;cursor:pointer;padding:0 4px;}
+}
+/* horizontal: se gana altura para la tabla */
+@media (orientation:landscape){
+  html.cel #main{padding:8px 12px 16px;}
+  html.cel .topbar{margin-bottom:6px;} html.cel .sub{display:none;}
+  html.cel .la-wrap{max-height:calc(100vh - 24px);}
+  html.cel .pt-semanas{margin-bottom:8px;} html.cel .pt-kpis{margin-bottom:8px;}
+  html.cel .pane[data-pane="lookahead"] :is(.btn-sec,.btn),html.cel .pane[data-pane="pts"] :is(.btn-sec,.btn),html.cel .pane[data-pane="ppc"] :is(.btn-sec,.btn){padding:4px 10px;font-size:11px;}
+  html.cel .pane :is(.icon-btn){width:30px;height:30px;} html.cel #menuBtn{width:30px;height:30px;}
+  html.cel .pane :is(.sel-mini,select){padding:3px 6px;font-size:11px;}
+  html.cel .la-bar{gap:6px;margin-bottom:6px;} html.cel .pane .la-semana{gap:6px;}
+  html.cel .pt-sem{padding:4px 9px;} html.cel .pt-sem b{font-size:11.5px;} html.cel .pt-sem small{font-size:9.5px;}
 }
 </style>
 <script>
@@ -353,6 +402,11 @@ textarea{resize:vertical;min-height:70px;font-family:inherit;}
 (function(){ try {
   var t = localStorage.getItem('obra-tema') || 'claro';
   document.documentElement.setAttribute('data-theme', t === 'oscuro' ? 'dark' : 'light');
+} catch(e) {} })();
+// celular = pantalla táctil con el lado corto < 600 px (vale en vertical y en horizontal). Con ?cel=1 se fuerza para probar en PC.
+(function(){ try {
+  var cel = (window.matchMedia('(pointer:coarse)').matches && Math.min(screen.width, screen.height) < 600) || /[?&]cel=1\b/.test(location.search);
+  if (cel) document.documentElement.classList.add('cel');
 } catch(e) {} })();
 </script>
 </head>
@@ -411,6 +465,7 @@ textarea{resize:vertical;min-height:70px;font-family:inherit;}
       <button type="button" id="btnFull" class="icon-btn" title="Pantalla completa" aria-label="Pantalla completa"></button>
     </div>
 
+    <div id="avisoGiro" role="note"><span>↻ Gira el celular para ver mejor la tabla</span><button type="button" id="avisoCerrar" aria-label="Cerrar aviso">✕</button></div>
     <div id="errBox"></div>
 
     <!-- ═══════════ RESUMEN ═══════════ -->
@@ -981,6 +1036,31 @@ const ICONO_SALIR = '<svg viewBox="0 0 24 24"><path d="M8 3v3a2 2 0 0 1-2 2H3M21
   ['fullscreenchange', 'webkitfullscreenchange'].forEach(ev => document.addEventListener(ev, pintar));
 }
 
+// ── celular: Look Ahead / Plan semanal / PPC piden pantalla completa y horizontal; al salir vuelve a vertical ──
+// El bloqueo de orientación solo lo permite el navegador dentro de pantalla completa y tras un toque (Android/Chrome).
+// En iPhone no existe: allí solo se muestra el aviso «Gira el celular» (en vertical).
+const esCelular = document.documentElement.classList.contains('cel');
+const PANES_ANCHOS = ['lookahead', 'pts', 'ppc'];
+let celEntroFull = false;
+const celEnFull = () => document.fullscreenElement || document.webkitFullscreenElement;
+const celDesbloquear = () => { try { if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock(); } catch (e) {} };
+function celPantalla(ancha) {
+  document.documentElement.classList.toggle('ancha', ancha);
+  if (ancha) {
+    const el = document.documentElement, pedir = el.requestFullscreen || el.webkitRequestFullscreen;
+    const bloquear = () => { try { const p = screen.orientation && screen.orientation.lock && screen.orientation.lock('landscape'); if (p && p.catch) p.catch(() => {}); } catch (e) {} };
+    if (!celEnFull() && pedir) { celEntroFull = true; try { const p = pedir.call(el); if (p && p.then) p.then(bloquear, () => { celEntroFull = false; bloquear(); }); else bloquear(); } catch (e) { celEntroFull = false; } }
+    else bloquear();
+  } else if (celEntroFull) {
+    celEntroFull = false; celDesbloquear();
+    if (celEnFull()) { try { (document.exitFullscreen || document.webkitExitFullscreen).call(document); } catch (e) {} }
+  }
+}
+if (esCelular) {
+  ['fullscreenchange', 'webkitfullscreenchange'].forEach(ev => document.addEventListener(ev, () => { if (!celEnFull()) { celEntroFull = false; celDesbloquear(); } }));
+  $('#avisoCerrar').addEventListener('click', () => document.documentElement.classList.add('sin-aviso'));
+}
+
 // ── modo administrador: ventana de acceso y estado ──
 function authUI() {
   $('#btnAdmin').textContent = AUTH.token ? '🔓 Salir' : '🔑 Entrar';
@@ -1051,6 +1131,7 @@ document.querySelectorAll('#nav button').forEach(b => {
       pts: ['Plan semanal', 'Meta y real por día de las actividades del Look Ahead · PAC de la semana'],
       ppc: ['PPC', 'Porcentaje de actividades completadas: trazabilidad semanal y causas de incumplimiento'] };
     if (titles[b.dataset.pane]) { $('#pageTitle').textContent = titles[b.dataset.pane][0]; $('#pageSub').textContent = titles[b.dataset.pane][1]; }
+    if (esCelular) celPantalla(PANES_ANCHOS.includes(b.dataset.pane));
     if (b.dataset.pane === 'lookahead') laCargar();
     if (b.dataset.pane === 'pts') ptCargar();
     if (b.dataset.pane === 'ppc') ppcCargar();
@@ -2433,7 +2514,7 @@ function ptRender() {
 
   const hoy = laHoy();
   const dias = [...Array(7).keys()].map(k => laFecha(d0 + k));
-  let html = `<thead><tr><th class="izq">ITEM</th><th class="izq act">DESCRIPCIÓN DE LA ACTIVIDAD</th><th>UND</th><th>ACUM. ANTERIOR</th><th>MEDIDA</th>`
+  let html = `<thead><tr><th class="izq itm">ITEM</th><th class="izq act">DESCRIPCIÓN DE LA ACTIVIDAD</th><th>UND</th><th>ACUM. ANTERIOR</th><th>MEDIDA</th>`
     + dias.map((d, k) => `<th class="${dias[k] === hoy ? 'hoy' : ''}">${LET_PT[k]}<br><span style="font-weight:500">${d.slice(8, 10)}/${d.slice(5, 7)}</span></th>`).join('')
     + `<th>PLAN / REAL</th><th>KPI AVANCE SPI</th><th>PAC<br>SÍ</th><th>PAC<br>NO</th><th>CAUSAS DE INCUMPLIMIENTO</th><th>RESTRICCIONES</th><th>COMENTARIOS</th></tr></thead><tbody>`;
   const arbol = laArbol(filas);
@@ -2452,7 +2533,7 @@ function ptRender() {
           const dis = !editable || (tipo === 'real' && d > hoy && false);
           return `<td class="${tipo === 'plan' ? 'pl' : 'rl'} ${k >= 5 ? 'fs' : ''} ${fuera ? 'fuera' : ''}"><input class="dia ${tipo}" type="number" min="0" step="0.01" ${dis ? 'disabled' : ''} value="${v ? v : ''}" data-fila="${f.fila_id}" data-tipo="${tipo}" data-k="${k}" data-act="${f.actividad_id}" data-fecha="${d}" title="${tipo === 'plan' ? 'Meta' : 'Ejecutado'} del ${LET_PT[k]} ${d.slice(8, 10)}/${d.slice(5, 7)}"></td>`;
         }).join('');
-        html += `<tr class="fila-plan act-row" data-fila="${f.fila_id}"><td rowspan="2" class="mono" style="font-size:10.5px">${esc(f.nodo_codigo)}</td>`
+        html += `<tr class="fila-plan act-row" data-fila="${f.fila_id}"><td rowspan="2" class="mono itm" style="font-size:10.5px">${esc(f.nodo_codigo)}</td>`
           + `<td rowspan="2" class="act" style="--lvl:${nivel}"><span class="nom">${f.critico ? '<span class="dot" title="Crítica"></span>' : ''}${esc(laCaso(f.partida))}${f.concepto === 'adicional' ? '<span class="tag-adi">ADI</span>' : ''}${editable ? ` <button class="quitar" title="Quitar del plan de la semana" data-quitar="${f.fila_id}">✕</button>` : ''}</span>`
           + `<span class="cod">${esc(String(f.proyecto_nombre || '').replace('Puente ', ''))} · ${esc(f.codigo_esp || '')}${f.detalle ? ' · ' + esc(f.detalle) : ''}</span></td>`
           + `<td rowspan="2" class="c">${esc(f.unidad || '')}</td><td rowspan="2" class="n" data-c="acum">${num2(f.acum_anterior)}</td>`
