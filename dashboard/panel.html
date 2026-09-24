@@ -57,6 +57,155 @@ a{color:inherit;}
 .icon-btn{background:var(--card);border:1px solid var(--line2);color:var(--tx2);width:38px;height:38px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex:0 0 auto;padding:0;}
 .icon-btn:hover{border-color:var(--blue);color:var(--blue);}
 .icon-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.dlg{border:1px solid var(--line2);border-radius:14px;background:var(--card);color:var(--tx);padding:20px 22px;width:min(400px,92vw);box-shadow:0 20px 60px rgba(0,0,0,.4);}
+.dlg::backdrop{background:rgba(2,6,23,.6);}
+.btn-adm{border-color:#d97706;color:var(--amber);}
+.badge-adm{background:#d9770622;color:var(--amber);}
+/* ── Look Ahead: grilla con barras de tiempo ── */
+:root{
+  --la-fs:rgba(100,116,139,.10); --la-l1:rgba(100,116,139,.16); --la-l2:rgba(100,116,139,.42);
+  --la-hdr:#eef3fb; --la-comp:#e4ecfa; --la-grp:#f3f7fd; --la-zebra:rgba(100,116,139,.045);
+  --azul1:#6b9bff; --azul2:#2f6fed; --azul-bg:rgba(47,111,237,.17); --azul-bd:rgba(47,111,237,.55);
+  --rojo1:#f87171; --rojo2:#dc2626; --rojo-bg:rgba(220,38,38,.15); --rojo-bd:rgba(220,38,38,.55);
+  --teal1:#34d3c1; --teal2:#0f766e; --teal-bg:rgba(15,118,110,.17); --teal-bd:rgba(15,118,110,.55);
+}
+:root[data-theme="dark"]{
+  --la-fs:rgba(148,163,184,.075); --la-l1:rgba(148,163,184,.13); --la-l2:rgba(148,163,184,.34);
+  --la-hdr:#0f182b; --la-comp:#18263f; --la-grp:#121c30; --la-zebra:rgba(148,163,184,.035);
+  --azul1:#86adff; --azul2:#3b82f6; --azul-bg:rgba(96,140,245,.24); --azul-bd:rgba(120,160,255,.7);
+  --rojo1:#ff8a8a; --rojo2:#ef4444; --rojo-bg:rgba(248,113,113,.22); --rojo-bd:rgba(255,120,120,.7);
+  --teal1:#4be3d0; --teal2:#14b8a6; --teal-bg:rgba(45,212,191,.2); --teal-bd:rgba(80,225,205,.65);
+}
+.btn-sec{display:inline-flex;align-items:center;gap:6px;background:var(--card);color:var(--tx);border:1px solid var(--line2);padding:8px 14px;border-radius:10px;font-size:12.5px;font-weight:600;cursor:pointer;transition:border-color .12s,color .12s,background .12s,transform .05s;}
+.btn-sec:hover{border-color:var(--blue);color:var(--blue);} .btn-sec:active{transform:translateY(1px);}
+.btn-sec:disabled{opacity:.42;cursor:default;pointer-events:none;}
+[hidden]{display:none !important;}   /* que un display de clase no anule el atributo hidden (botones de administrador, formularios) */
+.btn-sec.pri{background:linear-gradient(180deg,#4a86f7,#2f6fed);border-color:#2f6fed;color:#fff;box-shadow:0 2px 6px rgba(47,111,237,.35);}
+.btn-sec.pri:hover{color:#fff;filter:brightness(1.07);}
+.la-bar{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;}
+.la-semana,.la-acc,.la-filtros{display:flex;flex-wrap:wrap;align-items:center;gap:8px;}
+.la-filtros{font-size:11.5px;color:var(--mut);}
+.la-seg{display:inline-flex;gap:4px;margin-left:auto;}
+.la-chk{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--tx2);cursor:pointer;}
+.la-chk input{width:auto;}
+.la-form{max-width:760px;margin-bottom:14px;}
+.la-form[hidden]{display:none;}
+#laSel,#ptLook{font-weight:600;} #laSel{min-width:250px;}
+.badge{font-weight:700;letter-spacing:.1px;}
+.la-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px;background:var(--card);max-height:74vh;box-shadow:var(--shadow);}
+.la-tabla{border-collapse:separate;border-spacing:0;font-size:12px;min-width:max-content;--dw:26px;
+  --tl-pat:repeating-linear-gradient(to right, transparent 0, transparent calc(var(--dw) * 5), var(--la-fs) calc(var(--dw) * 5), var(--la-fs) calc(var(--dw) * 7)),
+    repeating-linear-gradient(to right, var(--la-l1) 0, var(--la-l1) 1px, transparent 1px, transparent var(--dw)),
+    repeating-linear-gradient(to right, var(--la-l2) 0, var(--la-l2) 2px, transparent 2px, transparent calc(var(--dw) * 7));}
+/* jerarquía: la sangría crece con el nivel (--lvl) y unas guías verticales marcan el árbol */
+.la-tabla td.act .nom,.la-tabla td.act .cod{padding-left:calc(10px + var(--lvl,0) * 14px);}
+.la-tabla td.act::before{content:"";position:absolute;left:10px;top:0;bottom:0;width:calc(var(--lvl,0) * 14px);background-image:repeating-linear-gradient(to right,var(--la-l2) 0,var(--la-l2) 1px,transparent 1px,transparent 14px);opacity:.5;pointer-events:none;}
+.la-tabla tr.act-row td.act .nom{font-weight:600;font-size:12px;}
+/* títulos: mayúsculas y bandas de color cada vez más fuertes hacia arriba; el componente se nota y separa */
+.la-tabla tr.tit td{background-color:var(--card);background-image:linear-gradient(rgba(var(--ccr),var(--tint)),rgba(var(--ccr),var(--tint)));color:var(--tx);border-top:1px solid var(--line2);}
+.la-tabla tr.tit td.tl{background-image:linear-gradient(rgba(var(--ccr),var(--tint)),rgba(var(--ccr),var(--tint))),var(--tl-pat);}
+.la-tabla tr.tit .nom{text-transform:uppercase;color:var(--tx);letter-spacing:.35px;}
+.la-tabla tr.tit .cod{font-size:10px;}
+.la-tabla tr.tit.n0{--tint:.34;} .la-tabla tr.tit.n1{--tint:.17;} .la-tabla tr.tit.n2{--tint:.09;} .la-tabla tr.tit.n3{--tint:.045;}
+.la-tabla tr.tit.n0 td{height:46px;border-top:4px solid var(--cc);border-bottom:1px solid rgba(var(--ccr),.55);}
+.la-tabla tr.tit.n0 td:first-child{box-shadow:inset 7px 0 0 var(--cc);}
+.la-tabla tr.tit.n0 td.act{box-shadow:inset 7px 0 0 var(--cc),3px 0 6px -3px rgba(0,0,0,.22);}
+.la-tabla tr.tit.n0 .nom{font-size:14px;font-weight:900;}
+.la-tabla tr.tit.n0 td.n,.la-tabla tr.tit.n0 td.c{font-weight:800;font-size:12.5px;}
+.la-tabla tr.tit.n1 td{height:34px;} .la-tabla tr.tit.n1 .nom{font-size:12.5px;font-weight:800;}
+.la-tabla tr.tit.n2 td{height:30px;} .la-tabla tr.tit.n2 .nom{font-size:12px;font-weight:800;}
+.la-tabla tr.tit.n3 td{height:28px;} .la-tabla tr.tit.n3 .nom{font-size:11.5px;font-weight:700;}
+.la-tabla tr.tit.n1 td,.la-tabla tr.tit.n2 td,.la-tabla tr.tit.n3 td{font-weight:700;}
+.la-tabla tr.tit td:first-child{box-shadow:inset 4px 0 0 rgba(var(--ccr),.7);}
+.la-tabla tr.tit td.act{box-shadow:inset 4px 0 0 rgba(var(--ccr),.7),3px 0 6px -3px rgba(0,0,0,.22);}
+.la-tabla tr.tit.n0 td.act{box-shadow:inset 7px 0 0 var(--cc),3px 0 6px -3px rgba(0,0,0,.22);}
+.la-tabla th{position:sticky;top:0;z-index:4;background:var(--la-hdr);color:var(--mut);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:8px 9px;border-bottom:2px solid var(--line2);border-right:1px solid var(--line);white-space:nowrap;vertical-align:bottom;text-align:left;}
+.la-tabla td{padding:0 9px;height:34px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);white-space:nowrap;color:var(--tx2);background:var(--card);font-variant-numeric:tabular-nums;}
+.la-tabla .n{text-align:right;} .la-tabla .c{text-align:center;color:var(--tx2);}
+.la-tabla th.act,.la-tabla td.act{position:sticky;left:0;z-index:3;min-width:380px;max-width:380px;overflow:hidden;text-overflow:ellipsis;box-shadow:3px 0 6px -3px rgba(0,0,0,.22);}
+.la-tabla th.act{z-index:6;}
+.la-tabla tr.act-row.editable{cursor:pointer;}
+.la-tabla tr.act-row:hover td{background:var(--input);}
+.la-tabla tr.act-row:hover td.act{box-shadow:inset 3px 0 0 var(--blue),3px 0 6px -3px rgba(0,0,0,.22);}
+.la-tabla .nom{display:block;overflow:hidden;text-overflow:ellipsis;color:var(--tx);font-weight:650;font-size:12.5px;line-height:1.25;}
+.la-tabla .cod{display:block;font-size:10.5px;color:var(--mut);line-height:1.3;overflow:hidden;text-overflow:ellipsis;}
+.chip{display:inline-block;font-family:var(--mono);font-size:9.5px;background:var(--input);border:1px solid var(--line2);color:var(--tx2);border-radius:4px;padding:0 4px;margin-right:5px;}
+.la-tabla .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#ef4444;box-shadow:0 0 0 3px rgba(239,68,68,.22);margin-right:7px;vertical-align:1px;}
+.la-tabla .tag-adi{display:inline-block;font-size:9px;font-weight:800;color:var(--teal2);background:var(--teal-bg);border:1px solid var(--teal-bd);border-radius:5px;padding:0 5px;margin-left:6px;vertical-align:1px;letter-spacing:.3px;}
+/* componente y elementos: franjas de color, no filas grises */
+.la-tabla tr.comp td{background:var(--la-comp);color:var(--tx);font-weight:800;font-size:13px;height:36px;border-top:1px solid var(--line2);}
+.la-tabla tr.comp td:first-child,.la-tabla tr.comp td.act{box-shadow:inset 5px 0 0 var(--cc,var(--blue));}
+.la-tabla tr.comp td.act{box-shadow:inset 5px 0 0 var(--cc,var(--blue)),3px 0 6px -3px rgba(0,0,0,.22);}
+.la-tabla tr.comp .nom{font-size:13px;font-weight:800;letter-spacing:.1px;padding-left:8px;}
+.la-tabla tr.grp td{background:var(--la-grp);color:var(--tx2);height:28px;font-size:11px;}
+.la-tabla tr.grp .nom{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--tx2);padding-left:12px;}
+.la-tabla tr.grp .nom::before{content:"▸";color:var(--cc,var(--blue));margin-right:6px;}
+.la-tabla tr.grp .cod{padding-left:12px;}
+.la-tabla td.tl{padding:0;position:relative;width:calc(var(--dw) * var(--nd));min-width:calc(var(--dw) * var(--nd));
+  background-image:var(--tl-pat);}
+.la-tabla th.tl{padding:0;min-width:calc(var(--dw) * var(--nd));}
+.la-th-sem{display:flex;}
+.la-th-sem span{flex:0 0 calc(var(--dw) * 7);padding:6px 8px 3px;font-weight:800;color:var(--tx);text-transform:none;font-size:11.5px;letter-spacing:0;border-right:2px solid var(--la-l2);}
+.la-th-sem span:nth-child(even){background:rgba(100,116,139,.07);}
+.la-th-sem span small{display:block;font-weight:500;color:var(--mut);font-size:10px;}
+.la-th-sem span.hoy{color:var(--blue-tx);box-shadow:inset 0 3px 0 var(--blue);}
+.la-th-dias{display:flex;border-top:1px solid var(--line);}
+.la-th-dias span{flex:0 0 var(--dw);text-align:center;line-height:1.05;padding:3px 0 4px;border-right:1px solid var(--la-l1);}
+.la-th-dias span b{display:block;font-size:9px;color:var(--mut);font-weight:700;}
+.la-th-dias span em{font-style:normal;font-size:10.5px;color:var(--tx);font-weight:800;}
+.la-th-dias span.fs{background:var(--la-fs);} .la-th-dias span.fs em{color:var(--mut);}
+.la-th-dias span.hoy{background:#fde68a;} .la-th-dias span.hoy em,.la-th-dias span.hoy b{color:#78350f;}
+:root[data-theme="dark"] .la-th-dias span.hoy{background:#7a5a10;} :root[data-theme="dark"] .la-th-dias span.hoy em,:root[data-theme="dark"] .la-th-dias span.hoy b{color:#fde68a;}
+/* barras: relleno = avance (degradado), fondo translúcido = lo que falta, borde del mismo color */
+.la-b{--b1:var(--azul1);--b2:var(--azul2);--bg:var(--azul-bg);--bd:var(--azul-bd);position:absolute;top:7px;height:20px;border-radius:7px;overflow:hidden;background:var(--bg);box-shadow:inset 0 0 0 1.5px var(--bd),0 1px 3px rgba(0,0,0,.2);}
+.la-b.cr{--b1:var(--rojo1);--b2:var(--rojo2);--bg:var(--rojo-bg);--bd:var(--rojo-bd);}
+.la-b.ad{--b1:var(--teal1);--b2:var(--teal2);--bg:var(--teal-bg);--bd:var(--teal-bd);}
+.la-b i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(180deg,var(--b1),var(--b2));box-shadow:2px 0 0 rgba(255,255,255,.55);}
+.la-b span{position:absolute;left:5px;top:3px;height:14px;line-height:14px;padding:0 5px;max-width:calc(100% - 8px);border-radius:5px;background:rgba(15,23,42,.62);color:#fff;font-size:9.5px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.la-b.cortaI{border-top-left-radius:0;border-bottom-left-radius:0;} .la-b.cortaD{border-top-right-radius:0;border-bottom-right-radius:0;}
+.la-res{position:absolute;top:12px;height:12px;background:linear-gradient(var(--tx2),var(--tx2)) center/100% 3px no-repeat;border-left:3px solid var(--tx2);border-right:3px solid var(--tx2);opacity:.55;border-radius:2px;}
+.la-hoy{position:absolute;top:0;bottom:0;background:#f59e0b;pointer-events:none;z-index:0;}
+/* % de avance: barrita con el número dentro */
+.pctb{position:relative;display:inline-block;width:56px;height:18px;border-radius:9px;background:var(--input);box-shadow:inset 0 0 0 1px var(--line2);overflow:hidden;vertical-align:middle;}
+.pctb i{position:absolute;left:0;top:0;bottom:0;background:var(--c,var(--azul2));opacity:.55;}
+.pctb em{position:relative;display:block;text-align:center;font-style:normal;font-size:10.5px;font-weight:800;line-height:18px;color:var(--tx);}
+.la-tot{margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:12px;}
+.la-tot .chart-card{padding:12px 14px;border-top:3px solid var(--blue);}
+.la-tot .chart-card:nth-child(2){border-top-color:var(--teal2);}
+.la-tot table{width:100%;min-width:0;font-size:12px;}
+.la-tot td,.la-tot th{padding:5px 8px;}
+.la-tot th{position:static;background:transparent;text-transform:none;font-size:11px;}
+/* ── Plan semanal (PTS) y PPC ── */
+.pt-semanas{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px;}
+.pt-sem{background:var(--card);border:1px solid var(--line2);color:var(--tx2);border-radius:12px;padding:8px 14px;font-size:12px;cursor:pointer;text-align:left;line-height:1.3;transition:border-color .12s,box-shadow .12s;}
+.pt-sem:hover{border-color:var(--blue);box-shadow:0 2px 8px rgba(47,111,237,.18);}
+.pt-sem b{display:block;color:var(--tx);font-size:13px;}
+.pt-sem small{color:var(--mut);font-size:10.5px;}
+.pt-sem.on{background:linear-gradient(180deg,#4a86f7,#2f6fed);border-color:#2f6fed;box-shadow:0 3px 10px rgba(47,111,237,.38);} .pt-sem.on,.pt-sem.on b,.pt-sem.on small{color:#fff;}
+.pt-sem .pac{display:inline-block;margin-top:3px;padding:1px 8px;border-radius:999px;font-size:10px;font-weight:800;background:#8393b233;color:var(--tx2);}
+.pt-sem .pac.ok{background:#10b98126;color:var(--green);} .pt-sem .pac.bajo{background:#f59e0b26;color:var(--amber);}
+.pt-sem.on .pac{background:rgba(255,255,255,.22);color:#fff;}
+.pt-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:0 0 12px;}
+.pt-kpi{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--blue);border-radius:12px;padding:9px 14px;box-shadow:var(--shadow);}
+.pt-kpi:nth-child(2){border-top-color:#d97706;} .pt-kpi:nth-child(3){border-top-color:#0e8f4f;} .pt-kpi:nth-child(4){border-top-color:#7c3aed;}
+.pt-kpi span{display:block;font-size:10.5px;color:var(--mut);font-weight:700;text-transform:uppercase;letter-spacing:.4px;}
+.pt-kpi b{display:block;font-size:22px;color:var(--tx);line-height:1.25;} .pt-kpi small{font-size:10.5px;color:var(--mut);}
+.pt-tabla th{white-space:normal;text-align:center;} .pt-tabla th.izq{text-align:left;}
+.pt-tabla td{height:28px;padding:2px 7px;}
+.pt-tabla td.pl,.pt-tabla td.rl{padding:2px 3px;text-align:center;}
+.pt-tabla tr.fila-plan td.pl{background:rgba(47,111,237,.06);} .pt-tabla tr.fila-real td.rl{background:rgba(14,143,79,.075);}
+.pt-tabla td.fs.pl,.pt-tabla td.fs.rl{background-image:linear-gradient(var(--la-fs),var(--la-fs));}
+.pt-tabla input.dia{width:60px;padding:4px 5px;font-size:11.5px;text-align:right;border-radius:6px;border:1px solid var(--line2);background:var(--input);color:var(--tx);font-variant-numeric:tabular-nums;}
+.pt-tabla input.dia:focus{outline:2px solid var(--blue);outline-offset:0;}
+.pt-tabla input.dia:disabled{opacity:.55;background:transparent;border-color:transparent;}
+.pt-tabla input.dia.real{border-color:rgba(14,143,79,.55);} .pt-tabla input.dia.plan{border-color:rgba(47,111,237,.5);}
+.pt-tabla tr.fila-plan td{border-bottom:1px dashed var(--line);} .pt-tabla tr.fila-real td{border-bottom:1px solid var(--line2);}
+.pt-tabla td.medida{font-weight:800;font-size:10.5px;text-align:center;letter-spacing:.4px;text-transform:uppercase;} .pt-tabla tr.fila-plan td.medida{color:var(--blue-tx);} .pt-tabla tr.fila-real td.medida{color:var(--green);}
+.pt-tabla td.fuera{opacity:.5;}
+.pt-tabla td.si{background:#10b98122;color:var(--green);font-weight:900;text-align:center;font-size:14px;} .pt-tabla td.no{background:#ef444422;color:var(--red);font-weight:900;text-align:center;font-size:14px;}
+.pt-tabla select.causa{width:158px;font-size:11px;padding:4px 5px;} .pt-tabla textarea.txt{width:176px;min-height:40px;font-size:11px;padding:4px 6px;resize:vertical;}
+.pt-tabla .quitar{border:0;background:transparent;color:var(--mut);cursor:pointer;font-size:12px;padding:0 4px;} .pt-tabla .quitar:hover{color:var(--red);}
+.ppc-bar{display:flex;align-items:center;gap:8px;margin:8px 0;font-size:12px;} .ppc-bar .nom{flex:0 0 165px;color:var(--tx2);} .ppc-bar .pista{flex:1;height:14px;background:var(--input);border-radius:7px;overflow:hidden;box-shadow:inset 0 0 0 1px var(--line);} .ppc-bar .pista i{display:block;height:100%;background:linear-gradient(90deg,#f59e0b,#d97706);border-radius:7px;} .ppc-bar .val{flex:0 0 66px;text-align:right;font-family:var(--mono);color:var(--tx);}
 /* globo desplegable "Datos generales" de la Curva S */
 .dpop{position:absolute;right:16px;top:62px;z-index:30;width:min(460px,calc(100% - 32px));background:var(--card);border:1px solid var(--line2);border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.28);padding:12px 14px 14px;}
 .dpop[hidden]{display:none;}
@@ -218,7 +367,9 @@ textarea{resize:vertical;min-height:70px;font-family:inherit;}
       <button data-pane="resumen" class="on">📊 Resumen<small>KPIs y avance general</small></button>
       <button data-pane="parte">📝 Parte diario<small>Registrar avance</small></button>
       <button data-pane="materiales">🧱 Materiales<small>Registrar metas y avance</small></button>
-      <button data-pane="lookahead" class="disabled" title="Aún sin datos reales cargados">📅 Look Ahead<small>Próximamente</small></button>
+      <button data-pane="lookahead">📅 Look Ahead<small>Plan de 4 semanas</small></button>
+      <button data-pane="pts">📆 Plan semanal<small>Meta y real por día</small></button>
+      <button data-pane="ppc">📈 PPC<small>Cumplimiento del plan</small></button>
       <button data-pane="produccion" class="disabled" title="Aún sin datos reales cargados">⚙️ Producción<small>Próximamente</small></button>
       <a href="../index.html" id="visorLink" style="display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:8px;font-size:13.5px;color:var(--tx2);text-decoration:none;">🧊 Visor 3D<small style="display:block;font-size:10px;color:var(--mut);">Modelo BIM del puente</small></a>
     </nav>
@@ -227,6 +378,7 @@ textarea{resize:vertical;min-height:70px;font-family:inherit;}
         <button class="seg-btn" data-tema="claro" title="Tema claro">☀ Claro</button>
         <button class="seg-btn" data-tema="oscuro" title="Tema oscuro">🌙 Oscuro</button>
       </div>
+      <div class="opt-row"><span id="admEstado">Administrador</span><button class="seg-btn" id="btnAdmin" type="button" title="Iniciar sesión como administrador">🔑 Entrar</button></div>
       <!-- solo aparece al abrir el panel desde esta PC (localhost); en la página publicada siempre se usa la nube -->
       <div class="opt-row" id="fuenteBox" style="display:none"><span>Datos</span>
         <button class="src-btn" data-src="local" title="Base de datos de esta PC">Local</button>
@@ -236,6 +388,17 @@ textarea{resize:vertical;min-height:70px;font-family:inherit;}
     </div>
   </aside>
   <div id="overlay"></div>
+
+  <dialog id="dlgAdmin" class="dlg">
+    <form id="admForm" method="dialog">
+      <h3 style="margin:0 0 4px">Acceso de administrador</h3>
+      <p class="hint" id="admAyuda" style="margin:0 0 14px"></p>
+      <div class="field" id="adm-mail"><label for="admMail">Correo</label><input id="admMail" type="email" autocomplete="username" placeholder="tu@correo.com"><span class="field-err">Ingresa el correo</span></div>
+      <div class="field" id="adm-pass"><label for="admPass">Contraseña</label><input id="admPass" type="password" autocomplete="current-password"><span class="field-err">Ingresa la contraseña</span></div>
+      <div id="admMsg"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" type="submit" id="admEntrar">Entrar</button><button class="btn-sec" type="button" id="admCancel">Cancelar</button></div>
+    </form>
+  </dialog>
 
   <main id="main">
     <div class="topbar">
@@ -360,8 +523,25 @@ textarea{resize:vertical;min-height:70px;font-family:inherit;}
 
     <!-- ═══════════ PARTE DIARIO ═══════════ -->
     <section class="pane" data-pane="parte">
+      <div class="la-seg" style="margin:0 0 12px" role="group" aria-label="Qué registrar">
+        <button type="button" class="seg-btn on" data-pmodo="la">Actividades del Look Ahead</button>
+        <button type="button" class="seg-btn" data-pmodo="visor">Partidas del visor 3D (anterior)</button>
+      </div>
       <div id="parteMsgBox"></div>
-      <form class="pform" id="parteForm">
+
+      <!-- parte diario de producción: lo ejecutado del día por actividad; alimenta el "Real" del plan semanal y el % de avance -->
+      <form class="pform" id="parteLA" style="max-width:820px">
+        <h3 style="margin:0 0 4px;font-size:14px">Parte diario de producción</h3>
+        <p class="hint" style="margin:0 0 12px">Registra lo ejecutado ese día en cada actividad del Look Ahead. Lo que anotes aparece solo como «Real» en el plan semanal, en el acumulado y en el PAC.</p>
+        <div class="row2">
+          <div class="field"><label for="plaLook">Look Ahead</label><select id="plaLook"></select></div>
+          <div class="field" id="pla-fecha"><label for="plaFecha">Fecha</label><input id="plaFecha" type="date"><span class="field-err">Ingresa la fecha</span></div>
+        </div>
+        <div id="plaLista" class="table-wrap" style="margin-bottom:14px"></div>
+        <button class="btn" type="submit" id="plaGuardar">Guardar parte del día</button>
+      </form>
+
+      <form class="pform" id="parteForm" hidden>
         <div class="row2">
           <div class="field" id="f-partida">
             <label for="p_partida">Partida</label>
@@ -488,8 +668,122 @@ textarea{resize:vertical;min-height:70px;font-family:inherit;}
 
     <!-- ═══════════ LOOK AHEAD / PRODUCCIÓN ═══════════ -->
     <section class="pane" data-pane="lookahead">
-      <div class="soon"><b>Look Ahead (Last Planner)</b>Todavía no hay compromisos semanales ni restricciones cargadas en la base de datos.<br>Se activa en cuanto empieces a registrarlos.</div>
+      <div id="laVacio" class="soon" style="display:none"></div>
+      <div id="laApp">
+        <div class="la-bar">
+          <div class="la-semana">
+            <button type="button" class="icon-btn" id="laPrev" title="Look Ahead anterior" aria-label="Look Ahead anterior">◀</button>
+            <select id="laSel" class="sel-mini" aria-label="Semana del Look Ahead"></select>
+            <button type="button" class="icon-btn" id="laNext" title="Look Ahead siguiente" aria-label="Look Ahead siguiente">▶</button>
+            <span id="laEstado" class="badge"></span>
+          </div>
+          <div class="la-acc">
+            <button type="button" class="btn-sec pri" id="laNuevo">＋ Nuevo Look Ahead</button>
+            <button type="button" class="btn-sec" id="laAgregar">＋ Agregar actividad</button>
+            <button type="button" class="btn-sec" id="laCerrar" title="Cerrar la semana: ya no se podrá modificar">🔒 Cerrar semana</button>
+            <button type="button" class="btn-sec btn-adm" id="laReabrir" hidden title="Solo administrador: vuelve a habilitar la edición">🔓 Reabrir (admin)</button>
+            <button type="button" class="btn-sec btn-adm" id="laEliminar" hidden title="Solo administrador: elimina este Look Ahead con sus actividades">🗑 Eliminar (admin)</button>
+          </div>
+        </div>
+        <div class="la-filtros">
+          <label for="laComp">Componente:</label><select id="laComp" class="sel-mini"></select>
+          <label class="la-chk"><input type="checkbox" id="laCrit"> Solo críticas</label>
+          <span class="la-seg" role="group" aria-label="Columnas">
+            <button type="button" class="seg-btn" data-lacols="resumen">Resumen</button>
+            <button type="button" class="seg-btn" data-lacols="todas">Todas las columnas</button>
+          </span>
+        </div>
+        <p class="hint" id="laInfo" style="margin:6px 0 10px"></p>
+        <div id="laMsg"></div>
+
+        <!-- crear un Look Ahead nuevo (una semana) -->
+        <form class="pform la-form" id="laNuevoBox" hidden>
+          <h3 style="margin:0 0 4px;font-size:14px">Nuevo Look Ahead</h3>
+          <p class="hint" style="margin:0 0 12px">Elige la semana en que se hace el plan. Cubre esa semana y las 4 siguientes.</p>
+          <div class="row2">
+            <div class="field"><label for="laNSem">Semana</label><select id="laNSem"></select></div>
+            <div class="field"><label>&nbsp;</label><label class="la-chk" style="font-weight:500"><input type="checkbox" id="laNCopiar" checked> Copiar las actividades pendientes del Look Ahead anterior</label></div>
+          </div>
+          <button class="btn" type="submit" id="laNCrear">Crear Look Ahead</button>
+          <button class="btn-sec" type="button" id="laNCancel">Cancelar</button>
+        </form>
+
+        <!-- agregar / editar una actividad: se elige de las partidas del valorizado, nunca se escribe a mano -->
+        <form class="pform la-form" id="laForm" hidden>
+          <h3 style="margin:0 0 4px;font-size:14px" id="laFTitulo">Agregar actividad</h3>
+          <p class="hint" style="margin:0 0 12px">La actividad se elige de las partidas del valorizado (código único): primero el componente, luego el elemento y por último la partida.</p>
+          <div class="row2">
+            <div class="field" id="laf-comp"><label for="laFComp">Componente</label><select id="laFComp"></select><span class="field-err">Elige un componente</span></div>
+            <div class="field" id="laf-elem"><label for="laFElem">Elemento</label><select id="laFElem"></select><span class="field-err">Elige el elemento</span></div>
+          </div>
+          <div class="field" id="laf-part"><label for="laFPart">Partida <input id="laFBuscar" class="sel-mini" type="search" placeholder="buscar…" style="width:130px;margin-left:8px;padding:3px 7px"></label><select id="laFPart" size="1"></select><span class="field-err">Elige la partida</span></div>
+          <p class="hint" id="laFInfo" style="margin:-8px 0 12px;min-height:16px"></p>
+          <div class="row2">
+            <div class="field"><label for="laFDetalle">Detalle / frente (opcional)</label><input id="laFDetalle" type="text" maxlength="90" placeholder="Ej. Estribo izquierdo · 1° vaciado"></div>
+            <div class="field"><label for="laFResp">Responsable (opcional)</label><input id="laFResp" type="text" maxlength="60" placeholder="Ej. Ing. residente"></div>
+          </div>
+          <div class="row2">
+            <div class="field" id="laf-ini"><label for="laFIni">Inicio</label><input id="laFIni" type="date"><span class="field-err">Ingresa la fecha de inicio</span></div>
+            <div class="field" id="laf-dias"><label for="laFDias">Días <span class="hint mono" id="laFFin"></span></label><input id="laFDias" type="number" min="1" step="1" placeholder="Ej. 8"><span class="field-err">Ingresa los días (1 o más)</span></div>
+          </div>
+          <div class="row2">
+            <div class="field" id="laf-meta"><label for="laFMeta">Metrado meta <span class="hint mono" id="laFUnd"></span></label><input id="laFMeta" type="number" min="0" step="0.01" placeholder="0.00"><span class="field-err">Ingresa el metrado (0 o más)</span></div>
+            <div class="field" id="laf-pct"><label for="laFPrev" title="Cantidad ya ejecutada antes de este Look Ahead. Lo que se ejecute después llega solo desde el parte diario.">Ejecutado antes <span class="hint mono" id="laFUnd2"></span></label><input id="laFPrev" type="number" min="0" step="0.01" value="0"><span class="field-err">Ingresa 0 o más</span></div>
+          </div>
+          <label class="la-chk" style="margin-bottom:14px"><input type="checkbox" id="laFCrit"> Actividad crítica (ruta crítica)</label>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            <button class="btn" type="submit" id="laFGuardar">Agregar</button>
+            <button class="btn-sec" type="button" id="laFCancel">Cancelar</button>
+            <button class="btn-sec" type="button" id="laFQuitar" hidden style="color:var(--red)">Quitar actividad</button>
+          </div>
+        </form>
+
+        <div class="la-wrap" id="laWrap"><table class="la-tabla" id="laTabla"></table></div>
+        <div id="laTotales"></div>
+      </div>
     </section>
+    <!-- ═══════════ PLAN SEMANAL (PTS) + PARTE DIARIO DE PRODUCCIÓN ═══════════ -->
+    <section class="pane" data-pane="pts">
+      <div id="ptVacio" class="soon" style="display:none"></div>
+      <div id="ptApp">
+        <div class="la-bar">
+          <div class="la-semana">
+            <label for="ptLook" class="hint">Look Ahead:</label>
+            <select id="ptLook" class="sel-mini" aria-label="Look Ahead"></select>
+            <span id="ptEstado" class="badge"></span>
+          </div>
+          <div class="la-acc">
+            <button type="button" class="btn-sec pri" id="ptCrear">＋ Crear plan de la semana</button>
+            <select id="ptAgregarSel" class="sel-mini" style="max-width:230px" aria-label="Actividad del Look Ahead a agregar"></select>
+            <button type="button" class="btn-sec" id="ptAgregar">＋ Agregar al plan</button>
+            <button type="button" class="btn-sec" id="ptCerrar" title="Cerrar la semana: el plan y el parte diario de esa semana ya no se podrán modificar">🔒 Cerrar semana</button>
+            <button type="button" class="btn-sec btn-adm" id="ptReabrir" hidden title="Solo administrador: vuelve a habilitar el plan y el parte diario de la semana">🔓 Reabrir (admin)</button>
+          </div>
+        </div>
+        <div class="pt-semanas" id="ptSemanas"></div>
+        <div class="la-filtros"><label for="ptComp">Componente:</label><select id="ptComp" class="sel-mini"></select></div>
+        <div id="ptKpis" class="pt-kpis"></div>
+        <p class="hint" id="ptInfo" style="margin:6px 0 10px"></p>
+        <div id="ptMsg"></div>
+        <div class="la-wrap" id="ptWrap"><table class="la-tabla pt-tabla" id="ptTabla"></table></div>
+      </div>
+    </section>
+
+    <!-- ═══════════ PPC: PORCENTAJE DE ACTIVIDADES COMPLETADAS ═══════════ -->
+    <section class="pane" data-pane="ppc">
+      <div id="ppcVacio" class="soon" style="display:none"></div>
+      <div id="ppcApp">
+        <div class="la-filtros" style="margin-bottom:10px"><label for="ppcComp">Componente:</label><select id="ppcComp" class="sel-mini"></select></div>
+        <div id="ppcKpis" class="pt-kpis"></div>
+        <div class="grid2">
+          <div class="chart-card"><h3>Trazabilidad semanal del PAC</h3><p class="hint">PAC semanal, PAC acumulado y meta</p><svg id="ppcSvg" viewBox="0 0 640 300"></svg>
+            <div class="legend2"><span><i style="background:#2f6fed"></i>PAC semanal</span><span><i style="background:#0e8f4f"></i>PAC acumulado</span><span><i style="background:transparent;border:1px dashed #d97706"></i>Meta</span></div></div>
+          <div class="chart-card"><h3>Causas de incumplimiento</h3><p class="hint">Actividades con plan que no cumplieron</p><div id="ppcCausas"></div></div>
+        </div>
+        <div class="table-wrap"><table id="ppcTabla" style="min-width:760px"></table></div>
+      </div>
+    </section>
+
     <section class="pane" data-pane="produccion">
       <div class="soon"><b>Producción</b>Falta cargar el APU (análisis de precios unitarios) y los partes de recursos para calcular rendimientos reales.</div>
     </section>
@@ -509,6 +803,23 @@ const esLocal = ['localhost', '127.0.0.1'].includes(location.hostname);
 let fuente = esLocal ? (localStorage.getItem('obra-fuente') || 'local') : 'cloud';
 if (!FUENTES[fuente]) fuente = esLocal ? 'local' : 'cloud';
 let { url: API, headers } = FUENTES[fuente];
+
+// ── modo administrador ──
+// En la nube: inicio de sesión con Supabase Auth (correo + contraseña que escribe la persona; el panel no los guarda).
+// Los privilegios NO los decide el panel: la base los da solo si el correo está en la tabla `admins` (admin_acceso.sql).
+// En local: el servidor local emite un token de pruebas ("admin@local") solo para esta PC.
+const AUTH = { token: null, email: null, admin: false, refresh: null, exp: 0 };
+const CLAVE_PUBLICA = FUENTES.cloud.headers.apikey;
+function authAplicar() {
+  if (AUTH.token) headers.Authorization = 'Bearer ' + AUTH.token;
+  else if (fuente === 'cloud') headers.Authorization = 'Bearer ' + CLAVE_PUBLICA;
+  else delete headers.Authorization;
+}
+function authGuardar() {
+  try { if (AUTH.token) sessionStorage.setItem('obra-auth-' + fuente, JSON.stringify({ token: AUTH.token, email: AUTH.email, admin: AUTH.admin, refresh: AUTH.refresh, exp: AUTH.exp })); else sessionStorage.removeItem('obra-auth-' + fuente); } catch (e) {}
+}
+try { const s = JSON.parse(sessionStorage.getItem('obra-auth-' + fuente) || 'null'); if (s && s.exp > Date.now()) Object.assign(AUTH, s); } catch (e) {}
+authAplicar();
 
 // ── tema claro/oscuro (ya aplicado desde <head>; acá solo el botón y su estado) ──
 let tema = localStorage.getItem('obra-tema') || 'claro';
@@ -670,6 +981,60 @@ const ICONO_SALIR = '<svg viewBox="0 0 24 24"><path d="M8 3v3a2 2 0 0 1-2 2H3M21
   ['fullscreenchange', 'webkitfullscreenchange'].forEach(ev => document.addEventListener(ev, pintar));
 }
 
+// ── modo administrador: ventana de acceso y estado ──
+function authUI() {
+  $('#btnAdmin').textContent = AUTH.token ? '🔓 Salir' : '🔑 Entrar';
+  $('#btnAdmin').title = AUTH.token ? `Sesión: ${AUTH.email}${AUTH.admin ? ' (administrador)' : ' (sin privilegios de administrador)'}` : 'Iniciar sesión como administrador';
+  $('#admEstado').innerHTML = AUTH.token ? (AUTH.admin ? '<b style="color:var(--amber)">🛡 Administrador</b>' : 'Sesión sin privilegios') : 'Administrador';
+  try { if (LA.cargado) laRender(); if (PT.look) ptRender(); if (!$('#parteLA').hidden) plaCargar(); } catch (e) {}
+}
+async function authEntrar(email, pass) {
+  let d;
+  if (fuente === 'cloud') {
+    const r = await fetch(`${API.replace(/\/rest\/v1$/, '')}/auth/v1/token?grant_type=password`, { method: 'POST', headers: { apikey: CLAVE_PUBLICA, 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password: pass }) });
+    d = await r.json().catch(() => ({})); if (!r.ok) throw new Error(d.error_description || d.msg || 'Correo o contraseña incorrectos.');
+    AUTH.refresh = d.refresh_token;
+  } else {
+    const r = await fetch('/local-admin-token'); d = await r.json().catch(() => ({})); if (!r.ok) throw new Error(d.error || 'No disponible: abre el panel desde http://localhost:8300 con iniciar_todo.bat.');
+  }
+  AUTH.token = d.access_token; AUTH.email = d.email || (d.user && d.user.email) || email; AUTH.exp = Date.now() + ((d.expires_in || 3600) - 60) * 1000;
+  authAplicar();
+  AUTH.admin = (await fetch(`${API}/rpc/es_admin`, { method: 'POST', headers: { ...headers, 'Content-Type': 'application/json' }, body: '{}' }).then(x => x.ok ? x.json() : false).catch(() => false)) === true;
+  authGuardar(); authUI();
+  return AUTH.admin;
+}
+function authSalir() { AUTH.token = AUTH.email = AUTH.refresh = null; AUTH.admin = false; AUTH.exp = 0; authAplicar(); authGuardar(); authUI(); }
+async function authRenovar() {   // el token de Supabase dura ~1 hora: se renueva solo mientras la sesión esté abierta
+  if (fuente !== 'cloud' || !AUTH.refresh || AUTH.exp - Date.now() > 5 * 60000) return;
+  try {
+    const r = await fetch(`${API.replace(/\/rest\/v1$/, '')}/auth/v1/token?grant_type=refresh_token`, { method: 'POST', headers: { apikey: CLAVE_PUBLICA, 'Content-Type': 'application/json' }, body: JSON.stringify({ refresh_token: AUTH.refresh }) });
+    const d = await r.json(); if (!r.ok) throw new Error();
+    AUTH.token = d.access_token; AUTH.refresh = d.refresh_token; AUTH.exp = Date.now() + ((d.expires_in || 3600) - 60) * 1000; authAplicar(); authGuardar();
+  } catch (e) { authSalir(); }
+}
+setInterval(authRenovar, 60000);
+$('#btnAdmin').addEventListener('click', () => {
+  if (AUTH.token) { if (confirm('¿Cerrar la sesión de administrador?')) authSalir(); return; }
+  $('#admMsg').innerHTML = ''; $('#admPass').value = '';
+  const local = fuente !== 'cloud';
+  $('#admAyuda').textContent = local ? 'Modo local: entras como «admin@local», solo en esta PC.' : 'Escribe el correo y la contraseña de tu usuario administrador (los que creaste en Supabase). El panel no los guarda.';
+  $('#adm-mail').style.display = $('#adm-pass').style.display = local ? 'none' : '';
+  $('#dlgAdmin').showModal(); if (!local) $('#admMail').focus();
+});
+$('#admCancel').addEventListener('click', () => $('#dlgAdmin').close());
+$('#admForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const local = fuente !== 'cloud', mail = $('#admMail').value.trim(), pass = $('#admPass').value;
+  if (!local) { marcarError('adm-mail', !mail); marcarError('adm-pass', !pass); if (!mail || !pass) return; }
+  const btn = $('#admEntrar'); btn.disabled = true; btn.textContent = 'Entrando…';
+  try {
+    const admin = await authEntrar(mail, pass); $('#admPass').value = '';
+    if (admin) $('#dlgAdmin').close();
+    else $('#admMsg').innerHTML = '<div class="msg err" style="margin-top:10px">La sesión es válida, pero este correo <b>no es administrador</b>. Debe estar en la tabla <code>admins</code> (admin_acceso.sql).</div>';
+  } catch (err) { $('#admMsg').innerHTML = `<div class="msg err" style="margin-top:10px">${esc(err.message)}</div>`; }
+  finally { btn.disabled = false; btn.textContent = 'Entrar'; }
+});
+
 // ── navegación por botones (una sola página) ──
 document.querySelectorAll('#nav button').forEach(b => {
   if (b.classList.contains('disabled')) return;
@@ -681,8 +1046,15 @@ document.querySelectorAll('#nav button').forEach(b => {
     const nComp = COMPONENTES.length;
     const titles = { resumen: ['DASHBOARD - CONTROL DE OBRA', `${nComp} componente${nComp===1?'':'s'} de la obra, en un solo lugar`],
       parte: ['Nuevo parte diario', 'Registra el avance ejecutado en obra'],
-      materiales: ['Registro de materiales', 'Metas totales y avance mensual por componente'] };
+      materiales: ['Registro de materiales', 'Metas totales y avance mensual por componente'],
+      lookahead: ['Look Ahead', 'Plan de 4 semanas · Last Planner: actividades ligadas al valorizado'],
+      pts: ['Plan semanal', 'Meta y real por día de las actividades del Look Ahead · PAC de la semana'],
+      ppc: ['PPC', 'Porcentaje de actividades completadas: trazabilidad semanal y causas de incumplimiento'] };
     if (titles[b.dataset.pane]) { $('#pageTitle').textContent = titles[b.dataset.pane][0]; $('#pageSub').textContent = titles[b.dataset.pane][1]; }
+    if (b.dataset.pane === 'lookahead') laCargar();
+    if (b.dataset.pane === 'pts') ptCargar();
+    if (b.dataset.pane === 'ppc') ppcCargar();
+    if (b.dataset.pane === 'parte' && !$('#parteLA').hidden) plaCargar();
     $('#side').classList.remove('open'); $('#overlay').classList.remove('on');
   });
 });
@@ -1412,7 +1784,7 @@ async function bootResumen() {
     const hayAdicional = progRows.some(r => r.concepto === 'adicional');
     if (!hayAdicional && alcance !== 'contrato') alcance = 'contrato';
     DATA = { proyectos, partidas, avance, programado, curvaMensual, eventosPlazo, materiales, matMetas, matAvance, matPartidas, matProg, matSinRegla,
-             version: progRows.length ? version : null, plazos, hayAdicional };
+             version: progRows.length ? version : null, versionId: version ? version.id : null, plazos, hayAdicional };
     $('#alcanceBox').style.display = hayAdicional ? '' : 'none';
     renderAll();
     fillMatForms();
@@ -1585,6 +1957,759 @@ $('#matAvForm').addEventListener('submit', async (e) => {
   } catch (err) { mmsg(`No se pudo guardar: ${textoErrorMat(err)}`, false); }
   finally { btn.disabled = false; btn.textContent = 'Guardar avance del mes'; }
 });
+
+// ============================================================================
+// PARTE DIARIO (integrado)
+// ============================================================================
+// ============================================================================
+// LOOK AHEAD (Last Planner): plan de 4 semanas, semana por semana
+// Cada actividad está LIGADA a una partida del valorizado (código único): se elige de listas en cascada
+// (componente > elemento > partida), nunca se escribe a mano. Las barras se dibujan por fechas (inicio + días),
+// con el avance encima (azul; rojo si es crítica; verde azulado si es del adicional).
+// ============================================================================
+const LA = { cargado: false, semanas: [], looks: [], sel: null, det: [], nodos: [], porId: {}, comp: '', crit: false, cols: 'resumen', edit: null };
+try { if (localStorage.getItem('obra-la-cols') === 'todas') LA.cols = 'todas'; } catch (e) {}
+const LA_DW = 26;   // ancho de un día en la línea de tiempo (px)
+const LA_COLORES = ['#0f766e', '#2f6fed', '#d97706', '#7c3aed', '#db2777'];
+const laColor = (cod) => LA_COLORES[Math.max(0, COMPONENTES.findIndex(c => c.id === cod)) % LA_COLORES.length];   // franja de color de cada componente
+const LETRAS = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
+const laDia = (s) => Math.floor(Date.parse(s + 'T00:00:00Z') / 86400000);
+const laFecha = (n) => new Date(n * 86400000).toISOString().slice(0, 10);
+const laFmt = (s) => s ? `${s.slice(8, 10)}/${s.slice(5, 7)}/${s.slice(2, 4)}` : '';
+const laHoy = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
+const laNum = (v, d = 0) => Number(v || 0).toLocaleString('es-PE', { minimumFractionDigits: d, maximumFractionDigits: d });
+const laMsg = (t, ok) => { $('#laMsg').innerHTML = t ? `<div class="msg ${ok ? 'ok' : 'err'}">${t}</div>` : ''; };
+const laActual = () => LA.looks.find(l => l.id === LA.sel) || null;
+// una semana CERRADA queda bloqueada para todos, también para el administrador: para editarla hay que usar «Reabrir» a propósito
+const laEditable = (l) => !!l && l.estado === 'borrador';
+
+// ── texto: títulos en MAYÚSCULAS, partidas en minúscula normal ──
+const LA_SIGLAS = new Set(['ASTM', 'PVC', 'MAC', 'MCA', 'PTS', 'RFI', 'CBR', 'GLB', 'UND', 'IGV']);
+let _laPropios = null;
+function laPropios() {   // nombres propios (Charanal, Damas, Bocana, Peña...) que llevan mayúscula inicial
+  if (!_laPropios) { _laPropios = new Set(); const ex = new Set(['PUENTE', 'LAS', 'LOS', 'DEL', 'DE', 'LA']);
+    COMPONENTES.forEach(c => String(c.nombre).split(/\s+/).forEach(w => { const b = limpiaTxt(w.replace(/[^A-Za-zÁÉÍÓÚÜÑáéíóúüñ]/g, '')); if (b.length > 3 && !ex.has(b)) _laPropios.add(b); })); }
+  return _laPropios;
+}
+function laCaso(txt) {   // "RELLENO PARA ESTRUCTURAS CON MATERIAL DE PRESTAMO" -> "Relleno para estructuras con material de préstamo"
+  const s = String(txt || '').trim(); if (!s) return s;
+  let prev = '';
+  const r = s.split(/(\s+)/).map(tok => {
+    if (/^\s+$/.test(tok)) return tok;
+    const base = tok.replace(/[^A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9']/g, '');
+    let o;
+    if (/^(m|km|cm|mm|kg)[23]?$/i.test(base)) o = tok.toLowerCase();                                  // unidades: m3, kg/cm2
+    else if (/\d/.test(base) || LA_SIGLAS.has(base.toUpperCase())) o = tok;                            // f'c=420, A615, ASTM
+    else if (base.length === 1 && /^(CLASE|TIPO|GRADO)$/i.test(prev)) o = tok.toUpperCase();          // clase A, tipo I
+    else if (laPropios().has(limpiaTxt(base))) o = tok.charAt(0).toUpperCase() + tok.slice(1).toLowerCase();
+    else o = tok.toLowerCase();
+    prev = base; return o;
+  }).join('');
+  return r.charAt(0).toUpperCase() + r.slice(1);
+}
+
+// ── jerarquía: componente > grupo > elemento > partida, en el orden del valorizado ──
+const LA_RGB = ['15,118,110', '47,111,237', '217,119,6', '124,58,237', '219,39,119'];
+const laColorRgb = (cod) => LA_RGB[Math.max(0, COMPONENTES.findIndex(c => c.id === cod)) % LA_RGB.length];
+function laCadena(nodoId) { const c = []; let n = LA.porId[nodoId]; while (n && n.padre_id) { n = LA.porId[n.padre_id]; if (n) c.unshift(n); } return c; }   // ancestros, de la raíz al padre
+function laArbol(filas) {
+  const orden = (f) => (LA.porId[f.nodo_id] || {}).orden || 0;
+  const ord = [...filas].sort((a, b) => orden(a) - orden(b) || a.orden - b.orden);
+  const out = []; let prev = [];
+  for (const f of ord) {
+    const cad = laCadena(f.nodo_id); let i = 0;
+    while (i < cad.length && i < prev.length && prev[i].id === cad[i].id) i++;
+    for (let k = i; k < cad.length; k++) out.push({ t: true, nodo: cad[k], nivel: k, acts: [], cod: f.proyecto });
+    prev = cad; out.push({ t: false, f, nivel: cad.length });
+  }
+  const pila = [];
+  for (const it of out) { if (it.t) { pila.length = it.nivel; pila[it.nivel] = it; } else pila.forEach(x => x && x.acts.push(it.f)); }   // cada título junta sus actividades
+  return out;
+}
+const laSemana = (n) => LA.semanas.find(s => s.numero === n);
+
+const LA_COLS = [
+  { k: 'wbs', t: 'WBS', res: false }, { k: 'crit', t: 'Crít.', res: false }, { k: 'puente', t: 'Puente', res: false },
+  { k: 'act', t: 'ACTIVIDAD', res: true }, { k: 'dias', t: 'DÍAS', res: true }, { k: 'ini', t: 'INICIO', res: true },
+  { k: 'fin', t: 'FIN', res: true }, { k: 'und', t: 'UND', res: false }, { k: 'meta', t: 'METRADO META', res: false },
+  { k: 'pct', t: '% AVAN', res: true }, { k: 'pu', t: 'P/U', res: false }, { k: 'plan', t: 'PLANEADO', res: false }, { k: 'ejec', t: 'EJECUTADO', res: false },
+];
+
+async function laCargar(forzar) {
+  if (LA.cargado && !forzar) { laRender(); return; }
+  try {
+    const [semanas, looks] = await Promise.all([
+      get(`/semanas_obra?obra_id=eq.${OBRA.id}&select=numero,fecha_inicio,fecha_fin&order=numero`),
+      get(`/lookaheads?obra_id=eq.${OBRA.id}&select=id,semana,semanas,estado,fuente,notas&order=semana`)]);
+    LA.semanas = semanas; LA.looks = looks;
+    if (DATA.versionId && !LA.nodos.length) {
+      LA.nodos = await getTodo(`/wbs_nodos?version_id=eq.${DATA.versionId}&select=id,proyecto_id,padre_id,codigo,codigo_esp,nombre,unidad,metrado,precio_unitario,concepto,es_hoja,orden&order=orden`);
+      LA.porId = Object.fromEntries(LA.nodos.map(n => [n.id, n]));
+    }
+    $('#laVacio').style.display = 'none'; $('#laApp').style.display = '';
+    LA.cargado = true;
+    let guardado = null; try { guardado = localStorage.getItem('obra-la-sel'); } catch (e) {}
+    if (!LA.looks.some(l => l.id === LA.sel)) LA.sel = (LA.looks.find(l => l.id === guardado) || LA.looks[LA.looks.length - 1] || {}).id || null;
+    await laCargarDetalle();
+  } catch (e) {
+    $('#laApp').style.display = 'none'; $('#laVacio').style.display = '';
+    $('#laVacio').innerHTML = `<b>Look Ahead</b>Todavía no está configurado en esta base de datos: faltan las tablas del Look Ahead (correr <code>lookahead_schema.sql</code>).<br><span class="mono" style="font-size:11px">${esc(e.message)}</span>`;
+  }
+}
+async function laCargarDetalle() {
+  LA.det = LA.sel ? await get(`/v_lookahead_detalle?lookahead_id=eq.${LA.sel}&order=orden`) : [];
+  laRender();
+}
+
+// ── escritura (requiere lookahead_permisos_registro.sql o login) ──
+async function laEnviar(metodo, path, body) {
+  const r = await fetch(`${API}${path}`, { method: metodo, headers: { ...headers, 'Content-Type': 'application/json', Prefer: 'return=representation' }, body: body ? JSON.stringify(body) : undefined });
+  const d = await r.json().catch(() => null);
+  if (!r.ok) { const e = new Error((d && d.message) || `HTTP ${r.status}`); e.status = r.status; e.code = d && d.code; throw e; }
+  return d;
+}
+const laErr = (e) => (e.status === 401 || e.status === 403 || e.code === '42501')
+  ? 'Este Look Ahead no se puede modificar: está cerrado, o todavía no se habilitó el registro (<code>lookahead_permisos_registro.sql</code>).'
+  : (e.status === 404 ? 'Las tablas del Look Ahead no existen en esta base de datos.' : esc(e.message));
+
+// ── dibujo ──
+function laBarra(f, d0, nd) {
+  const a = laDia(f.fecha_inicio) - d0, b = laDia(f.fecha_fin) - d0;
+  if (b < 0 || a > nd - 1) return '';                                  // cae fuera de la ventana de 5 semanas
+  const vs = Math.max(a, 0), ve = Math.min(b, nd - 1), w = (ve - vs + 1) * LA_DW - 2;
+  const cls = [f.critico ? 'cr' : (f.concepto === 'adicional' ? 'ad' : ''), a < 0 ? 'cortaI' : '', b > nd - 1 ? 'cortaD' : ''].join(' ');
+  const pct = Math.max(0, Math.min(1, Number(f.pct_avance) || 0));
+  const tip = `${f.partida}\n${f.nodo_codigo}${f.detalle ? ' · ' + f.detalle : ''}\n${laFmt(f.fecha_inicio)} → ${laFmt(f.fecha_fin)} (${f.dias} d)\nMeta ${laNum(f.metrado_meta, 2)} ${f.unidad || ''} · avance ${Math.round(pct * 100)}%`;
+  return `<div class="la-b ${cls}" style="left:${vs * LA_DW + 1}px;width:${w}px" title="${esc(tip)}"><i style="width:${(pct * 100).toFixed(1)}%"></i><span>${w > 74 ? laNum(f.metrado_meta, f.metrado_meta >= 100 ? 0 : 1) + ' ' + esc(f.unidad || '') : ''}</span></div>`;
+}
+function laResumenBarra(arr, d0, nd) {
+  const ini = arr.map(x => x.fecha_inicio).sort()[0], fin = arr.map(x => x.fecha_fin).sort().pop();
+  const a = laDia(ini) - d0, b = laDia(fin) - d0;
+  if (b < 0 || a > nd - 1) return '';
+  const vs = Math.max(a, 0), ve = Math.min(b, nd - 1);
+  return `<div class="la-res" style="left:${vs * LA_DW + 1}px;width:${(ve - vs + 1) * LA_DW - 2}px"></div>`;
+}
+
+function laRender() {
+  const look = laActual();
+  const editable = laEditable(look);
+  // selector de semana + estado
+  $('#laSel').innerHTML = LA.looks.length
+    ? LA.looks.map(l => { const s = laSemana(l.semana); return `<option value="${l.id}">Semana ${l.semana} · ${laFmt(s.fecha_inicio)} – ${laFmt(s.fecha_fin)}${l.estado === 'cerrado' ? ' · cerrado' : ''}</option>`; }).join('')
+    : '<option value="">(todavía no hay ningún Look Ahead)</option>';
+  if (look) $('#laSel').value = look.id;
+  const i = LA.looks.findIndex(l => l.id === LA.sel);
+  $('#laPrev').disabled = i <= 0; $('#laNext').disabled = i < 0 || i >= LA.looks.length - 1;
+  const est = $('#laEstado');
+  est.textContent = look ? (look.estado === 'cerrado' ? '🔒 Cerrado' : '✏️ Borrador') + (AUTH.admin ? ' · 🛡 admin' : '') : '';
+  est.style.cssText = look ? (look.estado === 'cerrado' ? 'background:#8393b226;color:var(--mut)' : 'background:#3b82f626;color:var(--blue-tx)') : '';
+  $('#laAgregar').disabled = !editable; $('#laCerrar').disabled = !(look && look.estado === 'borrador');
+  $('#laReabrir').hidden = !(AUTH.admin && look && look.estado === 'cerrado'); $('#laEliminar').hidden = !(AUTH.admin && look);
+  document.querySelectorAll('[data-lacols]').forEach(b => b.classList.toggle('on', b.dataset.lacols === LA.cols));
+  $('#laComp').innerHTML = '<option value="">Todos</option>' + COMPONENTES.map(c => `<option value="${esc(c.id)}">${esc(c.nombre)}</option>`).join('');
+  $('#laComp').value = LA.comp; $('#laCrit').checked = LA.crit;
+
+  const tabla = $('#laTabla');
+  if (!look) { tabla.innerHTML = ''; $('#laTotales').innerHTML = ''; $('#laInfo').innerHTML = 'Crea el primer Look Ahead con «＋ Nuevo Look Ahead».'; return; }
+  const sem = laSemana(look.semana), d0 = laDia(sem.fecha_inicio), nSem = look.semanas, nd = nSem * 7;
+  const hoyIdx = laDia(laHoy()) - d0;
+  const filas = LA.det.filter(f => (!LA.comp || f.proyecto === LA.comp) && (!LA.crit || f.critico));
+  const plan = filas.reduce((s, f) => s + Number(f.planeado || 0), 0), ejec = filas.reduce((s, f) => s + Number(f.ejecutado || 0), 0);
+  $('#laInfo').innerHTML = `<b>Semanas ${look.semana} a ${look.semana + look.semanas - 1}</b> (${look.semanas} semanas): ${laFmt(sem.fecha_inicio)} → ${laFmt(laFecha(d0 + nd - 1))} · ${filas.length} actividad${filas.length === 1 ? '' : 'es'}`
+    + ` · Planeado S/ ${laNum(plan)} · Ejecutado S/ ${laNum(ejec)}${look.fuente ? ' · <span class="mono">' + esc(look.fuente) + '</span>' : ''}`;
+
+  const cols = LA_COLS.filter(c => LA.cols === 'todas' || c.res);
+  // ── encabezado: mismas columnas del Excel + bloques de semana con los días (L M M J V S D) ──
+  let semH = '', diasH = '';
+  for (let w = 0; w < nSem; w++) {
+    const ini = d0 + w * 7, esHoy = hoyIdx >= w * 7 && hoyIdx < w * 7 + 7;
+    semH += `<span class="${esHoy ? 'hoy' : ''}">Semana ${look.semana + w}<small>${laFmt(laFecha(ini))} – ${laFmt(laFecha(ini + 6))}</small></span>`;
+    for (let k = 0; k < 7; k++) {
+      const idx = w * 7 + k;
+      diasH += `<span class="${k >= 5 ? 'fs' : ''} ${idx === hoyIdx ? 'hoy' : ''}"><b>${LETRAS[k]}</b><em>${laFecha(ini + k).slice(8, 10)}</em></span>`;
+    }
+  }
+  let html = `<thead><tr>${cols.map(c => `<th class="${c.k === 'act' ? 'act' : ''}">${c.t}</th>`).join('')}<th class="tl"><div class="la-th-sem">${semH}</div><div class="la-th-dias">${diasH}</div></th></tr></thead><tbody>`;
+  tabla.style.setProperty('--nd', nd);
+
+  const hoyLinea = (hoyIdx >= 0 && hoyIdx < nd) ? `<i class="la-hoy" style="left:${hoyIdx * LA_DW}px;width:${LA_DW}px;opacity:.2"></i>` : '';
+  const celdaAct = (f, nivel) => `<td class="act" style="--lvl:${nivel || 0}" title="${esc(f.partida)}"><span class="nom">${f.critico ? '<span class="dot" title="Crítica"></span>' : ''}${esc(laCaso(f.partida))}${f.concepto === 'adicional' ? '<span class="tag-adi">ADI</span>' : ''}</span>`
+    + `<span class="cod"><code class="chip">${esc(f.nodo_codigo)}</code>${f.codigo_esp ? esc(f.codigo_esp) : ''}${f.detalle ? ' · ' + esc(f.detalle) : ''}</span></td>`;
+  const celda = (c, f, nivel) => ({
+    wbs: () => `<td class="mono">${esc(f.nodo_codigo)}</td>`, crit: () => `<td class="c">${f.critico ? '<span class="dot"></span>' : ''}</td>`,
+    puente: () => `<td>${esc(String(f.proyecto_nombre || '').replace('Puente ', ''))}</td>`, act: () => celdaAct(f, nivel),
+    dias: () => `<td class="n">${f.dias}</td>`, ini: () => `<td class="c">${laFmt(f.fecha_inicio)}</td>`, fin: () => `<td class="c">${laFmt(f.fecha_fin)}</td>`,
+    und: () => `<td class="c">${esc(f.unidad || '')}</td>`, meta: () => `<td class="n">${laNum(f.metrado_meta, 2)}</td>`,
+    pct: () => { const p = Math.round(Number(f.pct_avance) * 100); return `<td class="c"><span class="pctb" style="--c:${p >= 100 ? '#0e8f4f' : p >= 50 ? '#2f6fed' : p > 0 ? '#d97706' : 'transparent'}"><i style="width:${Math.min(100, p)}%"></i><em>${p}%</em></span></td>`; }, pu: () => `<td class="n">${laNum(f.precio_unitario, 2)}</td>`,
+    plan: () => `<td class="n">${laNum(f.planeado, 2)}</td>`, ejec: () => `<td class="n">${laNum(f.ejecutado, 2)}</td>`,
+  }[c.k])();
+  // fila de título (componente o elemento): etiqueta + resumen de fechas y montos de lo que contiene
+  const filaTitulo = (it) => {
+    const arr = it.acts; if (!arr.length) return '';
+    const ini = arr.map(x => x.fecha_inicio).sort()[0], fin = arr.map(x => x.fecha_fin).sort().pop();
+    const pl = arr.reduce((s, x) => s + Number(x.planeado || 0), 0), ej = arr.reduce((s, x) => s + Number(x.ejecutado || 0), 0);
+    const dias = laDia(fin) - laDia(ini) + 1;
+    const cel = { act: `<td class="act" style="--lvl:${it.nivel}"><span class="nom">${esc(String(it.nodo.nombre).toUpperCase())}</span><span class="cod"><code class="chip">${esc(it.nodo.codigo)}</code>${arr.length} actividad${arr.length === 1 ? '' : 'es'}</span></td>`, dias: `<td class="n">${dias}</td>`,
+      ini: `<td class="c">${laFmt(ini)}</td>`, fin: `<td class="c">${laFmt(fin)}</td>`, plan: `<td class="n">${laNum(pl, 2)}</td>`, ejec: `<td class="n">${laNum(ej, 2)}</td>` };
+    return `<tr class="tit n${Math.min(it.nivel, 3)}" style="--cc:${laColor(it.cod)};--ccr:${laColorRgb(it.cod)}">${cols.map(c => cel[c.k] || '<td></td>').join('')}<td class="tl">${laResumenBarra(arr, d0, nd)}${hoyLinea}</td></tr>`;
+  };
+  if (!filas.length) html += `<tr><td colspan="${cols.length + 1}" style="padding:22px;text-align:center;color:var(--mut)">${LA.det.length ? 'Ninguna actividad cumple los filtros.' : (editable ? 'Este Look Ahead todavía no tiene actividades: usa «＋ Agregar actividad».' : 'Este Look Ahead no tiene actividades.')}</td></tr>`;
+  for (const it of laArbol(filas)) {
+    if (it.t) html += filaTitulo(it);
+    else html += `<tr class="act-row ${editable ? 'editable' : ''}" data-id="${it.f.id}">${cols.map(cc => celda(cc, it.f, it.nivel)).join('')}<td class="tl">${hoyLinea}${laBarra(it.f, d0, nd)}</td></tr>`;
+  }
+  tabla.innerHTML = html + '</tbody>';
+  laTotales(filas);
+}
+
+// totales como en el Excel: costo directo + gastos generales + utilidad = sub total (planeado vs ejecutado)
+function laTotales(filas) {
+  let out = '';
+  for (const [concepto, titulo] of [['contrato', 'Contrato principal'], ['adicional', 'Adicional']]) {
+    const fs = filas.filter(f => f.concepto === concepto);
+    if (!fs.length) continue;
+    const cdP = fs.reduce((s, f) => s + Number(f.planeado || 0), 0), cdE = fs.reduce((s, f) => s + Number(f.ejecutado || 0), 0);
+    const gg = Number(fs[0].gg_pct || 0), ut = Number(fs[0].utilidad_pct || 0);
+    const fila = (n, p, e, b) => `<tr><td${b ? ' style="font-weight:800;color:var(--tx)"' : ''}>${n}</td><td class="n"${b ? ' style="font-weight:800;color:var(--tx)"' : ''}>${laNum(p, 2)}</td><td class="n"${b ? ' style="font-weight:800;color:var(--tx)"' : ''}>${laNum(e, 2)}</td></tr>`;
+    out += `<div class="chart-card"><h3>${titulo} · ${fs.length} actividad${fs.length === 1 ? '' : 'es'}</h3><table><thead><tr><th></th><th class="n">PROGRAMADO S/</th><th class="n">EJECUTADO S/</th></tr></thead><tbody>`
+      + fila('Costo directo', cdP, cdE) + fila(`Gastos generales (${(gg * 100).toFixed(2)}%)`, cdP * gg, cdE * gg) + fila(`Utilidad (${(ut * 100).toFixed(2)}%)`, cdP * ut, cdE * ut)
+      + fila('Sub total', cdP * (1 + gg + ut), cdE * (1 + gg + ut), true)
+      + `<tr><td>Avance ponderado</td><td></td><td class="n" style="font-weight:700;color:var(--tx)">${cdP ? (cdE / cdP * 100).toFixed(2) : '0.00'}%</td></tr></tbody></table></div>`;
+  }
+  $('#laTotales').innerHTML = out ? `<div class="la-tot">${out}</div>` : '';
+}
+
+// ── formulario de actividad: listas en cascada componente > elemento > partida ──
+function laElementos(proyId) {
+  const hojas = LA.nodos.filter(n => n.es_hoja && n.proyecto_id === proyId);
+  const ids = [...new Set(hojas.map(n => n.padre_id))];
+  return ids.map(id => LA.porId[id]).filter(Boolean).sort((a, b) => a.orden - b.orden).map(p => {
+    const ab = LA.porId[p.padre_id], adi = hojas.some(h => h.padre_id === p.id && h.concepto === 'adicional');
+    return { id: p.id, etq: `${adi ? '[ADICIONAL] ' : ''}${ab && ab.padre_id ? ab.nombre + ' › ' : ''}${p.nombre} (${p.codigo})` };
+  });
+}
+function laLlenarElementos() {
+  const els = $('#laFComp').value ? laElementos($('#laFComp').value) : [];
+  $('#laFElem').innerHTML = '<option value="">Seleccione…</option>' + els.map(e => `<option value="${e.id}">${esc(e.etq)}</option>`).join('');
+  laLlenarPartidas();
+}
+function laLlenarPartidas() {
+  const q = limpiaTxt($('#laFBuscar').value), el = $('#laFElem').value;
+  let hs = LA.nodos.filter(n => n.es_hoja && n.padre_id === el);
+  if (q) hs = hs.filter(n => limpiaTxt(n.codigo + ' ' + (n.codigo_esp || '') + ' ' + n.nombre).includes(q));
+  const prev = $('#laFPart').value;
+  $('#laFPart').innerHTML = '<option value="">Seleccione…</option>' + hs.map(n => `<option value="${n.id}">${esc(n.codigo)} · ${esc(laCaso(n.nombre))} (${esc(n.unidad || '')})</option>`).join('');
+  if (hs.some(n => n.id === prev)) $('#laFPart').value = prev;
+  laInfoPartida();
+}
+const limpiaTxt = (s) => String(s || '').toUpperCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+function laInfoPartida() {
+  const n = LA.porId[$('#laFPart').value];
+  $('#laFUnd').textContent = n ? `(${n.unidad || ''})` : ''; $('#laFUnd2').textContent = n ? `(${n.unidad || ''})` : '';
+  if (!n) { $('#laFInfo').textContent = ''; return; }
+  const yaPlan = LA.det.filter(f => f.nodo_id === n.id && f.id !== LA.edit).reduce((s, f) => s + Number(f.metrado_meta || 0), 0);
+  $('#laFInfo').innerHTML = `<b>${esc(n.codigo)}</b> · código ${esc(n.codigo_esp || '—')} · metrado total <b>${laNum(n.metrado, 2)} ${esc(n.unidad || '')}</b> · P/U S/ ${laNum(n.precio_unitario, 2)}`
+    + (yaPlan ? ` · ya planeado en este Look Ahead: ${laNum(yaPlan, 2)}` : '');
+}
+function laFinTxt() {
+  const ini = $('#laFIni').value, d = parseInt($('#laFDias').value, 10);
+  $('#laFFin').textContent = (ini && d >= 1) ? `→ fin ${laFmt(laFecha(laDia(ini) + d - 1))}` : '';
+}
+function laFormAbrir(act) {
+  LA.edit = act ? act.id : null;
+  $('#laForm').hidden = false; $('#laNuevoBox').hidden = true; laMsg('');
+  $('#laFTitulo').textContent = act ? 'Editar actividad' : 'Agregar actividad';
+  $('#laFGuardar').textContent = act ? 'Guardar cambios' : 'Agregar';
+  $('#laFQuitar').hidden = !act;
+  ['laf-comp', 'laf-elem', 'laf-part', 'laf-ini', 'laf-dias', 'laf-meta', 'laf-pct'].forEach(id => marcarError(id, false));
+  $('#laFComp').innerHTML = '<option value="">Seleccione…</option>' + DATA.proyectos.map(p => `<option value="${p.id}">${esc(p.nombre)}</option>`).join('');
+  $('#laFBuscar').value = '';
+  const sem = laSemana(laActual().semana);
+  if (act) {
+    $('#laFComp').value = act.proyecto_id; laLlenarElementos(); $('#laFElem').value = act.padre_id; laLlenarPartidas(); $('#laFPart').value = act.nodo_id; laInfoPartida();
+    $('#laFDetalle').value = act.detalle || ''; $('#laFResp').value = act.responsable || ''; $('#laFCrit').checked = !!act.critico;
+    $('#laFIni').value = act.fecha_inicio; $('#laFDias').value = act.dias; $('#laFMeta').value = act.metrado_meta; $('#laFPrev').value = act.acumulado_previo;
+  } else {
+    laLlenarElementos();
+    $('#laFDetalle').value = ''; $('#laFResp').value = ''; $('#laFCrit').checked = false;
+    $('#laFIni').value = sem.fecha_inicio; $('#laFDias').value = ''; $('#laFMeta').value = ''; $('#laFPrev').value = 0;
+  }
+  ['laFComp', 'laFElem', 'laFPart', 'laFBuscar'].forEach(id => { $('#' + id).disabled = !!act; });   // la partida no se cambia: se quita y se agrega otra
+  laFinTxt();
+  $('#laForm').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function laIniciar() {
+  document.querySelectorAll('[data-lacols]').forEach(b => b.addEventListener('click', () => {
+    LA.cols = b.dataset.lacols; try { localStorage.setItem('obra-la-cols', LA.cols); } catch (e) {} laRender();
+  }));
+  $('#laSel').addEventListener('change', async (e) => { LA.sel = e.target.value; try { localStorage.setItem('obra-la-sel', LA.sel); } catch (x) {} await laCargarDetalle(); });
+  const mover = async (d) => { const i = LA.looks.findIndex(l => l.id === LA.sel); const n = LA.looks[i + d]; if (n) { LA.sel = n.id; try { localStorage.setItem('obra-la-sel', LA.sel); } catch (x) {} await laCargarDetalle(); } };
+  $('#laPrev').addEventListener('click', () => mover(-1)); $('#laNext').addEventListener('click', () => mover(1));
+  $('#laComp').addEventListener('change', (e) => { LA.comp = e.target.value; laRender(); });
+  $('#laCrit').addEventListener('change', (e) => { LA.crit = e.target.checked; laRender(); });
+  $('#laTabla').addEventListener('click', (e) => {
+    const tr = e.target.closest('tr.act-row.editable'); if (!tr) return;
+    const f = LA.det.find(x => x.id === tr.dataset.id); if (f) laFormAbrir(f);
+  });
+  $('#laAgregar').addEventListener('click', () => laFormAbrir(null));
+  $('#laFCancel').addEventListener('click', () => { $('#laForm').hidden = true; });
+  $('#laFComp').addEventListener('change', laLlenarElementos);
+  $('#laFElem').addEventListener('change', () => { laLlenarPartidas(); });
+  $('#laFBuscar').addEventListener('input', laLlenarPartidas);
+  $('#laFPart').addEventListener('change', () => {
+    laInfoPartida();
+    const n = LA.porId[$('#laFPart').value];
+    if (n && !LA.edit && !$('#laFMeta').value) $('#laFMeta').value = n.metrado;   // por defecto: el metrado total de la partida
+  });
+  ['laFIni', 'laFDias'].forEach(id => $('#' + id).addEventListener('input', laFinTxt));
+
+  $('#laForm').addEventListener('submit', async (e) => {
+    e.preventDefault(); laMsg('');
+    const look = laActual(); if (!look) return;
+    const nodo = $('#laFPart').value, ini = $('#laFIni').value, dias = parseInt($('#laFDias').value, 10), meta = parseFloat($('#laFMeta').value), prev = parseFloat($('#laFPrev').value);
+    let ok = true;
+    const v = (id, bad) => { marcarError(id, bad); if (bad) ok = false; };
+    v('laf-comp', !$('#laFComp').value); v('laf-elem', !$('#laFElem').value); v('laf-part', !nodo); v('laf-ini', !ini);
+    v('laf-dias', !(dias >= 1)); v('laf-meta', !(meta >= 0)); v('laf-pct', !(prev >= 0));
+    if (!ok) return;
+    const fin = laFecha(laDia(ini) + dias - 1), sem = laSemana(look.semana), fVentana = laFecha(laDia(sem.fecha_inicio) + look.semanas * 7 - 1);
+    if (fin < sem.fecha_inicio || ini > fVentana) {
+      if (!confirm(`Esta actividad (${laFmt(ini)} → ${laFmt(fin)}) queda fuera de la ventana del Look Ahead (${laFmt(sem.fecha_inicio)} → ${laFmt(fVentana)}) y no se dibujará. ¿Guardar igual?`)) return;
+    }
+    const cuerpo = { detalle: $('#laFDetalle').value.trim() || null, critico: $('#laFCrit').checked, fecha_inicio: ini, dias, metrado_meta: meta, acumulado_previo: prev, responsable: $('#laFResp').value.trim() || null };
+    const btn = $('#laFGuardar'); btn.disabled = true;
+    try {
+      if (LA.edit) await laEnviar('PATCH', `/lookahead_actividades?id=eq.${LA.edit}`, cuerpo);
+      else await laEnviar('POST', '/lookahead_actividades', { ...cuerpo, lookahead_id: look.id, nodo_id: nodo, orden: LA.det.reduce((m, f) => Math.max(m, f.orden), 0) + 1 });
+      $('#laForm').hidden = true; await laCargarDetalle(); laMsg(LA.edit ? 'Actividad actualizada.' : 'Actividad agregada al Look Ahead.', true);
+    } catch (err) { laMsg(`No se pudo guardar: ${laErr(err)}`, false); }
+    finally { btn.disabled = false; }
+  });
+  $('#laFQuitar').addEventListener('click', async () => {
+    if (!LA.edit || !confirm('¿Quitar esta actividad del Look Ahead?')) return;
+    try { await laEnviar('DELETE', `/lookahead_actividades?id=eq.${LA.edit}`); $('#laForm').hidden = true; await laCargarDetalle(); laMsg('Actividad quitada.', true); }
+    catch (err) { laMsg(`No se pudo quitar: ${laErr(err)}`, false); }
+  });
+
+  // nuevo Look Ahead
+  $('#laNuevo').addEventListener('click', () => {
+    laMsg(''); $('#laForm').hidden = true; $('#laNuevoBox').hidden = false;
+    const usadas = new Set(LA.looks.map(l => l.semana)), hoy = laHoy();
+    const actual = (LA.semanas.find(s => s.fecha_inicio <= hoy && hoy <= s.fecha_fin) || {}).numero;
+    const ultima = LA.looks.length ? LA.looks[LA.looks.length - 1].semana : null;
+    const libres = LA.semanas.filter(s => !usadas.has(s.numero));
+    const porDefecto = ultima != null && !usadas.has(ultima + 1) ? ultima + 1 : (actual != null && !usadas.has(actual) ? actual : (libres[0] || {}).numero);
+    $('#laNSem').innerHTML = libres.map(s => `<option value="${s.numero}">Semana ${s.numero} · ${laFmt(s.fecha_inicio)} – ${laFmt(s.fecha_fin)}${s.numero === actual ? ' · (esta semana)' : ''}</option>`).join('');
+    if (porDefecto != null) $('#laNSem').value = porDefecto;
+    $('#laNCopiar').disabled = !LA.looks.length; $('#laNCopiar').checked = !!LA.looks.length;
+  });
+  $('#laNCancel').addEventListener('click', () => { $('#laNuevoBox').hidden = true; });
+  $('#laNuevoBox').addEventListener('submit', async (e) => {
+    e.preventDefault(); laMsg('');
+    const sem = parseInt($('#laNSem').value, 10); if (!(sem >= 0)) return;
+    const btn = $('#laNCrear'); btn.disabled = true;
+    try {
+      const [nuevo] = await laEnviar('POST', '/lookaheads', { obra_id: OBRA.id, semana: sem, semanas: 4, estado: 'borrador', fuente: 'panel' });
+      let copiadas = 0;
+      const previo = LA.looks.filter(l => l.semana < sem).pop();
+      if ($('#laNCopiar').checked && previo) {
+        const rows = await get(`/v_lookahead_detalle?lookahead_id=eq.${previo.id}&order=orden`), s = laSemana(sem);
+        // pendientes: sin terminar y que todavía no acabaron antes de la semana nueva
+        const nuevas = rows.filter(r => Number(r.pct_avance) < 1 && r.fecha_fin >= s.fecha_inicio).map((r, i) => ({ lookahead_id: nuevo.id, nodo_id: r.nodo_id, orden: i + 1, detalle: r.detalle, critico: r.critico, fecha_inicio: r.fecha_inicio, dias: r.dias, metrado_meta: r.metrado_meta, acumulado_previo: r.acumulado, responsable: r.responsable }));   // lo ejecutado hasta hoy pasa a ser el acumulado previo del bloque nuevo
+        if (nuevas.length) { await laEnviar('POST', '/lookahead_actividades', nuevas); copiadas = nuevas.length; }
+      }
+      $('#laNuevoBox').hidden = true; LA.sel = nuevo.id; try { localStorage.setItem('obra-la-sel', LA.sel); } catch (x) {}
+      await laCargar(true);
+      laMsg(`Look Ahead de la semana ${sem} creado${copiadas ? ` con ${copiadas} actividad${copiadas === 1 ? '' : 'es'} pendiente${copiadas === 1 ? '' : 's'} del anterior` : ''}. Ya puedes agregar actividades.`, true);
+    } catch (err) { laMsg(`No se pudo crear: ${laErr(err)}`, false); }
+    finally { btn.disabled = false; }
+  });
+  $('#laCerrar').addEventListener('click', async () => {
+    const look = laActual(); if (!look || !confirm(`¿Cerrar el Look Ahead de la semana ${look.semana}? Una vez cerrado ya no se podrá modificar desde el panel.`)) return;
+    try { await laEnviar('PATCH', `/lookaheads?id=eq.${look.id}`, { estado: 'cerrado' }); $('#laForm').hidden = true; await laCargar(true); laMsg(`Look Ahead de la semana ${look.semana} cerrado.`, true); }
+    catch (err) { laMsg(`No se pudo cerrar: ${laErr(err)}`, false); }
+  });
+}
+laIniciar();
+
+// ============================================================================
+// PLAN SEMANAL (PTS) + PARTE DIARIO + PPC (Last Planner)
+// El plan semanal es un extracto de las MISMAS actividades del Look Ahead: aquí se fija la META de cada día (Plan)
+// y se ve lo EJECUTADO (Real), que sale del parte diario (avance_diario). Una actividad cumple (SÍ) si el real de la
+// semana >= el plan; PAC = actividades que cumplen / actividades con plan. Todo se calcula en la base.
+// ============================================================================
+const PT = { look: null, sem: null, planes: [], det: [], acts: [], causas: [], comp: '', cargado: false };
+const DIAS_PT = ['plan_l', 'plan_m', 'plan_x', 'plan_j', 'plan_v', 'plan_s', 'plan_d'];
+const REAL_PT = ['real_l', 'real_m', 'real_x', 'real_j', 'real_v', 'real_s', 'real_d'];
+const LET_PT = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
+const ptMsg = (t, ok) => { $('#ptMsg').innerHTML = t ? `<div class="msg ${ok ? 'ok' : 'err'}">${t}</div>` : ''; };
+const ptLookAct = () => LA.looks.find(l => l.id === PT.look) || null;
+const ptPlan = () => PT.planes.find(p => p.semana === PT.sem) || null;
+const ptSemFechas = () => laSemana(PT.sem);
+const num2 = (v) => Number(v || 0).toLocaleString('es-PE', { maximumFractionDigits: 2 });
+
+async function ptEnviar(metodo, path, body, upsert) {
+  const r = await fetch(`${API}${path}`, { method: metodo, headers: { ...headers, 'Content-Type': 'application/json', Prefer: (upsert ? 'resolution=merge-duplicates,' : '') + 'return=representation' }, body: body ? JSON.stringify(body) : undefined });
+  const d = await r.json().catch(() => null);
+  if (!r.ok) { const e = new Error((d && d.message) || `HTTP ${r.status}`); e.status = r.status; e.code = d && d.code; throw e; }
+  return d;
+}
+const ptErr = (e) => (e.status === 401 || e.status === 403 || e.code === '42501')
+  ? 'No se puede modificar: la semana está cerrada, o todavía no se habilitó el registro (<code>lookahead_permisos_registro.sql</code>).'
+  : (e.status === 404 ? 'Faltan las tablas del plan semanal en esta base de datos (<code>lookahead_schema.sql</code>).' : esc(e.message));
+
+async function ptCargar(forzar) {
+  try {
+    if (!LA.cargado) await laCargar();
+    if (!LA.cargado) throw new Error('El Look Ahead no está configurado en esta base.');
+    if (!PT.causas.length) PT.causas = await get('/causas_incumplimiento?order=orden&select=codigo,nombre');
+    if (!PT.look || !LA.looks.some(l => l.id === PT.look)) PT.look = LA.sel || (LA.looks[LA.looks.length - 1] || {}).id || null;
+    $('#ptVacio').style.display = 'none'; $('#ptApp').style.display = '';
+    await ptCargarLook();
+  } catch (e) {
+    $('#ptApp').style.display = 'none'; $('#ptVacio').style.display = '';
+    $('#ptVacio').innerHTML = `<b>Plan semanal</b>Todavía no está configurado en esta base de datos (correr <code>lookahead_schema.sql</code>).<br><span class="mono" style="font-size:11px">${esc(e.message)}</span>`;
+  }
+}
+async function ptCargarLook() {
+  const look = ptLookAct();
+  if (!look) { PT.planes = []; PT.det = []; PT.acts = []; ptRender(); return; }
+  const [planes, det, acts] = await Promise.all([
+    get(`/planes_semanales?lookahead_id=eq.${look.id}&select=id,semana,estado,comentarios&order=semana`),
+    get(`/v_plan_semanal_detalle?lookahead_id=eq.${look.id}&order=semana,orden`),
+    get(`/v_lookahead_detalle?lookahead_id=eq.${look.id}&order=orden`)]);
+  PT.planes = planes; PT.det = det; PT.acts = acts;
+  if (PT.sem == null || PT.sem < look.semana || PT.sem > look.semana + look.semanas - 1) {
+    const hoy = laHoy(), enBloque = [...Array(look.semanas).keys()].map(i => look.semana + i).find(n => { const s = laSemana(n); return s && s.fecha_inicio <= hoy && hoy <= s.fecha_fin; });
+    PT.sem = enBloque != null ? enBloque : (planes.length ? planes[0].semana : look.semana);
+  }
+  ptRender();
+}
+
+// ── cálculos que también hace la base (para refrescar sin volver a pedir todo) ──
+function ptRecalc(f) {
+  f.plan_total = DIAS_PT.reduce((s, k) => s + Number(f[k] || 0), 0);
+  f.real_total = REAL_PT.reduce((s, k) => s + Number(f[k] || 0), 0);
+  f.spi = f.plan_total > 0 ? f.real_total / f.plan_total : null;
+  f.pac = f.plan_total > 0 ? f.real_total >= f.plan_total - 0.0001 : null;
+}
+function ptPacTexto(filas) {
+  const con = filas.filter(f => f.pac !== null && f.pac !== undefined), si = con.filter(f => f.pac).length;
+  return { total: con.length, si, no: con.length - si, pac: con.length ? si / con.length : null };
+}
+
+function ptRender() {
+  const look = ptLookAct(), plan = ptPlan();
+  $('#ptLook').innerHTML = LA.looks.length ? LA.looks.map(l => `<option value="${l.id}">Semanas ${l.semana}–${l.semana + l.semanas - 1} · ${laFmt(laSemana(l.semana).fecha_inicio)}${l.estado === 'cerrado' ? ' · cerrado' : ''}</option>`).join('') : '<option value="">(sin Look Ahead)</option>';
+  if (look) $('#ptLook').value = look.id;
+  $('#ptComp').innerHTML = '<option value="">Todos</option>' + COMPONENTES.map(c => `<option value="${esc(c.id)}">${esc(c.nombre)}</option>`).join(''); $('#ptComp').value = PT.comp;
+  const tabla = $('#ptTabla');
+  if (!look) { tabla.innerHTML = ''; $('#ptSemanas').innerHTML = ''; $('#ptKpis').innerHTML = ''; $('#ptInfo').textContent = 'Primero crea un Look Ahead (pestaña Look Ahead).'; ['ptCrear', 'ptAgregar', 'ptCerrar'].forEach(i => { $('#' + i).disabled = true; }); return; }
+
+  // botones de las semanas del bloque, con su PAC
+  $('#ptSemanas').innerHTML = [...Array(look.semanas).keys()].map(i => {
+    const n = look.semana + i, s = laSemana(n), p = PT.planes.find(x => x.semana === n), k = ptPacTexto(PT.det.filter(f => f.semana === n));
+    return `<button type="button" class="pt-sem ${n === PT.sem ? 'on' : ''}" data-sem="${n}"><b>Semana ${n}</b><small>${laFmt(s.fecha_inicio)} – ${laFmt(s.fecha_fin)}</small><br>`
+      + (p ? `<span class="pac ${k.pac == null ? '' : (k.pac >= Number((PT.det[0] || {}).pac_meta || 0.9) ? 'ok' : 'bajo')}">${k.pac == null ? 'PAC —' : 'PAC ' + Math.round(k.pac * 100) + '%'}${p.estado === 'cerrado' ? ' · 🔒' : ''}</span>` : '<span class="pac">sin plan</span>') + '</button>';
+  }).join('');
+  const est = $('#ptEstado');
+  est.textContent = (plan ? (plan.estado === 'cerrado' ? '🔒 Semana cerrada' : '✏️ Semana en borrador') : 'Sin plan de esta semana') + (AUTH.admin && plan ? ' · 🛡 admin' : '');
+  est.style.cssText = plan ? (plan.estado === 'cerrado' ? 'background:#8393b226;color:var(--mut)' : 'background:#3b82f626;color:var(--blue-tx)') : 'background:#d9770626;color:var(--amber)';
+  const editable = !!plan && plan.estado === 'borrador';   // cerrado = bloqueado para todos hasta «Reabrir»
+  $('#ptReabrir').hidden = !(AUTH.admin && plan && plan.estado === 'cerrado');
+  $('#ptCrear').disabled = !!plan; $('#ptCerrar').disabled = !(plan && plan.estado === 'borrador'); $('#ptAgregar').disabled = !editable; $('#ptAgregarSel').disabled = !editable;
+  const enPlan = new Set(PT.det.filter(f => f.semana === PT.sem).map(f => f.actividad_id));
+  const libres = PT.acts.filter(a => !enPlan.has(a.id));
+  $('#ptAgregarSel').innerHTML = libres.length ? libres.map(a => `<option value="${a.id}">${esc(a.nodo_codigo)} · ${esc(laCaso(a.partida).slice(0, 42))}</option>`).join('') : '<option value="">(no quedan actividades)</option>';
+
+  const filas = PT.det.filter(f => f.semana === PT.sem && (!PT.comp || f.proyecto === PT.comp));
+  ptKpis(filas);
+  const sem = ptSemFechas(), d0 = laDia(sem.fecha_inicio);
+  $('#ptInfo').innerHTML = plan
+    ? `<b>Semana ${PT.sem}</b> · ${laFmt(sem.fecha_inicio)} – ${laFmt(sem.fecha_fin)} · ${filas.length} actividad${filas.length === 1 ? '' : 'es'} en el plan. ${editable ? 'Edita el <b>Plan</b> de cada día; el <b>Real</b> se registra aquí o en el Parte diario.' : ('Semana cerrada: solo lectura.' + (AUTH.admin ? ' Usa «Reabrir (admin)» para poder editarla.' : ''))}`
+    : `No hay plan para la semana ${PT.sem}. Usa «＋ Crear plan de la semana»: se arma con las actividades del Look Ahead que caen en esa semana.`;
+  if (!plan) { tabla.innerHTML = ''; return; }
+
+  const hoy = laHoy();
+  const dias = [...Array(7).keys()].map(k => laFecha(d0 + k));
+  let html = `<thead><tr><th class="izq">ITEM</th><th class="izq act">DESCRIPCIÓN DE LA ACTIVIDAD</th><th>UND</th><th>ACUM. ANTERIOR</th><th>MEDIDA</th>`
+    + dias.map((d, k) => `<th class="${dias[k] === hoy ? 'hoy' : ''}">${LET_PT[k]}<br><span style="font-weight:500">${d.slice(8, 10)}/${d.slice(5, 7)}</span></th>`).join('')
+    + `<th>PLAN / REAL</th><th>KPI AVANCE SPI</th><th>PAC<br>SÍ</th><th>PAC<br>NO</th><th>CAUSAS DE INCUMPLIMIENTO</th><th>RESTRICCIONES</th><th>COMENTARIOS</th></tr></thead><tbody>`;
+  const arbol = laArbol(filas);
+  const NC = 5 + 7 + 7;
+  const tituloPt = (it) => `<tr class="tit n${Math.min(it.nivel, 3)}" style="--cc:${laColor(it.cod)};--ccr:${laColorRgb(it.cod)}"><td colspan="${NC}"><span class="nom" style="--lvl:${it.nivel};padding-left:calc(10px + ${it.nivel} * 14px)">${esc(String(it.nodo.nombre).toUpperCase())}</span></td></tr>`;
+  if (!filas.length) html += `<tr><td colspan="${NC}" style="padding:22px;text-align:center;color:var(--mut)">${PT.det.some(f => f.semana === PT.sem) ? 'Ninguna actividad cumple el filtro.' : 'Este plan todavía no tiene actividades: usa «＋ Agregar al plan».'}</td></tr>`;
+  const opcCausa = (v) => '<option value="">—</option>' + PT.causas.map(c => `<option value="${c.codigo}" ${c.codigo === v ? 'selected' : ''}>${esc(c.nombre)}</option>`).join('');
+  for (const it of arbol) {
+    if (it.t) { html += tituloPt(it); continue; }
+    {
+      {
+        const f = it.f, nivel = it.nivel;
+        const ini = laDia(f.act_inicio) - d0, fin = laDia(f.act_fin) - d0;
+        const celdas = (tipo) => dias.map((d, k) => {
+          const clave = tipo === 'plan' ? DIAS_PT[k] : REAL_PT[k], v = Number(f[clave] || 0), fuera = k < ini || k > fin;
+          const dis = !editable || (tipo === 'real' && d > hoy && false);
+          return `<td class="${tipo === 'plan' ? 'pl' : 'rl'} ${k >= 5 ? 'fs' : ''} ${fuera ? 'fuera' : ''}"><input class="dia ${tipo}" type="number" min="0" step="0.01" ${dis ? 'disabled' : ''} value="${v ? v : ''}" data-fila="${f.fila_id}" data-tipo="${tipo}" data-k="${k}" data-act="${f.actividad_id}" data-fecha="${d}" title="${tipo === 'plan' ? 'Meta' : 'Ejecutado'} del ${LET_PT[k]} ${d.slice(8, 10)}/${d.slice(5, 7)}"></td>`;
+        }).join('');
+        html += `<tr class="fila-plan act-row" data-fila="${f.fila_id}"><td rowspan="2" class="mono" style="font-size:10.5px">${esc(f.nodo_codigo)}</td>`
+          + `<td rowspan="2" class="act" style="--lvl:${nivel}"><span class="nom">${f.critico ? '<span class="dot" title="Crítica"></span>' : ''}${esc(laCaso(f.partida))}${f.concepto === 'adicional' ? '<span class="tag-adi">ADI</span>' : ''}${editable ? ` <button class="quitar" title="Quitar del plan de la semana" data-quitar="${f.fila_id}">✕</button>` : ''}</span>`
+          + `<span class="cod">${esc(String(f.proyecto_nombre || '').replace('Puente ', ''))} · ${esc(f.codigo_esp || '')}${f.detalle ? ' · ' + esc(f.detalle) : ''}</span></td>`
+          + `<td rowspan="2" class="c">${esc(f.unidad || '')}</td><td rowspan="2" class="n" data-c="acum">${num2(f.acum_anterior)}</td>`
+          + `<td class="medida">Plan</td>${celdas('plan')}<td class="n" data-c="plan_total" style="font-weight:700">${num2(f.plan_total)}</td>`
+          + `<td rowspan="2" class="n" data-c="spi">${f.spi == null ? '' : (f.spi * 100).toFixed(0) + '%'}</td>`
+          + `<td rowspan="2" data-c="si" class="${f.pac === true ? 'si' : ''}">${f.pac === true ? 'X' : ''}</td><td rowspan="2" data-c="no" class="${f.pac === false ? 'no' : ''}">${f.pac === false ? 'X' : ''}</td>`
+          + `<td rowspan="2"><select class="causa" data-fila="${f.fila_id}" data-campo="causa" ${editable ? '' : 'disabled'}>${opcCausa(f.causa)}</select></td>`
+          + `<td rowspan="2"><textarea class="txt" data-fila="${f.fila_id}" data-campo="restricciones" ${editable ? '' : 'disabled'} placeholder="Restricciones">${esc(f.restricciones || '')}</textarea></td>`
+          + `<td rowspan="2"><textarea class="txt" data-fila="${f.fila_id}" data-campo="comentarios" ${editable ? '' : 'disabled'} placeholder="Comentarios">${esc(f.comentarios || '')}</textarea></td></tr>`
+          + `<tr class="fila-real" data-fila="${f.fila_id}"><td class="medida">Real</td>${celdas('real')}<td class="n" data-c="real_total" style="font-weight:700">${num2(f.real_total)}</td></tr>`;
+      }
+    }
+  }
+  tabla.innerHTML = html + '</tbody>';
+}
+
+function ptKpis(filas) {
+  const k = ptPacTexto(filas), meta = Number((PT.det[0] || {}).pac_meta || 0.9);
+  const cumple = k.pac != null && k.pac >= meta;
+  $('#ptKpis').innerHTML = `<div class="pt-kpi"><span>PAC de la semana</span><b style="color:${k.pac == null ? 'var(--mut)' : (cumple ? 'var(--green)' : 'var(--amber)')}">${k.pac == null ? '—' : Math.round(k.pac * 100) + '%'}</b><small>${k.total ? `${k.si} SÍ · ${k.no} NO de ${k.total}` : 'sin actividades con plan'}</small></div>`
+    + `<div class="pt-kpi"><span>Meta del PAC</span><b>${Math.round(meta * 100)}%</b><small>${k.pac == null ? '' : (cumple ? 'meta cumplida' : 'por debajo de la meta')}</small></div>`
+    + `<div class="pt-kpi"><span>Actividades con plan</span><b>${k.total}</b><small>en esta semana</small></div>`;
+}
+
+// actualiza SOLO las celdas calculadas de una fila (sin redibujar todo, para no perder el foco al escribir)
+function ptActualizarFila(f) {
+  ptRecalc(f);
+  const q = (c, tr) => document.querySelector(`#ptTabla tr[data-fila="${f.fila_id}"]${tr || ''} [data-c="${c}"]`);
+  const set = (c, txt, cls, tr) => { const e = q(c, tr); if (e) { e.textContent = txt; if (cls !== undefined) e.className = cls; } };
+  set('plan_total', num2(f.plan_total), 'n', '.fila-plan'); set('real_total', num2(f.real_total), 'n', '.fila-real');
+  set('spi', f.spi == null ? '' : (f.spi * 100).toFixed(0) + '%', 'n'); set('si', f.pac === true ? 'X' : '', f.pac === true ? 'si' : ''); set('no', f.pac === false ? 'X' : '', f.pac === false ? 'no' : '');
+  ptKpis(PT.det.filter(x => x.semana === PT.sem && (!PT.comp || x.proyecto === PT.comp)));
+  ptResumenSemanas();
+}
+function ptResumenSemanas() {
+  document.querySelectorAll('#ptSemanas .pt-sem').forEach(b => {
+    const n = +b.dataset.sem, p = PT.planes.find(x => x.semana === n), k = ptPacTexto(PT.det.filter(f => f.semana === n));
+    const sp = b.querySelector('.pac'); if (p && sp) sp.textContent = (k.pac == null ? 'PAC —' : 'PAC ' + Math.round(k.pac * 100) + '%') + (p.estado === 'cerrado' ? ' · 🔒' : '');
+  });
+}
+
+// ── plan de la semana: reparte lo que falta de cada actividad entre sus días de trabajo (L–S) ──
+function ptRepartir(a, semIni, avPrevio) {
+  const ini = laDia(a.fecha_inicio), fin = laDia(a.fecha_fin), lun = laDia(semIni), dom = lun + 6;
+  const laborables = (d1, d2) => { let n = 0; for (let d = d1; d <= d2; d++) if (((d - lun) % 7 + 7) % 7 < 6) n++; return n; };   // L a S
+  const desde = Math.max(ini, lun), enSemana = laborables(desde, Math.min(fin, dom)), restantes = laborables(desde, fin);
+  const faltante = Math.max(0, Number(a.metrado_meta) - (Number(a.acumulado_previo) + (avPrevio || 0)));
+  const res = [0, 0, 0, 0, 0, 0, 0];
+  if (!enSemana || !restantes || faltante <= 0) return res;
+  const porDia = faltante / restantes;
+  for (let d = desde; d <= Math.min(fin, dom); d++) { const k = d - lun; if (k < 6) res[k] = Math.round(porDia * 100) / 100; }
+  return res;
+}
+async function ptFilasNuevas(actividades, planId, semIni) {
+  const ids = actividades.map(a => a.id);
+  const prev = ids.length ? await get(`/avance_diario?actividad_id=in.(${ids.join(',')})&fecha=lt.${semIni}&select=actividad_id,cantidad`) : [];
+  const sumPrev = {}; prev.forEach(r => { sumPrev[r.actividad_id] = (sumPrev[r.actividad_id] || 0) + Number(r.cantidad); });
+  return actividades.map((a, i) => { const p = ptRepartir(a, semIni, sumPrev[a.id] || 0);
+    return { plan_id: planId, actividad_id: a.id, orden: i + 1, plan_l: p[0], plan_m: p[1], plan_x: p[2], plan_j: p[3], plan_v: p[4], plan_s: p[5], plan_d: p[6] }; });
+}
+
+function ptIniciar() {
+  $('#ptLook').addEventListener('change', async (e) => { PT.look = e.target.value; PT.sem = null; await ptCargarLook(); });
+  $('#ptComp').addEventListener('change', (e) => { PT.comp = e.target.value; ptRender(); });
+  $('#ptSemanas').addEventListener('click', (e) => { const b = e.target.closest('.pt-sem'); if (b) { PT.sem = +b.dataset.sem; ptMsg(''); ptRender(); } });
+
+  $('#ptCrear').addEventListener('click', async () => {
+    const look = ptLookAct(); if (!look || ptPlan()) return;
+    const s = ptSemFechas(), d0 = laDia(s.fecha_inicio), d1 = d0 + 6;
+    const cand = PT.acts.filter(a => laDia(a.fecha_fin) >= d0 && laDia(a.fecha_inicio) <= d1 && Number(a.pct_avance) < 1);
+    if (!confirm(`Crear el plan de la semana ${PT.sem} con ${cand.length} actividad${cand.length === 1 ? '' : 'es'} del Look Ahead que caen en esa semana?`)) return;
+    try {
+      const [plan] = await ptEnviar('POST', '/planes_semanales', { lookahead_id: look.id, semana: PT.sem, estado: 'borrador' });
+      const filas = await ptFilasNuevas(cand, plan.id, s.fecha_inicio);
+      if (filas.length) await ptEnviar('POST', '/plan_semanal_actividades', filas);
+      await ptCargarLook(); ptMsg(`Plan de la semana ${PT.sem} creado con ${filas.length} actividad${filas.length === 1 ? '' : 'es'}. Ajusta el Plan de cada día si hace falta.`, true);
+    } catch (err) { ptMsg(`No se pudo crear el plan: ${ptErr(err)}`, false); }
+  });
+  $('#ptAgregar').addEventListener('click', async () => {
+    const plan = ptPlan(), id = $('#ptAgregarSel').value, a = PT.acts.find(x => x.id === id); if (!plan || !a) return;
+    try {
+      const [fila] = await ptFilasNuevas([a], plan.id, ptSemFechas().fecha_inicio);
+      fila.orden = PT.det.filter(f => f.semana === PT.sem).reduce((m, f) => Math.max(m, f.orden), 0) + 1;
+      await ptEnviar('POST', '/plan_semanal_actividades', fila); await ptCargarLook(); ptMsg('Actividad agregada al plan de la semana.', true);
+    } catch (err) { ptMsg(`No se pudo agregar: ${ptErr(err)}`, false); }
+  });
+  $('#ptCerrar').addEventListener('click', async () => {
+    const plan = ptPlan(); if (!plan || !confirm(`¿Cerrar la semana ${PT.sem}? El plan y el parte diario de esa semana ya no se podrán modificar desde el panel.`)) return;
+    try { await ptEnviar('PATCH', `/planes_semanales?id=eq.${plan.id}`, { estado: 'cerrado' }); await ptCargarLook(); ptMsg(`Semana ${PT.sem} cerrada.`, true); }
+    catch (err) { ptMsg(`No se pudo cerrar: ${ptErr(err)}`, false); }
+  });
+
+  // edición en la grilla: Plan -> plan_semanal_actividades; Real -> avance_diario (parte diario); análisis -> la misma fila del plan
+  $('#ptTabla').addEventListener('change', async (e) => {
+    const el = e.target, fila = el.dataset.fila; if (!fila) return;
+    const f = PT.det.find(x => x.fila_id === fila); if (!f) return;
+    try {
+      if (el.matches('input.dia.plan')) {
+        const clave = DIAS_PT[+el.dataset.k], v = el.value === '' ? 0 : Math.max(0, parseFloat(el.value));
+        await ptEnviar('PATCH', `/plan_semanal_actividades?id=eq.${fila}`, { [clave]: v }); f[clave] = v; ptActualizarFila(f);
+      } else if (el.matches('input.dia.real')) {
+        const clave = REAL_PT[+el.dataset.k];
+        if (el.value === '') { await ptEnviar('DELETE', `/avance_diario?actividad_id=eq.${el.dataset.act}&fecha=eq.${el.dataset.fecha}`); f[clave] = 0; }
+        else { const v = Math.max(0, parseFloat(el.value)); await ptEnviar('POST', '/avance_diario?on_conflict=actividad_id,fecha', { actividad_id: el.dataset.act, fecha: el.dataset.fecha, cantidad: v }, true); f[clave] = v; }
+        ptActualizarFila(f);
+      } else if (el.dataset.campo) {
+        const v = el.value.trim() || null; await ptEnviar('PATCH', `/plan_semanal_actividades?id=eq.${fila}`, { [el.dataset.campo]: v }); f[el.dataset.campo] = v;
+      }
+      ptMsg('');
+    } catch (err) { ptMsg(`No se pudo guardar: ${ptErr(err)}`, false); if (el.matches('input.dia')) { const k = +el.dataset.k, val = Number(f[el.dataset.tipo === 'plan' ? DIAS_PT[k] : REAL_PT[k]] || 0); el.value = val ? val : ''; } }
+  });
+  $('#ptTabla').addEventListener('click', async (e) => {
+    const b = e.target.closest('[data-quitar]'); if (!b || !confirm('¿Quitar esta actividad del plan de la semana? (no se borra del Look Ahead ni el parte diario)')) return;
+    try { await ptEnviar('DELETE', `/plan_semanal_actividades?id=eq.${b.dataset.quitar}`); await ptCargarLook(); ptMsg('Actividad quitada del plan.', true); }
+    catch (err) { ptMsg(`No se pudo quitar: ${ptErr(err)}`, false); }
+  });
+}
+ptIniciar();
+
+// ============================================================================
+// PPC: PORCENTAJE DE ACTIVIDADES COMPLETADAS (trazabilidad semanal del PAC + causas)
+// ============================================================================
+const PPC = { filas: [], causas: [], comp: '' };
+async function ppcCargar() {
+  try {
+    if (!LA.cargado) await laCargar();
+    const [pac, causas] = await Promise.all([get(`/v_pac_semanal?obra_id=eq.${OBRA.id}&order=semana`), get(`/v_pac_causas?obra_id=eq.${OBRA.id}`)]);
+    PPC.filas = pac; PPC.causas = causas;
+    $('#ppcVacio').style.display = 'none'; $('#ppcApp').style.display = '';
+    ppcRender();
+  } catch (e) {
+    $('#ppcApp').style.display = 'none'; $('#ppcVacio').style.display = '';
+    $('#ppcVacio').innerHTML = `<b>PPC</b>Todavía no está configurado en esta base de datos (correr <code>lookahead_schema.sql</code>).<br><span class="mono" style="font-size:11px">${esc(e.message)}</span>`;
+  }
+}
+function ppcRender() {
+  $('#ppcComp').innerHTML = '<option value="">Toda la obra</option>' + DATA.proyectos.map(p => `<option value="${p.id}">${esc(p.nombre)}</option>`).join(''); $('#ppcComp').value = PPC.comp;
+  const f = PPC.filas.filter(r => !PPC.comp || r.proyecto_id === PPC.comp), meta = Number((PPC.filas[0] || {}).pac_meta || 0.9);
+  const por = new Map();
+  for (const r of f) { const s = por.get(r.semana) || { semana: r.semana, ini: r.fecha_inicio, fin: r.fecha_fin, plan: 0, ejec: 0 }; s.plan += Number(r.planificadas); s.ejec += Number(r.ejecutadas); por.set(r.semana, s); }
+  const semanas = [...por.values()].filter(s => s.plan > 0).sort((a, b) => a.semana - b.semana);
+  let ap = 0, ae = 0; semanas.forEach(s => { ap += s.plan; ae += s.ejec; s.apl = ap; s.aej = ae; s.pac = s.ejec / s.plan; s.pacAc = ae / ap; });
+  const ult = semanas[semanas.length - 1];
+  const kpi = (t, v, s, c) => `<div class="pt-kpi"><span>${t}</span><b${c ? ` style="color:${c}"` : ''}>${v}</b><small>${s || ''}</small></div>`;
+  const col = (p) => p == null ? 'var(--mut)' : (p >= meta ? 'var(--green)' : 'var(--amber)');
+  $('#ppcKpis').innerHTML = kpi('PAC acumulado', ult ? Math.round(ult.pacAc * 100) + '%' : '—', ult ? `${ae} de ${ap} actividades` : 'sin datos todavía', col(ult && ult.pacAc))
+    + kpi('PAC de la última semana', ult ? Math.round(ult.pac * 100) + '%' : '—', ult ? `semana ${ult.semana} · ${ult.ejec} de ${ult.plan}` : '', col(ult && ult.pac))
+    + kpi('Meta', Math.round(meta * 100) + '%', 'PAC objetivo') + kpi('Semanas evaluadas', semanas.length, '');
+
+  // gráfico de líneas: PAC semanal, PAC acumulado y meta
+  const W = 640, H = 300, pl = 44, pr = 16, pt = 18, pb = 44, px = (i) => pl + (semanas.length > 1 ? i / (semanas.length - 1) : .5) * (W - pl - pr), py = (v) => H - pb - v * (H - pt - pb);
+  let s = '';
+  [0, .25, .5, .75, 1].forEach(v => { s += `<line x1="${pl}" y1="${py(v)}" x2="${W - pr}" y2="${py(v)}" stroke="${SVGC.grid}"/><text x="${pl - 6}" y="${py(v) + 4}" font-size="10" text-anchor="end" fill="${SVGC.axis}">${Math.round(v * 100)}%</text>`; });
+  if (!semanas.length) s += `<text x="${W / 2}" y="${H / 2}" font-size="13" text-anchor="middle" fill="${SVGC.axis}">Todavía no hay semanas con plan y parte diario</text>`;
+  else {
+    s += `<line x1="${pl}" y1="${py(meta)}" x2="${W - pr}" y2="${py(meta)}" stroke="#d97706" stroke-width="1.5" stroke-dasharray="5,4"/>`;
+    const linea = (clave, color) => { const pts = semanas.map((x, i) => `${px(i).toFixed(1)},${py(x[clave]).toFixed(1)}`); return `<polyline points="${pts.join(' ')}" fill="none" stroke="${color}" stroke-width="2.4"/>` + semanas.map((x, i) => `<circle cx="${px(i).toFixed(1)}" cy="${py(x[clave]).toFixed(1)}" r="3.6" fill="${color}"><title>Semana ${x.semana}: ${Math.round(x[clave] * 100)}%</title></circle>`).join(''); };
+    s += linea('pacAc', '#0e8f4f') + linea('pac', '#2f6fed');
+    semanas.forEach((x, i) => { if (semanas.length <= 14 || i % 2 === 0) s += `<text x="${px(i)}" y="${H - pb + 16}" font-size="10" text-anchor="middle" fill="${SVGC.axis}">S${x.semana}</text>`; });
+    s += `<text x="${px(semanas.length - 1)}" y="${py(ult.pac) - 9}" font-size="10" font-weight="700" text-anchor="${semanas.length > 1 ? 'end' : 'middle'}" fill="#2f6fed">${Math.round(ult.pac * 100)}%</text>`;
+  }
+  $('#ppcSvg').innerHTML = s;
+
+  // causas de incumplimiento (barras horizontales, de mayor a menor)
+  const cs = new Map(); PPC.causas.filter(c => !PPC.comp || c.proyecto_id === PPC.comp).forEach(c => cs.set(c.causa_nombre, (cs.get(c.causa_nombre) || 0) + Number(c.actividades)));
+  const lista = [...cs.entries()].sort((a, b) => b[1] - a[1]), tot = lista.reduce((t, x) => t + x[1], 0), mx = lista.length ? lista[0][1] : 1;
+  $('#ppcCausas').innerHTML = lista.length ? lista.map(([n, v]) => `<div class="ppc-bar"><span class="nom">${esc(n)}</span><span class="pista"><i style="width:${(v / mx * 100).toFixed(0)}%"></i></span><span class="val">${v} · ${(v / tot * 100).toFixed(0)}%</span></div>`).join('')
+    : '<p class="hint">No hay actividades incumplidas registradas.</p>';
+
+  // tabla como en el Excel
+  $('#ppcTabla').innerHTML = `<thead><tr><th>Semana Nº</th><th>Fecha inicio</th><th>Fecha término</th><th>Nº activ. planificadas</th><th>Nº acumulado planif.</th><th>Nº activ. ejecutadas</th><th>Nº acumulado ejec.</th><th>PAC semanal</th><th>PAC acumulado</th><th>PAC meta</th></tr></thead><tbody>`
+    + (semanas.length ? semanas.map(x => `<tr><td class="mono">${x.semana}</td><td>${laFmt(x.ini)}</td><td>${laFmt(x.fin)}</td><td class="mono">${x.plan}</td><td class="mono">${x.apl}</td><td class="mono">${x.ejec}</td><td class="mono">${x.aej}</td>`
+      + `<td class="mono" style="color:${col(x.pac)};font-weight:700">${(x.pac * 100).toFixed(1)}%</td><td class="mono" style="color:${col(x.pacAc)};font-weight:700">${(x.pacAc * 100).toFixed(1)}%</td><td class="mono">${Math.round(meta * 100)}%</td></tr>`).join('')
+      : '<tr><td colspan="10" class="mono" style="color:var(--mut)">Aún no hay planes semanales con actividades.</td></tr>') + '</tbody>';
+}
+$('#ppcComp').addEventListener('change', (e) => { PPC.comp = e.target.value; ppcRender(); });
+
+// ============================================================================
+// PARTE DIARIO DE PRODUCCIÓN (ligado a las actividades del Look Ahead)
+// ============================================================================
+const PLA = { acts: [], planes: {}, avance: {} };
+async function plaCargar() {
+  try {
+    if (!LA.cargado) await laCargar();
+    $('#plaLook').innerHTML = LA.looks.length ? LA.looks.map(l => `<option value="${l.id}">Semanas ${l.semana}–${l.semana + l.semanas - 1} · ${laFmt(laSemana(l.semana).fecha_inicio)}</option>`).join('') : '<option value="">(no hay Look Ahead)</option>';
+    if (!$('#plaFecha').value) $('#plaFecha').value = laHoy();
+    if (LA.looks.length && !LA.looks.some(l => l.id === $('#plaLook').value)) $('#plaLook').value = LA.sel;
+    if (LA.looks.length) { const hoy = $('#plaFecha').value, l = LA.looks.find(x => { const a = laSemana(x.semana), b = laSemana(x.semana + x.semanas - 1); return a && b && a.fecha_inicio <= hoy && hoy <= b.fecha_fin; }); if (l) $('#plaLook').value = l.id; else if (LA.sel) $('#plaLook').value = LA.sel; }
+    await plaLista();
+  } catch (e) { $('#plaLista').innerHTML = `<p class="hint" style="padding:12px">No se pudo cargar el Look Ahead: ${esc(e.message)}</p>`; }
+}
+async function plaLista() {
+  const lid = $('#plaLook').value, fecha = $('#plaFecha').value;
+  if (!lid || !fecha) { $('#plaLista').innerHTML = '<p class="hint" style="padding:12px">Elige el Look Ahead y la fecha.</p>'; return; }
+  const acts = (await get(`/v_lookahead_detalle?lookahead_id=eq.${lid}&order=orden`)).filter(a => a.fecha_inicio <= fecha && fecha <= a.fecha_fin);
+  PLA.acts = acts;
+  const ids = acts.map(a => a.id);
+  const [av, planes] = await Promise.all([
+    ids.length ? get(`/avance_diario?fecha=eq.${fecha}&actividad_id=in.(${ids.join(',')})&select=actividad_id,cantidad,observaciones`) : [],
+    ids.length ? get(`/v_plan_semanal_detalle?lookahead_id=eq.${lid}&fecha_inicio=lte.${fecha}&fecha_fin=gte.${fecha}`) : []]);
+  PLA.avance = Object.fromEntries(av.map(r => [r.actividad_id, r])); PLA.planes = Object.fromEntries(planes.map(r => [r.actividad_id, r]));
+  const k = ((laDia(fecha) - laDia(planes[0] ? planes[0].fecha_inicio : fecha)) % 7 + 7) % 7;
+  const cerrada = planes.some(p => p.plan_estado === 'cerrado');   // cerrada: bloqueada hasta que el administrador la reabra en el Plan semanal
+  if (!acts.length) { $('#plaLista').innerHTML = `<p class="hint" style="padding:12px">Ninguna actividad del Look Ahead está programada el ${laFmt(fecha)}.</p>`; $('#plaGuardar').disabled = true; return; }
+  $('#plaGuardar').disabled = cerrada;
+  $('#plaLista').innerHTML = `<table style="min-width:640px"><thead><tr><th>Actividad</th><th>Und</th><th>Plan del día</th><th>Ejecutado el ${laFmt(fecha)}</th><th>Acumulado</th></tr></thead><tbody>`
+    + acts.map(a => { const p = PLA.planes[a.id], plan = p ? Number(p[DIAS_PT[k]] || 0) : null, v = PLA.avance[a.id];
+      return `<tr><td><b style="color:var(--tx)">${a.critico ? '<span class="dot" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#ef4444;margin-right:6px"></span>' : ''}${esc(laCaso(a.partida))}</b><br><span class="mono" style="font-size:10.5px;color:var(--mut)">${esc(a.nodo_codigo)} · ${esc(String(a.proyecto_nombre).replace('Puente ', ''))}${a.detalle ? ' · ' + esc(a.detalle) : ''}</span></td>`
+        + `<td>${esc(a.unidad || '')}</td><td class="mono">${plan == null ? '—' : num2(plan)}</td>`
+        + `<td><input type="number" min="0" step="0.01" data-act="${a.id}" value="${v ? Number(v.cantidad) : ''}" ${cerrada ? 'disabled' : ''} style="width:110px"></td><td class="mono">${num2(a.acumulado)} / ${num2(a.metrado_meta)}</td></tr>`; }).join('') + '</tbody></table>'
+    + (cerrada ? '<p class="hint" style="padding:8px 12px;color:var(--amber)">🔒 La semana de esa fecha está cerrada: el parte ya no se puede modificar.</p>' : '');
+}
+function plaIniciar() {
+  document.querySelectorAll('[data-pmodo]').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('[data-pmodo]').forEach(x => x.classList.toggle('on', x === b));
+    $('#parteLA').hidden = b.dataset.pmodo !== 'la'; $('#parteForm').hidden = b.dataset.pmodo !== 'visor'; $('#parteMsgBox').innerHTML = '';
+    if (b.dataset.pmodo === 'la') plaCargar();
+  }));
+  $('#plaLook').addEventListener('change', plaLista); $('#plaFecha').addEventListener('change', () => { plaCargar(); });
+  $('#parteLA').addEventListener('submit', async (e) => {
+    e.preventDefault(); $('#parteMsgBox').innerHTML = '';
+    const fecha = $('#plaFecha').value; marcarError('pla-fecha', !fecha); if (!fecha) return;
+    const btn = $('#plaGuardar'); btn.disabled = true; let n = 0;
+    try {
+      for (const inp of document.querySelectorAll('#plaLista input[data-act]')) {
+        const id = inp.dataset.act, previo = PLA.avance[id];
+        if (inp.value === '') { if (previo) { await ptEnviar('DELETE', `/avance_diario?actividad_id=eq.${id}&fecha=eq.${fecha}`); n++; } continue; }
+        const v = Math.max(0, parseFloat(inp.value)); if (previo && Number(previo.cantidad) === v) continue;
+        await ptEnviar('POST', '/avance_diario?on_conflict=actividad_id,fecha', { actividad_id: id, fecha, cantidad: v }, true); n++;
+      }
+      await plaLista(); $('#parteMsgBox').innerHTML = `<div class="msg ok">Parte del ${laFmt(fecha)} guardado${n ? ` (${n} actividad${n === 1 ? '' : 'es'})` : ': no había cambios'}. Ya se ve como «Real» en el plan semanal y en el acumulado.</div>`;
+      if (LA.cargado) laCargarDetalle();
+    } catch (err) { $('#parteMsgBox').innerHTML = `<div class="msg err">No se pudo guardar: ${ptErr(err)}</div>`; }
+    finally { btn.disabled = false; }
+  });
+}
+plaIniciar();
+
+// acciones de emergencia (solo administrador; la base lo exige: sin permiso, no se ejecutan)
+$('#laReabrir').addEventListener('click', async () => {
+  const look = laActual(); if (!look || !confirm(`¿Reabrir el Look Ahead de la semana ${look.semana} para poder editarlo?`)) return;
+  try { await laEnviar('PATCH', `/lookaheads?id=eq.${look.id}`, { estado: 'borrador' }); await laCargar(true); laMsg(`Look Ahead de la semana ${look.semana} reabierto.`, true); }
+  catch (err) { laMsg(`No se pudo reabrir: ${laErr(err)}`, false); }
+});
+$('#laEliminar').addEventListener('click', async () => {
+  const look = laActual(); if (!look) return;
+  if (!confirm(`¿ELIMINAR el Look Ahead de la semana ${look.semana} con todas sus actividades, planes semanales y parte diario? No se puede deshacer.`)) return;
+  if (!confirm('Confirma otra vez: se borrará todo lo registrado en ese Look Ahead.')) return;
+  try { await laEnviar('DELETE', `/lookaheads?id=eq.${look.id}`); LA.sel = null; try { localStorage.removeItem('obra-la-sel'); } catch (x) {} await laCargar(true); laMsg('Look Ahead eliminado.', true); }
+  catch (err) { laMsg(`No se pudo eliminar: ${laErr(err)}`, false); }
+});
+$('#ptReabrir').addEventListener('click', async () => {
+  const plan = ptPlan(); if (!plan || !confirm(`¿Reabrir la semana ${PT.sem} para editar el plan y el parte diario?`)) return;
+  try { await ptEnviar('PATCH', `/planes_semanales?id=eq.${plan.id}`, { estado: 'borrador' }); await ptCargarLook(); ptMsg(`Semana ${PT.sem} reabierta.`, true); }
+  catch (err) { ptMsg(`No se pudo reabrir: ${ptErr(err)}`, false); }
+});
+authUI();
 
 // ============================================================================
 // PARTE DIARIO (integrado)
