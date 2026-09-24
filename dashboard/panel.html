@@ -366,7 +366,7 @@ html.cel #btnFull{position:absolute;top:0;right:0;}
 html.cel h1{font-size:16px;margin:0;flex:1 1 0;min-width:0;line-height:1.2;}
 html.cel .sub{font-size:11.5px;margin:0;flex:0 0 100%;}
 /* tablas de Look Ahead y Plan semanal: la columna ACTIVIDAD deja de tapar la pantalla */
-html.cel .la-tabla th.act,html.cel .la-tabla td.act{min-width:150px;max-width:150px;}
+html.cel .la-tabla th.act,html.cel .la-tabla td.act{min-width:var(--actw,150px);max-width:var(--actw,150px);}
 html.cel .la-tabla td.act .nom,html.cel .la-tabla td.act .cod{padding-left:calc(6px + var(--lvl,0) * 8px);}
 html.cel .la-tabla td.act::before{left:4px;width:calc(var(--lvl,0) * 8px);background-image:repeating-linear-gradient(to right,var(--la-l2) 0,var(--la-l2) 1px,transparent 1px,transparent 8px);}
 html.cel .la-tabla td.act .cod{display:none;}
@@ -1059,6 +1059,29 @@ function celPantalla(ancha) {
 if (esCelular) {
   ['fullscreenchange', 'webkitfullscreenchange'].forEach(ev => document.addEventListener(ev, () => { if (!celEnFull()) { celEntroFull = false; celDesbloquear(); } }));
   $('#avisoCerrar').addEventListener('click', () => document.documentElement.classList.add('sin-aviso'));
+
+  // columna ACTIVIDAD elástica: con la tabla en el borde izquierdo se ve COMPLETA (hasta 2/3 de la pantalla) y, al deslizar a la
+  // derecha, se encoge hasta 150 px y queda fija; al volver, vuelve a abrirse. El ancho depende solo de cuánto se desliza, sin saltos.
+  const ACT_MIN = 150;
+  const actAncho = (w) => Math.max(ACT_MIN, Math.min(w._actFull || ACT_MIN, (w._actFull || ACT_MIN) - w.scrollLeft));
+  function celMedirAct() {
+    document.querySelectorAll('.la-wrap').forEach(w => {
+      if (!w.offsetParent) return;
+      let ancho = 0; w.querySelectorAll('td.act .nom').forEach(n => { if (n.scrollWidth > ancho) ancho = n.scrollWidth; });
+      w._actFull = Math.max(ACT_MIN, Math.min(ancho + 22, Math.round(window.innerWidth * 0.66)));
+      w.style.setProperty('--actw', actAncho(w) + 'px');
+    });
+  }
+  let celTimer = 0;
+  const celPlanear = () => { clearTimeout(celTimer); celTimer = setTimeout(celMedirAct, 60); };
+  document.addEventListener('scroll', (e) => {
+    const w = e.target; if (!w || !w.classList || !w.classList.contains('la-wrap')) return;
+    w.style.setProperty('--actw', actAncho(w) + 'px');
+  }, true);
+  window.addEventListener('resize', celPlanear);
+  window.addEventListener('orientationchange', celPlanear);
+  ['#laApp', '#ptApp'].forEach(s => { const el = $(s); if (el) new MutationObserver(celPlanear).observe(el, { childList: true, subtree: true }); });
+  document.querySelectorAll('#nav button').forEach(b => b.addEventListener('click', () => setTimeout(celPlanear, 400)));
 }
 
 // ── modo administrador: ventana de acceso y estado ──
