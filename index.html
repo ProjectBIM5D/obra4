@@ -558,6 +558,74 @@ html.cel .pt-sem{padding:6px 10px;}
   html.cel .la-bar{gap:6px;margin-bottom:6px;} html.cel .pane .la-semana{gap:6px;}
   html.cel .pt-sem{padding:4px 9px;} html.cel .pt-sem b{font-size:11.5px;} html.cel .pt-sem small{font-size:9.5px;}
 }
+
+/* ═══ barra de herramientas compacta (estilo ejecutivo) y menú lateral plegable ═══ */
+.tb{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 8px;}
+.tb-g{display:flex;flex-wrap:nowrap;align-items:center;gap:6px;min-width:0;max-width:100%;}
+.tb-acc{margin-left:auto;}
+:root .tb-btn{display:inline-flex;align-items:center;justify-content:center;gap:0;height:34px;padding:0 12px;border-radius:9px;border:1px solid var(--line2);background:var(--card);color:var(--tx);font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:inherit;transition:border-color .12s,background .12s,color .12s,filter .12s;}
+:root .tb-btn:hover:not(:disabled){border-color:var(--blue);color:var(--blue-tx);}
+:root .tb-btn:disabled{opacity:.45;cursor:default;}
+:root .tb-btn.pri{background:var(--blue);border-color:var(--blue);color:#fff;}
+:root .tb-btn.pri:hover:not(:disabled){filter:brightness(1.08);color:#fff;}
+:root .tb-btn.adm{color:var(--amber);border-color:rgba(217,119,6,.5);}
+:root .tb-btn.tb-ic{width:34px;padding:0;font-size:18px;line-height:1;}
+:root .tb-sel{height:34px;border-radius:9px;border:1px solid var(--line2);background-color:var(--card);color:var(--tx);padding:0 26px 0 10px;font-size:12.5px;font-family:inherit;max-width:230px;min-width:0;}
+:root .tb-sel:focus,.tb-btn:focus-visible{outline:2px solid var(--blue);outline-offset:1px;}
+.tb-chip{display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 11px;border:1px solid var(--line2);border-radius:9px;background:var(--card);color:var(--tx2);font-size:12.5px;font-weight:600;cursor:pointer;user-select:none;white-space:nowrap;}
+.tb-chip input{width:15px;height:15px;accent-color:var(--blue);margin:0;cursor:pointer;}
+.tb-chip:hover{border-color:var(--blue);}
+.tb-chip:has(input:checked){background:var(--ic-blue-bg);border-color:var(--blue);color:var(--blue-tx);}
+.tb-seg{display:inline-flex;height:34px;border:1px solid var(--line2);border-radius:9px;overflow:hidden;background:var(--card);}
+:root .tb-seg .seg-btn{border:0;border-radius:0;background:transparent;color:var(--tx2);padding:0 11px;height:100%;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;}
+:root .tb-seg .seg-btn + .seg-btn{border-left:1px solid var(--line2);}
+:root .tb-seg .seg-btn:hover:not(.on){background:var(--input);color:var(--tx);}
+:root .tb-seg .seg-btn.on{background:var(--ic-blue-bg);color:var(--blue-tx);}
+.tb-mas{position:relative;display:inline-flex;}
+.tb-menu{position:absolute;right:0;top:calc(100% + 6px);min-width:232px;padding:6px;border-radius:12px;background:var(--card);border:1px solid var(--line2);box-shadow:0 16px 40px rgba(2,6,23,.28);z-index:70;display:flex;flex-direction:column;gap:2px;}
+.tb-menu button{display:flex;align-items:center;gap:8px;width:100%;text-align:left;border:0;background:transparent;color:var(--tx);padding:9px 10px;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;}
+.tb-menu button:hover{background:var(--input);} .tb-menu button.adm{color:var(--amber);} .tb-menu button.peligro{color:var(--red);}
+.tb-add{display:inline-flex;} .tb-add .tb-sel{border-radius:9px 0 0 9px;border-right:0;max-width:200px;} :root .tb-add .tb-btn{border-radius:0 9px 9px 0;}
+.tb-info{margin:2px 0 8px;font-size:11.5px;color:var(--mut);}
+/* Plan semanal: semanas como pastillas y KPIs en una sola franja */
+.pt-semanas{gap:6px;margin:0 0 8px;}
+:root .pt-sem{display:inline-flex;align-items:center;gap:8px;padding:5px 12px;border-radius:9px;font-size:12px;}
+:root .pt-sem b{display:inline;font-size:12px;} :root .pt-sem small{font-size:10.5px;} :root .pt-sem br{display:none;} :root .pt-sem .pac{margin:0;}
+.pt-kpis{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 8px;}
+:root .pt-kpi{display:flex;align-items:baseline;gap:8px;padding:6px 13px;border-radius:10px;border:1px solid var(--line);border-left:3px solid var(--blue);box-shadow:none;}
+:root .pt-kpi:nth-child(2){border-left-color:#d97706;} :root .pt-kpi:nth-child(3){border-left-color:#0e8f4f;}
+:root .pt-kpi span{display:inline;} :root .pt-kpi b{display:inline;font-size:16px;line-height:1.2;} :root .pt-kpi small{font-size:10.5px;}
+/* cabecera de página en una sola línea */
+html:not(.cel) .topbar{flex-wrap:nowrap;align-items:center;margin-bottom:10px;}
+html:not(.cel) .topbar>div{display:flex;align-items:center;gap:12px;min-width:0;flex:1;}
+html:not(.cel) #menuBtn{display:inline-flex;flex:0 0 auto;}
+html:not(.cel) h1{margin:0;font-size:18px;white-space:nowrap;}
+html:not(.cel) .sub{margin:0;font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;}
+/* menú lateral: nombre + icono, o solo iconos */
+.nav a{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:8px;font-size:13.5px;color:var(--tx2);text-decoration:none;white-space:nowrap;}
+.nav .ni{flex:0 0 auto;width:24px;text-align:center;font-size:17px;line-height:1;}
+#side{transition:width .18s ease,flex-basis .18s ease;}
+.side-tg{margin:4px 10px 8px;height:32px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--mut);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;}
+.side-tg::before{content:"«";font-size:16px;line-height:1;} .side-tg::after{content:"Ocultar texto";font-size:11.5px;font-weight:600;}
+.side-tg:hover{color:var(--tx);border-color:var(--blue);}
+html.cel .side-tg{display:none;}
+@media (max-width:760px){ .side-tg{display:none;} }
+@media (min-width:761px){
+  html.side-mini:not(.cel){--side-w:64px;}
+  html.side-mini:not(.cel) .brand,html.side-mini:not(.cel) .side-foot{display:none;}
+  html.side-mini:not(.cel) .nav{padding:12px 8px;}
+  html.side-mini:not(.cel) .nav button,html.side-mini:not(.cel) .nav a{justify-content:center;padding:12px 0;}
+  html.side-mini:not(.cel) .nav .nt{display:none;}
+  html.side-mini:not(.cel) .side-tg{margin:4px 8px 8px;} html.side-mini:not(.cel) .side-tg::before{content:"»";} html.side-mini:not(.cel) .side-tg::after{display:none;}
+}
+/* celular: botones solo con icono */
+html.cel .tb-t{display:none;}
+html.cel .tb-sel{max-width:150px;padding-left:8px;}
+html.cel .tb-chip{padding:0 9px;} html.cel .tb-chip span{font-size:0;} html.cel .tb-chip span::before{content:"Crít.";font-size:12px;}
+html.cel .tb-seg .seg-btn{padding:0 9px;}
+html.cel .tb-acc{margin-left:0;}
+html.cel .tb{gap:6px 8px;}
+html.cel .tb-btn{padding:0 10px;} html.cel :root .tb-btn.tb-ic{padding:0;}
 </style>
 <script>
 // se aplica ANTES de pintar el body, para que no haya parpadeo del tema equivocado
@@ -580,6 +648,12 @@ html.cel .pt-sem{padding:6px 10px;}
   // tablet = pantalla táctil con el lado corto entre 600 y 1100 px (?tab=1 lo fuerza para probar en PC)
   var lado = Math.min(screen.width, screen.height);
   if (!cel && ((window.matchMedia('(pointer:coarse)').matches && lado >= 600 && lado < 1100) || /[?&]tab=1\b/.test(location.search))) document.documentElement.classList.add('tab');
+} catch(e) {} })();
+// menú lateral: solo iconos por defecto en tablet o ventanas angostas; después se recuerda la elección
+(function(){ try {
+  var d = document.documentElement, sd = localStorage.getItem('obra-side');
+  if (d.classList.contains('cel') || innerWidth <= 760) return;
+  if (sd === 'mini' || (!sd && (d.classList.contains('tab') || innerWidth < 1100))) d.classList.add('side-mini');
 } catch(e) {} })();
 </script>
 </head>
@@ -617,15 +691,16 @@ html.cel .pt-sem{padding:6px 10px;}
       <p id="obraSub"></p>
     </div>
     <nav class="nav" id="nav">
-      <button data-pane="resumen" class="on" title="KPIs y avance general">📊 Resumen</button>
-      <button data-pane="parte" title="Registrar avance">📝 Parte diario</button>
-      <button data-pane="materiales" title="Registrar metas y avance">🧱 Materiales</button>
-      <button data-pane="lookahead" title="Plan de 4 semanas">📅 Look Ahead</button>
-      <button data-pane="pts" title="Meta y real por día">📆 Plan semanal</button>
-      <button data-pane="ppc" title="Cumplimiento del plan">📈 PPC</button>
-      <button data-pane="produccion" class="disabled" title="Próximamente: aún sin datos reales cargados">⚙️ Producción</button>
-      <a href="visor/" id="visorLink" style="display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:8px;font-size:13.5px;color:var(--tx2);text-decoration:none;white-space:nowrap;" title="Modelo BIM del puente">🧊 Visor 3D</a>
+      <button data-pane="resumen" class="on" title="KPIs y avance general"><span class="ni">📊</span><span class="nt">Resumen</span></button>
+      <button data-pane="parte" title="Registrar avance"><span class="ni">📝</span><span class="nt">Parte diario</span></button>
+      <button data-pane="materiales" title="Registrar metas y avance"><span class="ni">🧱</span><span class="nt">Materiales</span></button>
+      <button data-pane="lookahead" title="Plan de 4 semanas"><span class="ni">📅</span><span class="nt">Look Ahead</span></button>
+      <button data-pane="pts" title="Meta y real por día"><span class="ni">📆</span><span class="nt">Plan semanal</span></button>
+      <button data-pane="ppc" title="Cumplimiento del plan"><span class="ni">📈</span><span class="nt">PPC</span></button>
+      <button data-pane="produccion" class="disabled" title="Próximamente: aún sin datos reales cargados"><span class="ni">⚙️</span><span class="nt">Producción</span></button>
+      <a href="visor/" id="visorLink" title="Modelo BIM del puente"><span class="ni">🧊</span><span class="nt">Visor 3D</span></a>
     </nav>
+    <button type="button" class="side-tg" id="sideToggle" title="Mostrar u ocultar el texto del menú" aria-label="Mostrar u ocultar el texto del menú"></button>
     <div class="side-foot">
       <div class="opt-row"><span>Tema</span>
         <button class="seg-btn" data-tema="claro" title="Tema claro">☀ Claro</button>
@@ -936,34 +1011,41 @@ html.cel .pt-sem{padding:6px 10px;}
     <section class="pane" data-pane="lookahead">
       <div id="laVacio" class="soon" style="display:none"></div>
       <div id="laApp">
-        <div class="la-bar">
-          <div class="la-semana">
-            <button type="button" class="icon-btn" id="laPrev" title="Look Ahead anterior" aria-label="Look Ahead anterior">◀</button>
-            <select id="laSel" class="sel-mini" aria-label="Semana del Look Ahead"></select>
-            <button type="button" class="icon-btn" id="laNext" title="Look Ahead siguiente" aria-label="Look Ahead siguiente">▶</button>
+        <div class="tb">
+          <div class="tb-g">
+            <button type="button" class="tb-btn tb-ic" id="laPrev" title="Look Ahead anterior" aria-label="Look Ahead anterior">‹</button>
+            <select id="laSel" class="tb-sel" aria-label="Semana del Look Ahead"></select>
+            <button type="button" class="tb-btn tb-ic" id="laNext" title="Look Ahead siguiente" aria-label="Look Ahead siguiente">›</button>
             <span id="laEstado" class="badge"></span>
           </div>
-          <div class="la-acc">
-            <button type="button" class="btn-sec pri" id="laNuevo">＋ Nuevo Look Ahead</button>
-            <button type="button" class="btn-sec" id="laAgregar">＋ Agregar actividad</button>
-            <button type="button" class="btn-sec" id="laCerrar" title="Cerrar la semana: ya no se podrá modificar">🔒 Cerrar semana</button>
-            <button type="button" class="btn-sec btn-adm" id="laReabrir" hidden title="Solo administrador: vuelve a habilitar la edición">🔓 Reabrir (admin)</button>
-            <button type="button" class="btn-sec btn-adm" id="laEliminar" hidden title="Solo administrador: elimina este Look Ahead con sus actividades">🗑 Eliminar (admin)</button>
+          <div class="tb-g">
+            <select id="laComp" class="tb-sel" aria-label="Componente"></select>
+            <label class="tb-chip" title="Mostrar solo las actividades de la ruta crítica"><input type="checkbox" id="laCrit"><span>Solo críticas</span></label>
+          </div>
+          <div class="tb-g">
+            <span class="tb-seg" role="group" aria-label="Columnas">
+              <button type="button" class="seg-btn" data-lacols="resumen" title="Columnas principales">Resumen</button>
+              <button type="button" class="seg-btn" data-lacols="todas" title="Todas las columnas">Todas</button>
+            </span>
+            <span class="tb-seg" role="group" aria-label="Grupos">
+              <button type="button" class="seg-btn" data-lagrupos="abrir" title="Expandir todos los grupos" aria-label="Expandir todos los grupos">⊞</button>
+              <button type="button" class="seg-btn" data-lagrupos="cerrar" title="Contraer los grupos (deja el puente y su primer nivel)" aria-label="Contraer los grupos">⊟</button>
+            </span>
+          </div>
+          <div class="tb-g tb-acc">
+            <button type="button" class="tb-btn pri" id="laAgregar" title="Agregar una actividad al Look Ahead">＋<span class="tb-t"> Actividad</span></button>
+            <button type="button" class="tb-btn" id="laCerrar" title="Cerrar la semana: ya no se podrá modificar">🔒<span class="tb-t"> Cerrar semana</span></button>
+            <span class="tb-mas">
+              <button type="button" class="tb-btn tb-ic" data-tbmas title="Más acciones" aria-label="Más acciones">⋯</button>
+              <div class="tb-menu" hidden>
+                <button type="button" id="laNuevo">＋ Nuevo Look Ahead</button>
+                <button type="button" class="adm" id="laReabrir" hidden title="Solo administrador: vuelve a habilitar la edición">🔓 Reabrir semana (admin)</button>
+                <button type="button" class="peligro" id="laEliminar" hidden title="Solo administrador: elimina este Look Ahead con sus actividades">🗑 Eliminar Look Ahead (admin)</button>
+              </div>
+            </span>
           </div>
         </div>
-        <div class="la-filtros">
-          <label for="laComp">Componente:</label><select id="laComp" class="sel-mini"></select>
-          <label class="la-chk"><input type="checkbox" id="laCrit"> Solo críticas</label>
-          <span class="la-seg" role="group" aria-label="Columnas">
-            <button type="button" class="seg-btn" data-lacols="resumen">Resumen</button>
-            <button type="button" class="seg-btn" data-lacols="todas">Todas las columnas</button>
-          </span>
-          <span class="la-seg" role="group" aria-label="Grupos">
-            <button type="button" class="seg-btn ic" data-lagrupos="abrir" title="Expandir todos los grupos">⊞ Expandir</button>
-            <button type="button" class="seg-btn ic" data-lagrupos="cerrar" title="Contraer los grupos (deja el puente y su primer nivel)">⊟ Contraer</button>
-          </span>
-        </div>
-        <p class="hint" id="laInfo" style="margin:6px 0 10px"></p>
+        <p class="hint tb-info" id="laInfo"></p>
         <div id="laMsg"></div>
 
         <!-- crear un Look Ahead nuevo (una semana) -->
@@ -1020,26 +1102,29 @@ html.cel .pt-sem{padding:6px 10px;}
     <section class="pane" data-pane="pts">
       <div id="ptVacio" class="soon" style="display:none"></div>
       <div id="ptApp">
-        <div class="la-bar">
-          <div class="la-semana">
-            <label for="ptLook" class="hint">Look Ahead:</label>
-            <select id="ptLook" class="sel-mini" aria-label="Look Ahead"></select>
+        <div class="tb">
+          <div class="tb-g">
+            <select id="ptLook" class="tb-sel" aria-label="Look Ahead"></select>
             <span id="ptEstado" class="badge"></span>
           </div>
-          <div class="la-acc">
-            <button type="button" class="btn-sec pri" id="ptCrear">＋ Crear plan de la semana</button>
-            <select id="ptAgregarSel" class="sel-mini" style="max-width:230px" aria-label="Actividad del Look Ahead a agregar"></select>
-            <button type="button" class="btn-sec" id="ptAgregar">＋ Agregar al plan</button>
-            <button type="button" class="btn-sec" id="ptCerrar" title="Cerrar la semana: el plan y el parte diario de esa semana ya no se podrán modificar">🔒 Cerrar semana</button>
-            <button type="button" class="btn-sec btn-adm" id="ptReabrir" hidden title="Solo administrador: vuelve a habilitar el plan y el parte diario de la semana">🔓 Reabrir (admin)</button>
+          <div class="tb-g">
+            <select id="ptComp" class="tb-sel" aria-label="Componente"></select>
+            <span class="tb-seg" role="group" aria-label="Grupos">
+              <button type="button" class="seg-btn" data-lagrupos="abrir" title="Expandir todos los grupos" aria-label="Expandir todos los grupos">⊞</button>
+              <button type="button" class="seg-btn" data-lagrupos="cerrar" title="Contraer los grupos (deja el puente y su primer nivel)" aria-label="Contraer los grupos">⊟</button>
+            </span>
+          </div>
+          <div class="tb-g tb-acc">
+            <button type="button" class="tb-btn pri" id="ptCrear" title="Crear el plan de la semana con las actividades del Look Ahead que caen en esa semana">＋<span class="tb-t"> Crear plan</span></button>
+            <span class="tb-add">
+              <select id="ptAgregarSel" class="tb-sel" aria-label="Actividad del Look Ahead a agregar"></select>
+              <button type="button" class="tb-btn" id="ptAgregar" title="Agregar al plan de la semana">＋<span class="tb-t"> Agregar</span></button>
+            </span>
+            <button type="button" class="tb-btn" id="ptCerrar" title="Cerrar la semana: el plan y el parte diario de esa semana ya no se podrán modificar">🔒<span class="tb-t"> Cerrar semana</span></button>
+            <button type="button" class="tb-btn adm" id="ptReabrir" hidden title="Solo administrador: vuelve a habilitar el plan y el parte diario de la semana">🔓<span class="tb-t"> Reabrir (admin)</span></button>
           </div>
         </div>
         <div class="pt-semanas" id="ptSemanas"></div>
-        <div class="la-filtros"><label for="ptComp">Componente:</label><select id="ptComp" class="sel-mini"></select>
-          <span class="la-seg" role="group" aria-label="Grupos">
-            <button type="button" class="seg-btn ic" data-lagrupos="abrir" title="Expandir todos los grupos">⊞ Expandir</button>
-            <button type="button" class="seg-btn ic" data-lagrupos="cerrar" title="Contraer los grupos (deja el puente y su primer nivel)">⊟ Contraer</button>
-          </span></div>
         <div id="ptKpis" class="pt-kpis"></div>
         <p class="hint" id="ptInfo" style="margin:6px 0 10px"></p>
         <div id="ptMsg"></div>
@@ -1440,7 +1525,21 @@ document.querySelectorAll('#nav button').forEach(b => {
     $('#side').classList.remove('open'); $('#overlay').classList.remove('on');
   });
 });
-$('#menuBtn').addEventListener('click', () => { $('#side').classList.toggle('open'); $('#overlay').classList.toggle('on'); });
+// menú lateral: en celular (o ventana muy angosta) es un cajón; en tablet y PC se alterna entre completo y solo iconos
+function sideToggle() { const mini = document.documentElement.classList.toggle('side-mini'); try { localStorage.setItem('obra-side', mini ? 'mini' : 'full'); } catch (e) {} }
+$('#sideToggle').addEventListener('click', sideToggle);
+$('#menuBtn').addEventListener('click', () => {
+  if (document.documentElement.classList.contains('cel') || innerWidth <= 760) { $('#side').classList.toggle('open'); $('#overlay').classList.toggle('on'); }
+  else sideToggle();
+});
+// menú «⋯» de las barras de herramientas
+document.addEventListener('click', (e) => {
+  const m = e.target.closest('[data-tbmas]');
+  document.querySelectorAll('.tb-menu').forEach(x => { if (!m || x !== m.nextElementSibling) x.hidden = true; });
+  if (m) { const menu = m.nextElementSibling; if (menu) menu.hidden = !menu.hidden; return; }
+  if (e.target.closest('.tb-menu button')) document.querySelectorAll('.tb-menu').forEach(x => { x.hidden = true; });
+});
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') document.querySelectorAll('.tb-menu').forEach(x => { x.hidden = true; }); });
 $('#overlay').addEventListener('click', () => { $('#side').classList.remove('open'); $('#overlay').classList.remove('on'); });
 
 // ── fuente local/nube ──
@@ -2520,7 +2619,7 @@ function laRender() {
   $('#laAgregar').disabled = !editable; $('#laCerrar').disabled = !(look && look.estado === 'borrador');
   $('#laReabrir').hidden = !(AUTH.admin && look && look.estado === 'cerrado'); $('#laEliminar').hidden = !(AUTH.admin && look);
   document.querySelectorAll('[data-lacols]').forEach(b => b.classList.toggle('on', b.dataset.lacols === LA.cols));
-  $('#laComp').innerHTML = '<option value="">Todos</option>' + COMPONENTES.map(c => `<option value="${esc(c.id)}">${esc(c.nombre)}</option>`).join('');
+  $('#laComp').innerHTML = '<option value="">Todos los puentes</option>' + COMPONENTES.map(c => `<option value="${esc(c.id)}">${esc(c.nombre)}</option>`).join('');
   $('#laComp').value = LA.comp; $('#laCrit').checked = LA.crit;
 
   const tabla = $('#laTabla');
@@ -2918,7 +3017,7 @@ function ptRender() {
   const look = ptLookAct(), plan = ptPlan();
   $('#ptLook').innerHTML = LA.looks.length ? LA.looks.map(l => `<option value="${l.id}">Semanas ${l.semana}–${l.semana + l.semanas - 1} · ${laFmt(laSemana(l.semana).fecha_inicio)}${l.estado === 'cerrado' ? ' · cerrado' : ''}</option>`).join('') : '<option value="">(sin Look Ahead)</option>';
   if (look) $('#ptLook').value = look.id;
-  $('#ptComp').innerHTML = '<option value="">Todos</option>' + COMPONENTES.map(c => `<option value="${esc(c.id)}">${esc(c.nombre)}</option>`).join(''); $('#ptComp').value = PT.comp;
+  $('#ptComp').innerHTML = '<option value="">Todos los puentes</option>' + COMPONENTES.map(c => `<option value="${esc(c.id)}">${esc(c.nombre)}</option>`).join(''); $('#ptComp').value = PT.comp;
   const tabla = $('#ptTabla');
   if (!look) { tabla.innerHTML = ''; $('#ptSemanas').innerHTML = ''; $('#ptKpis').innerHTML = ''; $('#ptInfo').textContent = 'Primero crea un Look Ahead (pestaña Look Ahead).'; ['ptCrear', 'ptAgregar', 'ptCerrar'].forEach(i => { $('#' + i).disabled = true; }); return; }
 
