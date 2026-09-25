@@ -973,6 +973,8 @@ const FUENTES = {
     headers: { apikey: 'sb_publishable_-g9cSWKmQc-EatM0IuSANQ_VHfZJmng', Authorization: 'Bearer sb_publishable_-g9cSWKmQc-EatM0IuSANQ_VHfZJmng' },
   },
 };
+// enlaces viejos del visor 3D (…/?proyecto=charanal) llegan aquí: se quita ese parámetro de la barra (el panel no lo usa)
+try { const u = new URL(location.href); if (u.searchParams.has('proyecto')) { u.searchParams.delete('proyecto'); history.replaceState(null, '', u.pathname + u.search + u.hash); } } catch (e) {}
 const esLocal = ['localhost', '127.0.0.1'].includes(location.hostname);
 // En la página publicada se usa SIEMPRE la nube (no hay selector); solo en esta PC se puede elegir local o nube.
 let fuente = esLocal ? (localStorage.getItem('obra-fuente') || 'local') : 'cloud';
