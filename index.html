@@ -533,6 +533,18 @@ html.la-modal{overflow:hidden;}
 .ppc-leg .fila:hover,.ppc-leg .fila.on{background:var(--input);} .ppc-leg .fila.on .nom{color:var(--tx);}
 .ppc-nota{margin:8px 2px 0;font-size:11px;color:var(--mut);text-align:center;}
 
+/* ═══ avisos flotantes ═══ */
+#toasts{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:600;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none;width:min(560px,calc(100vw - 20px));}
+.toast{pointer-events:auto;display:flex;align-items:flex-start;gap:10px;width:100%;padding:11px 10px 11px 12px;border-radius:12px;background:var(--card);color:var(--tx);border:1px solid var(--line2);box-shadow:0 14px 40px rgba(2,6,23,.34);font-size:13px;line-height:1.4;animation:toastIn .2s ease;}
+.toast.ok{border-left:4px solid var(--green);} .toast.err{border-left:4px solid var(--red);}
+.toast .ti{flex:0 0 22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:800;color:#fff;background:var(--green);} .toast.err .ti{background:var(--red);}
+.toast .tt{flex:1;min-width:0;padding-top:1px;} .toast .tt code{font-size:11.5px;}
+.toast .tx{flex:0 0 auto;width:24px;height:24px;border:0;border-radius:6px;background:transparent;color:var(--mut);cursor:pointer;font-size:12px;} .toast .tx:hover{background:var(--input);color:var(--tx);}
+.toast.sale{opacity:0;transform:translateY(6px);transition:opacity .2s,transform .2s;}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+html.cel #toasts{bottom:12px;}
+@media (prefers-reduced-motion:reduce){ .toast{animation:none;} }
+
 /* ═══ puerta de acceso ═══ */
 #puerta{display:none;position:fixed;inset:0;z-index:300;overflow:auto;padding:20px;place-items:center;
   background:radial-gradient(90% 70% at 12% 0%,rgba(47,111,237,.22),transparent 60%),radial-gradient(80% 60% at 100% 100%,rgba(124,58,237,.16),transparent 60%),var(--bg);}
@@ -2327,7 +2339,7 @@ async function bootResumen() {
 let FILTRO_PROY = '';
 // los nombres de material los puede crear cualquiera desde el formulario: se escapan siempre
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
-function mmsg(text, ok) { $('#matMsgBox').innerHTML = `<div class="msg ${ok?'ok':'err'}">${text}</div>`; }
+function mmsg(text, ok) { toast(text, ok, 'mat'); }
 const matPorId = (id) => (DATA.materiales || []).find(m => m.id === id);
 
 async function enviarMat(path, body, upsert) {
@@ -2425,7 +2437,7 @@ function pintarTablaMateriales() {
 
 // 1) meta total
 $('#matMetaForm').addEventListener('submit', async (e) => {
-  e.preventDefault(); $('#matMsgBox').innerHTML = '';
+  e.preventDefault(); toast('', false, 'mat');
   const pid = $('#mm_comp').value; let mid = $('#mm_mat').value;
   const nuevo = mid === '__nuevo__';
   const nombre = $('#mm_nnombre').value.trim(), unidad = $('#mm_nunidad').value.trim();
@@ -2460,7 +2472,7 @@ $('#matMetaForm').addEventListener('submit', async (e) => {
 
 // 2) avance ejecutado del mes
 $('#matAvForm').addEventListener('submit', async (e) => {
-  e.preventDefault(); $('#matMsgBox').innerHTML = '';
+  e.preventDefault(); toast('', false, 'mat');
   const pid = $('#ma_comp').value, mid = $('#ma_mat').value, mes = $('#ma_mes').value, cant = parseFloat($('#ma_cant').value);
   let ok = true;
   marcarError('fa-comp', !pid); if (!pid) ok = false;
@@ -2507,7 +2519,23 @@ const laFecha = (n) => new Date(n * 86400000).toISOString().slice(0, 10);
 const laFmt = (s) => s ? `${s.slice(8, 10)}/${s.slice(5, 7)}/${s.slice(2, 4)}` : '';
 const laHoy = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
 const laNum = (v, d = 0) => Number(v || 0).toLocaleString('es-PE', { minimumFractionDigits: d, maximumFractionDigits: d });
-const laMsg = (t, ok) => { $('#laMsg').innerHTML = t ? `<div class="msg ${ok ? 'ok' : 'err'}">${t}</div>` : ''; };
+// ── avisos flotantes: reemplazan a los mensajes que se quedaban fijos. Se van solos (los de éxito en 4,5 s; los de error en 10 s),
+//    no mueven la página y un aviso nuevo del mismo tipo reemplaza al anterior. Una llamada con texto vacío lo quita. ──
+function toast(html, ok, canal) {
+  let cont = document.getElementById('toasts');
+  if (!cont) { cont = document.createElement('div'); cont.id = 'toasts'; cont.setAttribute('aria-live', 'polite'); document.body.appendChild(cont); }
+  if (canal) cont.querySelectorAll(`[data-canal="${canal}"]`).forEach(x => x.remove());
+  if (!html) return;
+  const el = document.createElement('div'); el.className = 'toast ' + (ok ? 'ok' : 'err'); if (canal) el.dataset.canal = canal;
+  el.innerHTML = `<span class="ti">${ok ? '✓' : '!'}</span><div class="tt">${html}</div><button type="button" class="tx" aria-label="Cerrar aviso">✕</button>`;
+  let tm = 0; const cerrar = () => { clearTimeout(tm); el.classList.add('sale'); setTimeout(() => el.remove(), 220); };
+  el.querySelector('.tx').addEventListener('click', cerrar);
+  const armar = (ms) => { clearTimeout(tm); tm = setTimeout(cerrar, ms); };
+  el.addEventListener('mouseenter', () => clearTimeout(tm)); el.addEventListener('mouseleave', () => armar(2500));
+  cont.appendChild(el); armar(ok ? 4500 : 10000);
+  while (cont.children.length > 4) cont.firstChild.remove();
+}
+const laMsg = (t, ok) => toast(t, ok, 'la');
 const laActual = () => LA.looks.find(l => l.id === LA.sel) || null;
 // una semana CERRADA queda bloqueada para todos, también para el administrador: para editarla hay que usar «Reabrir» a propósito
 const laEditable = (l) => !!l && l.estado === 'borrador';
@@ -3019,7 +3047,7 @@ const PT = { look: null, sem: null, planes: [], det: [], acts: [], causas: [], c
 const DIAS_PT = ['plan_l', 'plan_m', 'plan_x', 'plan_j', 'plan_v', 'plan_s', 'plan_d'];
 const REAL_PT = ['real_l', 'real_m', 'real_x', 'real_j', 'real_v', 'real_s', 'real_d'];
 const LET_PT = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
-const ptMsg = (t, ok) => { $('#ptMsg').innerHTML = t ? `<div class="msg ${ok ? 'ok' : 'err'}">${t}</div>` : ''; };
+const ptMsg = (t, ok) => toast(t, ok, 'pt');
 const ptLookAct = () => LA.looks.find(l => l.id === PT.look) || null;
 const ptPlan = () => PT.planes.find(p => p.semana === PT.sem) || null;
 const ptSemFechas = () => laSemana(PT.sem);
@@ -3396,12 +3424,12 @@ async function plaLista() {
 function plaIniciar() {
   document.querySelectorAll('[data-pmodo]').forEach(b => b.addEventListener('click', () => {
     document.querySelectorAll('[data-pmodo]').forEach(x => x.classList.toggle('on', x === b));
-    $('#parteLA').hidden = b.dataset.pmodo !== 'la'; $('#parteForm').hidden = b.dataset.pmodo !== 'visor'; $('#parteMsgBox').innerHTML = '';
+    $('#parteLA').hidden = b.dataset.pmodo !== 'la'; $('#parteForm').hidden = b.dataset.pmodo !== 'visor'; toast('', false, 'parte');
     if (b.dataset.pmodo === 'la') plaCargar();
   }));
   $('#plaLook').addEventListener('change', plaLista); $('#plaFecha').addEventListener('change', () => { plaCargar(); });
   $('#parteLA').addEventListener('submit', async (e) => {
-    e.preventDefault(); $('#parteMsgBox').innerHTML = '';
+    e.preventDefault(); toast('', false, 'parte');
     const fecha = $('#plaFecha').value; marcarError('pla-fecha', !fecha); if (!fecha) return;
     const btn = $('#plaGuardar'); btn.disabled = true; let n = 0;
     try {
@@ -3411,9 +3439,9 @@ function plaIniciar() {
         const v = Math.max(0, parseFloat(inp.value)); if (previo && Number(previo.cantidad) === v) continue;
         await ptEnviar('POST', '/avance_diario?on_conflict=actividad_id,fecha', { actividad_id: id, fecha, cantidad: v }, true); n++;
       }
-      await plaLista(); $('#parteMsgBox').innerHTML = `<div class="msg ok">Parte del ${laFmt(fecha)} guardado${n ? ` (${n} actividad${n === 1 ? '' : 'es'})` : ': no había cambios'}. Ya se ve como «Real» en el plan semanal y en el acumulado.</div>`;
+      await plaLista(); pmsg(`Parte del ${laFmt(fecha)} guardado${n ? ` (${n} actividad${n === 1 ? '' : 'es'})` : ': no había cambios'}. Ya se ve como «Real» en el plan semanal y en el acumulado.`, true);
       if (LA.cargado) laCargarDetalle();
-    } catch (err) { $('#parteMsgBox').innerHTML = `<div class="msg err">No se pudo guardar: ${ptErr(err)}</div>`; }
+    } catch (err) { pmsg(`No se pudo guardar: ${ptErr(err)}`, false); }
     finally { btn.disabled = false; }
   });
 }
@@ -3443,7 +3471,7 @@ authUI();
 // PARTE DIARIO (integrado)
 // ============================================================================
 let partidasForm = [], proyectoIdForm = null;
-function pmsg(text, ok) { $('#parteMsgBox').innerHTML = `<div class="msg ${ok?'ok':'err'}">${text}</div>`; }
+function pmsg(text, ok) { toast(text, ok, 'parte'); }
 
 async function cargarPartidasForm() {
   const r = await fetch(`${API}/partidas?select=id,codigo,nombre,unidad,ubicacion,proyecto_id&order=codigo`, { headers });
@@ -3464,7 +3492,7 @@ function marcarError(id, on) { $('#' + id).classList.toggle('invalid', on); }
 
 $('#parteForm').addEventListener('submit', async (e) => {
   e.preventDefault();
-  $('#parteMsgBox').innerHTML = '';
+  toast('', false, 'parte');
   let ok = true;
   const partidaId = $('#p_partida').value, fecha = $('#p_fecha').value, cantidad = parseFloat($('#p_cantidad').value);
   marcarError('f-partida', !partidaId); if (!partidaId) ok = false;
