@@ -935,9 +935,10 @@ let { url: API, headers } = FUENTES[fuente];
 
 // ── modo administrador ──
 // En la nube: inicio de sesión con Supabase Auth (correo + contraseña que escribe la persona; el panel no los guarda).
-// Los privilegios NO los decide el panel: la base los da solo si el correo está en la tabla `admins` (admin_acceso.sql).
+// Los privilegios NO los decide el panel: la base los da según el rol del correo en la tabla `usuarios` (admin_acceso.sql).
 // En local: el servidor local emite un token de pruebas ("admin@local") solo para esta PC.
-const AUTH = { token: null, email: null, admin: false, refresh: null, exp: 0 };
+const AUTH = { token: null, email: null, admin: false, rol: null, refresh: null, exp: 0 };
+const ROLES = { admin: 'Administrador', residente: 'Residente', supervisor: 'Supervisor', cliente: 'Cliente', solo_lectura: 'Solo lectura' };
 const CLAVE_PUBLICA = FUENTES.cloud.headers.apikey;
 function authAplicar() {
   if (AUTH.token) headers.Authorization = 'Bearer ' + AUTH.token;
@@ -945,7 +946,7 @@ function authAplicar() {
   else delete headers.Authorization;
 }
 function authGuardar() {
-  try { if (AUTH.token) sessionStorage.setItem('obra-auth-' + fuente, JSON.stringify({ token: AUTH.token, email: AUTH.email, admin: AUTH.admin, refresh: AUTH.refresh, exp: AUTH.exp })); else sessionStorage.removeItem('obra-auth-' + fuente); } catch (e) {}
+  try { if (AUTH.token) sessionStorage.setItem('obra-auth-' + fuente, JSON.stringify({ token: AUTH.token, email: AUTH.email, admin: AUTH.admin, rol: AUTH.rol, refresh: AUTH.refresh, exp: AUTH.exp })); else sessionStorage.removeItem('obra-auth-' + fuente); } catch (e) {}
 }
 try { const s = JSON.parse(sessionStorage.getItem('obra-auth-' + fuente) || 'null'); if (s && s.exp > Date.now()) Object.assign(AUTH, s); } catch (e) {}
 authAplicar();
@@ -1164,8 +1165,8 @@ if (esCelular || esTablet) {
 // ── modo administrador: ventana de acceso y estado ──
 function authUI() {
   $('#btnAdmin').textContent = AUTH.token ? '🔓 Salir' : '🔑 Entrar';
-  $('#btnAdmin').title = AUTH.token ? `Sesión: ${AUTH.email}${AUTH.admin ? ' (administrador)' : ' (sin privilegios de administrador)'}` : 'Iniciar sesión como administrador';
-  $('#admEstado').innerHTML = AUTH.token ? (AUTH.admin ? '<b style="color:var(--amber)">🛡 Administrador</b>' : 'Sesión sin privilegios') : 'Administrador';
+  $('#btnAdmin').title = AUTH.token ? `Sesión: ${AUTH.email} · ${AUTH.rol ? ROLES[AUTH.rol] || AUTH.rol : 'sin usuario registrado'}` : 'Iniciar sesión';
+  $('#admEstado').innerHTML = AUTH.token ? (AUTH.admin ? '<b style="color:var(--amber)">🛡 Administrador</b>' : (AUTH.rol ? `<b>👤 ${esc(ROLES[AUTH.rol] || AUTH.rol)}</b>` : 'Sesión sin usuario')) : 'Administrador';
   try { if (LA.cargado) laRender(); if (PT.look) ptRender(); if (!$('#parteLA').hidden) plaCargar(); } catch (e) {}
 }
 async function authEntrar(email, pass) {
@@ -1179,11 +1180,16 @@ async function authEntrar(email, pass) {
   }
   AUTH.token = d.access_token; AUTH.email = d.email || (d.user && d.user.email) || email; AUTH.exp = Date.now() + ((d.expires_in || 3600) - 60) * 1000;
   authAplicar();
-  AUTH.admin = (await fetch(`${API}/rpc/es_admin`, { method: 'POST', headers: { ...headers, 'Content-Type': 'application/json' }, body: '{}' }).then(x => x.ok ? x.json() : false).catch(() => false)) === true;
+  // el rol sale de la tabla `usuarios` (rol_actual); si la base aún no tiene esa función, se usa la antigua es_admin
+  const rpc = (f) => fetch(`${API}/rpc/${f}`, { method: 'POST', headers: { ...headers, 'Content-Type': 'application/json' }, body: '{}' });
+  const rr = await rpc('rol_actual').catch(() => null);
+  if (rr && rr.ok) AUTH.rol = (await rr.json().catch(() => null)) || null;
+  else AUTH.rol = (await rpc('es_admin').then(x => x.ok ? x.json() : false).catch(() => false)) === true ? 'admin' : null;
+  AUTH.admin = AUTH.rol === 'admin';
   authGuardar(); authUI();
   return AUTH.admin;
 }
-function authSalir() { AUTH.token = AUTH.email = AUTH.refresh = null; AUTH.admin = false; AUTH.exp = 0; authAplicar(); authGuardar(); authUI(); }
+function authSalir() { AUTH.token = AUTH.email = AUTH.refresh = AUTH.rol = null; AUTH.admin = false; AUTH.exp = 0; authAplicar(); authGuardar(); authUI(); }
 async function authRenovar() {   // el token de Supabase dura ~1 hora: se renueva solo mientras la sesión esté abierta
   if (fuente !== 'cloud' || !AUTH.refresh || AUTH.exp - Date.now() > 5 * 60000) return;
   try {
@@ -1212,7 +1218,9 @@ $('#admForm').addEventListener('submit', async (e) => {
   try {
     const admin = await authEntrar(mail, pass); $('#admPass').value = '';
     if (admin) $('#dlgAdmin').close();
-    else $('#admMsg').innerHTML = '<div class="msg err" style="margin-top:10px">La sesión es válida, pero este correo <b>no es administrador</b>. Debe estar en la tabla <code>admins</code> (admin_acceso.sql).</div>';
+    else $('#admMsg').innerHTML = AUTH.rol
+      ? `<div class="msg ok">Sesión iniciada como <b>${esc(ROLES[AUTH.rol] || AUTH.rol)}</b>. Este rol no tiene privilegios de administrador.</div>`
+      : '<div class="msg err">La sesión es válida, pero este correo <b>no tiene un usuario activo</b> en la tabla <code>usuarios</code>. Agrégalo con rol <code>admin</code> (admin_acceso.sql).</div>';
   } catch (err) { $('#admMsg').innerHTML = `<div class="msg err" style="margin-top:10px">${esc(err.message)}</div>`; }
   finally { btn.disabled = false; btn.textContent = 'Entrar'; btn.classList.remove('cargando'); }
 });
