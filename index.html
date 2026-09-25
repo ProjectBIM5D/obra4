@@ -516,6 +516,23 @@ textarea{resize:vertical;min-height:70px;font-family:inherit;}
   border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
 html.la-modal{overflow:hidden;}
 
+/* ═══ PPC: causas de incumplimiento (dona / Pareto) ═══ */
+.cc-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:8px 10px;margin-bottom:8px;} .cc-head .tb-seg{flex:0 0 auto;} .cc-head h3{margin:0 0 3px;}
+.ppc-dona,.ppc-pareto{display:flex;flex-wrap:wrap;gap:14px 20px;align-items:center;justify-content:center;}
+.ppc-dona svg{width:208px;height:208px;flex:0 0 auto;}
+.ppc-pareto svg{width:100%;max-width:500px;height:auto;flex:1 1 320px;}
+.ppc-dona .seg{cursor:pointer;transition:opacity .15s,stroke-width .15s;}
+.ppc-dona.hov .seg{opacity:.28;} .ppc-dona.hov .seg.on{opacity:1;stroke-width:32;}
+.ppc-leg{flex:1 1 230px;min-width:210px;display:flex;flex-direction:column;gap:1px;}
+.ppc-leg .fila{display:grid;grid-template-columns:12px 1fr auto auto;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;cursor:default;font-size:12.5px;transition:background .12s;}
+.ppc-leg .fila i{width:10px;height:10px;border-radius:3px;display:block;}
+.ppc-leg .fila .rk{display:none;font-size:10px;font-weight:800;color:var(--mut);}
+.ppc-leg.nums .fila{grid-template-columns:auto 12px 1fr auto auto;} .ppc-leg.nums .fila .rk{display:inline;}
+.ppc-leg .fila .nom{color:var(--tx2);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ppc-leg .fila b{font-variant-numeric:tabular-nums;color:var(--tx);} .ppc-leg .fila em{font-style:normal;min-width:40px;text-align:right;font-variant-numeric:tabular-nums;color:var(--mut);font-weight:700;}
+.ppc-leg .fila:hover,.ppc-leg .fila.on{background:var(--input);} .ppc-leg .fila.on .nom{color:var(--tx);}
+.ppc-nota{margin:8px 2px 0;font-size:11px;color:var(--mut);text-align:center;}
+
 /* ═══ puerta de acceso ═══ */
 #puerta{display:none;position:fixed;inset:0;z-index:300;overflow:auto;padding:20px;place-items:center;
   background:radial-gradient(90% 70% at 12% 0%,rgba(47,111,237,.22),transparent 60%),radial-gradient(80% 60% at 100% 100%,rgba(124,58,237,.16),transparent 60%),var(--bg);}
@@ -1154,12 +1171,15 @@ html.cel .tb-btn{padding:0 10px;} html.cel :root .tb-btn.tb-ic{padding:0;}
     <section class="pane" data-pane="ppc">
       <div id="ppcVacio" class="soon" style="display:none"></div>
       <div id="ppcApp">
-        <div class="la-filtros" style="margin-bottom:10px"><label for="ppcComp">Componente:</label><select id="ppcComp" class="sel-mini"></select></div>
+        <div class="tb"><div class="tb-g"><select id="ppcComp" class="tb-sel" aria-label="Componente"></select></div></div>
         <div id="ppcKpis" class="pt-kpis"></div>
         <div class="grid2">
           <div class="chart-card"><h3>Trazabilidad semanal del PAC</h3><p class="hint">PAC semanal, PAC acumulado y meta</p><svg id="ppcSvg" viewBox="0 0 640 300"></svg>
             <div class="legend2"><span><i style="background:#2f6fed"></i>PAC semanal</span><span><i style="background:#0e8f4f"></i>PAC acumulado</span><span><i style="background:transparent;border:1px dashed #d97706"></i>Meta</span></div></div>
-          <div class="chart-card"><h3>Causas de incumplimiento</h3><p class="hint">Actividades con plan que no cumplieron</p><div id="ppcCausas"></div></div>
+          <div class="chart-card ppc-causas-card">
+            <div class="cc-head"><div><h3>Causas de incumplimiento</h3><p class="hint">Actividades con plan que no cumplieron (100% = todas las no cumplidas)</p></div>
+              <span class="tb-seg" role="group" aria-label="Tipo de gráfico"><button type="button" class="seg-btn" data-ppcvista="dona" title="Proporción de cada causa sobre el 100%">Dona</button><button type="button" class="seg-btn" data-ppcvista="pareto" title="Diagrama de Pareto: causas de mayor a menor con el % acumulado">Pareto</button></span></div>
+            <div id="ppcCausas"></div></div>
         </div>
         <div class="table-wrap"><table id="ppcTabla" style="min-width:760px"></table></div>
       </div>
@@ -3231,7 +3251,8 @@ ptIniciar();
 // ============================================================================
 // PPC: PORCENTAJE DE ACTIVIDADES COMPLETADAS (trazabilidad semanal del PAC + causas)
 // ============================================================================
-const PPC = { filas: [], causas: [], comp: '' };
+const PPC = { filas: [], causas: [], comp: '', vista: 'dona', _lista: [], _tot: 0 };
+try { const v = localStorage.getItem('obra-ppc-vista'); if (v === 'dona' || v === 'pareto') PPC.vista = v; } catch (e) {}
 async function ppcCargar() {
   try {
     if (!LA.cargado) await laCargar();
@@ -3275,8 +3296,7 @@ function ppcRender() {
   // causas de incumplimiento (barras horizontales, de mayor a menor)
   const cs = new Map(); PPC.causas.filter(c => !PPC.comp || c.proyecto_id === PPC.comp).forEach(c => cs.set(c.causa_nombre, (cs.get(c.causa_nombre) || 0) + Number(c.actividades)));
   const lista = [...cs.entries()].sort((a, b) => b[1] - a[1]), tot = lista.reduce((t, x) => t + x[1], 0), mx = lista.length ? lista[0][1] : 1;
-  $('#ppcCausas').innerHTML = lista.length ? lista.map(([n, v]) => `<div class="ppc-bar"><span class="nom">${esc(n)}</span><span class="pista"><i style="width:${(v / mx * 100).toFixed(0)}%"></i></span><span class="val">${v} · ${(v / tot * 100).toFixed(0)}%</span></div>`).join('')
-    : '<p class="hint">No hay actividades incumplidas registradas.</p>';
+  PPC._lista = lista; PPC._tot = tot; ppcCausasRender();
 
   // tabla como en el Excel
   $('#ppcTabla').innerHTML = `<thead><tr><th>Semana Nº</th><th>Fecha inicio</th><th>Fecha término</th><th>Nº activ. planificadas</th><th>Nº acumulado planif.</th><th>Nº activ. ejecutadas</th><th>Nº acumulado ejec.</th><th>PAC semanal</th><th>PAC acumulado</th><th>PAC meta</th></tr></thead><tbody>`
@@ -3284,6 +3304,58 @@ function ppcRender() {
       + `<td class="mono" style="color:${col(x.pac)};font-weight:700">${(x.pac * 100).toFixed(1)}%</td><td class="mono" style="color:${col(x.pacAc)};font-weight:700">${(x.pacAc * 100).toFixed(1)}%</td><td class="mono">${Math.round(meta * 100)}%</td></tr>`).join('')
       : '<tr><td colspan="10" class="mono" style="color:var(--mut)">Aún no hay planes semanales con actividades.</td></tr>') + '</tbody>';
 }
+// ── causas de incumplimiento: dona (proporción sobre 100%) o Pareto (de mayor a menor con % acumulado). Sin efecto 3D: el 3D distorsiona las proporciones. ──
+const PPC_COL = ['#3b82f6', '#f59e0b', '#14b8a6', '#8b5cf6', '#ef4444', '#84cc16'];
+function ppcAgrupar(lista) {   // hasta 6 causas con color; las menores se suman en «Otras»; «Sin causa indicada» va en gris (es un vacío de datos, no una causa)
+  const sin = lista.find(x => /sin causa/i.test(x[0])), con = lista.filter(x => x !== sin), resto = con.slice(6);
+  const g = con.slice(0, 6).map((x, i) => ({ n: x[0], v: x[1], c: PPC_COL[i] }));
+  if (resto.length) g.push({ n: `Otras (${resto.length})`, v: resto.reduce((s, x) => s + x[1], 0), c: '#b6c2d3', tip: resto.map(x => `${x[0]}: ${x[1]}`).join(' · ') });
+  if (sin) g.push({ n: sin[0], v: sin[1], c: '#475569', tip: 'Actividades que no cumplieron y todavía no tienen una causa registrada' });
+  return g.sort((a, b) => b.v - a.v);
+}
+function ppcDonaSvg(g, tot) {
+  const R = 72, C = 2 * Math.PI * R, GAP = g.length > 1 ? 2.5 : 0; let cum = 0;
+  const segs = g.map((x, i) => {
+    const len = Math.max(.6, C * x.v / tot - GAP);
+    const s = `<circle class="seg" data-i="${i}" cx="100" cy="100" r="${R}" fill="none" stroke="${x.c}" stroke-width="26" stroke-dasharray="${len.toFixed(2)} ${(C - len).toFixed(2)}" stroke-dashoffset="${(-cum).toFixed(2)}" transform="rotate(-90 100 100)"><title>${esc(x.n)}: ${x.v} (${Math.round(x.v / tot * 100)}%)</title></circle>`;
+    cum += C * x.v / tot; return s;
+  }).join('');
+  return `<svg viewBox="0 0 200 200" role="img" aria-label="Proporción de las causas de incumplimiento"><circle cx="100" cy="100" r="${R}" fill="none" stroke="${SVGC.grid}" stroke-width="26"/>${segs}`
+    + `<text id="ppcDcN" x="100" y="101" text-anchor="middle" font-size="30" font-weight="800" style="fill:var(--tx)">${tot}</text><text id="ppcDcT" x="100" y="121" text-anchor="middle" font-size="10.5" style="fill:var(--mut)">no cumplidas</text></svg>`;
+}
+function ppcParetoSvg(g, tot) {
+  const W = 500, H = 250, pl = 34, pr = 40, pt = 18, pb = 30, n = g.length, mx = Math.max(...g.map(x => x.v)), paso = (W - pl - pr) / n, bw = Math.min(46, paso * .62);
+  const px = (i) => pl + (i + .5) * paso, py = (v) => H - pb - v / mx * (H - pt - pb), pc = (p) => H - pb - p * (H - pt - pb);
+  let s = '', ac = 0, pts = [];
+  [0, .5, 1].forEach(f => { const y = H - pb - f * (H - pt - pb); s += `<line x1="${pl}" y1="${y}" x2="${W - pr}" y2="${y}" stroke="${SVGC.grid}"/><text x="${pl - 6}" y="${y + 4}" font-size="10" text-anchor="end" fill="${SVGC.axis}">${Math.round(mx * f)}</text><text x="${W - pr + 6}" y="${y + 4}" font-size="10" fill="${SVGC.axis}">${Math.round(f * 100)}%</text>`; });
+  s += `<line x1="${pl}" y1="${pc(.8)}" x2="${W - pr}" y2="${pc(.8)}" stroke="#d97706" stroke-width="1.2" stroke-dasharray="4,4"/><text x="${W - pr - 2}" y="${pc(.8) - 4}" font-size="9.5" text-anchor="end" fill="#d97706">80%</text>`;
+  g.forEach((x, i) => {
+    s += `<rect x="${(px(i) - bw / 2).toFixed(1)}" y="${py(x.v).toFixed(1)}" width="${bw.toFixed(1)}" height="${(H - pb - py(x.v)).toFixed(1)}" rx="4" fill="${x.c}"><title>${esc(x.n)}: ${x.v} (${Math.round(x.v / tot * 100)}%)</title></rect>`
+       + `<text x="${px(i).toFixed(1)}" y="${(py(x.v) - 5).toFixed(1)}" font-size="10.5" font-weight="700" text-anchor="middle" style="fill:var(--tx)">${x.v}</text>`
+       + `<text x="${px(i).toFixed(1)}" y="${H - pb + 16}" font-size="11" font-weight="700" text-anchor="middle" fill="${SVGC.axis}">${i + 1}</text>`;
+    ac += x.v; pts.push([px(i), pc(ac / tot), ac / tot]);
+  });
+  s += `<polyline points="${pts.map(p => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ')}" fill="none" style="stroke:var(--tx)" stroke-width="2"/>`
+     + pts.map(p => `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3.6" style="fill:var(--card);stroke:var(--tx)" stroke-width="2"><title>Acumulado ${Math.round(p[2] * 100)}%</title></circle>`).join('');
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Diagrama de Pareto de las causas de incumplimiento">${s}</svg>`;
+}
+function ppcCausasRender() {
+  const box = $('#ppcCausas'), lista = PPC._lista, tot = PPC._tot;
+  document.querySelectorAll('[data-ppcvista]').forEach(b => b.classList.toggle('on', b.dataset.ppcvista === PPC.vista));
+  if (!lista.length) { box.innerHTML = '<p class="hint">No hay actividades incumplidas registradas.</p>'; return; }
+  const g = ppcAgrupar(lista);
+  const leg = `<div class="ppc-leg ${PPC.vista === 'pareto' ? 'nums' : ''}">` + g.map((x, i) => `<div class="fila" data-i="${i}" title="${esc(x.tip || x.n)}"><span class="rk">${i + 1}</span><i style="background:${x.c}"></i><span class="nom">${esc(x.n)}</span><b>${x.v}</b><em>${Math.round(x.v / tot * 100)}%</em></div>`).join('') + '</div>';
+  if (PPC.vista === 'dona') {
+    box.innerHTML = `<div class="ppc-dona" id="ppcDona">${ppcDonaSvg(g, tot)}${leg}</div>`;
+    const cont = $('#ppcDona'), nN = $('#ppcDcN'), nT = $('#ppcDcT');
+    const sel = (i) => { cont.classList.add('hov'); cont.querySelectorAll('[data-i]').forEach(e => e.classList.toggle('on', +e.dataset.i === i)); nN.textContent = Math.round(g[i].v / tot * 100) + '%'; nT.textContent = g[i].n.length > 20 ? g[i].n.slice(0, 19) + '…' : g[i].n; };
+    const off = () => { cont.classList.remove('hov'); cont.querySelectorAll('.on').forEach(e => e.classList.remove('on')); nN.textContent = tot; nT.textContent = 'no cumplidas'; };
+    cont.querySelectorAll('[data-i]').forEach(e => { e.addEventListener('mouseenter', () => sel(+e.dataset.i)); e.addEventListener('mouseleave', off); e.addEventListener('click', () => sel(+e.dataset.i)); });
+  } else {
+    box.innerHTML = `<div class="ppc-pareto">${ppcParetoSvg(g, tot)}${leg}</div><p class="ppc-nota">Barras: actividades por causa · Línea: % acumulado · Regla 80/20: las primeras causas explican la mayor parte</p>`;
+  }
+}
+document.addEventListener('click', (e) => { const b = e.target.closest('[data-ppcvista]'); if (!b) return; PPC.vista = b.dataset.ppcvista; try { localStorage.setItem('obra-ppc-vista', PPC.vista); } catch (x) {} ppcCausasRender(); });
 $('#ppcComp').addEventListener('change', (e) => { PPC.comp = e.target.value; ppcRender(); });
 
 // ============================================================================
