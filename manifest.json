@@ -2,7 +2,7 @@
   "name": "Obra 04 · Panel de Control",
   "short_name": "Obra 04",
   "description": "Control de obra: avance, Curva S, materiales, Look Ahead, Plan semanal y PPC",
-  "start_url": "./panel.html",
+  "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#f4f6fb",
