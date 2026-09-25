@@ -502,6 +502,20 @@ textarea{resize:vertical;min-height:70px;font-family:inherit;}
 .lt-pista b{display:block;height:100%;background:var(--tc,var(--blue));border-radius:5px 0 0 5px;}
 @media (prefers-reduced-motion:reduce){ #laTip,#laTip.on{transition:none;} }
 
+/* ═══ pantalla táctil: sin selección de texto ni menú del navegador en la tabla y el diagrama ═══ */
+@media (hover:none){
+  .la-frame,.la-wrap{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;}
+  .la-b,.la-b em,.la-res{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;}
+}
+#laTip.tt{pointer-events:auto;}
+.lt-edit{display:block;width:calc(100% - 26px);margin:0 13px 13px;height:38px;border-radius:9px;border:1px solid var(--blue);background:var(--blue);color:#fff;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;}
+.lt-edit:active{filter:brightness(.92);}
+/* formularios del Look Ahead: ventana flotante */
+#laFondo{position:fixed;inset:0;z-index:119;background:rgba(2,6,23,.55);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);}
+#laForm:not([hidden]),#laNuevoBox:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(600px,calc(100vw - 20px));max-height:calc(100vh - 24px);overflow-y:auto;margin:0;
+  border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
+html.la-modal{overflow:hidden;}
+
 /* ═══ puerta de acceso ═══ */
 #puerta{display:none;position:fixed;inset:0;z-index:300;overflow:auto;padding:20px;place-items:center;
   background:radial-gradient(90% 70% at 12% 0%,rgba(47,111,237,.22),transparent 60%),radial-gradient(80% 60% at 100% 100%,rgba(124,58,237,.16),transparent 60%),var(--bg);}
@@ -2729,13 +2743,14 @@ function laIniciarFrame() {
   fr.addEventListener('mouseleave', () => fr.querySelectorAll('tr.hov').forEach(x => x.classList.remove('hov')));
   if (window.ResizeObserver) new ResizeObserver(() => laSyncPanes()).observe(fr);
   fr.addEventListener('click', (e) => {   // editar una actividad: clic en su fila (columnas o barra)
+    if (matchMedia('(hover:none)').matches && e.target.closest('#laDer .la-b, #laDer .la-res')) return;   // en táctil, la barra muestra su globo (se edita desde el botón del globo)
     const tr = e.target.closest('tr.act-row.editable'); if (!tr) return;
     const f = LA.det.find(x => x.id === tr.dataset.id); if (f) laFormAbrir(f);
   });
 }
 
 // ── globo de información de las barras (reemplaza al texto nativo del navegador) ──
-function laTipHtml(f) {
+function laTipHtml(f, editar) {
   const pct = Math.max(0, Math.min(1, Number(f.pct_avance) || 0)), tipo = f.critico ? 'cr' : (f.concepto === 'adicional' ? 'ad' : 'n');
   const pend = Math.max(0, Number(f.metrado_meta || 0) - Number(f.acumulado || 0)), u = esc(f.unidad || '');
   const fila = (k, v) => `<dt>${k}</dt><dd>${v}</dd>`;
@@ -2746,7 +2761,8 @@ function laTipHtml(f) {
     + `<dl class="lt-body">${fila('Fechas', `${laFmt(f.fecha_inicio)} → ${laFmt(f.fecha_fin)}`)}${fila('Duración', `${f.dias} día${f.dias === 1 ? '' : 's'}`)}`
     + `${fila('Meta', `${laNum(f.metrado_meta, 2)} ${u}`)}${fila('Ejecutado', `${laNum(f.acumulado, 2)} ${u}`)}${fila('Pendiente', `${laNum(pend, 2)} ${u}`)}`
     + `<div class="lt-prog"><span>Avance</span><i class="lt-pista"><b style="width:${(pct * 100).toFixed(1)}%"></b></i><strong>${Math.round(pct * 100)}%</strong></div>`
-    + `${fila('Planeado', 'S/ ' + laNum(f.planeado))}${fila('Valorizado', 'S/ ' + laNum(f.ejecutado))}${f.responsable ? fila('Responsable', esc(f.responsable)) : ''}</dl>`;
+    + `${fila('Planeado', 'S/ ' + laNum(f.planeado))}${fila('Valorizado', 'S/ ' + laNum(f.ejecutado))}${f.responsable ? fila('Responsable', esc(f.responsable)) : ''}</dl>`
+    + (editar ? `<button type="button" class="lt-edit" data-editar="${f.id}">✎ Editar actividad</button>` : '');
 }
 function laTipGrupoHtml(it) {
   const arr = it.acts, ini = arr.map(x => x.fecha_inicio).sort()[0], fin = arr.map(x => x.fecha_fin).sort().pop();
@@ -2770,16 +2786,21 @@ function laIniciarTip() {
   document.addEventListener('mouseover', (e) => {
     const b = e.target.closest('#laDer .la-b, #laDer .la-res'); if (!b) return;
     const tr = b.closest('tr'); if (!tr) return;
-    let html = '', tipo = 'n';
-    if (b.classList.contains('la-b')) { const f = LA.det.find(x => x.id === tr.dataset.id); if (!f) return; html = laTipHtml(f); tipo = f.critico ? 'cr' : (f.concepto === 'adicional' ? 'ad' : 'n'); }
+    let html = '', tipo = 'n', ed = false;
+    if (b.classList.contains('la-b')) { const f = LA.det.find(x => x.id === tr.dataset.id); if (!f) return; ed = matchMedia('(hover:none)').matches && tr.classList.contains('editable'); html = laTipHtml(f, ed); tipo = f.critico ? 'cr' : (f.concepto === 'adicional' ? 'ad' : 'n'); }
     else { const it = LA._grp && LA._grp.get(tr.dataset.nodo); if (!it) return; html = laTipGrupoHtml(it); tipo = 'g'; }
-    if (obj === b) return; obj = b; el.className = 'on ' + tipo; el.innerHTML = html; poner(e.clientX, e.clientY);
-    clearTimeout(cierre); if (matchMedia('(hover:none)').matches) cierre = setTimeout(ocultar, 6000);   // en pantallas táctiles no hay «salir del cursor»
+    if (obj === b) return; obj = b; el.className = 'on ' + tipo + (ed ? ' tt' : ''); el.innerHTML = html; poner(e.clientX, e.clientY);
+    clearTimeout(cierre); if (matchMedia('(hover:none)').matches) cierre = setTimeout(ocultar, ed ? 12000 : 6000);   // en pantallas táctiles no hay «salir del cursor»
   });
   document.addEventListener('mousemove', (e) => { if (obj) poner(e.clientX, e.clientY); });
-  document.addEventListener('mouseout', (e) => { if (obj && !(e.relatedTarget && obj.contains(e.relatedTarget)) && !(e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest('#laDer .la-b, #laDer .la-res') === obj)) ocultar(); });
+  document.addEventListener('mouseout', (e) => { if (obj && !(e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest('#laTip')) && !(e.relatedTarget && obj.contains(e.relatedTarget)) && !(e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest('#laDer .la-b, #laDer .la-res') === obj)) ocultar(); });
   ['#laDer', '#laIzq'].forEach(s => { const p = $(s); if (p) p.addEventListener('scroll', ocultar, { passive: true }); });
-  document.addEventListener('touchstart', (e) => { if (!e.target.closest('#laDer .la-b, #laDer .la-res')) ocultar(); }, { passive: true });
+  document.addEventListener('touchstart', (e) => { if (!e.target.closest('#laDer .la-b, #laDer .la-res, #laTip')) ocultar(); }, { passive: true });
+  document.addEventListener('contextmenu', (e) => { if (matchMedia('(hover:none)').matches && e.target.closest('#laDer, #laTip')) e.preventDefault(); });   // pulsación larga: sin menú del navegador
+  el.addEventListener('click', (e) => {   // botón «Editar actividad» del globo (tablet)
+    const bt = e.target.closest('.lt-edit'); if (!bt) return;
+    const f = LA.det.find(x => x.id === bt.dataset.editar); ocultar(); if (f) laFormAbrir(f);
+  });
 }
 
 // totales como en el Excel: costo directo + gastos generales + utilidad = sub total (planeado vs ejecutado)
@@ -2856,7 +2877,7 @@ function laFormAbrir(act) {
   }
   ['laFComp', 'laFElem', 'laFPart', 'laFBuscar'].forEach(id => { $('#' + id).disabled = !!act; });   // la partida no se cambia: se quita y se agrega otra
   laFinTxt();
-  $('#laForm').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  setTimeout(() => { try { $('#laFComp').focus({ preventScroll: true }); } catch (e) {} }, 50);
 }
 
 function laIniciar() {
@@ -2950,6 +2971,16 @@ function laIniciar() {
 laIniciar();
 laIniciarFrame();
 laIniciarTip();
+// formularios del Look Ahead: ventana flotante con fondo (no mueven la tabla)
+(function () {
+  const fondo = document.createElement('div'); fondo.id = 'laFondo'; fondo.hidden = true; document.body.appendChild(fondo);
+  const f1 = $('#laForm'), f2 = $('#laNuevoBox'); if (!f1 || !f2) return;
+  const sync = () => { const abierto = !f1.hidden || !f2.hidden; fondo.hidden = !abierto; document.documentElement.classList.toggle('la-modal', abierto); };
+  [f1, f2].forEach(f => new MutationObserver(sync).observe(f, { attributes: true, attributeFilter: ['hidden'] }));
+  const cerrar = () => { if (!f1.hidden) $('#laFCancel').click(); else if (!f2.hidden) $('#laNCancel').click(); };
+  fondo.addEventListener('click', cerrar);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') cerrar(); });
+})();
 
 // ============================================================================
 // PLAN SEMANAL (PTS) + PARTE DIARIO + PPC (Last Planner)
