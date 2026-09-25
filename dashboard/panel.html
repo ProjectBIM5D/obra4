@@ -411,6 +411,18 @@ textarea{resize:vertical;min-height:70px;font-family:inherit;}
 @media (max-width:480px){ .adm-dlg{width:94vw;} #admForm{padding:0 18px 18px;} .adm-head{margin:0 -18px 16px;padding:26px 18px 16px;} }
 @media (prefers-reduced-motion:reduce){ .adm-dlg[open],.adm-dlg::backdrop{animation:none;} }
 
+/* ═══ puerta de acceso ═══ */
+#puerta{display:none;position:fixed;inset:0;z-index:300;overflow:auto;padding:20px;place-items:center;
+  background:radial-gradient(90% 70% at 12% 0%,rgba(47,111,237,.22),transparent 60%),radial-gradient(80% 60% at 100% 100%,rgba(124,58,237,.16),transparent 60%),var(--bg);}
+html.con-puerta #puerta{display:grid;} html.con-puerta #app{display:none;} html.con-puerta{overflow:hidden;}
+.puerta-card{width:min(430px,100%);margin:auto;background:var(--card);border:1px solid var(--line2);border-radius:22px;overflow:hidden;box-shadow:0 30px 80px rgba(2,6,23,.30);animation:admIn .28s cubic-bezier(.2,.9,.3,1.1);}
+#pForm{padding:0 26px 22px;}
+.adm-check{display:flex;align-items:center;gap:9px;margin:2px 0 14px;font-size:12.5px;color:var(--tx2);cursor:pointer;user-select:none;}
+.adm-check input{width:16px;height:16px;accent-color:var(--blue);cursor:pointer;}
+#pMsg .msg{max-width:none;margin:0 0 14px;padding:10px 13px;font-size:12.5px;line-height:1.45;border-radius:11px;}
+:root[data-theme="dark"] #pMsg .msg.err{background:#3a1f22;border-color:#7a3038;color:#fca5a5;}
+@media (max-width:480px){ #pForm{padding:0 18px 18px;} #puerta{padding:12px;} }
+
 /* ═══ SOLO CELULAR (html.cel: pantalla táctil pequeña, vertical u horizontal). Tablet y PC no cambian ═══ */
 html.cel #side{position:fixed;left:0;top:0;bottom:0;z-index:20;transform:translateX(-100%);transition:transform .2s;}
 html.cel #side.open{transform:translateX(0);box-shadow:0 0 30px #000a;}
@@ -464,6 +476,14 @@ html.cel .pt-sem{padding:6px 10px;}
 } catch(e) {} })();
 // celular = pantalla táctil con el lado corto < 600 px (vale en vertical y en horizontal). Con ?cel=1 se fuerza para probar en PC.
 (function(){ try {
+  var loc = ['localhost', '127.0.0.1'].indexOf(location.hostname) >= 0;
+  var f = loc ? (localStorage.getItem('obra-fuente') || 'local') : 'cloud';
+  if (f === 'cloud') {
+    var s = null; try { s = JSON.parse(localStorage.getItem('obra-auth-cloud') || sessionStorage.getItem('obra-auth-cloud') || 'null'); } catch (e) {}
+    if (!s || !s.token) document.documentElement.classList.add('con-puerta');
+  }
+} catch(e) {} })();
+(function(){ try {
   var cel = (window.matchMedia('(pointer:coarse)').matches && Math.min(screen.width, screen.height) < 600) || /[?&]cel=1\b/.test(location.search);
   if (cel) document.documentElement.classList.add('cel');
   // tablet = pantalla táctil con el lado corto entre 600 y 1100 px (?tab=1 lo fuerza para probar en PC)
@@ -473,6 +493,32 @@ html.cel .pt-sem{padding:6px 10px;}
 </script>
 </head>
 <body>
+  <!-- puerta de acceso: en la nube nadie ve el panel sin iniciar sesión -->
+  <div id="puerta" role="dialog" aria-modal="true" aria-labelledby="pTitulo">
+    <div class="puerta-card">
+      <form id="pForm" novalidate>
+        <div class="adm-head">
+          <div class="adm-badge"><svg viewBox="0 0 24 24"><path d="M12 3 4.5 6v5.5c0 4.6 3.1 8.3 7.5 9.5 4.4-1.2 7.5-4.9 7.5-9.5V6L12 3Z"/><path d="m9 12 2.2 2.2L15.2 10"/></svg></div>
+          <h3 id="pTitulo">Panel de Control de Obra</h3>
+          <span class="adm-modo">Acceso restringido</span>
+          <p>Inicia sesión con tu correo y contraseña. Si todavía no tienes acceso, pídelo al administrador de la obra.</p>
+        </div>
+        <div class="field adm-f" id="p-mail"><label for="pMail">Correo</label>
+          <div class="adm-in"><svg class="adm-ic" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m4 7 8 6 8-6"/></svg><input id="pMail" type="email" autocomplete="username" placeholder="tu@correo.com" spellcheck="false"></div>
+          <span class="field-err">Ingresa el correo</span></div>
+        <div class="field adm-f" id="p-pass"><label for="pPass">Contraseña</label>
+          <div class="adm-in"><svg class="adm-ic" viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg><input id="pPass" type="password" autocomplete="current-password" placeholder="••••••••">
+            <button type="button" class="adm-ojo" id="pOjo" aria-label="Mostrar contraseña" title="Mostrar / ocultar contraseña"><svg viewBox="0 0 24 24"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+          <span class="adm-caps" id="pCaps" hidden>⇪ Bloq Mayús está activado</span>
+          <span class="field-err">Ingresa la contraseña</span></div>
+        <label class="adm-check"><input type="checkbox" id="pRecordar" checked> Mantener la sesión iniciada en este dispositivo</label>
+        <div id="pMsg"></div>
+        <div class="adm-btns"><button class="btn adm-go" type="submit" id="pEntrar">Entrar</button></div>
+        <p class="adm-nota"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8.5 11V8a3.5 3.5 0 0 1 7 0v3"/></svg><span>Acceso solo para personal autorizado. El panel no guarda tu contraseña.</span></p>
+      </form>
+    </div>
+  </div>
+
 <div id="app">
   <aside id="side">
     <div class="brand">
@@ -937,7 +983,7 @@ let { url: API, headers } = FUENTES[fuente];
 // En la nube: inicio de sesión con Supabase Auth (correo + contraseña que escribe la persona; el panel no los guarda).
 // Los privilegios NO los decide el panel: la base los da según el rol del correo en la tabla `usuarios` (admin_acceso.sql).
 // En local: el servidor local emite un token de pruebas ("admin@local") solo para esta PC.
-const AUTH = { token: null, email: null, admin: false, rol: null, refresh: null, exp: 0 };
+const AUTH = { token: null, email: null, admin: false, rol: null, refresh: null, exp: 0, recordar: true };
 const ROLES = { admin: 'Administrador', residente: 'Residente', supervisor: 'Supervisor', cliente: 'Cliente', solo_lectura: 'Solo lectura' };
 const CLAVE_PUBLICA = FUENTES.cloud.headers.apikey;
 function authAplicar() {
@@ -945,10 +991,14 @@ function authAplicar() {
   else if (fuente === 'cloud') headers.Authorization = 'Bearer ' + CLAVE_PUBLICA;
   else delete headers.Authorization;
 }
-function authGuardar() {
-  try { if (AUTH.token) sessionStorage.setItem('obra-auth-' + fuente, JSON.stringify({ token: AUTH.token, email: AUTH.email, admin: AUTH.admin, rol: AUTH.rol, refresh: AUTH.refresh, exp: AUTH.exp })); else sessionStorage.removeItem('obra-auth-' + fuente); } catch (e) {}
+function authGuardar() {   // con «mantener sesión» queda en este dispositivo (localStorage); si no, solo mientras la pestaña esté abierta
+  try {
+    const clave = 'obra-auth-' + fuente;
+    localStorage.removeItem(clave); sessionStorage.removeItem(clave);
+    if (AUTH.token) (AUTH.recordar ? localStorage : sessionStorage).setItem(clave, JSON.stringify({ token: AUTH.token, email: AUTH.email, admin: AUTH.admin, rol: AUTH.rol, refresh: AUTH.refresh, exp: AUTH.exp, recordar: AUTH.recordar }));
+  } catch (e) {}
 }
-try { const s = JSON.parse(sessionStorage.getItem('obra-auth-' + fuente) || 'null'); if (s && s.exp > Date.now()) Object.assign(AUTH, s); } catch (e) {}
+try { const s = JSON.parse(localStorage.getItem('obra-auth-' + fuente) || sessionStorage.getItem('obra-auth-' + fuente) || 'null'); if (s && s.token && (s.exp > Date.now() || s.refresh)) Object.assign(AUTH, s); } catch (e) {}
 authAplicar();
 
 // ── tema claro/oscuro (ya aplicado desde <head>; acá solo el botón y su estado) ──
@@ -1180,16 +1230,24 @@ async function authEntrar(email, pass) {
   }
   AUTH.token = d.access_token; AUTH.email = d.email || (d.user && d.user.email) || email; AUTH.exp = Date.now() + ((d.expires_in || 3600) - 60) * 1000;
   authAplicar();
-  // el rol sale de la tabla `usuarios` (rol_actual); si la base aún no tiene esa función, se usa la antigua es_admin
-  const rpc = (f) => fetch(`${API}/rpc/${f}`, { method: 'POST', headers: { ...headers, 'Content-Type': 'application/json' }, body: '{}' });
-  const rr = await rpc('rol_actual').catch(() => null);
-  if (rr && rr.ok) AUTH.rol = (await rr.json().catch(() => null)) || null;
-  else AUTH.rol = (await rpc('es_admin').then(x => x.ok ? x.json() : false).catch(() => false)) === true ? 'admin' : null;
-  AUTH.admin = AUTH.rol === 'admin';
+  await authCargarRol();
   authGuardar(); authUI();
   return AUTH.admin;
 }
-function authSalir() { AUTH.token = AUTH.email = AUTH.refresh = AUTH.rol = null; AUTH.admin = false; AUTH.exp = 0; authAplicar(); authGuardar(); authUI(); }
+// el rol sale de la tabla `usuarios` (rol_actual); si la base aún no tiene esa función, se usa la antigua es_admin
+async function authCargarRol() {
+  const rpc = (f) => fetch(`${API}/rpc/${f}`, { method: 'POST', headers: { ...headers, 'Content-Type': 'application/json' }, body: '{}' });
+  try {
+    const rr = await rpc('rol_actual');
+    if (rr.ok) AUTH.rol = (await rr.json().catch(() => null)) || null;
+    else AUTH.rol = (await rpc('es_admin').then(x => x.ok ? x.json() : false).catch(() => false)) === true ? 'admin' : null;
+  } catch (e) { return; }   // sin conexión: se conserva lo último conocido
+  AUTH.admin = AUTH.rol === 'admin';
+}
+function authSalir(sinRecargar) {
+  AUTH.token = AUTH.email = AUTH.refresh = AUTH.rol = null; AUTH.admin = false; AUTH.exp = 0; authAplicar(); authGuardar(); authUI();
+  if (fuente === 'cloud' && !sinRecargar) location.reload();   // en la nube, sin sesión solo se ve la puerta de acceso
+}
 async function authRenovar() {   // el token de Supabase dura ~1 hora: se renueva solo mientras la sesión esté abierta
   if (fuente !== 'cloud' || !AUTH.refresh || AUTH.exp - Date.now() > 5 * 60000) return;
   try {
@@ -1200,7 +1258,7 @@ async function authRenovar() {   // el token de Supabase dura ~1 hora: se renuev
 }
 setInterval(authRenovar, 60000);
 $('#btnAdmin').addEventListener('click', () => {
-  if (AUTH.token) { if (confirm('¿Cerrar la sesión de administrador?')) authSalir(); return; }
+  if (AUTH.token) { if (confirm('¿Cerrar la sesión?')) authSalir(); return; }
   $('#admMsg').innerHTML = ''; $('#admPass').value = '';
   const local = fuente !== 'cloud';
   $('#admModo').textContent = local ? 'Modo local · solo esta PC' : 'Nube · Supabase'; $('#admModo').classList.toggle('local', local);
@@ -1224,6 +1282,24 @@ $('#admForm').addEventListener('submit', async (e) => {
   } catch (err) { $('#admMsg').innerHTML = `<div class="msg err" style="margin-top:10px">${esc(err.message)}</div>`; }
   finally { btn.disabled = false; btn.textContent = 'Entrar'; btn.classList.remove('cargando'); }
 });
+// ── puerta de acceso (nube) ──
+function puertaMostrar(msg) { document.documentElement.classList.add('con-puerta'); $('#pMsg').innerHTML = msg ? `<div class="msg err">${msg}</div>` : ''; setTimeout(() => { try { $('#pMail').focus(); } catch (e) {} }, 60); }
+$('#pForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const mail = $('#pMail').value.trim(), pass = $('#pPass').value;
+  marcarError('p-mail', !mail); marcarError('p-pass', !pass); if (!mail || !pass) return;
+  const btn = $('#pEntrar'); btn.disabled = true; btn.textContent = 'Entrando…'; btn.classList.add('cargando'); $('#pMsg').innerHTML = '';
+  AUTH.recordar = $('#pRecordar').checked;
+  try {
+    await authEntrar(mail, pass); $('#pPass').value = '';
+    if (!AUTH.rol) { authSalir(true); throw new Error('Tu correo todavía no tiene acceso a esta obra. Pide al administrador que te registre.'); }
+    location.reload();   // con la sesión ya guardada, el panel arranca completo
+  } catch (err) { $('#pMsg').innerHTML = `<div class="msg err">${esc(err.message)}</div>`; btn.disabled = false; btn.textContent = 'Entrar'; btn.classList.remove('cargando'); }
+});
+$('#pOjo').addEventListener('click', () => { const ver = $('#pPass').type === 'password'; $('#pPass').type = ver ? 'text' : 'password'; $('#pOjo').classList.toggle('on', ver); $('#pOjo').setAttribute('aria-label', ver ? 'Ocultar contraseña' : 'Mostrar contraseña'); $('#pPass').focus(); });
+['keydown', 'keyup'].forEach(ev => $('#pPass').addEventListener(ev, (e) => { try { $('#pCaps').hidden = !e.getModifierState('CapsLock'); } catch (x) {} }));
+['pMail', 'pPass'].forEach(id => $('#' + id).addEventListener('input', () => marcarError(id === 'pMail' ? 'p-mail' : 'p-pass', false)));
+
 $('#admX').addEventListener('click', () => $('#dlgAdmin').close());
 $('#dlgAdmin').addEventListener('click', (e) => { if (e.target === $('#dlgAdmin')) $('#dlgAdmin').close(); });   // clic fuera de la tarjeta
 $('#admOjo').addEventListener('click', () => { const ver = $('#admPass').type === 'password'; $('#admPass').type = ver ? 'text' : 'password'; $('#admOjo').classList.toggle('on', ver); $('#admOjo').setAttribute('aria-label', ver ? 'Ocultar contraseña' : 'Mostrar contraseña'); $('#admPass').focus(); });
@@ -2967,8 +3043,17 @@ $('#parteForm').addEventListener('submit', async (e) => {
   }
 });
 
-bootResumen();
-cargarPartidasForm().catch(err => pmsg(`No se pudo conectar con la API (${err.message}).`, false));
+(async () => {
+  if (fuente === 'cloud') {
+    if (AUTH.token && AUTH.exp - Date.now() < 5 * 60000) await authRenovar();   // sesión guardada de otro día: se renueva sola
+    if (!AUTH.token) { puertaMostrar(); return; }
+    await authCargarRol();
+    if (!AUTH.rol) { authSalir(true); puertaMostrar('Tu correo no tiene un usuario activo en esta obra. Pide al administrador que te registre.'); return; }
+    document.documentElement.classList.remove('con-puerta'); authGuardar(); authUI();
+  }
+  bootResumen();
+  cargarPartidasForm().catch(err => pmsg(`No se pudo conectar con la API (${err.message}).`, false));
+})();
 </script>
 </body>
 </html>
