@@ -367,6 +367,50 @@ textarea{resize:vertical;min-height:70px;font-family:inherit;}
   .row2{grid-template-columns:1fr;}
 }
 
+/* ═══ ventana de acceso de administrador ═══ */
+.adm-dlg{width:min(420px,94vw);padding:0;border-radius:20px;border:1px solid var(--line2);background:var(--card);overflow:hidden;box-shadow:0 30px 80px rgba(2,6,23,.45),0 0 0 1px rgba(255,255,255,.04) inset;}
+.adm-dlg[open]{animation:admIn .22s cubic-bezier(.2,.9,.3,1.1);}
+.adm-dlg::backdrop{background:rgba(6,10,22,.62);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);animation:admFade .2s ease;}
+@keyframes admIn{from{opacity:0;transform:translateY(14px) scale(.97);}to{opacity:1;transform:none;}}
+@keyframes admFade{from{opacity:0;}to{opacity:1;}}
+#admForm{position:relative;padding:0 26px 22px;}
+.adm-head{margin:0 -26px 20px;padding:30px 26px 20px;text-align:center;background:radial-gradient(120% 90% at 50% 0%,rgba(47,111,237,.20),transparent 70%),linear-gradient(180deg,rgba(47,111,237,.07),transparent);border-bottom:1px solid var(--line);}
+.adm-badge{width:60px;height:60px;margin:0 auto 12px;border-radius:18px;display:grid;place-items:center;color:#fff;background:linear-gradient(145deg,#5b8cf5,#2f6fed 55%,#1f4fc4);box-shadow:0 10px 24px rgba(47,111,237,.38),inset 0 1px 0 rgba(255,255,255,.35);}
+.adm-badge svg{width:30px;height:30px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;}
+.adm-head h3{margin:0 0 6px;font-size:18px;letter-spacing:.1px;color:var(--tx);}
+.adm-modo{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.7px;text-transform:uppercase;padding:3px 10px;border-radius:999px;background:var(--ic-blue-bg);color:var(--ic-blue-fg);border:1px solid rgba(47,111,237,.28);}
+.adm-modo.local{background:var(--ic-amber-bg);color:var(--ic-amber-fg);border-color:rgba(217,119,6,.35);}
+.adm-head p{margin:10px auto 0;max-width:320px;font-size:12.5px;line-height:1.45;color:var(--mut);}
+.adm-x{position:absolute;top:12px;right:12px;width:30px;height:30px;border-radius:9px;border:1px solid transparent;background:transparent;color:var(--mut);cursor:pointer;font-size:13px;line-height:1;transition:background .12s,color .12s,border-color .12s;}
+.adm-x:hover{background:var(--input);color:var(--tx);border-color:var(--line2);}
+.adm-f{margin-bottom:14px;gap:7px;}
+.adm-f label{font-size:11.5px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;color:var(--tx2);}
+.adm-in{position:relative;}
+.adm-in input{width:100%;padding:12px 42px 12px 40px;border:1px solid var(--line2);background:var(--input);color:var(--tx);border-radius:11px;font-size:14px;font-family:inherit;transition:border-color .12s,box-shadow .12s,background .12s;}
+.adm-in input::placeholder{color:var(--mut);opacity:.7;}
+.adm-in input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3.5px rgba(47,111,237,.20);background:var(--card);}
+.adm-ic{position:absolute;left:13px;top:50%;width:17px;height:17px;margin-top:-8.5px;fill:none;stroke:var(--mut);stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;pointer-events:none;transition:stroke .12s;}
+.adm-in:focus-within .adm-ic{stroke:var(--blue);}
+.adm-ojo{position:absolute;right:6px;top:50%;width:32px;height:32px;margin-top:-16px;border:0;background:transparent;border-radius:8px;cursor:pointer;color:var(--mut);display:grid;place-items:center;}
+.adm-ojo:hover{background:var(--card);color:var(--tx);}
+.adm-ojo svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;}
+.adm-ojo.on{color:var(--blue);}
+.adm-caps{font-size:11.5px;font-weight:600;color:var(--amber);}
+.adm-f.invalid .adm-in input{border-color:var(--red);box-shadow:0 0 0 3px rgba(239,68,68,.15);}
+#admMsg .msg{max-width:none;margin:0 0 14px !important;padding:10px 13px;font-size:12.5px;line-height:1.45;border-radius:11px;}
+:root[data-theme="dark"] #admMsg .msg.err{background:#3a1f22;border-color:#7a3038;color:#fca5a5;}
+.adm-btns{display:flex;flex-direction:column;gap:9px;margin-top:4px;}
+.adm-go{width:100%;display:flex;align-items:center;justify-content:center;gap:9px;padding:13px 20px;border-radius:12px;font-size:14.5px;font-weight:700;letter-spacing:.2px;background:linear-gradient(180deg,#4a86f7,#2f6fed);box-shadow:0 6px 16px rgba(47,111,237,.35),inset 0 1px 0 rgba(255,255,255,.25);transition:transform .06s,filter .12s,box-shadow .12s;}
+.adm-go:hover:not(:disabled){filter:brightness(1.07);box-shadow:0 8px 20px rgba(47,111,237,.42),inset 0 1px 0 rgba(255,255,255,.25);}
+.adm-go:active:not(:disabled){transform:translateY(1px);}
+.adm-go.cargando::before{content:"";width:15px;height:15px;border-radius:50%;border:2.2px solid rgba(255,255,255,.4);border-top-color:#fff;animation:admGira .7s linear infinite;}
+@keyframes admGira{to{transform:rotate(360deg);}}
+.adm-btns .btn-sec{width:100%;justify-content:center;padding:11px 14px;border-radius:12px;font-size:13px;color:var(--tx2);}
+.adm-nota{display:flex;gap:9px;align-items:flex-start;margin:16px 0 0;padding:10px 12px;border-radius:11px;background:var(--input);border:1px solid var(--line);font-size:11.5px;line-height:1.45;color:var(--mut);}
+.adm-nota svg{flex:0 0 auto;width:15px;height:15px;margin-top:1px;fill:none;stroke:var(--green);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+@media (max-width:480px){ .adm-dlg{width:94vw;} #admForm{padding:0 18px 18px;} .adm-head{margin:0 -18px 16px;padding:26px 18px 16px;} }
+@media (prefers-reduced-motion:reduce){ .adm-dlg[open],.adm-dlg::backdrop{animation:none;} }
+
 /* ═══ SOLO CELULAR (html.cel: pantalla táctil pequeña, vertical u horizontal). Tablet y PC no cambian ═══ */
 html.cel #side{position:fixed;left:0;top:0;bottom:0;z-index:20;transform:translateX(-100%);transition:transform .2s;}
 html.cel #side.open{transform:translateX(0);box-shadow:0 0 30px #000a;}
@@ -461,14 +505,26 @@ html.cel .pt-sem{padding:6px 10px;}
   </aside>
   <div id="overlay"></div>
 
-  <dialog id="dlgAdmin" class="dlg">
-    <form id="admForm" method="dialog">
-      <h3 style="margin:0 0 4px">Acceso de administrador</h3>
-      <p class="hint" id="admAyuda" style="margin:0 0 14px"></p>
-      <div class="field" id="adm-mail"><label for="admMail">Correo</label><input id="admMail" type="email" autocomplete="username" placeholder="tu@correo.com"><span class="field-err">Ingresa el correo</span></div>
-      <div class="field" id="adm-pass"><label for="admPass">Contraseña</label><input id="admPass" type="password" autocomplete="current-password"><span class="field-err">Ingresa la contraseña</span></div>
+  <dialog id="dlgAdmin" class="dlg adm-dlg" aria-labelledby="admTitulo">
+    <form id="admForm" method="dialog" novalidate>
+      <button type="button" class="adm-x" id="admX" aria-label="Cerrar" title="Cerrar">✕</button>
+      <div class="adm-head">
+        <div class="adm-badge"><svg viewBox="0 0 24 24"><path d="M12 3 4.5 6v5.5c0 4.6 3.1 8.3 7.5 9.5 4.4-1.2 7.5-4.9 7.5-9.5V6L12 3Z"/><path d="m9 12 2.2 2.2L15.2 10"/></svg></div>
+        <h3 id="admTitulo">Acceso de administrador</h3>
+        <span class="adm-modo" id="admModo"></span>
+        <p id="admAyuda"></p>
+      </div>
+      <div class="field adm-f" id="adm-mail"><label for="admMail">Correo</label>
+        <div class="adm-in"><svg class="adm-ic" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m4 7 8 6 8-6"/></svg><input id="admMail" type="email" autocomplete="username" placeholder="tu@correo.com" spellcheck="false"></div>
+        <span class="field-err">Ingresa el correo</span></div>
+      <div class="field adm-f" id="adm-pass"><label for="admPass">Contraseña</label>
+        <div class="adm-in"><svg class="adm-ic" viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg><input id="admPass" type="password" autocomplete="current-password" placeholder="••••••••">
+          <button type="button" class="adm-ojo" id="admOjo" aria-label="Mostrar contraseña" title="Mostrar / ocultar contraseña"><svg viewBox="0 0 24 24"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+        <span class="adm-caps" id="admCaps" hidden>⇪ Bloq Mayús está activado</span>
+        <span class="field-err">Ingresa la contraseña</span></div>
       <div id="admMsg"></div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" type="submit" id="admEntrar">Entrar</button><button class="btn-sec" type="button" id="admCancel">Cancelar</button></div>
+      <div class="adm-btns"><button class="btn adm-go" type="submit" id="admEntrar">Entrar</button><button class="btn-sec" type="button" id="admCancel">Cancelar</button></div>
+      <p class="adm-nota"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8.5 11V8a3.5 3.5 0 0 1 7 0v3"/></svg><span>El panel no guarda tu contraseña. Los privilegios de administrador los concede la base de datos, no esta página.</span></p>
     </form>
   </dialog>
 
@@ -1116,7 +1172,7 @@ async function authEntrar(email, pass) {
   let d;
   if (fuente === 'cloud') {
     const r = await fetch(`${API.replace(/\/rest\/v1$/, '')}/auth/v1/token?grant_type=password`, { method: 'POST', headers: { apikey: CLAVE_PUBLICA, 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password: pass }) });
-    d = await r.json().catch(() => ({})); if (!r.ok) throw new Error(d.error_description || d.msg || 'Correo o contraseña incorrectos.');
+    d = await r.json().catch(() => ({})); if (!r.ok) throw new Error(/invalid login|invalid_grant|credentials/i.test(String(d.error_description || d.msg || '')) || !(d.error_description || d.msg) ? 'Correo o contraseña incorrectos.' : (/email not confirmed/i.test(String(d.error_description || d.msg)) ? 'El correo todavía no está confirmado en Supabase.' : (d.error_description || d.msg)));
     AUTH.refresh = d.refresh_token;
   } else {
     const r = await fetch('/local-admin-token'); d = await r.json().catch(() => ({})); if (!r.ok) throw new Error(d.error || 'No disponible: abre el panel desde http://localhost:8300 con iniciar_todo.bat.');
@@ -1141,7 +1197,9 @@ $('#btnAdmin').addEventListener('click', () => {
   if (AUTH.token) { if (confirm('¿Cerrar la sesión de administrador?')) authSalir(); return; }
   $('#admMsg').innerHTML = ''; $('#admPass').value = '';
   const local = fuente !== 'cloud';
-  $('#admAyuda').textContent = local ? 'Modo local: entras como «admin@local», solo en esta PC.' : 'Escribe el correo y la contraseña de tu usuario administrador (los que creaste en Supabase). El panel no los guarda.';
+  $('#admModo').textContent = local ? 'Modo local · solo esta PC' : 'Nube · Supabase'; $('#admModo').classList.toggle('local', local);
+  $('#admOjo').classList.remove('on'); $('#admPass').type = 'password'; $('#admCaps').hidden = true; marcarError('adm-mail', false); marcarError('adm-pass', false);
+  $('#admAyuda').textContent = local ? 'Entras como «admin@local», sin contraseña. Sirve para probar las funciones de administrador en esta PC.' : 'Ingresa el correo y la contraseña del usuario administrador que creaste en Supabase.';
   $('#adm-mail').style.display = $('#adm-pass').style.display = local ? 'none' : '';
   $('#dlgAdmin').showModal(); if (!local) $('#admMail').focus();
 });
@@ -1150,14 +1208,19 @@ $('#admForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const local = fuente !== 'cloud', mail = $('#admMail').value.trim(), pass = $('#admPass').value;
   if (!local) { marcarError('adm-mail', !mail); marcarError('adm-pass', !pass); if (!mail || !pass) return; }
-  const btn = $('#admEntrar'); btn.disabled = true; btn.textContent = 'Entrando…';
+  const btn = $('#admEntrar'); btn.disabled = true; btn.textContent = 'Entrando…'; btn.classList.add('cargando');
   try {
     const admin = await authEntrar(mail, pass); $('#admPass').value = '';
     if (admin) $('#dlgAdmin').close();
     else $('#admMsg').innerHTML = '<div class="msg err" style="margin-top:10px">La sesión es válida, pero este correo <b>no es administrador</b>. Debe estar en la tabla <code>admins</code> (admin_acceso.sql).</div>';
   } catch (err) { $('#admMsg').innerHTML = `<div class="msg err" style="margin-top:10px">${esc(err.message)}</div>`; }
-  finally { btn.disabled = false; btn.textContent = 'Entrar'; }
+  finally { btn.disabled = false; btn.textContent = 'Entrar'; btn.classList.remove('cargando'); }
 });
+$('#admX').addEventListener('click', () => $('#dlgAdmin').close());
+$('#dlgAdmin').addEventListener('click', (e) => { if (e.target === $('#dlgAdmin')) $('#dlgAdmin').close(); });   // clic fuera de la tarjeta
+$('#admOjo').addEventListener('click', () => { const ver = $('#admPass').type === 'password'; $('#admPass').type = ver ? 'text' : 'password'; $('#admOjo').classList.toggle('on', ver); $('#admOjo').setAttribute('aria-label', ver ? 'Ocultar contraseña' : 'Mostrar contraseña'); $('#admPass').focus(); });
+['keydown', 'keyup'].forEach(ev => $('#admPass').addEventListener(ev, (e) => { try { $('#admCaps').hidden = !e.getModifierState('CapsLock'); } catch (x) {} }));
+['admMail', 'admPass'].forEach(id => $('#' + id).addEventListener('input', () => marcarError(id === 'admMail' ? 'adm-mail' : 'adm-pass', false)));
 
 // ── navegación por botones (una sola página) ──
 document.querySelectorAll('#nav button').forEach(b => {
