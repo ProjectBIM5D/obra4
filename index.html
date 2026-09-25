@@ -509,7 +509,7 @@ textarea{resize:vertical;min-height:70px;font-family:inherit;}
 }
 #laTip.tt{pointer-events:auto;}
 .lt-edit{display:block;width:calc(100% - 26px);margin:0 13px 13px;height:38px;border-radius:9px;border:1px solid var(--blue);background:var(--blue);color:#fff;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;}
-.lt-edit:active{filter:brightness(.92);}
+.lt-edit:active{filter:brightness(.92);} .lt-edit{touch-action:manipulation;-webkit-tap-highlight-color:transparent;min-height:42px;}
 /* formularios del Look Ahead: ventana flotante */
 #laFondo{position:fixed;inset:0;z-index:119;background:rgba(2,6,23,.55);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);}
 #laForm:not([hidden]),#laNuevoBox:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(600px,calc(100vw - 20px));max-height:calc(100vh - 24px);overflow-y:auto;margin:0;
@@ -2783,16 +2783,23 @@ function laIniciarTip() {
     if (tp + h > innerHeight - 8) tp = y - h - 16; if (tp < 8) tp = 8;
     el.style.left = Math.round(l) + 'px'; el.style.top = Math.round(tp) + 'px';
   };
+  const tactil = () => matchMedia('(hover:none)').matches;
+  const ponerBarra = (b, x) => {   // táctil: debajo de la barra (o encima si no cabe), centrado en el toque
+    const r = b.getBoundingClientRect(), w = el.offsetWidth, h = el.offsetHeight;
+    const l = Math.min(Math.max(8, x - w / 2), Math.max(8, innerWidth - w - 8));
+    let tp = r.bottom + 8; if (tp + h > innerHeight - 8) tp = r.top - h - 8; if (tp < 8) tp = Math.max(8, innerHeight - h - 8);
+    el.style.left = Math.round(l) + 'px'; el.style.top = Math.round(tp) + 'px';
+  };
   document.addEventListener('mouseover', (e) => {
     const b = e.target.closest('#laDer .la-b, #laDer .la-res'); if (!b) return;
     const tr = b.closest('tr'); if (!tr) return;
     let html = '', tipo = 'n', ed = false;
     if (b.classList.contains('la-b')) { const f = LA.det.find(x => x.id === tr.dataset.id); if (!f) return; ed = matchMedia('(hover:none)').matches && tr.classList.contains('editable'); html = laTipHtml(f, ed); tipo = f.critico ? 'cr' : (f.concepto === 'adicional' ? 'ad' : 'n'); }
     else { const it = LA._grp && LA._grp.get(tr.dataset.nodo); if (!it) return; html = laTipGrupoHtml(it); tipo = 'g'; }
-    if (obj === b) return; obj = b; el.className = 'on ' + tipo + (ed ? ' tt' : ''); el.innerHTML = html; poner(e.clientX, e.clientY);
+    if (obj === b) return; obj = b; el.className = 'on ' + tipo + (ed ? ' tt' : ''); el.innerHTML = html; if (tactil()) ponerBarra(b, e.clientX); else poner(e.clientX, e.clientY);
     clearTimeout(cierre); if (matchMedia('(hover:none)').matches) cierre = setTimeout(ocultar, ed ? 12000 : 6000);   // en pantallas táctiles no hay «salir del cursor»
   });
-  document.addEventListener('mousemove', (e) => { if (obj) poner(e.clientX, e.clientY); });
+  document.addEventListener('mousemove', (e) => { if (obj && !tactil()) poner(e.clientX, e.clientY); });
   document.addEventListener('mouseout', (e) => { if (obj && !(e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest('#laTip')) && !(e.relatedTarget && obj.contains(e.relatedTarget)) && !(e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest('#laDer .la-b, #laDer .la-res') === obj)) ocultar(); });
   ['#laDer', '#laIzq'].forEach(s => { const p = $(s); if (p) p.addEventListener('scroll', ocultar, { passive: true }); });
   document.addEventListener('touchstart', (e) => { if (!e.target.closest('#laDer .la-b, #laDer .la-res, #laTip')) ocultar(); }, { passive: true });
