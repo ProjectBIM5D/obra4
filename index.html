@@ -572,6 +572,7 @@ html.cel .pt-sem{padding:6px 10px;}
 :root .tb-btn.tb-ic{width:34px;padding:0;font-size:18px;line-height:1;}
 :root .tb-sel{height:34px;border-radius:9px;border:1px solid var(--line2);background-color:var(--card);color:var(--tx);padding:0 26px 0 10px;font-size:12.5px;font-family:inherit;max-width:230px;min-width:0;}
 :root .tb-sel:focus,.tb-btn:focus-visible{outline:2px solid var(--blue);outline-offset:1px;}
+#laApp .tb-sel,#ptApp .tb-sel{min-width:0;}   /* (una regla antigua fijaba #laSel en 250 px) */
 .tb-chip{display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 11px;border:1px solid var(--line2);border-radius:9px;background:var(--card);color:var(--tx2);font-size:12.5px;font-weight:600;cursor:pointer;user-select:none;white-space:nowrap;}
 .tb-chip input{width:15px;height:15px;accent-color:var(--blue);margin:0;cursor:pointer;}
 .tb-chip:hover{border-color:var(--blue);}
@@ -619,6 +620,9 @@ html.cel .side-tg{display:none;}
   html.side-mini:not(.cel) .side-tg{margin:4px 8px 8px;} html.side-mini:not(.cel) .side-tg::before{content:"»";} html.side-mini:not(.cel) .side-tg::after{display:none;}
 }
 /* celular: botones solo con icono */
+/* tablet: la barra cabe en dos filas (selectores más angostos y «Cerrar semana» solo con el candado) */
+html.tab .tb-sel{max-width:185px;}
+html.tab #laCerrar .tb-t,html.tab #ptCerrar .tb-t{display:none;}
 html.cel .tb-t{display:none;}
 html.cel .tb-sel{max-width:150px;padding-left:8px;}
 html.cel .tb-chip{padding:0 9px;} html.cel .tb-chip span{font-size:0;} html.cel .tb-chip span::before{content:"Crít.";font-size:12px;}
@@ -2709,7 +2713,7 @@ function laIniciarFrame() {
   };
   iz.addEventListener('scroll', seguir(iz, de), { passive: true });
   de.addEventListener('scroll', seguir(de, iz), { passive: true });
-  sp.addEventListener('pointerdown', (e) => { e.preventDefault(); sp.setPointerCapture(e.pointerId); sp._x0 = e.clientX; sp._w0 = iz.offsetWidth; sp.classList.add('arrastra'); document.body.style.userSelect = 'none'; });
+  sp.addEventListener('pointerdown', (e) => { e.preventDefault(); try { sp.setPointerCapture(e.pointerId); } catch (x) {} sp._x0 = e.clientX; sp._w0 = iz.offsetWidth; sp.classList.add('arrastra'); document.body.style.userSelect = 'none'; });
   sp.addEventListener('pointermove', (e) => {
     if (!sp.classList.contains('arrastra')) return;
     const px = Math.round(Math.max(120, Math.min(fr.clientWidth - 140, sp._w0 + e.clientX - sp._x0)));
