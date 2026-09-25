@@ -533,6 +533,23 @@ html.la-modal{overflow:hidden;}
 .ppc-leg .fila:hover,.ppc-leg .fila.on{background:var(--input);} .ppc-leg .fila.on .nom{color:var(--tx);}
 .ppc-nota{margin:8px 2px 0;font-size:11px;color:var(--mut);text-align:center;}
 
+/* ═══ Plan semanal a dos paneles: la fila de cada actividad mide lo mismo que sus dos filas (Plan y Real) ═══ */
+:root .pt-tabla.la-t-izq tr.fila-izq td{height:56px;}
+:root .pt-tabla.la-t-izq td.act .nom{white-space:normal;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+:root .pt-tabla.la-t-der td{border-right:1px solid var(--lline);}
+:root .pt-tabla.la-t-der td.pl,:root .pt-tabla.la-t-der td.rl{padding:1px 3px;height:28px;}
+:root .pt-tabla input.dia{height:24px;padding:0 5px;}
+:root .pt-tabla.la-t-der tr.fila-real td{border-bottom:1px solid var(--lline);}
+.pt-tabla .quitar{opacity:.55;} .pt-tabla tr:hover .quitar{opacity:1;}
+
+/* ═══ Plan semanal: barra compacta ═══ */
+.tb-blq{max-width:120px;}
+.tb-pac{display:inline-flex;align-items:center;height:26px;padding:0 10px;border-radius:999px;font-size:12px;font-weight:800;background:var(--input);color:var(--mut);border:1px solid var(--line2);white-space:nowrap;cursor:help;}
+.tb-pac.ok{background:rgba(14,143,79,.14);color:var(--green);border-color:rgba(14,143,79,.4);} .tb-pac.bajo{background:rgba(217,119,6,.14);color:var(--amber);border-color:rgba(217,119,6,.4);}
+.tb-lista{min-width:320px;max-width:min(460px,92vw);max-height:min(360px,55vh);overflow-y:auto;}
+.tb-menu button .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600;font-size:12px;} .tb-menu button small{color:var(--mut);font-weight:700;}
+:root .pt-tabla input.dia{width:54px;}
+
 /* ═══ avisos flotantes ═══ */
 #toasts{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:600;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none;width:min(560px,calc(100vw - 20px));}
 .toast{pointer-events:auto;display:flex;align-items:flex-start;gap:10px;width:100%;padding:11px 10px 11px 12px;border-radius:12px;background:var(--card);color:var(--tx);border:1px solid var(--line2);box-shadow:0 14px 40px rgba(2,6,23,.34);font-size:13px;line-height:1.4;animation:toastIn .2s ease;}
@@ -604,8 +621,9 @@ html.cel .pt-sem{padding:6px 10px;}
 
 /* ═══ barra de herramientas compacta (estilo ejecutivo) y menú lateral plegable ═══ */
 .tb{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 8px;}
-.tb-g{display:flex;flex-wrap:nowrap;align-items:center;gap:6px;min-width:0;max-width:100%;}
+.tb-g{display:flex;flex:0 0 auto;flex-wrap:nowrap;align-items:center;gap:6px;min-width:0;max-width:100%;}
 .tb-acc{margin-left:auto;}
+.tb-seg,.tb-chip,.tb-btn,.tb-add,.tb-mas,.tb .badge{flex:0 0 auto;}   /* solo los selectores se encogen cuando falta espacio */
 :root .tb-btn{display:inline-flex;align-items:center;justify-content:center;gap:0;height:34px;padding:0 12px;border-radius:9px;border:1px solid var(--line2);background:var(--card);color:var(--tx);font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:inherit;transition:border-color .12s,background .12s,color .12s,filter .12s;}
 :root .tb-btn:hover:not(:disabled){border-color:var(--blue);color:var(--blue-tx);}
 :root .tb-btn:disabled{opacity:.45;cursor:default;}
@@ -1151,8 +1169,12 @@ html.cel .tb-btn{padding:0 10px;} html.cel :root .tb-btn.tb-ic{padding:0;}
       <div id="ptApp">
         <div class="tb">
           <div class="tb-g">
-            <select id="ptLook" class="tb-sel" aria-label="Look Ahead"></select>
+            <select id="ptLook" class="tb-sel tb-blq" aria-label="Bloque de Look Ahead (4 semanas)" title="Bloque de Look Ahead"></select>
+            <button type="button" class="tb-btn tb-ic" id="ptPrev" title="Semana anterior" aria-label="Semana anterior">‹</button>
+            <select id="ptSemSel" class="tb-sel" aria-label="Semana"></select>
+            <button type="button" class="tb-btn tb-ic" id="ptNext" title="Semana siguiente" aria-label="Semana siguiente">›</button>
             <span id="ptEstado" class="badge"></span>
+            <span id="ptPacChip" class="tb-pac"></span>
           </div>
           <div class="tb-g">
             <select id="ptComp" class="tb-sel" aria-label="Componente"></select>
@@ -1163,19 +1185,21 @@ html.cel .tb-btn{padding:0 10px;} html.cel :root .tb-btn.tb-ic{padding:0;}
           </div>
           <div class="tb-g tb-acc">
             <button type="button" class="tb-btn pri" id="ptCrear" title="Crear el plan de la semana con las actividades del Look Ahead que caen en esa semana">＋<span class="tb-t"> Crear plan</span></button>
-            <span class="tb-add">
-              <select id="ptAgregarSel" class="tb-sel" aria-label="Actividad del Look Ahead a agregar"></select>
-              <button type="button" class="tb-btn" id="ptAgregar" title="Agregar al plan de la semana">＋<span class="tb-t"> Agregar</span></button>
+            <span class="tb-mas">
+              <button type="button" class="tb-btn" id="ptAgregar" data-tbmas title="Agregar al plan una actividad del Look Ahead">＋<span class="tb-t"> Actividad</span> ▾</button>
+              <div class="tb-menu tb-lista" id="ptAgregarMenu" hidden></div>
             </span>
             <button type="button" class="tb-btn" id="ptCerrar" title="Cerrar la semana: el plan y el parte diario de esa semana ya no se podrán modificar">🔒<span class="tb-t"> Cerrar semana</span></button>
-            <button type="button" class="tb-btn adm" id="ptReabrir" hidden title="Solo administrador: vuelve a habilitar el plan y el parte diario de la semana">🔓<span class="tb-t"> Reabrir (admin)</span></button>
+            <button type="button" class="tb-btn adm" id="ptReabrir" hidden title="Solo administrador: vuelve a habilitar el plan y el parte diario de la semana">🔓<span class="tb-t"> Reabrir</span></button>
           </div>
         </div>
-        <div class="pt-semanas" id="ptSemanas"></div>
-        <div id="ptKpis" class="pt-kpis"></div>
-        <p class="hint" id="ptInfo" style="margin:6px 0 10px"></p>
+        <p class="hint tb-info" id="ptInfo"></p>
         <div id="ptMsg"></div>
-        <div class="la-wrap" id="ptWrap"><table class="la-tabla pt-tabla" id="ptTabla"></table></div>
+        <div class="la-frame" id="ptFrame">
+          <div class="la-pane la-izq" id="ptIzq"><div id="ptIzIn"><table class="la-tabla pt-tabla la-t-izq" id="ptTabla"></table></div></div>
+          <div class="la-split" id="ptSplit" role="separator" aria-orientation="vertical" title="Arrastra para mover la división entre la actividad y los días · doble clic: restablecer"></div>
+          <div class="la-pane la-der" id="ptDer"><table class="la-tabla pt-tabla la-t-der" id="ptTablaDer"></table></div>
+        </div>
       </div>
     </section>
 
@@ -2600,7 +2624,7 @@ function laToggleGrupo(id) { if (LA.colap.has(id)) LA.colap.delete(id); else LA.
 document.addEventListener('click', (e) => {
   const b = e.target.closest('[data-lagrupos]');
   if (b) { if (b.dataset.lagrupos === 'abrir') LA.colap.clear(); else (LA._tit || []).forEach(x => { if (x.nivel >= 1) LA.colap.add(x.id); }); laRefrescarGrupos(); return; }
-  const tr = e.target.closest('#laFrame tr.tit, #ptTabla tr.tit');
+  const tr = e.target.closest('#laFrame tr.tit, #ptFrame tr.tit');
   if (tr && tr.dataset.nodo) laToggleGrupo(tr.dataset.nodo);
 });
 const laSemana = (n) => LA.semanas.find(s => s.numero === n);
@@ -3105,86 +3129,90 @@ function ptPacTexto(filas) {
 
 function ptRender() {
   const look = ptLookAct(), plan = ptPlan();
-  $('#ptLook').innerHTML = LA.looks.length ? LA.looks.map(l => `<option value="${l.id}">Semanas ${l.semana}–${l.semana + l.semanas - 1} · ${laFmt(laSemana(l.semana).fecha_inicio)}${l.estado === 'cerrado' ? ' · cerrado' : ''}</option>`).join('') : '<option value="">(sin Look Ahead)</option>';
+  $('#ptLook').innerHTML = LA.looks.length ? LA.looks.map(l => `<option value="${l.id}">Sem. ${l.semana}–${l.semana + l.semanas - 1}${l.estado === 'cerrado' ? ' 🔒' : ''}</option>`).join('') : '<option value="">(sin Look Ahead)</option>';
   if (look) $('#ptLook').value = look.id;
   $('#ptComp').innerHTML = '<option value="">Todos los puentes</option>' + COMPONENTES.map(c => `<option value="${esc(c.id)}">${esc(c.nombre)}</option>`).join(''); $('#ptComp').value = PT.comp;
   const tabla = $('#ptTabla');
-  if (!look) { tabla.innerHTML = ''; $('#ptSemanas').innerHTML = ''; $('#ptKpis').innerHTML = ''; $('#ptInfo').textContent = 'Primero crea un Look Ahead (pestaña Look Ahead).'; ['ptCrear', 'ptAgregar', 'ptCerrar'].forEach(i => { $('#' + i).disabled = true; }); return; }
+  if (!look) { tabla.innerHTML = ''; $('#ptTablaDer').innerHTML = ''; $('#ptSemSel').innerHTML = ''; $('#ptPacChip').textContent = ''; $('#ptInfo').textContent = 'Primero crea un Look Ahead (pestaña Look Ahead).'; ['ptCrear', 'ptAgregar', 'ptCerrar'].forEach(i => { $('#' + i).disabled = true; }); return; }
 
-  // botones de las semanas del bloque, con su PAC
-  $('#ptSemanas').innerHTML = [...Array(look.semanas).keys()].map(i => {
+  // semana: lista desplegable con su PAC (reemplaza a las pastillas)
+  const meta0 = Number((PT.det[0] || {}).pac_meta || 0.9);
+  $('#ptSemSel').innerHTML = [...Array(look.semanas).keys()].map(i => {
     const n = look.semana + i, s = laSemana(n), p = PT.planes.find(x => x.semana === n), k = ptPacTexto(PT.det.filter(f => f.semana === n));
-    return `<button type="button" class="pt-sem ${n === PT.sem ? 'on' : ''}" data-sem="${n}"><b>Semana ${n}</b><small>${laFmt(s.fecha_inicio)} – ${laFmt(s.fecha_fin)}</small><br>`
-      + (p ? `<span class="pac ${k.pac == null ? '' : (k.pac >= Number((PT.det[0] || {}).pac_meta || 0.9) ? 'ok' : 'bajo')}">${k.pac == null ? 'PAC —' : 'PAC ' + Math.round(k.pac * 100) + '%'}${p.estado === 'cerrado' ? ' · 🔒' : ''}</span>` : '<span class="pac">sin plan</span>') + '</button>';
+    return `<option value="${n}">S${n} · ${laFmt(s.fecha_inicio).slice(0, 5)}–${laFmt(s.fecha_fin).slice(0, 5)} · ${p ? (k.pac == null ? '—' : Math.round(k.pac * 100) + '%') + (p.estado === 'cerrado' ? ' 🔒' : '') : 'sin plan'}</option>`;
   }).join('');
+  $('#ptSemSel').value = PT.sem;
+  const iSem = PT.sem - look.semana; $('#ptPrev').disabled = iSem <= 0; $('#ptNext').disabled = iSem >= look.semanas - 1;
   const est = $('#ptEstado');
-  est.textContent = (plan ? (plan.estado === 'cerrado' ? '🔒 Semana cerrada' : '✏️ Semana en borrador') : 'Sin plan de esta semana') + (AUTH.admin && plan ? ' · 🛡 admin' : '');
+  est.textContent = (plan ? (plan.estado === 'cerrado' ? '🔒 Cerrada' : '✏️ Borrador') : 'Sin plan') + (AUTH.admin && plan ? ' · 🛡' : '');
   est.style.cssText = plan ? (plan.estado === 'cerrado' ? 'background:#8393b226;color:var(--mut)' : 'background:#3b82f626;color:var(--blue-tx)') : 'background:#d9770626;color:var(--amber)';
   const editable = !!plan && plan.estado === 'borrador';   // cerrado = bloqueado para todos hasta «Reabrir»
   $('#ptReabrir').hidden = !(AUTH.admin && plan && plan.estado === 'cerrado');
-  $('#ptCrear').disabled = !!plan; $('#ptCerrar').disabled = !(plan && plan.estado === 'borrador'); $('#ptAgregar').disabled = !editable; $('#ptAgregarSel').disabled = !editable;
+  // solo se muestran los botones que sirven en este momento
+  $('#ptCrear').hidden = !!plan; $('#ptCerrar').hidden = !editable; $('#ptAgregar').parentElement.hidden = !editable;
   const enPlan = new Set(PT.det.filter(f => f.semana === PT.sem).map(f => f.actividad_id));
   const libres = PT.acts.filter(a => !enPlan.has(a.id));
-  $('#ptAgregarSel').innerHTML = libres.length ? libres.map(a => `<option value="${a.id}">${esc(a.nodo_codigo)} · ${esc(laCaso(a.partida).slice(0, 42))}</option>`).join('') : '<option value="">(no quedan actividades)</option>';
-
+  $('#ptAgregarMenu').innerHTML = libres.length ? libres.map(a => `<button type="button" data-add="${a.id}" title="${esc(a.nodo_codigo)}"><span class="nm">${esc(String(a.partida).toUpperCase())}</span><small>${esc(a.unidad || '')}</small></button>`).join('') : '<p class="hint" style="margin:8px 10px">No quedan actividades del Look Ahead por agregar.</p>';
   const filas = PT.det.filter(f => f.semana === PT.sem && (!PT.comp || f.proyecto === PT.comp));
   ptKpis(filas);
   const sem = ptSemFechas(), d0 = laDia(sem.fecha_inicio);
   $('#ptInfo').innerHTML = plan
-    ? `<b>Semana ${PT.sem}</b> · ${laFmt(sem.fecha_inicio)} – ${laFmt(sem.fecha_fin)} · ${filas.length} actividad${filas.length === 1 ? '' : 'es'} en el plan. ${editable ? 'Edita el <b>Plan</b> de cada día; el <b>Real</b> se registra aquí o en el Parte diario.' : ('Semana cerrada: solo lectura.' + (AUTH.admin ? ' Usa «Reabrir (admin)» para poder editarla.' : ''))}`
-    : `No hay plan para la semana ${PT.sem}. Usa «＋ Crear plan de la semana»: se arma con las actividades del Look Ahead que caen en esa semana.`;
-  if (!plan) { tabla.innerHTML = ''; return; }
+    ? `${filas.length} actividad${filas.length === 1 ? '' : 'es'} · ${editable ? 'edita el <b>Plan</b> y el <b>Real</b> de cada día (el Real también se registra en el Parte diario)' : 'semana cerrada: solo lectura' + (AUTH.admin ? ' · usa «Reabrir» para editarla' : '')}`
+    : `No hay plan para la semana ${PT.sem}: usa «＋ Crear plan» (se arma con las actividades del Look Ahead que caen en esa semana).`;
+  if (!plan) { tabla.innerHTML = ''; $('#ptTablaDer').innerHTML = ''; return; }
 
   const hoy = laHoy();
   const dias = [...Array(7).keys()].map(k => laFecha(d0 + k));
-  let html = `<thead><tr><th class="izq itm">ITEM</th><th class="izq act">DESCRIPCIÓN DE LA ACTIVIDAD</th><th>UND</th><th>ACUM. ANTERIOR</th><th>MEDIDA</th>`
-    + dias.map((d, k) => `<th class="${dias[k] === hoy ? 'hoy' : ''}">${LET_PT[k]}<br><span style="font-weight:500">${d.slice(8, 10)}/${d.slice(5, 7)}</span></th>`).join('')
-    + `<th>PLAN / REAL</th><th>KPI AVANCE SPI</th><th>PAC<br>SÍ</th><th>PAC<br>NO</th><th>CAUSAS DE INCUMPLIMIENTO</th><th>RESTRICCIONES</th><th>COMENTARIOS</th></tr></thead><tbody>`;
+  // dos paneles con las mismas filas: a la izquierda la actividad, a la derecha los días (Plan / Real) y el análisis
+  let hIz = `<thead><tr><th class="izq act">ACTIVIDAD</th><th>UND</th><th>ACUM. ANT.</th></tr></thead><tbody>`;
+  let hDe = `<thead><tr><th>MEDIDA</th>` + dias.map((d, k) => `<th class="${dias[k] === hoy ? 'hoy' : ''}">${LET_PT[k]}<br><span style="font-weight:500">${d.slice(8, 10)}/${d.slice(5, 7)}</span></th>`).join('')
+    + `<th>TOTAL</th><th>SPI</th><th>PAC<br>SÍ</th><th>PAC<br>NO</th><th>CAUSA DE INCUMPLIMIENTO</th><th>RESTRICCIONES</th><th>COMENTARIOS</th></tr></thead><tbody>`;
   const arbol = laArbol(filas);
-  const NC = 5 + 7 + 7;
-  const tituloPt = (it) => `<tr class="tit n${Math.min(it.nivel, 3)}" data-nodo="${it.nodo.id}" style="--cc:${laColor(it.cod)};--ccr:${laColorRgb(it.cod)}"><td colspan="${NC}" title="Clic para contraer o expandir"><span class="nom" style="--lvl:${it.nivel};padding-left:calc(10px + ${it.nivel} * 14px)">${laTituloNom(it)}</span></td></tr>`;
-  if (!filas.length) html += `<tr><td colspan="${NC}" style="padding:22px;text-align:center;color:var(--mut)">${PT.det.some(f => f.semana === PT.sem) ? 'Ninguna actividad cumple el filtro.' : 'Este plan todavía no tiene actividades: usa «＋ Agregar al plan».'}</td></tr>`;
+  const NCd = 1 + 7 + 1 + 3 + 3;   // columnas del panel derecho
+  const atr = (it, r) => `data-nodo="${it.nodo.id}" data-r="${r}" style="--cc:${laColor(it.cod)};--ccr:${laColorRgb(it.cod)}"`;
+  const tituloPt = (it, r) => [
+    `<tr class="tit n${Math.min(it.nivel, 3)}" ${atr(it, r)}><td colspan="3" title="Clic para contraer o expandir"><span class="nom" style="--lvl:${it.nivel};padding-left:calc(10px + ${it.nivel} * 14px)">${laTituloNom(it)}</span></td></tr>`,
+    `<tr class="tit n${Math.min(it.nivel, 3)}" ${atr(it, r)}><td colspan="${NCd}"></td></tr>`];
+  if (!filas.length) { hIz += `<tr><td colspan="3" style="padding:22px;text-align:center;color:var(--mut);white-space:normal">${PT.det.some(f => f.semana === PT.sem) ? 'Ninguna actividad cumple el filtro.' : 'Este plan todavía no tiene actividades: usa «＋ Agregar».'}</td></tr>`; hDe += `<tr><td colspan="${NCd}" style="height:70px"></td></tr>`; }
   const opcCausa = (v) => '<option value="">—</option>' + PT.causas.map(c => `<option value="${c.codigo}" ${c.codigo === v ? 'selected' : ''}>${esc(c.nombre)}</option>`).join('');
+  let nFila = 0;
   for (const it of arbol) {
     if (laOculto(it)) continue;   // dentro de un grupo contraído
-    if (it.t) { html += tituloPt(it); continue; }
-    {
-      {
-        const f = it.f, nivel = it.nivel;
-        const ini = laDia(f.act_inicio) - d0, fin = laDia(f.act_fin) - d0;
-        const celdas = (tipo) => dias.map((d, k) => {
-          const clave = tipo === 'plan' ? DIAS_PT[k] : REAL_PT[k], v = Number(f[clave] || 0), fuera = k < ini || k > fin;
-          const dis = !editable || (tipo === 'real' && d > hoy && false);
-          return `<td class="${tipo === 'plan' ? 'pl' : 'rl'} ${k >= 5 ? 'fs' : ''} ${fuera ? 'fuera' : ''}"><input class="dia ${tipo}" type="number" min="0" step="0.01" ${dis ? 'disabled' : ''} value="${v ? v : ''}" data-fila="${f.fila_id}" data-tipo="${tipo}" data-k="${k}" data-act="${f.actividad_id}" data-fecha="${d}" title="${tipo === 'plan' ? 'Meta' : 'Ejecutado'} del ${LET_PT[k]} ${d.slice(8, 10)}/${d.slice(5, 7)}"></td>`;
-        }).join('');
-        html += `<tr class="fila-plan act-row" data-fila="${f.fila_id}"><td rowspan="2" class="mono itm" style="font-size:10.5px">${esc(f.nodo_codigo)}</td>`
-          + `<td rowspan="2" class="act" style="--lvl:${nivel}" title="${esc(f.partida + (f.detalle ? ' — ' + f.detalle : '') + ' · ' + f.nodo_codigo + (f.codigo_esp ? ' · ' + f.codigo_esp : ''))}"><span class="nom">${f.critico ? '<span class="dot" title="Crítica"></span>' : ''}${esc(String(f.partida).toUpperCase())}${f.concepto === 'adicional' ? '<span class="tag-adi">ADI</span>' : ''}${editable ? ` <button class="quitar" title="Quitar del plan de la semana" data-quitar="${f.fila_id}">✕</button>` : ''}</span></td>`
-          + `<td rowspan="2" class="c">${esc(f.unidad || '')}</td><td rowspan="2" class="n" data-c="acum">${num2(f.acum_anterior)}</td>`
-          + `<td class="medida">Plan</td>${celdas('plan')}<td class="n" data-c="plan_total" style="font-weight:700">${num2(f.plan_total)}</td>`
-          + `<td rowspan="2" class="n" data-c="spi">${f.spi == null ? '' : (f.spi * 100).toFixed(0) + '%'}</td>`
-          + `<td rowspan="2" data-c="si" class="${f.pac === true ? 'si' : ''}">${f.pac === true ? 'X' : ''}</td><td rowspan="2" data-c="no" class="${f.pac === false ? 'no' : ''}">${f.pac === false ? 'X' : ''}</td>`
-          + `<td rowspan="2"><select class="causa" data-fila="${f.fila_id}" data-campo="causa" ${editable ? '' : 'disabled'}>${opcCausa(f.causa)}</select></td>`
-          + `<td rowspan="2"><textarea class="txt" data-fila="${f.fila_id}" data-campo="restricciones" ${editable ? '' : 'disabled'} placeholder="Restricciones">${esc(f.restricciones || '')}</textarea></td>`
-          + `<td rowspan="2"><textarea class="txt" data-fila="${f.fila_id}" data-campo="comentarios" ${editable ? '' : 'disabled'} placeholder="Comentarios">${esc(f.comentarios || '')}</textarea></td></tr>`
-          + `<tr class="fila-real" data-fila="${f.fila_id}"><td class="medida">Real</td>${celdas('real')}<td class="n" data-c="real_total" style="font-weight:700">${num2(f.real_total)}</td></tr>`;
-      }
-    }
+    const r = nFila++;
+    if (it.t) { const [a, b] = tituloPt(it, r); hIz += a; hDe += b; continue; }
+    const f = it.f, nivel = it.nivel;
+    const ini = laDia(f.act_inicio) - d0, fin = laDia(f.act_fin) - d0;
+    const celdas = (tipo) => dias.map((d, k) => {
+      const clave = tipo === 'plan' ? DIAS_PT[k] : REAL_PT[k], v = Number(f[clave] || 0), fuera = k < ini || k > fin;
+      const dis = !editable;
+      return `<td class="${tipo === 'plan' ? 'pl' : 'rl'} ${k >= 5 ? 'fs' : ''} ${fuera ? 'fuera' : ''}"><input class="dia ${tipo}" type="number" min="0" step="0.01" ${dis ? 'disabled' : ''} value="${v ? v : ''}" data-fila="${f.fila_id}" data-tipo="${tipo}" data-k="${k}" data-act="${f.actividad_id}" data-fecha="${d}" title="${tipo === 'plan' ? 'Meta' : 'Ejecutado'} del ${LET_PT[k]} ${d.slice(8, 10)}/${d.slice(5, 7)}"></td>`;
+    }).join('');
+    hIz += `<tr class="fila-izq act-row" data-fila="${f.fila_id}" data-r="${r}"><td class="act" style="--lvl:${nivel}" title="${esc(f.partida + (f.detalle ? ' — ' + f.detalle : '') + ' · ' + f.nodo_codigo + (f.codigo_esp ? ' · ' + f.codigo_esp : ''))}"><span class="nom">${f.critico ? '<span class="dot" title="Crítica"></span>' : ''}${esc(String(f.partida).toUpperCase())}${f.concepto === 'adicional' ? '<span class="tag-adi">ADI</span>' : ''}${editable ? ` <button class="quitar" title="Quitar del plan de la semana" data-quitar="${f.fila_id}">✕</button>` : ''}</span></td>`
+      + `<td class="c">${esc(f.unidad || '')}</td><td class="n" data-c="acum">${num2(f.acum_anterior)}</td></tr>`;
+    hDe += `<tr class="fila-plan act-row" data-fila="${f.fila_id}" data-r="${r}"><td class="medida">Plan</td>${celdas('plan')}<td class="n" data-c="plan_total" style="font-weight:700">${num2(f.plan_total)}</td>`
+      + `<td rowspan="2" class="n" data-c="spi">${f.spi == null ? '' : (f.spi * 100).toFixed(0) + '%'}</td>`
+      + `<td rowspan="2" data-c="si" class="${f.pac === true ? 'si' : ''}">${f.pac === true ? 'X' : ''}</td><td rowspan="2" data-c="no" class="${f.pac === false ? 'no' : ''}">${f.pac === false ? 'X' : ''}</td>`
+      + `<td rowspan="2"><select class="causa" data-fila="${f.fila_id}" data-campo="causa" ${editable ? '' : 'disabled'}>${opcCausa(f.causa)}</select></td>`
+      + `<td rowspan="2"><textarea class="txt" data-fila="${f.fila_id}" data-campo="restricciones" ${editable ? '' : 'disabled'} placeholder="Restricciones">${esc(f.restricciones || '')}</textarea></td>`
+      + `<td rowspan="2"><textarea class="txt" data-fila="${f.fila_id}" data-campo="comentarios" ${editable ? '' : 'disabled'} placeholder="Comentarios">${esc(f.comentarios || '')}</textarea></td></tr>`
+      + `<tr class="fila-real act-row" data-fila="${f.fila_id}" data-r="${r}"><td class="medida">Real</td>${celdas('real')}<td class="n" data-c="real_total" style="font-weight:700">${num2(f.real_total)}</td></tr>`;
   }
-  tabla.innerHTML = html + '</tbody>';
+  tabla.style.removeProperty('--nd');
+  tabla.innerHTML = hIz + '</tbody>'; $('#ptTablaDer').innerHTML = hDe + '</tbody>';
+  PT_PANES.sync();
 }
 
 function ptKpis(filas) {
-  const k = ptPacTexto(filas), meta = Number((PT.det[0] || {}).pac_meta || 0.9);
-  const cumple = k.pac != null && k.pac >= meta;
-  $('#ptKpis').innerHTML = `<div class="pt-kpi"><span>PAC de la semana</span><b style="color:${k.pac == null ? 'var(--mut)' : (cumple ? 'var(--green)' : 'var(--amber)')}">${k.pac == null ? '—' : Math.round(k.pac * 100) + '%'}</b><small>${k.total ? `${k.si} SÍ · ${k.no} NO de ${k.total}` : 'sin actividades con plan'}</small></div>`
-    + `<div class="pt-kpi"><span>Meta del PAC</span><b>${Math.round(meta * 100)}%</b><small>${k.pac == null ? '' : (cumple ? 'meta cumplida' : 'por debajo de la meta')}</small></div>`
-    + `<div class="pt-kpi"><span>Actividades con plan</span><b>${k.total}</b><small>en esta semana</small></div>`;
+  const k = ptPacTexto(filas), meta = Number((PT.det[0] || {}).pac_meta || 0.9), cumple = k.pac != null && k.pac >= meta, chip = $('#ptPacChip');
+  chip.textContent = k.pac == null ? 'PAC —' : 'PAC ' + Math.round(k.pac * 100) + '%';
+  chip.className = 'tb-pac ' + (k.pac == null ? '' : (cumple ? 'ok' : 'bajo'));
+  chip.title = k.total ? `${k.si} SÍ · ${k.no} NO de ${k.total} actividades con plan · meta ${Math.round(meta * 100)}% (${cumple ? 'cumplida' : 'por debajo de la meta'})` : 'Sin actividades con plan';
 }
 
 // actualiza SOLO las celdas calculadas de una fila (sin redibujar todo, para no perder el foco al escribir)
 function ptActualizarFila(f) {
   ptRecalc(f);
-  const q = (c, tr) => document.querySelector(`#ptTabla tr[data-fila="${f.fila_id}"]${tr || ''} [data-c="${c}"]`);
+  const q = (c, tr) => document.querySelector(`#ptFrame tr[data-fila="${f.fila_id}"]${tr || ''} [data-c="${c}"]`);
   const set = (c, txt, cls, tr) => { const e = q(c, tr); if (e) { e.textContent = txt; if (cls !== undefined) e.className = cls; } };
   set('plan_total', num2(f.plan_total), 'n', '.fila-plan'); set('real_total', num2(f.real_total), 'n', '.fila-real');
   set('spi', f.spi == null ? '' : (f.spi * 100).toFixed(0) + '%', 'n'); set('si', f.pac === true ? 'X' : '', f.pac === true ? 'si' : ''); set('no', f.pac === false ? 'X' : '', f.pac === false ? 'no' : '');
@@ -3192,9 +3220,10 @@ function ptActualizarFila(f) {
   ptResumenSemanas();
 }
 function ptResumenSemanas() {
-  document.querySelectorAll('#ptSemanas .pt-sem').forEach(b => {
-    const n = +b.dataset.sem, p = PT.planes.find(x => x.semana === n), k = ptPacTexto(PT.det.filter(f => f.semana === n));
-    const sp = b.querySelector('.pac'); if (p && sp) sp.textContent = (k.pac == null ? 'PAC —' : 'PAC ' + Math.round(k.pac * 100) + '%') + (p.estado === 'cerrado' ? ' · 🔒' : '');
+  const s = $('#ptSemSel'); if (!s) return;
+  [...s.options].forEach(o => {
+    const n = +o.value, p = PT.planes.find(x => x.semana === n), k = ptPacTexto(PT.det.filter(f => f.semana === n)), base = o.textContent.split(' · ').slice(0, 2).join(' · ');
+    o.textContent = base + ' · ' + (p ? (k.pac == null ? '—' : Math.round(k.pac * 100) + '%') + (p.estado === 'cerrado' ? ' 🔒' : '') : 'sin plan');
   });
 }
 
@@ -3218,10 +3247,56 @@ async function ptFilasNuevas(actividades, planId, semIni) {
     return { plan_id: planId, actividad_id: a.id, orden: i + 1, plan_l: p[0], plan_m: p[1], plan_x: p[2], plan_j: p[3], plan_v: p[4], plan_s: p[5], plan_d: p[6] }; });
 }
 
+// ── dos paneles (columnas | días) con divisor arrastrable y desplazamiento vertical unido: mismo comportamiento que el Look Ahead ──
+function dosPaneles(c) {
+  const fr = $(c.fr), iz = $(c.iz), de = $(c.de), sp = $(c.sp), tIz = $(c.tIz), tDe = $(c.tDe), inn = $(c.izIn);
+  if (!fr) return { sync() {} };
+  const sync = () => {
+    if (!fr.offsetWidth) return;
+    const cel = document.documentElement.classList.contains('cel');
+    let ancho = 0; tIz.querySelectorAll('td.act .nom').forEach(n => { if (n.scrollWidth > ancho) ancho = n.scrollWidth; });
+    fr.style.setProperty('--actw', Math.max(cel ? 130 : 150, Math.min(ancho + 24, cel ? Math.round(fr.clientWidth * 0.45) : 300, Math.round(fr.clientWidth * 0.6))) + 'px');
+    if (!fr._izqUser) fr.style.setProperty('--izq', Math.round(Math.min(tIz.offsetWidth + 2, fr.clientWidth * (cel ? 0.5 : 0.56))) + 'px');   // se ven todas las columnas de la izquierda; el resto es para los días
+    const hd = tDe.querySelector('thead th'); if (hd) tIz.querySelectorAll('thead th').forEach(th => { th.style.height = hd.offsetHeight + 'px'; });
+    // la fila de cada actividad (izquierda) mide lo mismo que sus filas del panel derecho (Plan + Real)
+    const alt = new Map(); tDe.querySelectorAll('tbody tr[data-r]').forEach(tr => alt.set(tr.dataset.r, (alt.get(tr.dataset.r) || 0) + tr.getBoundingClientRect().height));
+    tIz.querySelectorAll('tbody tr[data-r]').forEach(tr => { const h = alt.get(tr.dataset.r); if (h) tr.querySelectorAll('td').forEach(td => { td.style.height = h + 'px'; }); });
+    const sbDe = de.offsetHeight - de.clientHeight, sbIz = iz.offsetHeight - iz.clientHeight;
+    inn.style.paddingBottom = Math.max(0, sbDe - sbIz) + 'px';
+    if (iz.scrollTop !== de.scrollTop) iz.scrollTop = de.scrollTop;
+  };
+  let g = 0; try { g = +localStorage.getItem(c.clave) || 0; } catch (e) {}
+  if (g >= 120) { fr._izqUser = g; fr.style.setProperty('--izq', g + 'px'); }
+  const seguir = (a, b) => () => {
+    if (a._eco != null && Math.abs(a.scrollTop - a._eco) < 1.5) { a._eco = null; return; }
+    if (Math.abs(b.scrollTop - a.scrollTop) > 0.5) { b._eco = a.scrollTop; b.scrollTop = a.scrollTop; }
+  };
+  iz.addEventListener('scroll', seguir(iz, de), { passive: true });
+  de.addEventListener('scroll', seguir(de, iz), { passive: true });
+  sp.addEventListener('pointerdown', (e) => { e.preventDefault(); try { sp.setPointerCapture(e.pointerId); } catch (x) {} sp._x0 = e.clientX; sp._w0 = iz.offsetWidth; sp.classList.add('arrastra'); document.body.style.userSelect = 'none'; });
+  sp.addEventListener('pointermove', (e) => {
+    if (!sp.classList.contains('arrastra')) return;
+    const px = Math.round(Math.max(120, Math.min(fr.clientWidth - 140, sp._w0 + e.clientX - sp._x0))); fr._izqUser = px; fr.style.setProperty('--izq', px + 'px');
+  });
+  const fin = () => { if (!sp.classList.contains('arrastra')) return; sp.classList.remove('arrastra'); document.body.style.userSelect = ''; try { localStorage.setItem(c.clave, String(fr._izqUser)); } catch (x) {} sync(); };
+  sp.addEventListener('pointerup', fin); sp.addEventListener('pointercancel', fin);
+  sp.addEventListener('dblclick', () => { fr._izqUser = 0; try { localStorage.removeItem(c.clave); } catch (x) {} sync(); });
+  fr.addEventListener('mouseover', (e) => {
+    const tr = e.target.closest('tr[data-r]'); fr.querySelectorAll('tr.hov').forEach(x => x.classList.remove('hov'));
+    if (tr) fr.querySelectorAll(`tr[data-r="${tr.dataset.r}"]`).forEach(x => x.classList.add('hov'));
+  });
+  fr.addEventListener('mouseleave', () => fr.querySelectorAll('tr.hov').forEach(x => x.classList.remove('hov')));
+  if (window.ResizeObserver) new ResizeObserver(sync).observe(fr);
+  return { sync };
+}
+const PT_PANES = dosPaneles({ fr: '#ptFrame', iz: '#ptIzq', de: '#ptDer', sp: '#ptSplit', izIn: '#ptIzIn', tIz: '#ptTabla', tDe: '#ptTablaDer', clave: 'obra-pt-izq' });
+
 function ptIniciar() {
   $('#ptLook').addEventListener('change', async (e) => { PT.look = e.target.value; PT.sem = null; await ptCargarLook(); });
   $('#ptComp').addEventListener('change', (e) => { PT.comp = e.target.value; ptRender(); });
-  $('#ptSemanas').addEventListener('click', (e) => { const b = e.target.closest('.pt-sem'); if (b) { PT.sem = +b.dataset.sem; ptMsg(''); ptRender(); } });
+  $('#ptSemSel').addEventListener('change', (e) => { PT.sem = +e.target.value; ptMsg(''); ptRender(); });
+  const irSem = (d) => { const look = ptLookAct(); if (!look) return; const n = PT.sem + d; if (n >= look.semana && n < look.semana + look.semanas) { PT.sem = n; ptMsg(''); ptRender(); } };
+  $('#ptPrev').addEventListener('click', () => irSem(-1)); $('#ptNext').addEventListener('click', () => irSem(1));
 
   $('#ptCrear').addEventListener('click', async () => {
     const look = ptLookAct(); if (!look || ptPlan()) return;
@@ -3235,8 +3310,9 @@ function ptIniciar() {
       await ptCargarLook(); ptMsg(`Plan de la semana ${PT.sem} creado con ${filas.length} actividad${filas.length === 1 ? '' : 'es'}. Ajusta el Plan de cada día si hace falta.`, true);
     } catch (err) { ptMsg(`No se pudo crear el plan: ${ptErr(err)}`, false); }
   });
-  $('#ptAgregar').addEventListener('click', async () => {
-    const plan = ptPlan(), id = $('#ptAgregarSel').value, a = PT.acts.find(x => x.id === id); if (!plan || !a) return;
+  $('#ptAgregarMenu').addEventListener('click', async (e) => {   // elegir una actividad de la lista la agrega al plan
+    const b = e.target.closest('[data-add]'); if (!b) return;
+    const plan = ptPlan(), a = PT.acts.find(x => x.id === b.dataset.add); if (!plan || !a) return;
     try {
       const [fila] = await ptFilasNuevas([a], plan.id, ptSemFechas().fecha_inicio);
       fila.orden = PT.det.filter(f => f.semana === PT.sem).reduce((m, f) => Math.max(m, f.orden), 0) + 1;
@@ -3250,7 +3326,7 @@ function ptIniciar() {
   });
 
   // edición en la grilla: Plan -> plan_semanal_actividades; Real -> avance_diario (parte diario); análisis -> la misma fila del plan
-  $('#ptTabla').addEventListener('change', async (e) => {
+  $('#ptFrame').addEventListener('change', async (e) => {
     const el = e.target, fila = el.dataset.fila; if (!fila) return;
     const f = PT.det.find(x => x.fila_id === fila); if (!f) return;
     try {
@@ -3268,7 +3344,7 @@ function ptIniciar() {
       ptMsg('');
     } catch (err) { ptMsg(`No se pudo guardar: ${ptErr(err)}`, false); if (el.matches('input.dia')) { const k = +el.dataset.k, val = Number(f[el.dataset.tipo === 'plan' ? DIAS_PT[k] : REAL_PT[k]] || 0); el.value = val ? val : ''; } }
   });
-  $('#ptTabla').addEventListener('click', async (e) => {
+  $('#ptFrame').addEventListener('click', async (e) => {
     const b = e.target.closest('[data-quitar]'); if (!b || !confirm('¿Quitar esta actividad del plan de la semana? (no se borra del Look Ahead ni el parte diario)')) return;
     try { await ptEnviar('DELETE', `/plan_semanal_actividades?id=eq.${b.dataset.quitar}`); await ptCargarLook(); ptMsg('Actividad quitada del plan.', true); }
     catch (err) { ptMsg(`No se pudo quitar: ${ptErr(err)}`, false); }
