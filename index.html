@@ -721,6 +721,30 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
   #informe *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
 }
 
+/* ═══ módulo Valorizaciones ═══ */
+.vl-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px 16px;margin:0 0 12px;}
+.vl-kp{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px;}
+.vl-k{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--kc,#2f6fed);border-radius:12px;padding:12px 16px;box-shadow:var(--shadow);min-width:0;}
+.vl-k small{display:block;font-size:10.5px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--mut);}
+.vl-k b{display:block;font-size:21px;font-weight:800;margin:2px 0;font-variant-numeric:tabular-nums;} .vl-k em{display:block;font-style:normal;font-size:11.5px;color:var(--mut);}
+.vl-k .bar{height:6px;border-radius:3px;background:var(--line);margin-top:4px;overflow:hidden;} .vl-k .bar i{display:block;height:100%;background:var(--kc,#2f6fed);}
+.vl-card{background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:14px 16px;margin-bottom:14px;}
+.vl-card h3{margin:0 0 2px;font-size:13.5px;} .vl-card p.hint{margin:0 0 8px;font-size:11.5px;color:var(--mut);}
+.vl-card svg{display:block;width:100%;height:auto;}
+.vl-tw{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:10px;}
+.vl-tb{width:100%;min-width:900px;border-collapse:collapse;font-size:12px;}
+.vl-tb th,.vl-tb td{padding:8px 10px;border-top:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
+.vl-tb thead th{border-top:0;background:#17335a;color:#fff;font-size:11px;font-weight:800;letter-spacing:.3px;text-align:center;}
+.vl-tb th:first-child,.vl-tb td:first-child{text-align:center;font-weight:800;} .vl-tb td.l{text-align:left;}
+.vl-tb tbody tr:hover td{background:var(--input);}
+.vl-tb tr.prop td{background:#f59e0b12;} .vl-tb tr.tot td{border-top:2px solid var(--line2);background:var(--input);font-weight:800;}
+.vl-pill{display:inline-block;font-size:10.5px;font-weight:800;padding:2px 9px;border-radius:999px;} .vl-pill.ok{background:#10b98122;color:var(--green);} .vl-pill.pr{background:#f59e0b26;color:var(--rg-am,#a85a08);}
+.vl-pbar{display:inline-block;vertical-align:middle;width:64px;height:7px;border-radius:4px;background:var(--line);overflow:hidden;margin-right:6px;} .vl-pbar i{display:block;height:100%;background:var(--blue);}
+.vl-tb button{font:inherit;font-size:11px;font-weight:700;padding:3px 10px;border-radius:7px;border:1px solid var(--line2);background:var(--card);color:var(--tx);cursor:pointer;} .vl-tb button:hover{border-color:var(--blue);color:var(--blue);}
+.vl-tb button.ok{background:var(--blue);border-color:var(--blue);color:#fff;} .vl-tb button.ok:hover{filter:brightness(1.08);color:#fff;}
+@media (max-width:900px){.vl-kp{grid-template-columns:1fr 1fr;}}
+@media (max-width:560px){.vl-kp{grid-template-columns:1fr;}}
+
 /* ═══ avisos flotantes ═══ */
 #toasts{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:600;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none;width:min(560px,calc(100vw - 20px));}
 .toast{pointer-events:auto;display:flex;align-items:flex-start;gap:10px;width:100%;padding:11px 10px 11px 12px;border-radius:12px;background:var(--card);color:var(--tx);border:1px solid var(--line2);box-shadow:0 14px 40px rgba(2,6,23,.34);font-size:13px;line-height:1.4;animation:toastIn .2s ease;}
@@ -953,6 +977,7 @@ html.dens-densa{--rh:26px;--rh0:31px;--rh1:26px;--rh2:24px;--rh3:22px;--fc:10.5p
       <button data-pane="lookahead" title="Plan de 4 semanas"><span class="ni">📅</span><span class="nt">Look Ahead</span></button>
       <button data-pane="pts" title="Meta y real por día"><span class="ni">📆</span><span class="nt">Plan semanal</span></button>
       <button data-pane="ppc" title="Cumplimiento del plan"><span class="ni">📈</span><span class="nt">PPC</span></button>
+      <button data-pane="valorizaciones" title="Valor ganado: valorizaciones mensuales del contrato, adicionales y mayores metrados"><span class="ni">💰</span><span class="nt">Valorizaciones</span></button>
       <button data-pane="produccion" class="disabled" title="Próximamente: aún sin datos reales cargados"><span class="ni">⚙️</span><span class="nt">Producción</span></button>
       <a href="visor/" id="visorLink" title="Modelo BIM del puente"><span class="ni">🧊</span><span class="nt">Visor 3D</span></a>
     </nav>
@@ -1017,6 +1042,11 @@ html.dens-densa{--rh:26px;--rh0:31px;--rh1:26px;--rh2:24px;--rh3:22px;--fc:10.5p
         <button class="seg-btn" data-alc="contrato">Contrato principal</button>
         <button class="seg-btn" data-alc="adicional">Adicional</button>
         <button class="seg-btn" data-alc="todo">Contrato + adicional</button>
+      </p>
+      <p class="api" id="valBox" style="display:none;margin:8px 0 0">Valorizaciones:
+        <button class="seg-btn" data-vprop="0" title="Solo lo aprobado por el residente (cifras oficiales)">Solo aprobadas</button>
+        <button class="seg-btn" data-vprop="1" title="Suma también las valorizaciones en propuesta (aún sin conciliar)">Incluir propuestas</button>
+        <span id="valNota" class="hint" style="margin-left:6px"></span>
       </p>
       <br>
 
@@ -1112,6 +1142,19 @@ html.dens-densa{--rh:26px;--rh0:31px;--rh1:26px;--rh2:24px;--rh3:22px;--fc:10.5p
 
       <div id="rgGrid"><div class="rg-msg">Consultando la API…</div></div>
       <p class="rg-nota" id="rgNota"></p>
+    </section>
+
+    <!-- ═══════════ VALORIZACIONES ═══════════ -->
+    <section class="pane" data-pane="valorizaciones">
+      <div class="vl-top">
+        <p class="api" style="margin:0">Tipo:
+          <button class="seg-btn" data-vtipo="contrato">Contrato principal</button>
+          <button class="seg-btn" data-vtipo="adicional">Adicionales</button>
+          <button class="seg-btn" data-vtipo="mayores_metrados">Mayores metrados</button>
+        </p>
+        <span class="hint" id="vlNota"></span>
+      </div>
+      <div id="vlCuerpo"><div class="rg-msg">Consultando las valorizaciones…</div></div>
     </section>
 
     <!-- ═══════════ PARTE DIARIO ═══════════ -->
@@ -1815,18 +1858,22 @@ document.querySelectorAll('#nav button').forEach(b => {
       materiales: ['Registro de materiales', 'Metas totales y avance mensual por frente'],
       lookahead: ['Look Ahead', 'Plan de 4 semanas · Last Planner: actividades ligadas al valorizado'],
       pts: ['Plan semanal', 'Meta y real por día de las actividades del Look Ahead · PAC de la semana'],
-      ppc: ['PPC', 'Porcentaje de actividades completadas: trazabilidad semanal y causas de incumplimiento'] };
+      ppc: ['PPC', 'Porcentaje de actividades completadas: trazabilidad semanal y causas de incumplimiento'],
+      valorizaciones: ['Valorizaciones', 'Valor ganado: lo valorizado mes a mes (contrato, adicionales y mayores metrados)'] };
     if (titles[b.dataset.pane]) { $('#pageTitle').textContent = titles[b.dataset.pane][0]; $('#pageSub').textContent = titles[b.dataset.pane][1]; }
     if (esCelular) celPantalla(PANES_ANCHOS.includes(b.dataset.pane));
     if (b.dataset.pane === 'lookahead') laCargar();
     if (b.dataset.pane === 'pts') ptCargar();
     if (b.dataset.pane === 'ppc') ppcCargar();
+    if (b.dataset.pane === 'valorizaciones') valCargar();
     if (b.dataset.pane === 'parte' && !$('#parteLA').hidden) plaCargar();
     $('#side').classList.remove('open'); $('#overlay').classList.remove('on');
   });
 });
 // ── confirmaciones dentro de la página: la ventana del navegador (confirm) saca de la pantalla completa; esta no ──
 function confirmarInfo(m) {
+  if (/valorizaci[oó]n/i.test(m) && /^Aprobar/.test(m)) return { titulo: 'Aprobar valorización', si: 'Aprobar' };
+  if (/valorizaci[oó]n/i.test(m) && /^Reabrir/.test(m)) return { titulo: 'Reabrir valorización', si: 'Reabrir', peligro: true };
   if (/sesi[oó]n/i.test(m)) return { titulo: 'Cerrar sesión', si: 'Cerrar sesión' };
   if (/ELIMINAR|Confirma otra vez/.test(m)) return { titulo: 'Eliminar Look Ahead', si: 'Eliminar', peligro: true };
   if (/Quitar/.test(m)) return { titulo: 'Quitar actividad', si: 'Quitar', peligro: true };
@@ -2115,7 +2162,7 @@ function renderCurvaS() {
   // no hace falta un globo/popup flotante encima. ──
   $('#curvaMesSel').innerHTML = periodos.map(p => {
     const d = new Date(p);
-    return `<option value="${p}">${MESES_ES[d.getUTCMonth()]}-${String(d.getUTCFullYear()).slice(2)}</option>`;
+    return `<option value="${p}">${MESES_ES[d.getUTCMonth()]}-${String(d.getUTCFullYear()).slice(2)}${PROP_MESES.has(p) ? ' (propuesta)' : ''}</option>`;
   }).join('');
   // al abrir se elige el ÚLTIMO MES CON AVANCE REGISTRADO (no el mes de hoy); sin avance registrado, el mes de hoy
   const porDefecto = periodos.filter(p => porPeriodo[p].ejecP > 0).pop() || periodos.filter(p => new Date(p).getTime() <= hoy.getTime()).pop() || periodos[periodos.length-1];
@@ -2755,7 +2802,7 @@ function renderKpisYTabla(partidas, avanceRows, progRows, periodo) {
   const pctProg = presu ? prog/presu : 0;
 
   const fechaCorte = periodo ? new Date(periodo) : null;
-  $('#kpiMes').textContent = fechaCorte ? `Corte: ${MESES_ES[fechaCorte.getUTCMonth()]} ${fechaCorte.getUTCFullYear()} (Curva S real)` : '';
+  $('#kpiMes').textContent = fechaCorte ? `Corte: ${MESES_ES[fechaCorte.getUTCMonth()]} ${fechaCorte.getUTCFullYear()} (Curva S real${periodo && PROP_MESES.has(periodo) ? ' · incluye valorización en PROPUESTA, sin conciliar' : ''})` : '';
   $('#kPresu').textContent = fmt(presu);
   $('#kPresuS').textContent = `${porComponente.length} frente${porComponente.length===1?'':'s'} con datos`;
   $('#kProg').textContent = fmt(prog);
@@ -2785,6 +2832,102 @@ function restaurarVista() {
     setTimeout(() => window.scrollTo(0, v.y || 0), 900);
   } catch (e) {}
 }
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('[data-vprop]'); if (!b) return;
+  INCLUIR_PROP = b.dataset.vprop === '1'; try { localStorage.setItem('obra-incluir-prop', INCLUIR_PROP ? '1' : '0'); } catch (x) {}
+  if (RES_A) { curvaPopupFijo = null; aplicarResumen(RES_A, RES_B); }
+});
+function valBoxActualizar() {
+  const A = RES_A, val = A ? (A.valEj || []).filter(r => r.tipo === 'contrato' || r.tipo === 'adicional') : [], props = [...new Set(val.filter(r => r.estado !== 'aprobada').map(r => r.numero))].sort((a, b) => a - b);
+  const box = $('#valBox'); if (!box) return;
+  box.style.display = props.length || INCLUIR_PROP ? '' : 'none';
+  document.querySelectorAll('[data-vprop]').forEach(b => b.classList.toggle('on', (b.dataset.vprop === '1') === INCLUIR_PROP));
+  $('#valNota').textContent = props.length ? `Valorización ${props.join(', ')} en propuesta (sin conciliar)${INCLUIR_PROP ? ' — incluida' : ' — no incluida'}` : '';
+}
+// ══ Módulo VALORIZACIONES: valor ganado mes a mes, por tipo (contrato · adicional · mayores metrados) ══
+let VAL = { tipo: 'contrato', vals: [], ejec: [], ok: false };
+const TIPO_VAL = { contrato: 'Contrato principal', adicional: 'Adicionales', mayores_metrados: 'Mayores metrados' };
+async function valCargar() {
+  const box = $('#vlCuerpo'); if (!box) return;
+  try {
+    const [vals, ejec] = await Promise.all([
+      get('/valorizaciones?select=id,tipo,numero,estado,mes,aprobado_por,aprobado_en,archivo_origen,monto_oficial&order=tipo,numero'),
+      getTodo('/v_ejecutado_mes?select=proyecto_id,tipo,estado,mes,numero,monto_subtotal&order=proyecto_id,tipo,mes,estado')]);
+    VAL.vals = vals; VAL.ejec = ejec; VAL.ok = true;
+  } catch (e) {
+    box.innerHTML = '<div class="rg-msg">Este módulo necesita las tablas de valorizaciones. Pide al administrador que corra <b>valorizaciones_schema.sql</b> y la carga de valorizaciones en la base.</div>'; return;
+  }
+  if (!VAL.vals.some(v => v.tipo === VAL.tipo)) VAL.tipo = (VAL.vals[0] || {}).tipo || 'contrato';
+  valPintar();
+}
+document.addEventListener('click', (e) => { const b = e.target.closest('[data-vtipo]'); if (b && !b.disabled) { VAL.tipo = b.dataset.vtipo; valPintar(); } });
+function valPintar() {
+  const box = $('#vlCuerpo'); if (!box || !VAL.ok) return;
+  const tipos = new Set(VAL.vals.map(v => v.tipo));
+  document.querySelectorAll('[data-vtipo]').forEach(b => { b.classList.toggle('on', b.dataset.vtipo === VAL.tipo); b.disabled = !tipos.has(b.dataset.vtipo); b.title = tipos.has(b.dataset.vtipo) ? '' : 'Todavía no hay valorizaciones de este tipo'; });
+  const vt = VAL.vals.filter(v => v.tipo === VAL.tipo);
+  if (!vt.length) { box.innerHTML = '<div class="rg-msg">Todavía no hay valorizaciones cargadas.</div>'; $('#vlNota').textContent = ''; return; }
+  const A = RES_A || { proyectos: [], progRows: [] }, frentes = A.proyectos || [];
+  const concepto = VAL.tipo === 'adicional' ? 'adicional' : VAL.tipo === 'contrato' ? 'contrato' : null;
+  const presu = concepto ? (A.progRows || []).filter(r => (r.concepto || 'contrato') === concepto).reduce((s, r) => s + (Number(r.programado_parcial) || 0), 0) : 0;
+  const N0 = (n) => Number(n || 0).toLocaleString('es-PE', { maximumFractionDigits: 0 }), N2 = (n) => Number(n || 0).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const MES = (m) => { const d = new Date(m); return `${MESES_ES[d.getUTCMonth()]}-${String(d.getUTCFullYear()).slice(2)}`; };
+  let acum = 0, acumApr = 0;
+  const filas = vt.map(v => {
+    const porF = {}; let tot = 0;
+    VAL.ejec.filter(x => x.tipo === v.tipo && x.numero === v.numero).forEach(x => { const m = Number(x.monto_subtotal) || 0; porF[x.proyecto_id] = (porF[x.proyecto_id] || 0) + m; tot += m; });
+    const mes = v.monto_oficial != null ? Number(v.monto_oficial) : tot; acum += mes; if (v.estado === 'aprobada') acumApr += mes;
+    return { v, porF, mes, acum, pct: presu ? acum / presu : null };
+  });
+  const props = filas.filter(f => f.v.estado !== 'aprobada'), pMonto = props.reduce((s, f) => s + f.mes, 0), ult = filas[filas.length - 1];
+  $('#vlNota').textContent = presu ? `Montos sin IGV · presupuesto ${TIPO_VAL[VAL.tipo].toLowerCase()}: S/. ${N0(presu)}` : 'Montos sin IGV';
+  const kp = (color, lab, val, sub, barra) => `<div class="vl-k" style="--kc:${color}"><small>${lab}</small><b>${val}</b>${barra != null ? `<div class="bar"><i style="width:${Math.min(100, barra * 100).toFixed(1)}%"></i></div>` : ''}<em>${sub}</em></div>`;
+  const kpis = `<div class="vl-kp">
+    ${kp('#0f766e', 'Presupuesto (subtotal)', presu ? 'S/. ' + N0(presu) : '—', TIPO_VAL[VAL.tipo])}
+    ${kp('#2f6fed', 'Valorizado aprobado', 'S/. ' + N0(acumApr), presu ? (acumApr / presu * 100).toFixed(1) + ' % del presupuesto · oficial' : 'oficial', presu ? acumApr / presu : null)}
+    ${kp('#d97706', 'En propuesta (sin conciliar)', 'S/. ' + N0(pMonto), props.length ? 'Valorización ' + props.map(f => f.v.numero).join(', ') : 'ninguna pendiente')}
+    ${kp('#7c3aed', 'Saldo por valorizar', presu ? 'S/. ' + N0(Math.max(0, presu - acum)) : '—', presu ? (Math.max(0, 1 - acum / presu) * 100).toFixed(1) + ' % · incluye propuestas' : '')}</div>`;
+  // gráfico: valorización de cada mes (barras) y % acumulado (línea)
+  const W = 900, H = 250, pl = 46, pr = 44, pt = 20, pb = 34, n = filas.length, paso = (W - pl - pr) / n, bw = Math.min(46, paso * .6);
+  const ymax = Math.max(1, ...filas.map(f => f.mes)) * 1.12, yb = (v) => H - pb - v / ymax * (H - pt - pb), yp = (p) => H - pb - Math.min(1, p) * (H - pt - pb);
+  let g = `<defs><pattern id="vlRay" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="#f59e0b"/><line x1="0" y1="0" x2="0" y2="6" stroke="#fff" stroke-width="2.5"/></pattern></defs>`;
+  [0, .25, .5, .75, 1].forEach(f => { const y = H - pb - f * (H - pt - pb); g += `<line x1="${pl}" y1="${y}" x2="${W - pr}" y2="${y}" stroke="${SVGC.grid}"/><text x="${pl - 6}" y="${y + 3}" font-size="9.5" fill="${SVGC.axis}" text-anchor="end">${(ymax * f / 1e6).toFixed(1)} M</text>${presu ? `<text x="${W - pr + 6}" y="${y + 3}" font-size="9.5" fill="#dc2626">${Math.round(f * 100)}%</text>` : ''}`; });
+  filas.forEach((f, i) => {
+    const cx = pl + paso * i + paso / 2, prop = f.v.estado !== 'aprobada', y = yb(f.mes);
+    g += `<rect x="${cx - bw / 2}" y="${y}" width="${bw}" height="${H - pb - y}" rx="3" fill="${prop ? 'url(#vlRay)' : '#2f6fed'}" opacity="${prop ? 1 : .88}"><title>Valorización ${f.v.numero} · ${MES(f.v.mes)} · S/. ${N2(f.mes)}${prop ? ' (propuesta)' : ''}</title></rect>
+      <text x="${cx}" y="${y - 4}" font-size="9.5" font-weight="700" fill="${SVGC.axis}" text-anchor="middle">${(f.mes / 1e6).toFixed(1)}</text>
+      <text x="${cx}" y="${H - pb + 14}" font-size="9.5" fill="${SVGC.axis}" text-anchor="middle">${MES(f.v.mes)}</text><text x="${cx}" y="${H - pb + 25}" font-size="8.5" fill="${SVGC.axis}" text-anchor="middle" opacity=".7">N° ${f.v.numero}</text>`;
+  });
+  if (presu) { g += `<path d="${filas.map((f, i) => `${i ? 'L' : 'M'} ${pl + paso * i + paso / 2} ${yp(f.pct)}`).join(' ')}" fill="none" stroke="#dc2626" stroke-width="2.2"/>` + filas.map((f, i) => `<circle cx="${pl + paso * i + paso / 2}" cy="${yp(f.pct)}" r="3.2" fill="#dc2626" stroke="#fff" stroke-width="1.2"/>`).join(''); }
+  const grafico = `<div class="vl-card"><h3>Valorización de cada mes y avance acumulado</h3><p class="hint">Barras: monto del mes (millones de S/.) · línea roja: % acumulado del presupuesto · barras rayadas: valorización en propuesta</p><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Valorizaciones por mes">${g}</svg></div>`;
+  // tabla resumen (una fila por valorización, una columna por frente)
+  const admin = !!AUTH.admin;
+  const cab = `<thead><tr><th>N°</th><th>Periodo</th><th>Estado</th>${frentes.map(p => `<th>${esc(String(p.nombre).replace(/^Puente\s+/i, ''))}</th>`).join('')}<th>Valorización del mes</th><th>Acumulado</th><th>% avance</th><th>Saldo por valorizar</th>${admin ? '<th></th>' : ''}</tr></thead>`;
+  const cuerpo = filas.map(f => `<tr class="${f.v.estado !== 'aprobada' ? 'prop' : ''}"><td>${f.v.numero}</td><td class="l">${MES(f.v.mes)}</td>
+      <td>${f.v.estado === 'aprobada' ? `<span class="vl-pill ok" title="${esc('Aprobada por ' + (f.v.aprobado_por || '') + (f.v.aprobado_en ? ' · ' + String(f.v.aprobado_en).slice(0, 10) : ''))}">✔ Aprobada</span>` : '<span class="vl-pill pr" title="Aún sin conciliar">◔ Propuesta</span>'}</td>
+      ${frentes.map(p => `<td title="S/. ${N2(f.porF[p.id])}">${f.porF[p.id] ? N0(f.porF[p.id]) : '—'}</td>`).join('')}
+      <td title="S/. ${N2(f.mes)}"><b>${N0(f.mes)}</b></td><td>${N0(f.acum)}</td>
+      <td>${f.pct == null ? '—' : `<span class="vl-pbar"><i style="width:${Math.min(100, f.pct * 100).toFixed(1)}%"></i></span>${(f.pct * 100).toFixed(1)}%`}</td>
+      <td>${presu ? N0(Math.max(0, presu - f.acum)) : '—'}</td>
+      ${admin ? `<td>${f.v.estado === 'aprobada' ? `<button data-vreabrir="${f.v.id}" title="Vuelve a propuesta para poder corregirla">Reabrir</button>` : `<button class="ok" data-vaprobar="${f.v.id}">Aprobar</button>`}</td>` : ''}</tr>`).join('');
+  const sumF = (id) => filas.reduce((s, f) => s + (f.porF[id] || 0), 0);
+  const pie = `<tr class="tot"><td></td><td class="l">Total</td><td></td>${frentes.map(p => `<td>${N0(sumF(p.id))}</td>`).join('')}<td>${N0(acum)}</td><td>${N0(acum)}</td><td>${presu ? (acum / presu * 100).toFixed(1) + '%' : '—'}</td><td>${presu ? N0(Math.max(0, presu - acum)) : '—'}</td>${admin ? '<td></td>' : ''}</tr>`;
+  box.innerHTML = kpis + grafico + `<div class="vl-card"><h3>Resumen de valorizaciones — ${esc(TIPO_VAL[VAL.tipo])}</h3><p class="hint">Valorización mensual sin IGV, por frente. Lo aprobado es lo oficial; la propuesta se actualiza cuando el residente la aprueba${admin ? '' : ' (solo el administrador aprueba)'}.</p><div class="vl-tw"><table class="vl-tb">${cab}<tbody>${cuerpo}${pie}</tbody></table></div></div>`;
+}
+document.addEventListener('click', async (e) => {
+  const a = e.target.closest('[data-vaprobar],[data-vreabrir]'); if (!a) return;
+  const ap = !!a.dataset.vaprobar, id = a.dataset.vaprobar || a.dataset.vreabrir, v = VAL.vals.find(x => x.id === id); if (!v) return;
+  const mes = (() => { const d = new Date(v.mes); return `${MESES_ES[d.getUTCMonth()]} ${d.getUTCFullYear()}`; })();
+  const ok = await confirmar(ap ? `Aprobar la valorización N° ${v.numero} (${mes}). Pasa a ser oficial y queda congelada hasta que se reabra.` : `Reabrir la valorización N° ${v.numero} (${mes}). Volverá a propuesta y sus cifras dejarán de ser oficiales.`);
+  if (!ok) return;
+  a.disabled = true;
+  try {
+    const r = await fetch(`${API}/rpc/${ap ? 'aprobar_valorizacion' : 'reabrir_valorizacion'}`, { method: 'POST', headers: { ...headers, 'Content-Type': 'application/json' }, body: JSON.stringify({ p_id: id }) });
+    if (!r.ok) { const d = await r.json().catch(() => ({})); throw new Error(d.message || `HTTP ${r.status}`); }
+    toast(`Valorización N° ${v.numero} ${ap ? 'aprobada' : 'reabierta'}.`, true);
+    await valCargar(); bootResumen();
+  } catch (err) { toast(`No se pudo ${ap ? 'aprobar' : 'reabrir'}: ${esc(err.message)}`, false); a.disabled = false; }
+});
 // ── carga del Resumen (Curva S y KPIs) ──
 // Tres mejoras de velocidad: (1) obra + componentes + cronograma vigente en UNA consulta (antes eran tres seguidas);
 // (2) los datos de la Curva S se pintan apenas llegan, sin esperar a los de Materiales (que son más pesados);
@@ -2794,6 +2937,31 @@ function cacheResLeer() {
   try { if (fuente !== 'cloud' || !AUTH.recordar) return null; const c = JSON.parse(localStorage.getItem(CACHE_RES) || 'null'); return c && c.email === AUTH.email && c.raw ? c : null; } catch (e) { return null; }
 }
 function cacheResGuardar(raw) { try { if (fuente === 'cloud' && AUTH.recordar) localStorage.setItem(CACHE_RES, JSON.stringify({ email: AUTH.email, t: Date.now(), raw })); } catch (e) {} }   // si no cabe, simplemente no se guarda
+// ── Valor ganado: el ejecutado de la Curva S sale de las VALORIZACIONES (v_ejecutado_mes). Solo las APROBADAS son lo oficial; las
+// PROPUESTAS (aún sin conciliar) se suman solo si se activa «incluir propuestas». Mayores metrados no entran a la Curva S.
+// Si un frente/tipo todavía no tiene valorizaciones, se sigue usando lo que traía curva_s_mensual.
+let INCLUIR_PROP = false; try { INCLUIR_PROP = localStorage.getItem('obra-incluir-prop') === '1'; } catch (e) {}
+let PROP_MESES = new Set();   // meses que hoy salen de una valorización en PROPUESTA
+let RES_A = null, RES_B = null;
+function ejecDesdeValorizaciones(A) {
+  const base = A.curvaMensualRaw || [], val = (A.valEj || []).filter(r => r.tipo === 'contrato' || r.tipo === 'adicional');
+  PROP_MESES = new Set();
+  if (!val.length) return base;
+  const con = new Set(val.map(r => r.proyecto_id + '|' + r.tipo));
+  const out = base.filter(r => !con.has(r.proyecto_id + '|' + (r.concepto || 'contrato')));   // lo que aún no tiene valorizaciones
+  const grupos = {};
+  val.forEach(r => {
+    if (r.estado !== 'aprobada' && !INCLUIR_PROP) return;
+    const k = r.proyecto_id + '|' + r.tipo, m = String(r.mes).slice(0, 7) + '-01';
+    (grupos[k] = grupos[k] || { pid: r.proyecto_id, con: r.tipo, meses: {} }).meses[m] = (grupos[k].meses[m] || 0) + (Number(r.monto_subtotal) || 0);
+    if (r.estado !== 'aprobada') PROP_MESES.add(m);
+  });
+  Object.values(grupos).forEach(g => {
+    let acum = 0;
+    Object.keys(g.meses).sort().forEach(m => { acum += g.meses[m]; out.push({ proyecto_id: g.pid, concepto: g.con, periodo: m, ejecutado_parcial: g.meses[m], ejecutado_acumulado: acum, programado_parcial: 0 }); });
+  });
+  return out;
+}
 function aplicarResumen(A, B) {   // A = obra, componentes, Curva S y avance · B = materiales (puede faltar al principio)
   OBRA = A.obra;
   $('#obraNombre').textContent = OBRA.nombre;
@@ -2807,13 +2975,15 @@ function aplicarResumen(A, B) {   // A = obra, componentes, Curva S y avance · 
   FILTRO_PROY = idList ? `proyecto_id=in.(${idList})` : 'proyecto_id=eq.00000000-0000-0000-0000-000000000000';
   const b = B || { materiales: [], matMetasTabla: [], metasVal: [], matAvance: [], matPartidas: [], matProg: [], matSinRegla: [] };
   const idToCodigo = Object.fromEntries(proyectos.map(p => [p.id, p.codigo]));
-  const curvaMensual = armarCurvaMensual(A.curvaMensualRaw, A.progRows, idToCodigo);
+  RES_A = A; RES_B = B;
+  const curvaMensual = armarCurvaMensual(ejecDesdeValorizaciones(A), A.progRows, idToCodigo);
   const eventosPlazo = A.plazoEventos.map(e => ({ ...e, proyecto_id_codigo: e.proyecto_id ? idToCodigo[e.proyecto_id] : null }));
   const hayAdicional = A.progRows.some(r => r.concepto === 'adicional');
   if (!hayAdicional && alcance !== 'contrato') alcance = 'contrato';
   DATA = { proyectos, partidas: A.partidas, avance: A.avance, programado: A.programado, curvaMensual, eventosPlazo, materiales: b.materiales, matMetas: combinarMetas(b.matMetasTabla, b.metasVal),
            matAvance: b.matAvance, matPartidas: b.matPartidas, matProg: b.matProg, matSinRegla: b.matSinRegla, version: A.progRows.length ? version : null, versionId: version ? version.id : null, plazos: A.plazos, hayAdicional };
   $('#alcanceBox').style.display = hayAdicional ? '' : 'none';
+  valBoxActualizar();
   renderAll();
   fillMatForms();
 }
@@ -2848,6 +3018,8 @@ async function bootResumen() {
       get(`/plazo_eventos?obra_id=eq.${obra.id}&select=id,proyecto_id,tipo,descripcion,fecha_inicio,fecha_fin`),
       version ? opcional(get(`/v_curva_s_programada?version_id=eq.${version.id}&select=proyecto_id,concepto,periodo_orden,fecha_fin,programado_parcial&order=periodo_orden`)) : Promise.resolve([]),
       opcional(get(`/v_plazo_componente?obra_id=eq.${obra.id}&select=codigo,fecha_inicio,plazo_dias,fecha_fin_original,dias_suspension,dias_ampliacion,dias_otros,fecha_fin_vigente`)),
+      // valorizaciones (valor ganado): ejecutado por mes, frente, tipo y estado (aprobada / propuesta)
+      opcional(getTodo(`/v_ejecutado_mes?${filtroProy}&select=proyecto_id,tipo,estado,mes,numero,monto_subtotal&order=proyecto_id,tipo,mes,estado`)),
     ]);
     const pB = Promise.all([
       opcional(get('/materiales?activo=eq.true&order=orden&select=id,codigo,nombre,unidad,orden')),
@@ -2861,8 +3033,8 @@ async function bootResumen() {
       opcional(getTodo(`/v_material_sin_regla?${filtroProy}&select=material,codigo_esp,nombre,metrado&order=codigo`)),
     ]);
     pB.catch(() => {});   // (cada consulta ya es opcional; esto evita avisos si alguna falla mientras se espera al grupo A)
-    const [partidas, avance, programado, curvaMensualRaw, plazoEventos, progRows, plazos] = await pA;
-    const A = { obra, proyectos, version, partidas, avance, programado, curvaMensualRaw, plazoEventos, progRows, plazos };
+    const [partidas, avance, programado, curvaMensualRaw, plazoEventos, progRows, plazos, valEj] = await pA;
+    const A = { obra, proyectos, version, partidas, avance, programado, curvaMensualRaw, plazoEventos, progRows, plazos, valEj };
     aplicarResumen(A, null);
     cacheResGuardar(A);
     cargarReporteGrupos(version, filtroProy);   // aparte: no retrasa la Curva S
@@ -4170,7 +4342,7 @@ function infHTML() {
   const ih = (s) => (document.querySelector(s) || {}).innerHTML || '';
   const sel = seleccionada === GENERAL ? 'General (toda la obra)' : ((COMPONENTES.find(c => c.id === seleccionada) || {}).nombre || '');
   const ahora = new Date(), fecha = ahora.toLocaleDateString('es-PE', { day: '2-digit', month: 'long', year: 'numeric' }) + ' · ' + ahora.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
-  const corte = tx('#kpiMes').replace(/\s*\(Curva S real\)/, '').replace(/^Corte:\s*/, '');
+  const corte = tx('#kpiMes').replace(/\s*\(Curva S real[^)]*\)/, '').replace(/^Corte:\s*/, '') + (/PROPUESTA/.test(tx('#kpiMes')) ? ' (valorización en propuesta)' : '');
   const pct = parseFloat(String(tx('#kPct')).replace(',', '.')) || 0;
   const k = (color, lab, val, sub, barra, html) => `<div class="inf-k" style="--kc:${color}"><small>${lab}</small><b>${esc(val)}</b>${barra ? `<div class="bar"><i style="width:${Math.min(100, barra)}%"></i></div>` : ''}<em>${html ? sub : esc(sub)}</em></div>`;
   // Curva S: se vuelve a dibujar más ancha para que ocupe bien su lugar en la hoja
@@ -4230,7 +4402,7 @@ async function abrirInforme() {
   setTimeout(() => infAjustar(hojaEl), 350);   // otra pasada cuando las tipografías y el diseño ya asentaron
   try { document.fonts && document.fonts.ready.then(() => infAjustar(hojaEl)); } catch (e) {}
   ov.querySelector('#infCerrar').addEventListener('click', cerrarInforme);
-  ov.querySelector('#infImprimir').addEventListener('click', () => { infTituloPrevio = document.title; document.title = `Informe de avance - ${tx0('#obraNombre')} - ${tx0('#kpiMes').replace(/^Corte:\s*/, '').replace(/\s*\(Curva S real\)/, '')}`; window.print(); });
+  ov.querySelector('#infImprimir').addEventListener('click', () => { infTituloPrevio = document.title; document.title = `Informe de avance - ${tx0('#obraNombre')} - ${tx0('#kpiMes').replace(/^Corte:\s*/, '').replace(/\s*\(Curva S real[^)]*\)/, '')}`; window.print(); });
 }
 const tx0 = (s) => ((document.querySelector(s) || {}).textContent || '').trim();
 function cerrarInforme() { document.querySelector('#informe')?.remove(); document.body.classList.remove('inf-abierto'); }
