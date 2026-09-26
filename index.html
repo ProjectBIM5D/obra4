@@ -1948,7 +1948,7 @@ function renderCurvaS() {
   // en pantallas angostas (tablet/celular) el gráfico usa una proporción más alta: con la ancha (900×320) la curva
   // quedaba aplastada. Se vuelve a dibujar solo si al girar/redimensionar cambia de modo.
   curvaAngosto = ($('#curvaWrap').clientWidth || 900) < 640;
-  const w = CURVA_DIM ? CURVA_DIM[0] : curvaAngosto ? 640 : 900, h = CURVA_DIM ? CURVA_DIM[1] : curvaAngosto ? 400 : 320, padL=52, padR=16, padT=64, padB=50;
+  const w = CURVA_DIM ? CURVA_DIM[0] : curvaAngosto ? 640 : 900, h = CURVA_DIM ? CURVA_DIM[1] : curvaAngosto ? 400 : 320, padL=52, padR=16, padT=CURVA_DIM ? 30 : 64, padB=50;
   const yMax = Math.max(...progSeries.map(p=>p.y), ...ejecSeries.map(p=>p.y), 1);
   const plazo = plazoSeleccion();
   const xMin = progSeries[0].x;
