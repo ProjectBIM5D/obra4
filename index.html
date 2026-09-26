@@ -1281,7 +1281,12 @@ const SVGC = tema === 'oscuro'
 
 const $ = (s) => document.querySelector(s);
 const fmt = (n, d=0) => 'S/. ' + Number(n||0).toLocaleString('es-PE', {minimumFractionDigits:d, maximumFractionDigits:d});
-const get = (path) => fetch(`${API}${path}`, { headers }).then(r => { if (!r.ok) throw new Error(`HTTP ${r.status} en ${path}`); return r.json(); });
+async function getRaw(path) {
+  let r = await fetch(`${API}${path}`, { headers });
+  if (r.status === 401 && fuente === 'cloud' && AUTH.refresh) { await authRenovar(true); r = await fetch(`${API}${path}`, { headers }); }   // sesión vencida: se renueva y se reintenta
+  return r;
+}
+const get = (path) => getRaw(path).then(r => { if (!r.ok) { const e = new Error(`HTTP ${r.status} en ${path}`); e.status = r.status; throw e; } return r.json(); });
 // la API devuelve como máximo 1000 filas por consulta: esta pide de a 1000 hasta traerlo todo (la consulta debe llevar &order=)
 async function getTodo(path) {
   const out = [];
@@ -1517,8 +1522,8 @@ function authSalir(sinRecargar) {
   AUTH.token = AUTH.email = AUTH.refresh = AUTH.rol = null; AUTH.admin = false; AUTH.exp = 0; authAplicar(); authGuardar(); authUI();
   if (fuente === 'cloud' && !sinRecargar) location.reload();   // en la nube, sin sesión solo se ve la puerta de acceso
 }
-async function authRenovar() {   // el token de Supabase dura ~1 hora: se renueva solo mientras la sesión esté abierta
-  if (fuente !== 'cloud' || !AUTH.refresh || AUTH.exp - Date.now() > 5 * 60000) return;
+async function authRenovar(forzar) {   // el token de Supabase dura ~1 hora: se renueva solo mientras la sesión esté abierta
+  if (fuente !== 'cloud' || !AUTH.refresh || (!forzar && AUTH.exp - Date.now() > 5 * 60000)) return;
   try {
     const r = await fetch(`${API.replace(/\/rest\/v1$/, '')}/auth/v1/token?grant_type=refresh_token`, { method: 'POST', headers: { apikey: CLAVE_PUBLICA, 'Content-Type': 'application/json' }, body: JSON.stringify({ refresh_token: AUTH.refresh }) });
     const d = await r.json(); if (!r.ok) throw new Error();
@@ -2636,6 +2641,12 @@ const LA_COLS = [
   { k: 'pct', t: '% AVAN', res: true }, { k: 'pu', t: 'P/U', res: false }, { k: 'plan', t: 'PLANEADO', res: false }, { k: 'ejec', t: 'EJECUTADO', res: false },
 ];
 
+function msgCarga(modulo, e) {
+  const st = e && e.status, det = `<br><span class="mono" style="font-size:11px">${esc((e && e.message) || '')}</span>`;
+  if (st === 401 || st === 403) return `<b>${modulo}</b>Tu sesión no puede leer estos datos: venció o tu usuario no está activo. Cierra la sesión y vuelve a entrar; si sigue igual, pide al administrador que revise tu usuario.${det}`;
+  if (st === 404) return `<b>${modulo}</b>Todavía no está configurado en esta base de datos (correr <code>lookahead_schema.sql</code>).${det}`;
+  return `<b>${modulo}</b>No se pudieron cargar los datos. Vuelve a intentarlo.${det}`;
+}
 async function laCargar(forzar) {
   if (LA.cargado && !forzar) { laRender(); return; }
   try {
@@ -2654,7 +2665,7 @@ async function laCargar(forzar) {
     await laCargarDetalle();
   } catch (e) {
     $('#laApp').style.display = 'none'; $('#laVacio').style.display = '';
-    $('#laVacio').innerHTML = `<b>Look Ahead</b>Todavía no está configurado en esta base de datos: faltan las tablas del Look Ahead (correr <code>lookahead_schema.sql</code>).<br><span class="mono" style="font-size:11px">${esc(e.message)}</span>`;
+    LA.error = e; $('#laVacio').innerHTML = msgCarga('Look Ahead', e);
   }
 }
 async function laCargarDetalle() {
@@ -3090,14 +3101,14 @@ const ptErr = (e) => (e.status === 401 || e.status === 403 || e.code === '42501'
 async function ptCargar(forzar) {
   try {
     if (!LA.cargado) await laCargar();
-    if (!LA.cargado) throw new Error('El Look Ahead no está configurado en esta base.');
+    if (!LA.cargado) throw LA.error || new Error('No se pudo cargar el Look Ahead.');
     if (!PT.causas.length) PT.causas = await get('/causas_incumplimiento?order=orden&select=codigo,nombre');
     if (!PT.look || !LA.looks.some(l => l.id === PT.look)) PT.look = LA.sel || (LA.looks[LA.looks.length - 1] || {}).id || null;
     $('#ptVacio').style.display = 'none'; $('#ptApp').style.display = '';
     await ptCargarLook();
   } catch (e) {
     $('#ptApp').style.display = 'none'; $('#ptVacio').style.display = '';
-    $('#ptVacio').innerHTML = `<b>Plan semanal</b>Todavía no está configurado en esta base de datos (correr <code>lookahead_schema.sql</code>).<br><span class="mono" style="font-size:11px">${esc(e.message)}</span>`;
+    $('#ptVacio').innerHTML = msgCarga('Plan semanal', e);
   }
 }
 async function ptCargarLook() {
@@ -3366,7 +3377,7 @@ async function ppcCargar() {
     ppcRender();
   } catch (e) {
     $('#ppcApp').style.display = 'none'; $('#ppcVacio').style.display = '';
-    $('#ppcVacio').innerHTML = `<b>PPC</b>Todavía no está configurado en esta base de datos (correr <code>lookahead_schema.sql</code>).<br><span class="mono" style="font-size:11px">${esc(e.message)}</span>`;
+    $('#ppcVacio').innerHTML = msgCarga('PPC', e);
   }
 }
 function ppcRender() {
