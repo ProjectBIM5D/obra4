@@ -590,15 +590,31 @@ html.la-modal{overflow:hidden;}
 .rg-mx td.tot,.rg-mx th.tot{border-left:1px solid var(--line2);}
 .rg-mx td{white-space:normal;text-transform:none;letter-spacing:0;}
 .rg-g{font-weight:700;line-height:1.3;color:var(--tx);overflow-wrap:anywhere;}
-.mc{display:flex;flex-direction:column;gap:4px;align-items:center;}
-.mc b{font-size:12px;font-variant-numeric:tabular-nums;}
-.mtr{display:block;width:100%;min-width:44px;height:7px;border-radius:4px;background:var(--line);overflow:hidden;} .mtr i{display:block;height:100%;border-radius:4px;}
+.mc{display:flex;flex-direction:column;gap:5px;align-items:stretch;}
+.mv{display:flex;justify-content:center;align-items:baseline;gap:5px;font-variant-numeric:tabular-nums;white-space:nowrap;}
+:root{--rg-e:#b4322b;--rg-p:#2a5bc4;--rg-eb:#d9453d;--rg-pb:#3b74e0;}
+:root[data-theme="dark"]{--rg-e:#f3a19a;--rg-p:#93b4f5;--rg-eb:#ef8079;--rg-pb:#7ea6f5;}
+.mv b{font-size:12.5px;color:var(--rg-e);} .mv em{font-style:normal;font-size:10.5px;font-weight:600;color:var(--rg-p);}
+.mtr{position:relative;display:block;width:100%;min-width:44px;height:9px;border-radius:5px;background:var(--line);overflow:hidden;}
+.mtr i{position:absolute;left:0;border-radius:5px;} .mtr i.pg{top:0;height:100%;background:var(--rg-pb);opacity:.34;} .mtr i.ej{top:2px;height:5px;background:var(--rg-eb);}
+.rg-sel{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;font-weight:700;color:#dbe6f6;}
+.rg-sel select{font:inherit;font-size:12px;font-weight:700;color:#17335a;background:#fff;border:0;border-radius:8px;padding:5px 26px 5px 10px;cursor:pointer;}
+.rg-lg span{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:var(--tx);}
+.rg-lg span i{width:26px;height:9px;border-radius:5px;background:var(--line);position:relative;overflow:hidden;}
+.rg-lg span i::before{content:"";position:absolute;left:0;top:0;height:100%;width:100%;}
+.rg-lg span.lp i::before{background:var(--rg-pb);opacity:.34;} .rg-lg span.le i::before{background:var(--rg-eb);top:2px;height:5px;}
+.rg-cmp{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;margin-bottom:6px;}
+.rg-cb{display:inline-flex;align-items:center;gap:6px;border:0;background:transparent;font:inherit;font-size:12px;font-weight:600;color:var(--tx);cursor:pointer;padding:2px 0;} .rg-cb i{width:10px;height:10px;border-radius:50%;} .rg-cb.off{opacity:.35;text-decoration:line-through;}
+.rg-cn{font-size:11px;color:var(--mut);}
 .rc-n{color:var(--mut);text-align:center;}
-.rg-mx tr.sd td{color:var(--mut);} .rg-mx tr.sd .rg-g{font-weight:500;font-style:italic;}
 .rg-mx tr.tt td{border-top:2px solid var(--line2);background:var(--input);} .rg-mx tr.tt td:first-child{background:var(--input);}
 .rg-mx tr.st td{background:var(--input);padding-top:0;text-align:center;} .rg-mx tr.st td:first-child{background:var(--input);}
 .rg-badge{display:inline-block;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap;}
-.rg-badge.ok{background:#10b98122;color:var(--green);} .rg-badge.mal{background:#ef444422;color:var(--red);} .rg-badge.neu{background:#8393b226;color:var(--mut);}
+:root{--rg-am:#a85a08;} :root[data-theme="dark"]{--rg-am:#f2c66d;}
+.rg-badge.ok{background:#10b98122;color:var(--green);} .rg-badge.mal{background:#ef444422;color:var(--rg-e);} .rg-badge.am{background:#f59e0b26;color:var(--rg-am);}
+.rg-mx tr.cp td{background:var(--input);padding-top:6px;padding-bottom:2px;text-align:center;} .rg-mx tr.cp td:first-child{background:var(--input);}
+.rg-mx tr.cp .rg-g{font-size:11px;color:var(--mut);font-weight:700;}
+.rg-cpv{font-weight:800;font-size:13px;font-variant-numeric:tabular-nums;} .rg-cpv.ok{color:var(--green);} .rg-cpv.am{color:var(--rg-am);} .rg-cpv.mal{color:var(--rg-e);} .rg-cpv.neu{color:var(--mut);} .rg-badge.neu{background:#8393b226;color:var(--mut);}
 .rg-lg{display:flex;flex-wrap:wrap;gap:8px 16px;padding:9px 12px;background:var(--input);border:1px solid var(--line);border-radius:10px;}
 .rg-lg button{display:inline-flex;align-items:center;gap:7px;border:0;background:transparent;font:inherit;font-size:12px;font-weight:600;color:var(--tx);cursor:pointer;padding:2px 0;}
 .rg-lg button i{width:22px;height:3px;border-radius:2px;position:relative;} .rg-lg button i::after{content:"";position:absolute;left:50%;top:50%;width:8px;height:8px;border-radius:50%;background:inherit;transform:translate(-50%,-50%);}
@@ -2393,17 +2409,23 @@ async function cargarReporteGrupos(version, filtroProy) {
   }
   renderReporteGrupos();
 }
-let rgMetrica = 'prog', rgVista = 'radar'; const rgOcultos = new Set();
-try { const m = localStorage.getItem('obra-rg-metrica'), v = localStorage.getItem('obra-rg-vista'); if (m === 'ejec') rgMetrica = 'ejec'; if (v === 'barras') rgVista = 'barras'; } catch (e) {}
-const RG_COLORES = ['#2563eb', '#059669', '#f97316', '#7c3aed', '#0891b2', '#db2777', '#ca8a04', '#64748b'];
+let rgVista = 'radar', rgAmbito = 'total'; const rgOcultos = new Set();
+try { if (localStorage.getItem('obra-rg-vista') === 'barras') rgVista = 'barras'; const a = localStorage.getItem('obra-rg-ambito'); if (a) rgAmbito = a; } catch (e) {}
+const RG_COLORES = tema === 'oscuro' ? ['#7aa7f7', '#5fd0a7', '#f6a25f', '#b7a1f7', '#5cc6dc', '#f08db8', '#e0bd58', '#9fb0c8']
+  : ['#2563eb', '#059669', '#ea6a0a', '#7c3aed', '#0891b2', '#db2777', '#ca8a04', '#64748b'];
+const C_PROG_RG = tema === 'oscuro' ? '#7ea6f5' : '#3b74e0', C_EJEC_RG = tema === 'oscuro' ? '#ef8079' : '#d9453d';
 const rgNombre = (n) => { const s = String(n || '').toLowerCase().replace(/proteccion/g, 'protección'); return s.charAt(0).toUpperCase() + s.slice(1); };
 function rgEnvolver(txt, max) { const out = []; let l = ''; String(txt).split(' ').forEach(w => { if ((l + ' ' + w).trim().length > max && l) { out.push(l); l = w; } else l = (l + ' ' + w).trim(); }); if (l) out.push(l); return out; }
 document.addEventListener('click', (e) => {
-  const m = e.target.closest('[data-rgm]'), v = e.target.closest('[data-rgv]'), l = e.target.closest('[data-rgl]');
-  if (!m && !v && !l) return;
-  if (m) { rgMetrica = m.dataset.rgm; try { localStorage.setItem('obra-rg-metrica', rgMetrica); } catch (x) {} }
+  const v = e.target.closest('[data-rgv]'), l = e.target.closest('[data-rgl]');
+  if (!v && !l) return;
   if (v) { rgVista = v.dataset.rgv; try { localStorage.setItem('obra-rg-vista', rgVista); } catch (x) {} }
   if (l) { rgOcultos.has(l.dataset.rgl) ? rgOcultos.delete(l.dataset.rgl) : rgOcultos.add(l.dataset.rgl); }
+  renderReporteGrupos();
+});
+document.addEventListener('change', (e) => {
+  if (e.target.id !== 'rgAmbito') return;
+  rgAmbito = e.target.value; try { localStorage.setItem('obra-rg-ambito', rgAmbito); } catch (x) {}
   renderReporteGrupos();
 });
 function rgRadar(series, ejes, max) {
@@ -2420,7 +2442,7 @@ function rgRadar(series, ejes, max) {
   });
   series.forEach(se => {
     const pts = se.v.map((v, i) => pt(i, Math.max(0, Math.min(1, (v || 0) / max))));
-    s += `<polygon points="${pts.map(p => p.join(',')).join(' ')}" fill="${se.col}" fill-opacity=".13" stroke="${se.col}" stroke-width="2.4" stroke-linejoin="round"/>`;
+    s += `<polygon points="${pts.map(p => p.join(',')).join(' ')}" fill="${se.col}" fill-opacity="${se.rel === undefined ? .13 : se.rel}" stroke="${se.col}" stroke-width="2.4" stroke-linejoin="round"${se.dash ? ' stroke-dasharray="6 4"' : ''}/>`;
     pts.forEach((p, i) => { s += `<circle cx="${p[0]}" cy="${p[1]}" r="3.8" fill="${se.col}" stroke="#fff" stroke-width="1.3"><title>${esc(se.nom)} · ${esc(ejes[i])}: ${((se.v[i] || 0) * 100).toFixed(1)}%</title></circle>`; });
   });
   return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Radar comparativo por grupo">${s}</svg>`;
@@ -2435,9 +2457,10 @@ function renderReporteGrupos(periodo) {
   const todas = (DATA.curvaMensual || []).filter(enAlcance);
   const comps = COMPONENTES.filter(c => seleccionada === GENERAL || c.id === seleccionada);
   if (!comps.length) { box.innerHTML = '<div class="rg-msg">No hay componentes en esta obra.</div>'; return; }
-  const m = rgMetrica, pid = Object.fromEntries(DATA.proyectos.map(p => [p.codigo, p.id]));
+  const pid = Object.fromEntries(DATA.proyectos.map(p => [p.codigo, p.id]));
   const P = (x) => (x * 100).toFixed(1) + '%';
   const M = (n) => n >= 1e6 ? (n / 1e6).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' M' : Number(n || 0).toLocaleString('es-PE', { maximumFractionDigits: 0 });
+  const corto = (c) => String(c.nombre).replace(/^Puente\s+/i, '');
   const info = comps.map(c => {
     const gr = {};
     (GRUPOS || []).filter(r => r.proyecto_id === pid[c.id] && enAlcance(r)).forEach(r => {
@@ -2459,63 +2482,84 @@ function renderReporteGrupos(periodo) {
     const l = Object.values(gr), sPres = l.reduce((s, g) => s + g.pres, 0), sProg = l.reduce((s, g) => s + g.prog, 0), sEjec = l.reduce((s, g) => s + g.ejec, 0);
     const base = of ? of.base : sPres, prog = of ? of.prog : sProg, ejec = of ? of.ejec : sEjec;
     const col = RG_COLORES[Math.max(0, COMPONENTES.findIndex(q => q.id === c.id)) % RG_COLORES.length];
-    return { c, col, gr, base, prog, ejec, sinDes: of ? Math.max(0, ejec - sEjec) : 0, hay: !!(of || l.length) };
+    return { c, col, gr, base, prog, ejec, hay: !!(of || l.length) };
   });
   const claves = {};
   info.forEach(x => Object.values(x.gr).forEach(g => { claves[g.clave] = claves[g.clave] || { clave: g.clave, cod: g.cod, nom: g.nom, adic: g.adic }; }));
   const filas = Object.values(claves).sort((a, b) => (a.adic - b.adic) || (a.cod.split('.').slice(1).join('.') < b.cod.split('.').slice(1).join('.') ? -1 : 1));
   const multi = info.length > 1;
-  const tot = { base: 0, prog: 0, ejec: 0, sinDes: 0, gr: {} };
-  info.forEach(x => { tot.base += x.base; tot.prog += x.prog; tot.ejec += x.ejec; tot.sinDes += x.sinDes;
+  const tot = { base: 0, prog: 0, ejec: 0, gr: {} };
+  info.forEach(x => { tot.base += x.base; tot.prog += x.prog; tot.ejec += x.ejec;
     Object.values(x.gr).forEach(g => { const t0 = tot.gr[g.clave] || (tot.gr[g.clave] = { pres: 0, prog: 0, ejec: 0 }); t0.pres += g.pres; t0.prog += g.prog; t0.ejec += g.ejec; }); });
-  const val = (g) => g && g.pres ? g[m] / g.pres : null;          // % del grupo según la métrica elegida
-  const valOf = (base, prog, ejec) => base ? (m === 'prog' ? prog : ejec) / base : null;
-  const celda = (g, col, cls, nom) => { const v = val(g); return v === null ? `<td class="${cls || ''}"><div class="rc-n">—</div></td>`
-    : `<td class="${cls || ''}" title="${esc(`${nom}: programado ${fmt(g.prog)} · ejecutado (parte diario) ${fmt(g.ejec)} · presupuesto ${fmt(g.pres)}`)}"><div class="mc"><b style="color:${col}">${P(v)}</b><span class="mtr"><i style="width:${Math.min(100, v * 100).toFixed(1)}%;background:${col}"></i></span></div></td>`; };
-  const celdaV = (v, col, tip, cls) => v === null ? `<td class="${cls || ''}"><div class="rc-n">—</div></td>` : `<td class="${cls || ''}" title="${esc(tip || '')}"><div class="mc"><b style="color:${col}">${P(v)}</b><span class="mtr"><i style="width:${Math.min(100, v * 100).toFixed(1)}%;background:${col}"></i></span></div></td>`;
+  // ── celdas: % ejecutado (rojo) de % programado (azul) y una barra doble: la clara es lo programado, la fina sólida lo ejecutado ──
+  const bala = (pp, pe) => `<span class="mtr"><i class="pg" style="width:${Math.min(100, pp * 100).toFixed(1)}%"></i><i class="ej" style="width:${Math.min(100, pe * 100).toFixed(1)}%"></i></span>`;
+  const celdaG = (g, cls, nom) => !g || !g.pres ? `<td class="${cls || ''}"><div class="rc-n">—</div></td>`
+    : `<td class="${cls || ''}" title="${esc(`${nom}: programado ${fmt(g.prog)} · ejecutado (parte diario) ${fmt(g.ejec)} · presupuesto ${fmt(g.pres)}${g.prog > 0 ? ' · cumplimiento ' + P(g.ejec / g.prog) : ''}`)}"><div class="mc"><div class="mv"><b>${P(g.ejec / g.pres)}</b><em>/ ${P(g.prog / g.pres)}</em></div>${bala(g.prog / g.pres, g.ejec / g.pres)}</div></td>`;
+  const celdaT = (base, prog, ejec, cls) => !base ? `<td class="${cls || ''}"><div class="rc-n">—</div></td>`
+    : `<td class="${cls || ''}" title="${esc(`Programado ${fmt(prog)} · ejecutado ${fmt(ejec)} · presupuesto ${fmt(base)}`)}"><div class="mc"><div class="mv"><b>${P(ejec / base)}</b><em>/ ${P(prog / base)}</em></div>${bala(prog / base, ejec / base)}</div></td>`;
   const estado = (base, prog, ejec) => { if (!base) return '<span class="rg-badge neu">Sin datos</span>'; const dif = (ejec - prog) / base * 100;
     return ejec === 0 && prog > 0 ? '<span class="rg-badge neu">Sin avance</span>' : dif >= -0.05 ? '<span class="rg-badge ok">Al día</span>' : `<span class="rg-badge mal">${Math.abs(dif).toFixed(1)} pts atrás</span>`; };
-  const nom = (c) => esc(String(c.nombre).replace(/^Puente\s+/i, ''));
-  const haySinDes = m === 'ejec' && info.some(x => x.sinDes > 0.5);
-  // ── matriz ──
+  const nom = (c) => esc(corto(c));
+  // cumplimiento = ejecutado ÷ programado a la fecha; semáforo: verde ≥ 95 %, ámbar 80–95 %, rojo < 80 %
+  const cump = (prog, ejec) => prog > 0 ? ejec / prog : null;
+  const semaf = (v) => v === null ? 'neu' : v >= 0.95 ? 'ok' : v >= 0.8 ? 'am' : 'mal';
+  const celdaC = (prog, ejec, cls) => { const v = cump(prog, ejec); return `<td class="${cls || ''}" title="${esc('Ejecutado ÷ programado a la fecha')}"><span class="rg-cpv ${semaf(v)}">${v === null ? '—' : P(v)}</span></td>`; };
   const cab = `<thead><tr><th>Grupo</th>${info.map(x => `<th><i style="background:${x.col}"></i>${nom(x.c)}<small>${x.hay ? 'S/. ' + M(x.base) : 'sin datos'}</small></th>`).join('')}${multi ? `<th class="tot">Total obra<small>S/. ${M(tot.base)}</small></th>` : ''}</tr></thead>`;
-  const cuerpo = filas.map(f => `<tr><td><div class="rg-g">${esc(f.nom)}</div></td>${info.map(x => celda(x.gr[f.clave], x.col, '', f.nom)).join('')}${multi ? celda(tot.gr[f.clave], 'var(--tx)', 'tot', f.nom) : ''}</tr>`).join('');
-  const sd = haySinDes ? `<tr class="sd"><td><div class="rg-g">Avance sin desglose por grupo</div></td>${info.map(x => celdaV(x.sinDes > 0.5 ? x.sinDes / x.base : null, '#94a3b8', 'Ejecutado oficial (Curva S) aún no registrado por partida: ' + fmt(x.sinDes))).join('')}${multi ? celdaV(tot.sinDes > 0.5 ? tot.sinDes / tot.base : null, '#94a3b8', '', 'tot') : ''}</tr>` : '';
-  const total = `<tr class="tt"><td><div class="rg-g">Total (Curva S)</div></td>${info.map(x => celdaV(valOf(x.hay ? x.base : 0, x.prog, x.ejec), x.col, `Programado ${fmt(x.prog)} · ejecutado ${fmt(x.ejec)} · presupuesto ${fmt(x.base)}`)).join('')}${multi ? celdaV(valOf(tot.base, tot.prog, tot.ejec), 'var(--tx)', '', 'tot') : ''}</tr>`
+  const cuerpo = filas.map(f => `<tr><td><div class="rg-g">${esc(f.nom)}</div></td>${info.map(x => celdaG(x.gr[f.clave], '', f.nom)).join('')}${multi ? celdaG(tot.gr[f.clave], 'tot', f.nom) : ''}</tr>`).join('');
+  const total = `<tr class="tt"><td><div class="rg-g">Total (Curva S)</div></td>${info.map(x => celdaT(x.hay ? x.base : 0, x.prog, x.ejec)).join('')}${multi ? celdaT(tot.base, tot.prog, tot.ejec, 'tot') : ''}</tr>`
+    + `<tr class="cp"><td><div class="rg-g">Cumplimiento</div></td>${info.map(x => celdaC(x.hay ? x.prog : 0, x.ejec)).join('')}${multi ? celdaC(tot.prog, tot.ejec, 'tot') : ''}</tr>`
     + `<tr class="st"><td></td>${info.map(x => `<td>${estado(x.hay ? x.base : 0, x.prog, x.ejec)}</td>`).join('')}${multi ? `<td class="tot">${estado(tot.base, tot.prog, tot.ejec)}</td>` : ''}</tr>`;
-  // ── gráfico: radar (o barras horizontales agrupadas) ──
-  const visibles = info.filter(x => !rgOcultos.has(x.c.id));
-  const series = visibles.map(x => ({ nom: String(x.c.nombre).replace(/^Puente\s+/i, ''), col: x.col, v: filas.map(f => val(x.gr[f.clave])) }));
-  const vmax = Math.max(0, ...series.flatMap(s => s.v.map(v => v || 0)));
-  const escala = m === 'prog' ? 1 : ([0.05, 0.1, 0.2, 0.25, 0.5, 1].find(z => z >= vmax) || 1);
-  const usaRadar = rgVista === 'radar' && filas.length >= 3;
-  const grafico = usaRadar ? rgRadar(series, filas.map(f => f.nom), escala)
-    : `<div>${filas.map((f, i) => `<div class="rgb-g"><div class="rgb-t">${esc(f.nom)}</div>${series.map(se => `<div class="rgb-r"><span class="n">${esc(se.nom)}</span><span class="rgb-tr"><i style="width:${Math.min(100, (se.v[i] || 0) / escala * 100).toFixed(1)}%;background:${se.col}"></i></span><b style="color:${se.col}">${se.v[i] === null ? '—' : P(se.v[i])}</b></div>`).join('')}</div>`).join('')}</div>`;
-  const leyenda = info.map(x => `<button type="button" data-rgl="${esc(x.c.id)}" class="${rgOcultos.has(x.c.id) ? 'off' : ''}" title="Mostrar u ocultar en el gráfico"><i style="background:${x.col}"></i>${nom(x.c)}</button>`).join('');
-  // ── conclusiones visuales (se calculan solas con lo que hay en pantalla) ──
-  const et = m === 'prog' ? 'programado' : 'ejecutado', ok = [];
-  if (multi) {
-    const cuentas = info.map(x => ({ x, n: filas.filter(f => { const v = val(x.gr[f.clave]); return v !== null && v >= 0.9995; }).length, de: filas.filter(f => val(x.gr[f.clave]) !== null).length })).filter(q => q.n > 0).sort((a, b) => b.n - a.n);
-    if (cuentas.length) { const mx = cuentas[0].n, lid = cuentas.filter(q => q.n === mx).map(q => `<b>${nom(q.x.c)}</b>`).join(' y '); ok.push(`${lid} ${cuentas.filter(q => q.n === mx).length > 1 ? 'alcanzan' : 'alcanza'} el 100 % ${et} en ${mx} de ${cuentas[0].de} grupos.`); }
+  // ── gráfico: el ámbito se elige en el combo (Total obra, un puente o los puentes juntos) ──
+  const ambito = !multi ? info[0].c.id : (rgAmbito === 'total' || rgAmbito === 'todos' || rgAmbito === 'cumpl' || info.some(x => x.c.id === rgAmbito)) ? rgAmbito : 'total';
+  const val = (g, k) => g && g.pres ? g[k] / g.pres : null;
+  let series, escala, leyGraf = '';
+  if (ambito === 'cumpl') {   // cumplimiento (ejecutado ÷ programado) de cada puente en cada grupo
+    series = info.filter(x => !rgOcultos.has(x.c.id)).map(x => ({ nom: corto(x.c), col: x.col, v: filas.map(f => { const g = x.gr[f.clave]; return g && g.prog > 0 ? g.ejec / g.prog : null; }) }));
+    const vmax = Math.max(0, ...series.flatMap(s => s.v.map(v => v || 0)));
+    escala = [1, 1.25, 1.5, 2].find(z => z >= vmax) || Math.ceil(vmax);
+    leyGraf = `<div class="rg-cmp">${info.map(x => `<button type="button" class="rg-cb ${rgOcultos.has(x.c.id) ? 'off' : ''}" data-rgl="${esc(x.c.id)}" title="Mostrar u ocultar"><i style="background:${x.col}"></i>${nom(x.c)}</button>`).join('')}<span class="rg-cn">cumplimiento = ejecutado ÷ programado</span></div>`;
+  } else if (ambito === 'todos') {   // los puentes juntos: cada uno con su color, mostrando lo ejecutado
+    series = info.filter(x => !rgOcultos.has(x.c.id)).map(x => ({ nom: corto(x.c), col: x.col, v: filas.map(f => val(x.gr[f.clave], 'ejec')) }));
+    const vmax = Math.max(0, ...series.flatMap(s => s.v.map(v => v || 0)));
+    escala = [0.05, 0.1, 0.2, 0.25, 0.5, 1].find(z => z >= vmax) || 1;
+    leyGraf = `<div class="rg-cmp">${info.map(x => `<button type="button" class="rg-cb ${rgOcultos.has(x.c.id) ? 'off' : ''}" data-rgl="${esc(x.c.id)}" title="Mostrar u ocultar"><i style="background:${x.col}"></i>${nom(x.c)}</button>`).join('')}<span class="rg-cn">% ejecutado por puente</span></div>`;
+  } else {
+    const gA = ambito === 'total' ? (f) => tot.gr[f.clave] : (f) => (info.find(x => x.c.id === ambito) || info[0]).gr[f.clave];
+    series = [{ nom: 'Programado', col: C_PROG_RG, dash: true, rel: .10, v: filas.map(f => val(gA(f), 'prog')) }, { nom: 'Ejecutado', col: C_EJEC_RG, rel: .22, v: filas.map(f => val(gA(f), 'ejec')) }];
+    escala = 1;
   }
-  const prom = filas.map(f => { const vs = info.map(x => ({ x, v: val(x.gr[f.clave]) })).filter(q => q.v !== null); return { f, vs, media: vs.length ? vs.reduce((s, q) => s + q.v, 0) / vs.length : null }; }).filter(q => q.media !== null).sort((a, b) => a.media - b.media);
-  if (prom.length && prom[0].media < 0.995 && (m === 'prog' || prom[0].media > 0)) {
+  const usaRadar = rgVista === 'radar' && filas.length >= 3;
+  const grafico = usaRadar ? leyGraf + rgRadar(series, filas.map(f => f.nom), escala)
+    : leyGraf + `<div>${filas.map((f, i) => `<div class="rgb-g"><div class="rgb-t">${esc(f.nom)}</div>${series.map(se => `<div class="rgb-r"><span class="n">${esc(se.nom)}</span><span class="rgb-tr"><i style="width:${Math.min(100, (se.v[i] || 0) / escala * 100).toFixed(1)}%;background:${se.col}"></i></span><b style="color:${se.col}">${se.v[i] === null ? '—' : P(se.v[i])}</b></div>`).join('')}</div>`).join('')}</div>`;
+  const opciones = multi ? `<label class="rg-sel">Ver <select id="rgAmbito" aria-label="Qué mostrar en el gráfico"><option value="total"${ambito === 'total' ? ' selected' : ''}>Total obra</option>${info.map(x => `<option value="${esc(x.c.id)}"${ambito === x.c.id ? ' selected' : ''}>${nom(x.c)}</option>`).join('')}<option value="todos"${ambito === 'todos' ? ' selected' : ''}>Comparar puentes (ejecutado)</option><option value="cumpl"${ambito === 'cumpl' ? ' selected' : ''}>Cumplimiento por puente</option></select></label>` : '';
+  const tituloG = ambito === 'total' ? (multi ? 'Total obra' : corto(info[0].c)) : ambito === 'todos' ? 'Comparación de puentes · % ejecutado' : ambito === 'cumpl' ? 'Cumplimiento por puente · ejecutado ÷ programado' : corto(info.find(x => x.c.id === ambito).c);
+  // ── conclusiones visuales (se calculan solas con lo que hay en pantalla) ──
+  const ok = [];
+  if (multi) {
+    const cuentas = info.map(x => ({ x, n: filas.filter(f => { const v = val(x.gr[f.clave], 'prog'); return v !== null && v >= 0.9995; }).length, de: filas.filter(f => val(x.gr[f.clave], 'prog') !== null).length })).filter(q => q.n > 0).sort((a, b) => b.n - a.n);
+    if (cuentas.length) { const mx = cuentas[0].n, lid = cuentas.filter(q => q.n === mx).map(q => `<b>${nom(q.x.c)}</b>`).join(' y '); ok.push(`${lid} ${cuentas.filter(q => q.n === mx).length > 1 ? 'tienen' : 'tiene'} programado el 100 % en ${mx} de ${cuentas[0].de} grupos.`); }
+  }
+  const prom = filas.map(f => { const vs = info.map(x => ({ x, v: val(x.gr[f.clave], 'prog') })).filter(q => q.v !== null); return { f, vs, media: vs.length ? vs.reduce((s, q) => s + q.v, 0) / vs.length : null }; }).filter(q => q.media !== null).sort((a, b) => a.media - b.media);
+  if (prom.length && prom[0].media < 0.995) {
     const w = prom[0], bajos = [...w.vs].sort((a, b) => a.v - b.v).slice(0, multi ? 2 : 1);
-    ok.push(`<b>${esc(w.f.nom)}</b> es el grupo con menor avance ${et}: ${bajos.map(q => `${multi ? `<b>${nom(q.x.c)}</b> ` : ''}${P(q.v)}`).join(' y ')}.`);
+    ok.push(`<b>${esc(w.f.nom)}</b> es el grupo con menor programación a la fecha: ${bajos.map(q => `${multi ? `<b>${nom(q.x.c)}</b> ` : ''}${P(q.v)}`).join(' y ')}.`);
   }
   const conCurva = info.filter(x => x.hay && x.base);
   if (conCurva.length) ok.push('Según la Curva S (oficial), ' + conCurva.map(x => { const dif = (x.ejec - x.prog) / x.base * 100; return `<b>${nom(x.c)}</b> ${x.ejec === 0 && x.prog > 0 ? 'sin avance registrado' : dif >= -0.05 ? 'al día' : Math.abs(dif).toFixed(1) + ' pts atrás'}`; }).join(' · ') + '.');
+  if (multi) {
+    const cc = conCurva.map(x => ({ x, v: cump(x.prog, x.ejec) })).filter(q => q.v !== null).sort((a, b) => b.v - a.v);
+    if (cc.length > 1) ok.push(`Mayor cumplimiento (Curva S): <b>${nom(cc[0].x.c)}</b> ${P(cc[0].v)}; menor: <b>${nom(cc[cc.length - 1].x.c)}</b> ${P(cc[cc.length - 1].v)}.`);
+  }
   const nComp = info.length;
   box.innerHTML = `<div class="rg-card">
-    <div class="rg-band"><div><h3>Avance por grupo de partidas — ${nComp} componente${nComp === 1 ? '' : 's'}</h3><p>Comparativo del avance ${m === 'prog' ? 'programado a la fecha' : 'ejecutado (parte diario)'} en % · ${esc(corte)} · ${esc(ALCANCE_TXT[alcance])} · sin IGV</p></div>
-      <div class="rg-ctl"><span class="rg-seg" role="group" aria-label="Qué avance ver"><button type="button" data-rgm="prog" class="${m === 'prog' ? 'on' : ''}">Programado</button><button type="button" data-rgm="ejec" class="${m === 'ejec' ? 'on' : ''}">Ejecutado</button></span>
-        <span class="rg-seg" role="group" aria-label="Tipo de gráfico"><button type="button" data-rgv="radar" class="${usaRadar ? 'on' : ''}">Radar</button><button type="button" data-rgv="barras" class="${usaRadar ? '' : 'on'}">Barras</button></span></div></div>
-    <div class="rg-body"><div class="rg-chart">${grafico}</div>
-      <div class="rg-tabla"><div class="rg-tw"><table class="rg-mx">${cab}<tbody>${cuerpo}${sd}${total}</tbody></table></div><div class="rg-lg">${leyenda}</div></div></div>
+    <div class="rg-band"><div><h3>Avance por grupo de partidas — ${nComp} componente${nComp === 1 ? '' : 's'}</h3><p>Comparativo programado vs ejecutado (%) · ${esc(corte)} · ${esc(ALCANCE_TXT[alcance])} · sin IGV</p></div>
+      <div class="rg-ctl">${opciones}<span class="rg-seg" role="group" aria-label="Tipo de gráfico"><button type="button" data-rgv="radar" class="${usaRadar ? 'on' : ''}">Radar</button><button type="button" data-rgv="barras" class="${usaRadar ? '' : 'on'}">Barras</button></span></div></div>
+    <div class="rg-body"><div class="rg-chart"><div class="rg-ct">${esc(tituloG)}</div>${grafico}</div>
+      <div class="rg-tabla"><div class="rg-tw"><table class="rg-mx">${cab}<tbody>${cuerpo}${total}</tbody></table></div>
+        <div class="rg-lg"><span class="lp"><i></i>Programado a la fecha</span><span class="le"><i></i>Ejecutado</span><span style="color:var(--mut);font-weight:500">en cada celda: ejecutado / programado · cumplimiento = ejecutado ÷ programado (<b style="color:var(--green)">≥ 95 %</b> · <b style="color:var(--rg-am)">80–95 %</b> · <b style="color:var(--rg-e)">&lt; 80 %</b>)</span></div></div></div>
     ${ok.length ? `<div class="rg-con"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3" y="13" width="4" height="8" rx="1"/><rect x="10" y="8" width="4" height="13" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/></svg><div><b>Conclusiones visuales:</b><ul>${ok.map(q => `<li>${q}</li>`).join('')}</ul></div></div>` : ''}
   </div>`;
-  nota.textContent = 'Cada celda: % del presupuesto del grupo (línea = avance). Programado: cronograma valorizado vigente. Ejecutado por grupo: lo registrado en el parte diario del Look Ahead'
-    + (m === 'ejec' ? '; el ejecutado oficial del componente (Curva S) está en «Total» y lo que aún no se registró por partida aparece como «avance sin desglose».' : '.');
+  nota.textContent = 'Programado: cronograma valorizado vigente. Ejecutado por grupo: lo registrado en el parte diario del Look Ahead. «Total (Curva S)»: cifras oficiales del componente (incluyen avance que aún no está registrado por partida).';
 }
 
 function renderKpisYTabla(partidas, avanceRows, progRows, periodo) {
