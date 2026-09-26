@@ -560,6 +560,62 @@ html.la-modal{overflow:hidden;}
 .cf-btns .cf-no:hover{background:var(--input);} .cf-btns .cf-si{background:var(--blue);border-color:var(--blue);color:#fff;} .cf-btns .cf-si.pel{background:#dc2626;border-color:#dc2626;}
 .cf-btns .cf-si:hover{filter:brightness(1.08);} .cf-btns button:focus-visible{outline:2px solid var(--blue);outline-offset:2px;}
 
+/* ═══ Resumen: las dos gráficas miden lo mismo (sin vacío bajo la más baja) ═══ */
+.grid2.res-eq{align-items:stretch;}
+.av-card{display:flex;flex-direction:column;}
+.av-wrap{flex:1;position:relative;min-height:180px;}
+.av-wrap svg{position:absolute;inset:0;width:100%;height:100%;}
+.av-card .legend2{margin-top:6px;}
+/* ═══ Resumen: reporte gerencial de avance por grupo y puente (matriz + radar/barras) ═══ */
+.rg-card{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;}
+.rg-band{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px 18px;padding:14px 20px;background:linear-gradient(135deg,#17335a,#24487a);color:#fff;}
+.rg-band h3{margin:0;font-size:17px;font-weight:800;letter-spacing:.1px;color:#fff;} .rg-band p{margin:3px 0 0;font-size:12px;color:#cfdcf0;}
+.rg-ctl{display:flex;flex-wrap:wrap;gap:8px;}
+.rg-seg{display:inline-flex;background:rgba(255,255,255,.12);border-radius:9px;padding:2px;}
+.rg-seg button{border:0;background:transparent;color:#dbe6f6;font:inherit;font-size:11.5px;font-weight:700;padding:5px 12px;border-radius:7px;cursor:pointer;}
+.rg-seg button:hover{background:rgba(255,255,255,.14);} .rg-seg button.on{background:#fff;color:#17335a;}
+.rg-seg button:focus-visible{outline:2px solid #fff;outline-offset:1px;}
+.rg-body{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.3fr);gap:20px;padding:16px 20px;align-items:start;}
+.rg-chart{min-width:0;} .rg-chart svg{display:block;width:100%;height:auto;max-height:420px;}
+.rg-tabla{min-width:0;display:flex;flex-direction:column;gap:12px;}
+.rg-tw{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:10px;}
+.rg-mx{width:100%;border-collapse:collapse;min-width:430px;font-size:12px;table-layout:fixed;}
+.rg-mx th:first-child,.rg-mx td:first-child{width:25%;}
+.rg-mx th,.rg-mx td{padding:7px 7px;border-top:1px solid var(--line);vertical-align:middle;}
+.rg-mx thead th{border-top:0;background:#17335a;color:#fff;text-align:center;font-size:11.5px;font-weight:800;padding:9px 7px;white-space:nowrap;}
+.rg-mx thead th small{display:block;margin-top:1px;font-size:9.5px;font-weight:600;color:#b9cae6;font-variant-numeric:tabular-nums;}
+.rg-mx thead th i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:0;}
+.rg-mx th:first-child,.rg-mx td:first-child{text-align:left;position:sticky;left:0;background:var(--card);z-index:1;min-width:112px;}
+.rg-mx thead th:first-child{background:#17335a;font-size:10.5px;letter-spacing:.4px;text-transform:uppercase;}
+.rg-mx td.tot,.rg-mx th.tot{border-left:1px solid var(--line2);}
+.rg-mx td{white-space:normal;text-transform:none;letter-spacing:0;}
+.rg-g{font-weight:700;line-height:1.3;color:var(--tx);overflow-wrap:anywhere;}
+.mc{display:flex;flex-direction:column;gap:4px;align-items:center;}
+.mc b{font-size:12px;font-variant-numeric:tabular-nums;}
+.mtr{display:block;width:100%;min-width:44px;height:7px;border-radius:4px;background:var(--line);overflow:hidden;} .mtr i{display:block;height:100%;border-radius:4px;}
+.rc-n{color:var(--mut);text-align:center;}
+.rg-mx tr.sd td{color:var(--mut);} .rg-mx tr.sd .rg-g{font-weight:500;font-style:italic;}
+.rg-mx tr.tt td{border-top:2px solid var(--line2);background:var(--input);} .rg-mx tr.tt td:first-child{background:var(--input);}
+.rg-mx tr.st td{background:var(--input);padding-top:0;text-align:center;} .rg-mx tr.st td:first-child{background:var(--input);}
+.rg-badge{display:inline-block;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap;}
+.rg-badge.ok{background:#10b98122;color:var(--green);} .rg-badge.mal{background:#ef444422;color:var(--red);} .rg-badge.neu{background:#8393b226;color:var(--mut);}
+.rg-lg{display:flex;flex-wrap:wrap;gap:8px 16px;padding:9px 12px;background:var(--input);border:1px solid var(--line);border-radius:10px;}
+.rg-lg button{display:inline-flex;align-items:center;gap:7px;border:0;background:transparent;font:inherit;font-size:12px;font-weight:600;color:var(--tx);cursor:pointer;padding:2px 0;}
+.rg-lg button i{width:22px;height:3px;border-radius:2px;position:relative;} .rg-lg button i::after{content:"";position:absolute;left:50%;top:50%;width:8px;height:8px;border-radius:50%;background:inherit;transform:translate(-50%,-50%);}
+.rg-lg button.off{opacity:.35;text-decoration:line-through;}
+.rgb-g{margin-bottom:11px;} .rgb-t{font-size:12px;font-weight:800;margin-bottom:4px;color:var(--tx);}
+.rgb-r{display:grid;grid-template-columns:58px minmax(0,1fr) 46px;gap:8px;align-items:center;margin-bottom:3px;font-size:11px;}
+.rgb-r span.n{color:var(--tx2);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;} .rgb-r b{text-align:right;font-variant-numeric:tabular-nums;}
+.rgb-tr{display:block;height:9px;border-radius:5px;background:var(--line);overflow:hidden;} .rgb-tr i{display:block;height:100%;border-radius:5px;}
+.rg-ct{font-size:11px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--mut);margin:0 0 8px;}
+.rg-con{display:flex;gap:14px;margin:0 20px 16px;padding:13px 16px;background:var(--input);border:1px solid var(--line);border-left:3px solid #24487a;border-radius:10px;}
+.rg-con svg{flex:none;width:34px;height:34px;color:#24487a;} .rg-con b{display:block;font-size:13px;margin-bottom:5px;color:var(--tx);}
+.rg-con ul{margin:0;padding-left:18px;font-size:12px;line-height:1.55;color:var(--tx2);} .rg-con li b{display:inline;font-size:inherit;margin:0;color:var(--tx);}
+.rg-msg{background:var(--card);border:1px dashed var(--line2);border-radius:12px;padding:22px;text-align:center;font-size:12.5px;color:var(--mut);}
+.rg-nota{margin:10px 2px 0;font-size:11px;color:var(--mut);line-height:1.5;}
+@media (max-width:900px){.rg-body{grid-template-columns:1fr;} .rg-chart svg{max-height:380px;}}
+@media (max-width:560px){.rg-band{padding:12px 14px;} .rg-band h3{font-size:15px;} .rg-body{padding:14px;gap:16px;} .rg-con{margin:0 14px 14px;padding:11px 12px;} .rg-con>svg{display:none;} .rg-mx{min-width:520px;} .rg-mx th:first-child,.rg-mx td:first-child{width:30%;min-width:0;} .rg-g{font-size:11.5px;}}
+
 /* ═══ avisos flotantes ═══ */
 #toasts{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:600;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none;width:min(560px,calc(100vw - 20px));}
 .toast{pointer-events:auto;display:flex;align-items:flex-start;gap:10px;width:100%;padding:11px 10px 11px 12px;border-radius:12px;background:var(--card);color:var(--tx);border:1px solid var(--line2);box-shadow:0 14px 40px rgba(2,6,23,.34);font-size:13px;line-height:1.4;animation:toastIn .2s ease;}
@@ -919,11 +975,11 @@ html.dens-densa{--rh:26px;--rh0:31px;--rh1:26px;--rh2:24px;--rh3:22px;--fc:10.5p
         <div class="legend2"><span><i style="background:#2f6fed"></i>Programado</span><span><i style="background:var(--red)"></i>Ejecutado real</span><span><i style="background:#9db8ea"></i>Mes elegido</span><span><i style="background:#d97706"></i>Corte de hoy</span><span id="legendPlazo" style="display:none"><i style="background:#64748b;opacity:.35"></i>Suspensión / ampliación de plazo</span><span id="legendFinPlazo" style="display:none"><i style="background:#7c3aed"></i>Fin de plazo</span></div>
       </div>
 
-      <div class="grid2">
-        <div class="chart-card">
+      <div class="grid2 res-eq">
+        <div class="chart-card av-card">
           <h3>Avance por componente</h3>
           <p class="hint">% programado vs % ejecutado real — <b id="avancePuenteMes"></b> (ligado al mes elegido en la Curva S)</p>
-          <svg id="avancePuenteSvg" viewBox="0 0 420 190"></svg>
+          <div class="av-wrap"><svg id="avancePuenteSvg" viewBox="0 0 420 190"></svg></div>
           <div class="legend2"><span><i style="background:#2f6fed"></i>Programado</span><span><i style="background:var(--red)"></i>Ejecutado</span></div>
         </div>
         <div class="chart-card">
@@ -949,12 +1005,8 @@ html.dens-densa{--rh:26px;--rh0:31px;--rh1:26px;--rh2:24px;--rh3:22px;--fc:10.5p
         </div>
       </div>
 
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Código</th><th>Partida</th><th>Unidad</th><th>Metrado</th><th>Avance</th><th>Presupuesto</th><th>Valor ganado</th></tr></thead>
-          <tbody id="tbody"><tr><td colspan="7" class="mono" style="color:var(--mut)">Consultando la API…</td></tr></tbody>
-        </table>
-      </div>
+      <div id="rgGrid"><div class="rg-msg">Consultando la API…</div></div>
+      <p class="rg-nota" id="rgNota"></p>
     </section>
 
     <!-- ═══════════ PARTE DIARIO ═══════════ -->
@@ -1997,6 +2049,8 @@ function activarMes(periodo, silencioso) {
   renderAvancePuente(periodo);
   renderMateriales(periodo);
   renderKpisYTabla(DATA.partidas, DATA.avance, DATA.programado, periodo);
+  renderReporteGrupos(periodo);
+  reajustarAvance();   // Materiales ya tiene su alto: la gráfica de avance se estira a lo mismo
 }
 
 // Monto programado vs ejecutado DE ESE MES (no acumulado), como texto fijo junto al
@@ -2037,6 +2091,7 @@ function bar3D(x, yTop, baseline, width, depth, front, top, side) {
     <rect x="${x}" y="${yTop}" width="${width}" height="${baseline-yTop}" fill="${front}"/>`;
 }
 
+const w0Av = 420;
 function renderAvancePuente(periodo) {
   const todas = (DATA.curvaMensual || []).filter(enAlcance);
   const d = periodo ? new Date(periodo) : null;
@@ -2062,7 +2117,8 @@ function renderAvancePuente(periodo) {
   });
 
   const depth = 7;
-  const w = 420, h = 190, padL = 34, padR = 10 + depth, padT = 24, padB = 34;
+  const wrapAv = $('#avancePuenteSvg').parentElement;
+  const w = 420, h = wrapAv.clientWidth > 0 ? Math.max(190, Math.min(340, Math.round(w0Av * wrapAv.clientHeight / wrapAv.clientWidth))) : 190, padL = 34, padR = 10 + depth, padT = 24, padB = 34;
   const n = filas.length || 1;
   const slot = (w - padL - padR) / n;
   const barW = Math.min(26, slot * 0.3);
@@ -2096,7 +2152,14 @@ function renderAvancePuente(periodo) {
 
   $('#avancePuenteSvg').setAttribute('viewBox', `0 0 ${w} ${h}`);
   $('#avancePuenteSvg').innerHTML = bars;
+  avAlto = wrapAv ? wrapAv.clientHeight : 0;
 }
+let avAlto = 0;
+function reajustarAvance() {   // si Materiales cambió de alto, la gráfica de avance se vuelve a dibujar para llenar el mismo espacio
+  const wv = $('#avancePuenteSvg').parentElement;
+  if (DATA && wv.clientWidth && Math.abs(wv.clientHeight - avAlto) > 3) renderAvancePuente(curvaPopupFijo);
+}
+{ let tt; window.addEventListener('resize', () => { clearTimeout(tt); tt = setTimeout(() => { try { reajustarAvance(); } catch (e) {} }, 150); }); }
 
 // ── Control de materiales ─────────────────────────────────────────────────────────
 // Todo sale de la base: `materiales` (catálogo: acero, concreto, encofrado, ...),
@@ -2313,9 +2376,147 @@ function renderMateriales(periodo) {
         ? `<span class="mat-falta" style="display:block;margin-top:4px">⚠ ${sinRegla.length} partida${sinRegla.length === 1 ? '' : 's'} llamada${sinRegla.length === 1 ? '' : 's'} «${esc(mat.nombre)}…» no cuenta${sinRegla.length === 1 ? '' : 'n'} en la meta: falta la regla del código ${esc(codigosSR)}.</span>`
         : '');
 }
-$('#matSel').addEventListener('change', (e) => { matSel = e.target.value; matTipo = ''; matElem = ''; renderMateriales(curvaPopupFijo); });
-$('#matTipo').addEventListener('change', (e) => { matTipo = e.target.value; renderMateriales(curvaPopupFijo); });
-$('#matElem').addEventListener('change', (e) => { matElem = e.target.value; renderMateriales(curvaPopupFijo); });
+$('#matSel').addEventListener('change', (e) => { matSel = e.target.value; matTipo = ''; matElem = ''; renderMateriales(curvaPopupFijo); reajustarAvance(); });
+$('#matTipo').addEventListener('change', (e) => { matTipo = e.target.value; renderMateriales(curvaPopupFijo); reajustarAvance(); });
+$('#matElem').addEventListener('change', (e) => { matElem = e.target.value; renderMateriales(curvaPopupFijo); reajustarAvance(); });
+
+// ── Reporte de avance por componente y por grupo ──
+// Grupo = nivel 2 del cronograma valorizado (OBRAS PRELIMINARES, PUENTE, ACCESOS, ...). El programado sale del
+// valorizado vigente; el ejecutado por grupo es lo registrado en el parte diario del Look Ahead. El ejecutado OFICIAL
+// del componente es el de la Curva S: lo que aún no está desglosado por grupo aparece como su propia línea.
+let GRUPOS = null;   // null: cargando · 'falta': la base aún no tiene la vista · lista de filas
+async function cargarReporteGrupos(version, filtroProy) {
+  if (!version) GRUPOS = [];
+  else {
+    try { GRUPOS = await getTodo(`/v_reporte_grupo_mes?version_id=eq.${version.id}&${filtroProy}&select=proyecto_id,concepto,grupo_codigo,grupo_nombre,grupo_orden,mes,programado,ejecutado&order=proyecto_id,concepto,grupo_codigo,mes`); }
+    catch (e) { GRUPOS = 'falta'; }
+  }
+  renderReporteGrupos();
+}
+let rgMetrica = 'prog', rgVista = 'radar'; const rgOcultos = new Set();
+try { const m = localStorage.getItem('obra-rg-metrica'), v = localStorage.getItem('obra-rg-vista'); if (m === 'ejec') rgMetrica = 'ejec'; if (v === 'barras') rgVista = 'barras'; } catch (e) {}
+const RG_COLORES = ['#2563eb', '#059669', '#f97316', '#7c3aed', '#0891b2', '#db2777', '#ca8a04', '#64748b'];
+const rgNombre = (n) => { const s = String(n || '').toLowerCase().replace(/proteccion/g, 'protección'); return s.charAt(0).toUpperCase() + s.slice(1); };
+function rgEnvolver(txt, max) { const out = []; let l = ''; String(txt).split(' ').forEach(w => { if ((l + ' ' + w).trim().length > max && l) { out.push(l); l = w; } else l = (l + ' ' + w).trim(); }); if (l) out.push(l); return out; }
+document.addEventListener('click', (e) => {
+  const m = e.target.closest('[data-rgm]'), v = e.target.closest('[data-rgv]'), l = e.target.closest('[data-rgl]');
+  if (!m && !v && !l) return;
+  if (m) { rgMetrica = m.dataset.rgm; try { localStorage.setItem('obra-rg-metrica', rgMetrica); } catch (x) {} }
+  if (v) { rgVista = v.dataset.rgv; try { localStorage.setItem('obra-rg-vista', rgVista); } catch (x) {} }
+  if (l) { rgOcultos.has(l.dataset.rgl) ? rgOcultos.delete(l.dataset.rgl) : rgOcultos.add(l.dataset.rgl); }
+  renderReporteGrupos();
+});
+function rgRadar(series, ejes, max) {
+  const W = 480, H = 400, cx = W / 2, cy = 200, R = 122, n = ejes.length, ang = (i) => -Math.PI / 2 + i * 2 * Math.PI / n;
+  const pt = (i, f) => [(cx + Math.cos(ang(i)) * R * f).toFixed(1), (cy + Math.sin(ang(i)) * R * f).toFixed(1)];
+  let s = '';
+  [0.2, 0.4, 0.6, 0.8, 1].forEach(f => { s += `<polygon points="${ejes.map((_, i) => pt(i, f).join(',')).join(' ')}" fill="${f === 1 ? SVGC.grid + '55' : 'none'}" stroke="${SVGC.grid}" stroke-width="1"/>`; });
+  ejes.forEach((_, i) => { const [x, y] = pt(i, 1); s += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="${SVGC.grid}" stroke-width="1"/>`; });
+  [0.2, 0.4, 0.6, 0.8, 1].forEach(f => { const [x, y] = pt(0, f); s += `<text x="${+x + 4}" y="${+y + 3}" font-size="9" fill="${SVGC.axis}">${+(max * f * 100).toFixed(1)}%</text>`; });
+  ejes.forEach((e, i) => {
+    const a = ang(i), lx = cx + Math.cos(a) * (R + 16), ly = cy + Math.sin(a) * (R + 16), c = Math.cos(a), sn = Math.sin(a);
+    const anc = c > 0.3 ? 'start' : c < -0.3 ? 'end' : 'middle', ls = rgEnvolver(e, 17), y0 = ly + (sn > 0.3 ? 10 : sn < -0.3 ? -(ls.length - 1) * 12 - 2 : -(ls.length - 1) * 6 + 3);
+    s += `<text font-size="11.5" font-weight="700" fill="${tema === 'oscuro' ? '#e6ecf8' : '#1e3a5f'}" text-anchor="${anc}">${ls.map((q, k) => `<tspan x="${lx.toFixed(1)}" y="${(y0 + k * 12.5).toFixed(1)}">${esc(q)}</tspan>`).join('')}</text>`;
+  });
+  series.forEach(se => {
+    const pts = se.v.map((v, i) => pt(i, Math.max(0, Math.min(1, (v || 0) / max))));
+    s += `<polygon points="${pts.map(p => p.join(',')).join(' ')}" fill="${se.col}" fill-opacity=".13" stroke="${se.col}" stroke-width="2.4" stroke-linejoin="round"/>`;
+    pts.forEach((p, i) => { s += `<circle cx="${p[0]}" cy="${p[1]}" r="3.8" fill="${se.col}" stroke="#fff" stroke-width="1.3"><title>${esc(se.nom)} · ${esc(ejes[i])}: ${((se.v[i] || 0) * 100).toFixed(1)}%</title></circle>`; });
+  });
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Radar comparativo por grupo">${s}</svg>`;
+}
+function renderReporteGrupos(periodo) {
+  const box = $('#rgGrid'); if (!box || !DATA) return;
+  if (periodo === undefined) periodo = curvaPopupFijo;
+  const nota = $('#rgNota');
+  if (GRUPOS === null) { box.innerHTML = '<div class="rg-msg">Cargando el reporte por grupo…</div>'; nota.textContent = ''; return; }
+  if (GRUPOS === 'falta') { box.innerHTML = '<div class="rg-msg">Este reporte necesita la vista <b>v_reporte_grupo_mes</b>. Pide al administrador que corra <b>reporte_grupos.sql</b> en la base.</div>'; nota.textContent = ''; return; }
+  const d = periodo ? new Date(periodo) : null, corte = d ? `Corte: ${MESES_ES[d.getUTCMonth()]} ${d.getUTCFullYear()}` : 'Al corte';
+  const todas = (DATA.curvaMensual || []).filter(enAlcance);
+  const comps = COMPONENTES.filter(c => seleccionada === GENERAL || c.id === seleccionada);
+  if (!comps.length) { box.innerHTML = '<div class="rg-msg">No hay componentes en esta obra.</div>'; return; }
+  const m = rgMetrica, pid = Object.fromEntries(DATA.proyectos.map(p => [p.codigo, p.id]));
+  const P = (x) => (x * 100).toFixed(1) + '%';
+  const M = (n) => n >= 1e6 ? (n / 1e6).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' M' : Number(n || 0).toLocaleString('es-PE', { maximumFractionDigits: 0 });
+  const info = comps.map(c => {
+    const gr = {};
+    (GRUPOS || []).filter(r => r.proyecto_id === pid[c.id] && enAlcance(r)).forEach(r => {
+      const clave = (r.concepto === 'adicional' ? 'A|' : 'C|') + (r.grupo_nombre || r.grupo_codigo);
+      const g = gr[clave] || (gr[clave] = { clave, cod: r.grupo_codigo, nom: (r.concepto === 'adicional' ? 'Adicional · ' : '') + rgNombre(r.grupo_nombre || r.grupo_codigo), adic: r.concepto === 'adicional', pres: 0, prog: 0, ejec: 0 });
+      const p = Number(r.programado) || 0, e = Number(r.ejecutado) || 0;
+      g.pres += p; if (!periodo || r.mes <= periodo) { g.prog += p; g.ejec += e; }
+    });
+    const filasC = unaFilaPorPeriodo(todas.filter(r => r.proyecto_id_codigo === c.id));
+    let of = null;   // cifras oficiales del componente (Curva S), igual que la gráfica «Avance por componente»
+    if (filasC.length) {
+      const base = Math.max(...filasC.map(r => Number(r.programado_acumulado) || 0), 1);
+      if (periodo && periodo < filasC[0].periodo) of = { base, prog: 0, ejec: 0 };
+      else {
+        const f = (periodo && filasC.find(r => r.periodo === periodo)) || (periodo && [...filasC].reverse().find(r => r.periodo < periodo)) || filasC[filasC.length - 1];
+        of = { base, prog: Number(f.programado_acumulado) || 0, ejec: Number(f.ejecutado_acumulado) || 0 };
+      }
+    }
+    const l = Object.values(gr), sPres = l.reduce((s, g) => s + g.pres, 0), sProg = l.reduce((s, g) => s + g.prog, 0), sEjec = l.reduce((s, g) => s + g.ejec, 0);
+    const base = of ? of.base : sPres, prog = of ? of.prog : sProg, ejec = of ? of.ejec : sEjec;
+    const col = RG_COLORES[Math.max(0, COMPONENTES.findIndex(q => q.id === c.id)) % RG_COLORES.length];
+    return { c, col, gr, base, prog, ejec, sinDes: of ? Math.max(0, ejec - sEjec) : 0, hay: !!(of || l.length) };
+  });
+  const claves = {};
+  info.forEach(x => Object.values(x.gr).forEach(g => { claves[g.clave] = claves[g.clave] || { clave: g.clave, cod: g.cod, nom: g.nom, adic: g.adic }; }));
+  const filas = Object.values(claves).sort((a, b) => (a.adic - b.adic) || (a.cod.split('.').slice(1).join('.') < b.cod.split('.').slice(1).join('.') ? -1 : 1));
+  const multi = info.length > 1;
+  const tot = { base: 0, prog: 0, ejec: 0, sinDes: 0, gr: {} };
+  info.forEach(x => { tot.base += x.base; tot.prog += x.prog; tot.ejec += x.ejec; tot.sinDes += x.sinDes;
+    Object.values(x.gr).forEach(g => { const t0 = tot.gr[g.clave] || (tot.gr[g.clave] = { pres: 0, prog: 0, ejec: 0 }); t0.pres += g.pres; t0.prog += g.prog; t0.ejec += g.ejec; }); });
+  const val = (g) => g && g.pres ? g[m] / g.pres : null;          // % del grupo según la métrica elegida
+  const valOf = (base, prog, ejec) => base ? (m === 'prog' ? prog : ejec) / base : null;
+  const celda = (g, col, cls, nom) => { const v = val(g); return v === null ? `<td class="${cls || ''}"><div class="rc-n">—</div></td>`
+    : `<td class="${cls || ''}" title="${esc(`${nom}: programado ${fmt(g.prog)} · ejecutado (parte diario) ${fmt(g.ejec)} · presupuesto ${fmt(g.pres)}`)}"><div class="mc"><b style="color:${col}">${P(v)}</b><span class="mtr"><i style="width:${Math.min(100, v * 100).toFixed(1)}%;background:${col}"></i></span></div></td>`; };
+  const celdaV = (v, col, tip, cls) => v === null ? `<td class="${cls || ''}"><div class="rc-n">—</div></td>` : `<td class="${cls || ''}" title="${esc(tip || '')}"><div class="mc"><b style="color:${col}">${P(v)}</b><span class="mtr"><i style="width:${Math.min(100, v * 100).toFixed(1)}%;background:${col}"></i></span></div></td>`;
+  const estado = (base, prog, ejec) => { if (!base) return '<span class="rg-badge neu">Sin datos</span>'; const dif = (ejec - prog) / base * 100;
+    return ejec === 0 && prog > 0 ? '<span class="rg-badge neu">Sin avance</span>' : dif >= -0.05 ? '<span class="rg-badge ok">Al día</span>' : `<span class="rg-badge mal">${Math.abs(dif).toFixed(1)} pts atrás</span>`; };
+  const nom = (c) => esc(String(c.nombre).replace(/^Puente\s+/i, ''));
+  const haySinDes = m === 'ejec' && info.some(x => x.sinDes > 0.5);
+  // ── matriz ──
+  const cab = `<thead><tr><th>Grupo</th>${info.map(x => `<th><i style="background:${x.col}"></i>${nom(x.c)}<small>${x.hay ? 'S/. ' + M(x.base) : 'sin datos'}</small></th>`).join('')}${multi ? `<th class="tot">Total obra<small>S/. ${M(tot.base)}</small></th>` : ''}</tr></thead>`;
+  const cuerpo = filas.map(f => `<tr><td><div class="rg-g">${esc(f.nom)}</div></td>${info.map(x => celda(x.gr[f.clave], x.col, '', f.nom)).join('')}${multi ? celda(tot.gr[f.clave], 'var(--tx)', 'tot', f.nom) : ''}</tr>`).join('');
+  const sd = haySinDes ? `<tr class="sd"><td><div class="rg-g">Avance sin desglose por grupo</div></td>${info.map(x => celdaV(x.sinDes > 0.5 ? x.sinDes / x.base : null, '#94a3b8', 'Ejecutado oficial (Curva S) aún no registrado por partida: ' + fmt(x.sinDes))).join('')}${multi ? celdaV(tot.sinDes > 0.5 ? tot.sinDes / tot.base : null, '#94a3b8', '', 'tot') : ''}</tr>` : '';
+  const total = `<tr class="tt"><td><div class="rg-g">Total (Curva S)</div></td>${info.map(x => celdaV(valOf(x.hay ? x.base : 0, x.prog, x.ejec), x.col, `Programado ${fmt(x.prog)} · ejecutado ${fmt(x.ejec)} · presupuesto ${fmt(x.base)}`)).join('')}${multi ? celdaV(valOf(tot.base, tot.prog, tot.ejec), 'var(--tx)', '', 'tot') : ''}</tr>`
+    + `<tr class="st"><td></td>${info.map(x => `<td>${estado(x.hay ? x.base : 0, x.prog, x.ejec)}</td>`).join('')}${multi ? `<td class="tot">${estado(tot.base, tot.prog, tot.ejec)}</td>` : ''}</tr>`;
+  // ── gráfico: radar (o barras horizontales agrupadas) ──
+  const visibles = info.filter(x => !rgOcultos.has(x.c.id));
+  const series = visibles.map(x => ({ nom: String(x.c.nombre).replace(/^Puente\s+/i, ''), col: x.col, v: filas.map(f => val(x.gr[f.clave])) }));
+  const vmax = Math.max(0, ...series.flatMap(s => s.v.map(v => v || 0)));
+  const escala = m === 'prog' ? 1 : ([0.05, 0.1, 0.2, 0.25, 0.5, 1].find(z => z >= vmax) || 1);
+  const usaRadar = rgVista === 'radar' && filas.length >= 3;
+  const grafico = usaRadar ? rgRadar(series, filas.map(f => f.nom), escala)
+    : `<div>${filas.map((f, i) => `<div class="rgb-g"><div class="rgb-t">${esc(f.nom)}</div>${series.map(se => `<div class="rgb-r"><span class="n">${esc(se.nom)}</span><span class="rgb-tr"><i style="width:${Math.min(100, (se.v[i] || 0) / escala * 100).toFixed(1)}%;background:${se.col}"></i></span><b style="color:${se.col}">${se.v[i] === null ? '—' : P(se.v[i])}</b></div>`).join('')}</div>`).join('')}</div>`;
+  const leyenda = info.map(x => `<button type="button" data-rgl="${esc(x.c.id)}" class="${rgOcultos.has(x.c.id) ? 'off' : ''}" title="Mostrar u ocultar en el gráfico"><i style="background:${x.col}"></i>${nom(x.c)}</button>`).join('');
+  // ── conclusiones visuales (se calculan solas con lo que hay en pantalla) ──
+  const et = m === 'prog' ? 'programado' : 'ejecutado', ok = [];
+  if (multi) {
+    const cuentas = info.map(x => ({ x, n: filas.filter(f => { const v = val(x.gr[f.clave]); return v !== null && v >= 0.9995; }).length, de: filas.filter(f => val(x.gr[f.clave]) !== null).length })).filter(q => q.n > 0).sort((a, b) => b.n - a.n);
+    if (cuentas.length) { const mx = cuentas[0].n, lid = cuentas.filter(q => q.n === mx).map(q => `<b>${nom(q.x.c)}</b>`).join(' y '); ok.push(`${lid} ${cuentas.filter(q => q.n === mx).length > 1 ? 'alcanzan' : 'alcanza'} el 100 % ${et} en ${mx} de ${cuentas[0].de} grupos.`); }
+  }
+  const prom = filas.map(f => { const vs = info.map(x => ({ x, v: val(x.gr[f.clave]) })).filter(q => q.v !== null); return { f, vs, media: vs.length ? vs.reduce((s, q) => s + q.v, 0) / vs.length : null }; }).filter(q => q.media !== null).sort((a, b) => a.media - b.media);
+  if (prom.length && prom[0].media < 0.995 && (m === 'prog' || prom[0].media > 0)) {
+    const w = prom[0], bajos = [...w.vs].sort((a, b) => a.v - b.v).slice(0, multi ? 2 : 1);
+    ok.push(`<b>${esc(w.f.nom)}</b> es el grupo con menor avance ${et}: ${bajos.map(q => `${multi ? `<b>${nom(q.x.c)}</b> ` : ''}${P(q.v)}`).join(' y ')}.`);
+  }
+  const conCurva = info.filter(x => x.hay && x.base);
+  if (conCurva.length) ok.push('Según la Curva S (oficial), ' + conCurva.map(x => { const dif = (x.ejec - x.prog) / x.base * 100; return `<b>${nom(x.c)}</b> ${x.ejec === 0 && x.prog > 0 ? 'sin avance registrado' : dif >= -0.05 ? 'al día' : Math.abs(dif).toFixed(1) + ' pts atrás'}`; }).join(' · ') + '.');
+  const nComp = info.length;
+  box.innerHTML = `<div class="rg-card">
+    <div class="rg-band"><div><h3>Avance por grupo de partidas — ${nComp} componente${nComp === 1 ? '' : 's'}</h3><p>Comparativo del avance ${m === 'prog' ? 'programado a la fecha' : 'ejecutado (parte diario)'} en % · ${esc(corte)} · ${esc(ALCANCE_TXT[alcance])} · sin IGV</p></div>
+      <div class="rg-ctl"><span class="rg-seg" role="group" aria-label="Qué avance ver"><button type="button" data-rgm="prog" class="${m === 'prog' ? 'on' : ''}">Programado</button><button type="button" data-rgm="ejec" class="${m === 'ejec' ? 'on' : ''}">Ejecutado</button></span>
+        <span class="rg-seg" role="group" aria-label="Tipo de gráfico"><button type="button" data-rgv="radar" class="${usaRadar ? 'on' : ''}">Radar</button><button type="button" data-rgv="barras" class="${usaRadar ? '' : 'on'}">Barras</button></span></div></div>
+    <div class="rg-body"><div class="rg-chart">${grafico}</div>
+      <div class="rg-tabla"><div class="rg-tw"><table class="rg-mx">${cab}<tbody>${cuerpo}${sd}${total}</tbody></table></div><div class="rg-lg">${leyenda}</div></div></div>
+    ${ok.length ? `<div class="rg-con"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3" y="13" width="4" height="8" rx="1"/><rect x="10" y="8" width="4" height="13" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/></svg><div><b>Conclusiones visuales:</b><ul>${ok.map(q => `<li>${q}</li>`).join('')}</ul></div></div>` : ''}
+  </div>`;
+  nota.textContent = 'Cada celda: % del presupuesto del grupo (línea = avance). Programado: cronograma valorizado vigente. Ejecutado por grupo: lo registrado en el parte diario del Look Ahead'
+    + (m === 'ejec' ? '; el ejecutado oficial del componente (Curva S) está en «Total» y lo que aún no se registró por partida aparece como «avance sin desglose».' : '.');
+}
 
 function renderKpisYTabla(partidas, avanceRows, progRows, periodo) {
   const proyIds = DATA.proyectos
@@ -2359,21 +2560,6 @@ function renderKpisYTabla(partidas, avanceRows, progRows, periodo) {
     : pct >= pctProg ? 'Al día o adelantado' : `${((pctProg-pct)*100).toFixed(1)} pts atrás`;
   $('#kEstadoS').textContent = estado;
 
-  const colorOf = (p) => p >= 1 ? 'var(--green)' : p > 0 ? 'var(--blue)' : 'var(--mut)';
-  const labelOf = (p) => p >= 1 ? 'Terminado' : p > 0 ? 'En proceso' : 'Pendiente';
-  const bgOf = (p) => p >= 1 ? '#10b98126' : p > 0 ? '#3b82f626' : '#8393b226';
-  $('#tbody').innerHTML = partidasSel.map(p => {
-    const a = avanceMap[p.id] || { pct_avance: 0, valor_ganado: 0 };
-    const pctA = Number(a.pct_avance);
-    return `<tr>
-      <td class="mono">${p.codigo}</td><td>${p.nombre}</td><td>${p.unidad}</td>
-      <td class="mono">${Number(p.metrado).toLocaleString('es-PE')}</td>
-      <td><span class="mini-bar"><i style="width:${pctA*100}%;background:${colorOf(pctA)}"></i></span>
-          <span class="badge" style="background:${bgOf(pctA)};color:${colorOf(pctA)}">${labelOf(pctA)} ${(pctA*100).toFixed(0)}%</span></td>
-      <td class="mono">${fmt(p.presupuesto)}</td>
-      <td class="mono" style="color:var(--red)">${fmt(a.valor_ganado)}</td>
-    </tr>`;
-  }).join('') || `<tr><td colspan="7" class="mono" style="color:var(--mut)">Sin partidas para los componentes seleccionados</td></tr>`;
 }
 
 function renderAll() {
@@ -2470,6 +2656,7 @@ async function bootResumen() {
     const A = { obra, proyectos, version, partidas, avance, programado, curvaMensualRaw, plazoEventos, progRows, plazos };
     aplicarResumen(A, null);
     cacheResGuardar(A);
+    cargarReporteGrupos(version, filtroProy);   // aparte: no retrasa la Curva S
     const [materiales, matMetasTabla, matAvance, metasVal, matPartidas, matProg, matSinRegla] = await pB;
     aplicarResumen(A, { materiales, matMetasTabla, matAvance, metasVal, matPartidas, matProg, matSinRegla });
   } catch (err) {
