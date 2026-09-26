@@ -613,7 +613,7 @@ html.la-modal{overflow:hidden;}
 :root{--rg-am:#a85a08;} :root[data-theme="dark"]{--rg-am:#f2c66d;}
 .rg-badge.ok{background:#10b98122;color:var(--green);} .rg-badge.mal{background:#ef444422;color:var(--rg-e);} .rg-badge.am{background:#f59e0b26;color:var(--rg-am);}
 .rg-mx tr.cp td{background:var(--input);padding-top:6px;padding-bottom:2px;text-align:center;} .rg-mx tr.cp td:first-child{background:var(--input);}
-.rg-mx tr.cp .rg-g{font-size:11px;color:var(--mut);font-weight:700;}
+.rg-mx tr.cp .rg-g{font-size:11px;color:var(--mut);font-weight:700;} .rg-mx tr.cp td:first-child{text-align:left;}
 .rg-cpv{font-weight:800;font-size:13px;font-variant-numeric:tabular-nums;} .rg-cpv.ok{color:var(--green);} .rg-cpv.am{color:var(--rg-am);} .rg-cpv.mal{color:var(--rg-e);} .rg-cpv.neu{color:var(--mut);} .rg-badge.neu{background:#8393b226;color:var(--mut);}
 .rg-lg{display:flex;flex-wrap:wrap;gap:8px 16px;padding:9px 12px;background:var(--input);border:1px solid var(--line);border-radius:10px;}
 .rg-lg button{display:inline-flex;align-items:center;gap:7px;border:0;background:transparent;font:inherit;font-size:12px;font-weight:600;color:var(--tx);cursor:pointer;padding:2px 0;}
@@ -631,6 +631,67 @@ html.la-modal{overflow:hidden;}
 .rg-nota{margin:10px 2px 0;font-size:11px;color:var(--mut);line-height:1.5;}
 @media (max-width:900px){.rg-body{grid-template-columns:1fr;} .rg-chart svg{max-height:380px;}}
 @media (max-width:560px){.rg-band{padding:12px 14px;} .rg-band h3{font-size:15px;} .rg-body{padding:14px;gap:16px;} .rg-con{margin:0 14px 14px;padding:11px 12px;} .rg-con>svg{display:none;} .rg-mx{min-width:520px;} .rg-mx th:first-child,.rg-mx td:first-child{width:30%;min-width:0;} .rg-g{font-size:11.5px;}}
+
+/* ═══ Informe del Resumen en hoja A3 horizontal (vista previa y PDF) ═══ */
+.res-fila{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px 12px;margin:-6px 0 10px;}
+#informe{display:none;--bg:#f4f6fb;--panel:#fff;--card:#fff;--line:#e4e9f4;--line2:#d5deef;--tx:#141b29;--tx2:#3f4c65;--mut:#5c6b85;--blue:#2f6fed;--blue-tx:#1d4ed8;--green:#0e8f4f;--amber:#b45309;--red:#ef4444;--input:#f5f7fc;--shadow:none;
+  --rg-e:#b4322b;--rg-p:#2a5bc4;--rg-eb:#d9453d;--rg-pb:#3b74e0;--rg-am:#a85a08;color:var(--tx);}
+body.inf-abierto{overflow:hidden;}
+body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inset:0;z-index:950;background:#3f4652;}
+.inf-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;padding:10px 16px;background:#17335a;color:#fff;}
+.inf-bar b{flex:1;font-size:14px;min-width:180px;} .inf-bar span{font-size:11.5px;color:#cfdcf0;}
+.inf-bar button{font:inherit;font-size:12.5px;font-weight:700;padding:8px 16px;border-radius:9px;border:1px solid rgba(255,255,255,.35);background:transparent;color:#fff;cursor:pointer;}
+.inf-bar button.pri{background:#fff;color:#17335a;border-color:#fff;} .inf-bar button:hover{filter:brightness(1.1);}
+.inf-scroll{flex:1;overflow:auto;padding:18px;display:flex;justify-content:center;align-items:flex-start;}
+.inf-hoja{flex:none;width:420mm;height:296mm;box-sizing:border-box;padding:8mm 9mm;background:#fff;box-shadow:0 10px 40px rgba(0,0,0,.5);display:flex;flex-direction:column;gap:9px;overflow:hidden;zoom:var(--z,1);font-size:12px;line-height:1.35;}
+.inf-head{flex:none;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:12px 20px;border-radius:10px;background:linear-gradient(135deg,#17335a,#24487a);color:#fff;}
+.inf-head small{display:block;font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:#b9cae6;font-weight:700;} .inf-head h1{margin:2px 0 0;font-size:24px;font-weight:800;color:#fff;letter-spacing:.2px;} .inf-head p{margin:2px 0 0;font-size:12px;color:#cfdcf0;}
+.inf-meta{text-align:right;font-size:12px;color:#dbe6f6;line-height:1.55;} .inf-meta b{color:#fff;}
+.inf-kpis{flex:none;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.inf-k{border:1px solid var(--line);border-left:4px solid var(--kc,#2f6fed);border-radius:9px;padding:6px 14px;background:#fff;}
+.inf-k small{display:block;font-size:10.5px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--mut);}
+.inf-k b{display:block;font-size:24px;font-weight:800;margin:1px 0;font-variant-numeric:tabular-nums;} .inf-k em{display:block;font-style:normal;font-size:11.5px;color:var(--mut);}
+.inf-k .bar{height:6px;border-radius:3px;background:var(--line);margin-top:3px;overflow:hidden;} .inf-k .bar i{display:block;height:100%;background:var(--kc,#2f6fed);}
+.inf-fila2{flex:none;display:grid;grid-template-columns:1.95fr 1fr;gap:10px;height:338px;}
+.inf-card{border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:#fff;display:flex;flex-direction:column;min-width:0;min-height:0;overflow:hidden;}
+.inf-card h3{margin:0;font-size:14px;font-weight:800;color:var(--tx);} .inf-card p{margin:1px 0 4px;font-size:11px;color:var(--mut);}
+.inf-ctit{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:2px;}
+.inf-ctit .inf-chips{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px;font-size:10.5px;} .inf-ctit .inf-chips>*{padding:3px 9px !important;min-width:0 !important;} .inf-ctit .inf-chips *{font-size:11px !important;}
+.inf-card .svgw{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;} .inf-card .svgw svg{width:100%;height:100%;display:block;}
+.inf-card .legend2{margin-top:2px;flex-wrap:wrap;gap:4px 12px;font-size:10.5px;}
+.inf-fila3{flex:1;min-height:0;display:grid;grid-template-columns:1.95fr 1fr;gap:10px;} .inf-fila3>*{min-height:0;min-width:0;}
+.inf-fila3 .rg-card{height:100%;display:flex;flex-direction:column;box-shadow:none;}
+.inf-fila3 .rg-body{flex:1;min-height:0;grid-template-columns:.74fr 1.26fr;padding:6px 14px 4px;gap:10px;align-items:center;} .inf-fila3 .rg-chart svg{max-height:none;height:290px;}
+.inf-fila3 .rg-mx th:first-child,.inf-fila3 .rg-mx td:first-child{width:27%;min-width:0;} .inf-fila3 .rg-mx{font-size:11px;} .inf-fila3 .rg-mx .mv b{font-size:11.5px;} .inf-fila3 .rg-mx .mv em{font-size:9.5px;}
+.inf-fila3 .rg-band{padding:8px 16px;} .inf-fila3 .rg-band h3{font-size:15px;}
+.inf-fila3 .rg-mx{min-width:0;font-size:11.5px;} .inf-fila3 .rg-mx th,.inf-fila3 .rg-mx td{padding:1px 6px;} .inf-fila3 .rg-mx .mc{gap:3px;} .inf-fila3 .rg-mx thead th{padding:5px 5px;}
+.inf-fila3 .rg-con{margin:0 16px 8px;padding:6px 14px;} .inf-fila3 .rg-con ul{font-size:11.5px;line-height:1.4;}
+.inf-fila3 .rg-tabla{gap:0;} .inf-fila3 .rg-lg{display:none;}
+.inf-leg{display:flex;gap:16px;align-items:center;font-size:11.5px;color:#dbe6f6;} .inf-leg span{display:inline-flex;align-items:center;gap:7px;} .inf-leg i{display:inline-block;width:26px;height:9px;border-radius:5px;background:rgba(255,255,255,.25);position:relative;overflow:hidden;}
+.inf-leg i::before{content:"";position:absolute;left:0;top:0;width:100%;height:100%;background:#93b4f5;opacity:.7;} .inf-leg i.e::before{background:#f3a19a;opacity:1;top:2px;height:5px;}
+/* materiales: tabla por puente con ejecutado y saldo */
+.inf-mt{width:100%;min-width:0;border-collapse:collapse;font-size:11.5px;margin-top:6px;table-layout:fixed;}
+.inf-mt th,.inf-mt td{padding:4px 6px;border-top:1px solid var(--line);text-align:center;vertical-align:middle;}
+.inf-mt thead th{background:#17335a;color:#fff;border-top:0;font-size:11px;font-weight:800;padding:6px 4px;} .inf-mt thead th small{font-weight:600;color:#b9cae6;margin-left:3px;}
+.inf-mt thead tr+tr th{background:#24487a;font-size:10px;font-weight:700;padding:3px 4px;color:#dbe6f6;}
+.inf-mt .pu{text-align:left;width:19%;font-weight:700;} .inf-mt .pu i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;}
+.inf-mt td b{display:block;font-size:12.5px;color:#0e7a44;font-variant-numeric:tabular-nums;} .inf-mt td small{display:block;font-size:9.5px;color:var(--mut);font-variant-numeric:tabular-nums;} .inf-mt td small.x{color:#b4322b;font-weight:700;}
+.inf-mt td.s{color:#b45309;font-weight:800;font-size:12.5px;font-variant-numeric:tabular-nums;} .inf-mt tr.tt td{border-top:2px solid var(--line2);background:var(--input);}
+.inf-mt th.g0,.inf-mt td.g0{border-left:1px solid var(--line2);}
+.inf-mb{display:grid;grid-template-columns:78px minmax(0,1fr) 46px;gap:2px 8px;align-items:center;font-size:11px;margin-top:6px;} .inf-mb .n{font-weight:700;} .inf-mb .tr{display:block;height:10px;border-radius:5px;background:#d97706;opacity:.9;overflow:hidden;} .inf-mb .tr i{display:block;height:100%;background:#0e8f4f;border-radius:5px;}
+.inf-mb b{text-align:right;font-variant-numeric:tabular-nums;} .inf-mb em{grid-column:2/4;font-style:normal;font-size:10px;color:var(--mut);margin-top:-1px;margin-bottom:2px;}
+.inf-sub{margin:10px 0 0;font-size:11px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--mut);}
+.inf-pie{flex:none;display:flex;justify-content:space-between;align-items:flex-end;gap:20px;font-size:10.5px;color:var(--mut);}
+.inf-firmas{display:flex;gap:26px;} .inf-firmas span{display:block;width:150px;padding-top:3px;border-top:1px solid var(--mut);text-align:center;font-size:10px;}
+@page{size:A3 landscape;margin:0;}
+@media print{
+  html,body{background:#fff !important;}
+  body.inf-abierto>*:not(#informe){display:none !important;}
+  body.inf-abierto #informe{position:static;display:block;background:#fff;}
+  .inf-bar{display:none !important;} .inf-scroll{display:block;padding:0;overflow:visible;}
+  .inf-hoja{zoom:1 !important;box-shadow:none;margin:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  #informe *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+}
 
 /* ═══ avisos flotantes ═══ */
 #toasts{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:600;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none;width:min(560px,calc(100vw - 20px));}
@@ -931,7 +992,7 @@ html.dens-densa{--rh:26px;--rh0:31px;--rh1:26px;--rh2:24px;--rh3:22px;--fc:10.5p
       </p>
       <br>
 
-      <p class="hint" style="margin:-6px 0 10px" id="kpiMes"></p>
+      <div class="res-fila"><p class="hint" style="margin:0" id="kpiMes"></p><button type="button" class="btn-sec" id="btnInforme" title="Abre el informe del Resumen en una hoja A3 horizontal, listo para imprimir o guardar como PDF">📄 Informe PDF (A3)</button></div>
       <div class="kpis">
         <div class="card kc-teal">
           <div class="k-body">
@@ -988,7 +1049,7 @@ html.dens-densa{--rh:26px;--rh0:31px;--rh1:26px;--rh2:24px;--rh3:22px;--fc:10.5p
         <div id="curvaWrap" style="position:relative;">
           <svg id="curvaSvg" viewBox="0 0 900 320"></svg>
         </div>
-        <div class="legend2"><span><i style="background:#2f6fed"></i>Programado</span><span><i style="background:var(--red)"></i>Ejecutado real</span><span><i style="background:#9db8ea"></i>Mes elegido</span><span><i style="background:#d97706"></i>Corte de hoy</span><span id="legendPlazo" style="display:none"><i style="background:#64748b;opacity:.35"></i>Suspensión / ampliación de plazo</span><span id="legendFinPlazo" style="display:none"><i style="background:#7c3aed"></i>Fin de plazo</span></div>
+        <div class="legend2"><span><i style="background:#2f6fed"></i>Programado</span><span><i style="background:var(--red)"></i>Ejecutado real</span><span><i style="background:#d97706"></i>Fecha de corte</span><span id="legendPlazo" style="display:none"><i style="background:#64748b;opacity:.35"></i>Suspensión de plazo</span><span id="legendFinPlazo" style="display:none"><i style="background:#7c3aed"></i>Inicio y fin de plazo</span></div>
       </div>
 
       <div class="grid2 res-eq">
@@ -1387,8 +1448,8 @@ document.querySelectorAll('[data-tema]').forEach(b => {
 });
 // colores de los gráficos SVG (se dibujan en JS, no leen el CSS) — un juego por tema
 const SVGC = tema === 'oscuro'
-  ? { grid:'#26324a', axis:'#8a97b5', axisLine:'#2c3a54', warnBg:'#3a2020', warnBorder:'#7a3030', warnText:'#f87171', halo:'#151d2e', plazo:'#a78bfa', plazoOrig:'#8a97b5' }
-  : { grid:'#e4e9f4', axis:'#8592a8', axisLine:'#d5deef', warnBg:'#fdecec', warnBorder:'#f0a3aa', warnText:'#b91c1c', halo:'#ffffff', plazo:'#7c3aed', plazoOrig:'#94a3b8' };
+  ? { grid:'#26324a', axis:'#8a97b5', axisLine:'#2c3a54', warnBg:'#3a2020', warnBorder:'#7a3030', warnText:'#f87171', okBg:'#12301f', okBorder:'#2c7a52', okText:'#4ade80', midBg:'#16264a', midBorder:'#35509a', midText:'#8ab4f8', halo:'#151d2e', plazo:'#a78bfa', plazoOrig:'#8a97b5' }
+  : { grid:'#e4e9f4', axis:'#8592a8', axisLine:'#d5deef', warnBg:'#fdecec', warnBorder:'#f0a3aa', warnText:'#b91c1c', okBg:'#e8f7ef', okBorder:'#8fd5b0', okText:'#0e7a44', midBg:'#eaf1fe', midBorder:'#9db8ea', midText:'#1d4ed8', halo:'#ffffff', plazo:'#7c3aed', plazoOrig:'#94a3b8' };
 
 const $ = (s) => document.querySelector(s);
 const fmt = (n, d=0) => 'S/. ' + Number(n||0).toLocaleString('es-PE', {minimumFractionDigits:d, maximumFractionDigits:d});
@@ -1827,6 +1888,7 @@ let curvaPeriodos = []; // se llena en cada render, lo usa el <select> de mes y 
 let curvaPopupFijo = null; // periodo que el usuario eligió explícitamente (select o clic)
 let curvaPorPeriodoActual = {}; // datos del último render, para volver a este popup al quitar el mouse
 let curvaPxPorPeriodo = {}; // posición x (en el SVG) de cada mes, para mover la línea sin redibujar todo
+let CURVA_DIM = null;      // [ancho, alto] del dibujo; solo lo usa el informe para una Curva S más grande
 let curvaAngosto = null;    // true si la curva se dibujó en modo angosto (tablet/celular); ver renderCurvaS
 { let t; window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(() => {
   if (typeof DATA !== 'undefined' && DATA && curvaAngosto !== null && (($('#curvaWrap').clientWidth || 900) < 640) !== curvaAngosto) renderAll();
@@ -1886,7 +1948,7 @@ function renderCurvaS() {
   // en pantallas angostas (tablet/celular) el gráfico usa una proporción más alta: con la ancha (900×320) la curva
   // quedaba aplastada. Se vuelve a dibujar solo si al girar/redimensionar cambia de modo.
   curvaAngosto = ($('#curvaWrap').clientWidth || 900) < 640;
-  const w = curvaAngosto ? 640 : 900, h = curvaAngosto ? 400 : 320, padL=52, padR=16, padT=54, padB=50;
+  const w = CURVA_DIM ? CURVA_DIM[0] : curvaAngosto ? 640 : 900, h = CURVA_DIM ? CURVA_DIM[1] : curvaAngosto ? 400 : 320, padL=52, padR=16, padT=64, padB=50;
   const yMax = Math.max(...progSeries.map(p=>p.y), ...ejecSeries.map(p=>p.y), 1);
   const plazo = plazoSeleccion();
   const xMin = progSeries[0].x;
@@ -1916,44 +1978,9 @@ function renderCurvaS() {
   });
   ejeX += `<line x1="${padL}" y1="${h-padB}" x2="${w-padR}" y2="${h-padB}" stroke="${SVGC.axisLine}" stroke-width="1"/>`;
 
-  // línea vertical de "fecha de corte" = hoy (fija, siempre la fecha real de hoy)
-  let corteHoy = '';
-  if (hoy.getTime() >= xMin && hoy.getTime() <= xMax) {
-    const x = px(hoy.getTime());
-    corteHoy = `<line x1="${x}" y1="${padT}" x2="${x}" y2="${h-padB}" stroke="#d97706" stroke-width="1.5" stroke-dasharray="4,3"/>
-      <text x="${x}" y="${padT-8}" fill="#d97706" font-size="10" font-weight="600" text-anchor="middle">corte ${hoy.getDate()}/${hoy.getMonth()+1}</text>`;
-
-    // aviso de atraso EN la fecha de corte (globo de advertencia), si a hoy el ejecutado
-    // va por debajo de lo programado — mismo cálculo que la tarjeta "Estado del avance"
-    const periodoHoy = periodos.filter(p => new Date(p).getTime() <= hoy.getTime()).pop();
-    if (periodoHoy) {
-      const dHoy = porPeriodo[periodoHoy];
-      const gapPts = base ? ((dHoy.progA - dHoy.ejecA) / base) * 100 : 0;
-      if (gapPts > 1 && ejecSeries.some(p => p.y > 0)) {   // sin nada ejecutado registrado no se avisa "atrasado"
-        const bw = 112, bh = 32, by = 2;
-        const bx = Math.min(Math.max(x - bw/2, padL), w - padR - bw);
-        const tipX = Math.min(Math.max(x, bx + 14), bx + bw - 14);
-        corteHoy += `<g>
-          <path d="M ${tipX-6} ${by+bh} L ${tipX+6} ${by+bh} L ${tipX} ${by+bh+8} Z" fill="${SVGC.warnBg}" stroke="${SVGC.warnBorder}"/>
-          <rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="7" fill="${SVGC.warnBg}" stroke="${SVGC.warnBorder}"/>
-          <text x="${bx+bw/2}" y="${by+14}" fill="${SVGC.warnText}" font-size="10" font-weight="700" text-anchor="middle">⚠ Atrasado</text>
-          <text x="${bx+bw/2}" y="${by+26}" fill="${SVGC.warnText}" font-size="8.5" text-anchor="middle">${gapPts.toFixed(1)} pts vs. programado</text>
-        </g>`;
-      }
-    }
-  }
-
-  // línea vertical del MES ELEGIDO (distinta de "hoy") — se mueve con el <select> o al
-  // pasar el cursor por la curva; queda como grupo con id propio para poder moverla sola
-  // (sin redibujar todo el gráfico) cuando solo se está pre-visualizando con el mouse.
-  const xMesInicial = px(new Date(periodos.includes(curvaPopupFijo) ? curvaPopupFijo : periodos[periodos.length-1]).getTime());
-  const lineaMes = `<g id="curvaMesLine">
-      <line x1="${xMesInicial}" y1="${padT}" x2="${xMesInicial}" y2="${h-padB}" stroke="#9db8ea" stroke-width="1" opacity="0.85"/>
-      <circle cx="${xMesInicial}" cy="${padT}" r="2.5" fill="#9db8ea"/>
-    </g>`;
-
   const pts = arr => arr.map(p => ({ x: px(p.x), y: py(p.y) }));
   const ptsProg = pts(progSeries), ptsEjec = pts(ejecSeries);
+  CURVA_CTX = { periodos, porPeriodo, base, ptsProg, ptsEjec, w, h, padL, padR, padT, padB, informe: !!CURVA_DIM, hayEjec: ejecSeries.some(p => p.y > 0) };
   const lineFrom = (points, color, dash) => {
     if (!points.length) return '';
     const d = points.map((p,i) => `${i===0?'M':'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ');
@@ -1992,7 +2019,7 @@ function renderCurvaS() {
   // ── bandas de plazo: suspensión / ampliación / adicional, registradas en plazo_eventos.
   // Se muestran si aplican a toda la obra, o al componente que se esté mirando. ──
   const eventos = (DATA.eventosPlazo || []).filter(e =>
-    !e.proyecto_id_codigo || e.proyecto_id_codigo === seleccionada || seleccionada === GENERAL);
+    !e.proyecto_id_codigo || e.proyecto_id_codigo === seleccionada || seleccionada === GENERAL).filter(e => e.tipo === 'suspension' || e.tipo === 'otro');
   $('#legendPlazo').style.display = eventos.length ? '' : 'none';
   const ETIQUETA_TIPO = { suspension: 'Suspensión', ampliacion: 'Ampliación de plazo', adicional: 'Adicional de plazo', otro: 'Evento de plazo' };
   const bandasPlazo = eventos.map(ev => {
@@ -2022,7 +2049,7 @@ function renderCurvaS() {
       <text transform="translate(${(x-4).toFixed(1)},${baseline-6}) rotate(-90)" font-size="9" font-weight="700" fill="${color}" stroke="${SVGC.halo}" stroke-width="3" paint-order="stroke" text-anchor="start">${texto}</text>`;
   };
   const marcasPlazo = plazo
-    ? (plazo.finOriginal !== plazo.finVigente ? marcaPlazo(plazo.finOriginal, `Plazo original ${dmy(plazo.finOriginal)}`, SVGC.plazoOrig, '3,3') : '')
+    ? (plazo.inicio ? marcaPlazo(plazo.inicio, `Inicio de plazo ${dmy(plazo.inicio)}`, SVGC.plazo, '3,3') : '')
       + marcaPlazo(plazo.finVigente, `Fin de plazo ${dmy(plazo.finVigente)}`, SVGC.plazo, '')
     : '';
   $('#legendFinPlazo').style.display = plazo ? '' : 'none';
@@ -2030,10 +2057,11 @@ function renderCurvaS() {
 
   $('#curvaSvg').setAttribute('viewBox', `0 0 ${w} ${h}`);
   $('#curvaSvg').innerHTML = defs + grid + bandasPlazo + areaFrom(ptsProg, 'gradProg') + areaFrom(ptsEjec, 'gradEjec')
-    + ejeX + corteHoy + lineaMes
+    + ejeX
     + lineFrom(ptsProg, '#2f6fed', '5,4')
     + lineFrom(ptsEjec, '#ef4444')
     + marcasPlazo
+    + '<g id="curvaCorte" pointer-events="none"></g>'
     + hotspots;
   curvaPxPorPeriodo = Object.fromEntries(periodos.map((p, i) => [p, ptsEjec[i].x]));
 
@@ -2043,7 +2071,8 @@ function renderCurvaS() {
     const d = new Date(p);
     return `<option value="${p}">${MESES_ES[d.getUTCMonth()]}-${String(d.getUTCFullYear()).slice(2)}</option>`;
   }).join('');
-  const porDefecto = periodos.filter(p => new Date(p).getTime() <= hoy.getTime()).pop() || periodos[periodos.length-1];
+  // al abrir se elige el ÚLTIMO MES CON AVANCE REGISTRADO (no el mes de hoy); sin avance registrado, el mes de hoy
+  const porDefecto = periodos.filter(p => porPeriodo[p].ejecP > 0).pop() || periodos.filter(p => new Date(p).getTime() <= hoy.getTime()).pop() || periodos[periodos.length-1];
   const activo = periodos.includes(curvaPopupFijo) ? curvaPopupFijo : porDefecto;
   $('#curvaMesSel').value = activo;
 
@@ -2073,14 +2102,42 @@ function activarMes(periodo, silencioso) {
 // selector — no hace falta un globo/popup flotante encima de la curva para esto.
 // También mueve la línea vertical gris (#curvaMesLine) al mes elegido — sin redibujar
 // todo el gráfico, para que se sienta instantánea al pasar el cursor.
+let CURVA_CTX = null;
+function pintarCorte(periodo) {
+  const g = document.getElementById('curvaCorte'), c = CURVA_CTX; if (!g || !c) return;
+  const i = c.periodos.indexOf(periodo); if (i < 0) { g.innerHTML = ''; return; }
+  const x = c.ptsProg[i].x, yP = c.ptsProg[i].y, yE = c.ptsEjec[i].y, d = c.porPeriodo[periodo], base = c.base, baseline = c.h - c.padB;
+  const dt = new Date(periodo), txt = `corte ${MESES_ES[dt.getUTCMonth()]}-${String(dt.getUTCFullYear()).slice(2)}`;
+  let s = `<line x1="${x}" y1="${c.padT}" x2="${x}" y2="${baseline}" stroke="#d97706" stroke-width="1.5" stroke-dasharray="4,3"/>`;
+  if (c.informe) {
+    // informe: etiquetas de dato sobre cada línea (como una serie de Excel) y el rótulo del corte al pie
+    const alBorde = x > c.w - c.padR - 70;
+    s += `<text x="${alBorde ? x - 4 : x + 4}" y="${baseline - 6}" fill="#d97706" font-size="10" font-weight="600" text-anchor="${alBorde ? 'end' : 'start'}">${txt}</text>`;
+    const izq = x - 60 >= c.padL, px0 = izq ? x - 60 : x + 8, progArriba = yP <= yE;
+    const etiqueta = (cy, ty, tx, color) => `<circle cx="${x}" cy="${cy}" r="4.2" fill="${color}" stroke="#fff" stroke-width="1.6"/>
+      <rect x="${px0}" y="${ty - 11}" width="52" height="17" rx="4" fill="#fff" stroke="${color}" stroke-width="1.2"/>
+      <text x="${px0 + 26}" y="${ty + 1.5}" font-size="11.5" font-weight="800" fill="${color}" text-anchor="middle">${tx}</text>`;
+    if (base) s += etiqueta(yP, progArriba ? yP - 16 : yP + 20, (d.progA / base * 100).toFixed(1) + '%', '#1d4ed8') + etiqueta(yE, progArriba ? yE + 20 : yE - 16, (d.ejecA / base * 100).toFixed(1) + '%', '#dc2626');
+  } else {
+    s += `<circle cx="${x}" cy="${c.padT}" r="2.5" fill="#d97706"/><text x="${x}" y="${c.padT - 6}" fill="#d97706" font-size="10" font-weight="600" text-anchor="middle">${txt}</text>`;
+    // globo de estado EN la línea de corte (mismo cálculo que «Estado del avance»): atrasado, al día o adelantado
+    const gapPts = base ? ((d.progA - d.ejecA) / base) * 100 : 0;   // + atraso · − adelanto
+    if (c.hayEjec && (d.progA > 0 || d.ejecA > 0)) {
+      const est = gapPts > 1 ? { tit: '⚠ Atrasado', sub: `${gapPts.toFixed(1)} pts vs. programado`, k: 'warn' }
+        : gapPts < -1 ? { tit: '▲ Adelantado', sub: `+${Math.abs(gapPts).toFixed(1)} pts vs. programado`, k: 'ok' }
+        : { tit: '✓ Al día', sub: `${gapPts <= 0 ? '+' : '-'}${Math.abs(gapPts).toFixed(1)} pts vs. programado`, k: 'mid' };
+      const bg = SVGC[est.k + 'Bg'], bd = SVGC[est.k + 'Border'], tx = SVGC[est.k + 'Text'];
+      const bw = 118, bh = 32, by = 1, bx = Math.min(Math.max(x - bw / 2, c.padL), c.w - c.padR - bw), tipX = Math.min(Math.max(x, bx + 14), bx + bw - 14);
+      s += `<g><path d="M ${tipX - 6} ${by + bh} L ${tipX + 6} ${by + bh} L ${tipX} ${by + bh + 8} Z" fill="${bg}" stroke="${bd}"/>
+        <rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="7" fill="${bg}" stroke="${bd}"/>
+        <text x="${bx + bw / 2}" y="${by + 14}" fill="${tx}" font-size="10" font-weight="700" text-anchor="middle">${est.tit}</text>
+        <text x="${bx + bw / 2}" y="${by + 26}" fill="${tx}" font-size="8.5" text-anchor="middle">${est.sub}</text></g>`;
+    }
+  }
+  g.innerHTML = s;
+}
 function actualizarChipsMes(periodo, porPeriodo) {
-  const x = curvaPxPorPeriodo[periodo];
-  const grupo = document.getElementById('curvaMesLine');
-  if (grupo && x != null) {
-    grupo.querySelector('line').setAttribute('x1', x); grupo.querySelector('line').setAttribute('x2', x);
-    grupo.querySelector('circle').setAttribute('cx', x);
-    grupo.style.display = '';
-  } else if (grupo) { grupo.style.display = 'none'; }
+  pintarCorte(periodo);
 
   const d = porPeriodo[periodo];
   if (!d) { $('#curvaMesKpis').innerHTML = ''; return; }
@@ -2411,9 +2468,9 @@ async function cargarReporteGrupos(version, filtroProy) {
 }
 let rgVista = 'radar', rgAmbito = 'total'; const rgOcultos = new Set();
 try { if (localStorage.getItem('obra-rg-vista') === 'barras') rgVista = 'barras'; const a = localStorage.getItem('obra-rg-ambito'); if (a) rgAmbito = a; } catch (e) {}
-const RG_COLORES = tema === 'oscuro' ? ['#7aa7f7', '#5fd0a7', '#f6a25f', '#b7a1f7', '#5cc6dc', '#f08db8', '#e0bd58', '#9fb0c8']
-  : ['#2563eb', '#059669', '#ea6a0a', '#7c3aed', '#0891b2', '#db2777', '#ca8a04', '#64748b'];
-const C_PROG_RG = tema === 'oscuro' ? '#7ea6f5' : '#3b74e0', C_EJEC_RG = tema === 'oscuro' ? '#ef8079' : '#d9453d';
+const RG_OSC = ['#7aa7f7', '#5fd0a7', '#f6a25f', '#b7a1f7', '#5cc6dc', '#f08db8', '#e0bd58', '#9fb0c8'], RG_LUZ = ['#2563eb', '#059669', '#ea6a0a', '#7c3aed', '#0891b2', '#db2777', '#ca8a04', '#64748b'];
+let RG_COLORES = tema === 'oscuro' ? RG_OSC : RG_LUZ;
+let C_PROG_RG = tema === 'oscuro' ? '#7ea6f5' : '#3b74e0', C_EJEC_RG = tema === 'oscuro' ? '#ef8079' : '#d9453d';
 const rgNombre = (n) => { const s = String(n || '').toLowerCase().replace(/proteccion/g, 'protección'); return s.charAt(0).toUpperCase() + s.slice(1); };
 function rgEnvolver(txt, max) { const out = []; let l = ''; String(txt).split(' ').forEach(w => { if ((l + ' ' + w).trim().length > max && l) { out.push(l); l = w; } else l = (l + ' ' + w).trim(); }); if (l) out.push(l); return out; }
 document.addEventListener('click', (e) => {
@@ -3962,19 +4019,112 @@ $('#parteForm').addEventListener('submit', async (e) => {
   }
 });
 
+// ── Informe del Resumen: una hoja A3 horizontal con todo lo del panel principal ──
+// Se arma con los gráficos que ya están dibujados (se copian), siempre en colores claros aunque el panel esté en oscuro.
+const SVGC_OSC = { ...SVGC };
+const SVGC_LUZ = { grid: '#e4e9f4', axis: '#8592a8', axisLine: '#d5deef', warnBg: '#fdecec', warnBorder: '#f0a3aa', warnText: '#b91c1c', okBg: '#e8f7ef', okBorder: '#8fd5b0', okText: '#0e7a44', midBg: '#eaf1fe', midBorder: '#9db8ea', midText: '#1d4ed8', halo: '#ffffff', plazo: '#7c3aed', plazoOrig: '#94a3b8' };
+function infTema(claro) {   // cambia las paletas que quedan escritas dentro de los SVG y vuelve a dibujar
+  tema = claro ? 'claro' : 'oscuro'; Object.assign(SVGC, claro ? SVGC_LUZ : SVGC_OSC);
+  RG_COLORES = claro ? RG_LUZ : RG_OSC; C_PROG_RG = claro ? '#3b74e0' : '#7ea6f5'; C_EJEC_RG = claro ? '#d9453d' : '#ef8079';
+  try { renderAll(); } catch (e) {}
+}
+function infSvg(sel) {      // copia de un SVG con sus id renombrados (los originales quedan ocultos al imprimir)
+  const el = document.querySelector(sel); if (!el) return '';
+  let h = el.outerHTML; const ids = [...new Set([...h.matchAll(/\bid="([^"]+)"/g)].map(m => m[1]))];
+  ids.forEach(id => { h = h.split(`id="${id}"`).join(`id="inf-${id}"`).split(`url(#${id})`).join(`url(#inf-${id})`).split(`href="#${id}"`).join(`href="#inf-${id}"`); });
+  return h.replace(/^<svg /, '<svg preserveAspectRatio="xMidYMid meet" ');
+}
+function infMateriales(periodo, comps) {   // tabla por puente: ejecutado y saldo de cada material (todos los materiales, sin los filtros de la tarjeta)
+  const mats = DATA.materiales || [], metas = DATA.matMetas || [], avance = DATA.matAvance || [];
+  const ms = mats.filter(m => metas.some(t => t.material_id === m.id));
+  if (!ms.length) return '<p>Todavía no hay materiales configurados.</p>';
+  const filas = comps.map(c => {
+    const proy = DATA.proyectos.find(x => x.codigo === c.id), col = RG_COLORES[Math.max(0, COMPONENTES.findIndex(q => q.id === c.id)) % RG_COLORES.length];
+    return { c, col, celdas: ms.map(m => {
+      const meta = proy && metas.find(t => t.proyecto_id === proy.id && t.material_id === m.id); if (!meta) return null;
+      const total = Number(meta.cantidad_total) || 0, ejec = avance.filter(a => a.proyecto_id === proy.id && a.material_id === m.id && (!periodo || a.periodo <= periodo)).reduce((s, a) => s + (Number(a.ejecutado_parcial) || 0), 0);
+      return { total, ejec };
+    }) };
+  });
+  const tot = ms.map((m, j) => filas.reduce((s, f) => f.celdas[j] ? { total: s.total + f.celdas[j].total, ejec: s.ejec + f.celdas[j].ejec } : s, { total: 0, ejec: 0 }));
+  const celda = (x, g0) => !x ? `<td class="${g0 ? 'g0' : ''}">—</td><td class="s">—</td>` : `<td class="${g0 ? 'g0' : ''}"><b>${fmtCant(x.ejec)}</b><small>${x.total ? (x.ejec / x.total * 100).toFixed(0) : 0}% de ${fmtCant(x.total)}</small></td><td class="s">${fmtCant(Math.max(0, x.total - x.ejec))}${x.ejec - x.total > 0.005 * x.total ? `<small class="x">+${fmtCant(x.ejec - x.total)} mayor metrado</small>` : ''}</td>`;
+  const multi = filas.length > 1;
+  const cab = `<thead><tr><th rowspan="2" class="pu">Puente</th>${ms.map(m => `<th colspan="2" class="g0">${esc(m.nombre)}<small>(${esc(uniCorta(m.unidad))})</small></th>`).join('')}</tr><tr>${ms.map(() => '<th class="g0">Ejecutado</th><th>Saldo</th>').join('')}</tr></thead>`;
+  const cuerpo = filas.map(f => `<tr><td class="pu"><i style="background:${f.col}"></i>${esc(String(f.c.nombre).replace(/^Puente\s+/i, ''))}</td>${f.celdas.map((x, j) => celda(x, true)).join('')}</tr>`).join('');
+  const total = multi ? `<tr class="tt"><td class="pu">Total obra</td>${tot.map(x => celda(x, true)).join('')}</tr>` : '';
+  const barras = ms.map((m, j) => { const x = tot[j], p = x.total ? Math.min(100, x.ejec / x.total * 100) : 0; return `<div class="inf-mb"><span class="n">${esc(m.nombre)}</span><span class="tr"><i style="width:${p.toFixed(1)}%"></i></span><b>${x.total ? (x.ejec / x.total * 100).toFixed(1) : '0.0'}%</b><em>Ejecutado ${fmtCant(x.ejec)} ${esc(uniCorta(m.unidad))} · saldo ${fmtCant(Math.max(0, x.total - x.ejec))} ${esc(uniCorta(m.unidad))}</em></div>`; }).join('');
+  return `<table class="inf-mt">${cab}<tbody>${cuerpo}${total}</tbody></table><div class="inf-sub">Avance ${multi ? 'total de la obra' : 'del componente'} por material</div>${barras}
+    <div class="legend2" style="margin-top:8px"><span><i style="background:#0e8f4f"></i>Ejecutado</span><span><i style="background:#d97706"></i>Saldo por ejecutar</span><span><i style="background:#dc2626"></i>Mayor metrado (sobre lo valorizado)</span></div>`;
+}
+function infHTML() {
+  const tx = (s) => (document.querySelector(s) || {}).textContent || '';
+  const ih = (s) => (document.querySelector(s) || {}).innerHTML || '';
+  const sel = seleccionada === GENERAL ? 'General (toda la obra)' : ((COMPONENTES.find(c => c.id === seleccionada) || {}).nombre || '');
+  const ahora = new Date(), fecha = ahora.toLocaleDateString('es-PE', { day: '2-digit', month: 'long', year: 'numeric' }) + ' · ' + ahora.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
+  const corte = tx('#kpiMes').replace(/\s*\(Curva S real\)/, '').replace(/^Corte:\s*/, '');
+  const pct = parseFloat(String(tx('#kPct')).replace(',', '.')) || 0;
+  const k = (color, lab, val, sub, barra) => `<div class="inf-k" style="--kc:${color}"><small>${lab}</small><b>${esc(val)}</b>${barra ? `<div class="bar"><i style="width:${Math.min(100, barra)}%"></i></div>` : ''}<em>${esc(sub)}</em></div>`;
+  // Curva S: se vuelve a dibujar más ancha para que ocupe bien su lugar en la hoja
+  CURVA_DIM = [1000, 258]; try { renderCurvaS(); } catch (e) {} finally { CURVA_DIM = null; }
+  const curvaSvg = infSvg('#curvaSvg'), curvaChips = ih('#curvaMesKpis'), curvaTit = tx('#curvaTitulo'), curvaHint = tx('#curvaHint');
+  const lgCurva = (document.querySelector('#curvaWrap') || {}).parentElement ? document.querySelector('#curvaWrap').parentElement.querySelector('.legend2') : null, lgC = lgCurva ? lgCurva.innerHTML.replace(/<span[^>]*>(?:(?!<\/span>).)*Mes elegido<\/span>/, '').replace('Suspensión / ampliación de plazo', 'Suspensión de plazo') : '';
+  const periodo = curvaPopupFijo, comps = COMPONENTES.filter(c => seleccionada === GENERAL || c.id === seleccionada);
+  const rg = document.querySelector('#rgGrid .rg-card'); let rgH = '<div class="rg-msg" style="margin:20px">El reporte por grupo no está disponible en este momento.</div>';
+  if (rg) { const c = rg.cloneNode(true); c.querySelectorAll('.rg-ctl').forEach(x => { x.outerHTML = '<div class="inf-leg"><span><i></i>Programado a la fecha</span><span><i class="e"></i>Ejecutado</span></div>'; }); rgH = c.outerHTML; }
+  return `<div class="inf-hoja">
+    <div class="inf-head"><div><small>Informe de avance de obra</small><h1>${esc(tx('#obraNombre'))}</h1><p>${esc(tx('#obraSub'))}</p></div>
+      <div class="inf-meta">Corte: <b>${esc(corte)}</b><br>Alcance: <b>${esc(ALCANCE_TXT[alcance])}</b> · Vista: <b>${esc(sel)}</b><br>Emitido: ${esc(fecha)}</div></div>
+    <div class="inf-kpis">${k('#0f766e', 'Presupuesto total (sin IGV)', tx('#kPresu'), tx('#kPresuS'))}${k('#2f6fed', 'Programado a la fecha', tx('#kProg'), tx('#kProgS'))}${k('#dc2626', 'Valorizado (ejecutado real)', tx('#kValor'), tx('#kValorS'))}${k('#b45309', 'Estado del avance', tx('#kPct'), tx('#kEstadoS'), pct)}</div>
+    <div class="inf-fila2">
+      <div class="inf-card"><div class="inf-ctit"><div><h3>${esc(curvaTit)}</h3><p>${esc(curvaHint)}</p></div><div class="inf-chips">${curvaChips}</div></div><div class="svgw">${curvaSvg}</div><div class="legend2">${lgC}</div></div>
+      <div class="inf-card"><h3>Avance por componente</h3><p>% programado vs. % ejecutado real — ${esc(tx('#avancePuenteMes'))}</p><div class="svgw">${infSvg('#avancePuenteSvg')}</div><div class="legend2"><span><i style="background:#2f6fed"></i>Programado</span><span><i style="background:#ef4444"></i>Ejecutado</span></div></div>
+    </div>
+    <div class="inf-fila3">${rgH}
+      <div class="inf-card"><h3>Control de materiales — ejecutado y saldo</h3><p>${esc(tx('#matMes'))} · cantidades acumuladas al corte, por puente</p>${infMateriales(periodo, comps)}</div>
+    </div>
+    <div class="inf-pie"><span>Fuente: cronograma valorizado vigente, Curva S y parte diario del Look Ahead · montos en S/. sin IGV. En cada celda del reporte por grupo: ejecutado / programado. Cumplimiento = ejecutado ÷ programado (verde ≥ 95 %, ámbar 80–95 %, rojo &lt; 80 %).<br>Generado por el Panel de Control de Obra</span>
+      <div class="inf-firmas"><span>Elaborado por</span><span>Revisado por</span><span>V°B° Gerencia</span></div></div>
+  </div>`;
+}
+function infZoom() { const ov = document.querySelector('#informe'); if (!ov) return; const w = ov.querySelector('.inf-scroll').clientWidth - 36; ov.style.setProperty('--z', Math.min(1, Math.max(.2, w / 1588)).toFixed(3)); }
+let infTituloPrevio = null;
+async function abrirInforme() {
+  if (!DATA) { toast('Espera a que carguen los datos del Resumen.', false); return; }
+  const oscuro = tema === 'oscuro'; let html = '';
+  try { if (oscuro) infTema(true); html = infHTML(); } finally { if (oscuro) infTema(false); else { try { renderAll(); } catch (e) {} } }
+  document.querySelector('#informe')?.remove();
+  const ov = document.createElement('div'); ov.id = 'informe'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-label', 'Informe A3');
+  ov.innerHTML = `<div class="inf-bar"><b>Informe del Resumen · A3 horizontal</b><span>En la ventana de impresión elige «Guardar como PDF», tamaño A3, horizontal y márgenes «Ninguno».</span><button type="button" class="pri" id="infImprimir">🖨 Imprimir / Guardar PDF</button><button type="button" id="infCerrar">Cerrar</button></div><div class="inf-scroll">${html}</div>`;
+  document.body.appendChild(ov); document.body.classList.add('inf-abierto'); infZoom();
+  ov.querySelector('#infCerrar').addEventListener('click', cerrarInforme);
+  ov.querySelector('#infImprimir').addEventListener('click', () => { infTituloPrevio = document.title; document.title = `Informe de avance - ${tx0('#obraNombre')} - ${tx0('#kpiMes').replace(/^Corte:\s*/, '').replace(/\s*\(Curva S real\)/, '')}`; window.print(); });
+}
+const tx0 = (s) => ((document.querySelector(s) || {}).textContent || '').trim();
+function cerrarInforme() { document.querySelector('#informe')?.remove(); document.body.classList.remove('inf-abierto'); }
+window.addEventListener('afterprint', () => { if (infTituloPrevio) { document.title = infTituloPrevio; infTituloPrevio = null; } });
+window.addEventListener('resize', infZoom);
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && document.body.classList.contains('inf-abierto')) cerrarInforme(); });
+$('#btnInforme').addEventListener('click', abrirInforme);
+async function informeAlArrancar() {   // ?informe=1 abre el informe apenas cargan los datos (útil para generar el PDF sin tocar nada)
+  if (!/[?&]informe=1/.test(location.search)) return;
+  for (let i = 0; i < 48 && (!DATA || GRUPOS === null); i++) await new Promise(r => setTimeout(r, 250));
+  await new Promise(r => setTimeout(r, 400));
+  await abrirInforme();
+}
+
 (async () => {
   if (fuente === 'cloud') {
     if (AUTH.token && AUTH.exp - Date.now() < 5 * 60000) await authRenovar();   // sesión guardada de otro día: se renueva sola
     if (!AUTH.token) { puertaMostrar(); return; }
     const pRol = authCargarRol();            // se comprueba el rol MIENTRAS se cargan los datos (antes esperaba a terminar)
-    bootResumen().then(restaurarVista);
+    bootResumen().then(restaurarVista).then(informeAlArrancar);
     cargarPartidasForm().catch(err => pmsg(`No se pudo conectar con la API (${err.message}).`, false));
     await pRol;
     if (!AUTH.rol) { authSalir(true); puertaMostrar('Tu correo no tiene un usuario activo en esta obra. Pide al administrador que te registre.'); return; }
     document.documentElement.classList.remove('con-puerta'); authGuardar(); authUI();
     return;
   }
-  bootResumen().then(restaurarVista);
+  bootResumen().then(restaurarVista).then(informeAlArrancar);
   cargarPartidasForm().catch(err => pmsg(`No se pudo conectar con la API (${err.message}).`, false));
 })();
 </script>
