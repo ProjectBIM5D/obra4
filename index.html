@@ -550,6 +550,16 @@ html.la-modal{overflow:hidden;}
 .tb-menu button .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600;font-size:12px;} .tb-menu button small{color:var(--mut);font-weight:700;}
 :root .pt-tabla input.dia{width:54px;}
 
+/* ═══ ventana de confirmación propia ═══ */
+.cf-fondo{position:fixed;inset:0;z-index:700;display:grid;place-items:center;padding:16px;background:rgba(2,6,23,.58);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);animation:admFade .15s ease;}
+.cf-caja{width:min(420px,100%);background:var(--card);color:var(--tx);border:1px solid var(--line2);border-radius:18px;padding:22px 22px 18px;box-shadow:0 30px 80px rgba(2,6,23,.5);text-align:center;animation:admIn .2s cubic-bezier(.2,.9,.3,1.1);}
+.cf-ic{width:46px;height:46px;margin:0 auto 10px;border-radius:14px;display:grid;place-items:center;font-size:22px;font-weight:800;color:#fff;background:linear-gradient(145deg,#5b8cf5,#2f6fed);box-shadow:0 8px 20px rgba(47,111,237,.32);}
+.cf-ic.pel{background:linear-gradient(145deg,#f87171,#dc2626);box-shadow:0 8px 20px rgba(220,38,38,.32);}
+.cf-caja h3{margin:0 0 6px;font-size:16px;} .cf-caja p{margin:0 0 16px;font-size:13px;line-height:1.5;color:var(--tx2);}
+.cf-btns{display:flex;gap:10px;} .cf-btns button{flex:1;height:42px;border-radius:11px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit;border:1px solid var(--line2);background:var(--card);color:var(--tx);}
+.cf-btns .cf-no:hover{background:var(--input);} .cf-btns .cf-si{background:var(--blue);border-color:var(--blue);color:#fff;} .cf-btns .cf-si.pel{background:#dc2626;border-color:#dc2626;}
+.cf-btns .cf-si:hover{filter:brightness(1.08);} .cf-btns button:focus-visible{outline:2px solid var(--blue);outline-offset:2px;}
+
 /* ═══ avisos flotantes ═══ */
 #toasts{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:600;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none;width:min(560px,calc(100vw - 20px));}
 .toast{pointer-events:auto;display:flex;align-items:flex-start;gap:10px;width:100%;padding:11px 10px 11px 12px;border-radius:12px;background:var(--card);color:var(--tx);border:1px solid var(--line2);box-shadow:0 14px 40px rgba(2,6,23,.34);font-size:13px;line-height:1.4;animation:toastIn .2s ease;}
@@ -1286,7 +1296,13 @@ async function getRaw(path) {
   if (r.status === 401 && fuente === 'cloud' && AUTH.refresh) { await authRenovar(true); r = await fetch(`${API}${path}`, { headers }); }   // sesión vencida: se renueva y se reintenta
   return r;
 }
-const get = (path) => getRaw(path).then(r => { if (!r.ok) { const e = new Error(`HTTP ${r.status} en ${path}`); e.status = r.status; throw e; } return r.json(); });
+const get = (path) => getRaw(path).then(async r => {
+  if (!r.ok) {   // se incluye el mensaje que devuelve la base (código y texto) para poder diagnosticar
+    let d = null; try { d = await r.json(); } catch (x) {}
+    const e = new Error(`HTTP ${r.status} en ${path}` + (d && (d.message || d.code) ? ` — ${d.code ? d.code + ': ' : ''}${d.message || ''}` : '')); e.status = r.status; e.detalle = d; throw e;
+  }
+  return r.json();
+});
 // la API devuelve como máximo 1000 filas por consulta: esta pide de a 1000 hasta traerlo todo (la consulta debe llevar &order=)
 async function getTodo(path) {
   const out = [];
@@ -1520,6 +1536,7 @@ async function authCargarRol() {
 }
 function authSalir(sinRecargar) {
   AUTH.token = AUTH.email = AUTH.refresh = AUTH.rol = null; AUTH.admin = false; AUTH.exp = 0; authAplicar(); authGuardar(); authUI();
+  try { localStorage.removeItem('obra-cache-resumen'); } catch (e) {}
   if (fuente === 'cloud' && !sinRecargar) location.reload();   // en la nube, sin sesión solo se ve la puerta de acceso
 }
 async function authRenovar(forzar) {   // el token de Supabase dura ~1 hora: se renueva solo mientras la sesión esté abierta
@@ -1531,8 +1548,8 @@ async function authRenovar(forzar) {   // el token de Supabase dura ~1 hora: se 
   } catch (e) { authSalir(); }
 }
 setInterval(authRenovar, 60000);
-$('#btnAdmin').addEventListener('click', () => {
-  if (AUTH.token) { if (confirm('¿Cerrar la sesión?')) authSalir(); return; }
+$('#btnAdmin').addEventListener('click', async () => {
+  if (AUTH.token) { if (await confirmar('¿Cerrar la sesión?')) authSalir(); return; }
   $('#admMsg').innerHTML = ''; $('#admPass').value = '';
   const local = fuente !== 'cloud';
   $('#admModo').textContent = local ? 'Modo local · solo esta PC' : 'Nube · Supabase'; $('#admModo').classList.toggle('local', local);
@@ -1604,6 +1621,38 @@ document.querySelectorAll('#nav button').forEach(b => {
     $('#side').classList.remove('open'); $('#overlay').classList.remove('on');
   });
 });
+// ── confirmaciones dentro de la página: la ventana del navegador (confirm) saca de la pantalla completa; esta no ──
+function confirmarInfo(m) {
+  if (/sesi[oó]n/i.test(m)) return { titulo: 'Cerrar sesión', si: 'Cerrar sesión' };
+  if (/ELIMINAR|Confirma otra vez/.test(m)) return { titulo: 'Eliminar Look Ahead', si: 'Eliminar', peligro: true };
+  if (/Quitar/.test(m)) return { titulo: 'Quitar actividad', si: 'Quitar', peligro: true };
+  if (/Reabrir/.test(m)) return { titulo: 'Reabrir semana', si: 'Reabrir' };
+  if (/Cerrar/.test(m)) return { titulo: 'Cerrar semana', si: 'Cerrar semana' };
+  if (/Crear/.test(m)) return { titulo: 'Crear plan', si: 'Crear plan' };
+  if (/Guardar igual/.test(m)) return { titulo: 'Revisar antes de guardar', si: 'Guardar igual' };
+  return { titulo: 'Confirmar', si: 'Aceptar' };
+}
+function confirmar(mensaje) {   // devuelve una promesa: true si se acepta, false si se cancela (botón, Esc o clic fuera)
+  return new Promise((resolver) => {
+    const info = confirmarInfo(String(mensaje)), previo = document.activeElement;
+    const fondo = document.createElement('div'); fondo.className = 'cf-fondo'; fondo.setAttribute('role', 'alertdialog'); fondo.setAttribute('aria-modal', 'true'); fondo.setAttribute('aria-labelledby', 'cfTitulo');
+    fondo.innerHTML = `<div class="cf-caja"><div class="cf-ic ${info.peligro ? 'pel' : ''}">${info.peligro ? '!' : '?'}</div><h3 id="cfTitulo">${esc(info.titulo)}</h3><p>${esc(mensaje)}</p>`
+      + `<div class="cf-btns"><button type="button" class="cf-no">Cancelar</button><button type="button" class="cf-si ${info.peligro ? 'pel' : ''}">${esc(info.si)}</button></div></div>`;
+    const cerrar = (r) => { document.removeEventListener('keydown', tecla, true); fondo.remove(); try { previo && previo.focus && previo.focus({ preventScroll: true }); } catch (e) {} resolver(r); };
+    const tecla = (e) => {
+      if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); cerrar(false); }
+      else if (e.key === 'Enter' && document.activeElement !== fondo.querySelector('.cf-no')) { e.preventDefault(); e.stopPropagation(); cerrar(true); }
+      else if (e.key === 'Tab') { const bs = [...fondo.querySelectorAll('button')], i = bs.indexOf(document.activeElement); e.preventDefault(); bs[(i + (e.shiftKey ? -1 : 1) + bs.length) % bs.length].focus(); }
+    };
+    fondo.querySelector('.cf-no').addEventListener('click', () => cerrar(false));
+    fondo.querySelector('.cf-si').addEventListener('click', () => cerrar(true));
+    fondo.addEventListener('mousedown', (e) => { if (e.target === fondo) cerrar(false); });
+    document.addEventListener('keydown', tecla, true);
+    document.body.appendChild(fondo);
+    (info.peligro ? fondo.querySelector('.cf-no') : fondo.querySelector('.cf-si')).focus();   // en acciones peligrosas el foco inicial es «Cancelar»
+  });
+}
+
 // menú lateral: en celular (o ventana muy angosta) es un cajón; en tablet y PC se alterna entre completo y solo iconos
 function sideToggle() { const mini = document.documentElement.classList.toggle('side-mini'); try { localStorage.setItem('obra-side', mini ? 'mini' : 'full'); } catch (e) {} }
 $('#sideToggle').addEventListener('click', sideToggle);
@@ -2299,46 +2348,74 @@ function restaurarVista() {
     setTimeout(() => window.scrollTo(0, v.y || 0), 900);
   } catch (e) {}
 }
+// ── carga del Resumen (Curva S y KPIs) ──
+// Tres mejoras de velocidad: (1) obra + componentes + cronograma vigente en UNA consulta (antes eran tres seguidas);
+// (2) los datos de la Curva S se pintan apenas llegan, sin esperar a los de Materiales (que son más pesados);
+// (3) con la sesión guardada, la última carga se pinta al instante mientras llegan los datos frescos.
+const CACHE_RES = 'obra-cache-resumen';
+function cacheResLeer() {
+  try { if (fuente !== 'cloud' || !AUTH.recordar) return null; const c = JSON.parse(localStorage.getItem(CACHE_RES) || 'null'); return c && c.email === AUTH.email && c.raw ? c : null; } catch (e) { return null; }
+}
+function cacheResGuardar(raw) { try { if (fuente === 'cloud' && AUTH.recordar) localStorage.setItem(CACHE_RES, JSON.stringify({ email: AUTH.email, t: Date.now(), raw })); } catch (e) {} }   // si no cabe, simplemente no se guarda
+function aplicarResumen(A, B) {   // A = obra, componentes, Curva S y avance · B = materiales (puede faltar al principio)
+  OBRA = A.obra;
+  $('#obraNombre').textContent = OBRA.nombre;
+  $('#obraSub').textContent = [OBRA.entidad, OBRA.cliente].filter(Boolean).join(' · ') || 'Red Vial Nacional';
+  const proyectos = A.proyectos, version = A.version;
+  COMPONENTES = proyectos.map(p => ({ id: p.codigo, nombre: p.nombre, tipo: p.tipo }));
+  const nComp = COMPONENTES.length;
+  $('#pageTitle').textContent = `DASHBOARD - CONTROL DE OBRA`;
+  $('#pageSub').textContent = `${nComp} componente${nComp === 1 ? '' : 's'} de la obra, en un solo lugar`;
+  const idList = proyectos.map(p => p.id).join(',');
+  FILTRO_PROY = idList ? `proyecto_id=in.(${idList})` : 'proyecto_id=eq.00000000-0000-0000-0000-000000000000';
+  const b = B || { materiales: [], matMetasTabla: [], metasVal: [], matAvance: [], matPartidas: [], matProg: [], matSinRegla: [] };
+  const idToCodigo = Object.fromEntries(proyectos.map(p => [p.id, p.codigo]));
+  const curvaMensual = armarCurvaMensual(A.curvaMensualRaw, A.progRows, idToCodigo);
+  const eventosPlazo = A.plazoEventos.map(e => ({ ...e, proyecto_id_codigo: e.proyecto_id ? idToCodigo[e.proyecto_id] : null }));
+  const hayAdicional = A.progRows.some(r => r.concepto === 'adicional');
+  if (!hayAdicional && alcance !== 'contrato') alcance = 'contrato';
+  DATA = { proyectos, partidas: A.partidas, avance: A.avance, programado: A.programado, curvaMensual, eventosPlazo, materiales: b.materiales, matMetas: combinarMetas(b.matMetasTabla, b.metasVal),
+           matAvance: b.matAvance, matPartidas: b.matPartidas, matProg: b.matProg, matSinRegla: b.matSinRegla, version: A.progRows.length ? version : null, versionId: version ? version.id : null, plazos: A.plazos, hayAdicional };
+  $('#alcanceBox').style.display = hayAdicional ? '' : 'none';
+  renderAll();
+  fillMatForms();
+}
 async function bootResumen() {
   try {
-    // 1) la obra activa (hoy hay una sola; el selector de obra se puede agregar
-    //    después si algún día hay varias corriendo en paralelo)
-    const obras = await get('/obras?activo=eq.true&order=creado_en.asc&limit=1');
-    OBRA = obras[0] || null;
-    if (!OBRA) throw new Error('No hay ninguna obra registrada en la base de datos (tabla "obras").');
-    $('#obraNombre').textContent = OBRA.nombre;
-    $('#obraSub').textContent = [OBRA.entidad, OBRA.cliente].filter(Boolean).join(' · ') || 'Red Vial Nacional';
-
-    // 2) sus componentes (puentes, tramos, lo que sea — dinámico, sin lista fija)
-    const proyectos = await get(`/proyectos?obra_id=eq.${OBRA.id}&select=id,codigo,nombre,tipo`);
-    COMPONENTES = proyectos.map(p => ({ id: p.codigo, nombre: p.nombre, tipo: p.tipo }));
-    const nComp = COMPONENTES.length;
-    $('#pageTitle').textContent = `DASHBOARD - CONTROL DE OBRA`;
-    $('#pageSub').textContent = `${nComp} componente${nComp===1?'':'s'} de la obra, en un solo lugar`;
-
-    // 3) datos de avance, acotados a los componentes de ESTA obra
+    // 0) última carga guardada: se pinta al instante y luego se refresca
+    const c = cacheResLeer();
+    if (c) { try { aplicarResumen(c.raw, null); const h = new Date(c.t); $('#pageSub').textContent += ` · datos de ${String(h.getHours()).padStart(2, '0')}:${String(h.getMinutes()).padStart(2, '0')}, actualizando…`; } catch (e) {} }
+    const opcional = (p) => p.catch(() => []);
+    // 1) obra activa + sus componentes + cronograma vigente, en una sola consulta (si esta base aún no tiene el cronograma, se piden por separado)
+    let obra, proyectos, version;
+    try {
+      const o = (await get('/obras?activo=eq.true&order=creado_en.asc&limit=1&select=*,proyectos(id,codigo,nombre,tipo),cronograma_versiones(id,codigo,nombre,vigente)'))[0];
+      if (!o) throw new Error('No hay ninguna obra registrada en la base de datos (tabla "obras").');
+      obra = o; proyectos = o.proyectos || []; version = (o.cronograma_versiones || []).find(v => v.vigente) || null;
+    } catch (e1) {
+      const obras = await get('/obras?activo=eq.true&order=creado_en.asc&limit=1'); obra = obras[0] || null;
+      if (!obra) throw new Error('No hay ninguna obra registrada en la base de datos (tabla "obras").');
+      proyectos = await get(`/proyectos?obra_id=eq.${obra.id}&select=id,codigo,nombre,tipo`);
+      version = (await opcional(get(`/cronograma_versiones?obra_id=eq.${obra.id}&vigente=eq.true&select=id,codigo,nombre`)))[0] || null;
+    }
     const idList = proyectos.map(p => p.id).join(',');
     const filtroProy = idList ? `proyecto_id=in.(${idList})` : 'proyecto_id=eq.00000000-0000-0000-0000-000000000000';
-    // materiales: si esas tablas todavía no existen en esta base (p. ej. la nube antes de correr
-    // los scripts), no se rompe el panel: la tarjeta avisa que falta configurarlos
-    FILTRO_PROY = filtroProy;
-    const opcional = (p) => p.catch(() => []);
-    // cronograma valorizado vigente (si esta base ya lo tiene): de ahí sale el programado de la Curva S
-    const versiones = await opcional(get(`/cronograma_versiones?obra_id=eq.${OBRA.id}&vigente=eq.true&select=id,codigo,nombre`));
-    const version = versiones[0] || null;
-    const [partidas, avance, programado, curvaMensualRaw, plazoEventos, materiales, matMetasTabla, matAvance, progRows, plazos, metasVal, matPartidas, matProg, matSinRegla] = await Promise.all([
+    // 2) todo se pide a la vez; la Curva S (grupo A) se pinta en cuanto llega y Materiales (grupo B) se suma después
+    const pA = Promise.all([
       get(`/partidas?${filtroProy}&select=id,proyecto_id,codigo,nombre,unidad,metrado,presupuesto,fecha_inicio_prog,fecha_fin_prog`),
       get(`/v_avance_partida?${filtroProy}&select=partida_id,proyecto_id,pct_avance,valor_ganado,presupuesto`),
       get(`/v_valor_programado_partida?${filtroProy}&select=partida_id,proyecto_id,valor_programado,presupuesto`),
       // "concepto" (contrato / adicional) existe si la base ya corrió curva_s_adicional.sql; si no, se lee sin él
       get(`/curva_s_mensual?${filtroProy}&select=proyecto_id,concepto,periodo,programado_parcial,programado_acumulado,ejecutado_parcial,ejecutado_acumulado&order=periodo`)
         .catch(() => get(`/curva_s_mensual?${filtroProy}&select=proyecto_id,periodo,programado_parcial,programado_acumulado,ejecutado_parcial,ejecutado_acumulado&order=periodo`)),
-      get(`/plazo_eventos?obra_id=eq.${OBRA.id}&select=id,proyecto_id,tipo,descripcion,fecha_inicio,fecha_fin`),
+      get(`/plazo_eventos?obra_id=eq.${obra.id}&select=id,proyecto_id,tipo,descripcion,fecha_inicio,fecha_fin`),
+      version ? opcional(get(`/v_curva_s_programada?version_id=eq.${version.id}&select=proyecto_id,concepto,periodo_orden,fecha_fin,programado_parcial&order=periodo_orden`)) : Promise.resolve([]),
+      opcional(get(`/v_plazo_componente?obra_id=eq.${obra.id}&select=codigo,fecha_inicio,plazo_dias,fecha_fin_original,dias_suspension,dias_ampliacion,dias_otros,fecha_fin_vigente`)),
+    ]);
+    const pB = Promise.all([
       opcional(get('/materiales?activo=eq.true&order=orden&select=id,codigo,nombre,unidad,orden')),
       opcional(get(`/material_metas?${filtroProy}&select=proyecto_id,material_id,cantidad_total,fuente`)),
       opcional(get(`/material_avance_mensual?${filtroProy}&select=proyecto_id,material_id,periodo,ejecutado_parcial,fuente&order=periodo`)),
-      version ? opcional(get(`/v_curva_s_programada?version_id=eq.${version.id}&select=proyecto_id,concepto,periodo_orden,fecha_fin,programado_parcial&order=periodo_orden`)) : Promise.resolve([]),
-      opcional(get(`/v_plazo_componente?obra_id=eq.${OBRA.id}&select=codigo,fecha_inicio,plazo_dias,fecha_fin_original,dias_suspension,dias_ampliacion,dias_otros,fecha_fin_vigente`)),
       opcional(get(`/v_material_meta?${filtroProy}&select=proyecto_id,material_id,cantidad_total,fuente`)),
       // partidas del valorizado por material (con su tipo y elemento) y su programado mensual: base de los filtros
       opcional(getTodo(`/v_material_partidas?${filtroProy}&select=proyecto_id,material_id,subtipo,elemento,cantidad,concepto&order=codigo`)),
@@ -2346,17 +2423,13 @@ async function bootResumen() {
       // control: partidas que se llaman como un material pero cuyo código no tiene regla (no cuentan en la meta)
       opcional(getTodo(`/v_material_sin_regla?${filtroProy}&select=material,codigo_esp,nombre,metrado&order=codigo`)),
     ]);
-    const matMetas = combinarMetas(matMetasTabla, metasVal);
-    const idToCodigo = Object.fromEntries(proyectos.map(p => [p.id, p.codigo]));
-    const curvaMensual = armarCurvaMensual(curvaMensualRaw, progRows, idToCodigo);
-    const eventosPlazo = plazoEventos.map(e => ({ ...e, proyecto_id_codigo: e.proyecto_id ? idToCodigo[e.proyecto_id] : null }));
-    const hayAdicional = progRows.some(r => r.concepto === 'adicional');
-    if (!hayAdicional && alcance !== 'contrato') alcance = 'contrato';
-    DATA = { proyectos, partidas, avance, programado, curvaMensual, eventosPlazo, materiales, matMetas, matAvance, matPartidas, matProg, matSinRegla,
-             version: progRows.length ? version : null, versionId: version ? version.id : null, plazos, hayAdicional };
-    $('#alcanceBox').style.display = hayAdicional ? '' : 'none';
-    renderAll();
-    fillMatForms();
+    pB.catch(() => {});   // (cada consulta ya es opcional; esto evita avisos si alguna falla mientras se espera al grupo A)
+    const [partidas, avance, programado, curvaMensualRaw, plazoEventos, progRows, plazos] = await pA;
+    const A = { obra, proyectos, version, partidas, avance, programado, curvaMensualRaw, plazoEventos, progRows, plazos };
+    aplicarResumen(A, null);
+    cacheResGuardar(A);
+    const [materiales, matMetasTabla, matAvance, metasVal, matPartidas, matProg, matSinRegla] = await pB;
+    aplicarResumen(A, { materiales, matMetasTabla, matAvance, metasVal, matPartidas, matProg, matSinRegla });
   } catch (err) {
     $('#errBox').innerHTML = `<div class="err"><b>No se pudo conectar con la API.</b> ${fuente==='local' ? '¿Está corriendo iniciar_api.bat?' : ''} (${err.message})</div>`;
   }
@@ -2515,7 +2588,7 @@ $('#matAvForm').addEventListener('submit', async (e) => {
   const otros = (DATA.matAvance || []).filter(a => a.proyecto_id === pid && a.material_id === mid && a.periodo !== periodo)
     .reduce((s, a) => s + (Number(a.ejecutado_parcial) || 0), 0);
   if (otros + cant > Number(meta.cantidad_total)
-      && !confirm(`Con esto el acumulado (${fmtCant(otros + cant)}) supera la meta (${fmtCant(meta.cantidad_total)}). ¿Guardar igual?`)) return;
+      && !await confirmar(`Con esto el acumulado (${fmtCant(otros + cant)}) supera la meta (${fmtCant(meta.cantidad_total)}). ¿Guardar igual?`)) return;
   const btn = $('#ma_btn'); btn.disabled = true; btn.textContent = 'Guardando…';
   try {
     await enviarMat('/material_avance_mensual?on_conflict=proyecto_id,material_id,periodo',
@@ -3002,7 +3075,7 @@ function laIniciar() {
     if (!ok) return;
     const fin = laFecha(laDia(ini) + dias - 1), sem = laSemana(look.semana), fVentana = laFecha(laDia(sem.fecha_inicio) + look.semanas * 7 - 1);
     if (fin < sem.fecha_inicio || ini > fVentana) {
-      if (!confirm(`Esta actividad (${laFmt(ini)} → ${laFmt(fin)}) queda fuera de la ventana del Look Ahead (${laFmt(sem.fecha_inicio)} → ${laFmt(fVentana)}) y no se dibujará. ¿Guardar igual?`)) return;
+      if (!await confirmar(`Esta actividad (${laFmt(ini)} → ${laFmt(fin)}) queda fuera de la ventana del Look Ahead (${laFmt(sem.fecha_inicio)} → ${laFmt(fVentana)}) y no se dibujará. ¿Guardar igual?`)) return;
     }
     const cuerpo = { detalle: $('#laFDetalle').value.trim() || null, critico: $('#laFCrit').checked, fecha_inicio: ini, dias, metrado_meta: meta, acumulado_previo: prev, responsable: $('#laFResp').value.trim() || null };
     const btn = $('#laFGuardar'); btn.disabled = true;
@@ -3014,7 +3087,7 @@ function laIniciar() {
     finally { btn.disabled = false; }
   });
   $('#laFQuitar').addEventListener('click', async () => {
-    if (!LA.edit || !confirm('¿Quitar esta actividad del Look Ahead?')) return;
+    if (!LA.edit || !await confirmar('¿Quitar esta actividad del Look Ahead?')) return;
     try { await laEnviar('DELETE', `/lookahead_actividades?id=eq.${LA.edit}`); $('#laForm').hidden = true; await laCargarDetalle(); laMsg('Actividad quitada.', true); }
     catch (err) { laMsg(`No se pudo quitar: ${laErr(err)}`, false); }
   });
@@ -3053,7 +3126,7 @@ function laIniciar() {
     finally { btn.disabled = false; }
   });
   $('#laCerrar').addEventListener('click', async () => {
-    const look = laActual(); if (!look || !confirm(`¿Cerrar el Look Ahead de la semana ${look.semana}? Una vez cerrado ya no se podrá modificar desde el panel.`)) return;
+    const look = laActual(); if (!look || !await confirmar(`¿Cerrar el Look Ahead de la semana ${look.semana}? Una vez cerrado ya no se podrá modificar desde el panel.`)) return;
     try { await laEnviar('PATCH', `/lookaheads?id=eq.${look.id}`, { estado: 'cerrado' }); $('#laForm').hidden = true; await laCargar(true); laMsg(`Look Ahead de la semana ${look.semana} cerrado.`, true); }
     catch (err) { laMsg(`No se pudo cerrar: ${laErr(err)}`, false); }
   });
@@ -3313,7 +3386,7 @@ function ptIniciar() {
     const look = ptLookAct(); if (!look || ptPlan()) return;
     const s = ptSemFechas(), d0 = laDia(s.fecha_inicio), d1 = d0 + 6;
     const cand = PT.acts.filter(a => laDia(a.fecha_fin) >= d0 && laDia(a.fecha_inicio) <= d1 && Number(a.pct_avance) < 1);
-    if (!confirm(`Crear el plan de la semana ${PT.sem} con ${cand.length} actividad${cand.length === 1 ? '' : 'es'} del Look Ahead que caen en esa semana?`)) return;
+    if (!await confirmar(`Crear el plan de la semana ${PT.sem} con ${cand.length} actividad${cand.length === 1 ? '' : 'es'} del Look Ahead que caen en esa semana?`)) return;
     try {
       const [plan] = await ptEnviar('POST', '/planes_semanales', { lookahead_id: look.id, semana: PT.sem, estado: 'borrador' });
       const filas = await ptFilasNuevas(cand, plan.id, s.fecha_inicio);
@@ -3331,7 +3404,7 @@ function ptIniciar() {
     } catch (err) { ptMsg(`No se pudo agregar: ${ptErr(err)}`, false); }
   });
   $('#ptCerrar').addEventListener('click', async () => {
-    const plan = ptPlan(); if (!plan || !confirm(`¿Cerrar la semana ${PT.sem}? El plan y el parte diario de esa semana ya no se podrán modificar desde el panel.`)) return;
+    const plan = ptPlan(); if (!plan || !await confirmar(`¿Cerrar la semana ${PT.sem}? El plan y el parte diario de esa semana ya no se podrán modificar desde el panel.`)) return;
     try { await ptEnviar('PATCH', `/planes_semanales?id=eq.${plan.id}`, { estado: 'cerrado' }); await ptCargarLook(); ptMsg(`Semana ${PT.sem} cerrada.`, true); }
     catch (err) { ptMsg(`No se pudo cerrar: ${ptErr(err)}`, false); }
   });
@@ -3356,7 +3429,7 @@ function ptIniciar() {
     } catch (err) { ptMsg(`No se pudo guardar: ${ptErr(err)}`, false); if (el.matches('input.dia')) { const k = +el.dataset.k, val = Number(f[el.dataset.tipo === 'plan' ? DIAS_PT[k] : REAL_PT[k]] || 0); el.value = val ? val : ''; } }
   });
   $('#ptFrame').addEventListener('click', async (e) => {
-    const b = e.target.closest('[data-quitar]'); if (!b || !confirm('¿Quitar esta actividad del plan de la semana? (no se borra del Look Ahead ni el parte diario)')) return;
+    const b = e.target.closest('[data-quitar]'); if (!b || !await confirmar('¿Quitar esta actividad del plan de la semana? (no se borra del Look Ahead ni el parte diario)')) return;
     try { await ptEnviar('DELETE', `/plan_semanal_actividades?id=eq.${b.dataset.quitar}`); await ptCargarLook(); ptMsg('Actividad quitada del plan.', true); }
     catch (err) { ptMsg(`No se pudo quitar: ${ptErr(err)}`, false); }
   });
@@ -3536,19 +3609,19 @@ plaIniciar();
 
 // acciones de emergencia (solo administrador; la base lo exige: sin permiso, no se ejecutan)
 $('#laReabrir').addEventListener('click', async () => {
-  const look = laActual(); if (!look || !confirm(`¿Reabrir el Look Ahead de la semana ${look.semana} para poder editarlo?`)) return;
+  const look = laActual(); if (!look || !await confirmar(`¿Reabrir el Look Ahead de la semana ${look.semana} para poder editarlo?`)) return;
   try { await laEnviar('PATCH', `/lookaheads?id=eq.${look.id}`, { estado: 'borrador' }); await laCargar(true); laMsg(`Look Ahead de la semana ${look.semana} reabierto.`, true); }
   catch (err) { laMsg(`No se pudo reabrir: ${laErr(err)}`, false); }
 });
 $('#laEliminar').addEventListener('click', async () => {
   const look = laActual(); if (!look) return;
-  if (!confirm(`¿ELIMINAR el Look Ahead de la semana ${look.semana} con todas sus actividades, planes semanales y parte diario? No se puede deshacer.`)) return;
-  if (!confirm('Confirma otra vez: se borrará todo lo registrado en ese Look Ahead.')) return;
+  if (!await confirmar(`¿ELIMINAR el Look Ahead de la semana ${look.semana} con todas sus actividades, planes semanales y parte diario? No se puede deshacer.`)) return;
+  if (!await confirmar('Confirma otra vez: se borrará todo lo registrado en ese Look Ahead.')) return;
   try { await laEnviar('DELETE', `/lookaheads?id=eq.${look.id}`); LA.sel = null; try { localStorage.removeItem('obra-la-sel'); } catch (x) {} await laCargar(true); laMsg('Look Ahead eliminado.', true); }
   catch (err) { laMsg(`No se pudo eliminar: ${laErr(err)}`, false); }
 });
 $('#ptReabrir').addEventListener('click', async () => {
-  const plan = ptPlan(); if (!plan || !confirm(`¿Reabrir la semana ${PT.sem} para editar el plan y el parte diario?`)) return;
+  const plan = ptPlan(); if (!plan || !await confirmar(`¿Reabrir la semana ${PT.sem} para editar el plan y el parte diario?`)) return;
   try { await ptEnviar('PATCH', `/planes_semanales?id=eq.${plan.id}`, { estado: 'borrador' }); await ptCargarLook(); ptMsg(`Semana ${PT.sem} reabierta.`, true); }
   catch (err) { ptMsg(`No se pudo reabrir: ${ptErr(err)}`, false); }
 });
@@ -3619,9 +3692,13 @@ $('#parteForm').addEventListener('submit', async (e) => {
   if (fuente === 'cloud') {
     if (AUTH.token && AUTH.exp - Date.now() < 5 * 60000) await authRenovar();   // sesión guardada de otro día: se renueva sola
     if (!AUTH.token) { puertaMostrar(); return; }
-    await authCargarRol();
+    const pRol = authCargarRol();            // se comprueba el rol MIENTRAS se cargan los datos (antes esperaba a terminar)
+    bootResumen().then(restaurarVista);
+    cargarPartidasForm().catch(err => pmsg(`No se pudo conectar con la API (${err.message}).`, false));
+    await pRol;
     if (!AUTH.rol) { authSalir(true); puertaMostrar('Tu correo no tiene un usuario activo en esta obra. Pide al administrador que te registre.'); return; }
     document.documentElement.classList.remove('con-puerta'); authGuardar(); authUI();
+    return;
   }
   bootResumen().then(restaurarVista);
   cargarPartidasForm().catch(err => pmsg(`No se pudo conectar con la API (${err.message}).`, false));
