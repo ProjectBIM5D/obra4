@@ -726,7 +726,7 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .vl-kp{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px;}
 .vl-k{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--kc,#2f6fed);border-radius:12px;padding:12px 16px;box-shadow:var(--shadow);min-width:0;}
 .vl-k small{display:block;font-size:10.5px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--mut);}
-.vl-k b{display:block;font-size:21px;font-weight:800;margin:2px 0;font-variant-numeric:tabular-nums;} .vl-k em{display:block;font-style:normal;font-size:11.5px;color:var(--mut);}
+.vl-k b{display:block;font-size:19px;font-weight:800;margin:2px 0;font-variant-numeric:tabular-nums;} .vl-k em{display:block;font-style:normal;font-size:11.5px;color:var(--mut);}
 .vl-k .bar{height:6px;border-radius:3px;background:var(--line);margin-top:4px;overflow:hidden;} .vl-k .bar i{display:block;height:100%;background:var(--kc,#2f6fed);}
 .vl-card{background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:14px 16px;margin-bottom:14px;}
 .vl-card h3{margin:0 0 2px;font-size:13.5px;} .vl-card p.hint{margin:0 0 8px;font-size:11.5px;color:var(--mut);}
@@ -738,6 +738,7 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .vl-tb th:first-child,.vl-tb td:first-child{text-align:center;font-weight:800;} .vl-tb td.l{text-align:left;}
 .vl-tb tbody tr:hover td{background:var(--input);}
 .vl-tb tr.prop td{background:#f59e0b12;} .vl-tb tr.tot td{border-top:2px solid var(--line2);background:var(--input);font-weight:800;}
+.vl-gg{width:78px;font:inherit;font-size:11.5px;padding:3px 5px;border:1px solid var(--line2);border-radius:6px;background:var(--input);color:var(--tx);text-align:right;} .vl-alerta{color:#d97706;font-weight:800;cursor:help;}
 .vl-pill{display:inline-block;font-size:10.5px;font-weight:800;padding:2px 9px;border-radius:999px;} .vl-pill.ok{background:#10b98122;color:var(--green);} .vl-pill.pr{background:#f59e0b26;color:var(--rg-am,#a85a08);}
 .vl-pbar{display:inline-block;vertical-align:middle;width:64px;height:7px;border-radius:4px;background:var(--line);overflow:hidden;margin-right:6px;} .vl-pbar i{display:block;height:100%;background:var(--blue);}
 .vl-tb button{font:inherit;font-size:11px;font-weight:700;padding:3px 10px;border-radius:7px;border:1px solid var(--line2);background:var(--card);color:var(--tx);cursor:pointer;} .vl-tb button:hover{border-color:var(--blue);color:var(--blue);}
@@ -2851,7 +2852,7 @@ async function valCargar() {
   const box = $('#vlCuerpo'); if (!box) return;
   try {
     const [vals, ejec] = await Promise.all([
-      get('/valorizaciones?select=id,tipo,numero,estado,mes,aprobado_por,aprobado_en,archivo_origen,monto_oficial&order=tipo,numero'),
+      get('/valorizaciones?select=id,tipo,numero,estado,mes,aprobado_por,aprobado_en,archivo_origen,monto_oficial,gg_pct&order=tipo,numero'),
       getTodo('/v_ejecutado_mes?select=proyecto_id,tipo,estado,mes,numero,monto_subtotal&order=proyecto_id,tipo,mes,estado')]);
     VAL.vals = vals; VAL.ejec = ejec; VAL.ok = true;
   } catch (e) {
@@ -2870,14 +2871,15 @@ function valPintar() {
   const A = RES_A || { proyectos: [], progRows: [] }, frentes = A.proyectos || [];
   const concepto = VAL.tipo === 'adicional' ? 'adicional' : VAL.tipo === 'contrato' ? 'contrato' : null;
   const presu = concepto ? (A.progRows || []).filter(r => (r.concepto || 'contrato') === concepto).reduce((s, r) => s + (Number(r.programado_parcial) || 0), 0) : 0;
-  const N0 = (n) => Number(n || 0).toLocaleString('es-PE', { maximumFractionDigits: 0 }), N2 = (n) => Number(n || 0).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const N0 = (n) => Number(n || 0).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), N2 = (n) => Number(n || 0).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   const MES = (m) => { const d = new Date(m); return `${MESES_ES[d.getUTCMonth()]}-${String(d.getUTCFullYear()).slice(2)}`; };
   let acum = 0, acumApr = 0;
   const filas = vt.map(v => {
     const porF = {}; let tot = 0;
     VAL.ejec.filter(x => x.tipo === v.tipo && x.numero === v.numero).forEach(x => { const m = Number(x.monto_subtotal) || 0; porF[x.proyecto_id] = (porF[x.proyecto_id] || 0) + m; tot += m; });
-    const mes = v.monto_oficial != null ? Number(v.monto_oficial) : tot; acum += mes; if (v.estado === 'aprobada') acumApr += mes;
-    return { v, porF, mes, acum, pct: presu ? acum / presu : null };
+    const mes = tot; acum += mes; if (v.estado === 'aprobada') acumApr += mes;
+    const dif = v.monto_oficial != null ? mes - Number(v.monto_oficial) : null;   // control contra el resumen oficial del Excel
+    return { v, porF, mes, acum, dif, pct: presu ? acum / presu : null };
   });
   const props = filas.filter(f => f.v.estado !== 'aprobada'), pMonto = props.reduce((s, f) => s + f.mes, 0), ult = filas[filas.length - 1];
   $('#vlNota').textContent = presu ? `Montos sin IGV · presupuesto ${TIPO_VAL[VAL.tipo].toLowerCase()}: S/. ${N0(presu)}` : 'Montos sin IGV';
@@ -2902,18 +2904,30 @@ function valPintar() {
   const grafico = `<div class="vl-card"><h3>Valorización de cada mes y avance acumulado</h3><p class="hint">Barras: monto del mes (millones de S/.) · línea roja: % acumulado del presupuesto · barras rayadas: valorización en propuesta</p><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Valorizaciones por mes">${g}</svg></div>`;
   // tabla resumen (una fila por valorización, una columna por frente)
   const admin = !!AUTH.admin;
-  const cab = `<thead><tr><th>N°</th><th>Periodo</th><th>Estado</th>${frentes.map(p => `<th>${esc(String(p.nombre).replace(/^Puente\s+/i, ''))}</th>`).join('')}<th>Valorización del mes</th><th>Acumulado</th><th>% avance</th><th>Saldo por valorizar</th>${admin ? '<th></th>' : ''}</tr></thead>`;
+  const cab = `<thead><tr><th>N°</th><th>Periodo</th><th>Estado</th><th title="Gastos generales de esa valorización (la utilidad es la del contrato)">% G.G.</th>${frentes.map(p => `<th>${esc(String(p.nombre).replace(/^Puente\s+/i, ''))}</th>`).join('')}<th>Valorización del mes</th><th>Acumulado</th><th>% avance</th><th>Saldo por valorizar</th>${admin ? '<th></th>' : ''}</tr></thead>`;
   const cuerpo = filas.map(f => `<tr class="${f.v.estado !== 'aprobada' ? 'prop' : ''}"><td>${f.v.numero}</td><td class="l">${MES(f.v.mes)}</td>
       <td>${f.v.estado === 'aprobada' ? `<span class="vl-pill ok" title="${esc('Aprobada por ' + (f.v.aprobado_por || '') + (f.v.aprobado_en ? ' · ' + String(f.v.aprobado_en).slice(0, 10) : ''))}">✔ Aprobada</span>` : '<span class="vl-pill pr" title="Aún sin conciliar">◔ Propuesta</span>'}</td>
+      <td>${admin && f.v.estado !== 'aprobada' ? `<input class="vl-gg" data-vgg="${f.v.id}" type="number" step="0.00001" min="0" max="60" value="${f.v.gg_pct != null ? (Number(f.v.gg_pct) * 100).toFixed(5) : ''}" title="Gastos generales en % (editable mientras sea propuesta)"> %` : (f.v.gg_pct != null ? (Number(f.v.gg_pct) * 100).toFixed(5) + ' %' : '—')}</td>
       ${frentes.map(p => `<td title="S/. ${N2(f.porF[p.id])}">${f.porF[p.id] ? N0(f.porF[p.id]) : '—'}</td>`).join('')}
-      <td title="S/. ${N2(f.mes)}"><b>${N0(f.mes)}</b></td><td>${N0(f.acum)}</td>
+      <td title="S/. ${N2(f.mes)}${f.dif != null ? ' · oficial (Excel): S/. ' + N2(f.v.monto_oficial) : ''}"><b>${N0(f.mes)}</b>${f.dif != null && Math.abs(f.dif) > 5 ? ` <span class="vl-alerta" title="Difiere S/. ${N2(f.dif)} del monto oficial del Excel: revisa los gastos generales">⚠</span>` : ''}</td><td>${N0(f.acum)}</td>
       <td>${f.pct == null ? '—' : `<span class="vl-pbar"><i style="width:${Math.min(100, f.pct * 100).toFixed(1)}%"></i></span>${(f.pct * 100).toFixed(1)}%`}</td>
       <td>${presu ? N0(Math.max(0, presu - f.acum)) : '—'}</td>
       ${admin ? `<td>${f.v.estado === 'aprobada' ? `<button data-vreabrir="${f.v.id}" title="Vuelve a propuesta para poder corregirla">Reabrir</button>` : `<button class="ok" data-vaprobar="${f.v.id}">Aprobar</button>`}</td>` : ''}</tr>`).join('');
   const sumF = (id) => filas.reduce((s, f) => s + (f.porF[id] || 0), 0);
-  const pie = `<tr class="tot"><td></td><td class="l">Total</td><td></td>${frentes.map(p => `<td>${N0(sumF(p.id))}</td>`).join('')}<td>${N0(acum)}</td><td>${N0(acum)}</td><td>${presu ? (acum / presu * 100).toFixed(1) + '%' : '—'}</td><td>${presu ? N0(Math.max(0, presu - acum)) : '—'}</td>${admin ? '<td></td>' : ''}</tr>`;
+  const pie = `<tr class="tot"><td></td><td class="l">Total</td><td></td><td></td>${frentes.map(p => `<td>${N0(sumF(p.id))}</td>`).join('')}<td>${N0(acum)}</td><td>${N0(acum)}</td><td>${presu ? (acum / presu * 100).toFixed(1) + '%' : '—'}</td><td>${presu ? N0(Math.max(0, presu - acum)) : '—'}</td>${admin ? '<td></td>' : ''}</tr>`;
   box.innerHTML = kpis + grafico + `<div class="vl-card"><h3>Resumen de valorizaciones — ${esc(TIPO_VAL[VAL.tipo])}</h3><p class="hint">Valorización mensual sin IGV, por frente. Lo aprobado es lo oficial; la propuesta se actualiza cuando el residente la aprueba${admin ? '' : ' (solo el administrador aprueba)'}.</p><div class="vl-tw"><table class="vl-tb">${cab}<tbody>${cuerpo}${pie}</tbody></table></div></div>`;
 }
+document.addEventListener('change', async (e) => {   // editar los gastos generales de una valorización en propuesta
+  const inp = e.target.closest('[data-vgg]'); if (!inp) return;
+  const pct = parseFloat(String(inp.value).replace(',', '.')); if (!(pct >= 0 && pct <= 60)) { toast('Indica un % entre 0 y 60.', false); valPintar(); return; }
+  inp.disabled = true;
+  try {
+    const r = await fetch(`${API}/valorizaciones?id=eq.${inp.dataset.vgg}`, { method: 'PATCH', headers: { ...headers, 'Content-Type': 'application/json', Prefer: 'return=minimal' }, body: JSON.stringify({ gg_pct: +(pct / 100).toFixed(8) }) });
+    if (!r.ok) { const d = await r.json().catch(() => ({})); throw new Error(d.message || `HTTP ${r.status}`); }
+    toast('Gastos generales actualizados.', true);
+    await valCargar(); bootResumen();
+  } catch (err) { toast(`No se pudo guardar: ${esc(err.message)}`, false); valPintar(); }
+});
 document.addEventListener('click', async (e) => {
   const a = e.target.closest('[data-vaprobar],[data-vreabrir]'); if (!a) return;
   const ap = !!a.dataset.vaprobar, id = a.dataset.vaprobar || a.dataset.vreabrir, v = VAL.vals.find(x => x.id === id); if (!v) return;
