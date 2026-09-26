@@ -587,6 +587,8 @@ html.la-modal{overflow:hidden;}
 .rg-mx thead th i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:0;}
 .rg-mx th:first-child,.rg-mx td:first-child{text-align:left;position:sticky;left:0;background:var(--card);z-index:1;min-width:112px;}
 .rg-mx thead th:first-child{background:#17335a;font-size:10.5px;letter-spacing:.4px;text-transform:uppercase;}
+.rg-mx td{position:relative;} .rc-flag{position:absolute;top:0;right:0;width:0;height:0;font-size:0;border-style:solid;border-width:0 10px 10px 0;border-color:transparent #dc2626 transparent transparent;} .rc-ley{position:static;display:inline-block;margin-right:5px;vertical-align:-1px;}
+.rg-lg span.es-rc{white-space:nowrap;font-size:11px;font-weight:600;color:var(--mut);}
 .rg-mx td.tot,.rg-mx th.tot{border-left:1px solid var(--line2);}
 .rg-mx td{white-space:normal;text-transform:none;letter-spacing:0;}
 .rg-g{font-weight:700;line-height:1.3;color:var(--tx);overflow-wrap:anywhere;}
@@ -602,6 +604,7 @@ html.la-modal{overflow:hidden;}
 .rg-lg span{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:var(--tx);}
 .rg-lg span i{width:26px;height:9px;border-radius:5px;background:var(--line);position:relative;overflow:hidden;}
 .rg-lg span i::before{content:"";position:absolute;left:0;top:0;height:100%;width:100%;}
+.rg-lg span.es-t{flex-basis:100%;font-size:11px;font-weight:500;color:var(--mut);} .rg-lg span.es{white-space:nowrap;font-size:11.5px;font-weight:700;} .rg-lg span.es.ok{color:var(--green);} .rg-lg span.es.mid{color:var(--rg-p);} .rg-lg span.es.am{color:var(--rg-am);} .rg-lg span.es.mal{color:var(--rg-e);}
 .rg-lg span.lp i::before{background:var(--rg-pb);opacity:.34;} .rg-lg span.le i::before{background:var(--rg-eb);top:2px;height:5px;}
 .rg-cmp{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;margin-bottom:6px;}
 .rg-cb{display:inline-flex;align-items:center;gap:6px;border:0;background:transparent;font:inherit;font-size:12px;font-weight:600;color:var(--tx);cursor:pointer;padding:2px 0;} .rg-cb i{width:10px;height:10px;border-radius:50%;} .rg-cb.off{opacity:.35;text-decoration:line-through;}
@@ -611,10 +614,10 @@ html.la-modal{overflow:hidden;}
 .rg-mx tr.st td{background:var(--input);padding-top:0;text-align:center;} .rg-mx tr.st td:first-child{background:var(--input);}
 .rg-badge{display:inline-block;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap;}
 :root{--rg-am:#a85a08;} :root[data-theme="dark"]{--rg-am:#f2c66d;}
-.rg-badge.ok{background:#10b98122;color:var(--green);} .rg-badge.mal{background:#ef444422;color:var(--rg-e);} .rg-badge.am{background:#f59e0b26;color:var(--rg-am);}
+.rg-badge.ok{background:#10b98122;color:var(--green);} .rg-badge.mal{background:#ef444422;color:var(--rg-e);} .rg-badge.am{background:#f59e0b26;color:var(--rg-am);} .rg-badge.mid{background:#3b82f622;color:var(--rg-p);}
 .rg-mx tr.cp td{background:var(--input);padding-top:6px;padding-bottom:2px;text-align:center;} .rg-mx tr.cp td:first-child{background:var(--input);}
 .rg-mx tr.cp .rg-g{font-size:11px;color:var(--mut);font-weight:700;} .rg-mx tr.cp td:first-child{text-align:left;}
-.rg-cpv{font-weight:800;font-size:13px;font-variant-numeric:tabular-nums;} .rg-cpv.ok{color:var(--green);} .rg-cpv.am{color:var(--rg-am);} .rg-cpv.mal{color:var(--rg-e);} .rg-cpv.neu{color:var(--mut);} .rg-badge.neu{background:#8393b226;color:var(--mut);}
+.rg-cpv{font-weight:800;font-size:13px;font-variant-numeric:tabular-nums;} .rg-cpv.ok{color:var(--green);} .rg-cpv.mid{color:var(--rg-p);} .rg-cpv.am{color:var(--rg-am);} .rg-cpv.mal{color:var(--rg-e);} .rg-cpv.neu{color:var(--mut);} .rg-badge.neu{background:#8393b226;color:var(--mut);}
 .rg-lg{display:flex;flex-wrap:wrap;gap:8px 16px;padding:9px 12px;background:var(--input);border:1px solid var(--line);border-radius:10px;}
 .rg-lg button{display:inline-flex;align-items:center;gap:7px;border:0;background:transparent;font:inherit;font-size:12px;font-weight:600;color:var(--tx);cursor:pointer;padding:2px 0;}
 .rg-lg button i{width:22px;height:3px;border-radius:2px;position:relative;} .rg-lg button i::after{content:"";position:absolute;left:50%;top:50%;width:8px;height:8px;border-radius:50%;background:inherit;transform:translate(-50%,-50%);}
@@ -624,12 +627,32 @@ html.la-modal{overflow:hidden;}
 .rgb-r span.n{color:var(--tx2);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;} .rgb-r b{text-align:right;font-variant-numeric:tabular-nums;}
 .rgb-tr{display:block;height:9px;border-radius:5px;background:var(--line);overflow:hidden;} .rgb-tr i{display:block;height:100%;border-radius:5px;}
 .rg-ct{font-size:11px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--mut);margin:0 0 8px;}
+.sem{display:inline-flex;align-items:center;gap:7px;vertical-align:middle;margin-right:9px;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.28);}
+.sem i{display:block;width:12px;height:12px;border-radius:50%;opacity:.5;box-shadow:0 0 0 1.5px rgba(255,255,255,.75);}
+.sem i.mal{background:#ef4444;} .sem i.am{background:#f59e0b;} .sem i.mid{background:#3b82f6;} .sem i.ok{background:#22c55e;}
+.sem i.on{opacity:1;transform:scale(1.25);box-shadow:0 0 0 2.5px #fff,0 0 0 4px rgba(0,0,0,.35);}
+.inf-k .sem{background:#eef2f8;padding:3px 9px;gap:6px;} .inf-k .sem i{width:11px;height:11px;opacity:.45;box-shadow:0 0 0 1px rgba(15,23,42,.18);} .inf-k .sem i.on{opacity:1;box-shadow:0 0 0 2px #fff,0 0 0 3.5px rgba(15,23,42,.5);}
+.rg-cards{display:grid;grid-template-columns:1fr .9fr 1.35fr;gap:12px;margin:0 20px 16px;}
+.rgc{--ac:#2563eb;background:var(--input);border:1px solid var(--line);border-top:3px solid var(--ac);border-radius:10px;padding:10px 13px;min-width:0;}
+.rgc h4{margin:0 0 7px;font-size:11.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--tx);} .rgc h4 small{font-weight:600;color:var(--mut);letter-spacing:0;text-transform:none;}
+.rgc ul{list-style:none;margin:0;padding:0;} .rgc-i{display:flex;gap:8px;align-items:flex-start;font-size:11.5px;line-height:1.4;margin:0 0 6px;color:var(--tx2);} .rgc-i b{color:var(--tx);}
+.rgc-p{flex:none;min-width:80px;text-align:center;font-size:9.5px;font-weight:800;letter-spacing:.2px;padding:2px 7px;border-radius:999px;margin-top:1px;}
+.rgc-p.mal{background:#ef444422;color:var(--rg-e);} .rgc-p.am{background:#f59e0b26;color:var(--rg-am);} .rgc-p.ok{background:#10b98122;color:var(--green);} .rgc-p.mid{background:#3b82f622;color:var(--rg-p);} .rgc-p.neu{background:#8393b226;color:var(--mut);}
+.rgd{display:grid;grid-template-columns:78px minmax(0,1fr) 44px 44px;gap:8px;align-items:center;margin:0 0 5px;font-size:11.5px;} .rgd .n{display:flex;align-items:center;gap:6px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;} .rgd .n i{flex:none;width:8px;height:8px;border-radius:50%;}
+.rgd .b{display:block;height:8px;border-radius:4px;background:var(--line);overflow:hidden;} .rgd .b i{display:block;height:100%;border-radius:4px;} .rgd .b i.ok{background:var(--green);} .rgd .b i.mid{background:var(--rg-pb);} .rgd .b i.am{background:#d97706;} .rgd .b i.mal{background:var(--rg-eb);} .rgd .b i.neu{background:var(--mut);}
+.rgd b{text-align:right;font-variant-numeric:tabular-nums;} .rgd b.ok{color:var(--green);} .rgd b.mid{color:var(--rg-p);} .rgd b.am{color:var(--rg-am);} .rgd b.mal{color:var(--rg-e);}
+.rgd em{font-style:normal;font-size:9.5px;font-weight:800;text-align:center;padding:1px 0;border-radius:6px;} .rgd em.mx{background:#10b98122;color:var(--green);} .rgd em.mn{background:#ef444422;color:var(--rg-e);}
+.rgc-nt{margin:6px 0 0;font-size:10px;color:var(--mut);} .rgc-v{margin:0;font-size:11.5px;color:var(--mut);}
+.rgf-h{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:6px;} .rgf-h small{display:block;font-size:9.5px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;color:var(--mut);} .rgf-h b{font-size:14px;font-variant-numeric:tabular-nums;} .rgf-h em{font-style:normal;font-size:11px;font-weight:700;color:var(--mut);}
+.rgf-m{color:var(--rg-e);} .rgf-o{color:var(--green);}
+.rgf-t{display:grid;grid-template-columns:auto auto auto auto;gap:2px 12px;font-size:11px;margin-bottom:6px;font-variant-numeric:tabular-nums;} .rgf-t .n{font-weight:700;} .rgf-t b{text-align:right;}
+.rgc-rec{margin:0;padding:6px 9px;border-radius:8px;background:#7c3aed14;font-size:11.5px;line-height:1.4;color:var(--tx2);} .rgc-rec b{color:var(--tx);}
 .rg-con{display:flex;gap:14px;margin:0 20px 16px;padding:13px 16px;background:var(--input);border:1px solid var(--line);border-left:3px solid #24487a;border-radius:10px;}
 .rg-con svg{flex:none;width:34px;height:34px;color:#24487a;} .rg-con b{display:block;font-size:13px;margin-bottom:5px;color:var(--tx);}
 .rg-con ul{margin:0;padding-left:18px;font-size:12px;line-height:1.55;color:var(--tx2);} .rg-con li b{display:inline;font-size:inherit;margin:0;color:var(--tx);}
 .rg-msg{background:var(--card);border:1px dashed var(--line2);border-radius:12px;padding:22px;text-align:center;font-size:12.5px;color:var(--mut);}
 .rg-nota{margin:10px 2px 0;font-size:11px;color:var(--mut);line-height:1.5;}
-@media (max-width:900px){.rg-body{grid-template-columns:1fr;} .rg-chart svg{max-height:380px;}}
+@media (max-width:900px){.rg-cards{grid-template-columns:1fr;} .rg-body{grid-template-columns:1fr;} .rg-chart svg{max-height:380px;}}
 @media (max-width:560px){.rg-band{padding:12px 14px;} .rg-band h3{font-size:15px;} .rg-body{padding:14px;gap:16px;} .rg-con{margin:0 14px 14px;padding:11px 12px;} .rg-con>svg{display:none;} .rg-mx{min-width:520px;} .rg-mx th:first-child,.rg-mx td:first-child{width:30%;min-width:0;} .rg-g{font-size:11.5px;}}
 
 /* ═══ Informe del Resumen en hoja A3 horizontal (vista previa y PDF) ═══ */
@@ -644,15 +667,15 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .inf-bar button.pri{background:#fff;color:#17335a;border-color:#fff;} .inf-bar button:hover{filter:brightness(1.1);}
 .inf-scroll{flex:1;overflow:auto;padding:18px;display:flex;justify-content:center;align-items:flex-start;}
 .inf-hoja{flex:none;width:420mm;height:296mm;box-sizing:border-box;padding:8mm 9mm;background:#fff;box-shadow:0 10px 40px rgba(0,0,0,.5);display:flex;flex-direction:column;gap:9px;overflow:hidden;zoom:var(--z,1);font-size:12px;line-height:1.35;}
-.inf-head{flex:none;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:12px 20px;border-radius:10px;background:linear-gradient(135deg,#17335a,#24487a);color:#fff;}
-.inf-head small{display:block;font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:#b9cae6;font-weight:700;} .inf-head h1{margin:2px 0 0;font-size:24px;font-weight:800;color:#fff;letter-spacing:.2px;} .inf-head p{margin:2px 0 0;font-size:12px;color:#cfdcf0;}
+.inf-head{flex:none;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:8px 20px;border-radius:10px;background:linear-gradient(135deg,#17335a,#24487a);color:#fff;}
+.inf-head small{display:block;font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:#b9cae6;font-weight:700;} .inf-head h1{margin:1px 0 0;font-size:22px;font-weight:800;color:#fff;letter-spacing:.2px;} .inf-head p{margin:2px 0 0;font-size:12px;color:#cfdcf0;}
 .inf-meta{text-align:right;font-size:12px;color:#dbe6f6;line-height:1.55;} .inf-meta b{color:#fff;}
 .inf-kpis{flex:none;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
 .inf-k{border:1px solid var(--line);border-left:4px solid var(--kc,#2f6fed);border-radius:9px;padding:6px 14px;background:#fff;}
 .inf-k small{display:block;font-size:10.5px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--mut);}
-.inf-k b{display:block;font-size:24px;font-weight:800;margin:1px 0;font-variant-numeric:tabular-nums;} .inf-k em{display:block;font-style:normal;font-size:11.5px;color:var(--mut);}
+.inf-k b{display:block;font-size:20px;font-weight:800;margin:0;font-variant-numeric:tabular-nums;} .inf-k em{display:block;font-style:normal;font-size:11.5px;color:var(--mut);}
 .inf-k .bar{height:6px;border-radius:3px;background:var(--line);margin-top:3px;overflow:hidden;} .inf-k .bar i{display:block;height:100%;background:var(--kc,#2f6fed);}
-.inf-fila2{flex:none;display:grid;grid-template-columns:1.95fr 1fr;gap:10px;height:338px;}
+.inf-fila2{flex:none;display:grid;grid-template-columns:1.95fr 1fr;gap:10px;height:288px;}
 .inf-card{border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:#fff;display:flex;flex-direction:column;min-width:0;min-height:0;overflow:hidden;}
 .inf-card h3{margin:0;font-size:14px;font-weight:800;color:var(--tx);} .inf-card p{margin:1px 0 4px;font-size:11px;color:var(--mut);}
 .inf-ctit{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:2px;}
@@ -662,11 +685,16 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .inf-fila3{flex:1;min-height:0;display:grid;grid-template-columns:1.95fr 1fr;gap:10px;} .inf-fila3>*{min-height:0;min-width:0;}
 .inf-fila3 .rg-card{height:100%;display:flex;flex-direction:column;box-shadow:none;}
 .inf-fila3 .rg-body{flex:1;min-height:0;grid-template-columns:.74fr 1.26fr;padding:6px 14px 4px;gap:10px;align-items:center;} .inf-fila3 .rg-chart svg{max-height:none;height:290px;}
-.inf-fila3 .rg-mx th:first-child,.inf-fila3 .rg-mx td:first-child{width:27%;min-width:0;} .inf-fila3 .rg-mx{font-size:11px;} .inf-fila3 .rg-mx .mv b{font-size:11.5px;} .inf-fila3 .rg-mx .mv em{font-size:9.5px;}
+.inf-fila3 .rg-mx th:first-child,.inf-fila3 .rg-mx td:first-child{width:31%;min-width:0;} .inf-fila3 .rg-mx{font-size:11px;} .inf-fila3 .rg-mx .mv b{font-size:11.5px;} .inf-fila3 .rg-mx .mv em{font-size:9.5px;}
 .inf-fila3 .rg-band{padding:8px 16px;} .inf-fila3 .rg-band h3{font-size:15px;}
 .inf-fila3 .rg-mx{min-width:0;font-size:11.5px;} .inf-fila3 .rg-mx th,.inf-fila3 .rg-mx td{padding:1px 6px;} .inf-fila3 .rg-mx .mc{gap:3px;} .inf-fila3 .rg-mx thead th{padding:5px 5px;}
-.inf-fila3 .rg-con{margin:0 16px 8px;padding:6px 14px;} .inf-fila3 .rg-con ul{font-size:11.5px;line-height:1.4;}
+.inf-fila3 .rg-cards{margin:0 14px 8px;gap:8px;grid-template-columns:1fr .85fr 1.4fr;} .inf-fila3 .rgc{padding:6px 10px;} .inf-fila3 .rgc h4{margin-bottom:4px;font-size:10.5px;} .inf-fila3 .rgc-i,.inf-fila3 .rgd,.inf-fila3 .rgc-rec{font-size:10.5px;line-height:1.3;} .inf-fila3 .rgc-i{margin-bottom:3px;} .inf-fila3 .rgc-p{min-width:70px;font-size:9px;} .inf-fila3 .rgd{margin-bottom:3px;} .inf-fila3 .rgc-nt{display:none;} .inf-fila3 .rgf-h b{font-size:12.5px;} .inf-fila3 .rgf-t{font-size:10px;margin-bottom:3px;grid-template-columns:repeat(6,auto);gap:1px 10px;} .inf-fila3 .rgf-t span:nth-child(4n+2){display:none;} .inf-fila3 .rgc-rec{padding:3px 7px;}
 .inf-fila3 .rg-tabla{gap:0;} .inf-fila3 .rg-lg{display:none;}
+/* niveles de compactación (los activa infAjustar solo cuando algo no cabe) */
+.inf-hoja.inf-c1 .rg-mx th,.inf-hoja.inf-c1 .rg-mx td{padding-top:0 !important;padding-bottom:0 !important;} .inf-hoja.inf-c1 .rg-mx .mc{gap:1px;} .inf-hoja.inf-c1 .rg-mx .mtr{height:6px;} .inf-hoja.inf-c1 .rg-mx thead th{padding:3px 5px !important;} .inf-hoja.inf-c1 .rg-mx{font-size:10.5px;} .inf-hoja.inf-c1 .rg-mx .mv b{font-size:11px;} .inf-hoja.inf-c1 .inf-fila3 .rg-chart svg{height:236px;}
+.inf-hoja.inf-c2 .rg-mx tr.st{display:none;} .inf-hoja.inf-c2 .inf-fila3 .rg-band{padding:5px 14px;} .inf-hoja.inf-c2 .inf-fila3 .rg-body{padding-top:0;padding-bottom:0;} .inf-hoja.inf-c2 .inf-fila3 .rg-chart svg{height:214px;}
+.inf-hoja.inf-c3 .inf-fila2{height:262px;} .inf-hoja.inf-c3 .inf-fila3 .rgc-i{margin-bottom:1px;} .inf-hoja.inf-c3 .inf-fila3 .rg-cards{margin-bottom:5px;}
+.inf-hoja.inf-c4 .inf-fila2{height:236px;} .inf-hoja.inf-c4 .inf-head{padding-top:5px;padding-bottom:5px;} .inf-hoja.inf-c4 .inf-kpis{display:none;}
 .inf-leg{display:flex;gap:16px;align-items:center;font-size:11.5px;color:#dbe6f6;} .inf-leg span{display:inline-flex;align-items:center;gap:7px;} .inf-leg i{display:inline-block;width:26px;height:9px;border-radius:5px;background:rgba(255,255,255,.25);position:relative;overflow:hidden;}
 .inf-leg i::before{content:"";position:absolute;left:0;top:0;width:100%;height:100%;background:#93b4f5;opacity:.7;} .inf-leg i.e::before{background:#f3a19a;opacity:1;top:2px;height:5px;}
 /* materiales: tabla por puente con ejecutado y saldo */
@@ -1054,7 +1082,7 @@ html.dens-densa{--rh:26px;--rh0:31px;--rh1:26px;--rh2:24px;--rh3:22px;--fc:10.5p
 
       <div class="grid2 res-eq">
         <div class="chart-card av-card">
-          <h3>Avance por componente</h3>
+          <h3>Avance por frente</h3>
           <p class="hint">% programado vs % ejecutado real — <b id="avancePuenteMes"></b> (ligado al mes elegido en la Curva S)</p>
           <div class="av-wrap"><svg id="avancePuenteSvg" viewBox="0 0 420 190"></svg></div>
           <div class="legend2"><span><i style="background:#2f6fed"></i>Programado</span><span><i style="background:var(--red)"></i>Ejecutado</span></div>
@@ -1071,7 +1099,7 @@ html.dens-densa{--rh:26px;--rh0:31px;--rh1:26px;--rh2:24px;--rh3:22px;--fc:10.5p
             <label for="matTipo">Tipo:</label><select id="matTipo" class="sel-mini"></select>
             <label for="matElem">Elemento:</label><select id="matElem" class="sel-mini"></select>
           </div>
-          <p class="hint" style="margin-top:3px"><b id="matMes"></b> · <span id="matSub">meta del valorizado vigente vs. ejecutado por componente</span> <span id="matEjemplo" class="tag-demo" style="display:none">ejecutado de ejemplo</span></p>
+          <p class="hint" style="margin-top:3px"><b id="matMes"></b> · <span id="matSub">meta del valorizado vigente vs. ejecutado por frente</span> <span id="matEjemplo" class="tag-demo" style="display:none">ejecutado de ejemplo</span></p>
           <p id="matVacio" class="hint" style="display:none">No hay materiales configurados en la base de datos todavía (tablas <code>materiales</code>, <code>material_metas</code>, <code>material_avance_mensual</code>).</p>
           <div class="mat-wrap">
             <div class="mat-donut"><div id="matDonutGlobo"></div><svg id="matDonut" viewBox="0 0 200 200"></svg><div id="matDonutLeg"></div></div>
@@ -1158,12 +1186,12 @@ html.dens-densa{--rh:26px;--rh0:31px;--rh1:26px;--rh2:24px;--rh3:22px;--fc:10.5p
 
       <form class="pform" id="matMetaForm" style="margin-bottom:16px">
         <h3 style="margin:0 0 4px;font-size:14px">1 · Meta total del material</h3>
-        <p class="hint" style="margin:0 0 14px">Solo para materiales que NO están en el valorizado. Acero, concreto y encofrado ya toman su meta del cronograma valorizado vigente (se ven abajo como «valorizado»). Se registra una vez por componente y material.</p>
+        <p class="hint" style="margin:0 0 14px">Solo para materiales que NO están en el valorizado. Acero, concreto y encofrado ya toman su meta del cronograma valorizado vigente (se ven abajo como «valorizado»). Se registra una vez por frente y material.</p>
         <div class="row2">
           <div class="field" id="fm-comp">
-            <label for="mm_comp">Componente</label>
+            <label for="mm_comp">Frente</label>
             <select id="mm_comp"></select>
-            <span class="field-err">Elige un componente</span>
+            <span class="field-err">Elige un frente</span>
           </div>
           <div class="field" id="fm-mat">
             <label for="mm_mat">Material</label>
@@ -1196,9 +1224,9 @@ html.dens-densa{--rh:26px;--rh0:31px;--rh1:26px;--rh2:24px;--rh3:22px;--fc:10.5p
         <p class="hint" style="margin:0 0 14px">Lo que se ejecutó en ESE mes (no el acumulado): el acumulado y el saldo se calculan solos.</p>
         <div class="row2">
           <div class="field" id="fa-comp">
-            <label for="ma_comp">Componente</label>
+            <label for="ma_comp">Frente</label>
             <select id="ma_comp"></select>
-            <span class="field-err">Elige un componente</span>
+            <span class="field-err">Elige un frente</span>
           </div>
           <div class="field" id="fa-mat">
             <label for="ma_mat">Material</label>
@@ -1225,7 +1253,7 @@ html.dens-densa{--rh:26px;--rh0:31px;--rh1:26px;--rh2:24px;--rh3:22px;--fc:10.5p
       <h3 style="margin:18px 0 8px;font-size:14px">Lo registrado hasta ahora</h3>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Componente</th><th>Material</th><th>Meta total</th><th>Ejecutado acum.</th><th>Saldo</th><th>Avance</th><th>Origen</th></tr></thead>
+          <thead><tr><th>Frente</th><th>Material</th><th>Meta total</th><th>Ejecutado acum.</th><th>Saldo</th><th>Avance</th><th>Origen</th></tr></thead>
           <tbody id="matTbody"><tr><td colspan="7" class="mono" style="color:var(--mut)">—</td></tr></tbody>
         </table>
       </div>
@@ -1243,7 +1271,7 @@ html.dens-densa{--rh:26px;--rh0:31px;--rh1:26px;--rh2:24px;--rh3:22px;--fc:10.5p
             <span id="laEstado" class="badge"></span>
           </div>
           <div class="tb-g">
-            <select id="laComp" class="tb-sel" aria-label="Componente"></select>
+            <select id="laComp" class="tb-sel" aria-label="Frente"></select>
             <label class="tb-chip" title="Mostrar solo las actividades de la ruta crítica"><input type="checkbox" id="laCrit"><span>Solo críticas</span></label>
           </div>
           <div class="tb-g">
@@ -1291,9 +1319,9 @@ html.dens-densa{--rh:26px;--rh0:31px;--rh1:26px;--rh2:24px;--rh3:22px;--fc:10.5p
         <!-- agregar / editar una actividad: se elige de las partidas del valorizado, nunca se escribe a mano -->
         <form class="pform la-form" id="laForm" hidden>
           <h3 style="margin:0 0 4px;font-size:14px" id="laFTitulo">Agregar actividad</h3>
-          <p class="hint" style="margin:0 0 12px">La actividad se elige de las partidas del valorizado (código único): primero el componente, luego el elemento y por último la partida.</p>
+          <p class="hint" style="margin:0 0 12px">La actividad se elige de las partidas del valorizado (código único): primero el frente, luego el elemento y por último la partida.</p>
           <div class="row2">
-            <div class="field" id="laf-comp"><label for="laFComp">Componente</label><select id="laFComp"></select><span class="field-err">Elige un componente</span></div>
+            <div class="field" id="laf-comp"><label for="laFComp">Frente</label><select id="laFComp"></select><span class="field-err">Elige un frente</span></div>
             <div class="field" id="laf-elem"><label for="laFElem">Elemento</label><select id="laFElem"></select><span class="field-err">Elige el elemento</span></div>
           </div>
           <div class="field" id="laf-part"><label for="laFPart">Partida <input id="laFBuscar" class="sel-mini" type="search" placeholder="buscar…" style="width:130px;margin-left:8px;padding:3px 7px"></label><select id="laFPart" size="1"></select><span class="field-err">Elige la partida</span></div>
@@ -1340,7 +1368,7 @@ html.dens-densa{--rh:26px;--rh0:31px;--rh1:26px;--rh2:24px;--rh3:22px;--fc:10.5p
             <span id="ptPacChip" class="tb-pac"></span>
           </div>
           <div class="tb-g">
-            <select id="ptComp" class="tb-sel" aria-label="Componente"></select>
+            <select id="ptComp" class="tb-sel" aria-label="Frente"></select>
             <span class="tb-seg" role="group" aria-label="Grupos">
               <button type="button" class="seg-btn" data-lagrupos="abrir" title="Expandir todos los grupos" aria-label="Expandir todos los grupos">⊞</button>
               <button type="button" class="seg-btn" data-lagrupos="cerrar" title="Contraer los grupos (deja el puente y su primer nivel)" aria-label="Contraer los grupos">⊟</button>
@@ -1379,7 +1407,7 @@ html.dens-densa{--rh:26px;--rh0:31px;--rh1:26px;--rh2:24px;--rh3:22px;--fc:10.5p
     <section class="pane" data-pane="ppc">
       <div id="ppcVacio" class="soon" style="display:none"></div>
       <div id="ppcApp">
-        <div class="tb"><div class="tb-g"><select id="ppcComp" class="tb-sel" aria-label="Componente"></select></div></div>
+        <div class="tb"><div class="tb-g"><select id="ppcComp" class="tb-sel" aria-label="Frente"></select></div></div>
         <div id="ppcKpis" class="pt-kpis"></div>
         <div class="grid2">
           <div class="chart-card"><h3>Trazabilidad semanal del PAC</h3><p class="hint">PAC semanal, PAC acumulado y meta</p><svg id="ppcSvg" viewBox="0 0 640 300"></svg>
@@ -1448,8 +1476,8 @@ document.querySelectorAll('[data-tema]').forEach(b => {
 });
 // colores de los gráficos SVG (se dibujan en JS, no leen el CSS) — un juego por tema
 const SVGC = tema === 'oscuro'
-  ? { grid:'#26324a', axis:'#8a97b5', axisLine:'#2c3a54', warnBg:'#3a2020', warnBorder:'#7a3030', warnText:'#f87171', okBg:'#12301f', okBorder:'#2c7a52', okText:'#4ade80', midBg:'#16264a', midBorder:'#35509a', midText:'#8ab4f8', halo:'#151d2e', plazo:'#a78bfa', plazoOrig:'#8a97b5' }
-  : { grid:'#e4e9f4', axis:'#8592a8', axisLine:'#d5deef', warnBg:'#fdecec', warnBorder:'#f0a3aa', warnText:'#b91c1c', okBg:'#e8f7ef', okBorder:'#8fd5b0', okText:'#0e7a44', midBg:'#eaf1fe', midBorder:'#9db8ea', midText:'#1d4ed8', halo:'#ffffff', plazo:'#7c3aed', plazoOrig:'#94a3b8' };
+  ? { grid:'#26324a', axis:'#8a97b5', axisLine:'#2c3a54', warnBg:'#3a2020', warnBorder:'#7a3030', warnText:'#f87171', okBg:'#12301f', okBorder:'#2c7a52', okText:'#4ade80', midBg:'#16264a', midBorder:'#35509a', midText:'#8ab4f8', amBg:'#3a2c14', amBorder:'#8a6a25', amText:'#f2c66d', halo:'#151d2e', plazo:'#a78bfa', plazoOrig:'#8a97b5' }
+  : { grid:'#e4e9f4', axis:'#8592a8', axisLine:'#d5deef', warnBg:'#fdecec', warnBorder:'#f0a3aa', warnText:'#b91c1c', okBg:'#e8f7ef', okBorder:'#8fd5b0', okText:'#0e7a44', midBg:'#eaf1fe', midBorder:'#9db8ea', midText:'#1d4ed8', amBg:'#fdf3e2', amBorder:'#efc98a', amText:'#a85a08', halo:'#ffffff', plazo:'#7c3aed', plazoOrig:'#94a3b8' };
 
 const $ = (s) => document.querySelector(s);
 const fmt = (n, d=0) => 'S/. ' + Number(n||0).toLocaleString('es-PE', {minimumFractionDigits:d, maximumFractionDigits:d});
@@ -1490,6 +1518,20 @@ try { const a = localStorage.getItem('obra-alcance'); if (['contrato', 'adiciona
 const ALCANCE_TXT = { contrato: 'Contrato principal', adicional: 'Adicional', todo: 'Contrato + adicional' };
 const enAlcance = (r) => alcance === 'todo' || (r.concepto || 'contrato') === alcance;
 const dmy = (f) => f ? `${f.slice(8, 10)}/${f.slice(5, 7)}/${f.slice(2, 4)}` : '';   // 'YYYY-MM-DD' -> 'dd/mm/aa'
+// ── Estados de avance del sistema (KPI, globo de la Curva S, matriz, tarjetas e informe): se miden con el SPI = ejecutado ÷ programado a la fecha.
+//    Adelantado ≥ 1.02 · En plazo 0.98–1.02 · Atrasado 0.90–0.98 · Crítico < 0.90 (los umbrales se cambian aquí y rigen en todo el panel)
+const ESTADOS_AV = [{ k: 'ok', min: 1.02, txt: 'Adelantado', ic: '✔' }, { k: 'mid', min: 0.98, txt: 'En plazo', ic: '●' }, { k: 'am', min: 0.90, txt: 'Atrasado', ic: '▼' }, { k: 'mal', min: -Infinity, txt: 'Crítico', ic: '⚠' }];
+// semáforo: cuatro luces (de peor a mejor) con la del estado actual encendida
+let ESTADO_KPI = { k: 'neu', txt: '' };
+const COL_EST = { ok: '#0e8f4f', mid: '#2563eb', am: '#d97706', mal: '#dc2626', neu: '#64748b' };
+function semaforoHTML(k) {
+  return `<span class="sem" title="Estados (ejecutado ÷ programado): Crítico &lt; 90 % · Atrasado 90–98 % · En plazo 98–102 % · Adelantado ≥ 102 %">${['mal', 'am', 'mid', 'ok'].map(x => `<i class="${x}${x === k ? ' on' : ''}"></i>`).join('')}</span>`;
+}
+function estadoAv(prog, ejec) {
+  if (!(prog > 0)) return ejec > 0 ? ESTADOS_AV[0] : { k: 'neu', txt: 'Sin programar', ic: '–' };
+  if (!(ejec > 0)) return { k: 'mal', txt: 'Sin avance', ic: '⚠' };
+  const spi = ejec / prog; return ESTADOS_AV.find(e => spi >= e.min);
+}
 const DIA_MS = 86400000;
 
 // ── Curva S mensual = programado del cronograma valorizado VIGENTE (subtotal sin IGV, por
@@ -1768,9 +1810,9 @@ document.querySelectorAll('#nav button').forEach(b => {
     b.classList.add('on');
     document.querySelector(`.pane[data-pane="${b.dataset.pane}"]`).classList.add('on');
     const nComp = COMPONENTES.length;
-    const titles = { resumen: ['DASHBOARD - CONTROL DE OBRA', `${nComp} componente${nComp===1?'':'s'} de la obra, en un solo lugar`],
+    const titles = { resumen: ['DASHBOARD - CONTROL DE OBRA', `${nComp} frente${nComp===1?'':'s'} de trabajo en un solo lugar`],
       parte: ['Nuevo parte diario', 'Registra el avance ejecutado en obra'],
-      materiales: ['Registro de materiales', 'Metas totales y avance mensual por componente'],
+      materiales: ['Registro de materiales', 'Metas totales y avance mensual por frente'],
       lookahead: ['Look Ahead', 'Plan de 4 semanas · Last Planner: actividades ligadas al valorizado'],
       pts: ['Plan semanal', 'Meta y real por día de las actividades del Look Ahead · PAC de la semana'],
       ppc: ['PPC', 'Porcentaje de actividades completadas: trazabilidad semanal y causas de incumplimiento'] };
@@ -1904,17 +1946,17 @@ function renderCurvaS() {
     filas = todas;
   } else {
     const comp = COMPONENTES.find(c => c.id === seleccionada);
-    $('#curvaTitulo').textContent = comp ? `Curva S — ${comp.nombre} (S/. acumulados)` : 'Curva S por componente';
+    $('#curvaTitulo').textContent = comp ? `Curva S — ${comp.nombre} (S/. acumulados)` : 'Curva S por frente';
     filas = todas.filter(r => r.proyecto_id_codigo === seleccionada);
   }
-  const quien = seleccionada === GENERAL ? `Suma de los ${COMPONENTES.length} componentes` : `Solo ${(COMPONENTES.find(c => c.id === seleccionada) || {}).nombre || ''}`;
+  const quien = seleccionada === GENERAL ? `Suma de los ${COMPONENTES.length} frentes` : `Solo ${(COMPONENTES.find(c => c.id === seleccionada) || {}).nombre || ''}`;
   $('#curvaHint').textContent = `${quien} · ${ALCANCE_TXT[alcance]}`;
   $('#datosFuentes').innerHTML = `Montos subtotal (sin IGV). <b>Programado:</b> `
     + (DATA.version ? `cronograma vigente «${esc(DATA.version.nombre)}»` : 'curva de control de obra') + '. <b>Ejecutado:</b> control de obra.';
   document.querySelectorAll('[data-alc]').forEach(b => b.classList.toggle('on', b.dataset.alc === alcance));
 
   if (!filas.length) {
-    const msg = alcance === 'adicional' ? 'Este componente no tiene adicional' : 'Sin datos reales de Curva S todavía para esta selección';
+    const msg = alcance === 'adicional' ? 'Este frente no tiene adicional' : 'Sin datos reales de Curva S todavía para esta selección';
     $('#curvaSvg').setAttribute('viewBox', '0 0 900 320');
     $('#curvaSvg').innerHTML = `<text x="450" y="150" fill="${SVGC.axis}" font-size="13" text-anchor="middle">${msg}</text>`;
     $('#curvaMesSel').innerHTML = ''; $('#curvaMesKpis').innerHTML = ''; $('#plazoInfo').innerHTML = ''; $('#btnDatosTxt').textContent = '';
@@ -1980,7 +2022,11 @@ function renderCurvaS() {
 
   const pts = arr => arr.map(p => ({ x: px(p.x), y: py(p.y) }));
   const ptsProg = pts(progSeries), ptsEjec = pts(ejecSeries);
-  CURVA_CTX = { periodos, porPeriodo, base, ptsProg, ptsEjec, w, h, padL, padR, padT, padB, informe: !!CURVA_DIM, hayEjec: ejecSeries.some(p => p.y > 0) };
+  // el ejecutado solo se dibuja entre el primer y el último mes con avance reportado (después es un arrastre, no una medición)
+  const idxPri = periodos.findIndex(p => porPeriodo[p].ejecP > 0);
+  let idxUlt = -1; periodos.forEach((p, i) => { if (porPeriodo[p].ejecP > 0) idxUlt = i; });
+  const ptsEjecDib = idxUlt < 0 ? [] : ptsEjec.slice(Math.max(0, idxPri), idxUlt + 1);
+  CURVA_CTX = { periodos, porPeriodo, base, ptsProg, ptsEjec, w, h, padL, padR, padT, padB, informe: !!CURVA_DIM, hayEjec: ejecSeries.some(p => p.y > 0), idxPri: Math.max(0, idxPri), idxUlt };
   const lineFrom = (points, color, dash) => {
     if (!points.length) return '';
     const d = points.map((p,i) => `${i===0?'M':'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ');
@@ -2056,10 +2102,10 @@ function renderCurvaS() {
   renderPlazoInfo(plazo, hoy);
 
   $('#curvaSvg').setAttribute('viewBox', `0 0 ${w} ${h}`);
-  $('#curvaSvg').innerHTML = defs + grid + bandasPlazo + areaFrom(ptsProg, 'gradProg') + areaFrom(ptsEjec, 'gradEjec')
+  $('#curvaSvg').innerHTML = defs + grid + bandasPlazo + areaFrom(ptsProg, 'gradProg') + areaFrom(ptsEjecDib, 'gradEjec')
     + ejeX
     + lineFrom(ptsProg, '#2f6fed', '5,4')
-    + lineFrom(ptsEjec, '#ef4444')
+    + lineFrom(ptsEjecDib, '#ef4444')
     + marcasPlazo
     + '<g id="curvaCorte" pointer-events="none"></g>'
     + hotspots;
@@ -2117,21 +2163,21 @@ function pintarCorte(periodo) {
     const etiqueta = (cy, ty, tx, color) => `<circle cx="${x}" cy="${cy}" r="4.2" fill="${color}" stroke="#fff" stroke-width="1.6"/>
       <rect x="${px0}" y="${ty - 11}" width="52" height="17" rx="4" fill="#fff" stroke="${color}" stroke-width="1.2"/>
       <text x="${px0 + 26}" y="${ty + 1.5}" font-size="11.5" font-weight="800" fill="${color}" text-anchor="middle">${tx}</text>`;
-    if (base) s += etiqueta(yP, progArriba ? yP - 16 : yP + 20, (d.progA / base * 100).toFixed(1) + '%', '#1d4ed8') + etiqueta(yE, progArriba ? yE + 20 : yE - 16, (d.ejecA / base * 100).toFixed(1) + '%', '#dc2626');
+    const hayE = i >= c.idxPri && i <= c.idxUlt;
+    if (base) s += etiqueta(yP, progArriba || !hayE ? yP - 16 : yP + 20, (d.progA / base * 100).toFixed(1) + '%', '#1d4ed8') + (hayE ? etiqueta(yE, progArriba ? yE + 20 : yE - 16, (d.ejecA / base * 100).toFixed(1) + '%', '#dc2626') : '');
   } else {
     s += `<circle cx="${x}" cy="${c.padT}" r="2.5" fill="#d97706"/><text x="${x}" y="${c.padT - 6}" fill="#d97706" font-size="10" font-weight="600" text-anchor="middle">${txt}</text>`;
-    // globo de estado EN la línea de corte (mismo cálculo que «Estado del avance»): atrasado, al día o adelantado
+    // globo de estado EN la línea de corte: los estados del sistema (Adelantado, En plazo, Atrasado, Crítico)
     const gapPts = base ? ((d.progA - d.ejecA) / base) * 100 : 0;   // + atraso · − adelanto
     if (c.hayEjec && (d.progA > 0 || d.ejecA > 0)) {
-      const est = gapPts > 1 ? { tit: '⚠ Atrasado', sub: `${gapPts.toFixed(1)} pts vs. programado`, k: 'warn' }
-        : gapPts < -1 ? { tit: '▲ Adelantado', sub: `+${Math.abs(gapPts).toFixed(1)} pts vs. programado`, k: 'ok' }
-        : { tit: '✓ Al día', sub: `${gapPts <= 0 ? '+' : '-'}${Math.abs(gapPts).toFixed(1)} pts vs. programado`, k: 'mid' };
-      const bg = SVGC[est.k + 'Bg'], bd = SVGC[est.k + 'Border'], tx = SVGC[est.k + 'Text'];
+      const e = estadoAv(d.progA, d.ejecA), kk = e.k === 'mal' ? 'warn' : e.k === 'neu' ? 'mid' : e.k;
+      const sub = `${gapPts > 0 ? '−' : '+'}${Math.abs(gapPts).toFixed(1)} pts vs. programado`;
+      const bg = SVGC[kk + 'Bg'], bd = SVGC[kk + 'Border'], tx = SVGC[kk + 'Text'];
       const bw = 118, bh = 32, by = 1, bx = Math.min(Math.max(x - bw / 2, c.padL), c.w - c.padR - bw), tipX = Math.min(Math.max(x, bx + 14), bx + bw - 14);
       s += `<g><path d="M ${tipX - 6} ${by + bh} L ${tipX + 6} ${by + bh} L ${tipX} ${by + bh + 8} Z" fill="${bg}" stroke="${bd}"/>
         <rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="7" fill="${bg}" stroke="${bd}"/>
-        <text x="${bx + bw / 2}" y="${by + 14}" fill="${tx}" font-size="10" font-weight="700" text-anchor="middle">${est.tit}</text>
-        <text x="${bx + bw / 2}" y="${by + 26}" fill="${tx}" font-size="8.5" text-anchor="middle">${est.sub}</text></g>`;
+        <text x="${bx + bw / 2}" y="${by + 14}" fill="${tx}" font-size="10" font-weight="700" text-anchor="middle">${e.ic} ${e.txt}</text>
+        <text x="${bx + bw / 2}" y="${by + 26}" fill="${tx}" font-size="8.5" text-anchor="middle">${sub}</text></g>`;
     }
   }
   g.innerHTML = s;
@@ -2165,6 +2211,7 @@ function bar3D(x, yTop, baseline, width, depth, front, top, side) {
 }
 
 const w0Av = 420;
+let AV_DIM = null;   // [ancho, alto] del dibujo; solo lo usa el informe para barras más gruesas y letras más grandes
 function renderAvancePuente(periodo) {
   const todas = (DATA.curvaMensual || []).filter(enAlcance);
   const d = periodo ? new Date(periodo) : null;
@@ -2189,12 +2236,12 @@ function renderAvancePuente(periodo) {
     };
   });
 
-  const depth = 7;
+  const inf = !!AV_DIM, depth = inf ? 9 : 7;
   const wrapAv = $('#avancePuenteSvg').parentElement;
-  const w = 420, h = wrapAv.clientWidth > 0 ? Math.max(190, Math.min(340, Math.round(w0Av * wrapAv.clientHeight / wrapAv.clientWidth))) : 190, padL = 34, padR = 10 + depth, padT = 24, padB = 34;
+  const w = inf ? AV_DIM[0] : 420, h = inf ? AV_DIM[1] : (wrapAv.clientWidth > 0 ? Math.max(190, Math.min(340, Math.round(w0Av * wrapAv.clientHeight / wrapAv.clientWidth))) : 190), padL = inf ? 42 : 34, padR = 10 + depth, padT = inf ? 30 : 24, padB = inf ? 40 : 34;
   const n = filas.length || 1;
   const slot = (w - padL - padR) / n;
-  const barW = Math.min(26, slot * 0.3);
+  const barW = Math.min(inf ? 34 : 26, slot * 0.3);   // en el informe las barras son gruesas pero con aire entre frente y frente
   const baseline = h - padB;
   const yFor = pct => baseline - Math.min(1, pct) * (h - padT - padB - depth);
 
@@ -2203,14 +2250,14 @@ function renderAvancePuente(periodo) {
   [0, .5, 1].forEach(f => {
     const y = yFor(f);
     bars += `<line x1="${padL}" y1="${y}" x2="${w-padR}" y2="${y}" stroke="${SVGC.grid}" stroke-width="1"/>
-      <text x="${padL-5}" y="${y+3}" fill="${SVGC.axis}" font-size="8" text-anchor="end">${(f*100).toFixed(0)}%</text>`;
+      <text x="${padL-5}" y="${y+4}" fill="${SVGC.axis}" font-size="${inf ? 11 : 8}" text-anchor="end">${(f*100).toFixed(0)}%</text>`;
   });
   // "piso" con perspectiva, para que las barras parezcan pararse sobre algo
   bars += `<polygon points="${padL},${baseline} ${padL+depth},${baseline-depth} ${w-padR+depth},${baseline-depth} ${w-padR},${baseline}" fill="${SVGC.grid}"/>`;
 
   filas.forEach((f, i) => {
     const cx = padL + slot * i + slot / 2;
-    bars += `<text x="${cx}" y="${h-padB+18}" fill="${SVGC.axis}" font-size="9.5" text-anchor="middle">${f.nombre.replace('Puente ','')}</text>`;
+    bars += `<text x="${cx}" y="${h-padB+(inf ? 22 : 18)}" fill="${SVGC.axis}" font-size="${inf ? 13 : 9.5}" font-weight="${inf ? 700 : 400}" text-anchor="middle">${f.nombre.replace('Puente ','')}</text>`;
     if (f.sinDatos) {
       bars += `<text x="${cx}" y="${baseline-10}" fill="${SVGC.axis}" font-size="9" text-anchor="middle">sin datos</text>`;
       return;
@@ -2218,9 +2265,9 @@ function renderAvancePuente(periodo) {
     const x1 = cx - barW - 3, x2 = cx + 3;
     const y1 = yFor(f.pctProg), y2 = yFor(f.pctEjec);
     bars += bar3D(x1, y1, baseline, barW, depth, '#2f6fed', '#6f96f5', '#1e4fb8')
-      + `<text x="${x1+barW/2+depth/2}" y="${y1-depth-4}" fill="#1e4fb8" font-size="8.5" font-weight="700" text-anchor="middle">${(f.pctProg*100).toFixed(0)}%</text>`
+      + `<text x="${x1+barW/2+depth/2}" y="${y1-depth-4}" fill="#1e4fb8" font-size="${inf ? 13 : 8.5}" font-weight="700" text-anchor="middle">${(f.pctProg*100).toFixed(0)}%</text>`
       + bar3D(x2, y2, baseline, barW, depth, '#ef4444', '#f7a3a3', '#b52a2a')
-      + `<text x="${x2+barW/2+depth/2}" y="${y2-depth-4}" fill="#c62828" font-size="8.5" font-weight="700" text-anchor="middle">${(f.pctEjec*100).toFixed(0)}%</text>`;
+      + `<text x="${x2+barW/2+depth/2}" y="${y2-depth-4}" fill="#c62828" font-size="${inf ? 13 : 8.5}" font-weight="700" text-anchor="middle">${(f.pctEjec*100).toFixed(0)}%</text>`;
   });
 
   $('#avancePuenteSvg').setAttribute('viewBox', `0 0 ${w} ${h}`);
@@ -2326,7 +2373,7 @@ function renderMateriales(periodo) {
   });
   const hayEjemplo = !filtrado && [...metas, ...avance].some(r => r.material_id === mat.id && String(r.fuente || '').startsWith('demo'));
   $('#matEjemplo').style.display = hayEjemplo ? '' : 'none';
-  $('#matSub').textContent = filtrado ? `meta y programado del valorizado · ${filtroTxt}` : 'meta del valorizado vigente vs. ejecutado por componente';
+  $('#matSub').textContent = filtrado ? `meta y programado del valorizado · ${filtroTxt}` : 'meta del valorizado vigente vs. ejecutado por frente';
 
   // ── anillo: total del alcance elegido arriba (General = todos; o un solo componente) ──
   const enSel = filas.filter(f => !f.sinDatos && (seleccionada === GENERAL || f.id === seleccionada));
@@ -2351,7 +2398,7 @@ function renderMateriales(periodo) {
     <text x="100" y="114" text-anchor="middle" font-size="15" font-weight="800" style="fill:var(--tx)">${fmtCant(tTot)} ${u}</text>`
     : `<circle cx="100" cy="100" r="${R}" fill="none" stroke="${SVGC.grid}" stroke-width="${SW}"/>
        <text x="100" y="104" text-anchor="middle" font-size="11" style="fill:var(--mut)">sin datos</text>`;
-  const quienTxt = seleccionada === GENERAL ? `Total ${enSel.length} componente${enSel.length === 1 ? '' : 's'}`
+  const quienTxt = seleccionada === GENERAL ? `Total ${enSel.length} frente${enSel.length === 1 ? '' : 's'}`
     : (COMPONENTES.find(c => c.id === seleccionada) || {}).nombre || '';
   const liProg = hayProg && tTot
     ? `<div class="mat-li"><i style="background:${C_PROG}"></i><span>Programado a la fecha <b>${fmtCant(tPr)} ${u}</b> (${(tPr / tTot * 100).toFixed(1)}% de la meta)</span></div>` : '';
@@ -2458,6 +2505,17 @@ $('#matElem').addEventListener('change', (e) => { matElem = e.target.value; rend
 // valorizado vigente; el ejecutado por grupo es lo registrado en el parte diario del Look Ahead. El ejecutado OFICIAL
 // del componente es el de la Curva S: lo que aún no está desglosado por grupo aparece como su propia línea.
 let GRUPOS = null;   // null: cargando · 'falta': la base aún no tiene la vista · lista de filas
+let RUTA_CRIT = null;   // conjunto de 'proyecto_id|código del componente' con actividades de la ruta crítica (null: cargando)
+async function cargarRutaCritica(version, filtroProy) {
+  RUTA_CRIT = new Set();
+  if (version) {
+    try {
+      const rows = await getTodo(`/wbs_nodos?version_id=eq.${version.id}&es_critica=eq.true&${filtroProy}&select=id,proyecto_id,codigo&order=codigo,id`);
+      rows.forEach(r => { const g = String(r.codigo).split('.').slice(0, 2).join('.'); if (g.includes('.')) RUTA_CRIT.add(r.proyecto_id + '|' + g); });
+    } catch (e) {}
+  }
+  try { renderReporteGrupos(); } catch (e) {}
+}
 async function cargarReporteGrupos(version, filtroProy) {
   if (!version) GRUPOS = [];
   else {
@@ -2466,6 +2524,9 @@ async function cargarReporteGrupos(version, filtroProy) {
   }
   renderReporteGrupos();
 }
+const DIA_RG = 86400000;
+const finDeMesISO = (per) => { const d = new Date(per); return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 0)).toISOString().slice(0, 10); };
+const solapeDias = (a1, a2, b1, b2) => Math.max(0, (Math.min(a2, b2) - Math.max(a1, b1)) / DIA_RG);
 let rgVista = 'radar', rgAmbito = 'total'; const rgOcultos = new Set();
 try { if (localStorage.getItem('obra-rg-vista') === 'barras') rgVista = 'barras'; const a = localStorage.getItem('obra-rg-ambito'); if (a) rgAmbito = a; } catch (e) {}
 const RG_OSC = ['#7aa7f7', '#5fd0a7', '#f6a25f', '#b7a1f7', '#5cc6dc', '#f08db8', '#e0bd58', '#9fb0c8'], RG_LUZ = ['#2563eb', '#059669', '#ea6a0a', '#7c3aed', '#0891b2', '#db2777', '#ca8a04', '#64748b'];
@@ -2508,12 +2569,12 @@ function renderReporteGrupos(periodo) {
   const box = $('#rgGrid'); if (!box || !DATA) return;
   if (periodo === undefined) periodo = curvaPopupFijo;
   const nota = $('#rgNota');
-  if (GRUPOS === null) { box.innerHTML = '<div class="rg-msg">Cargando el reporte por grupo…</div>'; nota.textContent = ''; return; }
+  if (GRUPOS === null) { box.innerHTML = '<div class="rg-msg">Cargando el reporte por componente…</div>'; nota.textContent = ''; return; }
   if (GRUPOS === 'falta') { box.innerHTML = '<div class="rg-msg">Este reporte necesita la vista <b>v_reporte_grupo_mes</b>. Pide al administrador que corra <b>reporte_grupos.sql</b> en la base.</div>'; nota.textContent = ''; return; }
   const d = periodo ? new Date(periodo) : null, corte = d ? `Corte: ${MESES_ES[d.getUTCMonth()]} ${d.getUTCFullYear()}` : 'Al corte';
   const todas = (DATA.curvaMensual || []).filter(enAlcance);
   const comps = COMPONENTES.filter(c => seleccionada === GENERAL || c.id === seleccionada);
-  if (!comps.length) { box.innerHTML = '<div class="rg-msg">No hay componentes en esta obra.</div>'; return; }
+  if (!comps.length) { box.innerHTML = '<div class="rg-msg">No hay frentes de trabajo en esta obra.</div>'; return; }
   const pid = Object.fromEntries(DATA.proyectos.map(p => [p.codigo, p.id]));
   const P = (x) => (x * 100).toFixed(1) + '%';
   const M = (n) => n >= 1e6 ? (n / 1e6).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' M' : Number(n || 0).toLocaleString('es-PE', { maximumFractionDigits: 0 });
@@ -2539,7 +2600,7 @@ function renderReporteGrupos(periodo) {
     const l = Object.values(gr), sPres = l.reduce((s, g) => s + g.pres, 0), sProg = l.reduce((s, g) => s + g.prog, 0), sEjec = l.reduce((s, g) => s + g.ejec, 0);
     const base = of ? of.base : sPres, prog = of ? of.prog : sProg, ejec = of ? of.ejec : sEjec;
     const col = RG_COLORES[Math.max(0, COMPONENTES.findIndex(q => q.id === c.id)) % RG_COLORES.length];
-    return { c, col, gr, base, prog, ejec, hay: !!(of || l.length) };
+    return { c, col, gr, base, prog, ejec, serie: filasC, hay: !!(of || l.length) };
   });
   const claves = {};
   info.forEach(x => Object.values(x.gr).forEach(g => { claves[g.clave] = claves[g.clave] || { clave: g.clave, cod: g.cod, nom: g.nom, adic: g.adic }; }));
@@ -2548,21 +2609,23 @@ function renderReporteGrupos(periodo) {
   const tot = { base: 0, prog: 0, ejec: 0, gr: {} };
   info.forEach(x => { tot.base += x.base; tot.prog += x.prog; tot.ejec += x.ejec;
     Object.values(x.gr).forEach(g => { const t0 = tot.gr[g.clave] || (tot.gr[g.clave] = { pres: 0, prog: 0, ejec: 0 }); t0.pres += g.pres; t0.prog += g.prog; t0.ejec += g.ejec; }); });
+  const critOn = RUTA_CRIT instanceof Set && RUTA_CRIT.size > 0;   // ¿el cronograma trae ruta crítica?
+  const esCrit = (x, g) => !!g && critOn && RUTA_CRIT.has(pid[x.c.id] + '|' + g.cod);
   // ── celdas: % ejecutado (rojo) de % programado (azul) y una barra doble: la clara es lo programado, la fina sólida lo ejecutado ──
   const bala = (pp, pe) => `<span class="mtr"><i class="pg" style="width:${Math.min(100, pp * 100).toFixed(1)}%"></i><i class="ej" style="width:${Math.min(100, pe * 100).toFixed(1)}%"></i></span>`;
-  const celdaG = (g, cls, nom) => !g || !g.pres ? `<td class="${cls || ''}"><div class="rc-n">—</div></td>`
-    : `<td class="${cls || ''}" title="${esc(`${nom}: programado ${fmt(g.prog)} · ejecutado (parte diario) ${fmt(g.ejec)} · presupuesto ${fmt(g.pres)}${g.prog > 0 ? ' · cumplimiento ' + P(g.ejec / g.prog) : ''}`)}"><div class="mc"><div class="mv"><b>${P(g.ejec / g.pres)}</b><em>/ ${P(g.prog / g.pres)}</em></div>${bala(g.prog / g.pres, g.ejec / g.pres)}</div></td>`;
+  const celdaG = (g, cls, nom, crit) => !g || !g.pres ? `<td class="${cls || ''}"><div class="rc-n">—</div></td>`
+    : `<td class="${cls || ''}" title="${esc(`${nom}: programado ${fmt(g.prog)} · ejecutado (parte diario) ${fmt(g.ejec)} · presupuesto ${fmt(g.pres)}${g.prog > 0 ? ' · cumplimiento ' + P(g.ejec / g.prog) : ''}`)}">${crit ? '<i class="rc-flag" title="Componente de la ruta crítica">RC</i>' : ''}<div class="mc"><div class="mv"><b>${P(g.ejec / g.pres)}</b><em>/ ${P(g.prog / g.pres)}</em></div>${bala(g.prog / g.pres, g.ejec / g.pres)}</div></td>`;
   const celdaT = (base, prog, ejec, cls) => !base ? `<td class="${cls || ''}"><div class="rc-n">—</div></td>`
     : `<td class="${cls || ''}" title="${esc(`Programado ${fmt(prog)} · ejecutado ${fmt(ejec)} · presupuesto ${fmt(base)}`)}"><div class="mc"><div class="mv"><b>${P(ejec / base)}</b><em>/ ${P(prog / base)}</em></div>${bala(prog / base, ejec / base)}</div></td>`;
-  const estado = (base, prog, ejec) => { if (!base) return '<span class="rg-badge neu">Sin datos</span>'; const dif = (ejec - prog) / base * 100;
-    return ejec === 0 && prog > 0 ? '<span class="rg-badge neu">Sin avance</span>' : dif >= -0.05 ? '<span class="rg-badge ok">Al día</span>' : `<span class="rg-badge mal">${Math.abs(dif).toFixed(1)} pts atrás</span>`; };
+  const estado = (base, prog, ejec) => { if (!base) return '<span class="rg-badge neu">Sin datos</span>'; const e = estadoAv(prog, ejec), dif = (ejec - prog) / base * 100;
+    return `<span class="rg-badge ${e.k}" title="${dif >= 0 ? '+' : '−'}${Math.abs(dif).toFixed(1)} pts vs. programado">${e.ic} ${e.txt}</span>`; };
   const nom = (c) => esc(corto(c));
-  // cumplimiento = ejecutado ÷ programado a la fecha; semáforo: verde ≥ 95 %, ámbar 80–95 %, rojo < 80 %
+  // cumplimiento = ejecutado ÷ programado a la fecha (SPI); su color sigue los estados del sistema
   const cump = (prog, ejec) => prog > 0 ? ejec / prog : null;
-  const semaf = (v) => v === null ? 'neu' : v >= 0.95 ? 'ok' : v >= 0.8 ? 'am' : 'mal';
+  const semaf = (v) => v === null ? 'neu' : estadoAv(1, v).k;
   const celdaC = (prog, ejec, cls) => { const v = cump(prog, ejec); return `<td class="${cls || ''}" title="${esc('Ejecutado ÷ programado a la fecha')}"><span class="rg-cpv ${semaf(v)}">${v === null ? '—' : P(v)}</span></td>`; };
-  const cab = `<thead><tr><th>Grupo</th>${info.map(x => `<th><i style="background:${x.col}"></i>${nom(x.c)}<small>${x.hay ? 'S/. ' + M(x.base) : 'sin datos'}</small></th>`).join('')}${multi ? `<th class="tot">Total obra<small>S/. ${M(tot.base)}</small></th>` : ''}</tr></thead>`;
-  const cuerpo = filas.map(f => `<tr><td><div class="rg-g">${esc(f.nom)}</div></td>${info.map(x => celdaG(x.gr[f.clave], '', f.nom)).join('')}${multi ? celdaG(tot.gr[f.clave], 'tot', f.nom) : ''}</tr>`).join('');
+  const cab = `<thead><tr><th>Componente</th>${info.map(x => `<th><i style="background:${x.col}"></i>${nom(x.c)}<small>${x.hay ? 'S/. ' + M(x.base) : 'sin datos'}</small></th>`).join('')}${multi ? `<th class="tot">Total obra<small>S/. ${M(tot.base)}</small></th>` : ''}</tr></thead>`;
+  const cuerpo = filas.map(f => `<tr><td><div class="rg-g">${esc(f.nom)}</div></td>${info.map(x => celdaG(x.gr[f.clave], '', f.nom, esCrit(x, x.gr[f.clave]))).join('')}${multi ? celdaG(tot.gr[f.clave], 'tot', f.nom) : ''}</tr>`).join('');
   const total = `<tr class="tt"><td><div class="rg-g">Total (Curva S)</div></td>${info.map(x => celdaT(x.hay ? x.base : 0, x.prog, x.ejec)).join('')}${multi ? celdaT(tot.base, tot.prog, tot.ejec, 'tot') : ''}</tr>`
     + `<tr class="cp"><td><div class="rg-g">Cumplimiento</div></td>${info.map(x => celdaC(x.hay ? x.prog : 0, x.ejec)).join('')}${multi ? celdaC(tot.prog, tot.ejec, 'tot') : ''}</tr>`
     + `<tr class="st"><td></td>${info.map(x => `<td>${estado(x.hay ? x.base : 0, x.prog, x.ejec)}</td>`).join('')}${multi ? `<td class="tot">${estado(tot.base, tot.prog, tot.ejec)}</td>` : ''}</tr>`;
@@ -2570,7 +2633,7 @@ function renderReporteGrupos(periodo) {
   const ambito = !multi ? info[0].c.id : (rgAmbito === 'total' || rgAmbito === 'todos' || rgAmbito === 'cumpl' || info.some(x => x.c.id === rgAmbito)) ? rgAmbito : 'total';
   const val = (g, k) => g && g.pres ? g[k] / g.pres : null;
   let series, escala, leyGraf = '';
-  if (ambito === 'cumpl') {   // cumplimiento (ejecutado ÷ programado) de cada puente en cada grupo
+  if (ambito === 'cumpl') {   // cumplimiento (ejecutado ÷ programado) de cada frente en cada componente
     series = info.filter(x => !rgOcultos.has(x.c.id)).map(x => ({ nom: corto(x.c), col: x.col, v: filas.map(f => { const g = x.gr[f.clave]; return g && g.prog > 0 ? g.ejec / g.prog : null; }) }));
     const vmax = Math.max(0, ...series.flatMap(s => s.v.map(v => v || 0)));
     escala = [1, 1.25, 1.5, 2].find(z => z >= vmax) || Math.ceil(vmax);
@@ -2579,7 +2642,7 @@ function renderReporteGrupos(periodo) {
     series = info.filter(x => !rgOcultos.has(x.c.id)).map(x => ({ nom: corto(x.c), col: x.col, v: filas.map(f => val(x.gr[f.clave], 'ejec')) }));
     const vmax = Math.max(0, ...series.flatMap(s => s.v.map(v => v || 0)));
     escala = [0.05, 0.1, 0.2, 0.25, 0.5, 1].find(z => z >= vmax) || 1;
-    leyGraf = `<div class="rg-cmp">${info.map(x => `<button type="button" class="rg-cb ${rgOcultos.has(x.c.id) ? 'off' : ''}" data-rgl="${esc(x.c.id)}" title="Mostrar u ocultar"><i style="background:${x.col}"></i>${nom(x.c)}</button>`).join('')}<span class="rg-cn">% ejecutado por puente</span></div>`;
+    leyGraf = `<div class="rg-cmp">${info.map(x => `<button type="button" class="rg-cb ${rgOcultos.has(x.c.id) ? 'off' : ''}" data-rgl="${esc(x.c.id)}" title="Mostrar u ocultar"><i style="background:${x.col}"></i>${nom(x.c)}</button>`).join('')}<span class="rg-cn">% ejecutado por frente</span></div>`;
   } else {
     const gA = ambito === 'total' ? (f) => tot.gr[f.clave] : (f) => (info.find(x => x.c.id === ambito) || info[0]).gr[f.clave];
     series = [{ nom: 'Programado', col: C_PROG_RG, dash: true, rel: .10, v: filas.map(f => val(gA(f), 'prog')) }, { nom: 'Ejecutado', col: C_EJEC_RG, rel: .22, v: filas.map(f => val(gA(f), 'ejec')) }];
@@ -2588,35 +2651,80 @@ function renderReporteGrupos(periodo) {
   const usaRadar = rgVista === 'radar' && filas.length >= 3;
   const grafico = usaRadar ? leyGraf + rgRadar(series, filas.map(f => f.nom), escala)
     : leyGraf + `<div>${filas.map((f, i) => `<div class="rgb-g"><div class="rgb-t">${esc(f.nom)}</div>${series.map(se => `<div class="rgb-r"><span class="n">${esc(se.nom)}</span><span class="rgb-tr"><i style="width:${Math.min(100, (se.v[i] || 0) / escala * 100).toFixed(1)}%;background:${se.col}"></i></span><b style="color:${se.col}">${se.v[i] === null ? '—' : P(se.v[i])}</b></div>`).join('')}</div>`).join('')}</div>`;
-  const opciones = multi ? `<label class="rg-sel">Ver <select id="rgAmbito" aria-label="Qué mostrar en el gráfico"><option value="total"${ambito === 'total' ? ' selected' : ''}>Total obra</option>${info.map(x => `<option value="${esc(x.c.id)}"${ambito === x.c.id ? ' selected' : ''}>${nom(x.c)}</option>`).join('')}<option value="todos"${ambito === 'todos' ? ' selected' : ''}>Comparar puentes (ejecutado)</option><option value="cumpl"${ambito === 'cumpl' ? ' selected' : ''}>Cumplimiento por puente</option></select></label>` : '';
-  const tituloG = ambito === 'total' ? (multi ? 'Total obra' : corto(info[0].c)) : ambito === 'todos' ? 'Comparación de puentes · % ejecutado' : ambito === 'cumpl' ? 'Cumplimiento por puente · ejecutado ÷ programado' : corto(info.find(x => x.c.id === ambito).c);
-  // ── conclusiones visuales (se calculan solas con lo que hay en pantalla) ──
-  const ok = [];
-  if (multi) {
-    const cuentas = info.map(x => ({ x, n: filas.filter(f => { const v = val(x.gr[f.clave], 'prog'); return v !== null && v >= 0.9995; }).length, de: filas.filter(f => val(x.gr[f.clave], 'prog') !== null).length })).filter(q => q.n > 0).sort((a, b) => b.n - a.n);
-    if (cuentas.length) { const mx = cuentas[0].n, lid = cuentas.filter(q => q.n === mx).map(q => `<b>${nom(q.x.c)}</b>`).join(' y '); ok.push(`${lid} ${cuentas.filter(q => q.n === mx).length > 1 ? 'tienen' : 'tiene'} programado el 100 % en ${mx} de ${cuentas[0].de} grupos.`); }
-  }
-  const prom = filas.map(f => { const vs = info.map(x => ({ x, v: val(x.gr[f.clave], 'prog') })).filter(q => q.v !== null); return { f, vs, media: vs.length ? vs.reduce((s, q) => s + q.v, 0) / vs.length : null }; }).filter(q => q.media !== null).sort((a, b) => a.media - b.media);
-  if (prom.length && prom[0].media < 0.995) {
-    const w = prom[0], bajos = [...w.vs].sort((a, b) => a.v - b.v).slice(0, multi ? 2 : 1);
-    ok.push(`<b>${esc(w.f.nom)}</b> es el grupo con menor programación a la fecha: ${bajos.map(q => `${multi ? `<b>${nom(q.x.c)}</b> ` : ''}${P(q.v)}`).join(' y ')}.`);
-  }
+  const opciones = multi ? `<label class="rg-sel">Ver <select id="rgAmbito" aria-label="Qué mostrar en el gráfico"><option value="total"${ambito === 'total' ? ' selected' : ''}>Total obra</option>${info.map(x => `<option value="${esc(x.c.id)}"${ambito === x.c.id ? ' selected' : ''}>${nom(x.c)}</option>`).join('')}<option value="todos"${ambito === 'todos' ? ' selected' : ''}>Comparar frentes (ejecutado)</option><option value="cumpl"${ambito === 'cumpl' ? ' selected' : ''}>Cumplimiento por frente</option></select></label>` : '';
+  const tituloG = ambito === 'total' ? (multi ? 'Total obra' : corto(info[0].c)) : ambito === 'todos' ? 'Comparación de frentes · % ejecutado' : ambito === 'cumpl' ? 'Cumplimiento por frente · ejecutado ÷ programado' : corto(info.find(x => x.c.id === ambito).c);
+  // ── tarjetas de conclusión (se calculan solas con lo que hay en pantalla) ──
+  const pill = (k, txt) => `<span class="rgc-p ${k}">${txt}</span>`;
+  const fila = (k, lab, txt) => `<li class="rgc-i">${pill(k, lab)}<span>${txt}</span></li>`;
+  const MM = (n) => 'S/. ' + (Math.abs(n) / 1e6).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' M';
+  const dmyD = (d) => dmy(d.toISOString().slice(0, 10));
   const conCurva = info.filter(x => x.hay && x.base);
-  if (conCurva.length) ok.push('Según la Curva S (oficial), ' + conCurva.map(x => { const dif = (x.ejec - x.prog) / x.base * 100; return `<b>${nom(x.c)}</b> ${x.ejec === 0 && x.prog > 0 ? 'sin avance registrado' : dif >= -0.05 ? 'al día' : Math.abs(dif).toFixed(1) + ' pts atrás'}`; }).join(' · ') + '.');
-  if (multi) {
-    const cc = conCurva.map(x => ({ x, v: cump(x.prog, x.ejec) })).filter(q => q.v !== null).sort((a, b) => b.v - a.v);
-    if (cc.length > 1) ok.push(`Mayor cumplimiento (Curva S): <b>${nom(cc[0].x.c)}</b> ${P(cc[0].v)}; menor: <b>${nom(cc[cc.length - 1].x.c)}</b> ${P(cc[cc.length - 1].v)}.`);
-  }
+
+  // 1) Cuello de botella y holgura: componente (grupo de partidas) más atrasado, frente más atrasado y frente adelantado
+  const bn = [];
+  const celdas = []; info.forEach(x => Object.values(x.gr).forEach(g => { if (g.pres > 0 && g.prog / g.pres >= 0.10 && (!critOn || esCrit(x, g))) celdas.push({ x, g, pp: g.prog / g.pres, pe: g.ejec / g.pres }); }));
+  celdas.sort((a, b) => (b.pp - b.pe) - (a.pp - a.pe));
+  const c0 = celdas[0], lead = critOn ? 'Ruta crítica' : 'Componente atrasado';
+  if (c0 && c0.pp - c0.pe >= 0.02) { const e = estadoAv(c0.g.prog, c0.g.ejec); bn.push(fila(e.k, `${e.ic} ${e.txt}`, `<b>${lead}:</b> <b>${esc(c0.g.nom)}</b>${multi ? ` en <b>${nom(c0.x.c)}</b>` : ''}: ${P(c0.pe)} ejecutado, debería ir ${P(c0.pp)}.`)); }
+  else bn.push(fila(critOn ? 'mid' : 'neu', critOn ? '● En plazo' : '– Sin atrasos', critOn ? '<b>Ruta crítica:</b> ningún componente crítico va atrasado.' : '<b>Componente atrasado:</b> ninguno a esta fecha.'));
+  const fl = conCurva.map(x => ({ x, e: estadoAv(x.prog, x.ejec), pe: x.ejec / x.base, pp: x.prog / x.base, spi: x.prog > 0 ? x.ejec / x.prog : 9 })).sort((a, b) => a.spi - b.spi);
+  const f0 = fl[0];
+  if (f0 && (f0.e.k === 'am' || f0.e.k === 'mal')) bn.push(fila(f0.e.k, `${f0.e.ic} ${f0.e.txt}`, `<b>Frente atrasado:</b> <b>${nom(f0.x.c)}</b> con ${P(f0.pe)} ejecutado, debería tener ${P(f0.pp)}.`));
+  else if (f0) bn.push(fila('mid', '● En plazo', '<b>Frente atrasado:</b> ninguno, todos van en plazo o adelantados.'));
+  const ad = fl.filter(q => q.e.k === 'ok');
+  if (ad.length) bn.push(fila('ok', '✔ Adelantado', `<b>Frente adelantado:</b> ${ad.map(q => `<b>${nom(q.x.c)}</b> (${P(q.pe)} vs ${P(q.pp)} programado)`).join(' · ')}.`));
+  else bn.push(fila('neu', '– Sin adelantos', '<b>Frente adelantado:</b> ninguno a esta fecha.'));
+  const card1 = `<div class="rgc" style="--ac:#d97706"><h4>Cuello de botella y holgura</h4><ul>${bn.join('')}</ul></div>`;
+
+  // 2) Desempeño por frente: mayor y menor cumplimiento (ejecutado ÷ programado, Curva S)
+  const cc = conCurva.map(x => ({ x, v: cump(x.prog, x.ejec) })).filter(q => q.v !== null).sort((a, b) => b.v - a.v);
+  const card2 = `<div class="rgc" style="--ac:#2563eb"><h4>Desempeño por frente</h4>${cc.length ? cc.map((q, i) => `<div class="rgd"><span class="n"><i style="background:${q.x.col}"></i>${nom(q.x.c)}</span><span class="b"><i class="${semaf(q.v)}" style="width:${Math.min(100, q.v * 100).toFixed(1)}%"></i></span><b class="${semaf(q.v)}">${P(q.v)}</b>${cc.length > 1 && i === 0 ? '<em class="mx">Mayor</em>' : cc.length > 1 && i === cc.length - 1 ? '<em class="mn">Menor</em>' : '<em></em>'}</div>`).join('') : '<p class="rgc-v">Sin avance registrado todavía.</p>'}<p class="rgc-nt">Cumplimiento = ejecutado ÷ programado a la fecha.</p></div>`;
+
+  // 3) Pronóstico de término (SPI): fecha proyectada al ritmo que se lleva, frente al plazo contractual
+  const pl = (cod) => (DATA.plazos || []).find(p => p.codigo === cod);
+  const susp = (cod) => (DATA.eventosPlazo || []).filter(e => e.tipo === 'suspension' && (!e.proyecto_id_codigo || e.proyecto_id_codigo === cod)).map(e => ({ ini: +new Date(e.fecha_inicio), fin: +new Date(e.fecha_fin) + DIA_RG }));
+  const pron = (base, prog, ejec, ini, fin, sp) => {
+    if (!(prog > 0) || !(ejec > 0)) return null;
+    const spi = ejec / prog, sT = sp.reduce((s, e) => s + solapeDias(+ini, +fin, e.ini, e.fin), 0), durEf = (fin - ini) / DIA_RG - sT;
+    const proy = new Date(+ini + (durEf / spi + sT) * DIA_RG);
+    return { spi, proy, desvio: Math.round((proy - fin) / DIA_RG) };
+  };
+  const pf = info.map(x => { const p = pl(x.c.id); if (!p || !x.hay) return null; const ini = new Date(p.fecha_inicio), fin = new Date(p.fecha_fin_vigente); return { x, fin, ...(pron(x.base, x.prog, x.ejec, ini, fin, susp(x.c.id)) || {}) }; }).filter(q => q && q.proy);
+  let card3;
+  const plT = info.map(x => pl(x.c.id)).filter(Boolean);
+  if (plT.length && pf.length) {
+    const iniT = new Date(plT.map(p => p.fecha_inicio).sort()[0]), finT = new Date(plT.map(p => p.fecha_fin_vigente).sort().pop());
+    const spT = info.flatMap(x => susp(x.c.id)), tt = pron(tot.base, tot.prog, tot.ejec, iniT, finT, spT.filter((e, i, a) => a.findIndex(z => z.ini === e.ini && z.fin === e.fin) === i));
+    const corteD = periodo ? new Date(finDeMesISO(periodo)) : new Date();
+    const meses = Math.max(0.1, (finT - corteD) / DIA_RG / 30.44), req = (tot.base - tot.ejec) / meses;
+    const ult = {}; info.forEach(x => (x.serie || []).forEach(r => { if (!periodo || r.periodo <= periodo) ult[r.periodo] = (ult[r.periodo] || 0) + (Number(r.ejecutado_parcial) || 0); }));
+    const ks = Object.keys(ult).sort().slice(-3), act = ks.length ? ks.reduce((s, k) => s + ult[k], 0) / ks.length : 0;
+    // recomendación: si se proyecta pasar el plazo, se pide elevar el ritmo desde el mes siguiente al corte.
+    // Ritmo requerido = lo que falta ejecutar ÷ meses que quedan; TSPI = lo que falta ÷ lo que estaba planificado que faltara.
+    const MES_L = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+    const dCorte = periodo ? new Date(periodo) : new Date(), sig = MES_L[(dCorte.getUTCMonth() + 1) % 12];
+    const tspi = tot.base > tot.prog ? (tot.base - tot.ejec) / (tot.base - tot.prog) : null;
+    let rec;
+    if (tt && tt.desvio > 0) rec = `<b>Recomendación:</b> elevar el ritmo de ejecución a partir de ${sig}${tspi && tspi > 1 ? ` a ${tspi.toFixed(2)}× lo planificado` : ''} para mitigar los +${tt.desvio} días de desvío y cumplir con el plazo contractual del ${dmyD(finT)}.`;
+    else { const tarde = pf.filter(q => q.desvio > 0);
+      rec = tt ? (tarde.length ? `<b>Recomendación:</b> la obra termina dentro del plazo, pero ${tarde.map(q => nom(q.x.c)).join(', ')} se pasaría${tarde.length > 1 ? 'n' : ''} de su fecha: elevar el ritmo de ${tarde.length > 1 ? 'esos frentes' : 'ese frente'} a partir de ${sig}.` : 'Al ritmo actual todos los frentes terminan dentro del plazo contractual.') : 'Aún no hay avance suficiente para proyectar.'; }
+    const dv = (d) => d > 0 ? `<b class="rgf-m">+${d} d</b>` : `<b class="rgf-o">${d === 0 ? 'en plazo' : d + ' d'}</b>`;
+    card3 = `<div class="rgc" style="--ac:#7c3aed"><h4>Pronóstico de término <small>· método del valor ganado</small></h4>
+      ${tt ? `<div class="rgf-h"><div><small>Fin proyectado obra</small><b>${dmyD(tt.proy)}</b></div><div><small>Plazo contractual</small><b>${dmyD(finT)}</b></div><div title="SPI = valor ganado ÷ valor planificado, al corte"><small>Desvío · VG/VP</small>${dv(tt.desvio)} <em>${tt.spi.toFixed(2)}</em></div></div>` : ''}
+      ${multi ? `<div class="rgf-t">${pf.map(q => `<span class="n">${nom(q.x.c)}</span><span>${q.spi.toFixed(2)}</span><span>${dmyD(q.proy)}</span>${dv(q.desvio)}`).join('')}</div>` : ''}
+      <p class="rgc-rec">${rec}</p></div>`;
+  } else card3 = `<div class="rgc" style="--ac:#7c3aed"><h4>Pronóstico de término <small>· método del valor ganado</small></h4><p class="rgc-v">Sin plazos contractuales o sin avance suficiente para proyectar.</p></div>`;
+  const tarjetas = `<div class="rg-cards">${card1}${card2}${card3}</div>`;
   const nComp = info.length;
   box.innerHTML = `<div class="rg-card">
-    <div class="rg-band"><div><h3>Avance por grupo de partidas — ${nComp} componente${nComp === 1 ? '' : 's'}</h3><p>Comparativo programado vs ejecutado (%) · ${esc(corte)} · ${esc(ALCANCE_TXT[alcance])} · sin IGV</p></div>
+    <div class="rg-band"><div><h3>Avance por componente — ${nComp} frente${nComp === 1 ? '' : 's'}</h3><p>Comparativo programado vs ejecutado (%) · ${esc(corte)} · ${esc(ALCANCE_TXT[alcance])} · sin IGV</p></div>
       <div class="rg-ctl">${opciones}<span class="rg-seg" role="group" aria-label="Tipo de gráfico"><button type="button" data-rgv="radar" class="${usaRadar ? 'on' : ''}">Radar</button><button type="button" data-rgv="barras" class="${usaRadar ? '' : 'on'}">Barras</button></span></div></div>
     <div class="rg-body"><div class="rg-chart"><div class="rg-ct">${esc(tituloG)}</div>${grafico}</div>
       <div class="rg-tabla"><div class="rg-tw"><table class="rg-mx">${cab}<tbody>${cuerpo}${total}</tbody></table></div>
-        <div class="rg-lg"><span class="lp"><i></i>Programado a la fecha</span><span class="le"><i></i>Ejecutado</span><span style="color:var(--mut);font-weight:500">en cada celda: ejecutado / programado · cumplimiento = ejecutado ÷ programado (<b style="color:var(--green)">≥ 95 %</b> · <b style="color:var(--rg-am)">80–95 %</b> · <b style="color:var(--rg-e)">&lt; 80 %</b>)</span></div></div></div>
-    ${ok.length ? `<div class="rg-con"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3" y="13" width="4" height="8" rx="1"/><rect x="10" y="8" width="4" height="13" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/></svg><div><b>Conclusiones visuales:</b><ul>${ok.map(q => `<li>${q}</li>`).join('')}</ul></div></div>` : ''}
+        <div class="rg-lg"><span class="lp"><i></i>Programado a la fecha</span><span class="le"><i></i>Ejecutado</span><span class="es-t">En cada celda: ejecutado / programado. Estados según cumplimiento (ejecutado ÷ programado):</span><span class="es ok">✔ Adelantado ≥ 102 %</span><span class="es mid">● En plazo 98–102 %</span><span class="es am">▼ Atrasado 90–98 %</span><span class="es mal">⚠ Crítico &lt; 90 %</span>${critOn ? '<span class="es-rc"><i class="rc-flag rc-ley"></i>ruta crítica</span>' : ''}</div></div></div>
+    ${tarjetas}
   </div>`;
-  nota.textContent = 'Programado: cronograma valorizado vigente. Ejecutado por grupo: lo registrado en el parte diario del Look Ahead. «Total (Curva S)»: cifras oficiales del componente (incluyen avance que aún no está registrado por partida).';
+  nota.textContent = 'Programado: cronograma valorizado vigente. Ejecutado por componente: lo registrado en el parte diario del Look Ahead. «Total (Curva S)»: cifras oficiales del frente (incluyen avance que aún no está registrado por partida). Pronóstico de término: método del valor ganado (fin proyectado = inicio + duración planificada ÷ SPI; SPI = valor ganado ÷ valor planificado).';
 }
 
 function renderKpisYTabla(partidas, avanceRows, progRows, periodo) {
@@ -2650,16 +2758,17 @@ function renderKpisYTabla(partidas, avanceRows, progRows, periodo) {
   const fechaCorte = periodo ? new Date(periodo) : null;
   $('#kpiMes').textContent = fechaCorte ? `Corte: ${MESES_ES[fechaCorte.getUTCMonth()]} ${fechaCorte.getUTCFullYear()} (Curva S real)` : '';
   $('#kPresu').textContent = fmt(presu);
-  $('#kPresuS').textContent = `${porComponente.length} componente${porComponente.length===1?'':'s'} con datos`;
+  $('#kPresuS').textContent = `${porComponente.length} frente${porComponente.length===1?'':'s'} con datos`;
   $('#kProg').textContent = fmt(prog);
   $('#kProgS').textContent = `${(pctProg*100).toFixed(1)}% del total`;
   $('#kValor').textContent = fmt(valor);
   $('#kValorS').textContent = `${(pct*100).toFixed(1)}% del total`;
   $('#kPct').textContent = (pct*100).toFixed(1) + '%';
   $('#kBar').style.width = Math.min(100,pct*100) + '%';
-  const estado = (valor === 0 && prog > 0) ? 'Sin avance registrado'
-    : pct >= pctProg ? 'Al día o adelantado' : `${((pctProg-pct)*100).toFixed(1)} pts atrás`;
-  $('#kEstadoS').textContent = estado;
+  const eAv = estadoAv(prog, valor), gapK = (pctProg - pct) * 100;
+  const txtK = `${eAv.txt} · ${gapK > 0 ? '−' : '+'}${Math.abs(gapK).toFixed(1)} pts`;
+  ESTADO_KPI = { k: eAv.k, txt: txtK };
+  $('#kEstadoS').innerHTML = semaforoHTML(eAv.k) + esc(txtK);
 
 }
 
@@ -2694,7 +2803,7 @@ function aplicarResumen(A, B) {   // A = obra, componentes, Curva S y avance · 
   COMPONENTES = proyectos.map(p => ({ id: p.codigo, nombre: p.nombre, tipo: p.tipo }));
   const nComp = COMPONENTES.length;
   $('#pageTitle').textContent = `DASHBOARD - CONTROL DE OBRA`;
-  $('#pageSub').textContent = `${nComp} componente${nComp === 1 ? '' : 's'} de la obra, en un solo lugar`;
+  $('#pageSub').textContent = `${nComp} frente${nComp === 1 ? '' : 's'} de trabajo en un solo lugar`;
   const idList = proyectos.map(p => p.id).join(',');
   FILTRO_PROY = idList ? `proyecto_id=in.(${idList})` : 'proyecto_id=eq.00000000-0000-0000-0000-000000000000';
   const b = B || { materiales: [], matMetasTabla: [], metasVal: [], matAvance: [], matPartidas: [], matProg: [], matSinRegla: [] };
@@ -2758,6 +2867,7 @@ async function bootResumen() {
     aplicarResumen(A, null);
     cacheResGuardar(A);
     cargarReporteGrupos(version, filtroProy);   // aparte: no retrasa la Curva S
+    cargarRutaCritica(version, filtroProy);
     const [materiales, matMetasTabla, matAvance, metasVal, matPartidas, matProg, matSinRegla] = await pB;
     aplicarResumen(A, { materiales, matMetasTabla, matAvance, metasVal, matPartidas, matProg, matSinRegla });
   } catch (err) {
@@ -2842,7 +2952,7 @@ function actualizarFormMat() {
       .reduce((s, a) => s + (Number(a.ejecutado_parcial) || 0), 0);
     $('#ma_resumen').textContent = meta
       ? `Meta: ${fmtCant(meta.cantidad_total)} ${m2.unidad} · Ejecutado acumulado: ${fmtCant(acum)} · Saldo: ${fmtCant(Math.max(0, meta.cantidad_total - acum))}`
-      : 'Ese componente todavía no tiene meta para este material: regístrala primero en el formulario 1.';
+      : 'Ese frente todavía no tiene meta para este material: regístrala primero en el formulario 1.';
   } else $('#ma_resumen').textContent = '';
 }
 ['mm_mat', 'ma_mat', 'ma_comp'].forEach(id => $('#' + id).addEventListener('change', actualizarFormMat));
@@ -2876,7 +2986,7 @@ $('#matMetaForm').addEventListener('submit', async (e) => {
   const total = parseFloat($('#mm_total').value);
   // si esa meta ya viene del valorizado no se digita aquí: se cambia en el cronograma valorizado
   if (pid && mid && (DATA.matMetas || []).some(t => t.proyecto_id === pid && t.material_id === mid && t.fuente === 'valorizado')) {
-    mmsg('La meta de ese material y componente viene del valorizado vigente, por eso no se digita aquí. Si está mal, se corrige en el cronograma valorizado.', false);
+    mmsg('La meta de ese material y frente viene del valorizado vigente, por eso no se digita aquí. Si está mal, se corrige en el cronograma valorizado.', false);
     return;
   }
   let ok = true;
@@ -2913,7 +3023,7 @@ $('#matAvForm').addEventListener('submit', async (e) => {
   marcarError('fa-cant', !(cant >= 0)); if (!(cant >= 0)) ok = false;
   if (!ok) return;
   const meta = (DATA.matMetas || []).find(t => t.proyecto_id === pid && t.material_id === mid);
-  if (!meta) { mmsg('Ese componente todavía no tiene meta para este material: regístrala primero en el formulario 1.', false); return; }
+  if (!meta) { mmsg('Ese frente todavía no tiene meta para este material: regístrala primero en el formulario 1.', false); return; }
   const periodo = mes + '-01';
   const otros = (DATA.matAvance || []).filter(a => a.proyecto_id === pid && a.material_id === mid && a.periodo !== periodo)
     .reduce((s, a) => s + (Number(a.ejecutado_parcial) || 0), 0);
@@ -3023,7 +3133,7 @@ const GICO = ['<svg viewBox="0 0 24 24"><path d="M2 18h20M5 18V9m14 9V9M5 9c3.2 
               '<svg viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 13 9 5 9-5"/></svg>'];
 function laTituloNom(it) {   // flecha + icono (puente / grupo) + nombre en MAYÚSCULAS (+ cuántas actividades tiene, si está contraído)
   const cerrado = LA.colap.has(it.nodo.id);
-  const ico = it.nivel === 0 ? `<span class="gico" title="Puente / componente">${GICO[0]}</span>` : (it.nivel === 1 ? `<span class="gico g1">${GICO[1]}</span>` : '');
+  const ico = it.nivel === 0 ? `<span class="gico" title="Frente de trabajo">${GICO[0]}</span>` : (it.nivel === 1 ? `<span class="gico g1">${GICO[1]}</span>` : '');
   return `<i class="chev ${cerrado ? 'cerrado' : ''}"></i>${ico}<span class="t">${esc(String(it.nodo.nombre).toUpperCase())}</span>${cerrado ? `<span class="cnt" title="Actividades dentro">${it.acts.length}</span>` : ''}`;
 }
 function laGuardarColap() { try { localStorage.setItem('obra-la-colap', JSON.stringify([...LA.colap])); } catch (e) {} }
@@ -3254,7 +3364,7 @@ function laTipGrupoHtml(it) {
   const arr = it.acts, ini = arr.map(x => x.fecha_inicio).sort()[0], fin = arr.map(x => x.fecha_fin).sort().pop();
   const pl = arr.reduce((s, x) => s + Number(x.planeado || 0), 0), ej = arr.reduce((s, x) => s + Number(x.ejecutado || 0), 0), p = pl > 0 ? Math.min(1, ej / pl) : 0;
   const fila = (k, v) => `<dt>${k}</dt><dd>${v}</dd>`;
-  return `<div class="lt-head"><div class="lt-badges"><span class="lt-b">${it.nivel === 0 ? 'Puente / componente' : 'Grupo'}</span></div><div class="lt-nom">${esc(it.nodo.nombre)}</div><div class="lt-cod">${esc(it.nodo.codigo)}</div></div>`
+  return `<div class="lt-head"><div class="lt-badges"><span class="lt-b">${it.nivel === 0 ? 'Frente de trabajo' : 'Componente'}</span></div><div class="lt-nom">${esc(it.nodo.nombre)}</div><div class="lt-cod">${esc(it.nodo.codigo)}</div></div>`
     + `<dl class="lt-body">${fila('Actividades', arr.length)}${fila('Fechas', `${laFmt(ini)} → ${laFmt(fin)}`)}`
     + `<div class="lt-prog"><span>Avance</span><i class="lt-pista"><b style="width:${(p * 100).toFixed(1)}%"></b></i><strong>${Math.round(p * 100)}%</strong></div>`
     + `${fila('Planeado', 'S/ ' + laNum(pl))}${fila('Valorizado', 'S/ ' + laNum(ej))}</dl>`;
@@ -4022,7 +4132,7 @@ $('#parteForm').addEventListener('submit', async (e) => {
 // ── Informe del Resumen: una hoja A3 horizontal con todo lo del panel principal ──
 // Se arma con los gráficos que ya están dibujados (se copian), siempre en colores claros aunque el panel esté en oscuro.
 const SVGC_OSC = { ...SVGC };
-const SVGC_LUZ = { grid: '#e4e9f4', axis: '#8592a8', axisLine: '#d5deef', warnBg: '#fdecec', warnBorder: '#f0a3aa', warnText: '#b91c1c', okBg: '#e8f7ef', okBorder: '#8fd5b0', okText: '#0e7a44', midBg: '#eaf1fe', midBorder: '#9db8ea', midText: '#1d4ed8', halo: '#ffffff', plazo: '#7c3aed', plazoOrig: '#94a3b8' };
+const SVGC_LUZ = { grid: '#e4e9f4', axis: '#8592a8', axisLine: '#d5deef', warnBg: '#fdecec', warnBorder: '#f0a3aa', warnText: '#b91c1c', okBg: '#e8f7ef', okBorder: '#8fd5b0', okText: '#0e7a44', midBg: '#eaf1fe', midBorder: '#9db8ea', midText: '#1d4ed8', amBg: '#fdf3e2', amBorder: '#efc98a', amText: '#a85a08', halo: '#ffffff', plazo: '#7c3aed', plazoOrig: '#94a3b8' };
 function infTema(claro) {   // cambia las paletas que quedan escritas dentro de los SVG y vuelve a dibujar
   tema = claro ? 'claro' : 'oscuro'; Object.assign(SVGC, claro ? SVGC_LUZ : SVGC_OSC);
   RG_COLORES = claro ? RG_LUZ : RG_OSC; C_PROG_RG = claro ? '#3b74e0' : '#7ea6f5'; C_EJEC_RG = claro ? '#d9453d' : '#ef8079';
@@ -4049,11 +4159,11 @@ function infMateriales(periodo, comps) {   // tabla por puente: ejecutado y sald
   const tot = ms.map((m, j) => filas.reduce((s, f) => f.celdas[j] ? { total: s.total + f.celdas[j].total, ejec: s.ejec + f.celdas[j].ejec } : s, { total: 0, ejec: 0 }));
   const celda = (x, g0) => !x ? `<td class="${g0 ? 'g0' : ''}">—</td><td class="s">—</td>` : `<td class="${g0 ? 'g0' : ''}"><b>${fmtCant(x.ejec)}</b><small>${x.total ? (x.ejec / x.total * 100).toFixed(0) : 0}% de ${fmtCant(x.total)}</small></td><td class="s">${fmtCant(Math.max(0, x.total - x.ejec))}${x.ejec - x.total > 0.005 * x.total ? `<small class="x">+${fmtCant(x.ejec - x.total)} mayor metrado</small>` : ''}</td>`;
   const multi = filas.length > 1;
-  const cab = `<thead><tr><th rowspan="2" class="pu">Puente</th>${ms.map(m => `<th colspan="2" class="g0">${esc(m.nombre)}<small>(${esc(uniCorta(m.unidad))})</small></th>`).join('')}</tr><tr>${ms.map(() => '<th class="g0">Ejecutado</th><th>Saldo</th>').join('')}</tr></thead>`;
+  const cab = `<thead><tr><th rowspan="2" class="pu">Frente</th>${ms.map(m => `<th colspan="2" class="g0">${esc(m.nombre)}<small>(${esc(uniCorta(m.unidad))})</small></th>`).join('')}</tr><tr>${ms.map(() => '<th class="g0">Ejecutado</th><th>Saldo</th>').join('')}</tr></thead>`;
   const cuerpo = filas.map(f => `<tr><td class="pu"><i style="background:${f.col}"></i>${esc(String(f.c.nombre).replace(/^Puente\s+/i, ''))}</td>${f.celdas.map((x, j) => celda(x, true)).join('')}</tr>`).join('');
   const total = multi ? `<tr class="tt"><td class="pu">Total obra</td>${tot.map(x => celda(x, true)).join('')}</tr>` : '';
   const barras = ms.map((m, j) => { const x = tot[j], p = x.total ? Math.min(100, x.ejec / x.total * 100) : 0; return `<div class="inf-mb"><span class="n">${esc(m.nombre)}</span><span class="tr"><i style="width:${p.toFixed(1)}%"></i></span><b>${x.total ? (x.ejec / x.total * 100).toFixed(1) : '0.0'}%</b><em>Ejecutado ${fmtCant(x.ejec)} ${esc(uniCorta(m.unidad))} · saldo ${fmtCant(Math.max(0, x.total - x.ejec))} ${esc(uniCorta(m.unidad))}</em></div>`; }).join('');
-  return `<table class="inf-mt">${cab}<tbody>${cuerpo}${total}</tbody></table><div class="inf-sub">Avance ${multi ? 'total de la obra' : 'del componente'} por material</div>${barras}
+  return `<table class="inf-mt">${cab}<tbody>${cuerpo}${total}</tbody></table><div class="inf-sub">Avance ${multi ? 'total de la obra' : 'del frente'} por material</div>${barras}
     <div class="legend2" style="margin-top:8px"><span><i style="background:#0e8f4f"></i>Ejecutado</span><span><i style="background:#d97706"></i>Saldo por ejecutar</span><span><i style="background:#dc2626"></i>Mayor metrado (sobre lo valorizado)</span></div>`;
 }
 function infHTML() {
@@ -4063,9 +4173,11 @@ function infHTML() {
   const ahora = new Date(), fecha = ahora.toLocaleDateString('es-PE', { day: '2-digit', month: 'long', year: 'numeric' }) + ' · ' + ahora.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
   const corte = tx('#kpiMes').replace(/\s*\(Curva S real\)/, '').replace(/^Corte:\s*/, '');
   const pct = parseFloat(String(tx('#kPct')).replace(',', '.')) || 0;
-  const k = (color, lab, val, sub, barra) => `<div class="inf-k" style="--kc:${color}"><small>${lab}</small><b>${esc(val)}</b>${barra ? `<div class="bar"><i style="width:${Math.min(100, barra)}%"></i></div>` : ''}<em>${esc(sub)}</em></div>`;
+  const k = (color, lab, val, sub, barra, html) => `<div class="inf-k" style="--kc:${color}"><small>${lab}</small><b>${esc(val)}</b>${barra ? `<div class="bar"><i style="width:${Math.min(100, barra)}%"></i></div>` : ''}<em>${html ? sub : esc(sub)}</em></div>`;
   // Curva S: se vuelve a dibujar más ancha para que ocupe bien su lugar en la hoja
-  CURVA_DIM = [1000, 258]; try { renderCurvaS(); } catch (e) {} finally { CURVA_DIM = null; }
+  CURVA_DIM = [1000, 216]; try { renderCurvaS(); } catch (e) {} finally { CURVA_DIM = null; }
+  AV_DIM = [440, 214]; try { renderAvancePuente(curvaPopupFijo); } catch (e) {} finally { AV_DIM = null; }
+  const avanceSvg = infSvg('#avancePuenteSvg');
   const curvaSvg = infSvg('#curvaSvg'), curvaChips = ih('#curvaMesKpis'), curvaTit = tx('#curvaTitulo'), curvaHint = tx('#curvaHint');
   const lgCurva = (document.querySelector('#curvaWrap') || {}).parentElement ? document.querySelector('#curvaWrap').parentElement.querySelector('.legend2') : null, lgC = lgCurva ? lgCurva.innerHTML.replace(/<span[^>]*>(?:(?!<\/span>).)*Mes elegido<\/span>/, '').replace('Suspensión / ampliación de plazo', 'Suspensión de plazo') : '';
   const periodo = curvaPopupFijo, comps = COMPONENTES.filter(c => seleccionada === GENERAL || c.id === seleccionada);
@@ -4074,17 +4186,29 @@ function infHTML() {
   return `<div class="inf-hoja">
     <div class="inf-head"><div><small>Informe de avance de obra</small><h1>${esc(tx('#obraNombre'))}</h1><p>${esc(tx('#obraSub'))}</p></div>
       <div class="inf-meta">Corte: <b>${esc(corte)}</b><br>Alcance: <b>${esc(ALCANCE_TXT[alcance])}</b> · Vista: <b>${esc(sel)}</b><br>Emitido: ${esc(fecha)}</div></div>
-    <div class="inf-kpis">${k('#0f766e', 'Presupuesto total (sin IGV)', tx('#kPresu'), tx('#kPresuS'))}${k('#2f6fed', 'Programado a la fecha', tx('#kProg'), tx('#kProgS'))}${k('#dc2626', 'Valorizado (ejecutado real)', tx('#kValor'), tx('#kValorS'))}${k('#b45309', 'Estado del avance', tx('#kPct'), tx('#kEstadoS'), pct)}</div>
+    <div class="inf-kpis">${k('#0f766e', 'Presupuesto total (sin IGV)', tx('#kPresu'), tx('#kPresuS'))}${k('#2f6fed', 'Programado a la fecha', tx('#kProg'), tx('#kProgS'))}${k('#dc2626', 'Valorizado (ejecutado real)', tx('#kValor'), tx('#kValorS'))}${k(COL_EST[ESTADO_KPI.k] || '#b45309', 'Estado del avance', tx('#kPct'), semaforoHTML(ESTADO_KPI.k) + esc(ESTADO_KPI.txt), pct, true)}</div>
     <div class="inf-fila2">
       <div class="inf-card"><div class="inf-ctit"><div><h3>${esc(curvaTit)}</h3><p>${esc(curvaHint)}</p></div><div class="inf-chips">${curvaChips}</div></div><div class="svgw">${curvaSvg}</div><div class="legend2">${lgC}</div></div>
-      <div class="inf-card"><h3>Avance por componente</h3><p>% programado vs. % ejecutado real — ${esc(tx('#avancePuenteMes'))}</p><div class="svgw">${infSvg('#avancePuenteSvg')}</div><div class="legend2"><span><i style="background:#2f6fed"></i>Programado</span><span><i style="background:#ef4444"></i>Ejecutado</span></div></div>
+      <div class="inf-card"><h3>Avance por frente</h3><p>% programado vs. % ejecutado real — ${esc(tx('#avancePuenteMes'))}</p><div class="svgw">${avanceSvg}</div><div class="legend2"><span><i style="background:#2f6fed"></i>Programado</span><span><i style="background:#ef4444"></i>Ejecutado</span></div></div>
     </div>
     <div class="inf-fila3">${rgH}
       <div class="inf-card"><h3>Control de materiales — ejecutado y saldo</h3><p>${esc(tx('#matMes'))} · cantidades acumuladas al corte, por puente</p>${infMateriales(periodo, comps)}</div>
     </div>
-    <div class="inf-pie"><span>Fuente: cronograma valorizado vigente, Curva S y parte diario del Look Ahead · montos en S/. sin IGV. En cada celda del reporte por grupo: ejecutado / programado. Cumplimiento = ejecutado ÷ programado (verde ≥ 95 %, ámbar 80–95 %, rojo &lt; 80 %).<br>Generado por el Panel de Control de Obra</span>
+    <div class="inf-pie"><span>Fuente: cronograma valorizado vigente, Curva S y parte diario del Look Ahead · montos en S/. sin IGV. En cada celda del reporte por grupo: ejecutado / programado. Estados según cumplimiento (ejecutado ÷ programado): Adelantado ≥ 102 %, En plazo 98–102 %, Atrasado 90–98 %, Crítico &lt; 90 %.<br>Pronóstico de término por el método del valor ganado (SPI = valor ganado ÷ valor planificado). Generado por el Panel de Control de Obra</span>
       <div class="inf-firmas"><span>Elaborado por</span><span>Revisado por</span><span>V°B° Gerencia</span></div></div>
   </div>`;
+}
+function infAjustar(hoja) {
+  // ¿algo no cabe? el cuerpo del reporte (radar + matriz) mide más que el espacio que le queda, o la hoja entera se desborda
+  const body = hoja.querySelector('.inf-fila3 .rg-body');
+  const sobra = () => {
+    if (hoja.scrollHeight - hoja.clientHeight > 1) return true;
+    if (!body) return false;
+    const h = body.getBoundingClientRect().height;
+    const tabla = body.querySelector('.rg-tabla'), graf = body.querySelector('.rg-chart');   // la matriz manda; al radar se le tolera un poco más
+    return (tabla && tabla.getBoundingClientRect().height > h + 14) || (graf && graf.getBoundingClientRect().height > h + 14);
+  };
+  for (const c of ['inf-c1', 'inf-c2', 'inf-c3', 'inf-c4']) { if (!sobra()) break; hoja.classList.add(c); }
 }
 function infZoom() { const ov = document.querySelector('#informe'); if (!ov) return; const w = ov.querySelector('.inf-scroll').clientWidth - 36; ov.style.setProperty('--z', Math.min(1, Math.max(.2, w / 1588)).toFixed(3)); }
 let infTituloPrevio = null;
@@ -4095,7 +4219,7 @@ async function abrirInforme() {
   document.querySelector('#informe')?.remove();
   const ov = document.createElement('div'); ov.id = 'informe'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-label', 'Informe A3');
   ov.innerHTML = `<div class="inf-bar"><b>Informe del Resumen · A3 horizontal</b><span>En la ventana de impresión elige «Guardar como PDF», tamaño A3, horizontal y márgenes «Ninguno».</span><button type="button" class="pri" id="infImprimir">🖨 Imprimir / Guardar PDF</button><button type="button" id="infCerrar">Cerrar</button></div><div class="inf-scroll">${html}</div>`;
-  document.body.appendChild(ov); document.body.classList.add('inf-abierto'); infZoom();
+  document.body.appendChild(ov); document.body.classList.add('inf-abierto'); infZoom(); infAjustar(ov.querySelector('.inf-hoja'));
   ov.querySelector('#infCerrar').addEventListener('click', cerrarInforme);
   ov.querySelector('#infImprimir').addEventListener('click', () => { infTituloPrevio = document.title; document.title = `Informe de avance - ${tx0('#obraNombre')} - ${tx0('#kpiMes').replace(/^Corte:\s*/, '').replace(/\s*\(Curva S real\)/, '')}`; window.print(); });
 }
