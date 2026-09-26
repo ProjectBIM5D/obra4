@@ -684,15 +684,15 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .inf-card .legend2{margin-top:2px;flex-wrap:wrap;gap:4px 12px;font-size:10.5px;}
 .inf-fila3{flex:1;min-height:0;display:grid;grid-template-columns:1.95fr 1fr;gap:10px;} .inf-fila3>*{min-height:0;min-width:0;}
 .inf-fila3 .rg-card{height:100%;display:flex;flex-direction:column;box-shadow:none;}
-.inf-fila3 .rg-body{flex:1;min-height:0;grid-template-columns:.74fr 1.26fr;padding:6px 14px 4px;gap:10px;align-items:center;} .inf-fila3 .rg-chart svg{max-height:none;height:290px;}
-.inf-fila3 .rg-mx th:first-child,.inf-fila3 .rg-mx td:first-child{width:31%;min-width:0;} .inf-fila3 .rg-mx{font-size:11px;} .inf-fila3 .rg-mx .mv b{font-size:11.5px;} .inf-fila3 .rg-mx .mv em{font-size:9.5px;}
+.inf-fila3 .rg-body{flex:1;min-height:0;grid-template-columns:.68fr 1.32fr;padding:8px 14px 4px 14px;gap:10px;align-items:start;} .inf-fila3 .rg-chart svg{max-height:none;height:326px;margin:-6px -26px 0 -26px;width:calc(100% + 52px);max-width:none;} .inf-fila3 .rg-ct{margin-bottom:0;}
+.inf-fila3 .rg-mx th:first-child,.inf-fila3 .rg-mx td:first-child{width:24%;min-width:0;} .inf-fila3 .rg-mx thead th{padding-left:3px;padding-right:3px;letter-spacing:0;} .inf-fila3 .rg-mx{font-size:11px;} .inf-fila3 .rg-mx .mv b{font-size:11.5px;} .inf-fila3 .rg-mx .mv em{font-size:9.5px;}
 .inf-fila3 .rg-band{padding:8px 16px;} .inf-fila3 .rg-band h3{font-size:15px;}
-.inf-fila3 .rg-mx{min-width:0;font-size:11.5px;} .inf-fila3 .rg-mx th,.inf-fila3 .rg-mx td{padding:1px 6px;} .inf-fila3 .rg-mx .mc{gap:3px;} .inf-fila3 .rg-mx thead th{padding:5px 5px;}
+.inf-fila3 .rg-mx{min-width:0;font-size:11.5px;} .inf-fila3 .rg-mx th,.inf-fila3 .rg-mx td{padding:var(--rp,4px) 6px;} .inf-fila3 .rg-mx .mc{gap:4px;} .inf-fila3 .rg-mx thead th{padding:5px 5px;}
 .inf-fila3 .rg-cards{margin:0 14px 8px;gap:8px;grid-template-columns:1fr .85fr 1.4fr;} .inf-fila3 .rgc{padding:6px 10px;} .inf-fila3 .rgc h4{margin-bottom:4px;font-size:10.5px;} .inf-fila3 .rgc-i,.inf-fila3 .rgd,.inf-fila3 .rgc-rec{font-size:10.5px;line-height:1.3;} .inf-fila3 .rgc-i{margin-bottom:3px;} .inf-fila3 .rgc-p{min-width:70px;font-size:9px;} .inf-fila3 .rgd{margin-bottom:3px;} .inf-fila3 .rgc-nt{display:none;} .inf-fila3 .rgf-h b{font-size:12.5px;} .inf-fila3 .rgf-t{font-size:10px;margin-bottom:3px;grid-template-columns:repeat(6,auto);gap:1px 10px;} .inf-fila3 .rgf-t span:nth-child(4n+2){display:none;} .inf-fila3 .rgc-rec{padding:3px 7px;}
 .inf-fila3 .rg-tabla{gap:0;} .inf-fila3 .rg-lg{display:none;}
 /* niveles de compactación (los activa infAjustar solo cuando algo no cabe) */
-.inf-hoja.inf-c1 .rg-mx th,.inf-hoja.inf-c1 .rg-mx td{padding-top:0 !important;padding-bottom:0 !important;} .inf-hoja.inf-c1 .rg-mx .mc{gap:1px;} .inf-hoja.inf-c1 .rg-mx .mtr{height:6px;} .inf-hoja.inf-c1 .rg-mx thead th{padding:3px 5px !important;} .inf-hoja.inf-c1 .rg-mx{font-size:10.5px;} .inf-hoja.inf-c1 .rg-mx .mv b{font-size:11px;} .inf-hoja.inf-c1 .inf-fila3 .rg-chart svg{height:236px;}
-.inf-hoja.inf-c2 .rg-mx tr.st{display:none;} .inf-hoja.inf-c2 .inf-fila3 .rg-band{padding:5px 14px;} .inf-hoja.inf-c2 .inf-fila3 .rg-body{padding-top:0;padding-bottom:0;} .inf-hoja.inf-c2 .inf-fila3 .rg-chart svg{height:214px;}
+.inf-hoja.inf-c1 .rg-mx .mc{gap:1px;} .inf-hoja.inf-c1 .rg-mx .mtr{height:6px;} .inf-hoja.inf-c1 .rg-mx thead th{padding:3px 5px !important;} .inf-hoja.inf-c1 .rg-mx{font-size:10.5px;} .inf-hoja.inf-c1 .rg-mx .mv b{font-size:11px;} .inf-hoja.inf-c1 .inf-fila3 .rg-chart svg{height:262px;}
+.inf-hoja.inf-c2 .rg-mx tr.st{display:none;} .inf-hoja.inf-c2 .inf-fila3 .rg-band{padding:5px 14px;} .inf-hoja.inf-c2 .inf-fila3 .rg-body{padding-top:0;padding-bottom:0;} .inf-hoja.inf-c2 .inf-fila3 .rg-chart svg{height:236px;}
 .inf-hoja.inf-c3 .inf-fila2{height:262px;} .inf-hoja.inf-c3 .inf-fila3 .rgc-i{margin-bottom:1px;} .inf-hoja.inf-c3 .inf-fila3 .rg-cards{margin-bottom:5px;}
 .inf-hoja.inf-c4 .inf-fila2{height:236px;} .inf-hoja.inf-c4 .inf-head{padding-top:5px;padding-bottom:5px;} .inf-hoja.inf-c4 .inf-kpis{display:none;}
 .inf-leg{display:flex;gap:16px;align-items:center;font-size:11.5px;color:#dbe6f6;} .inf-leg span{display:inline-flex;align-items:center;gap:7px;} .inf-leg i{display:inline-block;width:26px;height:9px;border-radius:5px;background:rgba(255,255,255,.25);position:relative;overflow:hidden;}
@@ -2547,7 +2547,7 @@ document.addEventListener('change', (e) => {
   renderReporteGrupos();
 });
 function rgRadar(series, ejes, max) {
-  const W = 480, H = 400, cx = W / 2, cy = 200, R = 122, n = ejes.length, ang = (i) => -Math.PI / 2 + i * 2 * Math.PI / n;
+  const W = 520, H = 430, cx = W / 2, cy = 215, R = 138, n = ejes.length, ang = (i) => -Math.PI / 2 + i * 2 * Math.PI / n;
   const pt = (i, f) => [(cx + Math.cos(ang(i)) * R * f).toFixed(1), (cy + Math.sin(ang(i)) * R * f).toFixed(1)];
   let s = '';
   [0.2, 0.4, 0.6, 0.8, 1].forEach(f => { s += `<polygon points="${ejes.map((_, i) => pt(i, f).join(',')).join(' ')}" fill="${f === 1 ? SVGC.grid + '55' : 'none'}" stroke="${SVGC.grid}" stroke-width="1"/>`; });
@@ -2555,8 +2555,8 @@ function rgRadar(series, ejes, max) {
   [0.2, 0.4, 0.6, 0.8, 1].forEach(f => { const [x, y] = pt(0, f); s += `<text x="${+x + 4}" y="${+y + 3}" font-size="9" fill="${SVGC.axis}">${+(max * f * 100).toFixed(1)}%</text>`; });
   ejes.forEach((e, i) => {
     const a = ang(i), lx = cx + Math.cos(a) * (R + 16), ly = cy + Math.sin(a) * (R + 16), c = Math.cos(a), sn = Math.sin(a);
-    const anc = c > 0.3 ? 'start' : c < -0.3 ? 'end' : 'middle', ls = rgEnvolver(e, 17), y0 = ly + (sn > 0.3 ? 10 : sn < -0.3 ? -(ls.length - 1) * 12 - 2 : -(ls.length - 1) * 6 + 3);
-    s += `<text font-size="11.5" font-weight="700" fill="${tema === 'oscuro' ? '#e6ecf8' : '#1e3a5f'}" text-anchor="${anc}">${ls.map((q, k) => `<tspan x="${lx.toFixed(1)}" y="${(y0 + k * 12.5).toFixed(1)}">${esc(q)}</tspan>`).join('')}</text>`;
+    const anc = c > 0.3 ? 'start' : c < -0.3 ? 'end' : 'middle', ls = rgEnvolver(e, 16), y0 = ly + (sn > 0.3 ? 12 : sn < -0.3 ? -(ls.length - 1) * 14 - 2 : -(ls.length - 1) * 7 + 3);
+    s += `<text font-size="13.5" font-weight="700" fill="${tema === 'oscuro' ? '#e6ecf8' : '#1e3a5f'}" text-anchor="${anc}">${ls.map((q, k) => `<tspan x="${lx.toFixed(1)}" y="${(y0 + k * 14.5).toFixed(1)}">${esc(q)}</tspan>`).join('')}</text>`;
   });
   series.forEach(se => {
     const pts = se.v.map((v, i) => pt(i, Math.max(0, Math.min(1, (v || 0) / max))));
@@ -2627,7 +2627,6 @@ function renderReporteGrupos(periodo) {
   const cab = `<thead><tr><th>Componente</th>${info.map(x => `<th><i style="background:${x.col}"></i>${nom(x.c)}<small>${x.hay ? 'S/. ' + M(x.base) : 'sin datos'}</small></th>`).join('')}${multi ? `<th class="tot">Total obra<small>S/. ${M(tot.base)}</small></th>` : ''}</tr></thead>`;
   const cuerpo = filas.map(f => `<tr><td><div class="rg-g">${esc(f.nom)}</div></td>${info.map(x => celdaG(x.gr[f.clave], '', f.nom, esCrit(x, x.gr[f.clave]))).join('')}${multi ? celdaG(tot.gr[f.clave], 'tot', f.nom) : ''}</tr>`).join('');
   const total = `<tr class="tt"><td><div class="rg-g">Total (Curva S)</div></td>${info.map(x => celdaT(x.hay ? x.base : 0, x.prog, x.ejec)).join('')}${multi ? celdaT(tot.base, tot.prog, tot.ejec, 'tot') : ''}</tr>`
-    + `<tr class="cp"><td><div class="rg-g">Cumplimiento</div></td>${info.map(x => celdaC(x.hay ? x.prog : 0, x.ejec)).join('')}${multi ? celdaC(tot.prog, tot.ejec, 'tot') : ''}</tr>`
     + `<tr class="st"><td></td>${info.map(x => `<td>${estado(x.hay ? x.base : 0, x.prog, x.ejec)}</td>`).join('')}${multi ? `<td class="tot">${estado(tot.base, tot.prog, tot.ejec)}</td>` : ''}</tr>`;
   // ── gráfico: el ámbito se elige en el combo (Total obra, un puente o los puentes juntos) ──
   const ambito = !multi ? info[0].c.id : (rgAmbito === 'total' || rgAmbito === 'todos' || rgAmbito === 'cumpl' || info.some(x => x.c.id === rgAmbito)) ? rgAmbito : 'total';
@@ -2664,9 +2663,9 @@ function renderReporteGrupos(periodo) {
   const bn = [];
   const celdas = []; info.forEach(x => Object.values(x.gr).forEach(g => { if (g.pres > 0 && g.prog / g.pres >= 0.10 && (!critOn || esCrit(x, g))) celdas.push({ x, g, pp: g.prog / g.pres, pe: g.ejec / g.pres }); }));
   celdas.sort((a, b) => (b.pp - b.pe) - (a.pp - a.pe));
-  const c0 = celdas[0], lead = critOn ? 'Ruta crítica' : 'Componente atrasado';
+  const c0 = celdas[0], lead = 'Componente atrasado';
   if (c0 && c0.pp - c0.pe >= 0.02) { const e = estadoAv(c0.g.prog, c0.g.ejec); bn.push(fila(e.k, `${e.ic} ${e.txt}`, `<b>${lead}:</b> <b>${esc(c0.g.nom)}</b>${multi ? ` en <b>${nom(c0.x.c)}</b>` : ''}: ${P(c0.pe)} ejecutado, debería ir ${P(c0.pp)}.`)); }
-  else bn.push(fila(critOn ? 'mid' : 'neu', critOn ? '● En plazo' : '– Sin atrasos', critOn ? '<b>Ruta crítica:</b> ningún componente crítico va atrasado.' : '<b>Componente atrasado:</b> ninguno a esta fecha.'));
+  else bn.push(fila(critOn ? 'mid' : 'neu', critOn ? '● En plazo' : '– Sin atrasos', '<b>Componente atrasado:</b> ninguno a esta fecha.'));
   const fl = conCurva.map(x => ({ x, e: estadoAv(x.prog, x.ejec), pe: x.ejec / x.base, pp: x.prog / x.base, spi: x.prog > 0 ? x.ejec / x.prog : 9 })).sort((a, b) => a.spi - b.spi);
   const f0 = fl[0];
   if (f0 && (f0.e.k === 'am' || f0.e.k === 'mal')) bn.push(fila(f0.e.k, `${f0.e.ic} ${f0.e.txt}`, `<b>Frente atrasado:</b> <b>${nom(f0.x.c)}</b> con ${P(f0.pe)} ejecutado, debería tener ${P(f0.pp)}.`));
@@ -4199,16 +4198,23 @@ function infHTML() {
   </div>`;
 }
 function infAjustar(hoja) {
-  // ¿algo no cabe? el cuerpo del reporte (radar + matriz) mide más que el espacio que le queda, o la hoja entera se desborda
-  const body = hoja.querySelector('.inf-fila3 .rg-body');
-  const sobra = () => {
-    if (hoja.scrollHeight - hoja.clientHeight > 1) return true;
-    if (!body) return false;
-    const h = body.getBoundingClientRect().height;
-    const tabla = body.querySelector('.rg-tabla'), graf = body.querySelector('.rg-chart');   // la matriz manda; al radar se le tolera un poco más
-    return (tabla && tabla.getBoundingClientRect().height > h + 14) || (graf && graf.getBoundingClientRect().height > h + 14);
+  const body = hoja.querySelector('.inf-fila3 .rg-body'), cards = hoja.querySelector('.inf-fila3 .rg-cards');
+  if (!body || !cards) return;
+  const cabe = () => {   // ni la matriz ni el radar tocan las tarjetas, y la hoja no se pasa de alto
+    if (hoja.scrollHeight - hoja.clientHeight > 1) return false;
+    const top = cards.getBoundingClientRect().top - 12, tabla = body.querySelector('.rg-tabla'), graf = body.querySelector('.rg-chart');
+    return !(tabla && tabla.getBoundingClientRect().bottom > top) && !(graf && graf.getBoundingClientRect().bottom > top + 12);
   };
-  for (const c of ['inf-c1', 'inf-c2', 'inf-c3', 'inf-c4']) { if (!sobra()) break; hoja.classList.add(c); }
+  // 1) con el alto de fila más grande que quepa (de 0 a 14 px de relleno por lado)
+  const llenar = () => {
+    let ok = -1;
+    for (let p = 0; p <= 14; p += 0.5) { hoja.style.setProperty('--rp', p + 'px'); if (cabe()) ok = p; else break; }
+    hoja.style.setProperty('--rp', Math.max(ok, 0) + 'px');
+    return ok >= 0;
+  };
+  // 2) si ni con relleno 0 cabe, se compacta por pasos (radar más chico, sin fila de estados, hoja más baja…)
+  if (llenar()) return;
+  for (const c of ['inf-c1', 'inf-c2', 'inf-c3', 'inf-c4']) { hoja.classList.add(c); if (llenar()) return; }
 }
 function infZoom() { const ov = document.querySelector('#informe'); if (!ov) return; const w = ov.querySelector('.inf-scroll').clientWidth - 36; ov.style.setProperty('--z', Math.min(1, Math.max(.2, w / 1588)).toFixed(3)); }
 let infTituloPrevio = null;
@@ -4219,7 +4225,10 @@ async function abrirInforme() {
   document.querySelector('#informe')?.remove();
   const ov = document.createElement('div'); ov.id = 'informe'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-label', 'Informe A3');
   ov.innerHTML = `<div class="inf-bar"><b>Informe del Resumen · A3 horizontal</b><span>En la ventana de impresión elige «Guardar como PDF», tamaño A3, horizontal y márgenes «Ninguno».</span><button type="button" class="pri" id="infImprimir">🖨 Imprimir / Guardar PDF</button><button type="button" id="infCerrar">Cerrar</button></div><div class="inf-scroll">${html}</div>`;
-  document.body.appendChild(ov); document.body.classList.add('inf-abierto'); infZoom(); infAjustar(ov.querySelector('.inf-hoja'));
+  document.body.appendChild(ov); document.body.classList.add('inf-abierto'); infZoom();
+  const hojaEl = ov.querySelector('.inf-hoja'); infAjustar(hojaEl);
+  setTimeout(() => infAjustar(hojaEl), 350);   // otra pasada cuando las tipografías y el diseño ya asentaron
+  try { document.fonts && document.fonts.ready.then(() => infAjustar(hojaEl)); } catch (e) {}
   ov.querySelector('#infCerrar').addEventListener('click', cerrarInforme);
   ov.querySelector('#infImprimir').addEventListener('click', () => { infTituloPrevio = document.title; document.title = `Informe de avance - ${tx0('#obraNombre')} - ${tx0('#kpiMes').replace(/^Corte:\s*/, '').replace(/\s*\(Curva S real\)/, '')}`; window.print(); });
 }
