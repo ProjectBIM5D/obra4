@@ -701,6 +701,24 @@ html.cel .tb-seg .seg-btn{padding:0 9px;}
 html.cel .tb-acc{margin-left:0;}
 html.cel .tb{gap:6px 8px;}
 html.cel .tb-btn{padding:0 10px;} html.cel :root .tb-btn.tb-ic{padding:0;}
+
+/* ═══ densidad de las tablas (Look Ahead y Plan semanal): letra y altura de fila ═══ */
+:root{--rh:34px;--rh0:42px;--rh1:34px;--rh2:30px;--rh3:28px;--fc:12px;--fa:11.5px;--ft0:13.5px;--ft1:12.5px;--ft2:12px;--ft3:11.5px;--bh:22px;--bt:6px;--fb:10px;--pr:28px;--pin:24px;--pfs:11.5px;--gi:22px;--gi1:18px;}
+html.dens-compacta{--rh:30px;--rh0:36px;--rh1:30px;--rh2:27px;--rh3:25px;--fc:11px;--fa:10.5px;--ft0:12.5px;--ft1:11.5px;--ft2:11px;--ft3:10.5px;--bh:18px;--bt:6px;--fb:9.5px;--pr:25px;--pin:21px;--pfs:10.5px;--gi:20px;--gi1:16px;}
+html.dens-densa{--rh:26px;--rh0:31px;--rh1:26px;--rh2:24px;--rh3:22px;--fc:10.5px;--fa:10px;--ft0:11.5px;--ft1:10.5px;--ft2:10px;--ft3:9.5px;--bh:16px;--bt:5px;--fb:9px;--pr:22px;--pin:19px;--pfs:10px;--gi:18px;--gi1:14px;}
+:root .la-tabla{font-size:var(--fc);}
+:root .la-tabla td{height:var(--rh);}
+:root .la-tabla tr.tit.n0 td{height:var(--rh0);} :root .la-tabla tr.tit.n1 td{height:var(--rh1);} :root .la-tabla tr.tit.n2 td{height:var(--rh2);} :root .la-tabla tr.tit.n3 td{height:var(--rh3);}
+:root .la-tabla tr.act-row td.act .nom{font-size:var(--fa);}
+:root .la-tabla tr.tit.n0 .nom{font-size:var(--ft0);} :root .la-tabla tr.tit.n1 .nom{font-size:var(--ft1);} :root .la-tabla tr.tit.n2 .nom{font-size:var(--ft2);} :root .la-tabla tr.tit.n3 .nom{font-size:var(--ft3);}
+:root .la-tabla .gico{width:var(--gi);height:var(--gi);} :root .la-tabla .gico.g1{width:var(--gi1);height:var(--gi1);}
+:root .la-b{top:var(--bt);height:var(--bh);} :root .la-b em{font-size:var(--fb);}
+:root .la-res{top:50%;transform:translateY(-50%);}
+:root .pt-tabla.la-t-der td,:root .pt-tabla.la-t-der td.pl,:root .pt-tabla.la-t-der td.rl{height:var(--pr);}
+:root .pt-tabla input.dia{height:var(--pin);font-size:var(--pfs);}
+:root .pt-tabla.la-t-izq tr.fila-izq td{height:calc(var(--pr) * 2);}
+.tb-menu .dens-tit{margin:6px 10px 2px;font-size:10px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--mut);}
+.tb-menu button.on{background:var(--ic-blue-bg);color:var(--blue-tx);} .tb-menu button.on::after{content:"✓";margin-left:auto;font-weight:800;}
 </style>
 <script>
 // se aplica ANTES de pintar el body, para que no haya parpadeo del tema equivocado
@@ -724,6 +742,8 @@ html.cel .tb-btn{padding:0 10px;} html.cel :root .tb-btn.tb-ic{padding:0;}
   var lado = Math.min(screen.width, screen.height);
   if (!cel && ((window.matchMedia('(pointer:coarse)').matches && lado >= 600 && lado < 1100) || /[?&]tab=1\b/.test(location.search))) document.documentElement.classList.add('tab');
 } catch(e) {} })();
+// densidad de las tablas: compacta por defecto; después se recuerda la elección
+(function(){ try { var d = localStorage.getItem('obra-dens'); if (d !== 'comoda' && d !== 'densa') d = 'compacta'; document.documentElement.classList.add('dens-' + d); } catch(e) { document.documentElement.classList.add('dens-compacta'); } })();
 // menú lateral: solo iconos por defecto en tablet o ventanas angostas; después se recuerda la elección
 (function(){ try {
   var d = document.documentElement, sd = localStorage.getItem('obra-side');
@@ -1116,6 +1136,10 @@ html.cel .tb-btn{padding:0 10px;} html.cel :root .tb-btn.tb-ic{padding:0;}
                 <button type="button" id="laNuevo">＋ Nuevo Look Ahead</button>
                 <button type="button" class="adm" id="laReabrir" hidden title="Solo administrador: vuelve a habilitar la edición">🔓 Reabrir semana (admin)</button>
                 <button type="button" class="peligro" id="laEliminar" hidden title="Solo administrador: elimina este Look Ahead con sus actividades">🗑 Eliminar Look Ahead (admin)</button>
+                <div class="dens-tit">Tamaño de la tabla</div>
+                <button type="button" data-dens="comoda">Aa &nbsp;Cómoda</button>
+                <button type="button" data-dens="compacta">Aa &nbsp;Compacta</button>
+                <button type="button" data-dens="densa">Aa &nbsp;Densa</button>
               </div>
             </span>
           </div>
@@ -1201,6 +1225,15 @@ html.cel .tb-btn{padding:0 10px;} html.cel :root .tb-btn.tb-ic{padding:0;}
             </span>
             <button type="button" class="tb-btn" id="ptCerrar" title="Cerrar la semana: el plan y el parte diario de esa semana ya no se podrán modificar">🔒<span class="tb-t"> Cerrar semana</span></button>
             <button type="button" class="tb-btn adm" id="ptReabrir" hidden title="Solo administrador: vuelve a habilitar el plan y el parte diario de la semana">🔓<span class="tb-t"> Reabrir</span></button>
+            <span class="tb-mas">
+              <button type="button" class="tb-btn tb-ic" data-tbmas title="Tamaño de la tabla" aria-label="Tamaño de la tabla" style="font-size:13px;font-weight:800">Aa</button>
+              <div class="tb-menu" hidden>
+                <div class="dens-tit">Tamaño de la tabla</div>
+                <button type="button" data-dens="comoda">Aa &nbsp;Cómoda</button>
+                <button type="button" data-dens="compacta">Aa &nbsp;Compacta</button>
+                <button type="button" data-dens="densa">Aa &nbsp;Densa</button>
+              </div>
+            </span>
           </div>
         </div>
         <p class="hint tb-info" id="ptInfo"></p>
@@ -1660,6 +1693,15 @@ $('#menuBtn').addEventListener('click', () => {
   if (document.documentElement.classList.contains('cel') || innerWidth <= 760) { $('#side').classList.toggle('open'); $('#overlay').classList.toggle('on'); }
   else sideToggle();
 });
+// densidad de las tablas
+function aplicarDensidad(d, guardar) {
+  const h = document.documentElement; ['comoda', 'compacta', 'densa'].forEach(x => h.classList.toggle('dens-' + x, x === d));
+  if (guardar) { try { localStorage.setItem('obra-dens', d); } catch (e) {} }
+  document.querySelectorAll('[data-dens]').forEach(b => b.classList.toggle('on', b.dataset.dens === d));
+  setTimeout(() => { try { laSyncPanes(); PT_PANES.sync(); } catch (e) {} }, 30);
+}
+document.addEventListener('click', (e) => { const b = e.target.closest('[data-dens]'); if (b) aplicarDensidad(b.dataset.dens, true); });
+setTimeout(() => aplicarDensidad(['comoda', 'densa'].find(x => document.documentElement.classList.contains('dens-' + x)) || 'compacta', false), 0);
 // menú «⋯» de las barras de herramientas
 document.addEventListener('click', (e) => {
   const m = e.target.closest('[data-tbmas]');
@@ -3343,6 +3385,7 @@ function dosPaneles(c) {
     if (!fr._izqUser) fr.style.setProperty('--izq', Math.round(Math.min(tIz.offsetWidth + 2, fr.clientWidth * (cel ? 0.5 : 0.56))) + 'px');   // se ven todas las columnas de la izquierda; el resto es para los días
     const hd = tDe.querySelector('thead th'); if (hd) tIz.querySelectorAll('thead th').forEach(th => { th.style.height = hd.offsetHeight + 'px'; });
     // la fila de cada actividad (izquierda) mide lo mismo que sus filas del panel derecho (Plan + Real)
+    tIz.querySelectorAll('tbody tr[data-r] td').forEach(td => { td.style.height = ''; });
     const alt = new Map(); tDe.querySelectorAll('tbody tr[data-r]').forEach(tr => alt.set(tr.dataset.r, (alt.get(tr.dataset.r) || 0) + tr.getBoundingClientRect().height));
     tIz.querySelectorAll('tbody tr[data-r]').forEach(tr => { const h = alt.get(tr.dataset.r); if (h) tr.querySelectorAll('td').forEach(td => { td.style.height = h + 'px'; }); });
     const sbDe = de.offsetHeight - de.clientHeight, sbIz = iz.offsetHeight - iz.clientHeight;
