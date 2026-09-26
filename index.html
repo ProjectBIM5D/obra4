@@ -739,6 +739,15 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .vl-tb tbody tr:hover td{background:var(--input);}
 .vl-tb tr.prop td{background:#f59e0b12;} .vl-tb tr.tot td{border-top:2px solid var(--line2);background:var(--input);font-weight:800;}
 .vl-gg{width:78px;font:inherit;font-size:11.5px;padding:3px 5px;border:1px solid var(--line2);border-radius:6px;background:var(--input);color:var(--tx);text-align:right;} .vl-alerta{color:#d97706;font-weight:800;cursor:help;}
+.oc-tb{width:100%;min-width:1180px;border-collapse:collapse;font-size:12px;}
+.oc-tb th,.oc-tb td{padding:6px 9px;border:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
+.oc-tb thead th{text-align:center;font-weight:800;color:#3b2a1d;font-size:11.5px;} .oc-tb .h0{background:#fde9d9;} .oc-tb .h1{background:#f2dcdb;} .oc-tb .h2{background:#f8ecec;}
+.oc-tb td.c{text-align:center;} .oc-tb td.l{text-align:left;} .oc-tb td.sep,.oc-tb th.sep{border-left:3px double var(--line2);}
+.oc-tb tr.ini td,.oc-tb tr.susp td{font-weight:700;} .oc-tb tr.susp td{background:#dbe6f4;color:#1e3a5f;} .oc-tb tr.prop td{background:#f59e0b14;}
+.oc-tb tr.tot td{background:#fde9d9;color:#3b2a1d;font-weight:800;font-size:12.5px;border-top:2px solid var(--line2);}
+.oc-tb td.pend{color:var(--mut);}
+:root[data-theme="dark"] .oc-tb thead th{color:#f3e6dc;} :root[data-theme="dark"] .oc-tb .h0{background:#4a3527;} :root[data-theme="dark"] .oc-tb .h1{background:#4b3335;} :root[data-theme="dark"] .oc-tb .h2{background:#3a2a2c;}
+:root[data-theme="dark"] .oc-tb tr.susp td{background:#1e2c45;color:#cfe0f7;} :root[data-theme="dark"] .oc-tb tr.tot td{background:#4a3527;color:#f3e6dc;}
 .vl-pill{display:inline-block;font-size:10.5px;font-weight:800;padding:2px 9px;border-radius:999px;} .vl-pill.ok{background:#10b98122;color:var(--green);} .vl-pill.pr{background:#f59e0b26;color:var(--rg-am,#a85a08);}
 .vl-pbar{display:inline-block;vertical-align:middle;width:64px;height:7px;border-radius:4px;background:var(--line);overflow:hidden;margin-right:6px;} .vl-pbar i{display:block;height:100%;background:var(--blue);}
 .vl-tb button{font:inherit;font-size:11px;font-weight:700;padding:3px 10px;border-radius:7px;border:1px solid var(--line2);background:var(--card);color:var(--tx);cursor:pointer;} .vl-tb button:hover{border-color:var(--blue);color:var(--blue);}
@@ -1152,6 +1161,10 @@ html.dens-densa{--rh:26px;--rh0:31px;--rh1:26px;--rh2:24px;--rh3:22px;--fc:10.5p
           <button class="seg-btn" data-vtipo="contrato">Contrato principal</button>
           <button class="seg-btn" data-vtipo="adicional">Adicionales</button>
           <button class="seg-btn" data-vtipo="mayores_metrados">Mayores metrados</button>
+        </p>
+        <p class="api" style="margin:0">Cifras:
+          <button class="seg-btn" data-vprop="0" title="Solo lo aprobado por el residente (cifras oficiales)">Solo aprobadas</button>
+          <button class="seg-btn" data-vprop="1" title="Suma también las valorizaciones en propuesta">Incluir propuestas</button>
         </p>
         <span class="hint" id="vlNota"></span>
       </div>
@@ -2837,8 +2850,10 @@ document.addEventListener('click', (e) => {
   const b = e.target.closest('[data-vprop]'); if (!b) return;
   INCLUIR_PROP = b.dataset.vprop === '1'; try { localStorage.setItem('obra-incluir-prop', INCLUIR_PROP ? '1' : '0'); } catch (x) {}
   if (RES_A) { curvaPopupFijo = null; aplicarResumen(RES_A, RES_B); }
+  if (VAL.ok) valPintar();
 });
 function valBoxActualizar() {
+  document.querySelectorAll('[data-vprop]').forEach(b => b.classList.toggle('on', (b.dataset.vprop === '1') === INCLUIR_PROP));
   const A = RES_A, val = A ? (A.valEj || []).filter(r => r.tipo === 'contrato' || r.tipo === 'adicional') : [], props = [...new Set(val.filter(r => r.estado !== 'aprobada').map(r => r.numero))].sort((a, b) => a - b);
   const box = $('#valBox'); if (!box) return;
   box.style.display = props.length || INCLUIR_PROP ? '' : 'none';
@@ -2846,7 +2861,7 @@ function valBoxActualizar() {
   $('#valNota').textContent = props.length ? `Valorización ${props.join(', ')} en propuesta (sin conciliar)${INCLUIR_PROP ? ' — incluida' : ' — no incluida'}` : '';
 }
 // ══ Módulo VALORIZACIONES: valor ganado mes a mes, por tipo (contrato · adicional · mayores metrados) ══
-let VAL = { tipo: 'contrato', vals: [], ejec: [], ok: false };
+let VAL = { tipo: 'contrato', vals: [], ejec: [], progOf: [], ok: false };
 const TIPO_VAL = { contrato: 'Contrato principal', adicional: 'Adicionales', mayores_metrados: 'Mayores metrados' };
 async function valCargar() {
   const box = $('#vlCuerpo'); if (!box) return;
@@ -2855,11 +2870,59 @@ async function valCargar() {
       get('/valorizaciones?select=id,tipo,numero,estado,mes,aprobado_por,aprobado_en,archivo_origen,monto_oficial,gg_pct&order=tipo,numero'),
       getTodo('/v_ejecutado_mes?select=proyecto_id,tipo,estado,mes,numero,monto_subtotal&order=proyecto_id,tipo,mes,estado')]);
     VAL.vals = vals; VAL.ejec = ejec; VAL.ok = true;
+    try { VAL.progOf = RES_A && RES_A.version ? await get(`/programado_oficial?version_id=eq.${RES_A.version.id}&select=periodo_orden,concepto,monto`) : []; } catch (e) { VAL.progOf = []; }   // sin la tabla oficial se usa el cálculo
   } catch (e) {
     box.innerHTML = '<div class="rg-msg">Este módulo necesita las tablas de valorizaciones. Pide al administrador que corra <b>valorizaciones_schema.sql</b> y la carga de valorizaciones en la base.</div>'; return;
   }
   if (!VAL.vals.some(v => v.tipo === VAL.tipo)) VAL.tipo = (VAL.vals[0] || {}).tipo || 'contrato';
   valPintar();
+}
+// Curva S OFICIAL: programado (cronograma valorizado) contra ejecutado (valorizaciones), en el formato del control oficial de la obra
+function valCurvaOficial() {
+  const A = RES_A; if (!A || !(A.progRows || []).length) return '';
+  const N2 = (n) => Number(n || 0).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }), PC = (x) => (x * 100).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
+  const MES_L = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Setiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+  const mesDe = (f) => String(f).slice(0, 7) + '-01', nomMes = (f) => { const d = new Date(f); return `${MES_L[d.getUTCMonth()]} ${String(d.getUTCFullYear()).slice(2)}`; };
+  // periodos del cronograma (con la suspensión) y lo programado en cada uno, por contrato y adicional
+  const per = {};
+  A.progRows.forEach(r => {
+    const o = per[r.periodo_orden] || (per[r.periodo_orden] = { orden: r.periodo_orden, tipo: r.periodo_tipo || 'mes', etq: r.etiqueta, ini: r.fecha_inicio, fin: r.fecha_fin, ct: 0, ad: 0 });
+    if ((r.concepto || 'contrato') === 'adicional') o.ad += Number(r.programado_parcial) || 0; else o.ct += Number(r.programado_parcial) || 0;
+  });
+  const r2 = (x) => Math.round((x + 1e-9) * 100) / 100;
+  const lista = Object.values(per).sort((a, b) => a.orden - b.orden);
+  // cada periodo se redondea a centavos por separado (como los valores del control oficial) y el acumulado suma esos valores
+  const of = {}; (VAL.progOf || []).forEach(r => { of[r.periodo_orden + '|' + r.concepto] = Number(r.monto); });
+  const hayOf = (VAL.progOf || []).length > 0;   // programado OFICIAL (calendario aprobado); si no está cargado, se usa el calculado
+  lista.forEach(o => { o.ct2 = hayOf ? (of[o.orden + '|contrato'] || 0) : r2(o.ct); o.ad2 = hayOf ? (of[o.orden + '|adicional'] || 0) : r2(o.ad); o.tP = r2(o.ct2 + o.ad2); });
+  // ejecutado por mes: contrato desde las valorizaciones; adicional desde las valorizaciones de adicional o, si aún no hay, desde la Curva S anterior
+  const ej = {}, propMes = new Set(), hayValAd = VAL.ejec.some(x => x.tipo === 'adicional');
+  VAL.ejec.filter(x => (x.tipo === 'contrato' || x.tipo === 'adicional') && (x.estado === 'aprobada' || INCLUIR_PROP)).forEach(x => {
+    const m = mesDe(x.mes), o = ej[m] || (ej[m] = { ct: 0, ad: 0 }); const v = Number(x.monto_subtotal) || 0;
+    if (x.tipo === 'adicional') o.ad += v; else o.ct += v; if (x.estado !== 'aprobada') propMes.add(m);
+  });
+  if (!hayValAd) (A.curvaMensualRaw || []).filter(r => r.concepto === 'adicional').forEach(r => { const m = mesDe(r.periodo), o = ej[m] || (ej[m] = { ct: 0, ad: 0 }); o.ad += Number(r.ejecutado_parcial) || 0; });
+  const totProg = r2(lista.reduce((s, o) => s + o.tP, 0)), ultimoEj = Math.max(...Object.keys(ej).map(m => +new Date(m)), 0);
+  const baseE = totProg;   // los % (programados y ejecutados) son sobre el programado total
+  let n = 0, aP = 0, aE = 0, sCtP = 0, sAdP = 0, sCtE = 0, sAdE = 0, filas = '';
+  filas += `<tr class="ini"><td></td><td class="l">INICIO</td><td>0.00</td><td></td><td></td><td></td><td>0.00%</td><td>0.00%</td><td class="sep"></td><td></td><td></td><td></td><td>0.00%</td><td>0.00%</td></tr>`;
+  lista.forEach(o => {
+    if (o.tipo === 'suspension') { filas += `<tr class="susp"><td></td><td class="l">${nomMes(o.ini)}</td><td>0.00</td><td></td><td></td><td></td><td></td><td>${PC(aP / totProg)}</td><td class="sep"></td><td></td><td></td><td></td><td></td><td>${PC(aE / baseE)}</td></tr>`; return; }
+    n++; const m = mesDe(o.fin), tP = o.tP; aP = r2(aP + tP); sCtP += o.ct2; sAdP += o.ad2;
+    const e = ej[m], hayE = !!e && (+new Date(m) <= ultimoEj), tE = e ? e.ct + e.ad : 0; if (hayE) { aE = r2(aE + tE); sCtE += e.ct; sAdE += e.ad; }
+    const etq = o.tipo === 'mes' ? nomMes(o.fin) : String(o.etq || nomMes(o.fin));
+    filas += `<tr class="${propMes.has(m) ? 'prop' : ''}"><td class="c">${String(n).padStart(2, '0')}</td><td class="l">${esc(etq)}${propMes.has(m) ? ' <span class="vl-pill pr">propuesta</span>' : ''}</td>
+      <td>${N2(o.ct2)}</td><td>${o.ad2 ? N2(o.ad2) : ''}</td><td>${N2(tP)}</td><td>${N2(aP)}</td><td>${PC(tP / totProg)}</td><td>${PC(aP / totProg)}</td>
+      <td class="sep">${hayE ? N2(e.ct) : ''}</td><td>${hayE && e.ad ? N2(e.ad) : ''}</td><td>${hayE ? N2(tE) : ''}</td><td>${hayE ? N2(aE) : ''}</td><td>${hayE ? PC(tE / baseE) : ''}</td><td>${hayE ? PC(aE / baseE) : ''}</td></tr>`;
+  });
+  filas += `<tr class="tot"><td></td><td class="l">MONTO TOTAL</td><td>${N2(sCtP)}</td><td>${N2(sAdP)}</td><td>${N2(r2(sCtP + sAdP))}</td><td>${N2(r2(sCtP + sAdP))}</td><td>100.00%</td><td></td><td class="sep">${N2(sCtE)}</td><td>${N2(sAdE)}</td><td>${N2(sCtE + sAdE)}</td><td>${N2(sCtE + sAdE)}</td><td>${PC((sCtE + sAdE) / baseE)}</td><td></td></tr>`;
+  const susp = lista.find(o => o.tipo === 'suspension'), dm = (f) => f ? String(f).slice(8, 10) + '/' + String(f).slice(5, 7) + '/' + String(f).slice(0, 4) : '';
+  return `<div class="vl-card"><h3>Curva S oficial — programado vs ejecutado</h3><p class="hint">Programado: ${hayOf ? 'calendario valorizado oficial' : 'cronograma valorizado vigente'} · Ejecutado: valorizaciones ${INCLUIR_PROP ? '(aprobadas y propuestas)' : 'aprobadas'} · montos sin IGV</p>
+    <div class="vl-tw"><table class="oc-tb"><thead>
+      <tr><th class="h0" colspan="2">PERIODO</th><th class="h1" colspan="6">PROGRAMADO</th><th class="h1 sep" colspan="6">EJECUTADO</th></tr>
+      <tr><th class="h0" rowspan="2">N°</th><th class="h0" rowspan="2">VALORIZACIÓN</th><th class="h2" rowspan="2">CONTRATO PRINCIPAL</th><th class="h2" rowspan="2">ADICIONAL</th><th class="h2" colspan="2">TOTALES (S/.)</th><th class="h2" colspan="2">PORCENTAJES (%)</th><th class="h2 sep" rowspan="2">CONTRATO PRINCIPAL</th><th class="h2" rowspan="2">ADICIONAL</th><th class="h2" colspan="2">TOTALES (S/.)</th><th class="h2" colspan="2">PORCENTAJES (%)</th></tr>
+      <tr><th class="h2">PARCIAL</th><th class="h2">ACUMULADO</th><th class="h2">PARCIAL</th><th class="h2">ACUM.</th><th class="h2">PARCIAL</th><th class="h2">ACUMULADO</th><th class="h2">PARCIAL</th><th class="h2">ACUM.</th></tr>
+    </thead><tbody>${filas}</tbody></table></div><p class="hint" style="margin:8px 0 0"><i>${susp ? `NOTA. Periodo de suspensión del ${dm(susp.ini)} al ${dm(susp.fin)}. ` : ''}Los porcentajes son sobre el programado total (S/. ${N2(totProg)}).</i></p></div>`;
 }
 document.addEventListener('click', (e) => { const b = e.target.closest('[data-vtipo]'); if (b && !b.disabled) { VAL.tipo = b.dataset.vtipo; valPintar(); } });
 function valPintar() {
@@ -2907,7 +2970,7 @@ function valPintar() {
   const cab = `<thead><tr><th>N°</th><th>Periodo</th><th>Estado</th><th title="Gastos generales de esa valorización (la utilidad es la del contrato)">% G.G.</th>${frentes.map(p => `<th>${esc(String(p.nombre).replace(/^Puente\s+/i, ''))}</th>`).join('')}<th>Valorización del mes</th><th>Acumulado</th><th>% avance</th><th>Saldo por valorizar</th>${admin ? '<th></th>' : ''}</tr></thead>`;
   const cuerpo = filas.map(f => `<tr class="${f.v.estado !== 'aprobada' ? 'prop' : ''}"><td>${f.v.numero}</td><td class="l">${MES(f.v.mes)}</td>
       <td>${f.v.estado === 'aprobada' ? `<span class="vl-pill ok" title="${esc('Aprobada por ' + (f.v.aprobado_por || '') + (f.v.aprobado_en ? ' · ' + String(f.v.aprobado_en).slice(0, 10) : ''))}">✔ Aprobada</span>` : '<span class="vl-pill pr" title="Aún sin conciliar">◔ Propuesta</span>'}</td>
-      <td>${admin && f.v.estado !== 'aprobada' ? `<input class="vl-gg" data-vgg="${f.v.id}" type="number" step="0.00001" min="0" max="60" value="${f.v.gg_pct != null ? (Number(f.v.gg_pct) * 100).toFixed(5) : ''}" title="Gastos generales en % (editable mientras sea propuesta)"> %` : (f.v.gg_pct != null ? (Number(f.v.gg_pct) * 100).toFixed(5) + ' %' : '—')}</td>
+      <td>${admin && f.v.estado !== 'aprobada' ? `<input class="vl-gg" data-vgg="${f.v.id}" type="number" step="0.0000001" min="0" max="60" value="${f.v.gg_pct != null ? (Number(f.v.gg_pct) * 100).toFixed(7) : ''}" title="Gastos generales en % (editable mientras sea propuesta)"> %` : (f.v.gg_pct != null ? (Number(f.v.gg_pct) * 100).toFixed(7) + ' %' : '—')}</td>
       ${frentes.map(p => `<td title="S/. ${N2(f.porF[p.id])}">${f.porF[p.id] ? N0(f.porF[p.id]) : '—'}</td>`).join('')}
       <td title="S/. ${N2(f.mes)}${f.dif != null ? ' · oficial (Excel): S/. ' + N2(f.v.monto_oficial) : ''}"><b>${N0(f.mes)}</b>${f.dif != null && Math.abs(f.dif) > 0.10 ? ` <span class="vl-alerta" title="Difiere S/. ${N2(f.dif)} del monto oficial del Excel (control desde S/. 0.10): revisa los gastos generales y los metrados">⚠</span>` : ''}</td><td>${N0(f.acum)}</td>
       <td>${f.pct == null ? '—' : `<span class="vl-pbar"><i style="width:${Math.min(100, f.pct * 100).toFixed(1)}%"></i></span>${(f.pct * 100).toFixed(1)}%`}</td>
@@ -2915,14 +2978,16 @@ function valPintar() {
       ${admin ? `<td>${f.v.estado === 'aprobada' ? `<button data-vreabrir="${f.v.id}" title="Vuelve a propuesta para poder corregirla">Reabrir</button>` : `<button class="ok" data-vaprobar="${f.v.id}">Aprobar</button>`}</td>` : ''}</tr>`).join('');
   const sumF = (id) => filas.reduce((s, f) => s + (f.porF[id] || 0), 0);
   const pie = `<tr class="tot"><td></td><td class="l">Total</td><td></td><td></td>${frentes.map(p => `<td>${N0(sumF(p.id))}</td>`).join('')}<td>${N0(acum)}</td><td>${N0(acum)}</td><td>${presu ? (acum / presu * 100).toFixed(1) + '%' : '—'}</td><td>${presu ? N0(Math.max(0, presu - acum)) : '—'}</td>${admin ? '<td></td>' : ''}</tr>`;
-  box.innerHTML = kpis + grafico + `<div class="vl-card"><h3>Resumen de valorizaciones — ${esc(TIPO_VAL[VAL.tipo])}</h3><p class="hint">Valorización mensual sin IGV, por frente. Lo aprobado es lo oficial; la propuesta se actualiza cuando el residente la aprueba${admin ? '' : ' (solo el administrador aprueba)'}.</p><div class="vl-tw"><table class="vl-tb">${cab}<tbody>${cuerpo}${pie}</tbody></table></div></div>`;
+  box.innerHTML = kpis + grafico + valCurvaOficial() + `<div class="vl-card"><h3>Resumen de valorizaciones — ${esc(TIPO_VAL[VAL.tipo])}</h3><p class="hint">Valorización mensual sin IGV, por frente. Lo aprobado es lo oficial; la propuesta se actualiza cuando el residente la aprueba${admin ? '' : ' (solo el administrador aprueba)'}.</p><div class="vl-tw"><table class="vl-tb">${cab}<tbody>${cuerpo}${pie}</tbody></table></div></div>`;
 }
 document.addEventListener('change', async (e) => {   // editar los gastos generales de una valorización en propuesta
   const inp = e.target.closest('[data-vgg]'); if (!inp) return;
   const pct = parseFloat(String(inp.value).replace(',', '.')); if (!(pct >= 0 && pct <= 60)) { toast('Indica un % entre 0 y 60.', false); valPintar(); return; }
+  const vv = VAL.vals.find(x => x.id === inp.dataset.vgg);
+  if (vv && vv.gg_pct != null && Math.abs(pct - Number(vv.gg_pct) * 100) < 0.00000006) return;   // solo cambió el redondeo de lo mostrado: no se toca el valor guardado
   inp.disabled = true;
   try {
-    const r = await fetch(`${API}/valorizaciones?id=eq.${inp.dataset.vgg}`, { method: 'PATCH', headers: { ...headers, 'Content-Type': 'application/json', Prefer: 'return=minimal' }, body: JSON.stringify({ gg_pct: +(pct / 100).toFixed(8) }) });
+    const r = await fetch(`${API}/valorizaciones?id=eq.${inp.dataset.vgg}`, { method: 'PATCH', headers: { ...headers, 'Content-Type': 'application/json', Prefer: 'return=minimal' }, body: JSON.stringify({ gg_pct: +(pct / 100).toFixed(12) }) });
     if (!r.ok) { const d = await r.json().catch(() => ({})); throw new Error(d.message || `HTTP ${r.status}`); }
     toast('Gastos generales actualizados.', true);
     await valCargar(); bootResumen();
@@ -3030,7 +3095,7 @@ async function bootResumen() {
       get(`/curva_s_mensual?${filtroProy}&select=proyecto_id,concepto,periodo,programado_parcial,programado_acumulado,ejecutado_parcial,ejecutado_acumulado&order=periodo`)
         .catch(() => get(`/curva_s_mensual?${filtroProy}&select=proyecto_id,periodo,programado_parcial,programado_acumulado,ejecutado_parcial,ejecutado_acumulado&order=periodo`)),
       get(`/plazo_eventos?obra_id=eq.${obra.id}&select=id,proyecto_id,tipo,descripcion,fecha_inicio,fecha_fin`),
-      version ? opcional(get(`/v_curva_s_programada?version_id=eq.${version.id}&select=proyecto_id,concepto,periodo_orden,fecha_fin,programado_parcial&order=periodo_orden`)) : Promise.resolve([]),
+      version ? opcional(get(`/v_curva_s_programada?version_id=eq.${version.id}&select=proyecto_id,concepto,periodo_orden,etiqueta,periodo_tipo,fecha_inicio,fecha_fin,programado_parcial&order=periodo_orden`)) : Promise.resolve([]),
       opcional(get(`/v_plazo_componente?obra_id=eq.${obra.id}&select=codigo,fecha_inicio,plazo_dias,fecha_fin_original,dias_suspension,dias_ampliacion,dias_otros,fecha_fin_vigente`)),
       // valorizaciones (valor ganado): ejecutado por mes, frente, tipo y estado (aprobada / propuesta)
       opcional(getTodo(`/v_ejecutado_mes?${filtroProy}&select=proyecto_id,tipo,estado,mes,numero,monto_subtotal&order=proyecto_id,tipo,mes,estado`)),
