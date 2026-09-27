@@ -733,6 +733,12 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
   .inf-bar{display:none !important;} .inf-scroll{display:block;padding:0;overflow:visible;}
   .inf-hoja{zoom:1 !important;box-shadow:none;margin:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
   #informe *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  /* la cabecera de la tabla de la valorización se repite en cada hoja impresa (esto SÍ funciona en impresión;
+     lo pegajoso con position:sticky es cosa de pantalla y hay que anularlo, si no compiten los dos mecanismos
+     y el encabezado sale duplicado/montado sobre el cuerpo — el bug de «cabecera distorsionada») */
+  .vld-oc thead{display:table-header-group;position:static !important;}
+  .vld-oc thead th{position:static !important;}
+  .vld-oc tr{page-break-inside:avoid;}
 }
 
 /* ═══ módulo Valorizaciones ═══ */
@@ -766,6 +772,76 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .vl-pbar{display:inline-block;vertical-align:middle;width:64px;height:7px;border-radius:4px;background:var(--line);overflow:hidden;margin-right:6px;} .vl-pbar i{display:block;height:100%;background:var(--blue);}
 .vl-tb button{font:inherit;font-size:11px;font-weight:700;padding:3px 10px;border-radius:7px;border:1px solid var(--line2);background:var(--card);color:var(--tx);cursor:pointer;} .vl-tb button:hover{border-color:var(--blue);color:var(--blue);}
 .vl-tb button.ok{background:var(--blue);border-color:var(--blue);color:#fff;} .vl-tb button.ok:hover{filter:brightness(1.08);color:#fff;}
+.vld-ver{font:inherit;font-size:10.5px;font-weight:700;color:var(--blue);background:transparent;border:0;padding:2px 0 0;cursor:pointer;}
+.vld-ver:hover{text-decoration:underline;}
+.vl-tb tr.sel td{background:var(--ic-blue-bg,#eaf1ff);}
+.vld-card{position:relative;animation:admIn .15s ease;}
+.vld-x{position:absolute;top:14px;right:16px;border:0;background:transparent;color:var(--mut);font-size:15px;cursor:pointer;padding:3px 8px;border-radius:6px;}
+.vld-x:hover{background:var(--input);color:var(--tx);}
+.vld-el{font-size:10px;color:var(--mut);}
+.vld-bar{display:inline-block;vertical-align:middle;width:56px;height:7px;border-radius:4px;background:var(--line);overflow:hidden;margin-right:5px;}
+.vld-bar i{display:inline-block;height:100%;vertical-align:top;}
+.vld-ok{color:var(--green);font-weight:800;}
+.vld-mn{color:var(--mut);font-weight:600;font-size:9.5px;word-break:break-word;}
+.oc-tb td.c{overflow-wrap:anywhere;}
+.vld-ctl{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin:10px 0 12px;}
+.vld-lbl{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:700;color:var(--tx2);}
+.vld-sel2{font:inherit;font-size:12px;font-weight:700;padding:6px 10px;border:1px solid var(--line2);border-radius:8px;background:var(--card);color:var(--tx);}
+/* tabla jerárquica de la valorización: mismo esqueleto que «Curva S oficial» (.oc-tb), con colores navy (más «documento oficial») y encabezado fijo */
+.vld-tw2{overflow:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:10px;max-height:600px;}
+.vld-oc{min-width:1560px;table-layout:fixed;}
+.vld-oc thead th{font-size:9px;padding:5px 3px;line-height:1.15;white-space:normal;}
+/* el título va DENTRO del <thead> (se repite en cada hoja impresa): el espacio de arriba se le da A ÉL, nunca a .vld-hoja
+   (un padding-top en .vld-hoja solo aparecería en la 1ª hoja, porque el padding del contenedor no se repite al paginar) */
+.vld-oc thead tr.vld-doctit-row th{background:transparent;padding:8mm 0 10px;box-shadow:none;}
+.vld-tw2 .oc-tb thead{position:sticky;top:0;z-index:2;}
+.vld-navy th.h0,.vld-navy th.h1{background:#17335a;color:#fff;}
+.vld-navy th.h2{background:#24487a;color:#fff;}
+.btn-imp{margin-left:auto;font:inherit;font-size:12px;font-weight:700;padding:6px 13px;border-radius:8px;border:1px solid var(--blue);background:var(--blue);color:#fff;cursor:pointer;}
+.btn-imp:hover{filter:brightness(1.08);}
+/* título del documento (pantalla e impresión): igual estilo que el encabezado del Excel */
+.vld-doctit{text-align:center;margin-bottom:14px;}
+.vld-docob{font-size:11.5px;font-weight:400;color:var(--mut);margin-bottom:2px;}
+.vld-doctit h2{margin:2px 0;font-size:19px;letter-spacing:.4px;color:var(--tx);}
+.vld-docper{font-size:12px;font-weight:700;color:var(--tx2);letter-spacing:.2px;}
+.vld-docalc{font-size:10.5px;font-weight:400;color:var(--mut);margin-top:2px;text-transform:uppercase;letter-spacing:.3px;}   /* solo informativo: sin negrita, no es parte de la presentación */
+.vld-hoja{height:auto;min-height:0;overflow:visible;padding:0 12mm 14mm;
+  --tx:#1c2b3d;--tx2:#334155;--mut:#64748b;--line:#e3e8ef;--line2:#cbd5e1;--card:#fff;--input:#f1f5f9;color:#1c2b3d;}   /* siempre en claro, aunque el panel esté en modo oscuro al imprimir · sin padding arriba: ver nota junto a .vld-doctit-row */
+@media print{.vld-hoja{width:420mm !important;}}
+.oc-tb td.num{text-align:left;font-weight:700;}
+.oc-tb tr.pt td{white-space:normal;font-size:10.5px;}
+.oc-tb tr.pt:hover td{background:var(--input);}
+.oc-tb tr.fr td{background:#1e3a5f;color:#fff;font-weight:800;font-size:11.5px;letter-spacing:.2px;border-top:2px solid var(--line2);}
+.oc-tb tr.gp2 td{background:#dbe6f4;color:#1e3a5f;font-weight:800;font-size:10.5px;}
+.oc-tb tr.gp3 td{background:#eaf1fa;color:#1e3a5f;font-weight:700;font-size:10px;}
+.oc-tb tr.gp4 td{background:#f4f8fc;color:#3a5578;font-weight:700;font-size:9.5px;}
+.oc-tb tr.fr td:nth-child(n+4),.oc-tb tr.gp td:nth-child(n+4){font-size:10.5px;letter-spacing:0;}
+.oc-tb tr.pt td.f{color:var(--rg-am,#a85a08);font-weight:600;}
+/* columnas ACTUAL: un fondo tenue para que la mirada se fije ahí, del mismo azul-gris del último nivel de grupo (no un color aparte) */
+.oc-tb tr.pt td.hl{background:#f4f8fc;}
+:root[data-theme="dark"] .oc-tb tr.pt td.hl{background:#2c3c56;}
+.vld-sum td.hl{background:#f4f8fc;}
+:root[data-theme="dark"] .vld-sum td.hl{background:#2c3c56;}
+:root[data-theme="dark"] .oc-tb tr.fr td{background:#0f1f33;color:#dbe6f4;}
+:root[data-theme="dark"] .oc-tb tr.gp2 td{background:#1e2c45;color:#cfe0f7;}
+:root[data-theme="dark"] .oc-tb tr.gp3 td{background:#26364f;color:#cfe0f7;}
+:root[data-theme="dark"] .oc-tb tr.gp4 td{background:#2c3c56;color:#b9cae6;}
+/* cierre: costo directo + gastos generales + utilidad = subtotal */
+.vld-resumen{margin-top:16px;padding-top:12px;border-top:1px dashed var(--line2);}
+.vld-resumen h4{margin:0 0 8px;font-size:12.5px;}
+.vld-pend{color:var(--rg-am,#a85a08);font-weight:700;}
+.vld-sum{width:100%;max-width:1080px;border-collapse:collapse;font-size:11.5px;margin-top:8px;table-layout:fixed;}
+.vld-sum th,.vld-sum td{padding:7px 8px;border-top:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums;}
+.vld-sum th.l,.vld-sum td.l{text-align:left;}
+.vld-sum th.sep,.vld-sum td.sep{border-left:3px double var(--line2);}
+.vld-sum thead th{border-top:0;background:#17335a;color:#fff;font-size:10px;font-weight:800;line-height:1.2;}
+.vld-sum thead tr:last-child th{background:#24487a;font-size:9.5px;}
+.vld-sum thead th.l{text-align:left;}
+.vld-sum td small{display:block;font-size:9px;color:var(--mut);font-weight:600;margin-top:1px;}
+.vld-sum td.f{color:var(--rg-am,#a85a08);font-weight:700;}
+.vld-sum td.l{width:23%;}
+.vld-sum tr.tt td{border-top:2px solid var(--line2);background:var(--input);font-weight:800;}
+@media (max-width:560px){.vld-chip{padding:5px 10px;}}
 @media (max-width:900px){.vl-kp{grid-template-columns:1fr 1fr;}}
 @media (max-width:560px){.vl-kp{grid-template-columns:1fr;}}
 
@@ -2935,8 +3011,8 @@ async function valCargar() {
   const box = $('#vlCuerpo'); if (!box) return;
   try {
     const [vals, ejec] = await Promise.all([
-      get('/valorizaciones?select=id,tipo,numero,estado,mes,aprobado_por,aprobado_en,archivo_origen,monto_oficial,gg_pct&order=tipo,numero'),
-      getTodo('/v_ejecutado_mes?select=proyecto_id,tipo,estado,mes,numero,monto_subtotal&order=proyecto_id,tipo,mes,estado')]);
+      get('/valorizaciones?select=id,tipo,numero,estado,mes,fecha_inicio,fecha_fin,aprobado_por,aprobado_en,archivo_origen,monto_oficial,gg_pct&order=tipo,numero'),
+      getTodo('/v_ejecutado_mes?select=proyecto_id,tipo,estado,mes,numero,monto_cd,monto_subtotal&order=proyecto_id,tipo,mes,estado')]);
     VAL.vals = vals; VAL.ejec = ejec; VAL.ok = true;
     try { VAL.progOf = RES_A && RES_A.version ? await get(`/programado_oficial?version_id=eq.${RES_A.version.id}&select=periodo_orden,concepto,monto`) : []; } catch (e) { VAL.progOf = []; }   // sin la tabla oficial se usa el cálculo
   } catch (e) {
@@ -3036,7 +3112,7 @@ function valPintar() {
   // tabla resumen (una fila por valorización, una columna por frente)
   const admin = !!AUTH.admin;
   const cab = `<thead><tr><th>N°</th><th>Periodo</th><th>Estado</th><th title="Gastos generales de esa valorización (la utilidad es la del contrato)">% G.G.</th>${frentes.map(p => `<th>${esc(String(p.nombre).replace(/^Puente\s+/i, ''))}</th>`).join('')}<th>Valorización del mes</th><th>Acumulado</th><th>% avance</th><th>Saldo por valorizar</th>${admin ? '<th></th>' : ''}</tr></thead>`;
-  const cuerpo = filas.map(f => `<tr class="${f.v.estado !== 'aprobada' ? 'prop' : ''}"><td>${f.v.numero}</td><td class="l">${MES(f.v.mes)}</td>
+  const cuerpo = filas.map(f => `<tr class="${f.v.estado !== 'aprobada' ? 'prop' : ''}${valDetId === f.v.id ? ' sel' : ''}"><td>${f.v.numero}</td><td class="l">${MES(f.v.mes)}<br><button type="button" class="vld-ver" data-valdet="${f.v.id}">${valDetId === f.v.id ? '▾ Ocultar valorización' : '▸ Ver valorización'}</button></td>
       <td>${f.v.estado === 'aprobada' ? `<span class="vl-pill ok" title="${esc('Aprobada por ' + (f.v.aprobado_por || '') + (f.v.aprobado_en ? ' · ' + String(f.v.aprobado_en).slice(0, 10) : ''))}">✔ Aprobada</span>` : '<span class="vl-pill pr" title="Aún sin conciliar">◔ Propuesta</span>'}</td>
       <td>${admin && f.v.estado !== 'aprobada' ? `<input class="vl-gg" data-vgg="${f.v.id}" type="number" step="0.0000001" min="0" max="60" value="${f.v.gg_pct != null ? (Number(f.v.gg_pct) * 100).toFixed(7) : ''}" title="Gastos generales en % (editable mientras sea propuesta)"> %` : (f.v.gg_pct != null ? (Number(f.v.gg_pct) * 100).toFixed(7) + ' %' : '—')}</td>
       ${frentes.map(p => `<td title="S/. ${N2(f.porF[p.id])}">${f.porF[p.id] ? N0(f.porF[p.id]) : '—'}</td>`).join('')}
@@ -3046,8 +3122,325 @@ function valPintar() {
       ${admin ? `<td>${f.v.estado === 'aprobada' ? `<button data-vreabrir="${f.v.id}" title="Vuelve a propuesta para poder corregirla">Reabrir</button>` : `<button class="ok" data-vaprobar="${f.v.id}">Aprobar</button>`}</td>` : ''}</tr>`).join('');
   const sumF = (id) => filas.reduce((s, f) => s + (f.porF[id] || 0), 0);
   const pie = `<tr class="tot"><td></td><td class="l">Total</td><td></td><td></td>${frentes.map(p => `<td>${N0(sumF(p.id))}</td>`).join('')}<td>${N0(acum)}</td><td>${N0(acum)}</td><td>${presu ? (acum / presu * 100).toFixed(1) + '%' : '—'}</td><td>${presu ? N0(Math.max(0, presu - acum)) : '—'}</td>${admin ? '<td></td>' : ''}</tr>`;
-  box.innerHTML = kpis + grafico + valCurvaOficial() + `<div class="vl-card"><h3>Resumen de valorizaciones — ${esc(TIPO_VAL[VAL.tipo])}</h3><p class="hint">Valorización mensual sin IGV, por frente. Lo aprobado es lo oficial; la propuesta se actualiza cuando el residente la aprueba${admin ? '' : ' (solo el administrador aprueba)'}.</p><div class="vl-tw"><table class="vl-tb">${cab}<tbody>${cuerpo}${pie}</tbody></table></div></div>`;
+  box.innerHTML = kpis + grafico + valCurvaOficial() + `<div class="vl-card"><h3>Resumen de valorizaciones — ${esc(TIPO_VAL[VAL.tipo])}</h3><p class="hint">Valorización mensual sin IGV, por frente. Lo aprobado es lo oficial; la propuesta se actualiza cuando el residente la aprueba${admin ? '' : ' (solo el administrador aprueba)'}.</p><div class="vl-tw"><table class="vl-tb">${cab}<tbody>${cuerpo}${pie}</tbody></table></div></div><div id="vlDetalle">${valDetHTML()}</div>`;
 }
+
+// ══ Detalle de metrado por partida, dentro de una valorización — formato de la valorización oficial: partidas en TODA
+// la jerarquía del cronograma (frente > grupo > subgrupo > … > partida, tantos niveles como tenga esa obra), con metrado
+// y monto Anterior/Actual/Acumulado/Saldo, y el cierre de Costo directo + G.G. + Utilidad = Subtotal, como la hoja
+// «09. Val N°xx» del Excel. Al abrir carga solo lo ejecutado ese mes (rápido); «Toda la valorización» trae además las
+// partidas del contrato sin movimiento ese mes (para verlas todas, como la valorización completa del Excel). ══
+let valDetId = null, valDetFiltro = { frente: '', modo: 'mes' };
+const valDetCache = {};           // valDetCache[valorizacionId] = { mes: filas|undefined|'error', completo: filas|undefined|'error' }
+let WBS_ARBOL = null, WBS_MENOR = null;   // árbol completo del cronograma (todo nivel) y mapa de menor metrado por nodo: se piden una sola vez
+const PRESU_CD_CACHE = {};   // presupuesto actualizado total (costo directo) por tipo: sale del mismo árbol, sin pedir nada aparte
+async function valDetArbol() {
+  if (WBS_ARBOL) return WBS_ARBOL;
+  const version = RES_A && RES_A.version;
+  if (!version) return (WBS_ARBOL = {});
+  try {
+    const rows = await getTodo(`/wbs_nodos?version_id=eq.${version.id}&select=id,padre_id,nivel,orden,codigo,nombre,es_hoja,concepto,metrado,precio_unitario&order=orden`);
+    WBS_ARBOL = Object.fromEntries(rows.map(n => [n.id, n]));
+    rows.forEach(n => { if (n.es_hoja) PRESU_CD_CACHE[n.concepto] = (PRESU_CD_CACHE[n.concepto] || 0) + (Number(n.metrado) || 0) * (Number(n.precio_unitario) || 0); });
+  } catch (e) { WBS_ARBOL = {}; }
+  return WBS_ARBOL;
+}
+async function valDetMenorMap() {
+  if (WBS_MENOR) return WBS_MENOR;
+  try { const rows = await getTodo(`/metrado_ajustes?tipo=eq.menor&select=nodo_id,metrado`); WBS_MENOR = {}; rows.forEach(r => { WBS_MENOR[r.nodo_id] = (WBS_MENOR[r.nodo_id] || 0) + (Number(r.metrado) || 0); }); }
+  catch (e) { WBS_MENOR = {}; }
+  return WBS_MENOR;
+}
+async function valDetAbrir(id) {
+  if (valDetId === id) { valDetId = null; valPintar(); return; }
+  valDetId = id; valDetFiltro = { frente: '', modo: 'completo' };   // se abre con la valorización completa (no resumida), lista para revisar o imprimir
+  valPintar();
+  $('#vlDetalle').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  await valDetCargar(id, 'completo');
+}
+async function valDetCargar(id, modo) {
+  const c = valDetCache[id] || (valDetCache[id] = {});
+  if (c[modo] !== undefined) return;
+  c[modo] = null;   // "cargando"
+  try {
+    if (modo === 'mes') {
+      c.mes = await getTodo(`/v_valorizacion_partida_detalle?valorizacion_id=eq.${id}&select=nodo_id,proyecto_id,codigo_esp,nombre,unidad,orden,metrado,precio_unitario,monto_cd,monto_subtotal,meta,metrado_acum_aprobado,metrado_acum_propuestas,cd_acum_aprobado,cd_acum_propuestas,monto_acum_aprobado,monto_acum_propuestas,menor&order=orden`);
+    } else {
+      const v = VAL.vals.find(x => x.id === id);
+      const concepto = v.tipo === 'adicional' ? 'adicional' : 'contrato';
+      const version = RES_A && RES_A.version;
+      const [menorMap, hojas, hist] = await Promise.all([
+        valDetMenorMap(),
+        getTodo(`/wbs_nodos?version_id=eq.${version.id}&concepto=eq.${concepto}&es_hoja=eq.true&select=id,proyecto_id,codigo,codigo_esp,nombre,unidad,metrado,precio_unitario,orden&order=orden`),
+        getTodo(`/v_valorizacion_partida_detalle?tipo=eq.${v.tipo}&numero=lte.${v.numero}&select=nodo_id,numero,metrado,monto_cd,monto_subtotal,metrado_acum_aprobado,metrado_acum_propuestas,cd_acum_aprobado,cd_acum_propuestas,monto_acum_aprobado,monto_acum_propuestas&order=nodo_id,numero`),
+      ]);
+      const ultimo = {}; hist.forEach(r => { const u = ultimo[r.nodo_id]; if (!u || r.numero > u.numero) ultimo[r.nodo_id] = r; });   // el estado más reciente de cada partida, a la fecha de esta valorización
+      c.completo = hojas.map(n => {
+        const u = ultimo[n.id], esEsteMes = u && u.numero === v.numero;
+        return { nodo_id: n.id, proyecto_id: n.proyecto_id, codigo_esp: n.codigo_esp, nombre: n.nombre, unidad: n.unidad, orden: n.orden, meta: n.metrado, precio_unitario: n.precio_unitario,
+          metrado: esEsteMes ? u.metrado : 0, monto_cd: esEsteMes ? u.monto_cd : 0, monto_subtotal: esEsteMes ? u.monto_subtotal : 0,
+          metrado_acum_aprobado: u ? u.metrado_acum_aprobado : 0, metrado_acum_propuestas: u ? u.metrado_acum_propuestas : 0,
+          cd_acum_aprobado: u ? u.cd_acum_aprobado : 0, cd_acum_propuestas: u ? u.cd_acum_propuestas : 0,
+          monto_acum_aprobado: u ? u.monto_acum_aprobado : 0, monto_acum_propuestas: u ? u.monto_acum_propuestas : 0,
+          menor: menorMap[n.id] || 0 };
+      });
+    }
+  } catch (e) { c[modo] = 'error'; }
+  await valDetArbol();
+  if (valDetId === id) valDetPintar();
+}
+function valDetPintar() { const box = $('#vlDetalle'); if (box) box.innerHTML = valDetHTML(); }
+const ABREV_VAL = { contrato: 'CP', adicional: 'AD', mayores_metrados: 'MM' };
+const MES_MAYUS = ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SETIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
+function valDetPeriodoTxt(v) {   // «POR EL PERIODO DEL 1 AL 30 DE SETIEMBRE 2026», como el título del Excel
+  if (!v.fecha_inicio || !v.fecha_fin) { const d = new Date(v.mes); return `POR EL PERIODO DE ${MES_MAYUS[d.getUTCMonth()]} ${d.getUTCFullYear()}`; }
+  const a = v.fecha_inicio, b = v.fecha_fin, da = +a.slice(8, 10), db = +b.slice(8, 10), ma = +a.slice(5, 7) - 1, mb = +b.slice(5, 7) - 1, ya = a.slice(0, 4), yb = b.slice(0, 4);
+  return ma === mb && ya === yb ? `POR EL PERIODO DEL ${da} AL ${db} DE ${MES_MAYUS[ma]} ${ya}` : `POR EL PERIODO DEL ${da} DE ${MES_MAYUS[ma]} AL ${db} DE ${MES_MAYUS[mb]} ${yb}`;
+}
+const oracion = (s) => { s = String(s || '').toLowerCase().trim(); return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; };   // «trazo topografia...» -> «Trazo topografia...»
+// por partida: actual = este mes · acumulado = hasta esta valorización · anterior = acumulado − actual · saldo = meta − acumulado.
+// El PARCIAL de cada columna (anterior/actual/acumulado/saldo) va en COSTO DIRECTO (metrado × P.U.), igual que la hoja del Excel:
+// los gastos generales y la utilidad NO se reparten partida por partida, se agregan una sola vez al final (ver valDetResumenHTML).
+function valDetProcesarFilas(rows, conProp) {
+  return rows.map(r => {
+    const acumM = conProp ? Number(r.metrado_acum_propuestas) || 0 : Number(r.metrado_acum_aprobado) || 0;
+    const acumCD = conProp ? Number(r.cd_acum_propuestas) || 0 : Number(r.cd_acum_aprobado) || 0;
+    const actM = Number(r.metrado) || 0, actCD = Number(r.monto_cd) || 0;
+    const meta = Number(r.meta) || 0, pu = Number(r.precio_unitario) || 0, presCD = meta * pu, saldoBruto = Math.max(0, meta - acumM);
+    const menor = Math.min(saldoBruto, Math.max(0, Number(r.menor) || 0));
+    return { ...r, meta, pu, presCD, actM, actCD, acumM, acumCD, antM: Math.max(0, acumM - actM), antCD: acumCD - actCD,
+      saldoBruto, saldoCD: Math.max(0, presCD - acumCD), menor, saldoM: Math.max(0, saldoBruto - menor) };
+  });
+}
+// jerarquía real del cronograma: desde el padre inmediato de la partida hasta el grupo (nivel 2), tantos niveles como tenga
+function valDetAncestros(nodoId) {
+  const out = []; let cur = WBS_ARBOL[nodoId]; cur = cur && WBS_ARBOL[cur.padre_id];
+  while (cur && cur.nivel >= 2) { out.unshift(cur); cur = WBS_ARBOL[cur.padre_id]; } return out;
+}
+// arma el cuerpo de la tabla (frente > grupo > subgrupo > partida) y, aparte, la fila del cierre CD+GG+UT=Subtotal.
+// `listAgg`: la lista COMPLETA (todas las partidas del contrato, aunque se esté mostrando «Solo este mes»), para que los
+// subtotales de grupo/frente (presupuesto/anterior/acumulado/saldo) salgan siempre completos y no desaparezcan al filtrar;
+// si todavía no se cargó (se pide aparte, en segundo plano), se usa `list` mientras tanto.
+function valDetCuerpoTabla(list, proyectos, filtroFrente, modoTxt, listAgg) {
+  const tieneAgg = Array.isArray(listAgg);
+  const base = tieneAgg ? listAgg : list;
+  const N0 = (n) => Number(n || 0).toLocaleString('es-PE', { maximumFractionDigits: 2 });
+  const N2 = (n) => Number(n || 0).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const PCT = (n, base2) => base2 ? (n / base2 * 100).toFixed(2) + '%' : '—';
+  const nomF = Object.fromEntries(proyectos.map(pp => [pp.id, String(pp.nombre).replace(/^Puente\s+/i, '')]));
+  const ordenIdx = Object.fromEntries(proyectos.map(pp => [pp.id, COMPONENTES.findIndex(c2 => c2.id === pp.codigo)]));
+  // agregados SIEMPRE completos (a partir de `base`), independientes de qué partidas se estén LISTANDO
+  const cero = () => ({ presCD: 0, antCD: 0, actCD: 0, acumCD: 0 });
+  const sumaEn = (t, r) => { t.presCD += r.presCD; t.antCD += r.antCD; t.actCD += r.actCD; t.acumCD += r.acumCD; };
+  const aggFrente = {}, aggNodo = {};
+  base.forEach(r => { sumaEn(aggFrente[r.proyecto_id] || (aggFrente[r.proyecto_id] = cero()), r);
+    valDetAncestros(r.nodo_id).forEach(a => sumaEn(aggNodo[a.id] || (aggNodo[a.id] = cero()), r)); });
+  const porFrente = {}; list.forEach(r => (porFrente[r.proyecto_id] || (porFrente[r.proyecto_id] = [])).push(r));
+  const idsFrente = Object.keys(porFrente).sort((a, b) => (ordenIdx[a] ?? 99) - (ordenIdx[b] ?? 99));
+  const mostrar = filtroFrente ? idsFrente.filter(id => id === filtroFrente) : idsFrente;
+  const filaPartida = (r) => {
+    const estado = r.saldoBruto <= 0.005 ? '<span class="vld-ok" title="Cumplido">✔</span>'
+      : r.menor > 0.005 ? `<span class="vld-mn" title="Menor metrado: ${N2(r.menor)}">MM ${N2(r.menor)}</span>`
+      : '<span class="vld-pend" title="Pendiente">●</span>';
+    return `<tr class="pt" title="${esc(r.nombre)}">
+      <td class="l num">${esc(r.codigo_esp || '')}</td>
+      <td class="l">${esc(oracion(r.nombre))}</td>
+      <td class="l">${esc(uniCorta(r.unidad))}</td>
+      <td class="sep">${N2(r.meta)}</td><td>${N2(r.pu)}</td><td>${N0(r.presCD)}</td>
+      <td class="sep">${N2(r.antM)}</td><td>${N0(r.antCD)}</td>
+      <td class="sep hl">${N2(r.actM)}</td><td class="hl">${N0(r.actCD)}</td><td class="hl">${PCT(r.actCD, r.presCD)}</td>
+      <td class="sep">${N2(r.acumM)}</td><td>${N0(r.acumCD)}</td><td>${PCT(r.acumCD, r.presCD)}</td>
+      <td class="sep ${r.saldoBruto > 0.005 ? 'f' : ''}">${N2(r.saldoBruto)}</td><td class="${r.saldoBruto > 0.005 ? 'f' : ''}">${N0(r.saldoCD)}</td><td class="c">${estado}</td>
+    </tr>`;
+  };
+  const claseNivel = (nivel) => nivel <= 2 ? 'gp2' : nivel === 3 ? 'gp3' : 'gp4';
+  const filaResumenNivel = (clase, cod, nombre, pad, ag) => `<tr class="${clase}"><td class="l num">${esc(cod)}</td><td class="l"${pad ? ` style="padding-left:${pad}px"` : ''}><b>${esc(nombre)}</b></td><td></td>
+      <td class="sep"></td><td></td><td>${N0(ag.presCD)}</td>
+      <td class="sep"></td><td>${N0(ag.antCD)}</td>
+      <td class="sep hl"></td><td class="hl"><b>${N0(ag.actCD)}</b></td><td class="hl">${PCT(ag.actCD, ag.presCD)}</td>
+      <td class="sep"></td><td>${N0(ag.acumCD)}</td><td>${PCT(ag.acumCD, ag.presCD)}</td>
+      <td class="sep"></td><td>${N0(Math.max(0, ag.presCD - ag.acumCD))}</td><td></td></tr>`;
+  let cuerpo = '';
+  mostrar.forEach((pid) => {
+    const rs = porFrente[pid].slice().sort((a, b) => a.orden - b.orden);
+    if (!filtroFrente) cuerpo += filaResumenNivel('fr', (ordenIdx[pid] ?? 0) + 1, String(nomF[pid] || '').toUpperCase(), 0, aggFrente[pid] || cero());
+    let abiertos = [];
+    rs.forEach(r => {
+      const cad = valDetAncestros(r.nodo_id);
+      let i = 0; while (i < cad.length && i < abiertos.length && cad[i].id === abiertos[i].id) i++;
+      for (let j = i; j < cad.length; j++) { const nodo = cad[j], pad = 10 + Math.max(0, nodo.nivel - 2) * 16;
+        cuerpo += filaResumenNivel(`gp ${claseNivel(nodo.nivel)}`, String(nodo.codigo).replace(/^[^.]+\./, ''), nodo.nombre, pad, aggNodo[nodo.id] || cero()); }
+      abiertos = cad;
+      cuerpo += filaPartida(r);
+    });
+  });
+  if (!cuerpo) cuerpo = `<tr><td colspan="17" class="l" style="color:var(--mut)">Sin partidas${modoTxt === 'mes' ? ' con movimiento este mes' : ''}.</td></tr>`;
+  return cuerpo;
+}
+// cierre: costo directo + gastos generales + utilidad = subtotal, de TODA la valorización (los 4 frentes), igual que el cierre del Excel.
+// OJO: no sale de sumar las filas de la tabla (en modo «Solo lo ejecutado este mes» solo traen las partidas que se movieron ESTE mes: para
+// «anterior» y «acumulado» faltarían las ya completadas antes). Sale de acumular mes a mes, como la columna «Acumulado» de la tabla resumen:
+// por eso es la misma cifra esté la tabla filtrada por un frente o mostrando toda la obra.
+// Gastos generales y utilidad van SEPARADOS: la utilidad es la tasa fija del contrato (se obtiene exacta de esta valorización, que
+// tiene su propio % conocido, y se aplica igual en anterior/acumulado porque nunca cambia); los gastos generales sí variaron de una
+// valorización a otra, así que «anterior»/«acumulado» se arman sumando el GG real de CADA valorización anterior con SU PROPIO %.
+function valDetResumenHTML(v, conProp, presuCD) {
+  const N0 = (n) => Number(n || 0).toLocaleString('es-PE', { maximumFractionDigits: 2 });
+  const histV = (VAL.ejec || []).filter(x => x.tipo === v.tipo && x.numero <= v.numero && (x.estado === 'aprobada' || conProp));
+  const sumaHasta = (numMax, campo) => histV.filter(x => x.numero <= numMax).reduce((s, x) => s + (Number(x[campo]) || 0), 0);
+  const T = {
+    actCD: histV.filter(x => x.numero === v.numero).reduce((s, x) => s + (Number(x.monto_cd) || 0), 0),
+    actS:  histV.filter(x => x.numero === v.numero).reduce((s, x) => s + (Number(x.monto_subtotal) || 0), 0),
+    acumCD: sumaHasta(v.numero, 'monto_cd'), acumS: sumaHasta(v.numero, 'monto_subtotal'),
+  };
+  T.antCD = T.acumCD - T.actCD; T.antS = T.acumS - T.actS;
+  const ggActPct = Number(v.gg_pct) || 0, ggAct = Math.round(T.actCD * ggActPct * 100) / 100;
+  const utPct = T.actCD ? (T.actS - T.actCD - ggAct) / T.actCD : 0;   // utilidad: tasa fija del contrato, exacta a partir de esta valorización
+  const utAct = Math.round(T.actCD * utPct * 100) / 100;
+  const porNumero = {}; (VAL.vals || []).forEach(x => { if (x.tipo === v.tipo) porNumero[x.numero] = x; });
+  let ggAnt = 0, utAnt = 0;
+  histV.filter(x => x.numero < v.numero).forEach(x => {
+    const cd = Number(x.monto_cd) || 0, vv = porNumero[x.numero], gp = vv && vv.gg_pct != null ? Number(vv.gg_pct) : ggActPct;
+    ggAnt += Math.round(cd * gp * 100) / 100; utAnt += Math.round(cd * utPct * 100) / 100;
+  });
+  const ggAcum = ggAnt + ggAct, utAcum = utAnt + utAct;
+  // presupuesto (línea completa, constante) y saldo de cada concepto: igual estructura que el cierre del Excel
+  // (Presupuesto | Anterior | Actual | Acumulado | Saldo), no solo 3 columnas
+  const presu = presuCD == null ? null : {
+    cd: presuCD, gg: presuCD * ggActPct, ut: presuCD * utPct,
+  };
+  if (presu) presu.sub = presu.cd + presu.gg + presu.ut;
+  const PCT = (n, base) => base ? (n / base * 100).toFixed(2) + '%' : '—';
+  // cada columna de periodo trae, además del monto, su % sobre el presupuesto de ESE concepto (igual criterio que la tabla de partidas)
+  const fila = (label, pres, ant, act, acum, sub) => { const saldo = pres == null ? null : Math.max(0, pres - acum);
+    return `<tr${sub ? ' class="tt"' : ''}><td class="l">${label}</td>
+      <td>${pres == null ? '—' : N0(pres)}</td>
+      <td>${N0(ant)}</td><td>${PCT(ant, pres)}</td>
+      <td class="hl">${sub ? `<b>${N0(act)}</b>` : N0(act)}</td><td class="hl">${PCT(act, pres)}</td>
+      <td>${sub ? `<b>${N0(acum)}</b>` : N0(acum)}</td><td>${PCT(acum, pres)}</td>
+      <td class="f">${pres == null ? '—' : N0(saldo)}</td><td class="f">${PCT(saldo, pres)}</td></tr>`; };
+  return `<div class="vld-resumen"><h4>Presupuesto, costo directo, gastos generales y utilidad — toda la valorización</h4>
+    <table class="vld-sum"><thead>
+      <tr><th class="l" rowspan="2">Concepto</th><th rowspan="2">Presupuesto<br>actualizado</th>
+        <th class="sep" colspan="2">Anterior</th><th class="sep hl" colspan="2">Actual · Val. N°${v.numero}</th><th class="sep" colspan="2">Acumulado</th><th class="sep" colspan="2">Saldo</th></tr>
+      <tr><th class="sep">Monto</th><th>%</th><th class="sep hl">Monto</th><th class="hl">%</th><th class="sep">Monto</th><th>%</th><th class="sep">Monto</th><th>%</th></tr>
+    </thead>
+    <tbody>
+      ${fila('Costo directo', presu && presu.cd, T.antCD, T.actCD, T.acumCD)}
+      <tr><td class="l">Gastos generales</td><td>${presu ? N0(presu.gg) : '—'}<br><small>${(ggActPct * 100).toFixed(4)}%</small></td>
+        <td>${N0(ggAnt)}<br><small>${T.antCD ? (ggAnt / T.antCD * 100).toFixed(4) : '0.0000'}%</small></td><td>${presu ? PCT(ggAnt, presu.gg) : '—'}</td>
+        <td class="hl">${N0(ggAct)}<br><small>${(ggActPct * 100).toFixed(4)}%</small></td><td class="hl">${presu ? PCT(ggAct, presu.gg) : '—'}</td>
+        <td>${N0(ggAcum)}<br><small>${T.acumCD ? (ggAcum / T.acumCD * 100).toFixed(4) : '0.0000'}%</small></td><td>${presu ? PCT(ggAcum, presu.gg) : '—'}</td>
+        <td class="f">${presu ? N0(Math.max(0, presu.gg - ggAcum)) : '—'}</td><td class="f">${presu ? PCT(Math.max(0, presu.gg - ggAcum), presu.gg) : '—'}</td></tr>
+      <tr><td class="l">Utilidad</td><td>${presu ? N0(presu.ut) : '—'}<br><small>${(utPct * 100).toFixed(2)}%</small></td>
+        <td>${N0(utAnt)}<br><small>${(utPct * 100).toFixed(2)}%</small></td><td>${presu ? PCT(utAnt, presu.ut) : '—'}</td>
+        <td class="hl">${N0(utAct)}<br><small>${(utPct * 100).toFixed(2)}%</small></td><td class="hl">${presu ? PCT(utAct, presu.ut) : '—'}</td>
+        <td>${N0(utAcum)}<br><small>${(utPct * 100).toFixed(2)}%</small></td><td>${presu ? PCT(utAcum, presu.ut) : '—'}</td>
+        <td class="f">${presu ? N0(Math.max(0, presu.ut - utAcum)) : '—'}</td><td class="f">${presu ? PCT(Math.max(0, presu.ut - utAcum), presu.ut) : '—'}</td></tr>
+      ${fila('SUBTOTAL (sin IGV)', presu && presu.sub, T.antS, T.actS, T.acumS, true)}
+    </tbody></table>
+    <p class="hint">El % de cada columna es sobre el presupuesto de esa fila. Utilidad: tasa fija del contrato. Gastos generales: el % editable de cada valorización (en «Anterior»/«Acumulado» es el % real de cada una de las valorizaciones anteriores, no un promedio). Presupuesto de gastos generales y utilidad: estimado con el % de esta valorización sobre el presupuesto total.</p></div>`;
+}
+// mismas columnas que la hoja «09. Val N°xx» del Excel: presupuesto actualizado, y luego anterior/actual/acumulado/saldo
+// (cada uno en costo directo: metrado, parcial S/. y % del presupuesto — anterior sin %, como en el Excel)
+const valDetTablaCol = `<colgroup><col style="width:3.8%"><col style="width:16%"><col style="width:2.8%">
+  <col style="width:4.6%"><col style="width:4.3%"><col style="width:6.4%">
+  <col style="width:4.6%"><col style="width:6.4%">
+  <col style="width:4.6%"><col style="width:6.2%"><col style="width:3.2%">
+  <col style="width:4.6%"><col style="width:6.2%"><col style="width:3.2%">
+  <col style="width:4.6%"><col style="width:6%"><col style="width:4%"></colgroup>`;
+const valDetTablaCab = `<thead>
+      <tr><th class="h0" rowspan="2">PART.</th><th class="h0 l" rowspan="2">DESCRIPCIÓN</th><th class="h0" rowspan="2">UND</th>
+        <th class="h1 sep" colspan="3">PRESUPUESTO ACTUALIZADO</th>
+        <th class="h1 sep" colspan="2">ANTERIOR</th>
+        <th class="h1 sep hl" colspan="3">ACTUAL</th>
+        <th class="h1 sep" colspan="3">ACUMULADO</th>
+        <th class="h1 sep" colspan="3">SALDO</th></tr>
+      <tr><th class="h2 sep">Metrado</th><th class="h2">P.U.</th><th class="h2">Parcial</th>
+        <th class="h2 sep">Metrado</th><th class="h2">Parcial</th>
+        <th class="h2 sep hl">Metrado</th><th class="h2 hl">Parcial</th><th class="h2 hl">%</th>
+        <th class="h2 sep">Metrado</th><th class="h2">Parcial</th><th class="h2">%</th>
+        <th class="h2 sep">Metrado</th><th class="h2">Parcial</th><th class="h2" title="Estado">✓/●</th></tr>
+    </thead>`;
+const valDetLeyenda = `<div class="legend2" style="margin-top:8px"><span><i style="background:${C_EJEC}"></i>Ejecutado acumulado</span><span><i style="background:${C_SALDO}"></i>Falta ejecutar</span><span><i style="background:${C_MENOR}"></i>Menor metrado (no se ejecutará)</span></div>`;
+function valDetHTML() {
+  if (!valDetId) return '';
+  const c = valDetCache[valDetId] || {}, rows = c[valDetFiltro.modo];
+  const v = VAL.vals.find(x => x.id === valDetId) || {};
+  const MES = (m) => { const d = new Date(m); return `${MESES_ES[d.getUTCMonth()]}-${String(d.getUTCFullYear()).slice(2)}`; };
+  const cerrar = `<button type="button" class="vld-x" data-valdet="${valDetId}" aria-label="Cerrar">✕</button>`;
+  const controles = `<div class="vld-ctl">
+    <label class="vld-lbl">Ver <select id="vldFrenteSel" class="vld-sel2"><option value="">Total obra (4 frentes)</option>${(RES_A ? RES_A.proyectos : []).slice().sort((a, b) => COMPONENTES.findIndex(c2 => c2.id === a.codigo) - COMPONENTES.findIndex(c2 => c2.id === b.codigo)).map(p => `<option value="${esc(p.id)}"${valDetFiltro.frente === p.id ? ' selected' : ''}>${esc(String(p.nombre).replace(/^Puente\s+/i, ''))}</option>`).join('')}</select></label>
+    <button type="button" class="seg-btn ${valDetFiltro.modo === 'completo' ? 'on' : ''}" data-valdmodo="completo">Toda la valorización</button><button type="button" class="seg-btn ${valDetFiltro.modo === 'mes' ? 'on' : ''}" data-valdmodo="mes">Solo lo ejecutado este mes</button>
+    <button type="button" class="btn-imp" id="vldImprimir" title="Abre una hoja lista para imprimir o guardar como PDF">🖨 Imprimir / Guardar PDF</button>
+  </div>`;
+  const titulo = `<div class="vld-doctit"><h2>VALORIZACIÓN N° ${String(v.numero || 0).padStart(3, '0')} - ${ABREV_VAL[v.tipo] || ''} <span class="vl-pill ${v.estado === 'aprobada' ? 'ok' : 'pr'}">${v.estado === 'aprobada' ? '✔ Aprobada' : '◔ Propuesta'}</span></h2><div class="vld-docper">${esc(valDetPeriodoTxt(v))}</div></div>`;
+  if (rows === undefined || rows === null) return `<div class="vl-card vld-card">${cerrar}${titulo}${controles}<div class="rg-msg">Cargando${valDetFiltro.modo === 'completo' ? ' todas las partidas del contrato' : ''}…</div></div>`;
+  if (rows === 'error') return `<div class="vl-card vld-card">${cerrar}${titulo}${controles}<div class="rg-msg">No se pudo cargar. Falta correr <b>valorizacion_partida_detalle.sql</b> en la base.</div></div>`;
+  const conProp = INCLUIR_PROP;
+  const proyectos = RES_A ? RES_A.proyectos : [];
+  const list = valDetProcesarFilas(rows, conProp);
+  // subtotales de grupo/frente: siempre a partir de la valorización COMPLETA, aunque se esté listando «Solo este mes»
+  let listAgg = null;
+  if (c.completo && c.completo !== 'error') listAgg = valDetProcesarFilas(c.completo, conProp);
+  else valDetCargar(valDetId, 'completo');   // aún no está: se pide aparte y al llegar se vuelve a pintar sola
+  const cuerpo = valDetCuerpoTabla(list, proyectos, valDetFiltro.frente, valDetFiltro.modo, listAgg);
+  const resumen = valDetResumenHTML(v, conProp, PRESU_CD_CACHE[v.tipo]);
+  return `<div class="vl-card vld-card">${cerrar}${titulo}
+    <p class="hint">Metrado y monto ejecutado (${conProp ? 'aprobado + propuesta' : 'solo aprobado'}), con la jerarquía y el orden del cronograma. ${valDetFiltro.modo === 'completo' ? 'Todas las partidas del contrato.' : 'Solo lo ejecutado este mes.'}</p>
+    ${controles}
+    <div class="vld-tw2"><table class="oc-tb vld-oc vld-navy">${valDetTablaCol}${valDetTablaCab}<tbody>${cuerpo}</tbody></table></div>
+    ${valDetLeyenda}
+    ${resumen}
+  </div>`;
+}
+// versión imprimible: siempre la valorización completa (todas las partidas, todos los frentes), con el título oficial y firmas al pie
+async function valDetImprimir() {
+  if (!valDetId) return;
+  const v = VAL.vals.find(x => x.id === valDetId); if (!v) return;
+  const modo = valDetFiltro.modo, frenteId = valDetFiltro.frente;   // imprime lo mismo que se está viendo en pantalla (el filtro de frente y el modo)
+  await Promise.all([valDetCargar(valDetId, modo), valDetCargar(valDetId, 'completo')]);   // «completo» también, para que los subtotales de grupo/frente salgan completos
+  const c = valDetCache[valDetId] || {};
+  if (c[modo] === 'error') { toast('No se pudo cargar la valorización.', false); return; }
+  if (c[modo] == null) { toast('Espera a que termine de cargar…', false); return; }
+  const conProp = INCLUIR_PROP, proyectos = RES_A ? RES_A.proyectos : [];
+  const list = valDetProcesarFilas(c[modo], conProp);
+  const listAgg = (c.completo && c.completo !== 'error') ? valDetProcesarFilas(c.completo, conProp) : null;
+  const cuerpo = valDetCuerpoTabla(list, proyectos, frenteId, modo, listAgg);
+  const resumen = valDetResumenHTML(v, conProp, PRESU_CD_CACHE[v.tipo]);
+  const obraNombre = RES_A && RES_A.obra ? RES_A.obra.nombre : tx0('#obraNombre');
+  const obraSub = RES_A && RES_A.obra ? [RES_A.obra.entidad, RES_A.obra.cliente].filter(Boolean).join(' · ') : '';
+  const nomFrente = frenteId ? (proyectos.find(p => p.id === frenteId) || {}).nombre : '';
+  const alcanceTxt = [frenteId ? String(nomFrente || '').replace(/^Puente\s+/i, '') : 'Total obra', modo === 'mes' ? 'solo lo ejecutado este mes' : 'todas las partidas del contrato'].join(' · ');
+  // el título va DENTRO del <thead> (como una fila más, con colspan) para que se repita en cada hoja impresa junto con la cabecera de columnas
+  const tituloRow = `<tr class="vld-doctit-row"><th colspan="17"><div class="vld-doctit"><div class="vld-docob"><b>${esc(obraNombre)}</b>${obraSub ? ` · ${esc(obraSub)}` : ''}</div>
+      <h2>VALORIZACIÓN N° ${String(v.numero).padStart(3, '0')} - ${ABREV_VAL[v.tipo] || ''}</h2>
+      <div class="vld-docper">${esc(valDetPeriodoTxt(v))}</div><div class="vld-docalc">${esc(alcanceTxt)}</div></div></th></tr>`;
+  const cabConTitulo = valDetTablaCab.replace('<thead>', '<thead>' + tituloRow);
+  const html = `<div class="inf-hoja vld-hoja">
+    <div><table class="oc-tb vld-oc vld-navy" style="min-width:0;width:100%;">${valDetTablaCol}${cabConTitulo}<tbody>${cuerpo}</tbody><tfoot><tr><td colspan="17" style="height:25mm;padding:0;border:0;border-top:2px solid #1e3a5f;background:transparent;"></td></tr></tfoot></table></div>
+    ${valDetLeyenda}
+    ${resumen}
+    <div class="inf-pie" style="margin-top:18px"><span>Sin IGV · lo aprobado es lo oficial${v.estado !== 'aprobada' ? ' (esta valorización aún está en propuesta)' : ''}. Generado por el Panel de Control de Obra.</span>
+      <div class="inf-firmas"><span>Elaborado por</span><span>Revisado por</span><span>V°B° Gerencia</span></div></div>
+  </div>`;
+  document.querySelector('#informe')?.remove();
+  const ov = document.createElement('div'); ov.id = 'informe'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-label', 'Valorización para imprimir');
+  ov.innerHTML = `<div class="inf-bar"><b>Valorización N° ${v.numero} · A3 horizontal</b><span>En la ventana de impresión elige «Guardar como PDF», tamaño A3, horizontal y márgenes «Ninguno».</span><button type="button" class="pri" id="infImprimir">🖨 Imprimir / Guardar PDF</button><button type="button" id="infCerrar">Cerrar</button></div><div class="inf-scroll">${html}</div>`;
+  document.body.appendChild(ov); document.body.classList.add('inf-abierto'); infZoom();
+  ov.querySelector('#infCerrar').addEventListener('click', cerrarInforme);
+  ov.querySelector('#infImprimir').addEventListener('click', () => { infTituloPrevio = document.title; document.title = `Valorizacion N${v.numero} - ${esc(obraNombre)}`; window.print(); });
+}
+document.addEventListener('click', (e) => { const b = e.target.closest('[data-valdet]'); if (b) valDetAbrir(b.dataset.valdet); });
+document.addEventListener('click', (e) => {
+  const m = e.target.closest('[data-valdmodo]'); if (!m || !valDetId) return;
+  valDetFiltro.modo = m.dataset.valdmodo; valDetPintar(); valDetCargar(valDetId, valDetFiltro.modo);
+});
+document.addEventListener('click', (e) => { if (e.target.closest('#vldImprimir')) valDetImprimir(); });
+document.addEventListener('change', (e) => {
+  if (e.target.id !== 'vldFrenteSel' || !valDetId) return;
+  valDetFiltro.frente = e.target.value; valDetPintar();
+});
 document.addEventListener('change', async (e) => {   // editar los gastos generales de una valorización en propuesta
   const inp = e.target.closest('[data-vgg]'); if (!inp) return;
   const pct = parseFloat(String(inp.value).replace(',', '.')); if (!(pct >= 0 && pct <= 60)) { toast('Indica un % entre 0 y 60.', false); valPintar(); return; }
