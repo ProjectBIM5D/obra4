@@ -1578,6 +1578,7 @@ async function getTodo(path) {
 // ── componentes de la obra: NO se hardcodea "4 puentes" — se leen de la base.
 // Una obra futura puede tener otro número de componentes, y de otro tipo
 // (tramo_carretera, edificación, etc.) — ver tabla "obras" y columna proyectos.tipo.
+const ordenFrentes = (a, b) => (a.orden ?? 9999) - (b.orden ?? 9999) || String(a.codigo).localeCompare(String(b.codigo));   // 1 Charanal, 2 Damas, 3 Bocana, 4 Peña…
 let COMPONENTES = [];       // [{id: codigo, nombre, tipo}, ...] de la obra activa
 let OBRA = null;
 const GENERAL = '__general__';
@@ -3078,7 +3079,7 @@ function aplicarResumen(A, B) {   // A = obra, componentes, Curva S y avance · 
   OBRA = A.obra;
   $('#obraNombre').textContent = OBRA.nombre;
   $('#obraSub').textContent = [OBRA.entidad, OBRA.cliente].filter(Boolean).join(' · ') || 'Red Vial Nacional';
-  const proyectos = A.proyectos, version = A.version;
+  const proyectos = A.proyectos.sort(ordenFrentes), version = A.version;   // orden de los cronogramas (columna proyectos.orden)
   COMPONENTES = proyectos.map(p => ({ id: p.codigo, nombre: p.nombre, tipo: p.tipo }));
   const nComp = COMPONENTES.length;
   $('#pageTitle').textContent = `DASHBOARD - CONTROL DE OBRA`;
@@ -3108,13 +3109,13 @@ async function bootResumen() {
     // 1) obra activa + sus componentes + cronograma vigente, en una sola consulta (si esta base aún no tiene el cronograma, se piden por separado)
     let obra, proyectos, version;
     try {
-      const o = (await get('/obras?activo=eq.true&order=creado_en.asc&limit=1&select=*,proyectos(id,codigo,nombre,tipo),cronograma_versiones(id,codigo,nombre,vigente)'))[0];
+      const o = (await get('/obras?activo=eq.true&order=creado_en.asc&limit=1&select=*,proyectos(id,codigo,nombre,tipo,orden),cronograma_versiones(id,codigo,nombre,vigente)'))[0];
       if (!o) throw new Error('No hay ninguna obra registrada en la base de datos (tabla "obras").');
       obra = o; proyectos = o.proyectos || []; version = (o.cronograma_versiones || []).find(v => v.vigente) || null;
     } catch (e1) {
       const obras = await get('/obras?activo=eq.true&order=creado_en.asc&limit=1'); obra = obras[0] || null;
       if (!obra) throw new Error('No hay ninguna obra registrada en la base de datos (tabla "obras").');
-      proyectos = await get(`/proyectos?obra_id=eq.${obra.id}&select=id,codigo,nombre,tipo`);
+      proyectos = await get(`/proyectos?obra_id=eq.${obra.id}&select=id,codigo,nombre,tipo,orden`).catch(() => get(`/proyectos?obra_id=eq.${obra.id}&select=id,codigo,nombre,tipo`));
       version = (await opcional(get(`/cronograma_versiones?obra_id=eq.${obra.id}&vigente=eq.true&select=id,codigo,nombre`)))[0] || null;
     }
     const idList = proyectos.map(p => p.id).join(',');
@@ -3264,7 +3265,7 @@ function pintarTablaMateriales() {
       .reduce((s, a) => s + (Number(a.ejecutado_parcial) || 0), 0);
     filas.push({ p, m, tot: Number(t.cantidad_total) || 0, ej, demo: String(t.fuente || '').startsWith('demo'), val: t.fuente === 'valorizado' });
   }
-  filas.sort((a, b) => a.p.nombre.localeCompare(b.p.nombre) || a.m.nombre.localeCompare(b.m.nombre));
+  filas.sort((a, b) => ordenFrentes(a.p, b.p) || a.m.nombre.localeCompare(b.m.nombre));
   $('#matTbody').innerHTML = filas.map(f => `<tr>
       <td>${esc(f.p.nombre)}</td><td>${esc(f.m.nombre)}</td>
       <td class="mono">${fmtCant(f.tot)} ${esc(f.m.unidad)}</td><td class="mono">${fmtCant(f.ej)}</td>
