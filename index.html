@@ -755,9 +755,19 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .vl-tb{width:100%;min-width:900px;border-collapse:collapse;font-size:12px;}
 .vl-tb th,.vl-tb td{padding:8px 10px;border-top:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
 .vl-tb thead th{border-top:0;background:#17335a;color:#fff;font-size:11px;font-weight:800;letter-spacing:.3px;text-align:center;}
-.vl-tb th:first-child,.vl-tb td:first-child{text-align:center;font-weight:800;} .vl-tb td.l{text-align:left;}
+.vl-tb th:first-child,.vl-tb td:first-child{text-align:center;font-weight:800;width:44px;} .vl-tb td.l{text-align:left;}
+.vl-tb th:nth-child(2),.vl-tb td:nth-child(2){width:150px;}
 .vl-tb tbody tr:hover td{background:var(--input);}
 .vl-tb tr.prop td{background:#f59e0b12;} .vl-tb tr.tot td{border-top:2px solid var(--line2);background:var(--input);font-weight:800;}
+/* congela N° y Periodo (con línea divisoria) al desplazar la tabla horizontalmente en pantallas angostas */
+.vl-tb th:first-child,.vl-tb td:first-child,.vl-tb th:nth-child(2),.vl-tb td:nth-child(2){position:sticky;z-index:2;background:var(--card);}
+.vl-tb th:first-child,.vl-tb td:first-child{left:0;}
+.vl-tb th:nth-child(2),.vl-tb td:nth-child(2){left:44px;border-right:2px solid var(--line2);}
+.vl-tb thead th:first-child,.vl-tb thead th:nth-child(2){background:#17335a;z-index:3;}
+.vl-tb tbody tr:hover td:first-child,.vl-tb tbody tr:hover td:nth-child(2){background:var(--input);}
+.vl-tb tr.prop td:first-child,.vl-tb tr.prop td:nth-child(2){background:#fdf0da;}
+:root[data-theme="dark"] .vl-tb tr.prop td:first-child,:root[data-theme="dark"] .vl-tb tr.prop td:nth-child(2){background:#3a2f1a;}
+.vl-tb tr.tot td:first-child,.vl-tb tr.tot td:nth-child(2){background:var(--input);}
 .vl-gg{width:78px;font:inherit;font-size:11.5px;padding:3px 5px;border:1px solid var(--line2);border-radius:6px;background:var(--input);color:var(--tx);text-align:right;} .vl-alerta{color:#d97706;font-weight:800;cursor:help;}
 .oc-tb{width:100%;min-width:1180px;border-collapse:collapse;font-size:12px;}
 .oc-tb th,.oc-tb td{padding:6px 9px;border:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
@@ -775,6 +785,7 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .vld-ver{font:inherit;font-size:10.5px;font-weight:700;color:var(--blue);background:transparent;border:0;padding:2px 0 0;cursor:pointer;}
 .vld-ver:hover{text-decoration:underline;}
 .vl-tb tr.sel td{background:var(--ic-blue-bg,#eaf1ff);}
+.vl-tb tr.sel td:first-child,.vl-tb tr.sel td:nth-child(2){background:var(--ic-blue-bg,#eaf1ff);}
 .vld-card{position:relative;animation:admIn .15s ease;}
 .vld-x{position:absolute;top:14px;right:16px;border:0;background:transparent;color:var(--mut);font-size:15px;cursor:pointer;padding:3px 8px;border-radius:6px;}
 .vld-x:hover{background:var(--input);color:var(--tx);}
@@ -789,7 +800,7 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .vld-sel2{font:inherit;font-size:12px;font-weight:700;padding:6px 10px;border:1px solid var(--line2);border-radius:8px;background:var(--card);color:var(--tx);}
 /* tabla jerárquica de la valorización: mismo esqueleto que «Curva S oficial» (.oc-tb), con colores navy (más «documento oficial») y encabezado fijo */
 .vld-tw2{overflow:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:10px;max-height:600px;}
-.vld-oc{min-width:1560px;table-layout:fixed;}
+.vld-oc{min-width:1560px;width:1560px;table-layout:fixed;}
 .vld-oc thead th{font-size:9px;padding:5px 3px;line-height:1.15;white-space:normal;}
 /* el título va DENTRO del <thead> (se repite en cada hoja impresa): el espacio de arriba se le da A ÉL, nunca a .vld-hoja
    (un padding-top en .vld-hoja solo aparecería en la 1ª hoja, porque el padding del contenedor no se repite al paginar) */
@@ -797,6 +808,21 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .vld-tw2 .oc-tb thead{position:sticky;top:0;z-index:2;}
 .vld-navy th.h0,.vld-navy th.h1{background:#17335a;color:#fff;}
 .vld-navy th.h2{background:#24487a;color:#fff;}
+/* congela PART/DESCRIPCIÓN/UND (con línea divisoria) al desplazar la tabla de valorización; el desplazamiento empieza en METRADO */
+.vld-tw2 .oc-tb thead th.h0{position:sticky;z-index:3;}
+.vld-tw2 .oc-tb thead th.h0:nth-child(1),.vld-tw2 .oc-tb tbody td:nth-child(1){left:0;}
+.vld-tw2 .oc-tb thead th.h0:nth-child(2),.vld-tw2 .oc-tb tbody td:nth-child(2){left:65px;}
+.vld-tw2 .oc-tb thead th.h0:nth-child(3),.vld-tw2 .oc-tb tbody td:nth-child(3){left:338px;border-right:2px solid var(--line2);}
+.vld-tw2 .oc-tb tbody td:nth-child(-n+3){position:sticky;z-index:1;background:var(--card);}
+.vld-tw2 .oc-tb tr.pt:hover td:nth-child(-n+3){background:var(--input);}
+.vld-tw2 .oc-tb tr.fr td:nth-child(-n+3){background:#1e3a5f;}
+:root[data-theme="dark"] .vld-tw2 .oc-tb tr.fr td:nth-child(-n+3){background:#0f1f33;}
+.vld-tw2 .oc-tb tr.gp2 td:nth-child(-n+3){background:#dbe6f4;}
+.vld-tw2 .oc-tb tr.gp3 td:nth-child(-n+3){background:#eaf1fa;}
+.vld-tw2 .oc-tb tr.gp4 td:nth-child(-n+3){background:#f4f8fc;}
+:root[data-theme="dark"] .vld-tw2 .oc-tb tr.gp2 td:nth-child(-n+3){background:#1e2c45;}
+:root[data-theme="dark"] .vld-tw2 .oc-tb tr.gp3 td:nth-child(-n+3){background:#26364f;}
+:root[data-theme="dark"] .vld-tw2 .oc-tb tr.gp4 td:nth-child(-n+3){background:#2c3c56;}
 .btn-imp{margin-left:auto;font:inherit;font-size:12px;font-weight:700;padding:6px 13px;border-radius:8px;border:1px solid var(--blue);background:var(--blue);color:#fff;cursor:pointer;}
 .btn-imp:hover{filter:brightness(1.08);}
 /* título del documento (pantalla e impresión): igual estilo que el encabezado del Excel */
@@ -830,7 +856,9 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .vld-resumen{margin-top:16px;padding-top:12px;border-top:1px dashed var(--line2);}
 .vld-resumen h4{margin:0 0 8px;font-size:12.5px;}
 .vld-pend{color:var(--rg-am,#a85a08);font-weight:700;}
-.vld-sum{width:100%;max-width:1080px;border-collapse:collapse;font-size:11.5px;margin-top:8px;table-layout:fixed;}
+.vld-sumw{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+@media print{.vld-sumw{overflow:visible;}}
+.vld-sum{width:100%;min-width:720px;max-width:1080px;border-collapse:collapse;font-size:11.5px;margin-top:8px;table-layout:fixed;}
 .vld-sum th,.vld-sum td{padding:7px 8px;border-top:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums;}
 .vld-sum th.l,.vld-sum td.l{text-align:left;}
 .vld-sum th.sep,.vld-sum td.sep{border-left:3px double var(--line2);}
@@ -3320,7 +3348,7 @@ function valDetResumenHTML(v, conProp, presuCD) {
       <td>${sub ? `<b>${N0(acum)}</b>` : N0(acum)}</td><td>${PCT(acum, pres)}</td>
       <td class="f">${pres == null ? '—' : N0(saldo)}</td><td class="f">${PCT(saldo, pres)}</td></tr>`; };
   return `<div class="vld-resumen"><h4>Presupuesto, costo directo, gastos generales y utilidad — toda la valorización</h4>
-    <table class="vld-sum"><thead>
+    <div class="vld-sumw"><table class="vld-sum"><thead>
       <tr><th class="l" rowspan="2">Concepto</th><th rowspan="2">Presupuesto<br>actualizado</th>
         <th class="sep" colspan="2">Anterior</th><th class="sep hl" colspan="2">Actual · Val. N°${v.numero}</th><th class="sep" colspan="2">Acumulado</th><th class="sep" colspan="2">Saldo</th></tr>
       <tr><th class="sep">Monto</th><th>%</th><th class="sep hl">Monto</th><th class="hl">%</th><th class="sep">Monto</th><th>%</th><th class="sep">Monto</th><th>%</th></tr>
@@ -3338,17 +3366,17 @@ function valDetResumenHTML(v, conProp, presuCD) {
         <td>${N0(utAcum)}<br><small>${(utPct * 100).toFixed(2)}%</small></td><td>${presu ? PCT(utAcum, presu.ut) : '—'}</td>
         <td class="f">${presu ? N0(Math.max(0, presu.ut - utAcum)) : '—'}</td><td class="f">${presu ? PCT(Math.max(0, presu.ut - utAcum), presu.ut) : '—'}</td></tr>
       ${fila('SUBTOTAL (sin IGV)', presu && presu.sub, T.antS, T.actS, T.acumS, true)}
-    </tbody></table>
+    </tbody></table></div>
     <p class="hint">El % de cada columna es sobre el presupuesto de esa fila. Utilidad: tasa fija del contrato. Gastos generales: el % editable de cada valorización (en «Anterior»/«Acumulado» es el % real de cada una de las valorizaciones anteriores, no un promedio). Presupuesto de gastos generales y utilidad: estimado con el % de esta valorización sobre el presupuesto total.</p></div>`;
 }
 // mismas columnas que la hoja «09. Val N°xx» del Excel: presupuesto actualizado, y luego anterior/actual/acumulado/saldo
 // (cada uno en costo directo: metrado, parcial S/. y % del presupuesto — anterior sin %, como en el Excel)
-const valDetTablaCol = `<colgroup><col style="width:3.8%"><col style="width:16%"><col style="width:2.8%">
-  <col style="width:4.6%"><col style="width:4.3%"><col style="width:6.4%">
-  <col style="width:4.6%"><col style="width:6.4%">
-  <col style="width:4.6%"><col style="width:6.2%"><col style="width:3.2%">
-  <col style="width:4.6%"><col style="width:6.2%"><col style="width:3.2%">
-  <col style="width:4.6%"><col style="width:6%"><col style="width:4%"></colgroup>`;
+const valDetTablaCol = `<colgroup><col style="width:65px"><col style="width:273px"><col style="width:48px">
+  <col style="width:78px"><col style="width:73px"><col style="width:109px">
+  <col style="width:78px"><col style="width:109px">
+  <col style="width:78px"><col style="width:106px"><col style="width:55px">
+  <col style="width:78px"><col style="width:106px"><col style="width:55px">
+  <col style="width:78px"><col style="width:102px"><col style="width:69px"></colgroup>`;
 const valDetTablaCab = `<thead>
       <tr><th class="h0" rowspan="2">PART.</th><th class="h0 l" rowspan="2">DESCRIPCIÓN</th><th class="h0" rowspan="2">UND</th>
         <th class="h1 sep" colspan="3">PRESUPUESTO ACTUALIZADO</th>
