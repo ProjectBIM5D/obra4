@@ -2702,7 +2702,8 @@ function renderReporteGrupos(periodo) {
   if (GRUPOS === null) { box.innerHTML = '<div class="rg-msg">Cargando el reporte por componente…</div>'; nota.textContent = ''; return; }
   if (GRUPOS === 'falta') { box.innerHTML = '<div class="rg-msg">Este reporte necesita la vista <b>v_reporte_grupo_mes</b>. Pide al administrador que corra <b>reporte_grupos.sql</b> en la base.</div>'; nota.textContent = ''; return; }
   const d = periodo ? new Date(periodo) : null, corte = d ? `Corte: ${MESES_ES[d.getUTCMonth()]} ${d.getUTCFullYear()}` : 'Al corte';
-  const todas = (DATA.curvaMensual || []).filter(enAlcance);
+  const enContrato = (r) => (r.concepto || 'contrato') === 'contrato';   // este reporte es siempre del contrato principal, sin importar el alcance elegido arriba
+  const todas = (DATA.curvaMensual || []).filter(enContrato);
   const comps = COMPONENTES.filter(c => seleccionada === GENERAL || c.id === seleccionada);
   if (!comps.length) { box.innerHTML = '<div class="rg-msg">No hay frentes de trabajo en esta obra.</div>'; return; }
   const pid = Object.fromEntries(DATA.proyectos.map(p => [p.codigo, p.id]));
@@ -2711,7 +2712,7 @@ function renderReporteGrupos(periodo) {
   const corto = (c) => String(c.nombre).replace(/^Puente\s+/i, '');
   const info = comps.map(c => {
     const gr = {};
-    (GRUPOS || []).filter(r => r.proyecto_id === pid[c.id] && enAlcance(r)).forEach(r => {
+    (GRUPOS || []).filter(r => r.proyecto_id === pid[c.id] && enContrato(r)).forEach(r => {
       const clave = (r.concepto === 'adicional' ? 'A|' : 'C|') + (r.grupo_nombre || r.grupo_codigo);
       const g = gr[clave] || (gr[clave] = { clave, cod: r.grupo_codigo, nom: (r.concepto === 'adicional' ? 'Adicional · ' : '') + rgNombre(r.grupo_nombre || r.grupo_codigo), adic: r.concepto === 'adicional', pres: 0, prog: 0, ejec: 0 });
       const p = Number(r.programado) || 0, e = (Number(r.ejecutado) || 0) + (INCLUIR_PROP ? Number(r.ejecutado_propuesta) || 0 : 0);   // valorizaciones aprobadas (+ propuestas si se incluyen)
@@ -2844,7 +2845,7 @@ function renderReporteGrupos(periodo) {
   const tarjetas = `<div class="rg-cards">${card1}${card2}${card3}</div>`;
   const nComp = info.length;
   box.innerHTML = `<div class="rg-card">
-    <div class="rg-band"><div><h3>Avance por componente — ${nComp} frente${nComp === 1 ? '' : 's'}</h3><p>Comparativo programado vs ejecutado (%) · ${esc(corte)} · ${esc(ALCANCE_TXT[alcance])} · sin IGV</p></div>
+    <div class="rg-band"><div><h3>Avance por componente — ${nComp} frente${nComp === 1 ? '' : 's'}</h3><p>Comparativo programado vs ejecutado (%) · ${esc(corte)} · ${esc(ALCANCE_TXT.contrato)} · sin IGV</p></div>
       <div class="rg-ctl">${opciones}<span class="rg-seg" role="group" aria-label="Tipo de gráfico"><button type="button" data-rgv="radar" class="${usaRadar ? 'on' : ''}">Radar</button><button type="button" data-rgv="barras" class="${usaRadar ? '' : 'on'}">Barras</button></span></div></div>
     <div class="rg-body"><div class="rg-chart"><div class="rg-ct">${esc(tituloG)}</div>${grafico}</div>
       <div class="rg-tabla"><div class="rg-tw"><table class="rg-mx">${cab}<tbody>${cuerpo}${total}</tbody></table></div>
