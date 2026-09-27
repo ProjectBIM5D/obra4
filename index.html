@@ -283,7 +283,8 @@ h1{font-size:19px;margin:0 0 3px;} .sub{color:var(--mut);font-size:13px;margin:0
 .mat-sd-x{position:absolute;top:6px;right:8px;border:0;background:transparent;color:var(--mut);font-size:13px;cursor:pointer;padding:2px 6px;border-radius:6px;} .mat-sd-x:hover{background:var(--input);color:var(--tx);}
 .mat-sdt{font-size:12px;font-weight:800;color:var(--rg-am,#a85a08);margin:0 22px 6px 0;}
 .mat-sd-sc{max-height:236px;overflow:auto;}
-#matSaldo table{width:100%;min-width:0;table-layout:fixed;border-collapse:collapse;font-size:11px;} #matSaldo td,#matSaldo th{white-space:normal;overflow-wrap:anywhere;vertical-align:top;} #matSaldo th:nth-child(1){width:14%} #matSaldo th:nth-child(2){width:33%} #matSaldo th:nth-child(3){width:31%} #matSaldo th:nth-child(4){width:10%} #matSaldo th:nth-child(5){width:12%} #matSaldo th,#matSaldo td{padding:3px 6px;border-top:1px solid var(--line);text-align:left;} #matSaldo th{font-size:10px;color:var(--mut);text-transform:uppercase;border-top:0;position:sticky;top:0;background:var(--card);} #matSaldo td:nth-child(n+4),#matSaldo th:nth-child(n+4){text-align:right;font-variant-numeric:tabular-nums;} #matSaldo td.f{font-weight:800;color:var(--rg-am,#a85a08);}
+#matSaldo table{width:100%;min-width:0;table-layout:fixed;border-collapse:collapse;font-size:11px;} #matSaldo td,#matSaldo th{white-space:normal;overflow-wrap:anywhere;vertical-align:top;} #matSaldo th:nth-child(1){width:14%} #matSaldo th:nth-child(2){width:33%} #matSaldo th:nth-child(3){width:31%} #matSaldo th:nth-child(4){width:10%} #matSaldo th:nth-child(5){width:12%} #matSaldo th,#matSaldo td{padding:3px 6px;border-top:1px solid var(--line);text-align:left;} #matSaldo th{font-size:10px;color:var(--mut);text-transform:uppercase;border-top:0;position:sticky;top:0;background:var(--card);} #matSaldo td:nth-child(n+4),#matSaldo th:nth-child(n+4){text-align:right;font-variant-numeric:tabular-nums;} #matSaldo td.f{font-weight:800;color:var(--rg-am,#a85a08);} #matSaldo td.m{font-weight:800;color:var(--mut);}
+.mat-sdc{display:inline-block;margin-right:8px;padding:1px 8px;border-radius:999px;background:var(--input);color:var(--tx);font-size:10.5px;letter-spacing:.3px;text-transform:uppercase;} .mat-sd-sc>.mat-sdm:first-child{margin-top:0;} .mat-sdsep{margin:14px 0 2px;border-top:2px solid var(--line2);} .mat-sdm{margin-top:12px;color:var(--mut);} .mat-sdm span{font-weight:500;font-size:10.5px;margin-left:4px;} .mat-nt{font-style:normal;font-size:10.5px;color:var(--mut);}
 .mat-li-falta{cursor:pointer;border-radius:6px;} .mat-li-falta:hover{background:var(--input);} .mat-li-falta u{color:var(--blue);font-size:10.5px;text-decoration:none;white-space:nowrap;}
 .mat-alc{font-size:11.5px;font-weight:700;color:var(--tx);text-align:center;margin-bottom:5px;}
 .mat-li{display:flex;align-items:flex-start;gap:6px;font-size:11px;color:var(--tx2);margin:3px 0;line-height:1.3;}
@@ -719,7 +720,7 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .inf-mt td b{display:block;font-size:12.5px;color:#0e7a44;font-variant-numeric:tabular-nums;} .inf-mt td small{display:block;font-size:9.5px;color:var(--mut);font-variant-numeric:tabular-nums;} .inf-mt td small.x{color:#b4322b;font-weight:700;}
 .inf-mt td.s{color:#b45309;font-weight:800;font-size:12.5px;font-variant-numeric:tabular-nums;} .inf-mt tr.tt td{border-top:2px solid var(--line2);background:var(--input);}
 .inf-mt th.g0,.inf-mt td.g0{border-left:1px solid var(--line2);}
-.inf-mb{display:grid;grid-template-columns:78px minmax(0,1fr) 46px;gap:2px 8px;align-items:center;font-size:11px;margin-top:6px;} .inf-mb .n{font-weight:700;} .inf-mb .tr{display:block;height:10px;border-radius:5px;background:#d97706;opacity:.9;overflow:hidden;} .inf-mb .tr i{display:block;height:100%;background:#0e8f4f;border-radius:5px;}
+.inf-mb{display:grid;grid-template-columns:78px minmax(0,1fr) 46px;gap:2px 8px;align-items:center;font-size:11px;margin-top:6px;} .inf-mb .n{font-weight:700;} .inf-mb .tr{display:block;height:10px;border-radius:5px;background:#d97706;opacity:.9;overflow:hidden;} .inf-mb .tr i{display:block;height:100%;background:#0e8f4f;border-radius:5px;} .inf-mb .tr{position:relative;} .inf-mb .tr i.mn{position:absolute;top:0;background:repeating-linear-gradient(45deg,#8592a8 0 3px,#c9d0db 3px 6px);border-radius:0;} .inf-mt td small.mn{color:#64748b;font-weight:700;}
 .inf-mb b{text-align:right;font-variant-numeric:tabular-nums;} .inf-mb em{grid-column:2/4;font-style:normal;font-size:10px;color:var(--mut);margin-top:-1px;margin-bottom:2px;}
 .inf-sub{margin:10px 0 0;font-size:11px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--mut);}
 .inf-pie{flex:none;display:flex;justify-content:space-between;align-items:flex-end;gap:20px;font-size:10.5px;color:var(--mut);}
@@ -2364,7 +2365,7 @@ function reajustarAvance() {   // si Materiales cambió de alto, la gráfica de 
 // derecha columnas apiladas por componente, en cantidades reales (no en %), ligadas al mes
 // elegido en la Curva S. El desplegable lista los materiales que existan en la base.
 let matSel = null; // código del material elegido en el desplegable
-const C_EJEC = '#0e8f4f', C_SALDO = '#d97706';
+const C_EJEC = '#0e8f4f', C_SALDO = '#d97706', C_MENOR = '#8592a8';   // menor metrado: gris (no se va a ejecutar)
 const uniCorta = (u) => u === 'Ton' ? 'tn' : u;
 const fmtCant = (v) => Number(v).toLocaleString('es-PE', { maximumFractionDigits: v >= 100 ? 0 : 1 });
 function nicoMax(v) {
@@ -2384,18 +2385,36 @@ const C_PROG = '#2f6fed', C_RESTO = '#94a3b8';
 // «Dónde falta»: las partidas del material con saldo por ejecutar (meta − valorizado), para ubicar de qué tipo y elemento es lo que falta
 function renderSaldoMaterial(mat, delMat, cumple, filtrado, u) {
   const box = $('#matSaldo'); if (!box) return;
-  box.classList.remove('on'); box.innerHTML = '';
+  box.classList.remove('on'); box.innerHTML = ''; box._modos = null;
   const ids = new Set(DATA.proyectos.filter(pp => seleccionada === GENERAL || pp.codigo === seleccionada).map(pp => pp.id));
   const nom = Object.fromEntries(DATA.proyectos.map(pp => [pp.id, String(pp.nombre).replace(/^Puente\s+/i, '')]));
-  const filas = (DATA.matSaldo || []).filter(r => r.material_id === mat.id && ids.has(r.proyecto_id) && cumple(r))
-    .map(r => ({ ...r, falta: (Number(r.meta) || 0) - (INCLUIR_PROP ? Number(r.ejec_total) : Number(r.ejec_aprobado)) })).filter(r => r.falta > 0.005).sort((a, b) => b.falta - a.falta);
-  const tot = filas.reduce((s, r) => s + r.falta, 0);
-  box.innerHTML = `<button type="button" class="mat-sd-x" data-matsaldo-x aria-label="Cerrar">✕</button><div class="mat-sdt">Dónde falta · ${fmtCant(tot)} ${u} en ${filas.length} partida${filas.length === 1 ? '' : 's'}</div>`
-    + (filas.length ? `<div class="mat-sd-sc"><table><thead><tr><th>Frente</th><th>Partida</th><th>Tipo · elemento</th><th>Meta</th><th>Falta</th></tr></thead><tbody>${filas.map(r => `<tr title="${esc(r.nombre)}"><td>${esc(nom[r.proyecto_id] || '')}</td><td><b>${esc(r.codigo_esp || '')}</b> ${esc(String(r.nombre).toLowerCase().slice(0, 34))}</td><td>${esc(r.subtipo)} · ${esc(r.elemento)}</td><td>${fmtCant(r.meta)}</td><td class="f">${fmtCant(r.falta)}</td></tr>`).join('')}</tbody></table></div>`
-      : '<div class="hint">Sin saldo: todo lo de este material está valorizado.</div>');
+  // por partida: saldo = meta − ejecutado; el menor metrado (previsto u oficial) se descuenta del saldo: no se va a ejecutar
+  const filas = (DATA.matSaldo || []).filter(r => r.material_id === mat.id && ids.has(r.proyecto_id) && enAlcance(r) && cumple(r)).map(r => {
+    const meta = Number(r.meta) || 0, ej = INCLUIR_PROP ? Number(r.ejec_total) : Number(r.ejec_aprobado), saldo = Math.max(0, meta - ej);
+    const menor = Math.min(saldo, Math.max(0, Number(r.menor) || 0));
+    return { ...r, meta, ej, menor, falta: saldo - menor };
+  });
+  const plural = (n) => `${n} partida${n === 1 ? '' : 's'}`;
+  const par = (r) => `<b>${esc(r.codigo_esp || '')}</b> ${esc(String(r.nombre).toLowerCase().slice(0, 34))}`;
+  const tabla = (lista, col, cab) => `<table><thead><tr><th>Frente</th><th>Partida</th><th>Tipo · elemento</th><th>Meta</th><th>${cab}</th></tr></thead><tbody>${lista.map(r => `<tr title="${esc(r.nombre)}"><td>${esc(nom[r.proyecto_id] || '')}</td><td>${par(r)}</td><td>${esc(r.subtipo)} · ${esc(r.elemento)}</td><td>${fmtCant(r.meta)}</td><td class="${col}">${fmtCant(r[col === 'm' ? 'menor' : 'falta'])}</td></tr>`).join('')}</tbody></table>`;
+  // dos listas independientes (falta ejecutar / menor metrado); en cada una, el contrato principal y el adicional nunca se mezclan
+  const lista = (modo, rows, etiqueta) => {
+    const k = modo === 'menor' ? 'menor' : 'falta', col = modo === 'menor' ? 'm' : 'f';
+    const it = rows.filter(r => r[k] > 0.005).sort((a, b) => b[k] - a[k]), tot = it.reduce((s, r) => s + r[k], 0);
+    const pre = etiqueta ? `<span class="mat-sdc">${etiqueta}</span>` : '';
+    return { n: it.length, html: `<div class="mat-sdt${modo === 'menor' ? ' mat-sdm' : ''}">${pre}${modo === 'menor' ? 'Menor metrado' : 'Falta ejecutar'} · ${fmtCant(tot)} ${u} en ${plural(it.length)}${modo === 'menor' ? ' <span>no se va a ejecutar; queda como saldo de la valorización</span>' : ''}</div>`
+      + (it.length ? tabla(it, col, modo === 'menor' ? 'Menor' : 'Falta') : `<div class="hint">${modo === 'menor' ? 'Sin menor metrado registrado.' : 'Sin saldo por ejecutar: todo lo de este material está valorizado.'}</div>`) };
+  };
+  const porConcepto = (c) => filas.filter(r => (r.concepto || 'contrato') === c);
+  const armar = (modo) => alcance === 'todo'
+    ? (() => { const l = [lista(modo, porConcepto('contrato'), 'Contrato principal'), lista(modo, porConcepto('adicional'), 'Adicional')], con = modo === 'menor' ? l.filter(x => x.n) : l; return (con.length ? con : [l[0]]).map(x => x.html).join('<div class="mat-sdsep"></div>'); })()
+    : lista(modo, filas, alcance === 'adicional' ? 'Adicional' : '').html;
+  box._modos = { falta: armar('falta'), menor: armar('menor') };
 }
 function abrirSaldoMaterial(ancla) {
-  const box = $('#matSaldo'); if (!box || !box.innerHTML) return;
+  const box = $('#matSaldo'); if (!box || !box._modos) return;
+  const modo = ancla.dataset.matsaldo === 'menor' ? 'menor' : 'falta';
+  box.innerHTML = `<button type="button" class="mat-sd-x" data-matsaldo-x aria-label="Cerrar">✕</button><div class="mat-sd-sc">${box._modos[modo]}</div>`; box.dataset.modo = modo;
   const card = box.parentElement, rc = card.getBoundingClientRect(), ra = ancla.getBoundingClientRect();
   box.classList.add('on');
   const w = Math.min(box.offsetWidth || 520, rc.width - 16);
@@ -2406,10 +2425,37 @@ function abrirSaldoMaterial(ancla) {
 document.addEventListener('click', (e) => {
   const box = $('#matSaldo'); if (!box) return;
   const a = e.target.closest('[data-matsaldo]');
-  if (a) { box.classList.contains('on') ? box.classList.remove('on') : abrirSaldoMaterial(a); return; }
+  if (a) { const modo = a.dataset.matsaldo === 'menor' ? 'menor' : 'falta'; if (box.classList.contains('on') && box.dataset.modo === modo) box.classList.remove('on'); else abrirSaldoMaterial(a); return; }
   if (e.target.closest('[data-matsaldo-x]') || !e.target.closest('#matSaldo')) box.classList.remove('on');
 });
 document.addEventListener('keydown', (e) => { const box = $('#matSaldo'); if (!box) return; if (e.key === 'Escape') box.classList.remove('on'); if ((e.key === 'Enter' || e.key === ' ') && e.target.closest && e.target.closest('[data-matsaldo]')) { e.preventDefault(); e.target.closest('[data-matsaldo]').click(); } });
+// Cifras de un material en un frente, según el ALCANCE elegido (contrato principal, adicional o ambos):
+//   total = meta de las partidas · prog = programado a la fecha · ejec = ejecutado (valorizaciones) · menor = parte del saldo que no se ejecutará
+function matCifras(proy, mat, cumple, periodo, soloProg) {
+  const dm = (DATA.matPartidas || []).filter(r => r.material_id === mat.id);
+  let total;
+  if (dm.length) {
+    const rs = dm.filter(r => r.proyecto_id === proy.id && enAlcance(r) && cumple(r));
+    if (!rs.length) return { sinDatos: true, sinPartidas: true };
+    total = rs.reduce((s, r) => s + (Number(r.cantidad) || 0), 0);
+  } else {
+    const meta = (DATA.matMetas || []).find(t => t.proyecto_id === proy.id && t.material_id === mat.id);
+    if (!meta) return { sinDatos: true };
+    total = Number(meta.cantidad_total) || 0;
+  }
+  const progMat = DATA.matProg || [], ev = DATA.matEjVal || [];
+  const prog = progMat.length ? progMat.filter(r => r.proyecto_id === proy.id && r.material_id === mat.id && enAlcance(r) && cumple(r) && (!periodo || r.mes <= periodo)).reduce((s, r) => s + (Number(r.cantidad) || 0), 0) : null;
+  // el ejecutado NO se recorta a la meta: si lo ejecutado pasa lo valorizado, se ve como "mayor metrado"
+  const conVal = ev.some(r => r.proyecto_id === proy.id && r.material_id === mat.id);
+  const ejec = soloProg ? null : conVal
+    ? ev.filter(r => r.proyecto_id === proy.id && r.material_id === mat.id && enAlcance(r) && cumple(r) && (r.estado === 'aprobada' || INCLUIR_PROP) && (!periodo || String(r.mes).slice(0, 7) + '-01' <= periodo)).reduce((s, r) => s + (Number(r.cantidad) || 0), 0)
+    : (DATA.matAvance || []).filter(a => a.proyecto_id === proy.id && a.material_id === mat.id && (!periodo || a.periodo <= periodo)).reduce((s, a) => s + (Number(a.ejecutado_parcial) || 0), 0);
+  const saldo = ejec == null ? null : Math.max(0, total - ejec);
+  // menor metrado (previsto u oficial): parte del saldo que no se va a ejecutar; cada partida aporta como máximo su propio saldo
+  const menor = saldo == null ? 0 : Math.min(saldo, (DATA.matSaldo || []).filter(r => r.proyecto_id === proy.id && r.material_id === mat.id && enAlcance(r) && cumple(r))
+    .reduce((s, r) => s + Math.min(Math.max(0, Number(r.menor) || 0), Math.max(0, (Number(r.meta) || 0) - (INCLUIR_PROP ? Number(r.ejec_total) : Number(r.ejec_aprobado)))), 0));
+  return { total, prog, ejec, saldo, menor, falta: saldo == null ? null : Math.max(0, saldo - menor), exceso: ejec == null ? 0 : Math.max(0, ejec - total) };
+}
 function renderMateriales(periodo) {
   const mats = DATA.materiales || [], metas = DATA.matMetas || [], avance = DATA.matAvance || [];
   const partidasMat = DATA.matPartidas || [], progMat = DATA.matProg || [];
@@ -2453,30 +2499,12 @@ function renderMateriales(periodo) {
   const filtroTxt = [matTipo, matElem].filter(Boolean).join(' · ');
   const hayProg = progMat.length > 0;
 
-  // ── por componente: meta, programado a la fecha y (sin filtro) ejecutado acumulado hasta el mes elegido ──
+  // ── por componente: meta, programado a la fecha y ejecutado acumulado hasta el mes elegido (según el alcance elegido arriba) ──
   const filas = COMPONENTES.map(c => {
     const proy = DATA.proyectos.find(x => x.codigo === c.id);
     if (!proy) return { ...c, sinDatos: true };
-    let total;
-    if (filtrado) {
-      const rs = delMat.filter(r => r.proyecto_id === proy.id && cumple(r));
-      if (!rs.length) return { ...c, sinDatos: true, sinPartidas: true };
-      total = rs.reduce((s, r) => s + (Number(r.cantidad) || 0), 0);
-    } else {
-      const meta = metas.find(t => t.proyecto_id === proy.id && t.material_id === mat.id);
-      if (!meta) return { ...c, sinDatos: true };
-      total = Number(meta.cantidad_total) || 0;
-    }
-    const prog = hayProg
-      ? progMat.filter(r => r.proyecto_id === proy.id && r.material_id === mat.id && cumple(r) && (!periodo || r.mes <= periodo))
-               .reduce((s, r) => s + (Number(r.cantidad) || 0), 0)
-      : null;
-    // el ejecutado NO se recorta a la meta: si lo ejecutado pasa lo valorizado, se ve como "mayor metrado"
-    const ejec = soloProg ? null : (filtrado
-      ? (DATA.matEjVal || []).filter(r => r.proyecto_id === proy.id && r.material_id === mat.id && cumple(r) && (r.estado === 'aprobada' || INCLUIR_PROP) && (!periodo || String(r.mes).slice(0, 7) + '-01' <= periodo)).reduce((s, r) => s + (Number(r.cantidad) || 0), 0)
-      : avance.filter(a => a.proyecto_id === proy.id && a.material_id === mat.id && (!periodo || a.periodo <= periodo)).reduce((s, a) => s + (Number(a.ejecutado_parcial) || 0), 0));
-    return { ...c, sinDatos: false, total, prog, ejec,
-             saldo: ejec == null ? null : Math.max(0, total - ejec), exceso: ejec == null ? 0 : Math.max(0, ejec - total) };
+    const k = matCifras(proy, mat, cumple, periodo, soloProg);
+    return k.sinDatos ? { ...c, sinDatos: true, sinPartidas: !!k.sinPartidas } : { ...c, sinDatos: false, ...k };
   });
   const hayEjemplo = !filtrado && [...metas, ...avance].some(r => r.material_id === mat.id && String(r.fuente || '').startsWith('demo'));
   $('#matEjemplo').style.display = hayEjemplo ? '' : 'none';
@@ -2488,6 +2516,8 @@ function renderMateriales(periodo) {
   const tEj = enSel.reduce((s, f) => s + (f.ejec || 0), 0);
   const tPr = hayProg ? enSel.reduce((s, f) => s + (f.prog || 0), 0) : null;
   const tSa = Math.max(0, tTot - tEj);
+  const tMe = enSel.reduce((s, f) => s + (f.menor || 0), 0);      // menor metrado dentro del saldo
+  const tFa = Math.max(0, tSa - tMe);                              // falta ejecutar de verdad
   const tEx = Math.max(0, tEj - tTot);
   const R = 62, SW = 26, C = 2 * Math.PI * R;
   const valorAnillo = soloProg ? (tPr || 0) : tEj;                 // lo que llena el anillo
@@ -2499,6 +2529,7 @@ function renderMateriales(periodo) {
     ? `<div class="mat-globo">⚠ Mayor metrado<br>+${fmtCant(tEx)} ${u} (+${(tEx / tTot * 100).toFixed(1)}% sobre lo valorizado)</div>` : '';
   $('#matDonut').innerHTML = tTot ? `
     <circle cx="100" cy="100" r="${R}" fill="none" stroke="${colorResto}" stroke-width="${SW}" ${soloProg ? 'opacity=".35"' : ''}/>
+    ${!soloProg && tMe > 0 && tTot ? `<circle cx="100" cy="100" r="${R}" fill="none" stroke="${C_MENOR}" stroke-width="${SW}" stroke-dasharray="${(Math.min(1, tMe / tTot) * C).toFixed(2)} ${(C - Math.min(1, tMe / tTot) * C).toFixed(2)}" transform="rotate(${(-90 + Math.min(1, pct) * 360).toFixed(2)} 100 100)"/>` : ''}
     <circle cx="100" cy="100" r="${R}" fill="none" stroke="${colorLleno}" stroke-width="${SW}"
       stroke-dasharray="${dash.toFixed(2)} ${(C - dash).toFixed(2)}" transform="rotate(-90 100 100)"/>
     <text x="100" y="94" text-anchor="middle" font-size="11" style="fill:var(--mut)">${soloProg ? 'Meta' : filtrado ? 'Meta del filtro' : 'Total'}</text>
@@ -2514,7 +2545,8 @@ function renderMateriales(periodo) {
     // sin filtro (o con filtro y ejecutado real): lo ejecutado y "falta completar" (o "meta superada" si es mayor); más lo programado a la fecha
     const lineaSaldo = tEx > 0.005 * tTot
       ? `<div class="mat-li"><i style="background:#dc2626"></i><span>Meta superada en <b>${fmtCant(tEx)} ${u}</b> (+${(tEx / tTot * 100).toFixed(1)}%)</span></div>`
-      : `<div class="mat-li mat-li-falta" data-matsaldo tabindex="0" role="button" title="Ver en qué partidas falta"><i style="background:${C_SALDO}"></i><span class="mat-falta">Falta completar <b>${fmtCant(tSa)} ${u}</b> (${((1 - Math.min(1, tEj / tTot)) * 100).toFixed(1)}%) <u>ver dónde ▸</u></span></div>`;
+      : `<div class="mat-li mat-li-falta" data-matsaldo="falta" tabindex="0" role="button" title="Ver en qué partidas falta"><i style="background:${C_SALDO}"></i><span class="mat-falta">Falta ejecutar <b>${fmtCant(tFa)} ${u}</b> (${(tFa / tTot * 100).toFixed(1)}%) <u>ver dónde ▸</u></span></div>`
+        + (tMe > 0.005 ? `<div class="mat-li mat-li-falta" data-matsaldo="menor" tabindex="0" role="button" title="Menor metrado: no se va a ejecutar (queda como saldo de la valorización). Ver en qué partidas"><i style="background:${C_MENOR}"></i><span>Menor metrado <b>${fmtCant(tMe)} ${u}</b> (${(tMe / tTot * 100).toFixed(1)}%) <em class="mat-nt">sin ejecutar</em> <u>ver dónde ▸</u></span></div>` : '');
     leg = `<div class="mat-li"><i style="background:${C_EJEC}"></i><span>Ejecutado <b>${fmtCant(tEj)} ${u}</b> (${(tEj / tTot * 100).toFixed(1)}% de la meta)</span></div>${lineaSaldo}${liProg}`;
   } else if (tTot && soloProg) {
     const falta = Math.max(0, tTot - (tPr || 0));
@@ -2530,7 +2562,7 @@ function renderMateriales(periodo) {
   const plotH = H - padT - padB, plotW = W - padL - padR, base = H - padB;
   const top = nicoMax(Math.max(0, ...filas.filter(f => !f.sinDatos).map(f => Math.max(f.total, f.ejec || 0))));
   const yv = v => base - (v / top) * plotH;
-  let s = `<text x="4" y="12" font-size="10" font-weight="600" style="fill:var(--mut)">${esc(mat.unidad)}</text>`;
+  let s = `<defs><pattern id="matHatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="${C_MENOR}" opacity=".18"/><line x1="0" y1="0" x2="0" y2="6" stroke="${C_MENOR}" stroke-width="2.2"/></pattern></defs><text x="4" y="12" font-size="10" font-weight="600" style="fill:var(--mut)">${esc(mat.unidad)}</text>`;
   for (let i = 0; i <= 4; i++) {
     const v = top * i / 4, y = yv(v);
     s += `<line x1="${padL}" y1="${y}" x2="${W - padR}" y2="${y}" stroke="${SVGC.grid}" stroke-width="1"/>
@@ -2559,15 +2591,16 @@ function renderMateriales(periodo) {
       return;
     }
     // sin filtro: verde = ejecutado hasta la meta; ámbar = lo que falta completar; rojo = lo que pasa de la meta
-    const hE = (Math.min(f.ejec, f.total) / top) * plotH, hS = (f.saldo / top) * plotH, hX = (f.exceso / top) * plotH;
+    const hE = (Math.min(f.ejec, f.total) / top) * plotH, hS = (f.falta / top) * plotH, hM = (f.menor / top) * plotH, hX = (f.exceso / top) * plotH;
     s += `<rect x="${x}" y="${base - hE}" width="${bw}" height="${hE}" fill="${C_EJEC}"/>
-      <rect x="${x}" y="${base - hE - hS}" width="${bw}" height="${hS}" fill="${C_SALDO}" rx="2" data-matsaldo style="cursor:pointer"><title>Clic: ver en qué partidas falta</title></rect>
+      <rect x="${x}" y="${base - hE - hS}" width="${bw}" height="${hS}" fill="${C_SALDO}" rx="2" data-matsaldo="falta" style="cursor:pointer"><title>Clic: ver en qué partidas falta</title></rect>
+      ${hM > 0.4 ? `<rect x="${x}" y="${base - hE - hS - hM}" width="${bw}" height="${hM}" fill="url(#matHatch)" stroke="${C_MENOR}" stroke-width="1" rx="2" data-matsaldo="menor" style="cursor:pointer"><title>Menor metrado: ${fmtCant(f.menor)} ${esc(mat.unidad)} (no se va a ejecutar). Clic: ver dónde</title></rect>` : ''}
       <rect x="${x}" y="${yMeta - hX}" width="${bw}" height="${hX}" fill="#dc2626" rx="2"/>${lineaMeta}`
       + rot(hE, base - hE / 2, cx, Math.min(f.ejec, f.total), f.total ? Math.min(f.ejec, f.total) / f.total : 0)
       + (hS >= 27
           ? `<text x="${cx}" y="${base - hE - hS / 2 - 1}" font-size="8" text-anchor="middle" fill="#fff">falta</text>
-             <text x="${cx}" y="${base - hE - hS / 2 + 10}" font-size="9" font-weight="700" text-anchor="middle" fill="#fff">${fmtCant(f.saldo)} ${u}</text>`
-          : (hS >= 13 ? `<text x="${cx}" y="${base - hE - hS / 2 + 3}" font-size="9" font-weight="700" text-anchor="middle" fill="#fff">${fmtCant(f.saldo)}</text>` : ''))
+             <text x="${cx}" y="${base - hE - hS / 2 + 10}" font-size="9" font-weight="700" text-anchor="middle" fill="#fff">${fmtCant(f.falta)} ${u}</text>`
+          : (hS >= 13 ? `<text x="${cx}" y="${base - hE - hS / 2 + 3}" font-size="9" font-weight="700" text-anchor="middle" fill="#fff">${fmtCant(f.falta)}</text>` : ''))
       + (hX >= 13 ? `<text x="${cx}" y="${yMeta - hX / 2 + 3}" font-size="9" font-weight="700" text-anchor="middle" fill="#fff">+${fmtCant(f.exceso)}</text>` : '');
     // marca azul: programado a la fecha (para comparar lo ejecutado contra lo que debía llevarse)
     if (f.prog != null) {
@@ -2594,7 +2627,7 @@ function renderMateriales(periodo) {
   const itMeta = it('transparent', 'Meta (valorizado)', 'border:1px dashed var(--mut)');
   $('#matLegend').innerHTML = soloProg
     ? (hayProg ? it(C_PROG, 'Programado a la fecha') + it(C_RESTO, 'Falta programar', 'opacity:.6') : '') + itMeta
-    : it(C_EJEC, 'Ejecutado') + it(C_SALDO, 'Falta completar') + it('#dc2626', 'Mayor metrado') + itMeta + (hayProg ? it(C_PROG, 'Programado a la fecha') : '');
+    : it(C_EJEC, 'Ejecutado') + it(C_SALDO, 'Falta ejecutar') + (tMe > 0.005 ? it(C_MENOR, 'Menor metrado', 'opacity:.75') : '') + it('#dc2626', 'Mayor metrado') + itMeta + (hayProg ? it(C_PROG, 'Programado a la fecha') : '');
   const sinRegla = (DATA.matSinRegla || []).filter(r => r.material === mat.codigo);
   const codigosSR = [...new Set(sinRegla.map(r => String(r.codigo_esp).split('.')[0]))].join(', ');
   $('#matNota').innerHTML = (soloProg
@@ -3141,12 +3174,15 @@ async function bootResumen() {
       opcional(get(`/v_material_meta?${filtroProy}&select=proyecto_id,material_id,cantidad_total,fuente`)),
       // partidas del valorizado por material (con su tipo y elemento) y su programado mensual: base de los filtros
       opcional(getTodo(`/v_material_partidas?${filtroProy}&select=proyecto_id,material_id,subtipo,elemento,cantidad,concepto&order=codigo`)),
-      opcional(getTodo(`/v_material_programado?${filtroProy}&select=proyecto_id,material_id,subtipo,elemento,mes,cantidad&order=mes,proyecto_id,material_id,subtipo,elemento`)),
+      opcional(getTodo(`/v_material_programado?${filtroProy}&select=proyecto_id,material_id,subtipo,elemento,mes,cantidad,concepto&order=mes,proyecto_id,material_id,subtipo,elemento`)
+        .catch(() => getTodo(`/v_material_programado?${filtroProy}&select=proyecto_id,material_id,subtipo,elemento,mes,cantidad&order=mes,proyecto_id,material_id,subtipo,elemento`))),
       // control: partidas que se llaman como un material pero cuyo código no tiene regla (no cuentan en la meta)
       opcional(getTodo(`/v_material_sin_regla?${filtroProy}&select=material,codigo_esp,nombre,metrado&order=codigo`)),
       // ejecutado de materiales: sale de las VALORIZACIONES (metrado ejecutado × factor del material)
-      opcional(getTodo(`/v_material_saldo_partida?${filtroProy}&select=proyecto_id,material_id,nodo_id,codigo,codigo_esp,nombre,subtipo,elemento,meta,ejec_aprobado,ejec_total&order=codigo,nodo_id`)),
-      opcional(getTodo(`/v_material_ejecutado?${filtroProy}&select=proyecto_id,material_id,subtipo,elemento,mes,estado,cantidad&order=proyecto_id,material_id,mes,estado,subtipo,elemento`)),
+      opcional(getTodo(`/v_material_saldo_partida?${filtroProy}&select=proyecto_id,material_id,nodo_id,codigo,codigo_esp,nombre,subtipo,elemento,meta,ejec_aprobado,ejec_total,menor,concepto&order=codigo,nodo_id`)
+        .catch(() => getTodo(`/v_material_saldo_partida?${filtroProy}&select=proyecto_id,material_id,nodo_id,codigo,codigo_esp,nombre,subtipo,elemento,meta,ejec_aprobado,ejec_total&order=codigo,nodo_id`))),
+      opcional(getTodo(`/v_material_ejecutado?${filtroProy}&select=proyecto_id,material_id,subtipo,elemento,mes,estado,cantidad,concepto&order=proyecto_id,material_id,mes,estado,subtipo,elemento`)
+        .catch(() => getTodo(`/v_material_ejecutado?${filtroProy}&select=proyecto_id,material_id,subtipo,elemento,mes,estado,cantidad&order=proyecto_id,material_id,mes,estado,subtipo,elemento`))),
     ]);
     pB.catch(() => {});   // (cada consulta ya es opcional; esto evita avisos si alguna falla mientras se espera al grupo A)
     const [partidas, avance, programado, curvaMensualRaw, plazoEventos, progRows, plazos, valEj] = await pA;
@@ -3214,7 +3250,8 @@ async function refrescarMateriales() {
     op(get(`/material_metas?${FILTRO_PROY}&select=proyecto_id,material_id,cantidad_total,fuente`)),
     op(get(`/material_avance_mensual?${FILTRO_PROY}&select=proyecto_id,material_id,periodo,ejecutado_parcial,fuente&order=periodo`)),
     op(get(`/v_material_meta?${FILTRO_PROY}&select=proyecto_id,material_id,cantidad_total,fuente`)),
-    op(getTodo(`/v_material_ejecutado?${FILTRO_PROY}&select=proyecto_id,material_id,subtipo,elemento,mes,estado,cantidad&order=proyecto_id,material_id,mes,estado,subtipo,elemento`)),
+    op(getTodo(`/v_material_ejecutado?${FILTRO_PROY}&select=proyecto_id,material_id,subtipo,elemento,mes,estado,cantidad,concepto&order=proyecto_id,material_id,mes,estado,subtipo,elemento`)
+      .catch(() => getTodo(`/v_material_ejecutado?${FILTRO_PROY}&select=proyecto_id,material_id,subtipo,elemento,mes,estado,cantidad&order=proyecto_id,material_id,mes,estado,subtipo,elemento`))),
   ]);
   DATA.materiales = materiales; DATA.matMetas = combinarMetas(metasTabla, metasVal); DATA.matAvanceManual = matAvance; DATA.matEjVal = matEjVal; DATA.matAvance = armarMatAvance(matAvance, matEjVal);
   renderMateriales(curvaPopupFijo);
@@ -4442,27 +4479,28 @@ function infSvg(sel) {      // copia de un SVG con sus id renombrados (los origi
   ids.forEach(id => { h = h.split(`id="${id}"`).join(`id="inf-${id}"`).split(`url(#${id})`).join(`url(#inf-${id})`).split(`href="#${id}"`).join(`href="#inf-${id}"`); });
   return h.replace(/^<svg /, '<svg preserveAspectRatio="xMidYMid meet" ');
 }
-function infMateriales(periodo, comps) {   // tabla por puente: ejecutado y saldo de cada material (todos los materiales, sin los filtros de la tarjeta)
-  const mats = DATA.materiales || [], metas = DATA.matMetas || [], avance = DATA.matAvance || [];
+function infMateriales(periodo, comps) {   // tabla por puente: ejecutado, falta y menor metrado de cada material (todos los materiales, sin los filtros de la tarjeta)
+  const mats = DATA.materiales || [], metas = DATA.matMetas || [];
   const ms = mats.filter(m => metas.some(t => t.material_id === m.id));
   if (!ms.length) return '<p>Todavía no hay materiales configurados.</p>';
+  const todo = () => true;
   const filas = comps.map(c => {
     const proy = DATA.proyectos.find(x => x.codigo === c.id), col = RG_COLORES[Math.max(0, COMPONENTES.findIndex(q => q.id === c.id)) % RG_COLORES.length];
     return { c, col, celdas: ms.map(m => {
-      const meta = proy && metas.find(t => t.proyecto_id === proy.id && t.material_id === m.id); if (!meta) return null;
-      const total = Number(meta.cantidad_total) || 0, ejec = avance.filter(a => a.proyecto_id === proy.id && a.material_id === m.id && (!periodo || a.periodo <= periodo)).reduce((s, a) => s + (Number(a.ejecutado_parcial) || 0), 0);
-      return { total, ejec };
+      const k = proy ? matCifras(proy, m, todo, periodo, false) : { sinDatos: true}; if (k.sinDatos) return null;
+      return { total: k.total, ejec: k.ejec, menor: k.menor, falta: k.falta };
     }) };
   });
-  const tot = ms.map((m, j) => filas.reduce((s, f) => f.celdas[j] ? { total: s.total + f.celdas[j].total, ejec: s.ejec + f.celdas[j].ejec } : s, { total: 0, ejec: 0 }));
-  const celda = (x, g0) => !x ? `<td class="${g0 ? 'g0' : ''}">—</td><td class="s">—</td>` : `<td class="${g0 ? 'g0' : ''}"><b>${fmtCant(x.ejec)}</b><small>${x.total ? (x.ejec / x.total * 100).toFixed(0) : 0}% de ${fmtCant(x.total)}</small></td><td class="s">${fmtCant(Math.max(0, x.total - x.ejec))}${x.ejec - x.total > 0.005 * x.total ? `<small class="x">+${fmtCant(x.ejec - x.total)} mayor metrado</small>` : ''}</td>`;
+  const tot = ms.map((m, j) => filas.reduce((s, f) => f.celdas[j] ? { total: s.total + f.celdas[j].total, ejec: s.ejec + f.celdas[j].ejec, menor: s.menor + f.celdas[j].menor, falta: s.falta + f.celdas[j].falta } : s, { total: 0, ejec: 0, menor: 0, falta: 0 }));
+  const celda = (x, g0) => !x ? `<td class="${g0 ? 'g0' : ''}">—</td><td class="s">—</td>` : `<td class="${g0 ? 'g0' : ''}"><b>${fmtCant(x.ejec)}</b><small>${x.total ? (x.ejec / x.total * 100).toFixed(0) : 0}% de ${fmtCant(x.total)}</small></td><td class="s">${fmtCant(x.falta)}${x.ejec - x.total > 0.005 * x.total ? `<small class="x">+${fmtCant(x.ejec - x.total)} mayor metrado</small>` : ''}</td>`;
   const multi = filas.length > 1;
-  const cab = `<thead><tr><th rowspan="2" class="pu">Frente</th>${ms.map(m => `<th colspan="2" class="g0">${esc(m.nombre)}<small>(${esc(uniCorta(m.unidad))})</small></th>`).join('')}</tr><tr>${ms.map(() => '<th class="g0">Ejecutado</th><th>Saldo</th>').join('')}</tr></thead>`;
+  const cab = `<thead><tr><th rowspan="2" class="pu">Frente</th>${ms.map(m => `<th colspan="2" class="g0">${esc(m.nombre)}<small>(${esc(uniCorta(m.unidad))})</small></th>`).join('')}</tr><tr>${ms.map(() => '<th class="g0">Ejecutado</th><th>Falta</th>').join('')}</tr></thead>`;
   const cuerpo = filas.map(f => `<tr><td class="pu"><i style="background:${f.col}"></i>${esc(String(f.c.nombre).replace(/^Puente\s+/i, ''))}</td>${f.celdas.map((x, j) => celda(x, true)).join('')}</tr>`).join('');
   const total = multi ? `<tr class="tt"><td class="pu">Total obra</td>${tot.map(x => celda(x, true)).join('')}</tr>` : '';
-  const barras = ms.map((m, j) => { const x = tot[j], p = x.total ? Math.min(100, x.ejec / x.total * 100) : 0; return `<div class="inf-mb"><span class="n">${esc(m.nombre)}</span><span class="tr"><i style="width:${p.toFixed(1)}%"></i></span><b>${x.total ? (x.ejec / x.total * 100).toFixed(1) : '0.0'}%</b><em>Ejecutado ${fmtCant(x.ejec)} ${esc(uniCorta(m.unidad))} · saldo ${fmtCant(Math.max(0, x.total - x.ejec))} ${esc(uniCorta(m.unidad))}</em></div>`; }).join('');
-  return `<table class="inf-mt">${cab}<tbody>${cuerpo}${total}</tbody></table><div class="inf-sub">Avance ${multi ? 'total de la obra' : 'del frente'} por material</div>${barras}
-    <div class="legend2" style="margin-top:8px"><span><i style="background:#0e8f4f"></i>Ejecutado</span><span><i style="background:#d97706"></i>Saldo por ejecutar</span><span><i style="background:#dc2626"></i>Mayor metrado (sobre lo valorizado)</span></div>`;
+  const barras = ms.map((m, j) => { const x = tot[j], p = x.total ? Math.min(100, x.ejec / x.total * 100) : 0, pm = x.total ? Math.min(100 - p, x.menor / x.total * 100) : 0; return `<div class="inf-mb"><span class="n">${esc(m.nombre)}</span><span class="tr"><i style="width:${p.toFixed(1)}%"></i>${pm > 0.05 ? `<i class="mn" style="left:${p.toFixed(2)}%;width:${pm.toFixed(2)}%"></i>` : ''}</span><b>${x.total ? (x.ejec / x.total * 100).toFixed(1) : '0.0'}%</b><em>Ejecutado ${fmtCant(x.ejec)} ${esc(uniCorta(m.unidad))} · falta ejecutar ${fmtCant(x.falta)} ${esc(uniCorta(m.unidad))}${x.menor > 0.005 ? ` · menor metrado ${fmtCant(x.menor)} ${esc(uniCorta(m.unidad))}` : ''}</em></div>`; }).join('');
+  const hayMenor = tot.some(x => x.menor > 0.005);
+  return `<table class="inf-mt">${cab}<tbody>${cuerpo}${total}</tbody></table><div class="inf-sub">Avance ${multi ? 'total de la obra' : 'del frente'} por material · ${esc(ALCANCE_TXT[alcance])}</div>${barras}
+    <div class="legend2" style="margin-top:8px"><span><i style="background:#0e8f4f"></i>Ejecutado</span><span><i style="background:#d97706"></i>Falta ejecutar</span>${hayMenor ? `<span><i style="background:${C_MENOR}"></i>Menor metrado (no se ejecutará)</span>` : ''}<span><i style="background:#dc2626"></i>Mayor metrado (sobre lo valorizado)</span></div>`;
 }
 function infHTML() {
   const tx = (s) => (document.querySelector(s) || {}).textContent || '';
