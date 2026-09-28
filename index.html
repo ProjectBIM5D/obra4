@@ -894,7 +894,7 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .vld-mm2{border-collapse:collapse;font-size:12.5px;min-width:280px;}
 .vld-mm2 th,.vld-mm2 td{padding:8px 16px;border-top:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums;}
 .vld-mm2 thead th{border-top:0;background:#17335a;color:#fff;font-size:10.5px;font-weight:800;line-height:1.25;}
-.vld-mm2 tbody td{font-weight:800;font-size:14px;}
+.vld-mm2 tbody td{font-weight:800;font-size:13px;}
 @media (max-width:560px){.vld-chip{padding:5px 10px;}}
 @media (max-width:900px){.vl-kp{grid-template-columns:1fr 1fr;}}
 @media (max-width:560px){.vl-kp{grid-template-columns:1fr;}}
@@ -3417,10 +3417,10 @@ function valDetResumenHTML(v, conProp, presuCD, menorMonto) {
       ${fila('SUBTOTAL (sin IGV)', presu && presu.sub, T.antS, T.actS, T.acumS, true)}
     </tbody></table></div>
     <p class="hint">El % de cada columna es sobre el presupuesto de esa fila. Utilidad: tasa fija del contrato. Gastos generales: el % editable de cada valorización (en «Anterior»/«Acumulado» es el % real de cada una de las valorizaciones anteriores, no un promedio). Presupuesto de gastos generales y utilidad: estimado con el % de esta valorización sobre el presupuesto total.</p>
-    </div><div class="vld-rescol vld-mmres"><h4>Menores metrados<br>toda la valorización</h4>
-      <table class="vld-mm2"><thead><tr><th>Monto (S/.)</th><th>% de incidencia<br>sobre el contrato de obra</th></tr></thead>
-        <tbody><tr><td>${N0(menorMonto || 0)}</td><td>${presu ? PCT(menorMonto || 0, presu.sub) : '—'}</td></tr></tbody></table>
-      <p class="hint">Monto (metrado no ejecutado × precio unitario) que no se va a ejecutar por menor metrado, en toda la obra. El % es sobre el monto total del contrato (costo directo + GG + utilidad, sin IGV).</p>
+    </div><div class="vld-rescol vld-mmres"><h4>Menor metrado acumulado</h4>
+      <table class="vld-mm2"><thead><tr><th>Monto</th><th>% incidencia</th></tr></thead>
+        <tbody><tr><td>${N0((menorMonto || 0) * (1 + ggActPct + utPct))}</td><td>${presu ? PCT((menorMonto || 0) * (1 + ggActPct + utPct), presu.sub) : '—'}</td></tr></tbody></table>
+      <p class="hint">Subtotal (costo directo + GG + utilidad) del metrado que no se ejecutará, en toda la obra. El % es sobre el monto del contrato (subtotal, sin IGV).</p>
     </div></div></div>`;
 }
 // mismas columnas que la hoja «09. Val N°xx» del Excel: presupuesto actualizado, y luego anterior/actual/acumulado/saldo
@@ -3431,6 +3431,17 @@ const valDetTablaCol = `<colgroup><col style="width:65px"><col style="width:273p
   <col style="width:78px"><col style="width:106px"><col style="width:55px">
   <col style="width:78px"><col style="width:106px"><col style="width:55px">
   <col style="width:78px"><col style="width:102px"><col style="width:69px"></colgroup>`;
+// mismo colgroup que arriba pero escalado ×0.9545 (suma 1489px en vez de 1560px): solo para IMPRESIÓN. Descubrimos que
+// table-layout:fixed con columnas de ancho fijo en px no las achica cuando la tabla en sí se declara más angosta que la
+// suma de esas columnas (aunque sí las estira cuando la tabla es más ancha) — así que para que la tabla de impresión
+// respete el margen derecho de la hoja (420mm − 12mm − 12mm = 396mm ≈ 1497px de ancho útil), hay que achicar las
+// columnas del colgroup directamente, no el ancho de la tabla en sí (eso no alcanza, queda pegado al borde).
+const valDetTablaColImpresion = `<colgroup><col style="width:62px"><col style="width:261px"><col style="width:46px">
+  <col style="width:74px"><col style="width:70px"><col style="width:104px">
+  <col style="width:74px"><col style="width:104px">
+  <col style="width:74px"><col style="width:101px"><col style="width:53px">
+  <col style="width:74px"><col style="width:101px"><col style="width:53px">
+  <col style="width:75px"><col style="width:97px"><col style="width:66px"></colgroup>`;
 const valDetTablaCab = `<thead>
       <tr><th class="h0" rowspan="2">PART.</th><th class="h0 l" rowspan="2">DESCRIPCIÓN</th><th class="h0" rowspan="2">UND</th>
         <th class="h1 sep" colspan="3">PRESUPUESTO ACTUALIZADO</th>
@@ -3509,7 +3520,7 @@ async function valDetImprimir() {
       <div class="vld-docper">${esc(valDetPeriodoTxt(v))}</div><div class="vld-docalc">${esc(alcanceTxt)}</div></div></th></tr>`;
   const cabConTitulo = valDetTablaCab.replace('<thead>', '<thead>' + tituloRow);
   const html = `<div class="inf-hoja vld-hoja">
-    <div><table class="oc-tb vld-oc vld-navy" style="min-width:0;width:100%;">${valDetTablaCol}${cabConTitulo}<tbody>${cuerpo}</tbody><tfoot><tr><td colspan="17" style="height:25mm;padding:0;border:0;border-top:2px solid #1e3a5f;background:transparent;"></td></tr></tfoot></table></div>
+    <div><table class="oc-tb vld-oc vld-navy" style="min-width:0;width:1489px;">${valDetTablaColImpresion}${cabConTitulo}<tbody>${cuerpo}</tbody><tfoot><tr><td colspan="17" style="height:25mm;padding:0;border:0;border-top:2px solid #1e3a5f;background:transparent;"></td></tr></tfoot></table></div>
     ${valDetLeyenda}
     ${resumen}
     <div class="inf-pie" style="margin-top:18px"><span>Sin IGV · lo aprobado es lo oficial${v.estado !== 'aprobada' ? ' (esta valorización aún está en propuesta)' : ''}. Generado por el Panel de Control de Obra.</span>
@@ -5137,7 +5148,7 @@ function infAjustar(hoja) {
   if (llenar()) return;
   for (const c of ['inf-c1', 'inf-c2', 'inf-c3', 'inf-c4']) { hoja.classList.add(c); if (llenar()) return; }
 }
-function infZoom() { const ov = document.querySelector('#informe'); if (!ov) return; const w = ov.querySelector('.inf-scroll').clientWidth - 36; ov.style.setProperty('--z', Math.min(1, Math.max(.2, w / 1588)).toFixed(3)); }
+function infZoom() { const ov = document.querySelector('#informe'); if (!ov) return; const w = ov.querySelector('.inf-scroll').clientWidth - 56; ov.style.setProperty('--z', Math.min(1, Math.max(.2, w / 1588)).toFixed(3)); }
 let infTituloPrevio = null;
 async function abrirInforme() {
   if (!DATA) { toast('Espera a que carguen los datos del Resumen.', false); return; }
