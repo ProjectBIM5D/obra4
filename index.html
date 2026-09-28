@@ -679,7 +679,12 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .inf-bar b{flex:1;font-size:14px;min-width:180px;} .inf-bar span{font-size:11.5px;color:#cfdcf0;}
 .inf-bar button{font:inherit;font-size:12.5px;font-weight:700;padding:8px 16px;border-radius:9px;border:1px solid rgba(255,255,255,.35);background:transparent;color:#fff;cursor:pointer;}
 .inf-bar button.pri{background:#fff;color:#17335a;border-color:#fff;} .inf-bar button:hover{filter:brightness(1.1);}
-.inf-scroll{flex:1;overflow:auto;padding:18px;display:flex;justify-content:center;align-items:flex-start;}
+/* overflow-x:hidden (no overflow:auto en los dos ejes): con `zoom` para achicar la hoja, el navegador a veces calcula el
+   ancho de desplazamiento con el tamaño SIN achicar (el real, más ancho), y aparece una barra + una tira angosta con
+   contenido superpuesto/repetido en el borde derecho — un defecto de cómo se calcula el scroll con `zoom`, no del PDF
+   en sí (al imprimir de verdad el zoom vuelve a 1). Como `infZoom()` ya achica la hoja para que quepa a lo ancho,
+   nunca hace falta desplazar horizontalmente — solo verticalmente, en documentos de varias hojas. */
+.inf-scroll{flex:1;overflow-x:hidden;overflow-y:auto;padding:18px;display:flex;justify-content:center;align-items:flex-start;}
 .inf-hoja{flex:none;width:420mm;height:296mm;box-sizing:border-box;padding:8mm 9mm;background:#fff;box-shadow:0 10px 40px rgba(0,0,0,.5);display:flex;flex-direction:column;gap:9px;overflow:hidden;zoom:var(--z,1);font-size:12px;line-height:1.35;}
 .inf-head{flex:none;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:8px 20px;border-radius:10px;background:linear-gradient(135deg,#17335a,#24487a);color:#fff;}
 .inf-head small{display:block;font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:#b9cae6;font-weight:700;} .inf-head h1{margin:1px 0 0;font-size:22px;font-weight:800;color:#fff;letter-spacing:.2px;} .inf-head p{margin:2px 0 0;font-size:12px;color:#cfdcf0;}
@@ -864,7 +869,7 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .vld-resumen{margin-top:16px;padding-top:12px;border-top:1px dashed var(--line2);}
 .vld-resumen h4{margin:0 0 8px;font-size:12.5px;}
 .vld-pend{color:var(--rg-am,#a85a08);font-weight:700;}
-.vld-sumw{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.vld-sumw{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:1080px;}
 @media print{.vld-sumw{overflow:visible;}}
 .vld-sum{width:100%;min-width:720px;max-width:1080px;border-collapse:collapse;font-size:11.5px;margin-top:8px;table-layout:fixed;}
 .vld-sum th,.vld-sum td{padding:7px 8px;border-top:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums;}
@@ -877,6 +882,19 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .vld-sum td.f{color:var(--rg-am,#a85a08);font-weight:700;}
 .vld-sum td.l{width:23%;}
 .vld-sum tr.tt td{border-top:2px solid var(--line2);background:var(--input);font-weight:800;}
+/* «Menores metrados» al costado del cuadro de presupuesto/CD/GG/utilidad (no debajo): usan el espacio en blanco que
+   queda a la derecha en la hoja A3; con flex-wrap, en pantallas angostas donde no entran los dos lado a lado, el
+   segundo cuadro pasa a la línea siguiente (ahí se le agrega una línea arriba en vez de a la izquierda). */
+.vld-resfila{display:flex;flex-wrap:wrap;align-items:flex-start;gap:28px;}
+.vld-rescol{flex:0 0 auto;min-width:0;}
+.vld-resfila>.vld-rescol:first-child{max-width:1080px;}
+.vld-mmres{padding-left:24px;border-left:1px dashed var(--line2);max-width:340px;}
+.vld-mmres h4{margin:0 0 8px;font-size:12.5px;}
+@media (max-width:900px){.vld-mmres{padding-left:0;border-left:0;margin-top:16px;padding-top:12px;border-top:1px dashed var(--line2);}}
+.vld-mm2{border-collapse:collapse;font-size:12.5px;min-width:280px;}
+.vld-mm2 th,.vld-mm2 td{padding:8px 16px;border-top:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums;}
+.vld-mm2 thead th{border-top:0;background:#17335a;color:#fff;font-size:10.5px;font-weight:800;line-height:1.25;}
+.vld-mm2 tbody td{font-weight:800;font-size:14px;}
 @media (max-width:560px){.vld-chip{padding:5px 10px;}}
 @media (max-width:900px){.vl-kp{grid-template-columns:1fr 1fr;}}
 @media (max-width:560px){.vl-kp{grid-template-columns:1fr;}}
@@ -3342,7 +3360,7 @@ function valDetCuerpoTabla(list, proyectos, filtroFrente, modoTxt, listAgg, spli
 // Gastos generales y utilidad van SEPARADOS: la utilidad es la tasa fija del contrato (se obtiene exacta de esta valorización, que
 // tiene su propio % conocido, y se aplica igual en anterior/acumulado porque nunca cambia); los gastos generales sí variaron de una
 // valorización a otra, así que «anterior»/«acumulado» se arman sumando el GG real de CADA valorización anterior con SU PROPIO %.
-function valDetResumenHTML(v, conProp, presuCD) {
+function valDetResumenHTML(v, conProp, presuCD, menorMonto) {
   const N0 = (n) => Number(n || 0).toLocaleString('es-PE', { maximumFractionDigits: 2 });
   const histV = (VAL.ejec || []).filter(x => x.tipo === v.tipo && x.numero <= v.numero && (x.estado === 'aprobada' || conProp));
   const sumaHasta = (numMax, campo) => histV.filter(x => x.numero <= numMax).reduce((s, x) => s + (Number(x[campo]) || 0), 0);
@@ -3377,7 +3395,8 @@ function valDetResumenHTML(v, conProp, presuCD) {
       <td class="hl">${sub ? `<b>${N0(act)}</b>` : N0(act)}</td><td class="hl">${PCT(act, pres)}</td>
       <td>${sub ? `<b>${N0(acum)}</b>` : N0(acum)}</td><td>${PCT(acum, pres)}</td>
       <td class="f">${pres == null ? '—' : N0(saldo)}</td><td class="f">${PCT(saldo, pres)}</td></tr>`; };
-  return `<div class="vld-resumen"><h4>Presupuesto, costo directo, gastos generales y utilidad — toda la valorización</h4>
+  return `<div class="vld-resumen"><div class="vld-resfila"><div class="vld-rescol">
+    <h4>Presupuesto, costo directo, gastos generales y utilidad — toda la valorización</h4>
     <div class="vld-sumw"><table class="vld-sum"><thead>
       <tr><th class="l" rowspan="2">Concepto</th><th rowspan="2">Presupuesto<br>actualizado</th>
         <th class="sep" colspan="2">Anterior</th><th class="sep hl" colspan="2">Actual · Val. N°${v.numero}</th><th class="sep" colspan="2">Acumulado</th><th class="sep" colspan="2">Saldo</th></tr>
@@ -3397,7 +3416,12 @@ function valDetResumenHTML(v, conProp, presuCD) {
         <td class="f">${presu ? N0(Math.max(0, presu.ut - utAcum)) : '—'}</td><td class="f">${presu ? PCT(Math.max(0, presu.ut - utAcum), presu.ut) : '—'}</td></tr>
       ${fila('SUBTOTAL (sin IGV)', presu && presu.sub, T.antS, T.actS, T.acumS, true)}
     </tbody></table></div>
-    <p class="hint">El % de cada columna es sobre el presupuesto de esa fila. Utilidad: tasa fija del contrato. Gastos generales: el % editable de cada valorización (en «Anterior»/«Acumulado» es el % real de cada una de las valorizaciones anteriores, no un promedio). Presupuesto de gastos generales y utilidad: estimado con el % de esta valorización sobre el presupuesto total.</p></div>`;
+    <p class="hint">El % de cada columna es sobre el presupuesto de esa fila. Utilidad: tasa fija del contrato. Gastos generales: el % editable de cada valorización (en «Anterior»/«Acumulado» es el % real de cada una de las valorizaciones anteriores, no un promedio). Presupuesto de gastos generales y utilidad: estimado con el % de esta valorización sobre el presupuesto total.</p>
+    </div><div class="vld-rescol vld-mmres"><h4>Menores metrados<br>toda la valorización</h4>
+      <table class="vld-mm2"><thead><tr><th>Monto (S/.)</th><th>% de incidencia<br>sobre el contrato de obra</th></tr></thead>
+        <tbody><tr><td>${N0(menorMonto || 0)}</td><td>${presu ? PCT(menorMonto || 0, presu.sub) : '—'}</td></tr></tbody></table>
+      <p class="hint">Monto (metrado no ejecutado × precio unitario) que no se va a ejecutar por menor metrado, en toda la obra. El % es sobre el monto total del contrato (costo directo + GG + utilidad, sin IGV).</p>
+    </div></div></div>`;
 }
 // mismas columnas que la hoja «09. Val N°xx» del Excel: presupuesto actualizado, y luego anterior/actual/acumulado/saldo
 // (cada uno en costo directo: metrado, parcial S/. y % del presupuesto — anterior sin %, como en el Excel)
@@ -3443,7 +3467,8 @@ function valDetHTML() {
   if (c.completo && c.completo !== 'error') listAgg = valDetProcesarFilas(c.completo, conProp);
   else valDetCargar(valDetId, 'completo');   // aún no está: se pide aparte y al llegar se vuelve a pintar sola
   const cuerpo = valDetCuerpoTabla(list, proyectos, valDetFiltro.frente, valDetFiltro.modo, listAgg);
-  const resumen = valDetResumenHTML(v, conProp, PRESU_CD_CACHE[v.tipo]);
+  const menorMonto = (listAgg || list).reduce((s, r) => s + (r.menor || 0) * (r.pu || 0), 0);
+  const resumen = valDetResumenHTML(v, conProp, PRESU_CD_CACHE[v.tipo], menorMonto);
   // NOTA (2026-09-27): se probó un panel izquierdo/derecho arrastrable (como Look Ahead) para esta tabla, pero con
   // valorizaciones de 600+ filas el alto de fila entre las dos tablas independientes nunca terminó de cuadrar al
   // 100% (varias causas distintas encontradas y corregidas, pero siempre quedaba un desalineado en algún punto de
@@ -3472,7 +3497,8 @@ async function valDetImprimir() {
   const list = valDetProcesarFilas(c[modo], conProp);
   const listAgg = (c.completo && c.completo !== 'error') ? valDetProcesarFilas(c.completo, conProp) : null;
   const cuerpo = valDetCuerpoTabla(list, proyectos, frenteId, modo, listAgg);
-  const resumen = valDetResumenHTML(v, conProp, PRESU_CD_CACHE[v.tipo]);
+  const menorMonto = (listAgg || list).reduce((s, r) => s + (r.menor || 0) * (r.pu || 0), 0);
+  const resumen = valDetResumenHTML(v, conProp, PRESU_CD_CACHE[v.tipo], menorMonto);
   const obraNombre = RES_A && RES_A.obra ? RES_A.obra.nombre : tx0('#obraNombre');
   const obraSub = RES_A && RES_A.obra ? [RES_A.obra.entidad, RES_A.obra.cliente].filter(Boolean).join(' · ') : '';
   const nomFrente = frenteId ? (proyectos.find(p => p.id === frenteId) || {}).nombre : '';
