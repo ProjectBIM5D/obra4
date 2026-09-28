@@ -757,7 +757,7 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .vl-card h3{margin:0 0 2px;font-size:13.5px;} .vl-card p.hint{margin:0 0 8px;font-size:11.5px;color:var(--mut);}
 .vl-card svg{display:block;width:100%;height:auto;}
 .vl-tw{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:10px;}
-.vl-tb{width:100%;border-collapse:collapse;font-size:12px;}
+.vl-tb{width:100%;border-collapse:collapse;font-size:12px;font-family:'Arial Narrow',Arial,sans-serif;}
 .vl-tb th,.vl-tb td{padding:8px 10px;border-top:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
 .vl-tb thead th{border-top:0;background:#17335a;color:#fff;font-size:11px;font-weight:800;letter-spacing:.3px;text-align:center;}
 .vl-tb td.l{text-align:left;}
@@ -766,8 +766,8 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .vl-tb tbody tr:hover td{background:var(--input);}
 .vl-tb tr.prop td{background:#f59e0b12;} .vl-tb tr.tot td{border-top:2px solid var(--line2);background:var(--input);font-weight:800;}
 .vl-gg{width:78px;font:inherit;font-size:11.5px;padding:3px 5px;border:1px solid var(--line2);border-radius:6px;background:var(--input);color:var(--tx);text-align:right;} .vl-alerta{color:#d97706;font-weight:800;cursor:help;}
-.oc-tb{width:100%;min-width:1180px;border-collapse:collapse;font-size:12px;}
-.oc-tb th,.oc-tb td{padding:6px 9px;border:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
+.oc-tb{width:100%;min-width:1180px;border-collapse:collapse;font-size:12px;font-family:'Arial Narrow',Arial,sans-serif;}
+.oc-tb th,.oc-tb td{padding:3px 9px;border:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
 .oc-tb thead th{text-align:center;font-weight:800;color:#3b2a1d;font-size:11.5px;} .oc-tb .h0{background:#fde9d9;} .oc-tb .h1{background:#f2dcdb;} .oc-tb .h2{background:#f8ecec;}
 .oc-tb td.c{text-align:center;} .oc-tb td.l{text-align:left;} .oc-tb td.sep,.oc-tb th.sep{border-left:3px double var(--line2);}
 .oc-tb tr.ini td,.oc-tb tr.susp td{font-weight:700;} .oc-tb tr.susp td{background:#dbe6f4;color:#1e3a5f;} .oc-tb tr.prop td{background:#f59e0b14;}
@@ -782,7 +782,7 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .vld-ver{font:inherit;font-size:10.5px;font-weight:700;color:var(--blue);background:transparent;border:0;padding:2px 0 0;cursor:pointer;}
 .vld-ver:hover{text-decoration:underline;}
 .vl-tb tr.sel td{background:var(--ic-blue-bg,#eaf1ff);}
-.vld-card{position:relative;animation:admIn .15s ease;}
+.vld-card{position:relative;animation:admIn .15s ease;font-family:'Arial Narrow',Arial,sans-serif;}
 .vld-x{position:absolute;top:14px;right:16px;border:0;background:transparent;color:var(--mut);font-size:15px;cursor:pointer;padding:3px 8px;border-radius:6px;}
 .vld-x:hover{background:var(--input);color:var(--tx);}
 .vld-el{font-size:10px;color:var(--mut);}
@@ -800,7 +800,7 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .vld-oc thead th{font-size:9px;padding:5px 3px;line-height:1.15;white-space:normal;}
 /* el título va DENTRO del <thead> (se repite en cada hoja impresa): el espacio de arriba se le da A ÉL, nunca a .vld-hoja
    (un padding-top en .vld-hoja solo aparecería en la 1ª hoja, porque el padding del contenedor no se repite al paginar) */
-.vld-oc thead tr.vld-doctit-row th{background:transparent;padding:8mm 0 10px;box-shadow:none;}
+.vld-oc thead tr.vld-doctit-row th{background:transparent;padding:20mm 0 10px;box-shadow:none;}
 .vld-tw2 .oc-tb thead{position:sticky;top:0;z-index:2;}
 .vld-navy th.h0,.vld-navy th.h1{background:#17335a;color:#fff;}
 .vld-navy th.h2{background:#24487a;color:#fff;}
@@ -824,8 +824,8 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
    de 600+ filas nunca terminó de cuadrar el alto de fila al 100% entre las dos tablas — ver nota en valDetHTML()). */
 .vld-tw2 .oc-tb thead th.h0{position:sticky;z-index:3;}
 .vld-tw2 .oc-tb thead th.h0:nth-child(1),.vld-tw2 .oc-tb tbody td:nth-child(1){left:0;}
-.vld-tw2 .oc-tb thead th.h0:nth-child(2),.vld-tw2 .oc-tb tbody td:nth-child(2){left:65px;}
-.vld-tw2 .oc-tb thead th.h0:nth-child(3),.vld-tw2 .oc-tb tbody td:nth-child(3){left:338px;border-right:2px solid var(--line2);}
+.vld-tw2 .oc-tb thead th.h0:nth-child(2),.vld-tw2 .oc-tb tbody td:nth-child(2){left:60px;}
+.vld-tw2 .oc-tb thead th.h0:nth-child(3),.vld-tw2 .oc-tb tbody td:nth-child(3){left:395px;border-right:2px solid var(--line2);}
 .vld-tw2 .oc-tb tbody td:nth-child(-n+3){position:sticky;z-index:1;background:var(--card);}
 .vld-tw2 .oc-tb tr.pt:hover td:nth-child(-n+3){background:var(--input);}
 .vld-tw2 .oc-tb tr.fr td:nth-child(-n+3){background:#1e3a5f;}
@@ -844,11 +844,11 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .vld-doctit h2{margin:2px 0;font-size:19px;letter-spacing:.4px;color:var(--tx);}
 .vld-docper{font-size:12px;font-weight:700;color:var(--tx2);letter-spacing:.2px;}
 .vld-docalc{font-size:10.5px;font-weight:400;color:var(--mut);margin-top:2px;text-transform:uppercase;letter-spacing:.3px;}   /* solo informativo: sin negrita, no es parte de la presentación */
-.vld-hoja{height:auto;min-height:0;overflow:visible;padding:0 12mm 14mm;
+.vld-hoja{height:auto;min-height:0;overflow:visible;padding:0 12mm 25mm;font-family:'Arial Narrow',Arial,sans-serif;
   --tx:#1c2b3d;--tx2:#334155;--mut:#64748b;--line:#e3e8ef;--line2:#cbd5e1;--card:#fff;--input:#f1f5f9;color:#1c2b3d;}   /* siempre en claro, aunque el panel esté en modo oscuro al imprimir · sin padding arriba: ver nota junto a .vld-doctit-row */
 @media print{.vld-hoja{width:420mm !important;}}
 .oc-tb td.num{text-align:left;font-weight:700;}
-.oc-tb tr.pt td{white-space:normal;font-size:10.5px;}
+.oc-tb tr.pt td{white-space:normal;font-size:9.5px;line-height:1.2;}
 .oc-tb tr.pt:hover td{background:var(--input);}
 .oc-tb tr.fr td{background:#1e3a5f;color:#fff;font-weight:800;font-size:11.5px;letter-spacing:.2px;border-top:2px solid var(--line2);}
 .oc-tb tr.gp2 td{background:#dbe6f4;color:#1e3a5f;font-weight:800;font-size:10.5px;}
@@ -871,7 +871,7 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .vld-pend{color:var(--rg-am,#a85a08);font-weight:700;}
 .vld-sumw{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:1080px;}
 @media print{.vld-sumw{overflow:visible;}}
-.vld-sum{width:100%;min-width:720px;max-width:1080px;border-collapse:collapse;font-size:11.5px;margin-top:8px;table-layout:fixed;}
+.vld-sum{width:100%;min-width:720px;max-width:1080px;border-collapse:collapse;font-size:11.5px;margin-top:8px;table-layout:fixed;font-family:'Arial Narrow',Arial,sans-serif;}
 .vld-sum th,.vld-sum td{padding:7px 8px;border-top:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums;}
 .vld-sum th.l,.vld-sum td.l{text-align:left;}
 .vld-sum th.sep,.vld-sum td.sep{border-left:3px double var(--line2);}
@@ -891,7 +891,7 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .vld-mmres{padding-left:24px;border-left:1px dashed var(--line2);max-width:340px;}
 .vld-mmres h4{margin:0 0 8px;font-size:12.5px;}
 @media (max-width:900px){.vld-mmres{padding-left:0;border-left:0;margin-top:16px;padding-top:12px;border-top:1px dashed var(--line2);}}
-.vld-mm2{border-collapse:collapse;font-size:12.5px;min-width:280px;}
+.vld-mm2{border-collapse:collapse;font-size:12.5px;min-width:280px;font-family:'Arial Narrow',Arial,sans-serif;}
 .vld-mm2 th,.vld-mm2 td{padding:8px 16px;border-top:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums;}
 .vld-mm2 thead th{border-top:0;background:#17335a;color:#fff;font-size:10.5px;font-weight:800;line-height:1.25;}
 .vld-mm2 tbody td{font-weight:800;font-size:13px;}
@@ -3269,7 +3269,6 @@ function valDetPeriodoTxt(v) {   // «POR EL PERIODO DEL 1 AL 30 DE SETIEMBRE 20
   const a = v.fecha_inicio, b = v.fecha_fin, da = +a.slice(8, 10), db = +b.slice(8, 10), ma = +a.slice(5, 7) - 1, mb = +b.slice(5, 7) - 1, ya = a.slice(0, 4), yb = b.slice(0, 4);
   return ma === mb && ya === yb ? `POR EL PERIODO DEL ${da} AL ${db} DE ${MES_MAYUS[ma]} ${ya}` : `POR EL PERIODO DEL ${da} DE ${MES_MAYUS[ma]} AL ${db} DE ${MES_MAYUS[mb]} ${yb}`;
 }
-const oracion = (s) => { s = String(s || '').toLowerCase().trim(); return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; };   // «trazo topografia...» -> «Trazo topografia...»
 // por partida: actual = este mes · acumulado = hasta esta valorización · anterior = acumulado − actual · saldo = meta − acumulado.
 // El PARCIAL de cada columna (anterior/actual/acumulado/saldo) va en COSTO DIRECTO (metrado × P.U.), igual que la hoja del Excel:
 // los gastos generales y la utilidad NO se reparten partida por partida, se agregan una sola vez al final (ver valDetResumenHTML).
@@ -3316,7 +3315,7 @@ function valDetCuerpoTabla(list, proyectos, filtroFrente, modoTxt, listAgg, spli
       : '<span class="vld-pend" title="Pendiente">●</span>';
     return { cls: 'pt', title: esc(r.nombre), tds: [
       `<td class="l num">${esc(r.codigo_esp || '')}</td>`,
-      `<td class="l">${esc(oracion(r.nombre))}</td>`,
+      `<td class="l">${esc(String(r.nombre || '').toUpperCase())}</td>`,
       `<td class="l">${esc(uniCorta(r.unidad))}</td>`,
       `<td class="sep">${N2(r.meta)}</td>`, `<td>${N2(r.pu)}</td>`, `<td>${N0(r.presCD)}</td>`,
       `<td class="sep">${N2(r.antM)}</td>`, `<td>${N0(r.antCD)}</td>`,
@@ -3430,23 +3429,23 @@ function valDetResumenHTML(v, conProp, presuCD, menorMonto) {
 }
 // mismas columnas que la hoja «09. Val N°xx» del Excel: presupuesto actualizado, y luego anterior/actual/acumulado/saldo
 // (cada uno en costo directo: metrado, parcial S/. y % del presupuesto — anterior sin %, como en el Excel)
-const valDetTablaCol = `<colgroup><col style="width:65px"><col style="width:273px"><col style="width:48px">
-  <col style="width:78px"><col style="width:73px"><col style="width:109px">
-  <col style="width:78px"><col style="width:109px">
-  <col style="width:78px"><col style="width:106px"><col style="width:55px">
-  <col style="width:78px"><col style="width:106px"><col style="width:55px">
-  <col style="width:78px"><col style="width:102px"><col style="width:69px"></colgroup>`;
-// mismo colgroup que arriba pero escalado ×0.9545 (suma 1489px en vez de 1560px): solo para IMPRESIÓN. Descubrimos que
+const valDetTablaCol = `<colgroup><col style="width:60px"><col style="width:335px"><col style="width:44px">
+  <col style="width:74px"><col style="width:69px"><col style="width:104px">
+  <col style="width:74px"><col style="width:104px">
+  <col style="width:74px"><col style="width:101px"><col style="width:53px">
+  <col style="width:74px"><col style="width:101px"><col style="width:53px">
+  <col style="width:74px"><col style="width:98px"><col style="width:68px"></colgroup>`;
+// mismo colgroup que arriba pero escalado (suma 1489px en vez de 1560px): solo para IMPRESIÓN. Descubrimos que
 // table-layout:fixed con columnas de ancho fijo en px no las achica cuando la tabla en sí se declara más angosta que la
 // suma de esas columnas (aunque sí las estira cuando la tabla es más ancha) — así que para que la tabla de impresión
 // respete el margen derecho de la hoja (420mm − 12mm − 12mm = 396mm ≈ 1497px de ancho útil), hay que achicar las
 // columnas del colgroup directamente, no el ancho de la tabla en sí (eso no alcanza, queda pegado al borde).
-const valDetTablaColImpresion = `<colgroup><col style="width:62px"><col style="width:261px"><col style="width:46px">
-  <col style="width:74px"><col style="width:70px"><col style="width:104px">
-  <col style="width:74px"><col style="width:104px">
-  <col style="width:74px"><col style="width:101px"><col style="width:53px">
-  <col style="width:74px"><col style="width:101px"><col style="width:53px">
-  <col style="width:75px"><col style="width:97px"><col style="width:66px"></colgroup>`;
+const valDetTablaColImpresion = `<colgroup><col style="width:57px"><col style="width:320px"><col style="width:42px">
+  <col style="width:71px"><col style="width:66px"><col style="width:99px">
+  <col style="width:71px"><col style="width:99px">
+  <col style="width:71px"><col style="width:96px"><col style="width:51px">
+  <col style="width:71px"><col style="width:96px"><col style="width:51px">
+  <col style="width:71px"><col style="width:94px"><col style="width:63px"></colgroup>`;
 const valDetTablaCab = `<thead>
       <tr><th class="h0" rowspan="2">PART.</th><th class="h0 l" rowspan="2">DESCRIPCIÓN</th><th class="h0" rowspan="2">UND</th>
         <th class="h1 sep" colspan="3">PRESUPUESTO ACTUALIZADO</th>
