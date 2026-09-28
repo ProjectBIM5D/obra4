@@ -3188,7 +3188,12 @@ function valPintar() {
     <div class="vf-split" id="vlResSplit" role="separator" aria-orientation="vertical" title="Arrastra para ajustar el ancho · doble clic: restablecer"></div>
     <div class="vf-pane vf-der" id="vlResDer"><table class="vl-tb vl-tD">${cabDer}<tbody>${cuerpoDer}${pieDer}</tbody></table></div>
   </div>`;
-  box.innerHTML = kpis + grafico + valCurvaOficial() + `<div class="vl-card"><h3>Resumen de valorizaciones — ${esc(TIPO_VAL[VAL.tipo])}</h3><p class="hint">Valorización mensual sin IGV, por frente. Lo aprobado es lo oficial; la propuesta se actualiza cuando el residente la aprueba${admin ? '' : ' (solo el administrador aprueba)'}.</p>${tablaResumen}</div><div id="vlDetalle">${valDetHTML()}</div>`;
+  const hayPropuesta = VAL.vals.some(v => v.estado === 'propuesta');
+  const btnImportar = admin && hayPropuesta ? `<button type="button" class="btn-imp" id="vlImportar" title="Lee el Excel de la valorización: actualiza el metrado de las valorizaciones abiertas (Propuesta) cuyo mes calce, el monto oficial de esas mismas, y los menores metrados de todas las partidas. No crea valorizaciones nuevas.">📥 Actualizar valorizaciones</button>` : '';
+  const btnNueva = admin ? `<button type="button" class="btn-imp" id="vlNueva" style="background:var(--green,#0e8f4f);border-color:var(--green,#0e8f4f)" title="Lee el Excel y crea la(s) valorización(es) del contrato que todavía no existen en el panel (quedan en Propuesta)">🆕 Nueva valorización</button>` : '';
+  box.innerHTML = kpis + grafico + valCurvaOficial() + `<div class="vl-card"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px"><h3>Resumen de valorizaciones — ${esc(TIPO_VAL[VAL.tipo])}</h3><div style="display:flex;gap:8px;flex-wrap:wrap">${btnNueva}${btnImportar}</div></div><p class="hint">Valorización mensual sin IGV, por frente. Lo aprobado es lo oficial; la propuesta se actualiza cuando el residente la aprueba${admin ? '' : ' (solo el administrador aprueba)'}.</p>${tablaResumen}</div><div id="vlDetalle">${valDetHTML()}</div>`;
+  const btnImp = $('#vlImportar'); if (btnImp) btnImp.addEventListener('click', valImportarIniciar);
+  const btnNva = $('#vlNueva'); if (btnNva) btnNva.addEventListener('click', valNuevaIniciar);
   panelesFijos({ fr: '#vlResFrame', iz: '#vlResIzq', de: '#vlResDer', sp: '#vlResSplit', clave: 'obra-vlres-izq', izqDefault: 170, min: 90, minDer: 260 });
 }
 
@@ -3570,6 +3575,229 @@ document.addEventListener('click', async (e) => {
     await valCargar(); bootResumen();
   } catch (err) { toast(`No se pudo ${ap ? 'aprobar' : 'reabrir'}: ${esc(err.message)}`, false); a.disabled = false; }
 });
+// ── Importar valorización desde el Excel (botón «📥 Importar valorización») ──
+// Hace en el navegador la parte de `importar_valorizacion.py` que hace falta para actualizar una valorización que YA
+// está cargada pero sigue en Propuesta (no crea valorizaciones nuevas — para eso, o para la carga histórica con
+// --aprobar-hasta, se sigue usando el script): lee la hoja «07. Met. Ejec.» (metrado ejecutado por mes de cada
+// partida, y las columnas MENORES METRADOS/DEDUCTIVO POR TRANSPORTE), relaciona cada fila con el cronograma vigente
+// por ORDEN dentro de cada frente (verificando unidad/nombre/precio/metrado contra la hoja «09. Val N°xx», igual que
+// el script), y:
+//   1) reemplaza el metrado de `valorizacion_partidas` de cada valorización en Propuesta cuyo mes calce con una
+//      columna del Excel (las que están APROBADAS no se tocan — igual que el script).
+//   2) de paso, el monto oficial (`valorizaciones.monto_oficial`) de esas mismas valorizaciones, si la hoja «06. Res
+//      VALs» lo trae (para que la ⚠ de diferencia contra el Excel oficial salga bien).
+//   3) reemplaza TODOS los menores metrados (`metrado_ajustes` tipo='menor') con lo que trae el Excel — esto no está
+//      acotado a un mes (es una foto del estado actual, no cambia el monto del contrato, es una referencia de por
+//      qué no se llega al metrado planeado) así que se actualiza siempre, aunque el Excel no traiga meses abiertos.
+// NO toca: gastos generales históricos, «Nueva Curva S» / programado oficial, ni crea valorizaciones nuevas — eso
+// sigue siendo trabajo del script de Python (uso puntual, no la actualización de rutina de un mes abierto).
+let _xlsxProm = null;
+function valCargarXLSX() {
+  if (window.XLSX) return Promise.resolve();
+  if (_xlsxProm) return _xlsxProm;
+  return _xlsxProm = new Promise((res, rej) => {
+    const s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
+    s.onload = () => res(); s.onerror = () => { _xlsxProm = null; rej(new Error('No se pudo cargar la librería para leer Excel (revisa la conexión a internet).')); };
+    document.head.appendChild(s);
+  });
+}
+function valImpNorm(s) { return String(s == null ? '' : s).normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/\s+/g, ' ').trim(); }
+function valImpEspNorm(s) { return String(s == null ? '' : s).trim().replace(/[.…\s]+$/, ''); }
+function valImpLeerHoja(aoa, primera) {   // aoa: array-of-arrays (SheetJS sheet_to_json con header:1) · igual que leer_hojas() del script
+  const out = []; let frente = null, titulo = '';
+  for (let i = primera; i <= aoa.length; i++) {
+    const r = aoa[i - 1] || [];
+    const c1 = r[0], c2 = r[1], c3 = r[2];
+    if (c1 == null && c2 == null) continue;
+    const s1 = c1 != null ? String(c1).trim() : '';
+    if (c2 != null && ['COSTO DIRECTO', 'GASTOS GENERALES', 'UTILIDAD', 'SUB TOTAL'].includes(String(c2).trim().toUpperCase())) break;
+    if (c3 == null || c3 === '') { if (/^[1-9]$/.test(s1)) { frente = +s1; titulo = String(c2 || '').trim(); } continue; }
+    out.push([frente, titulo, i, r]);
+  }
+  return out;
+}
+// lee y verifica el Excel (hojas 07/09/06 — igual que el script), SIN escribir nada todavía: lo comparten los dos
+// botones («Actualizar valorizaciones» y «Nueva valorización»), cada uno decide después qué meses le tocan.
+async function valImpLeerExcel(file) {
+  await valCargarXLSX();
+  const buf = await file.arrayBuffer();
+  const wbx = XLSX.read(buf, { type: 'array', cellDates: true });
+  const n07 = wbx.SheetNames.find(n => n.startsWith('07.')), n09 = wbx.SheetNames.find(n => n.startsWith('09.'));
+  if (!n07 || !n09) throw new Error('No encuentro las hojas «07. Met. Ejec.» y «09. Val N°xx» en el Excel.');
+  const ws7 = XLSX.utils.sheet_to_json(wbx.Sheets[n07], { header: 1, raw: true });
+  const ws9 = XLSX.utils.sheet_to_json(wbx.Sheets[n09], { header: 1, raw: true });
+  const h7 = valImpLeerHoja(ws7, 16), h9 = valImpLeerHoja(ws9, 18);
+  if (h7.length !== h9.length) throw new Error(`Las hojas «${n07}» (${h7.length} partidas) y «${n09}» (${h9.length}) no calzan en cantidad.`);
+  const hdr13 = ws7[12] || [];
+  const col07 = (...claves) => { for (let c = 0; c < 12; c++) { const x = hdr13[c]; if (x != null && claves.some(k => valImpNorm(x).startsWith(k))) return c; } return null; };
+  const cAct = col07('metrado actualizado'), cMenor = col07('menores metrados', 'menor metrado'), cDt = col07('deductivo por transporte');
+  if (cAct == null) throw new Error('No encuentro la columna «METRADO ACTUALIZADO» en la hoja 07 (fila 13).');
+  // meses (fila 14): [(columna, 'YYYY-MM')] — el índice+1 dentro de esta lista es el N° de valorización (igual que el script)
+  const hdr14 = ws7[13] || []; const meses = [];
+  for (let c = 0; c < hdr14.length; c++) { const v = hdr14[c]; if (v instanceof Date) meses.push([c, v.toISOString().slice(0, 7)]); else if (meses.length) break; }
+  if (!meses.length) throw new Error('No encuentro los meses en la fila 14 de la hoja 07.');
+
+  // monto oficial por N° de valorización: hoja «06. Res VALs», fila del ítem 1.0.0, columnas «VAL N°x»
+  const n06 = wbx.SheetNames.find(n => n.startsWith('06.'));
+  const oficiales = {};
+  if (n06) {
+    const ws6 = XLSX.utils.sheet_to_json(wbx.Sheets[n06], { header: 1, raw: true }).slice(0, 40);
+    const cab06 = ws6.find(r => r && r.some(x => typeof x === 'string' && /^VAL N/i.test(x.trim())));
+    const fila06 = ws6.find(r => r && ['1.0.0', '1.0.0.'].includes(String(r[1] || '').trim()));
+    if (cab06 && fila06) cab06.forEach((x, c) => { const m = /^VAL N.\s*(\d+)/i.exec(String(x || '').trim()); if (m && fila06[c] != null && fila06[c] !== '') oficiales[+m[1]] = Number(fila06[c]); });
+  }
+
+  await valDetArbol();
+  const proyectos = RES_A ? RES_A.proyectos : [];
+  if (!proyectos.length || !RES_A || !RES_A.version) throw new Error('No hay cronograma vigente cargado todavía (recarga la página e intenta de nuevo).');
+  const wbsRows = await getTodo(`/wbs_nodos?version_id=eq.${RES_A.version.id}&es_hoja=eq.true&concepto=eq.contrato&select=id,codigo,codigo_esp,nombre,unidad,metrado,precio_unitario,proyecto_id&order=orden`);
+  const proyPorId = Object.fromEntries(proyectos.map(p => [p.id, p.codigo]));
+  const porProy = {};
+  wbsRows.forEach(w => { const cod = proyPorId[w.proyecto_id]; if (cod) (porProy[cod] = porProy[cod] || []).push(w); });
+
+  const proyectoDe = (titulo) => { const t = valImpNorm(titulo); for (const p of proyectos) { const clave = valImpNorm(p.nombre).replace(/^puente\s+/, '').trim(); if (clave && t.includes(clave)) return p.codigo; } return null; };
+  const frentesMap = {}; h9.forEach(([f, t]) => { if (!(f in frentesMap)) frentesMap[f] = proyectoDe(t); });
+  if (Object.values(frentesMap).some(v => v == null)) throw new Error('No pude reconocer algún frente del Excel por su nombre contra los proyectos de la obra.');
+
+  const avisos = [], fallas = [], ajustes = [], porMes = {};   // porMes[YYYY-MM] = [{proy,cod,metrado}], para TODOS los meses del Excel
+  meses.forEach(([, m]) => porMes[m] = []);
+  const cursor = {}; Object.keys(porProy).forEach(p => cursor[p] = 0);
+  for (let i = 0; i < h7.length; i++) {
+    const [f7, , fila7, r7] = h7[i], [, , fila9, r9] = h9[i];
+    const p = frentesMap[f7], lista = porProy[p] || []; const k = cursor[p] || 0; cursor[p] = k + 1;
+    if (k >= lista.length) { fallas.push(`${p} fila ${fila9}: sobran partidas en el Excel`); continue; }
+    const w = lista[k];
+    const pu9 = Number(r9[4] || 0), met9 = Number(r9[3] || 0);
+    if (valImpNorm(r9[2]) !== valImpNorm(w.unidad)) fallas.push(`${p} fila ${fila9}: unidad «${r9[2]}» ≠ «${w.unidad}» (${w.codigo})`);
+    if (valImpNorm(r9[1]).slice(0, 25) !== valImpNorm(w.nombre).slice(0, 25)) fallas.push(`${p} fila ${fila9}: nombre distinto (${w.codigo})`);
+    if (Math.abs(pu9 - Number(w.precio_unitario || 0)) > 0.01) fallas.push(`${p} fila ${fila9}: precio ${pu9} ≠ ${w.precio_unitario} (${w.codigo})`);
+    if (Math.abs(met9 - Number(w.metrado || 0)) > 0.01) fallas.push(`${p} fila ${fila9}: metrado ${met9} ≠ ${w.metrado} (${w.codigo})`);
+    if (valImpEspNorm(r9[0]) !== valImpEspNorm(w.codigo_esp)) avisos.push(`${p} fila ${fila9}: código «${r9[0]}» vs «${w.codigo_esp}» (${w.codigo})`);
+    if (valImpNorm(r7[1]).slice(0, 25) !== valImpNorm(r9[1]).slice(0, 25) || Math.abs(Number(r7[cAct] || 0) - met9) > 0.01) fallas.push(`${p} fila ${fila7}: las hojas 07 y 09 no están alineadas`);
+    if (cMenor != null) { const v = r7[cMenor]; if (typeof v === 'number' && v > 0) ajustes.push({ proy: p, cod: w.codigo, origen: 'menores_metrados', metrado: Math.round(v * 10000) / 10000 }); }
+    if (cDt != null) { const v = r7[cDt]; if (typeof v === 'number' && v > 0) ajustes.push({ proy: p, cod: w.codigo, origen: 'deductivo_transporte', metrado: Math.round(v * 10000) / 10000 }); }
+    meses.forEach(([c, m]) => { const v = r7[c]; if (typeof v === 'number') porMes[m].push({ proy: p, cod: w.codigo, metrado: Math.round(v * 100) / 100 }); });
+  }
+  Object.keys(porProy).forEach(p => { if ((cursor[p] || 0) !== porProy[p].length) fallas.push(`${p}: el cronograma tiene ${porProy[p].length} partidas y el Excel ${cursor[p] || 0}`); });
+  if (fallas.length) throw new Error(`Hay ${fallas.length} diferencia(s) que impiden importar (revisa que sea el Excel de esta obra):\n` + fallas.slice(0, 8).join('\n') + (fallas.length > 8 ? `\n… y ${fallas.length - 8} más` : ''));
+
+  const idPorProyCod = {}; wbsRows.forEach(w => { const cod = proyPorId[w.proyecto_id]; if (cod) idPorProyCod[cod + '|' + w.codigo] = w.id; });
+  return { meses, oficiales, ajustes, avisos, porMes, wbsRows, idPorProyCod };
+}
+// escribe los menores metrados (siempre, foto completa — no depende de qué mes esté abierto ni de si se creó una valorización)
+async function valImpGuardarMenores(leido, archivoNombre) {
+  const filasMenor = leido.ajustes.map(a => ({ nodo_id: leido.idPorProyCod[a.proy + '|' + a.cod], tipo: 'menor', origen: a.origen, estado: 'previsto', metrado: a.metrado, valorizacion_numero: leido.meses.length, archivo_origen: archivoNombre })).filter(x => x.nodo_id);
+  const rDel = await fetch(`${API}/metrado_ajustes?tipo=eq.menor&origen=in.(menores_metrados,deductivo_transporte)`, { method: 'DELETE', headers });
+  if (!rDel.ok) throw new Error(`No se pudo borrar los menores metrados anteriores (HTTP ${rDel.status}).`);
+  if (filasMenor.length) {
+    const rIns = await fetch(`${API}/metrado_ajustes`, { method: 'POST', headers: { ...headers, 'Content-Type': 'application/json', Prefer: 'return=minimal' }, body: JSON.stringify(filasMenor) });
+    if (!rIns.ok) { const d = await rIns.json().catch(() => ({})); throw new Error('No se pudo guardar los menores metrados: ' + (d.message || `HTTP ${rIns.status}`)); }
+  }
+  return filasMenor.length;
+}
+function valImportarIniciar() {
+  const inp = document.createElement('input'); inp.type = 'file'; inp.accept = '.xlsx';
+  inp.onchange = () => { if (inp.files[0]) valActualizarProcesar(inp.files[0]); };
+  inp.click();
+}
+// «Actualizar valorizaciones»: solo toca valorizaciones que YA EXISTEN en Propuesta — nunca crea ninguna.
+async function valActualizarProcesar(file) {
+  const btn = $('#vlImportar'); if (btn) btn.disabled = true;
+  try {
+    toast('Cargando el lector de Excel…', true);
+    const leido = await valImpLeerExcel(file);
+    const { meses, oficiales, porMes, wbsRows } = leido;
+
+    const abiertas = await getTodo(`/valorizaciones?tipo=eq.contrato&estado=eq.propuesta&select=id,numero,mes`);
+    const abiertaPorMes = {}; abiertas.forEach(v => { abiertaPorMes[String(v.mes).slice(0, 7)] = v; });
+    const mesesAbiertos = meses.filter(([, m]) => abiertaPorMes[m]);
+
+    const sinAbrir = meses.filter(([, m]) => !abiertaPorMes[m]).map(([, m]) => m);
+    const msj = [`Se van a actualizar ${mesesAbiertos.length} valorización(es) abierta(s): ${mesesAbiertos.map(([, m]) => `N°${abiertaPorMes[m].numero} (${m})`).join(', ') || 'ninguna'}.`,
+      `Menores metrados: ${leido.ajustes.length} valores (siempre se actualiza, no depende del mes).`,
+      sinAbrir.length ? `El Excel también trae ${sinAbrir.join(', ')}, pero no está(n) abierta(s) en el panel — no se toca(n) (si alguna es nueva, usa «Nueva valorización»).` : '',
+      leido.avisos.length ? `${leido.avisos.length} avisos de código (ver consola).` : ''].filter(Boolean).join('\n');
+    const ok = await confirmar(msj + '\n¿Continuar?');
+    if (!ok) { toast('Cancelado.', false); return; }
+    if (leido.avisos.length) console.warn('Actualizar valorizaciones — avisos de código:', leido.avisos);
+
+    for (const [, m] of mesesAbiertos) {
+      const v = abiertaPorMes[m], filasV = porMes[m].map(x => ({ valorizacion_id: v.id, nodo_id: leido.idPorProyCod[x.proy + '|' + x.cod], metrado: x.metrado, precio_unitario: (wbsRows.find(w => w.id === leido.idPorProyCod[x.proy + '|' + x.cod]) || {}).precio_unitario })).filter(x => x.nodo_id);
+      const rDelV = await fetch(`${API}/valorizacion_partidas?valorizacion_id=eq.${v.id}`, { method: 'DELETE', headers });
+      if (!rDelV.ok) throw new Error(`No se pudo borrar el metrado anterior de la valorización N°${v.numero} (HTTP ${rDelV.status}).`);
+      if (filasV.length) {
+        const rInsV = await fetch(`${API}/valorizacion_partidas`, { method: 'POST', headers: { ...headers, 'Content-Type': 'application/json', Prefer: 'return=minimal' }, body: JSON.stringify(filasV) });
+        if (!rInsV.ok) { const d = await rInsV.json().catch(() => ({})); throw new Error(`No se pudo guardar el metrado de la valorización N°${v.numero}: ` + (d.message || `HTTP ${rInsV.status}`)); }
+      }
+      if (oficiales[v.numero] != null) {
+        const rOf = await fetch(`${API}/valorizaciones?id=eq.${v.id}`, { method: 'PATCH', headers: { ...headers, 'Content-Type': 'application/json', Prefer: 'return=minimal' }, body: JSON.stringify({ monto_oficial: oficiales[v.numero] }) });
+        if (!rOf.ok) console.warn(`No se pudo actualizar el monto oficial de la valorización N°${v.numero} (HTTP ${rOf.status}).`);
+      }
+    }
+    const nMenor = await valImpGuardarMenores(leido, file.name);
+
+    WBS_MENOR = null; Object.keys(valDetCache).forEach(k => delete valDetCache[k]);
+    toast(`Actualizado: ${mesesAbiertos.length} valorización(es), ${nMenor} menores metrados${leido.avisos.length ? ` · ${leido.avisos.length} avisos (ver consola)` : ''}.`, true);
+    await valCargar(); bootResumen();
+  } catch (err) {
+    toast('No se pudo actualizar: ' + esc(err.message), false); console.error(err);
+  } finally { if (btn) btn.disabled = false; }
+}
+function valNuevaIniciar() {
+  const inp = document.createElement('input'); inp.type = 'file'; inp.accept = '.xlsx';
+  inp.onchange = () => { if (inp.files[0]) valNuevaProcesar(inp.files[0]); };
+  inp.click();
+}
+// «Nueva valorización»: crea la(s) valorización(es) del contrato que el Excel trae y todavía NO existen en el panel
+// (con cualquier estado) — el N° de cada una es su posición dentro de la lista de meses del Excel (igual que el script).
+async function valNuevaProcesar(file) {
+  const btn = $('#vlNueva'); if (btn) btn.disabled = true;
+  try {
+    toast('Cargando el lector de Excel…', true);
+    const leido = await valImpLeerExcel(file);
+    const { meses, oficiales, porMes, wbsRows } = leido;
+
+    const existentes = await getTodo(`/valorizaciones?tipo=eq.contrato&select=numero`);
+    const numsExistentes = new Set(existentes.map(v => v.numero));
+    const nuevas = meses.map(([, m], idx) => [idx + 1, m]).filter(([num]) => !numsExistentes.has(num));
+    if (!nuevas.length) { toast('No hay ninguna valorización nueva: todos los meses del Excel ya existen en el panel.', false); return; }
+
+    const periodos = await getTodo(`/periodos_valorizacion?version_id=eq.${RES_A.version.id}&select=id,tipo,fecha_inicio,fecha_fin,orden&order=orden`);
+    const periodoDe = (m) => periodos.find(p => p.tipo !== 'suspension' && String(p.fecha_fin).slice(0, 7) === m);
+    const sinPeriodo = nuevas.filter(([, m]) => !periodoDe(m));
+    if (sinPeriodo.length) throw new Error(`El mes ${sinPeriodo[0][1]} no existe en los periodos del cronograma — revisa que el cronograma llegue hasta ahí.`);
+    if (!RES_A.obra || !RES_A.obra.id) throw new Error('No encuentro la obra activa (recarga la página e intenta de nuevo).');
+
+    const ok = await confirmar(`Se va(n) a CREAR ${nuevas.length} valorización(es) nueva(s) (quedan en Propuesta): ${nuevas.map(([n, m]) => `N°${n} (${m})`).join(', ')}.\nMenores metrados: ${leido.ajustes.length} valores.${leido.avisos.length ? `\n${leido.avisos.length} avisos de código (ver consola).` : ''}\n¿Continuar?`);
+    if (!ok) { toast('Cancelado.', false); return; }
+    if (leido.avisos.length) console.warn('Nueva valorización — avisos de código:', leido.avisos);
+
+    for (const [num, m] of nuevas) {
+      const p = periodoDe(m);
+      const rIns = await fetch(`${API}/valorizaciones`, { method: 'POST', headers: { ...headers, 'Content-Type': 'application/json', Prefer: 'return=representation' },
+        body: JSON.stringify({ obra_id: RES_A.obra.id, version_id: RES_A.version.id, tipo: 'contrato', numero: num, periodo_id: p.id, mes: m + '-01', fecha_inicio: p.fecha_inicio, fecha_fin: p.fecha_fin, archivo_origen: file.name, creado_por: 'panel' }) });
+      if (!rIns.ok) { const d = await rIns.json().catch(() => ({})); throw new Error(`No se pudo crear la valorización N°${num}: ` + (d.message || `HTTP ${rIns.status}`)); }
+      const [v] = await rIns.json();
+      const filasV = porMes[m].map(x => ({ valorizacion_id: v.id, nodo_id: leido.idPorProyCod[x.proy + '|' + x.cod], metrado: x.metrado, precio_unitario: (wbsRows.find(w => w.id === leido.idPorProyCod[x.proy + '|' + x.cod]) || {}).precio_unitario })).filter(x => x.nodo_id);
+      if (filasV.length) {
+        const rInsV = await fetch(`${API}/valorizacion_partidas`, { method: 'POST', headers: { ...headers, 'Content-Type': 'application/json', Prefer: 'return=minimal' }, body: JSON.stringify(filasV) });
+        if (!rInsV.ok) { const d = await rInsV.json().catch(() => ({})); throw new Error(`No se pudo guardar el metrado de la valorización N°${num}: ` + (d.message || `HTTP ${rInsV.status}`)); }
+      }
+      if (oficiales[num] != null) {
+        const rOf = await fetch(`${API}/valorizaciones?id=eq.${v.id}`, { method: 'PATCH', headers: { ...headers, 'Content-Type': 'application/json', Prefer: 'return=minimal' }, body: JSON.stringify({ monto_oficial: oficiales[num] }) });
+        if (!rOf.ok) console.warn(`No se pudo actualizar el monto oficial de la valorización N°${num} (HTTP ${rOf.status}).`);
+      }
+    }
+    const nMenor = await valImpGuardarMenores(leido, file.name);
+
+    WBS_MENOR = null; Object.keys(valDetCache).forEach(k => delete valDetCache[k]);
+    toast(`Creado: ${nuevas.length} valorización(es) nueva(s), ${nMenor} menores metrados${leido.avisos.length ? ` · ${leido.avisos.length} avisos (ver consola)` : ''}.`, true);
+    await valCargar(); bootResumen();
+  } catch (err) {
+    toast('No se pudo crear: ' + esc(err.message), false); console.error(err);
+  } finally { if (btn) btn.disabled = false; }
+}
 // ── carga del Resumen (Curva S y KPIs) ──
 // Tres mejoras de velocidad: (1) obra + componentes + cronograma vigente en UNA consulta (antes eran tres seguidas);
 // (2) los datos de la Curva S se pintan apenas llegan, sin esperar a los de Materiales (que son más pesados);
