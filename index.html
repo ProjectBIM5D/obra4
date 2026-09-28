@@ -752,22 +752,14 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .vl-card h3{margin:0 0 2px;font-size:13.5px;} .vl-card p.hint{margin:0 0 8px;font-size:11.5px;color:var(--mut);}
 .vl-card svg{display:block;width:100%;height:auto;}
 .vl-tw{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:10px;}
-.vl-tb{width:100%;min-width:900px;border-collapse:collapse;font-size:12px;}
+.vl-tb{width:100%;border-collapse:collapse;font-size:12px;}
 .vl-tb th,.vl-tb td{padding:8px 10px;border-top:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
 .vl-tb thead th{border-top:0;background:#17335a;color:#fff;font-size:11px;font-weight:800;letter-spacing:.3px;text-align:center;}
-.vl-tb th:first-child,.vl-tb td:first-child{text-align:center;font-weight:800;width:44px;} .vl-tb td.l{text-align:left;}
-.vl-tb th:nth-child(2),.vl-tb td:nth-child(2){width:150px;}
+.vl-tb td.l{text-align:left;}
+.vl-tI{min-width:170px;} .vl-tI th:first-child,.vl-tI td:first-child{text-align:center;font-weight:800;width:44px;}
+.vl-tD{min-width:820px;}
 .vl-tb tbody tr:hover td{background:var(--input);}
 .vl-tb tr.prop td{background:#f59e0b12;} .vl-tb tr.tot td{border-top:2px solid var(--line2);background:var(--input);font-weight:800;}
-/* congela N° y Periodo (con línea divisoria) al desplazar la tabla horizontalmente en pantallas angostas */
-.vl-tb th:first-child,.vl-tb td:first-child,.vl-tb th:nth-child(2),.vl-tb td:nth-child(2){position:sticky;z-index:2;background:var(--card);}
-.vl-tb th:first-child,.vl-tb td:first-child{left:0;}
-.vl-tb th:nth-child(2),.vl-tb td:nth-child(2){left:44px;border-right:2px solid var(--line2);}
-.vl-tb thead th:first-child,.vl-tb thead th:nth-child(2){background:#17335a;z-index:3;}
-.vl-tb tbody tr:hover td:first-child,.vl-tb tbody tr:hover td:nth-child(2){background:var(--input);}
-.vl-tb tr.prop td:first-child,.vl-tb tr.prop td:nth-child(2){background:#fdf0da;}
-:root[data-theme="dark"] .vl-tb tr.prop td:first-child,:root[data-theme="dark"] .vl-tb tr.prop td:nth-child(2){background:#3a2f1a;}
-.vl-tb tr.tot td:first-child,.vl-tb tr.tot td:nth-child(2){background:var(--input);}
 .vl-gg{width:78px;font:inherit;font-size:11.5px;padding:3px 5px;border:1px solid var(--line2);border-radius:6px;background:var(--input);color:var(--tx);text-align:right;} .vl-alerta{color:#d97706;font-weight:800;cursor:help;}
 .oc-tb{width:100%;min-width:1180px;border-collapse:collapse;font-size:12px;}
 .oc-tb th,.oc-tb td{padding:6px 9px;border:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
@@ -785,7 +777,6 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .vld-ver{font:inherit;font-size:10.5px;font-weight:700;color:var(--blue);background:transparent;border:0;padding:2px 0 0;cursor:pointer;}
 .vld-ver:hover{text-decoration:underline;}
 .vl-tb tr.sel td{background:var(--ic-blue-bg,#eaf1ff);}
-.vl-tb tr.sel td:first-child,.vl-tb tr.sel td:nth-child(2){background:var(--ic-blue-bg,#eaf1ff);}
 .vld-card{position:relative;animation:admIn .15s ease;}
 .vld-x{position:absolute;top:14px;right:16px;border:0;background:transparent;color:var(--mut);font-size:15px;cursor:pointer;padding:3px 8px;border-radius:6px;}
 .vld-x:hover{background:var(--input);color:var(--tx);}
@@ -808,7 +799,24 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .vld-tw2 .oc-tb thead{position:sticky;top:0;z-index:2;}
 .vld-navy th.h0,.vld-navy th.h1{background:#17335a;color:#fff;}
 .vld-navy th.h2{background:#24487a;color:#fff;}
-/* congela PART/DESCRIPCIÓN/UND (con línea divisoria) al desplazar la tabla de valorización; el desplazamiento empieza en METRADO */
+/* dos paneles con divisor arrastrable (igual que Look Ahead/Semanal): columnas fijas a la izquierda con ancho ajustable,
+   el resto se desplaza a la derecha. Reemplaza el freeze con position:sticky (tenía parpadeos de render en tablets). */
+.vf-frame{display:flex;align-items:stretch;position:relative;border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+.vf-pane{min-width:0;overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;}
+.vf-pane table thead{position:sticky;top:0;z-index:2;}
+.vf-izq{flex:0 0 var(--izq,180px);width:var(--izq,180px);overflow-x:hidden;}
+.vf-izq::-webkit-scrollbar:vertical{width:0;height:0;}
+.vf-der{flex:1 1 auto;}
+.vf-split{flex:0 0 7px;position:relative;cursor:col-resize;touch-action:none;background:var(--line2);z-index:8;transition:background .12s;}
+.vf-split::before{content:"";position:absolute;left:1px;top:50%;transform:translateY(-50%);width:5px;height:34px;border-radius:3px;background:var(--mut);opacity:.55;transition:background .12s,height .12s,opacity .12s;}
+.vf-split::after{content:"";position:absolute;left:-8px;right:-8px;top:0;bottom:0;}
+.vf-split:hover,.vf-split.arrastra{background:var(--blue);}
+.vf-split:hover::before,.vf-split.arrastra::before{background:#fff;opacity:1;height:44px;}
+@media (pointer:coarse){.vf-split{flex-basis:12px;} .vf-split::before{left:3px;width:6px;height:44px;} .vf-split::after{left:-14px;right:-14px;}}
+.vl-tb tr.hov td,.oc-tb tr.hov td{background:var(--input);}
+/* congela PART/DESCRIPCIÓN/UND (con línea divisoria) al desplazar la tabla de valorización; el desplazamiento empieza en METRADO.
+   (freeze estático, no arrastrable: se probó un panel arrastrable de dos tablas para esta vista, pero con valorizaciones
+   de 600+ filas nunca terminó de cuadrar el alto de fila al 100% entre las dos tablas — ver nota en valDetHTML()). */
 .vld-tw2 .oc-tb thead th.h0{position:sticky;z-index:3;}
 .vld-tw2 .oc-tb thead th.h0:nth-child(1),.vld-tw2 .oc-tb tbody td:nth-child(1){left:0;}
 .vld-tw2 .oc-tb thead th.h0:nth-child(2),.vld-tw2 .oc-tb tbody td:nth-child(2){left:65px;}
@@ -3139,18 +3147,31 @@ function valPintar() {
   const grafico = `<div class="vl-card"><h3>Valorización de cada mes y avance acumulado</h3><p class="hint">Barras: monto del mes (millones de S/.) · línea roja: % acumulado del presupuesto · barras rayadas: valorización en propuesta</p><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Valorizaciones por mes">${g}</svg></div>`;
   // tabla resumen (una fila por valorización, una columna por frente)
   const admin = !!AUTH.admin;
-  const cab = `<thead><tr><th>N°</th><th>Periodo</th><th>Estado</th><th title="Gastos generales de esa valorización (la utilidad es la del contrato)">% G.G.</th>${frentes.map(p => `<th>${esc(String(p.nombre).replace(/^Puente\s+/i, ''))}</th>`).join('')}<th>Valorización del mes</th><th>Acumulado</th><th>% avance</th><th>Saldo por valorizar</th>${admin ? '<th></th>' : ''}</tr></thead>`;
-  const cuerpo = filas.map(f => `<tr class="${f.v.estado !== 'aprobada' ? 'prop' : ''}${valDetId === f.v.id ? ' sel' : ''}"><td>${f.v.numero}</td><td class="l">${MES(f.v.mes)}<br><button type="button" class="vld-ver" data-valdet="${f.v.id}">${valDetId === f.v.id ? '▾ Ocultar valorización' : '▸ Ver valorización'}</button></td>
+  const cabIzq = `<thead><tr><th>N°</th><th>Periodo</th></tr></thead>`;
+  const cabDer = `<thead><tr><th>Estado</th><th title="Gastos generales de esa valorización (la utilidad es la del contrato)">% G.G.</th>${frentes.map(p => `<th>${esc(String(p.nombre).replace(/^Puente\s+/i, ''))}</th>`).join('')}<th>Valorización del mes</th><th>Acumulado</th><th>% avance</th><th>Saldo por valorizar</th>${admin ? '<th></th>' : ''}</tr></thead>`;
+  let cuerpoIzq = '', cuerpoDer = '';
+  filas.forEach(f => {
+    const cls = `${f.v.estado !== 'aprobada' ? 'prop' : ''}${valDetId === f.v.id ? ' sel' : ''}`;
+    cuerpoIzq += `<tr class="${cls}"><td>${f.v.numero}</td><td class="l">${MES(f.v.mes)}<br><button type="button" class="vld-ver" data-valdet="${f.v.id}">${valDetId === f.v.id ? '▾ Ocultar valorización' : '▸ Ver valorización'}</button></td></tr>`;
+    cuerpoDer += `<tr class="${cls}">
       <td>${f.v.estado === 'aprobada' ? `<span class="vl-pill ok" title="${esc('Aprobada por ' + (f.v.aprobado_por || '') + (f.v.aprobado_en ? ' · ' + String(f.v.aprobado_en).slice(0, 10) : ''))}">✔ Aprobada</span>` : '<span class="vl-pill pr" title="Aún sin conciliar">◔ Propuesta</span>'}</td>
       <td>${admin && f.v.estado !== 'aprobada' ? `<input class="vl-gg" data-vgg="${f.v.id}" type="number" step="0.0000001" min="0" max="60" value="${f.v.gg_pct != null ? (Number(f.v.gg_pct) * 100).toFixed(7) : ''}" title="Gastos generales en % (editable mientras sea propuesta)"> %` : (f.v.gg_pct != null ? (Number(f.v.gg_pct) * 100).toFixed(7) + ' %' : '—')}</td>
       ${frentes.map(p => `<td title="S/. ${N2(f.porF[p.id])}">${f.porF[p.id] ? N0(f.porF[p.id]) : '—'}</td>`).join('')}
       <td title="S/. ${N2(f.mes)}${f.dif != null ? ' · oficial (Excel): S/. ' + N2(f.v.monto_oficial) : ''}"><b>${N0(f.mes)}</b>${f.dif != null && Math.abs(f.dif) > 0.10 ? ` <span class="vl-alerta" title="Difiere S/. ${N2(f.dif)} del monto oficial del Excel (control desde S/. 0.10): revisa los gastos generales y los metrados">⚠</span>` : ''}</td><td>${N0(f.acum)}</td>
       <td>${f.pct == null ? '—' : `<span class="vl-pbar"><i style="width:${Math.min(100, f.pct * 100).toFixed(1)}%"></i></span>${(f.pct * 100).toFixed(1)}%`}</td>
       <td>${presu ? N0(Math.max(0, presu - f.acum)) : '—'}</td>
-      ${admin ? `<td>${f.v.estado === 'aprobada' ? `<button data-vreabrir="${f.v.id}" title="Vuelve a propuesta para poder corregirla">Reabrir</button>` : `<button class="ok" data-vaprobar="${f.v.id}">Aprobar</button>`}</td>` : ''}</tr>`).join('');
+      ${admin ? `<td>${f.v.estado === 'aprobada' ? `<button data-vreabrir="${f.v.id}" title="Vuelve a propuesta para poder corregirla">Reabrir</button>` : `<button class="ok" data-vaprobar="${f.v.id}">Aprobar</button>`}</td>` : ''}</tr>`;
+  });
   const sumF = (id) => filas.reduce((s, f) => s + (f.porF[id] || 0), 0);
-  const pie = `<tr class="tot"><td></td><td class="l">Total</td><td></td><td></td>${frentes.map(p => `<td>${N0(sumF(p.id))}</td>`).join('')}<td>${N0(acum)}</td><td>${N0(acum)}</td><td>${presu ? (acum / presu * 100).toFixed(1) + '%' : '—'}</td><td>${presu ? N0(Math.max(0, presu - acum)) : '—'}</td>${admin ? '<td></td>' : ''}</tr>`;
-  box.innerHTML = kpis + grafico + valCurvaOficial() + `<div class="vl-card"><h3>Resumen de valorizaciones — ${esc(TIPO_VAL[VAL.tipo])}</h3><p class="hint">Valorización mensual sin IGV, por frente. Lo aprobado es lo oficial; la propuesta se actualiza cuando el residente la aprueba${admin ? '' : ' (solo el administrador aprueba)'}.</p><div class="vl-tw"><table class="vl-tb">${cab}<tbody>${cuerpo}${pie}</tbody></table></div></div><div id="vlDetalle">${valDetHTML()}</div>`;
+  const pieIzq = `<tr class="tot"><td></td><td class="l">Total</td></tr>`;
+  const pieDer = `<tr class="tot"><td></td><td></td>${frentes.map(p => `<td>${N0(sumF(p.id))}</td>`).join('')}<td>${N0(acum)}</td><td>${N0(acum)}</td><td>${presu ? (acum / presu * 100).toFixed(1) + '%' : '—'}</td><td>${presu ? N0(Math.max(0, presu - acum)) : '—'}</td>${admin ? '<td></td>' : ''}</tr>`;
+  const tablaResumen = `<div class="vf-frame" id="vlResFrame" style="max-height:600px">
+    <div class="vf-pane vf-izq" id="vlResIzq"><table class="vl-tb vl-tI">${cabIzq}<tbody>${cuerpoIzq}${pieIzq}</tbody></table></div>
+    <div class="vf-split" id="vlResSplit" role="separator" aria-orientation="vertical" title="Arrastra para ajustar el ancho · doble clic: restablecer"></div>
+    <div class="vf-pane vf-der" id="vlResDer"><table class="vl-tb vl-tD">${cabDer}<tbody>${cuerpoDer}${pieDer}</tbody></table></div>
+  </div>`;
+  box.innerHTML = kpis + grafico + valCurvaOficial() + `<div class="vl-card"><h3>Resumen de valorizaciones — ${esc(TIPO_VAL[VAL.tipo])}</h3><p class="hint">Valorización mensual sin IGV, por frente. Lo aprobado es lo oficial; la propuesta se actualiza cuando el residente la aprueba${admin ? '' : ' (solo el administrador aprueba)'}.</p>${tablaResumen}</div><div id="vlDetalle">${valDetHTML()}</div>`;
+  panelesFijos({ fr: '#vlResFrame', iz: '#vlResIzq', de: '#vlResDer', sp: '#vlResSplit', clave: 'obra-vlres-izq', izqDefault: 170, min: 90, minDer: 260 });
 }
 
 // ══ Detalle de metrado por partida, dentro de una valorización — formato de la valorización oficial: partidas en TODA
@@ -3249,7 +3270,7 @@ function valDetAncestros(nodoId) {
 // `listAgg`: la lista COMPLETA (todas las partidas del contrato, aunque se esté mostrando «Solo este mes»), para que los
 // subtotales de grupo/frente (presupuesto/anterior/acumulado/saldo) salgan siempre completos y no desaparezcan al filtrar;
 // si todavía no se cargó (se pide aparte, en segundo plano), se usa `list` mientras tanto.
-function valDetCuerpoTabla(list, proyectos, filtroFrente, modoTxt, listAgg) {
+function valDetCuerpoTabla(list, proyectos, filtroFrente, modoTxt, listAgg, split) {
   const tieneAgg = Array.isArray(listAgg);
   const base = tieneAgg ? listAgg : list;
   const N0 = (n) => Number(n || 0).toLocaleString('es-PE', { maximumFractionDigits: 2 });
@@ -3270,40 +3291,49 @@ function valDetCuerpoTabla(list, proyectos, filtroFrente, modoTxt, listAgg) {
     const estado = r.saldoBruto <= 0.005 ? '<span class="vld-ok" title="Cumplido">✔</span>'
       : r.menor > 0.005 ? `<span class="vld-mn" title="Menor metrado: ${N2(r.menor)}">MM ${N2(r.menor)}</span>`
       : '<span class="vld-pend" title="Pendiente">●</span>';
-    return `<tr class="pt" title="${esc(r.nombre)}">
-      <td class="l num">${esc(r.codigo_esp || '')}</td>
-      <td class="l">${esc(oracion(r.nombre))}</td>
-      <td class="l">${esc(uniCorta(r.unidad))}</td>
-      <td class="sep">${N2(r.meta)}</td><td>${N2(r.pu)}</td><td>${N0(r.presCD)}</td>
-      <td class="sep">${N2(r.antM)}</td><td>${N0(r.antCD)}</td>
-      <td class="sep hl">${N2(r.actM)}</td><td class="hl">${N0(r.actCD)}</td><td class="hl">${PCT(r.actCD, r.presCD)}</td>
-      <td class="sep">${N2(r.acumM)}</td><td>${N0(r.acumCD)}</td><td>${PCT(r.acumCD, r.presCD)}</td>
-      <td class="sep ${r.saldoBruto > 0.005 ? 'f' : ''}">${N2(r.saldoBruto)}</td><td class="${r.saldoBruto > 0.005 ? 'f' : ''}">${N0(r.saldoCD)}</td><td class="c">${estado}</td>
-    </tr>`;
+    return { cls: 'pt', title: esc(r.nombre), tds: [
+      `<td class="l num">${esc(r.codigo_esp || '')}</td>`,
+      `<td class="l">${esc(oracion(r.nombre))}</td>`,
+      `<td class="l">${esc(uniCorta(r.unidad))}</td>`,
+      `<td class="sep">${N2(r.meta)}</td>`, `<td>${N2(r.pu)}</td>`, `<td>${N0(r.presCD)}</td>`,
+      `<td class="sep">${N2(r.antM)}</td>`, `<td>${N0(r.antCD)}</td>`,
+      `<td class="sep hl">${N2(r.actM)}</td>`, `<td class="hl">${N0(r.actCD)}</td>`, `<td class="hl">${PCT(r.actCD, r.presCD)}</td>`,
+      `<td class="sep">${N2(r.acumM)}</td>`, `<td>${N0(r.acumCD)}</td>`, `<td>${PCT(r.acumCD, r.presCD)}</td>`,
+      `<td class="sep ${r.saldoBruto > 0.005 ? 'f' : ''}">${N2(r.saldoBruto)}</td>`, `<td class="${r.saldoBruto > 0.005 ? 'f' : ''}">${N0(r.saldoCD)}</td>`, `<td class="c">${estado}</td>`,
+    ] };
   };
   const claseNivel = (nivel) => nivel <= 2 ? 'gp2' : nivel === 3 ? 'gp3' : 'gp4';
-  const filaResumenNivel = (clase, cod, nombre, pad, ag) => `<tr class="${clase}"><td class="l num">${esc(cod)}</td><td class="l"${pad ? ` style="padding-left:${pad}px"` : ''}><b>${esc(nombre)}</b></td><td></td>
-      <td class="sep"></td><td></td><td>${N0(ag.presCD)}</td>
-      <td class="sep"></td><td>${N0(ag.antCD)}</td>
-      <td class="sep hl"></td><td class="hl"><b>${N0(ag.actCD)}</b></td><td class="hl">${PCT(ag.actCD, ag.presCD)}</td>
-      <td class="sep"></td><td>${N0(ag.acumCD)}</td><td>${PCT(ag.acumCD, ag.presCD)}</td>
-      <td class="sep"></td><td>${N0(Math.max(0, ag.presCD - ag.acumCD))}</td><td></td></tr>`;
-  let cuerpo = '';
+  const filaResumenNivel = (clase, cod, nombre, pad, ag) => ({ cls: clase, title: '', tds: [
+    `<td class="l num">${esc(cod)}</td>`, `<td class="l"${pad ? ` style="padding-left:${pad}px"` : ''}><b>${esc(nombre)}</b></td>`, `<td></td>`,
+    `<td class="sep"></td>`, `<td></td>`, `<td>${N0(ag.presCD)}</td>`,
+    `<td class="sep"></td>`, `<td>${N0(ag.antCD)}</td>`,
+    `<td class="sep hl"></td>`, `<td class="hl"><b>${N0(ag.actCD)}</b></td>`, `<td class="hl">${PCT(ag.actCD, ag.presCD)}</td>`,
+    `<td class="sep"></td>`, `<td>${N0(ag.acumCD)}</td>`, `<td>${PCT(ag.acumCD, ag.presCD)}</td>`,
+    `<td class="sep"></td>`, `<td>${N0(Math.max(0, ag.presCD - ag.acumCD))}</td>`, `<td></td>`,
+  ] });
+  let filasObj = [];
   mostrar.forEach((pid) => {
     const rs = porFrente[pid].slice().sort((a, b) => a.orden - b.orden);
-    if (!filtroFrente) cuerpo += filaResumenNivel('fr', (ordenIdx[pid] ?? 0) + 1, String(nomF[pid] || '').toUpperCase(), 0, aggFrente[pid] || cero());
+    if (!filtroFrente) filasObj.push(filaResumenNivel('fr', (ordenIdx[pid] ?? 0) + 1, String(nomF[pid] || '').toUpperCase(), 0, aggFrente[pid] || cero()));
     let abiertos = [];
     rs.forEach(r => {
       const cad = valDetAncestros(r.nodo_id);
       let i = 0; while (i < cad.length && i < abiertos.length && cad[i].id === abiertos[i].id) i++;
       for (let j = i; j < cad.length; j++) { const nodo = cad[j], pad = 10 + Math.max(0, nodo.nivel - 2) * 16;
-        cuerpo += filaResumenNivel(`gp ${claseNivel(nodo.nivel)}`, String(nodo.codigo).replace(/^[^.]+\./, ''), nodo.nombre, pad, aggNodo[nodo.id] || cero()); }
+        filasObj.push(filaResumenNivel(`gp ${claseNivel(nodo.nivel)}`, String(nodo.codigo).replace(/^[^.]+\./, ''), nodo.nombre, pad, aggNodo[nodo.id] || cero())); }
       abiertos = cad;
-      cuerpo += filaPartida(r);
+      filasObj.push(filaPartida(r));
     });
   });
-  if (!cuerpo) cuerpo = `<tr><td colspan="17" class="l" style="color:var(--mut)">Sin partidas${modoTxt === 'mes' ? ' con movimiento este mes' : ''}.</td></tr>`;
-  return cuerpo;
+  if (split) {
+    if (!filasObj.length) return { izq: `<tr><td colspan="3" class="l" style="color:var(--mut)">Sin partidas.</td></tr>`, der: `<tr><td colspan="14" class="l" style="color:var(--mut)">${modoTxt === 'mes' ? 'Sin movimiento este mes.' : ''}</td></tr>` };
+    return {
+      izq: filasObj.map(f => `<tr class="${f.cls}"${f.title ? ` title="${f.title}"` : ''}>${f.tds.slice(0, 3).join('')}</tr>`).join(''),
+      der: filasObj.map(f => `<tr class="${f.cls}"${f.title ? ` title="${f.title}"` : ''}>${f.tds.slice(3).join('')}</tr>`).join(''),
+    };
+  }
+  if (!filasObj.length) return `<tr><td colspan="17" class="l" style="color:var(--mut)">Sin partidas${modoTxt === 'mes' ? ' con movimiento este mes' : ''}.</td></tr>`;
+  return filasObj.map(f => `<tr class="${f.cls}"${f.title ? ` title="${f.title}"` : ''}>${f.tds.join('')}</tr>`).join('');
 }
 // cierre: costo directo + gastos generales + utilidad = subtotal, de TODA la valorización (los 4 frentes), igual que el cierre del Excel.
 // OJO: no sale de sumar las filas de la tabla (en modo «Solo lo ejecutado este mes» solo traen las partidas que se movieron ESTE mes: para
@@ -3414,10 +3444,17 @@ function valDetHTML() {
   else valDetCargar(valDetId, 'completo');   // aún no está: se pide aparte y al llegar se vuelve a pintar sola
   const cuerpo = valDetCuerpoTabla(list, proyectos, valDetFiltro.frente, valDetFiltro.modo, listAgg);
   const resumen = valDetResumenHTML(v, conProp, PRESU_CD_CACHE[v.tipo]);
+  // NOTA (2026-09-27): se probó un panel izquierdo/derecho arrastrable (como Look Ahead) para esta tabla, pero con
+  // valorizaciones de 600+ filas el alto de fila entre las dos tablas independientes nunca terminó de cuadrar al
+  // 100% (varias causas distintas encontradas y corregidas, pero siempre quedaba un desalineado en algún punto de
+  // la lista) — se volvió al freeze estático de siempre (columnas PART/DESCRIPCIÓN/UND fijas con position:sticky,
+  // una sola tabla) que no tiene ese problema porque no depende de igualar el alto entre dos tablas. La tabla
+  // «Resumen de valorizaciones» (16 filas) sí se quedó con el panel arrastrable — a esa escala nunca hubo problema.
+  const tablaDetalle = `<div class="vld-tw2"><table class="oc-tb vld-oc vld-navy">${valDetTablaCol}${valDetTablaCab}<tbody>${cuerpo}</tbody></table></div>`;
   return `<div class="vl-card vld-card">${cerrar}${titulo}
     <p class="hint">Metrado y monto ejecutado (${conProp ? 'aprobado + propuesta' : 'solo aprobado'}), con la jerarquía y el orden del cronograma. ${valDetFiltro.modo === 'completo' ? 'Todas las partidas del contrato.' : 'Solo lo ejecutado este mes.'}</p>
     ${controles}
-    <div class="vld-tw2"><table class="oc-tb vld-oc vld-navy">${valDetTablaCol}${valDetTablaCab}<tbody>${cuerpo}</tbody></table></div>
+    ${tablaDetalle}
     ${valDetLeyenda}
     ${resumen}
   </div>`;
@@ -4528,6 +4565,105 @@ async function ptFilasNuevas(actividades, planId, semIni) {
     return { plan_id: planId, actividad_id: a.id, orden: i + 1, plan_l: p[0], plan_m: p[1], plan_x: p[2], plan_j: p[3], plan_v: p[4], plan_s: p[5], plan_d: p[6] }; });
 }
 
+// ── panel congelado con divisor arrastrable, para tablas anchas (Valorizaciones): mismo mecanismo del divisor que Look Ahead/Semanal,
+// pero más simple (las dos tablas son partes de UNA sola fila de datos, con el mismo texto en una sola línea, así que no hace falta
+// forzar el ancho de la columna «actividad» ni sumar sub-filas Plan/Real; solo igualar la altura de cada fila entre ambos paneles). ──
+function panelesFijos(c) {
+  const fr = $(c.fr), iz = $(c.iz), de = $(c.de), sp = $(c.sp);
+  if (!fr || !iz || !de || !sp) return { sync() {} };
+  const sync = () => {
+    if (!fr.offsetWidth) return;
+    if (!fr._izqUser) fr.style.setProperty('--izq', c.izqDefault + 'px');
+    const tIz = iz.querySelector('table'), tDe = de.querySelector('table');
+    // columna flexible del panel izquierdo (ej. DESCRIPCIÓN): table-layout:fixed no le reparte bien el ancho sobrante cuando
+    // su texto es nowrap (el navegador termina agrandando la tabla entera para no truncarla) — se fuerza por JS, con el
+    // mismo ancho que va quedando el panel al arrastrar el divisor, menos el ancho de las demás columnas fijas.
+    if (c.flexCol && tIz) { const col = tIz.querySelector(c.flexCol); if (col) col.style.width = Math.max(40, iz.clientWidth - (c.flexFixed || 0)) + 'px'; }
+    // igualar el alto fila por fila con JS (medir y copiar) funciona con pocas filas (tabla de Resumen), pero con
+    // cientos de filas (tabla de Detalle) resultó lento Y ni siquiera queda exacto: aunque se copie el mismo número
+    // medido, el navegador puede renderizar un pelo distinto entre una tabla y otra, y ese margen se va acumulando
+    // fila tras fila hasta desalinearlas visiblemente. Por eso el Detalle usa alturas FIJAS por CSS en vez de esto
+    // (`.oc-tb tr.pt/.fr/.gp2/.gp3/.gp4 td{height:...}`, mismo valor exacto en las dos tablas por diseño, no por medición)
+    // y pasa `rowHeightSync:false` para saltarse este bloque; la de Resumen (pocas filas) sigue usando esto.
+    if (c.rowHeightSync !== false && tIz && tDe) {
+      const filasIz = [...tIz.querySelectorAll('tbody tr')], filasDe = [...tDe.querySelectorAll('tbody tr')];
+      filasIz.forEach(tr => tr.querySelectorAll('td').forEach(td => { td.style.height = ''; }));
+      filasDe.forEach(tr => tr.querySelectorAll('td').forEach(td => { td.style.height = ''; }));
+      const hIzArr = filasIz.map(tr => tr.getBoundingClientRect().height);
+      const hDeArr = filasDe.map(tr => tr.getBoundingClientRect().height);
+      filasIz.forEach((tr, i) => {
+        const trD = filasDe[i]; if (!trD) return;
+        const h = Math.max(hIzArr[i], hDeArr[i] || 0);
+        tr.querySelectorAll('td').forEach(td => { td.style.height = h + 'px'; });
+        trD.querySelectorAll('td').forEach(td => { td.style.height = h + 'px'; });
+      });
+    }
+    if (tIz && tDe) {
+      // excepciones puntuales (ej. una fila con una etiqueta de menor metrado más ancha de lo normal, que empuja su
+      // fila un poco más alta SOLO en el panel derecho): el alto fijo por CSS cubre el caso general, pero una fila
+      // así necesita que el panel izquierdo también crezca ahí. Se mide una sola vez (barato) y solo se corrige la
+      // fila puntual que salió distinta, no las 660 — así no se repite el problema de medir/copiar fila por fila.
+      const filasIzO = [...tIz.querySelectorAll('tbody tr')], filasDeO = [...tDe.querySelectorAll('tbody tr')];
+      const hIzO = filasIzO.map(tr => tr.getBoundingClientRect().height);
+      const hDeO = filasDeO.map(tr => tr.getBoundingClientRect().height);
+      filasIzO.forEach((tr, i) => {
+        const trD = filasDeO[i]; if (!trD) return;
+        const dif = hDeO[i] - hIzO[i];
+        if (Math.abs(dif) > 0.1) {
+          const h = Math.max(hIzO[i], hDeO[i]) + 0.5;
+          tr.querySelectorAll('td').forEach(td => { td.style.height = h + 'px'; });
+          trD.querySelectorAll('td').forEach(td => { td.style.height = h + 'px'; });
+        }
+      });
+    }
+    if (tIz && tDe) {
+      // el encabezado también debe medir igual en los dos paneles (si no, las filas quedan desalineadas al desplazar):
+      // si un lado tiene menos filas de cabecera que el otro (ej. 1 fila vs 2), se le agrega el sobrante a su ÚLTIMA fila.
+      const theadIz = tIz.querySelector('thead'), theadDe = tDe.querySelector('thead');
+      if (theadIz && theadDe) {
+        [...theadIz.querySelectorAll('tr th')].forEach(th => { th.style.height = ''; });
+        [...theadDe.querySelectorAll('tr th')].forEach(th => { th.style.height = ''; });
+        const hIz = theadIz.getBoundingClientRect().height, hDe = theadDe.getBoundingClientRect().height;
+        const target = Math.ceil(Math.max(hIz, hDe));   // entero: mismo motivo que el alto de fila, evita 1px de diferencia entre paneles
+        const filasHIz = [...theadIz.querySelectorAll('tr')], filasHDe = [...theadDe.querySelectorAll('tr')];
+        const lastIz = filasHIz[filasHIz.length - 1], lastDe = filasHDe[filasHDe.length - 1];
+        if (lastIz) { const cur = lastIz.getBoundingClientRect().height; lastIz.querySelectorAll('th').forEach(th => { th.style.height = (cur + (target - hIz)) + 'px'; }); }
+        if (lastDe) { const cur = lastDe.getBoundingClientRect().height; lastDe.querySelectorAll('th').forEach(th => { th.style.height = (cur + (target - hDe)) + 'px'; }); }
+      }
+    }
+    const sbDe = de.offsetHeight - de.clientHeight, sbIz = iz.offsetHeight - iz.clientHeight;
+    iz.style.paddingBottom = Math.max(0, sbDe - sbIz) + 'px';
+    if (iz.scrollTop !== de.scrollTop) iz.scrollTop = de.scrollTop;
+  };
+  let g = 0; try { g = +localStorage.getItem(c.clave) || 0; } catch (e) {}
+  if (g >= (c.min || 80)) { fr._izqUser = g; fr.style.setProperty('--izq', g + 'px'); }
+  const seguir = (a, b) => () => {
+    if (a._eco != null && Math.abs(a.scrollTop - a._eco) < 1.5) { a._eco = null; return; }
+    if (Math.abs(b.scrollTop - a.scrollTop) > 0.5) { b._eco = a.scrollTop; b.scrollTop = a.scrollTop; }
+  };
+  iz.addEventListener('scroll', seguir(iz, de), { passive: true });
+  de.addEventListener('scroll', seguir(de, iz), { passive: true });
+  sp.addEventListener('pointerdown', (e) => { e.preventDefault(); try { sp.setPointerCapture(e.pointerId); } catch (x) {} sp._x0 = e.clientX; sp._w0 = iz.offsetWidth; sp.classList.add('arrastra'); document.body.style.userSelect = 'none'; });
+  sp.addEventListener('pointermove', (e) => {
+    if (!sp.classList.contains('arrastra')) return;
+    const px = Math.round(Math.max(c.min || 80, Math.min(fr.clientWidth - (c.minDer || 160), sp._w0 + e.clientX - sp._x0))); fr._izqUser = px; fr.style.setProperty('--izq', px + 'px'); sync();
+  });
+  const fin = () => { if (!sp.classList.contains('arrastra')) return; sp.classList.remove('arrastra'); document.body.style.userSelect = ''; try { localStorage.setItem(c.clave, String(fr._izqUser)); } catch (x) {} sync(); };
+  sp.addEventListener('pointerup', fin); sp.addEventListener('pointercancel', fin);
+  sp.addEventListener('dblclick', () => { fr._izqUser = 0; try { localStorage.removeItem(c.clave); } catch (x) {} sync(); });
+  fr.addEventListener('mouseover', (e) => {
+    const tr = e.target.closest('tr'); if (!tr || !tr.parentElement || tr.parentElement.tagName !== 'TBODY') return;
+    const tbl = tr.closest('table'), tIz = iz.querySelector('table'), tDe = de.querySelector('table'); if (!tbl || !tIz || !tDe) return;
+    const filas = [...tbl.querySelectorAll('tbody tr')], idx = filas.indexOf(tr); if (idx < 0) return;
+    fr.querySelectorAll('tr.hov').forEach(x => x.classList.remove('hov'));
+    const otro = tbl === tIz ? tDe : tIz; const filasIz = [...tIz.querySelectorAll('tbody tr')], filasDe = [...tDe.querySelectorAll('tbody tr')];
+    if (filasIz[idx]) filasIz[idx].classList.add('hov'); if (filasDe[idx]) filasDe[idx].classList.add('hov');
+  });
+  fr.addEventListener('mouseleave', () => fr.querySelectorAll('tr.hov').forEach(x => x.classList.remove('hov')));
+  if (window.ResizeObserver) new ResizeObserver(sync).observe(fr);
+  sync();
+  return { sync };
+}
 // ── dos paneles (columnas | días) con divisor arrastrable y desplazamiento vertical unido: mismo comportamiento que el Look Ahead ──
 function dosPaneles(c) {
   const fr = $(c.fr), iz = $(c.iz), de = $(c.de), sp = $(c.sp), tIz = $(c.tIz), tDe = $(c.tDe), inn = $(c.izIn);
