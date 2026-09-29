@@ -712,7 +712,7 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .inf-k small{display:block;font-size:10.5px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--mut);}
 .inf-k b{display:block;font-size:20px;font-weight:800;margin:0;font-variant-numeric:tabular-nums;} .inf-k em{display:block;font-style:normal;font-size:11.5px;color:var(--mut);}
 .inf-k .bar{height:6px;border-radius:3px;background:var(--line);margin-top:3px;overflow:hidden;} .inf-k .bar i{display:block;height:100%;background:var(--kc,#2f6fed);}
-.inf-pa{background:linear-gradient(180deg,#f7f9fc,#fff);}
+.inf-pa{background:linear-gradient(180deg,#f7f9fc,#fff);padding-left:20px;}
 .inf-pa h3{font-size:12.5px !important;} .inf-pa > p{font-size:11px !important;margin:0 0 3px !important;}
 .inf-pa .pa-hero{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:4px;}
 .inf-pa .pa-hero b{font-size:22px;font-weight:800;color:#1e3a5f;letter-spacing:-.3px;font-variant-numeric:tabular-nums;}
@@ -724,11 +724,13 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .inf-pa .pa-lb{display:flex;align-items:center;gap:6px;font-size:11px;line-height:1.3;color:var(--tx2);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .inf-pa .pa-d{flex:none;width:8px;height:8px;border-radius:2px;}
 .inf-pa .pa-d.base{background:#1e3a5f;} .inf-pa .pa-d.add{background:#0e8f4f;} .inf-pa .pa-d.sub{background:#e07b1a;}
+.inf-pa .pa-vals{flex:none;display:flex;align-items:baseline;gap:8px;}
 .inf-pa .pa-r b{flex:none;font-size:11px;line-height:1.3;font-variant-numeric:tabular-nums;font-weight:800;color:var(--tx);}
+.inf-pa .pa-r em{flex:none;width:40px;text-align:right;font-style:normal;font-size:9.5px;font-weight:600;color:var(--mut);font-variant-numeric:tabular-nums;}
 .inf-pa .pa-r.add b{color:#0e7a44;} .inf-pa .pa-r.sub b{color:#c2620a;}
 .inf-pa .pa-bar{height:5px;border-radius:3px;background:var(--line);margin-top:4px;flex-shrink:0;overflow:hidden;} .inf-pa .pa-bar i{display:block;height:100%;background:linear-gradient(90deg,#1e3a5f,#2f6fed);}
 .inf-pa .pa-nt{margin:5px 0 0;} .inf-pa .pa-nt p{margin:0 0 2px;font-size:11px;line-height:1.3;color:var(--mut);} .inf-pa .pa-nt p:last-child{margin-bottom:0;}
-.inf-fila2{flex:none;display:grid;grid-template-columns:2.3fr 1fr;gap:10px;height:316px;}
+.inf-fila2{flex:none;display:grid;grid-template-columns:1.95fr 1fr;gap:10px;height:316px;}
 .inf-card{border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:#fff;display:flex;flex-direction:column;min-width:0;min-height:0;overflow:hidden;}
 .inf-card h3{margin:0;font-size:14px;font-weight:800;color:var(--tx);} .inf-card p{margin:1px 0 4px;font-size:11px;color:var(--mut);}
 .inf-ctit{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:2px;}
@@ -5397,7 +5399,7 @@ function infPresupActualizado() {   // presupuesto contractual + adicionales + m
   const de = ob.monto_deductivo != null ? Number(ob.monto_deductivo) : 0;
   const act = cp + ad + mm - de;
   const N = (n) => Number(n || 0).toLocaleString('es-PE', { minimumFractionDigits: 0, maximumFractionDigits: 0 }), pc = (n) => cp ? (n / cp * 100).toFixed(1) + '%' : '—';
-  const r = (cls, dot, lab, sig, monto) => `<div class="pa-r ${cls}"><span class="pa-lb"><i class="pa-d ${dot}"></i>${lab}</span><b>${sig}${N(monto)}</b></div>`;
+  const r = (cls, dot, lab, sig, monto) => `<div class="pa-r ${cls}"><span class="pa-lb"><i class="pa-d ${dot}"></i>${lab}</span><span class="pa-vals"><b>${sig}${N(monto)}</b><em>${pc(monto)}</em></span></div>`;
   const neg = act - cp < 0;
   // N° de adicionales/mayores metrados/deductivos: dato manual por ahora (obras.n_*), hasta que el mayor
   // metrado tenga sus propios estados (solicitado/autorizado/con resolución/ejecutado/valorizado) y se pueda contar solo.
