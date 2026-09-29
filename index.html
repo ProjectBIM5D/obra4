@@ -253,7 +253,7 @@ a{color:inherit;}
 .opt-row .seg-btn,.opt-row .src-btn{padding:5px 9px;}
 .foot-txt{margin-top:2px;opacity:.85;}
 
-#main{flex:1;min-width:0;padding:22px 26px 40px;}
+#main{flex:1;min-width:0;padding:22px 26px 40px;max-width:1600px;margin:0 auto;}
 h1{font-size:19px;margin:0 0 3px;} .sub{color:var(--mut);font-size:13px;margin:0 0 16px;}
 .topbar{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:18px;}
 
@@ -275,9 +275,9 @@ h1{font-size:19px;margin:0 0 3px;} .sub{color:var(--mut);font-size:13px;margin:0
 .mes-chip .lbl{color:var(--mut);font-size:11px;}
 .pane{display:none;} .pane.on{display:block;}
 .mat-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;}
-.mat-wrap{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:6px;}
-.mat-donut{flex:0 0 168px;max-width:100%;margin:0 auto;}
-#matBars{flex:1 1 240px;min-width:240px;}
+.mat-wrap{display:flex;flex-wrap:wrap;align-items:center;gap:16px;margin-top:6px;max-width:900px;}
+.mat-donut{flex:0 0 180px;max-width:100%;margin:0 auto;}
+#matBars{flex:1 1 320px;min-width:240px;max-width:640px;}
 #matSaldo{display:none;position:absolute;z-index:80;width:min(540px,calc(100% - 16px));background:var(--card);border:1px solid var(--line2);border-radius:12px;box-shadow:0 16px 44px rgba(2,6,23,.28);padding:10px 12px 8px;}
 #matSaldo.on{display:block;animation:admIn .15s ease;}
 .mat-sd-x{position:absolute;top:6px;right:8px;border:0;background:transparent;color:var(--mut);font-size:13px;cursor:pointer;padding:2px 6px;border-radius:6px;} .mat-sd-x:hover{background:var(--input);color:var(--tx);}
@@ -576,14 +576,15 @@ html.la-modal{overflow:hidden;}
 .av-card .legend2{margin-top:6px;}
 /* ═══ Resumen: reporte gerencial de avance por grupo y puente (matriz + radar/barras) ═══ */
 .rg-card{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;}
-.rg-band{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px 18px;padding:14px 20px;background:linear-gradient(135deg,#17335a,#24487a);color:#fff;}
-.rg-band h3{margin:0;font-size:17px;font-weight:800;letter-spacing:.1px;color:#fff;} .rg-band p{margin:3px 0 0;font-size:12px;color:#cfdcf0;}
+.rg-band{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px 18px;padding:11px 18px;background:linear-gradient(135deg,#17335a,#24487a);color:#fff;}
+.rg-band h3{margin:0;font-size:14px;font-weight:800;letter-spacing:.1px;color:#fff;} .rg-band p{margin:2px 0 0;font-size:11px;color:#cfdcf0;}
 .rg-ctl{display:flex;flex-wrap:wrap;gap:8px;}
 .rg-seg{display:inline-flex;background:rgba(255,255,255,.12);border-radius:9px;padding:2px;}
 .rg-seg button{border:0;background:transparent;color:#dbe6f6;font:inherit;font-size:11.5px;font-weight:700;padding:5px 12px;border-radius:7px;cursor:pointer;}
 .rg-seg button:hover{background:rgba(255,255,255,.14);} .rg-seg button.on{background:#fff;color:#17335a;}
 .rg-seg button:focus-visible{outline:2px solid #fff;outline-offset:1px;}
-.rg-body{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.3fr);gap:20px;padding:16px 20px;align-items:start;}
+.rg-body .av-card{border:0;box-shadow:none;background:transparent;padding:0;} .rg-body .av-wrap{min-height:195px;}
+.rg-body{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:16px;padding:12px 18px;align-items:start;}
 .rg-chart{min-width:0;} .rg-chart svg{display:block;width:100%;height:auto;max-height:420px;}
 .rg-tabla{min-width:0;display:flex;flex-direction:column;gap:12px;}
 .rg-tw{container-type:inline-size;overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:10px;}
@@ -612,7 +613,7 @@ html.la-modal{overflow:hidden;}
 .rg-lg span i{width:26px;height:9px;border-radius:5px;background:var(--line);position:relative;overflow:hidden;}
 .rg-lg span i::before{content:"";position:absolute;left:0;top:0;height:100%;width:100%;}
 .rg-lg span.es-t{flex-basis:100%;font-size:11px;font-weight:500;color:var(--mut);} .rg-lg span.es{white-space:nowrap;font-size:11.5px;font-weight:700;} .rg-lg span.es.ok{color:var(--green);} .rg-lg span.es.mid{color:var(--rg-p);} .rg-lg span.es.am{color:var(--rg-am);} .rg-lg span.es.mal{color:var(--rg-e);}
-.rg-lg span.lp i::before{background:var(--rg-pb);opacity:.34;} .rg-lg span.le i::before{background:var(--rg-eb);top:2px;height:5px;}
+.rg-lg span.lp i::before{background:var(--rg-pb);opacity:.34;} .rg-lg span.le i::before{background:var(--rg-eb);top:0;height:100%;}
 .rg-cmp{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;margin-bottom:6px;}
 .rg-cb{display:inline-flex;align-items:center;gap:6px;border:0;background:transparent;font:inherit;font-size:12px;font-weight:600;color:var(--tx);cursor:pointer;padding:2px 0;} .rg-cb i{width:10px;height:10px;border-radius:50%;} .rg-cb.off{opacity:.35;text-decoration:line-through;}
 .rg-cn{font-size:11px;color:var(--mut);}
@@ -640,14 +641,28 @@ html.la-modal{overflow:hidden;}
 .rgb-r{display:grid;grid-template-columns:58px minmax(0,1fr) 46px;gap:8px;align-items:center;margin-bottom:3px;font-size:11px;}
 .rgb-r span.n{color:var(--tx2);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;} .rgb-r b{text-align:right;font-variant-numeric:tabular-nums;}
 .rgb-tr{display:block;height:9px;border-radius:5px;background:var(--line);overflow:hidden;} .rgb-tr i{display:block;height:100%;border-radius:5px;}
-.rg-ct{font-size:11px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--mut);margin:0 0 8px;}
+.hm-w{display:flex;align-items:stretch;gap:12px;max-width:420px;margin:2px auto 0;}
+.hm{flex:1;min-width:0;display:grid;grid-template-columns:auto repeat(var(--n),minmax(0,1fr));gap:4px;font-variant-numeric:tabular-nums;}
+.hm-e{font-size:10px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--mut);align-self:end;padding:0 10px 6px 0;text-align:right;}
+.hm-h{display:flex;flex-direction:column;align-items:center;gap:1px;padding:0 4px 4px;border-bottom:2px solid var(--line);margin-bottom:2px;} .hm-h b{font-size:11.5px;font-weight:800;color:var(--tx);text-align:center;line-height:1.2;} .hm-h small{font-size:9.5px;font-weight:600;color:var(--mut);}
+.hm-r{font-size:11.5px;font-weight:800;color:var(--tx);display:flex;align-items:center;justify-content:flex-end;padding:0 12px 0 2px;}
+.hm-c{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;height:38px;border-radius:4px;} .hm-c b{font-size:13px;font-weight:800;letter-spacing:-.2px;line-height:1.05;} .hm-c small{font-size:9px;font-weight:700;opacity:1;}
+.hm-c.vacio{background:var(--input);color:var(--mut);font-weight:600;}
+.hm-cb{flex:none;width:48px;display:flex;flex-direction:column;} .hm-cbt{font-size:9px;font-weight:800;letter-spacing:.3px;text-transform:uppercase;color:var(--mut);height:34px;display:flex;align-items:flex-end;padding-bottom:4px;line-height:1.15;}
+.hm-cbb{position:relative;flex:1;padding:7px 0;} .hm-cbb i{position:absolute;left:0;top:7px;bottom:7px;width:11px;background:linear-gradient(0deg,rgb(176,84,76),rgb(204,124,94) 30%,rgb(225,192,136) 53%,rgb(192,208,172) 73%,rgb(126,176,152) 86%,rgb(54,128,118));}
+.hm-cbb span{position:absolute;left:17px;bottom:calc(7px + (100% - 14px) * var(--p));transform:translateY(50%);font-size:10.5px;font-weight:700;color:var(--tx2,var(--mut));white-space:nowrap;line-height:1;}
+@media (max-width:560px){.hm-w{gap:8px;} .hm-cb{width:40px;} .hm-cbt{font-size:8.5px;} .hm-c{height:46px;} .hm-c b{font-size:15px;} .hm-c small{display:none;} .hm-h b{font-size:10.5px;} .hm-h small{display:none;} .hm-r{font-size:11px;padding-right:6px;}}
+.hm-lg{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;padding:9px 12px;max-width:420px;margin:0 auto;background:var(--input);border:1px solid var(--line);border-radius:10px;font-size:11.5px;font-weight:700;color:var(--tx);}
+.hm-bar{width:190px;height:10px;border-radius:6px;background:linear-gradient(90deg,rgb(214,120,116),rgb(226,168,104) 33%,rgb(212,190,110) 60%,rgb(110,178,148) 85%,rgb(72,150,116));} .hm-lg em{display:none;} .hm-lg .hm-n{flex-basis:100%;font-size:11px;font-weight:500;color:var(--mut);}
+@media (max-width:560px){.hm{grid-template-columns:minmax(80px,1fr) repeat(var(--n),minmax(46px,1fr));gap:4px;} .hm-c{min-height:70px;} .hm-c b{font-size:14px;} .hm-c small,.hm-c em{display:none;} .hm-h{font-size:9.5px;}}
+.rg-ct{font-size:11px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--mut);text-align:center;margin:6px 0 24px;}
 .sem{display:inline-flex;align-items:center;gap:7px;vertical-align:middle;margin-right:9px;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.28);}
 .sem i{display:block;width:12px;height:12px;border-radius:50%;opacity:.5;box-shadow:0 0 0 1.5px rgba(255,255,255,.75);}
 .sem i.mal{background:#ef4444;} .sem i.am{background:#f59e0b;} .sem i.mid{background:#3b82f6;} .sem i.ok{background:#22c55e;}
 .sem i.on{opacity:1;transform:scale(1.25);box-shadow:0 0 0 2.5px #fff,0 0 0 4px rgba(0,0,0,.35);}
 .inf-k .sem{background:#eef2f8;padding:3px 9px;gap:6px;} .inf-k .sem i{width:11px;height:11px;opacity:.45;box-shadow:0 0 0 1px rgba(15,23,42,.18);} .inf-k .sem i.on{opacity:1;box-shadow:0 0 0 2px #fff,0 0 0 3.5px rgba(15,23,42,.5);}
-.rg-cards{display:grid;grid-template-columns:1fr .9fr 1.35fr;gap:12px;margin:0 20px 16px;}
-.rgc{--ac:#2563eb;background:var(--input);border:1px solid var(--line);border-top:3px solid var(--ac);border-radius:10px;padding:10px 13px;min-width:0;}
+.rg-cards{display:grid;grid-template-columns:1fr .9fr 1.35fr;gap:10px;margin:0 18px 14px;}
+.rgc{--ac:#2563eb;background:var(--input);border:1px solid var(--line);border-top:3px solid var(--ac);border-radius:10px;padding:8px 12px;min-width:0;}
 .rgc h4{margin:0 0 7px;font-size:11.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--tx);} .rgc h4 small{font-weight:600;color:var(--mut);letter-spacing:0;text-transform:none;}
 .rgc ul{list-style:none;margin:0;padding:0;} .rgc-i{display:flex;gap:8px;align-items:flex-start;font-size:11.5px;line-height:1.4;margin:0 0 6px;color:var(--tx2);} .rgc-i b{color:var(--tx);}
 .rgc-p{flex:none;min-width:80px;text-align:center;font-size:9.5px;font-weight:800;letter-spacing:.2px;padding:2px 7px;border-radius:999px;margin-top:1px;}
@@ -697,7 +712,23 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .inf-k small{display:block;font-size:10.5px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--mut);}
 .inf-k b{display:block;font-size:20px;font-weight:800;margin:0;font-variant-numeric:tabular-nums;} .inf-k em{display:block;font-style:normal;font-size:11.5px;color:var(--mut);}
 .inf-k .bar{height:6px;border-radius:3px;background:var(--line);margin-top:3px;overflow:hidden;} .inf-k .bar i{display:block;height:100%;background:var(--kc,#2f6fed);}
-.inf-fila2{flex:none;display:grid;grid-template-columns:1.95fr 1fr;gap:10px;height:288px;}
+.inf-pa{background:linear-gradient(180deg,#f7f9fc,#fff);}
+.inf-pa h3{font-size:12.5px !important;} .inf-pa > p{font-size:11px !important;margin:0 0 3px !important;}
+.inf-pa .pa-hero{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:4px;}
+.inf-pa .pa-hero b{font-size:22px;font-weight:800;color:#1e3a5f;letter-spacing:-.3px;font-variant-numeric:tabular-nums;}
+.inf-pa .pa-chip{font-size:9.5px;font-weight:800;padding:2px 8px;border-radius:999px;white-space:nowrap;}
+.inf-pa .pa-chip.pos{background:#0e8f4f1c;color:#0e7a44;} .inf-pa .pa-chip.neg{background:#ef444420;color:#c62828;}
+.inf-pa .pa-rows{display:flex;flex-direction:column;gap:3px;}
+.inf-pa .pa-r{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:2.5px 8px;border-radius:7px;background:#8393b210;}
+.inf-pa .pa-r.add{background:#0e8f4f10;} .inf-pa .pa-r.sub{background:#e07b1a12;}
+.inf-pa .pa-lb{display:flex;align-items:center;gap:6px;font-size:11px;line-height:1.3;color:var(--tx2);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.inf-pa .pa-d{flex:none;width:8px;height:8px;border-radius:2px;}
+.inf-pa .pa-d.base{background:#1e3a5f;} .inf-pa .pa-d.add{background:#0e8f4f;} .inf-pa .pa-d.sub{background:#e07b1a;}
+.inf-pa .pa-r b{flex:none;font-size:11px;line-height:1.3;font-variant-numeric:tabular-nums;font-weight:800;color:var(--tx);}
+.inf-pa .pa-r.add b{color:#0e7a44;} .inf-pa .pa-r.sub b{color:#c2620a;}
+.inf-pa .pa-bar{height:5px;border-radius:3px;background:var(--line);margin-top:4px;flex-shrink:0;overflow:hidden;} .inf-pa .pa-bar i{display:block;height:100%;background:linear-gradient(90deg,#1e3a5f,#2f6fed);}
+.inf-pa .pa-nt{margin:5px 0 0;} .inf-pa .pa-nt p{margin:0 0 2px;font-size:11px;line-height:1.3;color:var(--mut);} .inf-pa .pa-nt p:last-child{margin-bottom:0;}
+.inf-fila2{flex:none;display:grid;grid-template-columns:2.3fr 1fr;gap:10px;height:316px;}
 .inf-card{border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:#fff;display:flex;flex-direction:column;min-width:0;min-height:0;overflow:hidden;}
 .inf-card h3{margin:0;font-size:14px;font-weight:800;color:var(--tx);} .inf-card p{margin:1px 0 4px;font-size:11px;color:var(--mut);}
 .inf-ctit{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:2px;}
@@ -706,7 +737,7 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .inf-card .legend2{margin-top:2px;flex-wrap:wrap;gap:4px 12px;font-size:10.5px;}
 .inf-fila3{flex:1;min-height:0;display:grid;grid-template-columns:1.95fr 1fr;gap:10px;} .inf-fila3>*{min-height:0;min-width:0;}
 .inf-fila3 .rg-card{height:100%;display:flex;flex-direction:column;box-shadow:none;}
-.inf-fila3 .rg-body{flex:1;min-height:0;grid-template-columns:.68fr 1.32fr;padding:8px 14px 4px 14px;gap:10px;align-items:start;} .inf-fila3 .rg-chart svg{max-height:none;height:326px;margin:-6px -26px 0 -26px;width:calc(100% + 52px);max-width:none;} .inf-fila3 .rg-ct{margin-bottom:0;}
+.inf-fila3 .rg-body{flex:1;min-height:0;grid-template-columns:.85fr 1.15fr;padding:8px 14px 4px 14px;gap:10px;align-items:start;} .inf-fila3 .rg-chart svg{max-height:none;height:326px;margin:0 auto;width:100%;max-width:none;} .inf-fila3 .rg-ct{margin-bottom:14px;}
 .inf-fila3 .rg-mx th:first-child,.inf-fila3 .rg-mx td:first-child{width:24%;min-width:0;} .inf-fila3 .rg-mx thead th{padding-left:3px;padding-right:3px;letter-spacing:0;} .inf-fila3 .rg-mx{font-size:11px;} .inf-fila3 .rg-mx .mv b{font-size:11.5px;} .inf-fila3 .rg-mx .mv em{font-size:9.5px;}
 .inf-fila3 .rg-band{padding:8px 16px;} .inf-fila3 .rg-band h3{font-size:15px;}
 .inf-fila3 .rg-mx{min-width:0;font-size:11.5px;} .inf-fila3 .rg-mx th,.inf-fila3 .rg-mx td{padding:var(--rp,4px) 6px;} .inf-fila3 .rg-mx .mc{gap:4px;} .inf-fila3 .rg-mx thead th{padding:5px 5px;}
@@ -715,8 +746,8 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 /* niveles de compactación (los activa infAjustar solo cuando algo no cabe) */
 .inf-hoja.inf-c1 .rg-mx .mc{gap:1px;} .inf-hoja.inf-c1 .rg-mx .mtr{height:6px;} .inf-hoja.inf-c1 .rg-mx thead th{padding:3px 5px !important;} .inf-hoja.inf-c1 .rg-mx{font-size:10.5px;} .inf-hoja.inf-c1 .rg-mx .mv b{font-size:11px;} .inf-hoja.inf-c1 .inf-fila3 .rg-chart svg{height:262px;}
 .inf-hoja.inf-c2 .rg-mx tr.st{display:none;} .inf-hoja.inf-c2 .inf-fila3 .rg-band{padding:5px 14px;} .inf-hoja.inf-c2 .inf-fila3 .rg-body{padding-top:0;padding-bottom:0;} .inf-hoja.inf-c2 .inf-fila3 .rg-chart svg{height:236px;}
-.inf-hoja.inf-c3 .inf-fila2{height:262px;} .inf-hoja.inf-c3 .inf-fila3 .rgc-i{margin-bottom:1px;} .inf-hoja.inf-c3 .inf-fila3 .rg-cards{margin-bottom:5px;}
-.inf-hoja.inf-c4 .inf-fila2{height:236px;} .inf-hoja.inf-c4 .inf-head{padding-top:5px;padding-bottom:5px;} .inf-hoja.inf-c4 .inf-kpis{display:none;}
+.inf-hoja.inf-c3 .inf-fila2{height:286px;} .inf-hoja.inf-c3 .inf-fila3 .rgc-i{margin-bottom:1px;} .inf-hoja.inf-c3 .inf-fila3 .rg-cards{margin-bottom:5px;}
+.inf-hoja.inf-c4 .inf-fila2{height:258px;} .inf-hoja.inf-c4 .inf-head{padding-top:5px;padding-bottom:5px;} .inf-hoja.inf-c4 .inf-kpis{display:none;}
 .inf-leg{display:flex;gap:16px;align-items:center;font-size:11.5px;color:#dbe6f6;} .inf-leg span{display:inline-flex;align-items:center;gap:7px;} .inf-leg i{display:inline-block;width:26px;height:9px;border-radius:5px;background:rgba(255,255,255,.25);position:relative;overflow:hidden;}
 .inf-leg i::before{content:"";position:absolute;left:0;top:0;width:100%;height:100%;background:#93b4f5;opacity:.7;} .inf-leg i.e::before{background:#f3a19a;opacity:1;top:2px;height:5px;}
 /* materiales: tabla por puente con ejecutado y saldo */
@@ -1271,7 +1302,7 @@ html.dens-densa{--rh:26px;--rh0:31px;--rh1:26px;--rh2:24px;--rh3:22px;--fc:10.5p
         <div class="legend2"><span><i style="background:#2f6fed"></i>Programado</span><span><i style="background:var(--red)"></i>Ejecutado real</span><span><i style="background:#d97706"></i>Fecha de corte</span><span id="legendPlazo" style="display:none"><i style="background:#64748b;opacity:.35"></i>Suspensión de plazo</span><span id="legendFinPlazo" style="display:none"><i style="background:#7c3aed"></i>Inicio y fin de plazo</span></div>
       </div>
 
-      <div class="grid2 res-eq">
+      <div class="grid2 res-eq" style="grid-template-columns:minmax(0,1fr)">
         <div class="chart-card av-card">
           <h3>Avance por frente</h3>
           <p class="hint">% programado vs % ejecutado real — <b id="avancePuenteMes"></b> (ligado al mes elegido en la Curva S)</p>
@@ -2425,6 +2456,8 @@ function bar3D(x, yTop, baseline, width, depth, front, top, side) {
 }
 
 const w0Av = 420;
+const AV_NODE = document.querySelector('.av-card'), AV_HOLD = document.createElement('div');   // la gráfica «Avance por frente» se dibuja dentro de la tarjeta de componentes (ver renderReporteGrupos); mientras tanto espera aquí, dentro del documento, para que sus ids sigan existiendo
+AV_HOLD.hidden = true; document.body.appendChild(AV_HOLD); if (AV_NODE) AV_HOLD.appendChild(AV_NODE);
 let AV_DIM = null;   // [ancho, alto] del dibujo; solo lo usa el informe para barras más gruesas y letras más grandes
 function renderAvancePuente(periodo) {
   const todas = (DATA.curvaMensual || []).filter(enAlcance);
@@ -2832,8 +2865,32 @@ function rgRadar(series, ejes, max) {
   });
   return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Radar comparativo por grupo">${s}</svg>`;
 }
+const HM_STOPS = [[.40, [176, 84, 76]], [.60, [204, 124, 94]], [.75, [225, 192, 136]], [.88, [192, 208, 172]], [.97, [126, 176, 152]], [1.06, [54, 128, 118]]];   // ladrillo -> terracota -> arena -> salvia -> verde azulado
+function hmColor(v) {   // escala continua 40 % (rojo) -> 105 % (verde profundo); devuelve [color, letra con el mayor contraste]
+  let c = HM_STOPS[HM_STOPS.length - 1][1];
+  if (v <= HM_STOPS[0][0]) c = HM_STOPS[0][1];
+  else for (let k = 1; k < HM_STOPS.length; k++) if (v <= HM_STOPS[k][0]) { const [a, ca] = HM_STOPS[k - 1], [b, cb] = HM_STOPS[k], f = (v - a) / (b - a); c = ca.map((x, m) => x + (cb[m] - x) * f); break; }
+  const L = c.map(x => { x /= 255; return x <= .03928 ? x / 12.92 : Math.pow((x + .055) / 1.055, 2.4); }), lum = .2126 * L[0] + .7152 * L[1] + .0722 * L[2];
+  const cBlanco = 1.05 / (lum + .05), cOscuro = (lum + .05) / (.0086 + .05);   // contraste WCAG contra #fff y contra #0b1a2e (luminancia ~.0086)
+  return [`rgb(${c.map(Math.round).join(',')})`, cBlanco >= cOscuro ? '#ffffff' : '#0b1a2e'];
+}
+function rgHeat(frentes, filasH, tot) {   // filas = frentes (puentes), columnas = componentes; celda = % de cumplimiento (ejecutado ÷ programado)
+  const P = (x) => (x * 100).toFixed(1) + '%', M = (n) => (n / 1e6).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const corto = (n) => /^metrados/i.test(n) ? 'Met. de protección' : n;
+  let h = `<div class="hm-w"><div class="hm" style="--n:${filasH.length}"><div class="hm-e">Frente</div>${filasH.map(f => { const g = tot[f.clave]; return `<div class="hm-h"><b>${esc(corto(f.nom))}</b>${g && g.pres ? `<small>S/. ${M(g.pres)} M</small>` : ''}</div>`; }).join('')}`;
+  frentes.forEach(x => {
+    h += `<div class="hm-r">${esc(x.nom)}</div>` + filasH.map(f => {
+      const g = x.gr[f.clave];
+      if (!g || !g.pres || !(g.prog > 0)) return `<div class="hm-c vacio">—</div>`;
+      const cu = g.ejec / g.prog, [bg, fg] = hmColor(cu);
+      return `<div class="hm-c" style="background:${bg};color:${fg}" title="${esc(`${x.nom} · ${f.nom}: ejecutado ${P(g.ejec / g.pres)} · programado ${P(g.prog / g.pres)} · cumplimiento ${P(cu)} · presupuesto S/. ${M(g.pres)} M`)}"><b>${Math.round(cu * 100)}%</b><small>${(g.ejec / g.pres * 100).toFixed(1)} / ${(g.prog / g.pres * 100).toFixed(1)}</small></div>`;
+    }).join('');
+  });
+  return h + `</div><div class="hm-cb"><div class="hm-cbt">Cumpli-<br>miento</div><div class="hm-cbb"><i></i><span style="--p:1">105 %</span><span style="--p:.76">90 %</span><span style="--p:.45">70 %</span><span style="--p:0">40 %</span></div></div></div>`;
+}
 function renderReporteGrupos(periodo) {
   const box = $('#rgGrid'); if (!box || !DATA) return;
+  if (AV_NODE && box.contains(AV_NODE)) AV_HOLD.appendChild(AV_NODE);   // se guarda antes de reescribir la tarjeta
   if (periodo === undefined) periodo = curvaPopupFijo;
   const nota = $('#rgNota');
   if (GRUPOS === null) { box.innerHTML = '<div class="rg-msg">Cargando el reporte por componente…</div>'; nota.textContent = ''; return; }
@@ -2877,47 +2934,19 @@ function renderReporteGrupos(periodo) {
   const tot = { base: 0, prog: 0, ejec: 0, gr: {} };
   info.forEach(x => { tot.base += x.base; tot.prog += x.prog; tot.ejec += x.ejec;
     Object.values(x.gr).forEach(g => { const t0 = tot.gr[g.clave] || (tot.gr[g.clave] = { pres: 0, prog: 0, ejec: 0 }); t0.pres += g.pres; t0.prog += g.prog; t0.ejec += g.ejec; }); });
-  // ── celdas: % ejecutado (rojo) de % programado (azul) y una barra doble: la clara es lo programado, la fina sólida lo ejecutado ──
-  const bala = (pp, pe) => `<span class="mtr"><i class="pg" style="width:${Math.min(100, pp * 100).toFixed(1)}%"></i><i class="ej" style="width:${Math.min(100, pe * 100).toFixed(1)}%"></i></span>`;
-  const celdaG = (g, cls, nom) => !g || !g.pres ? `<td class="${cls || ''}"><div class="rc-n">—</div></td>`
-    : `<td class="${cls || ''}" title="${esc(`${nom}: programado ${fmt(g.prog)} · ejecutado (valorizado) ${fmt(g.ejec)} · presupuesto ${fmt(g.pres)}${g.prog > 0 ? ' · cumplimiento ' + P(g.ejec / g.prog) : ''}`)}"><div class="mc"><div class="mv"><b>${P(g.ejec / g.pres)}</b><em>/ ${P(g.prog / g.pres)}</em></div>${bala(g.prog / g.pres, g.ejec / g.pres)}</div></td>`;
-  const celdaT = (base, prog, ejec, cls) => !base ? `<td class="${cls || ''}"><div class="rc-n">—</div></td>`
-    : `<td class="${cls || ''}" title="${esc(`Programado ${fmt(prog)} · ejecutado ${fmt(ejec)} · presupuesto ${fmt(base)}`)}"><div class="mc"><div class="mv"><b>${P(ejec / base)}</b><em>/ ${P(prog / base)}</em></div>${bala(prog / base, ejec / base)}</div></td>`;
-  const estado = (base, prog, ejec) => { if (!base) return '<span class="rg-badge neu">Sin datos</span>'; const e = estadoAv(prog, ejec), dif = (ejec - prog) / base * 100;
-    return `<span class="rg-badge ${e.k}" title="${dif >= 0 ? '+' : '−'}${Math.abs(dif).toFixed(1)} pts vs. programado">${e.ic} ${e.txt}</span>`; };
   const nom = (c) => esc(corto(c));
   // cumplimiento = ejecutado ÷ programado a la fecha (SPI); su color sigue los estados del sistema
   const cump = (prog, ejec) => prog > 0 ? ejec / prog : null;
   const semaf = (v) => v === null ? 'neu' : estadoAv(1, v).k;
-  const celdaC = (prog, ejec, cls) => { const v = cump(prog, ejec); return `<td class="${cls || ''}" title="${esc('Ejecutado ÷ programado a la fecha')}"><span class="rg-cpv ${semaf(v)}">${v === null ? '—' : P(v)}</span></td>`; };
-  const cab = `<thead><tr><th>Componente</th>${info.map(x => `<th><i style="background:${x.col}"></i>${nom(x.c)}<small>${x.hay ? 'S/. ' + M(x.base) : 'sin datos'}</small></th>`).join('')}${multi ? `<th class="tot">Total obra<small>S/. ${M(tot.base)}</small></th>` : ''}</tr></thead>`;
-  const cuerpo = filas.map(f => `<tr><td><div class="rg-g">${esc(f.nom)}</div></td>${info.map(x => celdaG(x.gr[f.clave], '', f.nom)).join('')}${multi ? celdaG(tot.gr[f.clave], 'tot', f.nom) : ''}</tr>`).join('');
-  const total = `<tr class="tt"><td><div class="rg-g">Total (Curva S)</div></td>${info.map(x => celdaT(x.hay ? x.base : 0, x.prog, x.ejec)).join('')}${multi ? celdaT(tot.base, tot.prog, tot.ejec, 'tot') : ''}</tr>`
-    + `<tr class="st"><td></td>${info.map(x => `<td>${estado(x.hay ? x.base : 0, x.prog, x.ejec)}</td>`).join('')}${multi ? `<td class="tot">${estado(tot.base, tot.prog, tot.ejec)}</td>` : ''}</tr>`;
   // ── gráfico: el ámbito se elige en el combo (Total obra, un puente o los puentes juntos) ──
   const ambito = !multi ? info[0].c.id : (rgAmbito === 'total' || rgAmbito === 'todos' || rgAmbito === 'cumpl' || info.some(x => x.c.id === rgAmbito)) ? rgAmbito : 'total';
   const val = (g, k) => g && g.pres ? g[k] / g.pres : null;
-  let series, escala, leyGraf = '';
-  if (ambito === 'cumpl') {   // cumplimiento (ejecutado ÷ programado) de cada frente en cada componente
-    series = info.filter(x => !rgOcultos.has(x.c.id)).map(x => ({ nom: corto(x.c), col: x.col, v: filas.map(f => { const g = x.gr[f.clave]; return g && g.prog > 0 ? g.ejec / g.prog : null; }) }));
-    const vmax = Math.max(0, ...series.flatMap(s => s.v.map(v => v || 0)));
-    escala = [1, 1.25, 1.5, 2].find(z => z >= vmax) || Math.ceil(vmax);
-    leyGraf = `<div class="rg-cmp">${info.map(x => `<button type="button" class="rg-cb ${rgOcultos.has(x.c.id) ? 'off' : ''}" data-rgl="${esc(x.c.id)}" title="Mostrar u ocultar"><i style="background:${x.col}"></i>${nom(x.c)}</button>`).join('')}<span class="rg-cn">cumplimiento = ejecutado ÷ programado</span></div>`;
-  } else if (ambito === 'todos') {   // los puentes juntos: cada uno con su color, mostrando lo ejecutado
-    series = info.filter(x => !rgOcultos.has(x.c.id)).map(x => ({ nom: corto(x.c), col: x.col, v: filas.map(f => val(x.gr[f.clave], 'ejec')) }));
-    const vmax = Math.max(0, ...series.flatMap(s => s.v.map(v => v || 0)));
-    escala = [0.05, 0.1, 0.2, 0.25, 0.5, 1].find(z => z >= vmax) || 1;
-    leyGraf = `<div class="rg-cmp">${info.map(x => `<button type="button" class="rg-cb ${rgOcultos.has(x.c.id) ? 'off' : ''}" data-rgl="${esc(x.c.id)}" title="Mostrar u ocultar"><i style="background:${x.col}"></i>${nom(x.c)}</button>`).join('')}<span class="rg-cn">% ejecutado por frente</span></div>`;
-  } else {
-    const gA = ambito === 'total' ? (f) => tot.gr[f.clave] : (f) => (info.find(x => x.c.id === ambito) || info[0]).gr[f.clave];
-    series = [{ nom: 'Programado', col: C_PROG_RG, dash: true, rel: .10, v: filas.map(f => val(gA(f), 'prog')) }, { nom: 'Ejecutado', col: C_EJEC_RG, rel: .22, v: filas.map(f => val(gA(f), 'ejec')) }];
-    escala = 1;
-  }
-  const usaRadar = rgVista === 'radar' && filas.length >= 3;
-  const grafico = usaRadar ? leyGraf + rgRadar(series, filas.map(f => f.nom), escala)
-    : leyGraf + `<div>${filas.map((f, i) => `<div class="rgb-g"><div class="rgb-t">${esc(f.nom)}</div>${series.map(se => `<div class="rgb-r"><span class="n">${esc(se.nom)}</span><span class="rgb-tr"><i style="width:${Math.min(100, (se.v[i] || 0) / escala * 100).toFixed(1)}%;background:${se.col}"></i></span><b style="color:${se.col}">${se.v[i] === null ? '—' : P(se.v[i])}</b></div>`).join('')}</div>`).join('')}</div>`;
-  const opciones = multi ? `<label class="rg-sel">Ver <select id="rgAmbito" aria-label="Qué mostrar en el gráfico"><option value="total"${ambito === 'total' ? ' selected' : ''}>Total obra</option>${info.map(x => `<option value="${esc(x.c.id)}"${ambito === x.c.id ? ' selected' : ''}>${nom(x.c)}</option>`).join('')}<option value="todos"${ambito === 'todos' ? ' selected' : ''}>Comparar frentes (ejecutado)</option><option value="cumpl"${ambito === 'cumpl' ? ' selected' : ''}>Cumplimiento por frente</option></select></label>` : '';
-  const tituloG = ambito === 'total' ? (multi ? 'Total obra' : corto(info[0].c)) : ambito === 'todos' ? 'Comparación de frentes · % ejecutado' : ambito === 'cumpl' ? 'Cumplimiento por frente · ejecutado ÷ programado' : corto(info.find(x => x.c.id === ambito).c);
+  // Mapa de calor: 3 componentes (filas) x frentes (columnas); el color es el cumplimiento (ejecutado ÷ programado a la fecha)
+  const ordH = ['puente', 'accesos', 'metrados'];
+  const filasH = filas.filter(f => !f.adic && ordH.some(k => f.nom.toLowerCase().startsWith(k))).sort((x, y) => ordH.findIndex(k => x.nom.toLowerCase().startsWith(k)) - ordH.findIndex(k => y.nom.toLowerCase().startsWith(k)));
+  const grafico = rgHeat(info.map(x => ({ nom: corto(x.c), gr: x.gr })), filasH, tot.gr);
+  const opciones = '';
+  const tituloG = 'Mapa de calor · cumplimiento (ejecutado ÷ programado)';
   // ── tarjetas de conclusión (se calculan solas con lo que hay en pantalla) ──
   const pill = (k, txt) => `<span class="rgc-p ${k}">${txt}</span>`;
   const fila = (k, lab, txt) => `<li class="rgc-i">${pill(k, lab)}<span>${txt}</span></li>`;
@@ -2982,13 +3011,13 @@ function renderReporteGrupos(periodo) {
   const tarjetas = `<div class="rg-cards">${card1}${card2}${card3}</div>`;
   const nComp = info.length;
   box.innerHTML = `<div class="rg-card">
-    <div class="rg-band"><div><h3>Avance por componente — ${nComp} frente${nComp === 1 ? '' : 's'}</h3><p>Comparativo programado vs ejecutado (%) · ${esc(corte)} · ${esc(ALCANCE_TXT.contrato)} · sin IGV</p></div>
-      <div class="rg-ctl">${opciones}<span class="rg-seg" role="group" aria-label="Tipo de gráfico"><button type="button" data-rgv="radar" class="${usaRadar ? 'on' : ''}">Radar</button><button type="button" data-rgv="barras" class="${usaRadar ? '' : 'on'}">Barras</button></span></div></div>
-    <div class="rg-body"><div class="rg-chart"><div class="rg-ct">${esc(tituloG)}</div>${grafico}</div>
-      <div class="rg-tabla"><div class="rg-tw"><table class="rg-mx">${cab}<tbody>${cuerpo}${total}</tbody></table></div>
-        <div class="rg-lg"><span class="lp"><i></i>Programado a la fecha</span><span class="le"><i></i>Ejecutado</span><span class="es-t">En cada celda: ejecutado / programado. Estados según cumplimiento (ejecutado ÷ programado):</span><span class="es ok">✔ Adelantado ≥ 102 %</span><span class="es mid">● En plazo 98–102 %</span><span class="es am">▼ Atrasado 90–98 %</span><span class="es mal">⚠ Crítico &lt; 90 %</span></div></div></div>
+    <div class="rg-band"><div><h3>Avance por frente y por componente — ${nComp} frente${nComp === 1 ? '' : 's'}</h3><p>Comparativo programado vs ejecutado (%) · ${esc(corte)} · ${esc(ALCANCE_TXT.contrato)} · sin IGV</p></div>
+      <div class="rg-ctl">${opciones}</div></div>
+    <div class="rg-body"><div id="rgAvSlot"></div><div class="rg-chart"><div class="rg-ct">${esc(tituloG)}</div>${grafico}
+      <div class="rg-tabla"><div class="hm-lg"><span class="hm-n"><b>Lectura:</b> % de cumplimiento (ejecutado ÷ programado). Verde = en plazo · arena = atrasado · rojo = crítico (&lt;90%).</span></div></div></div></div>
     ${tarjetas}
   </div>`;
+  const slotAv = box.querySelector('#rgAvSlot'); if (slotAv && AV_NODE) { slotAv.replaceWith(AV_NODE); try { renderAvancePuente(periodo); } catch (e) {} }
   nota.textContent = 'Programado: cronograma valorizado vigente. Ejecutado por componente: lo valorizado (valorizaciones aprobadas). «Total (Curva S)»: cifras oficiales del frente (incluyen avance que aún no está registrado por partida). Pronóstico de término: método del valor ganado (fin proyectado = inicio + duración planificada ÷ SPI; SPI = valor ganado ÷ valor planificado).';
 }
 
@@ -3211,7 +3240,7 @@ function valPintar() {
 // partidas del contrato sin movimiento ese mes (para verlas todas, como la valorización completa del Excel). ══
 let valDetId = null, valDetFiltro = { frente: '', modo: 'mes' };
 const valDetCache = {};           // valDetCache[valorizacionId] = { mes: filas|undefined|'error', completo: filas|undefined|'error' }
-let WBS_ARBOL = null, WBS_MENOR = null;   // árbol completo del cronograma (todo nivel) y mapa de menor metrado por nodo: se piden una sola vez
+let WBS_ARBOL = null, WBS_MENOR = null, WBS_DEDUCTIVO = null;   // árbol completo del cronograma (todo nivel), mapa de menor metrado por nodo (todo origen) y mapa solo del deductivo por transporte (para presupuesto actualizado, que no debe restar el menor metrado)
 const PRESU_CD_CACHE = {};   // presupuesto actualizado total (costo directo) por tipo: sale del mismo árbol, sin pedir nada aparte
 async function valDetArbol() {
   if (WBS_ARBOL) return WBS_ARBOL;
@@ -3226,8 +3255,15 @@ async function valDetArbol() {
 }
 async function valDetMenorMap() {
   if (WBS_MENOR) return WBS_MENOR;
-  try { const rows = await getTodo(`/metrado_ajustes?tipo=eq.menor&select=nodo_id,metrado`); WBS_MENOR = {}; rows.forEach(r => { WBS_MENOR[r.nodo_id] = (WBS_MENOR[r.nodo_id] || 0) + (Number(r.metrado) || 0); }); }
-  catch (e) { WBS_MENOR = {}; }
+  try {
+    const rows = await getTodo(`/metrado_ajustes?tipo=eq.menor&select=nodo_id,metrado,origen`);
+    WBS_MENOR = {}; WBS_DEDUCTIVO = {};
+    rows.forEach(r => {
+      WBS_MENOR[r.nodo_id] = (WBS_MENOR[r.nodo_id] || 0) + (Number(r.metrado) || 0);
+      if (r.origen === 'deductivo_transporte') WBS_DEDUCTIVO[r.nodo_id] = (WBS_DEDUCTIVO[r.nodo_id] || 0) + (Number(r.metrado) || 0);
+    });
+  }
+  catch (e) { WBS_MENOR = {}; WBS_DEDUCTIVO = {}; }
   return WBS_MENOR;
 }
 async function valDetAbrir(id) {
@@ -3756,7 +3792,7 @@ async function valActualizarProcesar(file) {
     }
     const nMenor = await valImpGuardarMenores(leido, file.name);
 
-    WBS_MENOR = null; Object.keys(valDetCache).forEach(k => delete valDetCache[k]);
+    WBS_MENOR = null; WBS_DEDUCTIVO = null; Object.keys(valDetCache).forEach(k => delete valDetCache[k]);
     toast(`Actualizado: ${mesesAbiertos.length} valorización(es), ${nMenor} menores metrados${leido.avisos.length ? ` · ${leido.avisos.length} avisos (ver consola)` : ''}.`, true);
     await valCargar(); bootResumen();
   } catch (err) {
@@ -3810,7 +3846,7 @@ async function valNuevaProcesar(file) {
     }
     const nMenor = await valImpGuardarMenores(leido, file.name);
 
-    WBS_MENOR = null; Object.keys(valDetCache).forEach(k => delete valDetCache[k]);
+    WBS_MENOR = null; WBS_DEDUCTIVO = null; Object.keys(valDetCache).forEach(k => delete valDetCache[k]);
     toast(`Creado: ${nuevas.length} valorización(es) nueva(s), ${nMenor} menores metrados${leido.avisos.length ? ` · ${leido.avisos.length} avisos (ver consola)` : ''}.`, true);
     await valCargar(); bootResumen();
   } catch (err) {
@@ -5344,6 +5380,41 @@ function infMateriales(periodo, comps) {   // tabla por puente: ejecutado, falta
   return `<table class="inf-mt">${cab}<tbody>${cuerpo}${total}</tbody></table><div class="inf-sub">Avance ${multi ? 'total de la obra' : 'del frente'} por material · ${esc(ALCANCE_TXT[alcance])}</div>${barras}
     <div class="legend2" style="margin-top:8px"><span><i style="background:#0e8f4f"></i>Ejecutado</span><span><i style="background:#d97706"></i>Falta ejecutar</span>${hayMenor ? `<span><i style="background:${C_MENOR}"></i>Menor metrado (no se ejecutará)</span>` : ''}<span><i style="background:#dc2626"></i>Mayor metrado (sobre lo valorizado)</span></div>`;
 }
+function infPresupActualizado() {   // presupuesto contractual + adicionales + mayores metrados − deductivos = presupuesto actualizado (subtotal sin IGV, total obra)
+  // el menor metrado NO entra aquí: es una proyección de lo que no se ejecutará (ver «Menor metrado acumulado» en la valorización), no una modificación del contrato.
+  const filas = (RES_A && RES_A.progRows) || [], suma = (c) => filas.filter(r => (r.concepto || 'contrato') === c).reduce((s, r) => s + (Number(r.programado_parcial) || 0), 0);
+  const ob = (RES_A && RES_A.obra) || {};
+  // OJO: el cronograma valorizado vigente (suma('contrato')) ya viene CON el deductivo aplicado — no sirve como
+  // «100 %» de esta tarjeta porque restaría el deductivo dos veces. Se usa el monto ORIGINAL del contrato
+  // (obras.monto_contrato_original, Contrato N° 222025-MTC/20.2), con el cronograma como respaldo si no está cargado.
+  const cp = ob.monto_contrato_original != null ? Number(ob.monto_contrato_original) : suma('contrato');
+  // adicionales/mayores metrados/deductivo: `valorizaciones` ya tiene tipo='adicional'/'mayores_metrados', pero todavía
+  // no hay registros cargados ahí (por eso antes salía 0 o una cifra del cronograma que no coincidía con lo real).
+  // Mientras tanto se usa el monto manual de obras.monto_* (confirmado con el usuario: S/. 1,836,166.56 / 1,873,149.83 / 6,237.85
+  // sin IGV a la fecha); el día que se carguen esas valorizaciones, esto se reemplaza por la suma de lo aprobado.
+  const ad = ob.monto_adicionales != null ? Number(ob.monto_adicionales) : suma('adicional');
+  const mm = ob.monto_mayores_metrados != null ? Number(ob.monto_mayores_metrados) : 0;
+  const de = ob.monto_deductivo != null ? Number(ob.monto_deductivo) : 0;
+  const act = cp + ad + mm - de;
+  const N = (n) => Number(n || 0).toLocaleString('es-PE', { minimumFractionDigits: 0, maximumFractionDigits: 0 }), pc = (n) => cp ? (n / cp * 100).toFixed(1) + '%' : '—';
+  const r = (cls, dot, lab, sig, monto) => `<div class="pa-r ${cls}"><span class="pa-lb"><i class="pa-d ${dot}"></i>${lab}</span><b>${sig}${N(monto)}</b></div>`;
+  const neg = act - cp < 0;
+  // N° de adicionales/mayores metrados/deductivos: dato manual por ahora (obras.n_*), hasta que el mayor
+  // metrado tenga sus propios estados (solicitado/autorizado/con resolución/ejecutado/valorizado) y se pueda contar solo.
+  const cta = (n) => n || n === 0 ? ` (${n})` : '', ctaMM = (n) => n || n === 0 ? ` (${n})*` : '';
+  const nMM = ob.n_mayores_metrados, nRes = ob.n_mm_resolucion, nAut = ob.n_mm_autorizados;
+  const notaMM = (nMM && (nRes || nAut)) ? `<p><b>*</b> De los ${nMM} mayores metrados: ${nRes || 0} con resolución, ${nAut || 0} autorizados (dato manual, en automatización).</p>` : '';
+  return `<div class="inf-card inf-pa"><h3>Presupuesto actualizado</h3><p>Total obra · subtotal sin IGV · S/.</p>
+    <div class="pa-hero"><b>${N(act)}</b><span class="pa-chip ${neg ? 'neg' : 'pos'}">${neg ? '−' : '+'} ${pc(Math.abs(act - cp))} vs. contractual</span></div>
+    <div class="pa-rows">
+      ${r('', 'base', 'Presupuesto contractual', '', cp)}
+      ${r('add', 'add', 'Adicionales' + cta(ob.n_adicionales), '+', ad)}
+      ${r('add', 'add', 'Mayores metrados' + ctaMM(nMM), '+', mm)}
+      ${r('sub', 'sub', 'Deductivos' + cta(ob.n_deductivos), '−', de)}
+    </div>
+    <div class="pa-bar"><i style="width:${Math.min(100, cp ? cp / Math.max(act, cp) * 100 : 0).toFixed(1)}%"></i></div>
+    <div class="pa-nt"><p>Presupuesto contractual: monto original del contrato.</p><p>Variación neta: <b>${neg ? '−' : '+'} S/. ${N(Math.abs(act - cp))}</b>.</p>${notaMM}</div></div>`;
+}
 function infHTML() {
   const tx = (s) => (document.querySelector(s) || {}).textContent || '';
   const ih = (s) => (document.querySelector(s) || {}).innerHTML || '';
@@ -5355,7 +5426,6 @@ function infHTML() {
   // Curva S: se vuelve a dibujar más ancha para que ocupe bien su lugar en la hoja
   CURVA_DIM = [1000, 216]; try { renderCurvaS(); } catch (e) {} finally { CURVA_DIM = null; }
   AV_DIM = [440, 214]; try { renderAvancePuente(curvaPopupFijo); } catch (e) {} finally { AV_DIM = null; }
-  const avanceSvg = infSvg('#avancePuenteSvg');
   const curvaSvg = infSvg('#curvaSvg'), curvaChips = ih('#curvaMesKpis'), curvaTit = tx('#curvaTitulo'), curvaHint = tx('#curvaHint');
   const lgCurva = (document.querySelector('#curvaWrap') || {}).parentElement ? document.querySelector('#curvaWrap').parentElement.querySelector('.legend2') : null, lgC = lgCurva ? lgCurva.innerHTML.replace(/<span[^>]*>(?:(?!<\/span>).)*Mes elegido<\/span>/, '').replace('Suspensión / ampliación de plazo', 'Suspensión de plazo') : '';
   const periodo = curvaPopupFijo, comps = COMPONENTES.filter(c => seleccionada === GENERAL || c.id === seleccionada);
@@ -5368,7 +5438,7 @@ function infHTML() {
     <div class="inf-kpis">${k('#0f766e', 'Presupuesto total (sin IGV)', tx('#kPresu'), tx('#kPresuS'))}${k('#2f6fed', 'Programado a la fecha', tx('#kProg'), tx('#kProgS'))}${k('#dc2626', 'Valorizado (ejecutado real)', tx('#kValor'), tx('#kValorS'))}${k(COL_EST[ESTADO_KPI.k] || '#b45309', 'Estado del avance', tx('#kPct'), semaforoHTML(ESTADO_KPI.k) + esc(ESTADO_KPI.txt), pct, true)}</div>
     <div class="inf-fila2">
       <div class="inf-card"><div class="inf-ctit"><div><h3>${esc(curvaTit)}</h3><p>${esc(curvaHint)}</p></div><div class="inf-chips">${curvaChips}</div></div><div class="svgw">${curvaSvg}</div><div class="legend2">${lgC}</div></div>
-      <div class="inf-card"><h3>Avance por frente</h3><p>% programado vs. % ejecutado real — ${esc(tx('#avancePuenteMes'))}</p><div class="svgw">${avanceSvg}</div><div class="legend2"><span><i style="background:#2f6fed"></i>Programado</span><span><i style="background:#ef4444"></i>Ejecutado</span></div></div>
+      ${infPresupActualizado()}
     </div>
     <div class="inf-fila3">${rgH}
       <div class="inf-card"><h3>Control de materiales — ejecutado y saldo</h3><p>${esc(tx('#matMes'))} · cantidades acumuladas al corte, por puente</p>${infMateriales(periodo, comps)}</div>
@@ -5401,6 +5471,7 @@ let infTituloPrevio = null;
 async function abrirInforme() {
   if (!DATA) { toast('Espera a que carguen los datos del Resumen.', false); return; }
   const oscuro = tema === 'oscuro'; let html = '';
+  try { await valDetArbol(); await valDetMenorMap(); } catch (e) {}   // para el cuadro de presupuesto actualizado (deductivos y menores metrados)
   try { if (oscuro) infTema(true); html = infHTML(); } finally { if (oscuro) infTema(false); else { try { renderAll(); } catch (e) {} } }
   document.querySelector('#informe')?.remove();
   const ov = document.createElement('div'); ov.id = 'informe'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-label', 'Informe A3');
