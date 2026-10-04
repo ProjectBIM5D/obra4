@@ -795,9 +795,12 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .hh-leg span{cursor:pointer;user-select:none;} .hh-leg span.off{opacity:.35;text-decoration:line-through;}
 .hh-dot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:7px;vertical-align:baseline;}
 .hh-card{position:relative;} .hh-hot{cursor:pointer;} .hh-hot:hover{fill:rgba(47,111,237,.09);}
-.hh-globo{position:absolute;z-index:20;min-width:250px;max-width:340px;background:var(--card);border:1px solid var(--line2);border-radius:12px;box-shadow:0 12px 34px rgba(2,6,23,.22);padding:10px 12px;font-size:12px;color:var(--tx);pointer-events:none;}
+.hh-leg span.hh-gan{cursor:default;} .hh-globo tr.cab td{font-size:10px;color:var(--mut);text-transform:uppercase;border-bottom:1px solid var(--line2);padding-bottom:3px;}
+.hh-tablas .vl-card{container-type:inline-size;} .hh-tablas .vl-tb th,.hh-tablas .vl-tb td{padding:8px 7px;}
+@container (max-width:560px){.hh-tablas .c-pct{display:none;}}
+.hh-globo{position:absolute;z-index:20;min-width:250px;max-width:400px;background:var(--card);border:1px solid var(--line2);border-radius:12px;box-shadow:0 12px 34px rgba(2,6,23,.22);padding:10px 12px;font-size:12px;color:var(--tx);pointer-events:none;}
 .hh-globo b{display:block;font-size:13px;margin-bottom:6px;} .hh-globo table{width:100%;min-width:0;border-collapse:collapse;font-size:12px;font-variant-numeric:tabular-nums;}
-.hh-globo td{padding:3px 0;border-bottom:0;color:var(--tx);} .hh-globo td:nth-child(2),.hh-globo td:nth-child(3){text-align:right;padding-left:12px;white-space:nowrap;}
+.hh-globo td{padding:3px 0;border-bottom:0;color:var(--tx);} .hh-globo td:not(:first-child){text-align:right;padding-left:12px;white-space:nowrap;}
 .hh-globo tr.tt td{border-top:1px solid var(--line2);font-weight:800;padding-top:5px;} .hh-globo small{display:block;margin-top:7px;font-size:10.5px;color:var(--mut);line-height:1.35;}
 .hh-tablas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:stretch;} .hh-tablas.solo{grid-template-columns:minmax(0,1fr);}
 .hh-tablas .vl-card{margin-bottom:0;min-width:0;display:flex;flex-direction:column;} .hh-tablas .vl-tw{flex:1;}
@@ -5376,7 +5379,7 @@ $('#parteForm').addEventListener('submit', async (e) => {
 // ══ Módulo HORAS-HOMBRE: histograma de horas planificadas desde el APU de la oferta (v_hh_plan_mes / v_hh_plan_semana) ══
 // Horas de una partida = metrado vigente × cuantía del APU (el plazo no las cambia; solo cambia cómo se reparten en el tiempo).
 // Cada serie es un recurso, como en la relación de insumos de S10: los operadores de equipo salen aparte de la mano de obra.
-const HH = { per: 'mes', frente: 'todos', medida: 'hh', datos: {}, cob: null, ocultos: new Set(), colores: null, vista: null };
+const HH = { per: 'mes', frente: 'todos', medida: 'hh', datos: {}, cob: null, gan: null, ocultos: new Set(), colores: null, vista: null };
 let hhFijo = -1;   // periodo con el globo fijado por clic (-1 = ninguno)
 const HH_PALETA = ['#1e3a5f', '#2f6fed', '#5b9bff', '#9cc4ff', '#d97706', '#f59e0b', '#0f766e', '#14b8a6', '#5eead4', '#99f6e4', '#7c3aed', '#a78bfa', '#be185d', '#f472b6', '#64748b', '#94a3b8'];
 // solo las categorías que se usan para productividad (códigos de la relación de insumos de S10); para ver otras, agregar su código aquí
@@ -5384,12 +5387,15 @@ const HH_RECURSOS = { '0147010001': '#1e3a5f', '0147010002': '#2f6fed', '0147010
 async function hhCargar() {
   const box = $('#hhCuerpo'); if (!box) return;
   try {
-    if (!HH.datos[HH.per]) {
-      box.innerHTML = '<div class="rg-msg">Consultando las horas planificadas…</div>';
-      const vista = HH.per === 'mes' ? 'v_hh_plan_mes' : 'v_hh_plan_semana', col = HH.per === 'mes' ? 'mes' : 'semana';
-      HH.datos[HH.per] = await getTodo(`/${vista}?select=proyecto_id,${col},recurso_codigo,recurso,unidad,horas&order=${col},proyecto_id,recurso_codigo`);
-    }
+    const pedir = async (per) => {
+      if (HH.datos[per]) return;
+      const vista = per === 'mes' ? 'v_hh_plan_mes' : 'v_hh_plan_semana', col = per === 'mes' ? 'mes' : 'semana';
+      HH.datos[per] = await getTodo(`/${vista}?select=proyecto_id,${col},recurso_codigo,recurso,unidad,horas&order=${col},proyecto_id,recurso_codigo`);
+    };
+    if (!HH.datos[HH.per]) box.innerHTML = '<div class="rg-msg">Consultando las horas planificadas…</div>';
+    await pedir('mes'); await pedir(HH.per);   // el plan mensual siempre: sirve para comparar con las horas ganadas hasta el corte
     if (!HH.cob) HH.cob = await get('/v_apu_cobertura?select=*');
+    if (!HH.gan) { try { HH.gan = await getTodo('/v_hh_ganadas_mes?select=proyecto_id,mes,estado,recurso_codigo,unidad,horas&order=mes,proyecto_id,estado,recurso_codigo'); } catch (e) { HH.gan = []; } }   // sin la vista (apu_hh.sql sin actualizar) el módulo sigue sirviendo sin horas ganadas
   } catch (e) {
     box.innerHTML = '<div class="rg-msg">Este módulo necesita las tablas del APU y la carga de la oferta. Pide al administrador que corra <b>apu_hh.sql</b> y los <b>apu_oferta_*.sql</b> en la base.</div>'; return;
   }
@@ -5430,6 +5436,18 @@ function hhPintar() {
   const lab = (p) => { const d = new Date(ms(p)); return HH.per === 'mes' ? `${MESES_ES[d.getUTCMonth()]}-${String(d.getUTCFullYear()).slice(2)}` : `${String(d.getUTCDate()).padStart(2, '0')}/${String(d.getUTCMonth() + 1).padStart(2, '0')}`; };
   const labLargo = (p) => { const d = new Date(ms(p)); return HH.per === 'mes' ? `${MESES_ES[d.getUTCMonth()]} ${d.getUTCFullYear()}` : `semana del ${String(d.getUTCDate()).padStart(2, '0')}/${String(d.getUTCMonth() + 1).padStart(2, '0')}/${d.getUTCFullYear()}`; };
 
+  // horas GANADAS (avance de cada valorización × cuantía del APU) y el plan hasta el mismo mes de corte
+  const conProp = typeof INCLUIR_PROP !== 'undefined' && INCLUIR_PROP;
+  const ganF = (HH.gan || []).filter(r => HH_RECURSOS[r.recurso_codigo] && r.unidad === HH.medida && (!frId || r.proyecto_id === frId) && (r.estado === 'aprobada' || (conProp && r.estado === 'propuesta')));
+  const k10 = (r) => String(r.mes).slice(0, 10), corte = ganF.reduce((m, r) => k10(r) > m ? k10(r) : m, '');
+  const planF = (HH.datos.mes || []).filter(r => HH_RECURSOS[r.recurso_codigo] && r.unidad === HH.medida && (!frId || r.proyecto_id === frId) && k10(r) <= corte);
+  const sumPor = (rows, k) => rows.reduce((o, r) => { o[r[k]] = (o[r[k]] || 0) + (Number(r.horas) || 0); return o; }, {});
+  const ganRec = sumPor(ganF, 'recurso_codigo'), ganFr = sumPor(ganF, 'proyecto_id'), pafRec = sumPor(planF, 'recurso_codigo'), pafFr = sumPor(planF, 'proyecto_id');
+  const ganTot = ganF.reduce((s, r) => s + (Number(r.horas) || 0), 0), pafTot = planF.reduce((s, r) => s + (Number(r.horas) || 0), 0), hayGan = ganF.length > 0;
+  const ganMes = {}; ganF.forEach(r => { const k = k10(r), h = Number(r.horas) || 0, o = ganMes[k] || (ganMes[k] = { tot: 0, rec: {} }); o.tot += h; o.rec[r.recurso_codigo] = (o.rec[r.recurso_codigo] || 0) + h; });
+  const ganP = periodos.map(p => HH.per === 'mes' ? (ganMes[p] || null) : null);   // las valorizaciones son mensuales: la línea solo se dibuja en la vista mensual
+  const labCorte = corte ? `${MESES_ES[+corte.slice(5, 7) - 1]} ${corte.slice(0, 4)}` : '';
+
   // cobertura del APU (costo directo con APU enlazado) para el frente elegido
   const cobF = (HH.cob || []).filter(c => !frId || c.proyecto_id === frId), sumC = (k, conc) => cobF.filter(c => c.concepto === conc).reduce((s, c) => s + Number(c[k] || 0), 0);
   const cdT = sumC('cd_total', 'contrato'), cdA = sumC('cd_con_apu', 'contrato'), adSin = cobF.filter(c => c.concepto !== 'contrato').reduce((s, c) => s + (Number(c.partidas) - Number(c.con_apu)), 0);
@@ -5438,13 +5456,14 @@ function hhPintar() {
     ${kp('#2f6fed', U.tot + ' planificadas', nf(total) + ' ' + U.corto, 'capataz, operario, oficial y peón' + (HH.frente === 'todos' ? ' · toda la obra' : ' · frente seleccionado'))}
     ${kp('#d97706', 'Pico ' + (HH.per === 'mes' ? 'mensual' : 'semanal'), nf(tot[iPico]) + ' ' + U.corto, labLargo(periodos[iPico]))}
     ${kp('#0f766e', U.pers + ' en el pico', nf(pers[iPico]), HH.medida === 'hh' ? 'sobre días sin suspensión · jornada de 8 h' : 'sobre días sin suspensión · jornada de 8 h')}
-    ${kp('#7c3aed', 'Partidas con APU', cdT ? pc1(cdA / cdT) : '—', 'del costo directo del contrato' + (adSin ? ` · ${adSin} adicionales sin APU` : ''))}</div>`;
+    ${kp('#dc2626', U.tot + ' ganadas', hayGan ? nf(ganTot) + ' ' + U.corto : '—', hayGan ? `${pafTot ? pc1(ganTot / pafTot) : '—'} del plan hasta ${labCorte}` : 'sin avance valorizado todavía')}</div>`;
 
   // gráfico apilado por recurso
   const W = 900, H = 300, pl = 52, pr = 14, pt = 22, pb = 40, n = periodos.length, paso = (W - pl - pr) / n, bw = Math.min(HH.per === 'mes' ? 40 : 14, paso * .72);
   const vis = cods.filter(c => !HH.ocultos.has(c));
   const totVis = periodos.map((_, i) => vis.reduce((s, c) => s + (M[i][c] || 0), 0));
-  const mx = Math.max(1, ...totVis) * 1.06, ex = Math.pow(10, Math.floor(Math.log10(mx))), ymax = [1, 2, 2.5, 5, 10].map(f => f * ex).find(v => v >= mx) || mx;
+  const ganV = ganP.map(o => o ? vis.reduce((s, c) => s + (o.rec[c] || 0), 0) : null);
+  const mx = Math.max(1, ...totVis, ...ganV.filter(v => v != null)) * 1.06, ex = Math.pow(10, Math.floor(Math.log10(mx))), ymax = [1, 2, 2.5, 5, 10].map(f => f * ex).find(v => v >= mx) || mx;
   const yb = (v) => H - pb - v / ymax * (H - pt - pb), fk = (v) => v >= 1000 ? (v / 1000).toFixed(v >= 10000 || v % 1000 === 0 ? 0 : 1) + ' k' : String(Math.round(v));
   let g = '';
   [0, .25, .5, .75, 1].forEach(f => { const y = yb(ymax * f); g += `<line x1="${pl}" y1="${y}" x2="${W - pr}" y2="${y}" stroke="${SVGC.grid}"/><text x="${pl - 6}" y="${y + 3}" font-size="9.5" fill="${SVGC.axis}" text-anchor="end">${fk(ymax * f)}</text>`; });
@@ -5458,12 +5477,16 @@ function hhPintar() {
     if (i % cada === 0) g += `<text x="${cx}" y="${H - pb + 14}" font-size="9.5" fill="${SVGC.axis}" text-anchor="middle">${lab(p)}</text>`;
     g += `<rect class="hh-hot" data-i="${i}" x="${cx - paso / 2}" y="${pt}" width="${paso}" height="${H - pb - pt}" fill="transparent"/>`;
   });
-  HH.vista = { etiq: periodos.map(labLargo), M, tot, diasDe, cods, recs, U, nf };
+  const pts = ganV.map((v, i) => v == null ? null : [+(pl + paso * i + paso / 2).toFixed(1), +yb(v).toFixed(1)]).filter(Boolean);
+  if (pts.length > 1) g += `<polyline points="${pts.map(p => p.join(',')).join(' ')}" fill="none" stroke="#dc2626" stroke-width="2.4" stroke-linejoin="round" pointer-events="none"/>`;
+  pts.forEach(p => { g += `<circle cx="${p[0]}" cy="${p[1]}" r="3.3" fill="#dc2626" stroke="#fff" stroke-width="1.2" pointer-events="none"/>`; });
+  HH.vista = { etiq: periodos.map(labLargo), M, tot, diasDe, cods, recs, U, nf, ganP };
   g += `<line x1="${pl}" y1="${H - pb}" x2="${W - pr}" y2="${H - pb}" stroke="${SVGC.axisLine}"/>`;
   const frNom = HH.frente === 'todos' ? 'toda la obra' : String((COMPONENTES.find(c => c.id === HH.frente) || {}).nombre || HH.frente);
-  const leyenda = cods.map(c => `<span data-hhs="${c}" class="${HH.ocultos.has(c) ? 'off' : ''}" title="Clic para mostrar u ocultar"><i style="background:${HH.colores[c]}"></i>${esc(recs[c])}</span>`).join('');
+  const leyenda = cods.map(c => `<span data-hhs="${c}" class="${HH.ocultos.has(c) ? 'off' : ''}" title="Clic para mostrar u ocultar"><i style="background:${HH.colores[c]}"></i>${esc(recs[c])}</span>`).join('')
+    + (pts.length ? '<span class="hh-gan" title="Avance de cada valorización × cuantía del APU"><i style="background:#dc2626"></i>HH ganadas (avance real)</span>' : '');
   const grafico = `<div class="vl-card hh-card"><div class="hh-globo" id="hhGlobo" hidden></div><h3>Histograma de ${U.tot.toLowerCase()} planificadas — ${esc(frNom)}</h3>
-    <p class="hint">Total de horas = metrado vigente de cada partida × cuantía del APU de la oferta. Se reparten parejo por día calendario entre el inicio y el fin de la partida en el cronograma, sin los días de suspensión (franja gris). Las horas reales se superpondrán aquí cuando se cargue el tareo.</p>
+    <p class="hint">Total de horas = metrado vigente de cada partida × cuantía del APU de la oferta. Se reparten parejo por día calendario entre el inicio y el fin de la partida en el cronograma, sin los días de suspensión (franja gris). ${HH.per === 'mes' ? 'La línea roja son las horas ganadas: lo avanzado en cada valorización × la cuantía del APU, es decir, las horas que debieron gastarse.' : 'Las horas ganadas salen por mes: cámbiate a la vista mensual para verlas.'} Las horas reales se superpondrán cuando se cargue el tareo. Cobertura del APU: ${cdT ? pc1(cdA / cdT) : '—'} del costo directo del contrato${adSin ? ` (${adSin} partidas adicionales sin APU)` : ''}.</p>
     <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Histograma de horas planificadas">${g}</svg>
     <div class="legend2 hh-leg" style="flex-wrap:wrap">${leyenda}</div></div>`;
 
@@ -5472,15 +5495,17 @@ function hhPintar() {
   const tPico = (arr) => Math.max(0, ...arr.map((h, i) => diasDe[i].h ? h / (diasDe[i].h * 8) : 0));
   const tProm = (arr) => { const hs = arr.reduce((s, h, i) => s + (h > 0 ? diasDe[i].h * 8 : 0), 0); return hs ? arr.reduce((s, h) => s + h, 0) / hs : 0; }, ph = HH.per === 'mes' ? 'mes pico' : 'semana pico';
   const cabT = `<th title="Promedio de trabajadores por día, solo en los periodos con trabajo (sin los días de suspensión)">Trab. promedio</th><th title="Trabajadores por día en el ${ph}">Trab. ${ph}</th>`;
-  const filasR = cods.map(c => `<tr><td class="l"><i class="hh-dot" style="background:${HH.colores[c]}"></i>${esc(recs[c])}</td><td>${nf(porRec[c])}</td><td>${pc1(porRec[c] / total)}</td><td>${nf(tProm(periodos.map((_, i) => M[i][c] || 0)))}</td><td>${nf(tPico(periodos.map((_, i) => M[i][c] || 0)))}</td></tr>`).join('');
-  const tablaR = `<div class="vl-card"><h3>Trabajadores y ${U.tot.toLowerCase()} por categoría</h3><p class="hint">Categorías que se usan para productividad. Trabajadores por día = horas ÷ (días sin suspensión × 8 h).</p>
-    <div class="vl-tw"><table class="vl-tb"><thead><tr><th class="l">Categoría</th><th>${U.corto}</th><th>%</th>${cabT}</tr></thead><tbody>${filasR}
-    <tr class="tot"><td class="l">Total</td><td>${nf(total)}</td><td>100.0 %</td><td>${nf(tProm(tot))}</td><td>${nf(tPico(tot))}</td></tr></tbody></table></div></div>`;
+  const celdasG = (g, p) => hayGan ? `<td>${nf(g || 0)}</td><td>${p ? pc1((g || 0) / p) : '—'}</td>` : '<td>—</td><td>—</td>';
+  const cabG = `<th title="Horas que debieron gastarse por lo avanzado en las valorizaciones hasta ${labCorte || 'el corte'}">${U.corto} ganadas</th><th title="${U.corto} ganadas ÷ ${U.corto} planificadas hasta ${labCorte || 'el corte'}">Cumpl.</th>`;
+  const filasR = cods.map(c => `<tr><td class="l"><i class="hh-dot" style="background:${HH.colores[c]}"></i>${esc(recs[c])}</td><td>${nf(porRec[c])}</td><td class="c-pct">${pc1(porRec[c] / total)}</td><td>${nf(tProm(periodos.map((_, i) => M[i][c] || 0)))}</td><td>${nf(tPico(periodos.map((_, i) => M[i][c] || 0)))}</td>${celdasG(ganRec[c], pafRec[c])}</tr>`).join('');
+  const tablaR = `<div class="vl-card"><h3>Trabajadores y ${U.tot.toLowerCase()} por categoría</h3><p class="hint">Categorías que se usan para productividad. Trabajadores por día = horas ÷ (días sin suspensión × 8 h).${hayGan ? ` Horas ganadas y cumplimiento hasta ${labCorte}.` : ''}</p>
+    <div class="vl-tw"><table class="vl-tb"><thead><tr><th class="l">Categoría</th><th>${U.corto} plan.</th><th class="c-pct">%</th>${cabT}${cabG}</tr></thead><tbody>${filasR}
+    <tr class="tot"><td class="l">Total</td><td>${nf(total)}</td><td class="c-pct">100.0 %</td><td>${nf(tProm(tot))}</td><td>${nf(tPico(tot))}</td>${celdasG(ganTot, pafTot)}</tr></tbody></table></div></div>`;
   const frs = Object.entries(porFrente).sort((a, b2) => b2[1] - a[1]);
-  const filasF = frs.map(([id, h]) => { const nom = String((COMPONENTES.find(c => c.id === codDe(id)) || {}).nombre || codDe(id) || id).replace(/^Puente\s+/i, ''); return `<tr><td class="l">${esc(nom)}</td><td>${nf(h)}</td><td>${pc1(h / total)}</td><td>${nf(tProm(MF[id]))}</td><td>${nf(tPico(MF[id]))}</td></tr>`; }).join('');
-  const tablaF = frs.length > 1 ? `<div class="vl-card"><h3>Trabajadores y ${U.tot.toLowerCase()} por frente</h3><p class="hint">Cada frente con su propio APU.</p>
-    <div class="vl-tw"><table class="vl-tb"><thead><tr><th class="l">Frente</th><th>${U.corto}</th><th>%</th>${cabT}</tr></thead><tbody>${filasF}
-    <tr class="tot"><td class="l">Total</td><td>${nf(total)}</td><td>100.0 %</td><td>${nf(tProm(tot))}</td><td>${nf(tPico(tot))}</td></tr></tbody></table></div></div>` : '';
+  const filasF = frs.map(([id, h]) => { const nom = String((COMPONENTES.find(c => c.id === codDe(id)) || {}).nombre || codDe(id) || id).replace(/^Puente\s+/i, ''); return `<tr><td class="l">${esc(nom)}</td><td>${nf(h)}</td><td class="c-pct">${pc1(h / total)}</td><td>${nf(tProm(MF[id]))}</td><td>${nf(tPico(MF[id]))}</td>${celdasG(ganFr[id], pafFr[id])}</tr>`; }).join('');
+  const tablaF = frs.length > 1 ? `<div class="vl-card"><h3>Trabajadores y ${U.tot.toLowerCase()} por frente</h3><p class="hint">Cada frente con su propio APU.${hayGan ? ` Horas ganadas y cumplimiento hasta ${labCorte}.` : ''}</p>
+    <div class="vl-tw"><table class="vl-tb"><thead><tr><th class="l">Frente</th><th>${U.corto} plan.</th><th class="c-pct">%</th>${cabT}${cabG}</tr></thead><tbody>${filasF}
+    <tr class="tot"><td class="l">Total</td><td>${nf(total)}</td><td class="c-pct">100.0 %</td><td>${nf(tProm(tot))}</td><td>${nf(tPico(tot))}</td>${celdasG(ganTot, pafTot)}</tr></tbody></table></div></div>` : '';
   box.innerHTML = kpis + grafico + `<div class="hh-tablas${tablaF ? '' : ' solo'}">${tablaR}${tablaF}</div>`;
 }
 document.addEventListener('click', (e) => {
@@ -5497,9 +5522,11 @@ function hhGloboMostrar(i, hot) {
   const V = HH.vista, g = $('#hhGlobo'), card = g && g.closest('.hh-card'); if (!V || !g || !card) return;
   const d = V.diasDe[i], jor = d.h * 8, nf = V.nf;
   const filas = V.cods.map(c => ({ c, h: V.M[i][c] || 0 })).filter(x => x.h > 0).sort((a, b) => b.h - a.h);
-  const fil = filas.map(x => `<tr><td><i class="hh-dot" style="background:${HH.colores[x.c]}"></i>${esc(V.recs[x.c])}</td><td>${nf(x.h)} ${V.U.corto}</td><td>${jor ? nf(x.h / jor) + ' trab.' : '—'}</td></tr>`).join('');
+  const gp = V.ganP && V.ganP[i];   // horas ganadas de ese mes (solo en la vista mensual y hasta el corte)
+  const fil = filas.map(x => `<tr><td><i class="hh-dot" style="background:${HH.colores[x.c]}"></i>${esc(V.recs[x.c])}</td><td>${nf(x.h)}</td>${gp ? `<td>${nf(gp.rec[x.c] || 0)}</td>` : ''}<td>${jor ? nf(x.h / jor) : '—'}</td></tr>`).join('');
+  const cab = `<tr class="cab"><td></td><td>${V.U.corto} plan.</td>${gp ? `<td>${V.U.corto} ganadas</td>` : ''}<td>Trab.</td></tr>`;
   g.innerHTML = `<b>${esc(V.etiq[i])}</b>` + (filas.length
-    ? `<table>${fil}<tr class="tt"><td>Total</td><td>${nf(V.tot[i])} ${V.U.corto}</td><td>${jor ? nf(V.tot[i] / jor) + ' trab.' : '—'}</td></tr></table><small>Trabajadores = horas ÷ (${d.h} días sin suspensión × 8 h)${d.h < d.n ? ' · ' + (d.n - d.h) + ' días en suspensión' : ''}</small>`
+    ? `<table>${cab}${fil}<tr class="tt"><td>Total</td><td>${nf(V.tot[i])}</td>${gp ? `<td>${nf(gp.tot)}</td>` : ''}<td>${jor ? nf(V.tot[i] / jor) : '—'}</td></tr></table><small>Trabajadores = horas planificadas ÷ (${d.h} días sin suspensión × 8 h)${d.h < d.n ? ' · ' + (d.n - d.h) + ' días en suspensión' : ''}</small>`
     : `<small>Sin horas: ${d.h ? 'no hay partidas en este periodo' : 'suspensión de plazo'}.</small>`);
   g.hidden = false;
   const rc = card.getBoundingClientRect(), rh = hot.getBoundingClientRect();
