@@ -3922,8 +3922,11 @@ function aplicarResumen(A, B) {   // A = obra, componentes, Curva S y avance · 
   const proyectos = A.proyectos.sort(ordenFrentes), version = A.version;   // orden de los cronogramas (columna proyectos.orden)
   COMPONENTES = proyectos.map(p => ({ id: p.codigo, nombre: p.nombre, tipo: p.tipo }));
   const nComp = COMPONENTES.length;
-  $('#pageTitle').textContent = `DASHBOARD - CONTROL DE OBRA`;
-  $('#pageSub').textContent = `${nComp} frente${nComp === 1 ? '' : 's'} de trabajo en un solo lugar`;
+  const paneActivo = ((document.querySelector('#nav button.on') || {}).dataset || {}).pane;
+  if (!paneActivo || paneActivo === 'resumen') {   // los datos del Resumen llegan tarde en la nube: no pisar el título de la pestaña donde estás
+    $('#pageTitle').textContent = `DASHBOARD - CONTROL DE OBRA`;
+    $('#pageSub').textContent = `${nComp} frente${nComp === 1 ? '' : 's'} de trabajo en un solo lugar`;
+  }
   const idList = proyectos.map(p => p.id).join(',');
   FILTRO_PROY = idList ? `proyecto_id=in.(${idList})` : 'proyecto_id=eq.00000000-0000-0000-0000-000000000000';
   const b = B || { materiales: [], matMetasTabla: [], metasVal: [], matAvance: [], matPartidas: [], matProg: [], matSinRegla: [], matSaldo: [], matEjVal: [] };
