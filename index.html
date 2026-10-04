@@ -792,6 +792,17 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .vl-card{background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:14px 16px;margin-bottom:14px;}
 .vl-card h3{margin:0 0 2px;font-size:13.5px;} .vl-card p.hint{margin:0 0 8px;font-size:11.5px;color:var(--mut);}
 .vl-card svg{display:block;width:100%;height:auto;}
+.hh-leg span{cursor:pointer;user-select:none;} .hh-leg span.off{opacity:.35;text-decoration:line-through;}
+.hh-dot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:7px;vertical-align:baseline;}
+.hh-card{position:relative;} .hh-hot{cursor:pointer;} .hh-hot:hover{fill:rgba(47,111,237,.09);}
+.hh-globo{position:absolute;z-index:20;min-width:250px;max-width:340px;background:var(--card);border:1px solid var(--line2);border-radius:12px;box-shadow:0 12px 34px rgba(2,6,23,.22);padding:10px 12px;font-size:12px;color:var(--tx);pointer-events:none;}
+.hh-globo b{display:block;font-size:13px;margin-bottom:6px;} .hh-globo table{width:100%;min-width:0;border-collapse:collapse;font-size:12px;font-variant-numeric:tabular-nums;}
+.hh-globo td{padding:3px 0;border-bottom:0;color:var(--tx);} .hh-globo td:nth-child(2),.hh-globo td:nth-child(3){text-align:right;padding-left:12px;white-space:nowrap;}
+.hh-globo tr.tt td{border-top:1px solid var(--line2);font-weight:800;padding-top:5px;} .hh-globo small{display:block;margin-top:7px;font-size:10.5px;color:var(--mut);line-height:1.35;}
+.hh-tablas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:stretch;} .hh-tablas.solo{grid-template-columns:minmax(0,1fr);}
+.hh-tablas .vl-card{margin-bottom:0;min-width:0;display:flex;flex-direction:column;} .hh-tablas .vl-tw{flex:1;}
+.hh-tablas .vl-tb{min-width:0;table-layout:auto;} .hh-tablas .vl-tb th:not(.l){text-align:right;white-space:normal;line-height:1.2;} .hh-tablas .vl-tb td:not(.l){white-space:nowrap;}
+@media (max-width:900px){.hh-tablas{grid-template-columns:minmax(0,1fr);}}
 .vl-tw{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:10px;}
 .vl-tb{width:100%;border-collapse:collapse;font-size:12px;font-family:'Arial Narrow',Arial,sans-serif;}
 .vl-tb th,.vl-tb td{padding:8px 10px;border-top:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
@@ -1172,6 +1183,7 @@ html.dens-densa{--rh:26px;--rh0:31px;--rh1:26px;--rh2:24px;--rh3:22px;--fc:10.5p
       <button data-pane="pts" title="Meta y real por día"><span class="ni">📆</span><span class="nt">Plan semanal</span></button>
       <button data-pane="ppc" title="Cumplimiento del plan"><span class="ni">📈</span><span class="nt">PPC</span></button>
       <button data-pane="valorizaciones" title="Valor ganado: valorizaciones mensuales del contrato, adicionales y mayores metrados"><span class="ni">💰</span><span class="nt">Valorizaciones</span></button>
+      <button data-pane="hh" title="Histograma de horas-hombre planificadas desde el APU de la oferta"><span class="ni">👷</span><span class="nt">Horas-hombre</span></button>
       <button data-pane="produccion" class="disabled" title="Próximamente: aún sin datos reales cargados"><span class="ni">⚙️</span><span class="nt">Producción</span></button>
       <a href="visor/" id="visorLink" title="Modelo BIM del puente"><span class="ni">🧊</span><span class="nt">Visor 3D</span></a>
     </nav>
@@ -1354,6 +1366,18 @@ html.dens-densa{--rh:26px;--rh0:31px;--rh1:26px;--rh2:24px;--rh3:22px;--fc:10.5p
         <span class="hint" id="vlNota"></span>
       </div>
       <div id="vlCuerpo"><div class="rg-msg">Consultando las valorizaciones…</div></div>
+    </section>
+
+    <!-- ═══════════ HORAS-HOMBRE ═══════════ -->
+    <section class="pane" data-pane="hh">
+      <div class="vl-top">
+        <p class="api" style="margin:0">Frente: <span id="hhFrentes"></span></p>
+        <p class="api" style="margin:0">Periodo:
+          <button class="seg-btn" data-hhper="mes">Mensual</button>
+          <button class="seg-btn" data-hhper="semana">Semanal</button>
+        </p>
+      </div>
+      <div id="hhCuerpo"><div class="rg-msg">Consultando las horas planificadas…</div></div>
     </section>
 
     <!-- ═══════════ PARTE DIARIO ═══════════ -->
@@ -2059,13 +2083,15 @@ document.querySelectorAll('#nav button').forEach(b => {
       lookahead: ['Look Ahead', 'Plan de 4 semanas · Last Planner: actividades ligadas al valorizado'],
       pts: ['Plan semanal', 'Meta y real por día de las actividades del Look Ahead · PAC de la semana'],
       ppc: ['PPC', 'Porcentaje de actividades completadas: trazabilidad semanal y causas de incumplimiento'],
-      valorizaciones: ['Valorizaciones', 'Valor ganado: lo valorizado mes a mes (contrato, adicionales y mayores metrados)'] };
+      valorizaciones: ['Valorizaciones', 'Valor ganado: lo valorizado mes a mes (contrato, adicionales y mayores metrados)'],
+      hh: ['Horas-hombre', 'Histograma planificado desde el APU de la oferta: metrado × cuantía, repartido en el plazo del cronograma'] };
     if (titles[b.dataset.pane]) { $('#pageTitle').textContent = titles[b.dataset.pane][0]; $('#pageSub').textContent = titles[b.dataset.pane][1]; }
     if (esCelular) celPantalla(PANES_ANCHOS.includes(b.dataset.pane));
     if (b.dataset.pane === 'lookahead') laCargar();
     if (b.dataset.pane === 'pts') ptCargar();
     if (b.dataset.pane === 'ppc') ppcCargar();
     if (b.dataset.pane === 'valorizaciones') valCargar();
+    if (b.dataset.pane === 'hh') hhCargar();
     if (b.dataset.pane === 'parte' && !$('#parteLA').hidden) plaCargar();
     $('#side').classList.remove('open'); $('#overlay').classList.remove('on');
   });
@@ -5342,6 +5368,147 @@ $('#parteForm').addEventListener('submit', async (e) => {
   } finally {
     btn.disabled = false; btn.textContent = 'Guardar parte diario';
   }
+});
+
+// ══ Módulo HORAS-HOMBRE: histograma de horas planificadas desde el APU de la oferta (v_hh_plan_mes / v_hh_plan_semana) ══
+// Horas de una partida = metrado vigente × cuantía del APU (el plazo no las cambia; solo cambia cómo se reparten en el tiempo).
+// Cada serie es un recurso, como en la relación de insumos de S10: los operadores de equipo salen aparte de la mano de obra.
+const HH = { per: 'mes', frente: 'todos', medida: 'hh', datos: {}, cob: null, ocultos: new Set(), colores: null, vista: null };
+let hhFijo = -1;   // periodo con el globo fijado por clic (-1 = ninguno)
+const HH_PALETA = ['#1e3a5f', '#2f6fed', '#5b9bff', '#9cc4ff', '#d97706', '#f59e0b', '#0f766e', '#14b8a6', '#5eead4', '#99f6e4', '#7c3aed', '#a78bfa', '#be185d', '#f472b6', '#64748b', '#94a3b8'];
+// solo las categorías que se usan para productividad (códigos de la relación de insumos de S10); para ver otras, agregar su código aquí
+const HH_RECURSOS = { '0147010001': '#1e3a5f', '0147010002': '#2f6fed', '0147010003': '#14b8a6', '0147010004': '#f59e0b' };   // capataz, operario, oficial, peón
+async function hhCargar() {
+  const box = $('#hhCuerpo'); if (!box) return;
+  try {
+    if (!HH.datos[HH.per]) {
+      box.innerHTML = '<div class="rg-msg">Consultando las horas planificadas…</div>';
+      const vista = HH.per === 'mes' ? 'v_hh_plan_mes' : 'v_hh_plan_semana', col = HH.per === 'mes' ? 'mes' : 'semana';
+      HH.datos[HH.per] = await getTodo(`/${vista}?select=proyecto_id,${col},recurso_codigo,recurso,unidad,horas&order=${col},proyecto_id,recurso_codigo`);
+    }
+    if (!HH.cob) HH.cob = await get('/v_apu_cobertura?select=*');
+  } catch (e) {
+    box.innerHTML = '<div class="rg-msg">Este módulo necesita las tablas del APU y la carga de la oferta. Pide al administrador que corra <b>apu_hh.sql</b> y los <b>apu_oferta_*.sql</b> en la base.</div>'; return;
+  }
+  hhPintar();
+}
+function hhPintar() {
+  const box = $('#hhCuerpo'); if (!box) return;
+  hhFijo = -1;
+  const nf = (n) => Math.round(n).toLocaleString('es-PE'), pc1 = (x) => (x * 100).toLocaleString('es-PE', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + ' %';
+  const filasT = HH.datos[HH.per] || [], col = HH.per === 'mes' ? 'mes' : 'semana';
+  const proys = (RES_A && RES_A.proyectos) || [], idDe = (cod) => (proys.find(p => p.codigo === cod) || {}).id, codDe = (id) => (proys.find(p => p.id === id) || {}).codigo;
+  // colores estables por recurso (orden del código = orden de la relación de insumos)
+  if (!HH.colores) { HH.colores = { ...HH_RECURSOS }; }
+  const frId = HH.frente === 'todos' ? null : idDe(HH.frente), frCod = HH.frente === 'todos' ? null : HH.frente;
+  const sel = filasT.filter(r => HH_RECURSOS[r.recurso_codigo] && r.unidad === HH.medida && (!frId || r.proyecto_id === frId));
+  // controles
+  $('#hhFrentes').innerHTML = [['todos', 'Toda la obra']].concat(COMPONENTES.map(c => [c.id, String(c.nombre).replace(/^Puente\s+/i, '')])).map(([v, t]) => `<button class="seg-btn ${HH.frente === v ? 'on' : ''}" data-hhfr="${v}">${esc(t)}</button>`).join(' ');
+  document.querySelectorAll('[data-hhmed]').forEach(b => b.classList.toggle('on', b.dataset.hhmed === HH.medida));
+  document.querySelectorAll('[data-hhper]').forEach(b => b.classList.toggle('on', b.dataset.hhper === HH.per));
+  const U = HH.medida === 'hh' ? { tot: 'Horas-hombre', corto: 'HH', pers: 'Personas por día', obj: 'personas' } : { tot: 'Horas-máquina', corto: 'HM', pers: 'Equipos por día', obj: 'equipos' };
+  if (!sel.length) { box.innerHTML = '<div class="rg-msg">Todavía no hay horas planificadas para esta selección (falta cargar el APU de la oferta).</div>'; return; }
+
+  // periodos continuos (los vacíos, como la suspensión, salen en cero)
+  const ms = (s) => Date.UTC(+s.slice(0, 4), +s.slice(5, 7) - 1, +s.slice(8, 10)), iso = (t) => new Date(t).toISOString().slice(0, 10);
+  const sig = (s) => { const d = new Date(ms(s)); if (HH.per === 'mes') d.setUTCMonth(d.getUTCMonth() + 1); else d.setUTCDate(d.getUTCDate() + 7); return iso(d.getTime()); };
+  const claves = sel.map(r => String(r[col]).slice(0, 10)).sort(), periodos = [];
+  for (let p = claves[0]; p <= claves[claves.length - 1]; p = sig(p)) periodos.push(p);
+  const idx = Object.fromEntries(periodos.map((p, i) => [p, i]));
+  const recs = {}; sel.forEach(r => { recs[r.recurso_codigo] = r.recurso; });
+  const cods = Object.keys(recs).sort();
+  const M = periodos.map(() => ({})), tot = periodos.map(() => 0), porRec = {}, porFrente = {}, MF = {};
+  sel.forEach(r => { const i = idx[String(r[col]).slice(0, 10)], h = Number(r.horas) || 0; M[i][r.recurso_codigo] = (M[i][r.recurso_codigo] || 0) + h; tot[i] += h; porRec[r.recurso_codigo] = (porRec[r.recurso_codigo] || 0) + h; porFrente[r.proyecto_id] = (porFrente[r.proyecto_id] || 0) + h; (MF[r.proyecto_id] || (MF[r.proyecto_id] = periodos.map(() => 0)))[i] += h; });
+  // días del periodo y días hábiles (sin suspensión de plazo) → personas por día
+  const susp = ((typeof DATA !== 'undefined' && DATA && DATA.eventosPlazo) || []).filter(e => e.tipo === 'suspension' && (!e.proyecto_id_codigo || e.proyecto_id_codigo === frCod));
+  const diasDe = periodos.map(p => { const a = ms(p), b = HH.per === 'mes' ? ms(sig(p)) : a + 7 * 86400000; let n = 0, h = 0; for (let t = a; t < b; t += 86400000) { n++; const f = iso(t); if (!susp.some(e => f >= String(e.fecha_inicio).slice(0, 10) && f <= String(e.fecha_fin).slice(0, 10))) h++; } return { n, h }; });
+  const pers = tot.map((h, i) => diasDe[i].h ? h / (diasDe[i].h * 8) : 0);
+  const total = tot.reduce((s, x) => s + x, 0), iPico = tot.indexOf(Math.max(...tot));
+  const lab = (p) => { const d = new Date(ms(p)); return HH.per === 'mes' ? `${MESES_ES[d.getUTCMonth()]}-${String(d.getUTCFullYear()).slice(2)}` : `${String(d.getUTCDate()).padStart(2, '0')}/${String(d.getUTCMonth() + 1).padStart(2, '0')}`; };
+  const labLargo = (p) => { const d = new Date(ms(p)); return HH.per === 'mes' ? `${MESES_ES[d.getUTCMonth()]} ${d.getUTCFullYear()}` : `semana del ${String(d.getUTCDate()).padStart(2, '0')}/${String(d.getUTCMonth() + 1).padStart(2, '0')}/${d.getUTCFullYear()}`; };
+
+  // cobertura del APU (costo directo con APU enlazado) para el frente elegido
+  const cobF = (HH.cob || []).filter(c => !frId || c.proyecto_id === frId), sumC = (k, conc) => cobF.filter(c => c.concepto === conc).reduce((s, c) => s + Number(c[k] || 0), 0);
+  const cdT = sumC('cd_total', 'contrato'), cdA = sumC('cd_con_apu', 'contrato'), adSin = cobF.filter(c => c.concepto !== 'contrato').reduce((s, c) => s + (Number(c.partidas) - Number(c.con_apu)), 0);
+  const kp = (color, lab2, val, sub) => `<div class="vl-k" style="--kc:${color}"><small>${lab2}</small><b>${val}</b><em>${sub}</em></div>`;
+  const kpis = `<div class="vl-kp">
+    ${kp('#2f6fed', U.tot + ' planificadas', nf(total) + ' ' + U.corto, 'capataz, operario, oficial y peón' + (HH.frente === 'todos' ? ' · toda la obra' : ' · frente seleccionado'))}
+    ${kp('#d97706', 'Pico ' + (HH.per === 'mes' ? 'mensual' : 'semanal'), nf(tot[iPico]) + ' ' + U.corto, labLargo(periodos[iPico]))}
+    ${kp('#0f766e', U.pers + ' en el pico', nf(pers[iPico]), HH.medida === 'hh' ? 'sobre días sin suspensión · jornada de 8 h' : 'sobre días sin suspensión · jornada de 8 h')}
+    ${kp('#7c3aed', 'Partidas con APU', cdT ? pc1(cdA / cdT) : '—', 'del costo directo del contrato' + (adSin ? ` · ${adSin} adicionales sin APU` : ''))}</div>`;
+
+  // gráfico apilado por recurso
+  const W = 900, H = 300, pl = 52, pr = 14, pt = 22, pb = 40, n = periodos.length, paso = (W - pl - pr) / n, bw = Math.min(HH.per === 'mes' ? 40 : 14, paso * .72);
+  const vis = cods.filter(c => !HH.ocultos.has(c));
+  const totVis = periodos.map((_, i) => vis.reduce((s, c) => s + (M[i][c] || 0), 0));
+  const mx = Math.max(1, ...totVis) * 1.06, ex = Math.pow(10, Math.floor(Math.log10(mx))), ymax = [1, 2, 2.5, 5, 10].map(f => f * ex).find(v => v >= mx) || mx;
+  const yb = (v) => H - pb - v / ymax * (H - pt - pb), fk = (v) => v >= 1000 ? (v / 1000).toFixed(v >= 10000 || v % 1000 === 0 ? 0 : 1) + ' k' : String(Math.round(v));
+  let g = '';
+  [0, .25, .5, .75, 1].forEach(f => { const y = yb(ymax * f); g += `<line x1="${pl}" y1="${y}" x2="${W - pr}" y2="${y}" stroke="${SVGC.grid}"/><text x="${pl - 6}" y="${y + 3}" font-size="9.5" fill="${SVGC.axis}" text-anchor="end">${fk(ymax * f)}</text>`; });
+  const cada = HH.per === 'mes' ? 1 : Math.ceil(n / 16);
+  periodos.forEach((p, i) => {
+    const cx = pl + paso * i + paso / 2;
+    if (diasDe[i].h < diasDe[i].n) g += `<rect x="${cx - paso / 2}" y="${pt}" width="${paso}" height="${H - pb - pt}" fill="#64748b" opacity="${diasDe[i].h ? .07 : .14}"><title>${labLargo(p)} · ${diasDe[i].h ? 'suspensión parcial: ' + (diasDe[i].n - diasDe[i].h) + ' días' : 'suspensión de plazo: sin horas'}</title></rect>`;
+    let acc = 0;
+    vis.forEach(c => { const v = M[i][c] || 0; if (v <= 0) return; const y1 = yb(acc + v), y0 = yb(acc); g += `<rect x="${cx - bw / 2}" y="${y1}" width="${bw}" height="${Math.max(.5, y0 - y1)}" fill="${HH.colores[c]}"><title>${labLargo(p)} · ${esc(recs[c])} · ${nf(v)} ${U.corto}</title></rect>`; acc += v; });
+    if (totVis[i] > 0 && HH.per === 'mes') g += `<text x="${cx}" y="${yb(totVis[i]) - 4}" font-size="9.5" font-weight="700" fill="${SVGC.axis}" text-anchor="middle">${fk(totVis[i])}</text>`;
+    if (i % cada === 0) g += `<text x="${cx}" y="${H - pb + 14}" font-size="9.5" fill="${SVGC.axis}" text-anchor="middle">${lab(p)}</text>`;
+    g += `<rect class="hh-hot" data-i="${i}" x="${cx - paso / 2}" y="${pt}" width="${paso}" height="${H - pb - pt}" fill="transparent"/>`;
+  });
+  HH.vista = { etiq: periodos.map(labLargo), M, tot, diasDe, cods, recs, U, nf };
+  g += `<line x1="${pl}" y1="${H - pb}" x2="${W - pr}" y2="${H - pb}" stroke="${SVGC.axisLine}"/>`;
+  const frNom = HH.frente === 'todos' ? 'toda la obra' : String((COMPONENTES.find(c => c.id === HH.frente) || {}).nombre || HH.frente);
+  const leyenda = cods.map(c => `<span data-hhs="${c}" class="${HH.ocultos.has(c) ? 'off' : ''}" title="Clic para mostrar u ocultar"><i style="background:${HH.colores[c]}"></i>${esc(recs[c])}</span>`).join('');
+  const grafico = `<div class="vl-card hh-card"><div class="hh-globo" id="hhGlobo" hidden></div><h3>Histograma de ${U.tot.toLowerCase()} planificadas — ${esc(frNom)}</h3>
+    <p class="hint">Total de horas = metrado vigente de cada partida × cuantía del APU de la oferta. Se reparten parejo por día calendario entre el inicio y el fin de la partida en el cronograma, sin los días de suspensión (franja gris). Las horas reales se superpondrán aquí cuando se cargue el tareo.</p>
+    <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Histograma de horas planificadas">${g}</svg>
+    <div class="legend2 hh-leg" style="flex-wrap:wrap">${leyenda}</div></div>`;
+
+  // tablas: por recurso (como la relación de insumos) y por frente
+  // trabajadores = horas ÷ (días sin suspensión × 8 h): promedio de toda la obra y en el periodo de mayor carga
+  const tPico = (arr) => Math.max(0, ...arr.map((h, i) => diasDe[i].h ? h / (diasDe[i].h * 8) : 0));
+  const tProm = (arr) => { const hs = arr.reduce((s, h, i) => s + (h > 0 ? diasDe[i].h * 8 : 0), 0); return hs ? arr.reduce((s, h) => s + h, 0) / hs : 0; }, ph = HH.per === 'mes' ? 'mes pico' : 'semana pico';
+  const cabT = `<th title="Promedio de trabajadores por día, solo en los periodos con trabajo (sin los días de suspensión)">Trab. promedio</th><th title="Trabajadores por día en el ${ph}">Trab. ${ph}</th>`;
+  const filasR = cods.map(c => `<tr><td class="l"><i class="hh-dot" style="background:${HH.colores[c]}"></i>${esc(recs[c])}</td><td>${nf(porRec[c])}</td><td>${pc1(porRec[c] / total)}</td><td>${nf(tProm(periodos.map((_, i) => M[i][c] || 0)))}</td><td>${nf(tPico(periodos.map((_, i) => M[i][c] || 0)))}</td></tr>`).join('');
+  const tablaR = `<div class="vl-card"><h3>Trabajadores y ${U.tot.toLowerCase()} por categoría</h3><p class="hint">Categorías que se usan para productividad. Trabajadores por día = horas ÷ (días sin suspensión × 8 h).</p>
+    <div class="vl-tw"><table class="vl-tb"><thead><tr><th class="l">Categoría</th><th>${U.corto}</th><th>%</th>${cabT}</tr></thead><tbody>${filasR}
+    <tr class="tot"><td class="l">Total</td><td>${nf(total)}</td><td>100.0 %</td><td>${nf(tProm(tot))}</td><td>${nf(tPico(tot))}</td></tr></tbody></table></div></div>`;
+  const frs = Object.entries(porFrente).sort((a, b2) => b2[1] - a[1]);
+  const filasF = frs.map(([id, h]) => { const nom = String((COMPONENTES.find(c => c.id === codDe(id)) || {}).nombre || codDe(id) || id).replace(/^Puente\s+/i, ''); return `<tr><td class="l">${esc(nom)}</td><td>${nf(h)}</td><td>${pc1(h / total)}</td><td>${nf(tProm(MF[id]))}</td><td>${nf(tPico(MF[id]))}</td></tr>`; }).join('');
+  const tablaF = frs.length > 1 ? `<div class="vl-card"><h3>Trabajadores y ${U.tot.toLowerCase()} por frente</h3><p class="hint">Cada frente con su propio APU.</p>
+    <div class="vl-tw"><table class="vl-tb"><thead><tr><th class="l">Frente</th><th>${U.corto}</th><th>%</th>${cabT}</tr></thead><tbody>${filasF}
+    <tr class="tot"><td class="l">Total</td><td>${nf(total)}</td><td>100.0 %</td><td>${nf(tProm(tot))}</td><td>${nf(tPico(tot))}</td></tr></tbody></table></div></div>` : '';
+  box.innerHTML = kpis + grafico + `<div class="hh-tablas${tablaF ? '' : ' solo'}">${tablaR}${tablaF}</div>`;
+}
+document.addEventListener('click', (e) => {
+  const fr = e.target.closest('[data-hhfr]'), med = e.target.closest('[data-hhmed]'), per = e.target.closest('[data-hhper]'), s = e.target.closest('[data-hhs]');
+  if (fr) { HH.frente = fr.dataset.hhfr; hhPintar(); }
+  else if (med) { HH.medida = med.dataset.hhmed; HH.ocultos.clear(); hhPintar(); }
+  else if (per) { HH.per = per.dataset.hhper; hhCargar(); }
+  else if (s) { const c = s.dataset.hhs; if (HH.ocultos.has(c)) HH.ocultos.delete(c); else HH.ocultos.add(c); hhPintar(); }
+});
+
+// globo con el resumen del mes (o semana) bajo el cursor: horas y trabajadores por categoría.
+// Trabajadores = horas ÷ (días sin suspensión del periodo × 8 h): la cantidad promedio de personas por día.
+function hhGloboMostrar(i, hot) {
+  const V = HH.vista, g = $('#hhGlobo'), card = g && g.closest('.hh-card'); if (!V || !g || !card) return;
+  const d = V.diasDe[i], jor = d.h * 8, nf = V.nf;
+  const filas = V.cods.map(c => ({ c, h: V.M[i][c] || 0 })).filter(x => x.h > 0).sort((a, b) => b.h - a.h);
+  const fil = filas.map(x => `<tr><td><i class="hh-dot" style="background:${HH.colores[x.c]}"></i>${esc(V.recs[x.c])}</td><td>${nf(x.h)} ${V.U.corto}</td><td>${jor ? nf(x.h / jor) + ' trab.' : '—'}</td></tr>`).join('');
+  g.innerHTML = `<b>${esc(V.etiq[i])}</b>` + (filas.length
+    ? `<table>${fil}<tr class="tt"><td>Total</td><td>${nf(V.tot[i])} ${V.U.corto}</td><td>${jor ? nf(V.tot[i] / jor) + ' trab.' : '—'}</td></tr></table><small>Trabajadores = horas ÷ (${d.h} días sin suspensión × 8 h)${d.h < d.n ? ' · ' + (d.n - d.h) + ' días en suspensión' : ''}</small>`
+    : `<small>Sin horas: ${d.h ? 'no hay partidas en este periodo' : 'suspensión de plazo'}.</small>`);
+  g.hidden = false;
+  const rc = card.getBoundingClientRect(), rh = hot.getBoundingClientRect();
+  let x = rh.right - rc.left + 8; if (x + g.offsetWidth > rc.width - 6) x = rh.left - rc.left - g.offsetWidth - 8;
+  g.style.left = Math.max(6, x) + 'px'; g.style.top = Math.max(40, Math.min(rh.top - rc.top + 24, rc.height - g.offsetHeight - 6)) + 'px';
+}
+document.addEventListener('mouseover', (e) => { const h = e.target.closest && e.target.closest('.hh-hot'); if (h && hhFijo < 0) hhGloboMostrar(+h.dataset.i, h); });
+document.addEventListener('mouseout', (e) => { if (hhFijo < 0 && e.target.closest && e.target.closest('.hh-hot')) { const g = $('#hhGlobo'); if (g) g.hidden = true; } });
+document.addEventListener('click', (e) => {
+  const h = e.target.closest && e.target.closest('.hh-hot'), g = $('#hhGlobo');
+  if (h) { const i = +h.dataset.i; if (hhFijo === i) { hhFijo = -1; if (g) g.hidden = true; } else { hhFijo = i; hhGloboMostrar(i, h); } }
+  else if (hhFijo >= 0 && !(e.target.closest && e.target.closest('#hhGlobo'))) { hhFijo = -1; if (g) g.hidden = true; }
 });
 
 // ── Informe del Resumen: una hoja A3 horizontal con todo lo del panel principal ──
