@@ -1115,11 +1115,11 @@ html.dens-densa{--rh:26px;--rh0:31px;--rh1:26px;--rh2:24px;--rh3:22px;--fc:10.5p
 
 /* ═══ REDISEÑO 2026-10 · navy + naranja, tarjetas blancas redondeadas (solo tema claro; el oscuro conserva su paleta) ═══ */
 :root{
-  --bg:#fdf3ec; --line:#f0e3d7; --line2:#e6d4c4; --tx:#111a3d; --tx2:#444b6d; --mut:#6a7090;
-  --blue:#f26a1b; --blue-tx:#c2410c; --input:#fbf6f1; --navy:#141c5e; --navy2:#27338f; --naranja:#f26a1b; --naranja2:#ffb27a;
-  --shadow:0 1px 2px rgba(80,40,10,.04), 0 8px 24px rgba(80,40,10,.06);
-  --ic-neutral-bg:#f7efe8; --ic-blue-bg:#fff0e5; --ic-blue-fg:#f26a1b;
-  --sb-thumb:#e3cdbb; --sb-hover:#f26a1b; --sb-track:#fbf1e9;
+  --bg:#f4f6fb; --line:#e4e9f4; --line2:#d5deef; --tx:#111a3d; --tx2:#444b6d; --mut:#6a7090;
+  --blue:#f26a1b; --blue-tx:#c2410c; --input:#f6f8fc; --navy:#141c5e; --navy2:#27338f; --naranja:#f26a1b; --naranja2:#ffb27a;
+  --shadow:0 1px 2px rgba(20,28,94,.04), 0 6px 20px rgba(20,28,94,.05);
+  --ic-neutral-bg:#f1f4fa; --ic-blue-bg:#fff0e5; --ic-blue-fg:#f26a1b;
+  --sb-thumb:#cdd5e6; --sb-hover:#f26a1b; --sb-track:#eef1f8;
 }
 :root:not([data-theme="dark"]) #side{background:linear-gradient(180deg,#171f66 0%,#0d1450 100%);border-right:0;color:#c6caee;}
 :root:not([data-theme="dark"]) .brand{border-bottom:1px solid rgba(255,255,255,.09);}
@@ -1131,15 +1131,15 @@ html.dens-densa{--rh:26px;--rh0:31px;--rh1:26px;--rh2:24px;--rh3:22px;--fc:10.5p
 :root:not([data-theme="dark"]) .side-tg{color:#c6caee;}
 .kpis{gap:14px;}
 .card{border-radius:18px;padding:16px 18px;}
-.card.kc-teal{background:var(--navy);} .card.kc-red{background:var(--naranja);}
-.card.kc-blue,.card.kc-amber{background:#fff;color:var(--tx);border:1px solid var(--line);}
-.card.kc-blue .label,.card.kc-amber .label{color:var(--mut);} .card.kc-blue .value,.card.kc-amber .value{color:var(--tx);}
-.card.kc-blue .sub2,.card.kc-amber .sub2{color:var(--mut);} .card.kc-blue .k-ic-big,.card.kc-amber .k-ic-big{color:var(--naranja);opacity:.85;}
-.card.kc-amber .bar{background:#f4e8de;} .card.kc-amber .bar i{background:var(--naranja);}
-.card.kc-amber .sem{background:#f6ece3;}
+.card.kc-teal,.card.kc-red,.card.kc-blue,.card.kc-amber{background:#fff;color:var(--tx);border:1px solid var(--line);}
+.card .label,.card .sub2{color:var(--mut);} .card .value{color:var(--tx);}
+.card.kc-teal{box-shadow:inset 4px 0 0 var(--navy),var(--shadow);} .card.kc-blue{box-shadow:inset 4px 0 0 var(--navy2),var(--shadow);} .card.kc-red{box-shadow:inset 4px 0 0 var(--naranja),var(--shadow);} .card.kc-amber{box-shadow:inset 4px 0 0 #ffb27a,var(--shadow);}
+.card .k-ic-big{opacity:.85;} .card.kc-teal .k-ic-big,.card.kc-blue .k-ic-big{color:var(--navy);} .card.kc-red .k-ic-big,.card.kc-amber .k-ic-big{color:var(--naranja);}
+.card.kc-amber .bar{background:#e9edf6;} .card.kc-amber .bar i{background:var(--naranja);}
+.card.kc-amber .sem{background:#eef1f8;}
 .chart-card{border-radius:18px;padding:18px 20px;}
 .chart-card h3{font-size:15px;font-weight:800;color:var(--tx);}
-.mes-chip{border-radius:12px;background:#fbf6f1;border-color:var(--line);padding:8px 14px;}
+.mes-chip{border-radius:12px;background:#f6f8fc;border-color:var(--line);padding:8px 14px;}
 /* Resumen: fila 1 = Curva S + horas-hombre; fila 2 = Gantt por puente + materiales (misma rejilla, mismas columnas) */
 .res-top{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:16px;align-items:stretch;margin-bottom:16px;}
 .res-top>.chart-card{margin:0;min-width:0;}
@@ -1161,10 +1161,10 @@ html.dens-densa{--rh:26px;--rh0:31px;--rh1:26px;--rh2:24px;--rh3:22px;--fc:10.5p
 .mr-lista{display:flex;flex-direction:column;justify-content:space-around;gap:6px;flex:1;min-height:0;}
 .mr-r{min-width:0;} .mr-n{display:flex;justify-content:space-between;align-items:baseline;gap:8px;line-height:16px;font-size:12.5px;color:var(--tx);} .mr-n b{font-weight:700;white-space:nowrap;} .mr-n em{font-style:normal;font-size:11px;color:var(--mut);font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;} .mr-n .x{font-style:normal;color:var(--naranja);font-weight:700;}
 .mr-l{display:grid;grid-template-columns:minmax(0,1fr) 38px;gap:8px;align-items:center;margin-top:3px;} .mr-l>span{line-height:12px;font-size:12px;font-weight:800;color:var(--naranja);text-align:right;font-variant-numeric:tabular-nums;}
-.mr-bar{position:relative;height:9px;border-radius:5px;background:#f2e6db;overflow:hidden;} .mr-bar i{position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:var(--navy);} .mr-bar i.mn{background:#c3c7d8;border-radius:0;}
+.mr-bar{position:relative;height:9px;border-radius:5px;background:#e9edf6;overflow:hidden;} .mr-bar i{position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:var(--navy);} .mr-bar i.mn{background:#c3c7d8;border-radius:0;}
 .mr-r.tt{border-top:1px dashed var(--line2);padding-top:7px;} .mr-r.tt .mr-n b{color:var(--navy);} .mr-r.tt .mr-bar{height:11px;}
-.mr-chips{display:flex;gap:8px;margin:0 0 12px;flex-wrap:wrap;} .mr-chips button{font:inherit;display:flex;align-items:baseline;gap:7px;padding:6px 12px;border-radius:12px;border:1px solid var(--line2);background:#fbf6f1;color:var(--tx2);cursor:pointer;font-size:12px;} .mr-chips button span{font-weight:800;color:var(--naranja);} .mr-chips button.on{background:var(--navy);border-color:var(--navy);color:#fff;} .mr-chips button.on span{color:#ffb27a;}
-.mr-ley{display:flex;gap:14px;margin-top:10px;font-size:10.5px;color:var(--mut);} .mr-ley span{display:flex;align-items:center;gap:5px;} .mr-ley i{width:14px;height:6px;border-radius:3px;background:var(--navy);} .mr-ley i.f{background:#f2e6db;} .mr-ley i.m{background:#c3c7d8;}
+.mr-chips{display:flex;gap:8px;margin:0 0 12px;flex-wrap:wrap;} .mr-chips button{font:inherit;display:flex;align-items:baseline;gap:7px;padding:6px 12px;border-radius:12px;border:1px solid var(--line2);background:#f6f8fc;color:var(--tx2);cursor:pointer;font-size:12px;} .mr-chips button span{font-weight:800;color:var(--naranja);} .mr-chips button.on{background:var(--navy);border-color:var(--navy);color:#fff;} .mr-chips button.on span{color:#ffb27a;}
+.mr-ley{display:flex;gap:14px;margin-top:10px;font-size:10.5px;color:var(--mut);} .mr-ley span{display:flex;align-items:center;gap:5px;} .mr-ley i{width:14px;height:6px;border-radius:3px;background:var(--navy);} .mr-ley i.f{background:#e9edf6;} .mr-ley i.m{background:#c3c7d8;}
 .hhr-pp{display:flex;flex-direction:column;gap:7px;margin-top:8px;} .hhr-sub{font-size:10px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--mut);margin-bottom:1px;}
 .hhr-pp .mr-bar i{background:var(--naranja);}
 /* detalle de materiales: ventana pequeña centrada, no ocupa la pantalla */
@@ -1189,8 +1189,39 @@ body.con-modal{overflow:hidden;}
 .gt-grid{position:absolute;top:26px;bottom:30px;left:var(--gl);right:0;pointer-events:none;z-index:0;} .gt-grid i{position:absolute;top:0;bottom:0;width:1px;background:var(--line);}
 .gt-hoy{position:absolute;top:0;bottom:0;border-left:2px dashed #6a7090;z-index:2;} .gt-hoy b{position:absolute;bottom:-26px;left:0;transform:translateX(-50%);background:var(--navy);color:#fff;font-size:10.5px;padding:3px 10px;border-radius:10px;font-weight:700;white-space:nowrap;}
 @container (max-width:560px){.gt{--gl:118px;} .gt-tk.alt{display:none;} .gt-l small{display:none;} .gt-l b{font-size:12px;}}
+
+/* franja de cabecera del Resumen: frentes + corte + informe en una sola línea */
+.res-cab{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;margin:0 0 12px;}
+.res-cab .bridges{gap:6px;flex:1 1 auto;} .res-cab .bpill{padding:6px 13px;font-size:12.5px;}
+.res-cab .res-fila{margin:0 0 0 auto;flex:0 1 auto;flex-wrap:nowrap;justify-content:flex-end;gap:12px;} .res-cab .res-fila .hint{margin:0;font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;} .res-cab .btn-sec{padding:6px 12px;white-space:nowrap;flex:none;}
+html:not(.cel) .topbar{margin-bottom:8px;}
+@media (max-width:900px){.res-cab .res-fila{flex:1 1 100%;justify-content:space-between;} .res-cab .res-fila .hint{white-space:normal;}}
+
+.frente-sel{display:inline-flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line2);border-radius:12px;padding:0 4px 0 12px;height:36px;box-shadow:var(--shadow);} .frente-sel span{font-size:10.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--mut);}
+.frente-sel select{appearance:none;-webkit-appearance:none;border:0;background:transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23f26a1b' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center;color:var(--tx);font:inherit;font-size:13px;font-weight:700;padding:0 30px 0 2px;height:100%;cursor:pointer;outline:0;min-width:150px;} .frente-sel:focus-within{border-color:var(--naranja);box-shadow:0 0 0 3px rgba(242,106,27,.15);}
+
+/* barra superior del Resumen: título, frente, corte e informe en una sola fila */
+html .topbar>.topbar-acc.topbar-acc{display:none;align-items:center;gap:12px;flex:0 0 auto;min-width:0;}
+html[data-pane="resumen"] .topbar>.topbar-acc.topbar-acc{display:flex;}
+html[data-pane="resumen"]:not(.cel) #pageSub{display:none;}
+.topbar-acc .bridges{flex:none;} .topbar-acc .res-fila{margin:0;flex-wrap:nowrap;gap:12px;} .topbar-acc .res-fila .hint{margin:0;font-size:11.5px;white-space:nowrap;}
+.topbar-acc .btn-sec{padding:0 14px;height:36px;white-space:nowrap;}
+html:not(.cel) .topbar{flex-wrap:wrap;gap:8px 14px;}
+html:not(.cel) .topbar>div:first-child{flex:1 1 300px;}
+@media (max-width:900px){html:not(.cel) .topbar-acc{order:3;flex:1 1 100%;justify-content:space-between;}}
+html.cel .topbar-acc{margin-top:8px;flex-wrap:wrap;}
+
+/* controles de la barra superior: iconos antes que texto */
+.frente-sel{padding:0 4px 0 12px;gap:6px;} .frente-sel>svg{width:17px;height:17px;flex:none;fill:none;stroke:var(--naranja);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;} .frente-sel select{min-width:96px;}
+.topbar-acc .hint#kpiMes{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 12px 0 10px;border:1px solid var(--line2);border-radius:12px;background:var(--card);color:var(--tx);font-size:12.5px;font-weight:700;box-shadow:var(--shadow);}
+.topbar-acc .hint#kpiMes::before{content:"";width:16px;height:16px;flex:none;background:var(--naranja);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='5' width='18' height='16' rx='2'/%3E%3Cpath d='M16 3v4M8 3v4M3 11h18'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='5' width='18' height='16' rx='2'/%3E%3Cpath d='M16 3v4M8 3v4M3 11h18'/%3E%3C/svg%3E") center/contain no-repeat;}
+.topbar-acc .hint#kpiMes.prop{border-color:var(--naranja);}
+.btn-inf{width:auto;height:36px;padding:0 12px;gap:6px;display:inline-flex;align-items:center;border-radius:12px;} .btn-inf svg{width:18px;height:18px;fill:none;stroke:var(--navy);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;} .btn-inf b{font-size:11px;font-weight:800;color:var(--naranja);letter-spacing:.3px;}
+html:not(.cel) .topbar{margin-bottom:22px;}
+@media (max-width:1380px){.topbar-acc .res-fila .hint#kpiMes{display:inline-flex;}}
 </style>
 <script>
+document.documentElement.dataset.pane = 'resumen';
 // se aplica ANTES de pintar el body, para que no haya parpadeo del tema equivocado
 (function(){ try {
   var t = localStorage.getItem('obra-tema') || 'claro';
@@ -1315,6 +1346,10 @@ body.con-modal{overflow:hidden;}
         <p class="sub" id="pageSub">Cargando…</p>
       </div>
       <!-- pantalla completa (como el visor 3D): oculta la barra del navegador y gana espacio en tablet -->
+      <div class="topbar-acc">
+        <div class="bridges" id="bridgeSel"></div>
+        <div class="res-fila"><span class="hint" id="kpiMes"></span><button type="button" class="icon-btn btn-inf" id="btnInforme" title="Informe PDF del Resumen · hoja A3 horizontal, listo para imprimir o guardar" aria-label="Informe PDF A3"><svg viewBox="0 0 24 24"><path d="M7 9V3h10v6"/><path d="M7 17H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2"/><rect x="7" y="14" width="10" height="7" rx="1"/></svg><b>A3</b></button></div>
+      </div>
       <button type="button" id="btnFull" class="icon-btn" title="Pantalla completa" aria-label="Pantalla completa"></button>
     </div>
 
@@ -1323,20 +1358,6 @@ body.con-modal{overflow:hidden;}
 
     <!-- ═══════════ RESUMEN ═══════════ -->
     <section class="pane on" data-pane="resumen">
-      <div class="bridges" id="bridgeSel"></div>
-      <p class="api" id="alcanceBox" style="display:none;margin:12px 0 0">Alcance:
-        <button class="seg-btn" data-alc="contrato">Contrato principal</button>
-        <button class="seg-btn" data-alc="adicional">Adicional</button>
-        <button class="seg-btn" data-alc="todo">Contrato + adicional</button>
-      </p>
-      <p class="api" id="valBox" style="display:none;margin:8px 0 0">Valorizaciones:
-        <button class="seg-btn" data-vprop="0" title="Solo lo aprobado por el residente (cifras oficiales)">Solo aprobadas</button>
-        <button class="seg-btn" data-vprop="1" title="Suma también las valorizaciones en propuesta (aún sin conciliar)">Incluir propuestas</button>
-        <span id="valNota" class="hint" style="margin-left:6px"></span>
-      </p>
-      <br>
-
-      <div class="res-fila"><p class="hint" style="margin:0" id="kpiMes"></p><button type="button" class="btn-sec" id="btnInforme" title="Abre el informe del Resumen en una hoja A3 horizontal, listo para imprimir o guardar como PDF">📄 Informe PDF (A3)</button></div>
       <div class="kpis">
         <div class="card kc-teal">
           <div class="k-body">
@@ -1875,8 +1896,7 @@ const GENERAL = '__general__';
 let seleccionada = GENERAL; // selección ÚNICA: GENERAL (suma de todo) o el código de un componente
 
 // alcance: el contrato principal, el adicional (otra prestación, con su propio presupuesto) o ambos
-let alcance = 'contrato';
-try { const a = localStorage.getItem('obra-alcance'); if (['contrato', 'adicional', 'todo'].includes(a)) alcance = a; } catch (e) {}
+let alcance = 'todo';   // el Resumen siempre parte del contrato principal + adicionales (sin selector; si no hay adicionales, solo el contrato)
 const ALCANCE_TXT = { contrato: 'Contrato principal', adicional: 'Adicional', todo: 'Contrato + adicional' };
 const enAlcance = (r) => alcance === 'todo' || (r.concepto || 'contrato') === alcance;
 const dmy = (f) => f ? `${f.slice(8, 10)}/${f.slice(5, 7)}/${f.slice(2, 4)}` : '';   // 'YYYY-MM-DD' -> 'dd/mm/aa'
@@ -2171,6 +2191,7 @@ document.querySelectorAll('#nav button').forEach(b => {
     document.querySelectorAll('.pane').forEach(x => x.classList.remove('on'));
     b.classList.add('on');
     document.querySelector(`.pane[data-pane="${b.dataset.pane}"]`).classList.add('on');
+    document.documentElement.dataset.pane = b.dataset.pane;
     const nComp = COMPONENTES.length;
     const titles = { resumen: ['DASHBOARD - CONTROL DE OBRA', `${nComp} frente${nComp===1?'':'s'} de trabajo en un solo lugar`],
       parte: ['Nuevo parte diario', 'Registra el avance ejecutado en obra'],
@@ -2274,18 +2295,20 @@ function tieneDatosReales(codigoComponente) {
 }
 
 function renderBridgeSel() {
-  const items = [{ id: GENERAL, nombre: 'General (toda la obra)', general: true }, ...COMPONENTES];
-  $('#bridgeSel').innerHTML = items.map(p => {
+  // lista desplegable de frentes: escala a cualquier cantidad y se oculta si la obra tiene un solo frente
+  const box = $('#bridgeSel');
+  if (COMPONENTES.length < 2) { seleccionada = GENERAL; box.innerHTML = ''; box.style.display = 'none'; return; }
+  box.style.display = '';
+  const items = [{ id: GENERAL, nombre: 'General', general: true }, ...COMPONENTES];
+  box.innerHTML = `<label class="frente-sel" title="Frente de trabajo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 13 9 5 9-5"/></svg><select id="frenteSel" aria-label="Frente de trabajo">${items.map(p => {
     const tieneDatos = p.general || tieneDatosReales(p.id);
-    const on = seleccionada === p.id;
-    return `<button class="bpill ${on?'on':''} ${tieneDatos?'':'empty'}" data-id="${p.id}" title="${tieneDatos?'':'Sin datos reales todavía'}">
-      <i></i>${p.nombre}${tieneDatos?'':' · sin datos'}</button>`;
-  }).join('');
-  document.querySelectorAll('.bpill').forEach(b => b.addEventListener('click', () => {
-    if (seleccionada === b.dataset.id) return; // ya está elegido, no hace nada
-    seleccionada = b.dataset.id;               // selección única: reemplaza, no se acumula
+    return `<option value="${esc(p.id)}"${seleccionada === p.id ? ' selected' : ''}>${esc(p.general ? p.nombre : String(p.nombre).replace(/^Puente\s+/i, ''))}${tieneDatos ? '' : ' · sin datos'}</option>`;
+  }).join('')}</select></label>`;
+  $('#frenteSel').addEventListener('change', (e) => {
+    if (seleccionada === e.target.value) return;
+    seleccionada = e.target.value;   // selección única: reemplaza, no se acumula
     renderAll();
-  }));
+  });
 }
 
 const MESES_ES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Set','Oct','Nov','Dic'];
@@ -2395,16 +2418,25 @@ function renderCurvaS() {
   let idxUlt = -1; periodos.forEach((p, i) => { if (porPeriodo[p].ejecP > 0) idxUlt = i; });
   const ptsEjecDib = idxUlt < 0 ? [] : ptsEjec.slice(Math.max(0, idxPri), idxUlt + 1);
   CURVA_CTX = { periodos, porPeriodo, base, ptsProg, ptsEjec, w, h, padL, padR, padT, padB, informe: !!CURVA_DIM, hayEjec: ejecSeries.some(p => p.y > 0), idxPri: Math.max(0, idxPri), idxUlt };
+  // trazo suavizado: spline cúbica monótona (Fritsch–Carlson). Pasa por cada punto y no se pasa de la curva real (no «rebota» como una spline común)
+  const trazo = (points) => {
+    const n = points.length; if (n < 3) return points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ');
+    const dx = [], m = []; for (let i = 0; i < n - 1; i++) { dx[i] = points[i + 1].x - points[i].x || 1e-6; m[i] = (points[i + 1].y - points[i].y) / dx[i]; }
+    const tg = [m[0]]; for (let i = 1; i < n - 1; i++) tg[i] = m[i - 1] * m[i] <= 0 ? 0 : (m[i - 1] + m[i]) / 2; tg[n - 1] = m[n - 2];
+    for (let i = 0; i < n - 1; i++) { if (m[i] === 0) { tg[i] = 0; tg[i + 1] = 0; continue; } const a = tg[i] / m[i], b = tg[i + 1] / m[i], s = a * a + b * b; if (s > 9) { const k = 3 / Math.sqrt(s); tg[i] = k * a * m[i]; tg[i + 1] = k * b * m[i]; } }
+    let d = `M ${points[0].x.toFixed(1)} ${points[0].y.toFixed(1)}`;
+    for (let i = 0; i < n - 1; i++) { const h = dx[i] / 3; d += ` C ${(points[i].x + h).toFixed(1)} ${(points[i].y + tg[i] * h).toFixed(1)} ${(points[i + 1].x - h).toFixed(1)} ${(points[i + 1].y - tg[i + 1] * h).toFixed(1)} ${points[i + 1].x.toFixed(1)} ${points[i + 1].y.toFixed(1)}`; }
+    return d;
+  };
   const lineFrom = (points, color, dash) => {
     if (!points.length) return '';
-    const d = points.map((p,i) => `${i===0?'M':'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ');
+    const d = trazo(points);
     return `<path d="${d}" fill="none" stroke="${color}" stroke-width="2.5" ${dash?`stroke-dasharray="${dash}"`:''}/>`;
   };
   // sombra de área bajo cada línea (degradado hacia transparente) — mismo tono que su línea
   const areaFrom = (points, fillId) => {
     if (!points.length) return '';
-    const d = `M ${points[0].x.toFixed(1)} ${baseline} ` +
-      points.map(p => `L ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ') +
+    const d = `M ${points[0].x.toFixed(1)} ${baseline} L ${points[0].x.toFixed(1)} ${points[0].y.toFixed(1)} ` + (points.length < 3 ? points.slice(1).map(p => `L ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ') : trazo(points).replace(/^M [^C]*/, '')) +
       ` L ${points[points.length-1].x.toFixed(1)} ${baseline} Z`;
     return `<path d="${d}" fill="url(#${fillId})" stroke="none"/>`;
   };
@@ -3176,7 +3208,10 @@ function renderKpisYTabla(partidas, avanceRows, progRows, periodo) {
   const pctProg = presu ? prog/presu : 0;
 
   const fechaCorte = periodo ? new Date(periodo) : null;
-  $('#kpiMes').textContent = fechaCorte ? `Corte: ${MESES_ES[fechaCorte.getUTCMonth()]} ${fechaCorte.getUTCFullYear()} (Curva S real${periodo && PROP_MESES.has(periodo) ? ' · incluye valorización en PROPUESTA, sin conciliar' : ''})` : '';
+  { const km = $('#kpiMes'), esProp = !!(periodo && PROP_MESES.has(periodo));
+    km.textContent = fechaCorte ? `${MESES_ES[fechaCorte.getUTCMonth()]} ${fechaCorte.getUTCFullYear()}` : '';
+    km.title = fechaCorte ? `Corte de la Curva S real${esProp ? ' · incluye una valorización en PROPUESTA, sin conciliar' : ''}` : '';
+    km.classList.toggle('prop', esProp); km.style.display = fechaCorte ? '' : 'none'; }
   $('#kPresu').textContent = fmt(presu);
   $('#kPresuS').textContent = `${porComponente.length} frente${porComponente.length===1?'':'s'} con datos`;
   $('#kProg').textContent = fmt(prog);
@@ -3991,7 +4026,7 @@ function cacheResGuardar(raw) { try { if (fuente === 'cloud' && AUTH.recordar) l
 // ── Valor ganado: el ejecutado de la Curva S sale de las VALORIZACIONES (v_ejecutado_mes). Solo las APROBADAS son lo oficial; las
 // PROPUESTAS (aún sin conciliar) se suman solo si se activa «incluir propuestas». Mayores metrados no entran a la Curva S.
 // Si un frente/tipo todavía no tiene valorizaciones, se sigue usando lo que traía curva_s_mensual.
-let INCLUIR_PROP = false; try { INCLUIR_PROP = localStorage.getItem('obra-incluir-prop') === '1'; } catch (e) {}
+let INCLUIR_PROP = false;   // por defecto solo valorizaciones aprobadas; las propuestas se incluyen con el botón de la pestaña Valorizaciones (no se recuerda entre sesiones)
 let PROP_MESES = new Set();   // meses que hoy salen de una valorización en PROPUESTA
 let RES_A = null, RES_B = null;
 function ejecDesdeValorizaciones(A) {
@@ -4036,12 +4071,12 @@ function aplicarResumen(A, B) {   // A = obra, componentes, Curva S y avance · 
   if (!hayAdicional && alcance !== 'contrato') alcance = 'contrato';
   DATA = { proyectos, partidas: A.partidas, avance: A.avance, programado: A.programado, curvaMensual, eventosPlazo, materiales: b.materiales, matMetas: combinarMetas(b.matMetasTabla, b.metasVal),
            matAvance: armarMatAvance(b.matAvance, b.matEjVal), matAvanceManual: b.matAvance, matEjVal: b.matEjVal || [], matSaldo: b.matSaldo || [], matPartidas: b.matPartidas, matProg: b.matProg, matSinRegla: b.matSinRegla, version: A.progRows.length ? version : null, versionId: version ? version.id : null, plazos: A.plazos, hayAdicional };
-  $('#alcanceBox').style.display = hayAdicional ? '' : 'none';
   valBoxActualizar();
   renderAll();
   fillMatForms();
 }
 async function bootResumen() {
+  try { hhAsegurar('mes').catch(() => {}); } catch (e) {}   // las horas-hombre empiezan a cargar a la vez que el resto, no después
   try {
     // 0) última carga guardada: se pinta al instante y luego se refresca
     const c = cacheResLeer();
@@ -5629,15 +5664,37 @@ let hhFijo = -1;   // periodo con el globo fijado por clic (-1 = ninguno)
 const HH_PALETA = ['#1e3a5f', '#2f6fed', '#5b9bff', '#9cc4ff', '#d97706', '#f59e0b', '#0f766e', '#14b8a6', '#5eead4', '#99f6e4', '#7c3aed', '#a78bfa', '#be185d', '#f472b6', '#64748b', '#94a3b8'];
 // solo las categorías que se usan para productividad (códigos de la relación de insumos de S10); para ver otras, agregar su código aquí
 const HH_RECURSOS = { '0147010001': '#141c5e', '0147010002': '#4f5bd5', '0147010003': '#f9a870', '0147010004': '#f26a1b' };   // capataz, operario, oficial, peón
+// Carga de horas-hombre, pensada para que el Resumen no espere:
+//  1) solo se piden las 4 categorías que se usan (el filtro va en la consulta, no en el navegador) y las 4 consultas salen en paralelo;
+//  2) cada consulta se hace una sola vez aunque se pida varias veces mientras carga (hhUna);
+//  3) la última carga queda en sessionStorage: al actualizar la página se dibuja al instante con eso y se refresca en segundo plano.
+const hhMemo = {};
+const hhUna = (k, f) => hhMemo[k] || (hhMemo[k] = f().catch(e => { delete hhMemo[k]; throw e; }));
+const hhFiltro = () => `&recurso_codigo=in.(${Object.keys(HH_RECURSOS).join(',')})`;
+const hhPlanFetch = (p) => { const vista = p === 'mes' ? 'v_hh_plan_mes' : 'v_hh_plan_semana', col = p === 'mes' ? 'mes' : 'semana'; return getTodo(`/${vista}?select=proyecto_id,${col},recurso_codigo,recurso,unidad,horas${hhFiltro()}&order=${col},proyecto_id,recurso_codigo`); };
+const hhGanFetch = () => getTodo(`/v_hh_ganadas_mes?select=proyecto_id,mes,estado,recurso_codigo,unidad,horas${hhFiltro()}&order=mes,proyecto_id,estado,recurso_codigo`).catch(() => []);   // sin la vista (apu_hh.sql sin actualizar) sigue sirviendo sin horas ganadas
+const hhCobFetch = () => get('/v_apu_cobertura?select=*');
+const hhCK = () => 'obra-hh-cache|' + API;
+function hhCacheLeer() { try { return JSON.parse(sessionStorage.getItem(hhCK()) || 'null'); } catch (e) { return null; } }
+function hhCacheGuardar() { try { sessionStorage.setItem(hhCK(), JSON.stringify({ mes: HH.datos.mes, gan: HH.gan, cob: HH.cob })); } catch (e) {} }
+async function hhRefrescar(viejo) {   // segundo plano: trae lo nuevo y, solo si cambió algo, vuelve a dibujar
+  try {
+    const [mes, cob, gan] = await Promise.all([hhUna('plan:mes', () => hhPlanFetch('mes')), hhUna('cob', hhCobFetch), hhUna('gan', hhGanFetch)]);
+    const cambio = JSON.stringify({ mes, gan, cob }) !== JSON.stringify({ mes: viejo.mes, gan: viejo.gan, cob: viejo.cob });
+    HH.datos.mes = mes; HH.gan = gan; HH.cob = cob; hhCacheGuardar();
+    if (cambio) { renderHHResumen(); if (HH.datos[HH.per] && document.querySelector('.pane.on[data-pane="hh"]')) hhPintar(); }
+  } catch (e) { /* se queda con lo guardado */ }
+}
 async function hhAsegurar(per) {   // trae (una vez) el plan, la cobertura y las horas ganadas; lo usan la pestaña Horas-hombre y el Resumen
-  const pedir = async (p) => {
-    if (HH.datos[p]) return;
-    const vista = p === 'mes' ? 'v_hh_plan_mes' : 'v_hh_plan_semana', col = p === 'mes' ? 'mes' : 'semana';
-    HH.datos[p] = await getTodo(`/${vista}?select=proyecto_id,${col},recurso_codigo,recurso,unidad,horas&order=${col},proyecto_id,recurso_codigo`);
-  };
-  await pedir('mes'); await pedir(per);   // el plan mensual siempre: sirve para comparar con las horas ganadas hasta el corte
-  if (!HH.cob) HH.cob = await get('/v_apu_cobertura?select=*');
-  if (!HH.gan) { try { HH.gan = await getTodo('/v_hh_ganadas_mes?select=proyecto_id,mes,estado,recurso_codigo,unidad,horas&order=mes,proyecto_id,estado,recurso_codigo'); } catch (e) { HH.gan = []; } }   // sin la vista (apu_hh.sql sin actualizar) sigue sirviendo sin horas ganadas
+  if (per === 'mes' && !HH.datos.mes) {
+    const c = hhCacheLeer();
+    if (c && c.mes && c.mes.length) { HH.datos.mes = c.mes; HH.gan = c.gan || []; HH.cob = c.cob || []; hhRefrescar(c); return; }
+  }
+  const [mes, sem, cob, gan] = await Promise.all([
+    HH.datos.mes || hhUna('plan:mes', () => hhPlanFetch('mes')),   // el plan mensual siempre: sirve para comparar con las horas ganadas hasta el corte
+    per !== 'mes' ? (HH.datos[per] || hhUna('plan:' + per, () => hhPlanFetch(per))) : null,
+    HH.cob || hhUna('cob', hhCobFetch), HH.gan || hhUna('gan', hhGanFetch)]);
+  HH.datos.mes = mes; if (sem) HH.datos[per] = sem; HH.cob = cob; HH.gan = gan; hhCacheGuardar();
 }
 async function hhCargar() {
   const box = $('#hhCuerpo'); if (!box) return;
