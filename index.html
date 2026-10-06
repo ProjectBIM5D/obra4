@@ -1344,6 +1344,47 @@ h1,h3,.card .value,.hhr-pie b{letter-spacing:-.2px;}
 /* detalle de la valorización: ACUMULADO % a 9 px con menos relleno (no desborda) y última columna del SALDO (%) centrada en todas las filas */
 .oc-tb.vld-oc tbody tr[class] td:nth-child(14){font-size:9px;padding-left:3px;padding-right:3px;letter-spacing:0;}
 .oc-tb.vld-oc tbody tr[class] td:last-child,.oc-tb.vld-oc thead tr th:last-child{text-align:center;}
+
+/* CIERRE DE LA VALORIZACIÓN (costo directo + gastos generales + utilidad = subtotal): columnas fijas, nada se desborda, bloque centrado y armónico.
+   En el PDF va en su propia hoja, con el encabezado y los márgenes de las demás. */
+.vld-pagres{break-before:page;page-break-before:always;}
+.vld-pagres td.vld-pagres-td{border:0;padding:0 2mm 4mm;text-align:left;white-space:normal;background:transparent;}
+.vld-pagres thead tr.vld-doctit-row th{padding-top:20mm;}
+.vld-resumen{margin-top:0;padding-top:0;border-top:0;}
+.vld-resumen h4{font-size:12px;letter-spacing:.3px;text-transform:uppercase;color:#141c5e;margin:0 0 10px;text-align:center;}
+.vld-resfila{display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:30px;}
+.vld-resfila>.vld-rescol:first-child{flex:1 1 640px;max-width:1080px;min-width:0;}
+.vld-sumw{max-width:none;overflow-x:auto;}
+.vld-sum{table-layout:fixed;width:100%;min-width:820px;max-width:none;border-collapse:collapse;font-size:12px;margin-top:0;}
+.vld-sum col.cC{width:17%;} .vld-sum col.cP{width:13%;} .vld-sum col.cM{width:11.5%;} .vld-sum col.cQ{width:6%;}
+.vld-sum th,.vld-sum td{padding:6px 8px;white-space:nowrap;}
+.vld-sum thead th{text-align:center;font-size:10px;letter-spacing:.3px;} .vld-sum thead th.l{text-align:left;padding-left:12px;}
+.vld-sum td.l{width:auto;text-align:left;padding-left:12px;font-weight:700;}
+.vld-sum tbody td{text-align:right;padding-right:8px;padding-left:4px;font-variant-numeric:tabular-nums;} .vld-sum tbody td:nth-child(3n+1):not(.l),.vld-sum tbody td:nth-child(odd):not(.l){}
+.vld-sum td small{font-size:9px;color:var(--mut);margin-top:1px;}
+.vld-sum tr.tt td{font-size:11.5px;font-weight:800;color:#141c5e;background:#e9ecf7;border-top:2px solid #141c5e;}
+.vld-sum tr.tt td.l{font-size:11px;letter-spacing:.4px;}
+.vld-mmres{flex:0 0 250px;max-width:250px;padding-left:22px;}
+.vld-mm2{margin:0 auto;min-width:0;width:100%;}
+.vld-mm2 th,.vld-mm2 td{text-align:center;padding:8px 10px;}
+.vld-resumen .hint{font-size:10px;line-height:1.4;color:var(--mut);margin:8px 0 0;text-align:left;}
+
+/* cierre pegado al final de la valorización (misma hoja): sin bordes y con aire arriba */
+.vld-oc tbody.vld-cierre td.vld-cierre-td{border:0;padding:14px 2mm 0;text-align:left;white-space:normal;background:transparent;}
+.vld-oc tbody.vld-cierre tr{break-inside:avoid;page-break-inside:avoid;}
+.vld-oc tbody.vld-cierre .legend2{margin:0 0 14px;}
+
+/* hojas de la valorización: cada <section class="vld-pag"> es una hoja A3 (el reparto de filas lo calcula valDetPaginar) */
+.vld-hoja{padding:0 12mm !important;gap:0 !important;}
+.vld-pag{height:297mm;box-sizing:border-box;overflow:hidden;background:#fff;margin-bottom:10mm;break-after:page;page-break-after:always;}
+.vld-pag.ultima{break-after:auto;page-break-after:auto;margin-bottom:0;}
+.vld-cierre-blk{margin-top:12mm;}
+.vld-pag .vld-pagres{break-before:auto;page-break-before:auto;}
+.vld-oc tbody.vld-cierre{display:none;}
+@media print{.vld-pag{margin-bottom:0 !important;}}
+
+/* panel: el cuadro de cierre no va pegado a la tabla de partidas */
+.vld-card .vld-resumen{margin-top:30px;padding-top:24px;border-top:1px dashed var(--line2);}
 </style>
 <script>
 document.documentElement.dataset.pane = 'resumen';
@@ -3761,7 +3802,7 @@ function valDetResumenHTML(v, conProp, presuCD, menorMonto) {
       <td class="f">${pres == null ? '—' : N0(saldo)}</td><td class="f">${PCT(saldo, pres)}</td></tr>`; };
   return `<div class="vld-resumen"><div class="vld-resfila"><div class="vld-rescol">
     <h4>Presupuesto, costo directo, gastos generales y utilidad — toda la valorización</h4>
-    <div class="vld-sumw"><table class="vld-sum"><thead>
+    <div class="vld-sumw"><table class="vld-sum"><colgroup><col class="cC"><col class="cP"><col class="cM"><col class="cQ"><col class="cM"><col class="cQ"><col class="cM"><col class="cQ"><col class="cM"><col class="cQ"></colgroup><thead>
       <tr><th class="l" rowspan="2">Concepto</th><th rowspan="2">Presupuesto<br>actualizado</th>
         <th class="sep" colspan="2">Anterior</th><th class="sep hl" colspan="2">Actual · Val. N°${v.numero}</th><th class="sep" colspan="2">Acumulado</th><th class="sep" colspan="2">Saldo</th></tr>
       <tr><th class="sep">Monto</th><th>%</th><th class="sep hl">Monto</th><th class="hl">%</th><th class="sep">Monto</th><th>%</th><th class="sep">Monto</th><th>%</th></tr>
@@ -3780,7 +3821,6 @@ function valDetResumenHTML(v, conProp, presuCD, menorMonto) {
         <td class="f">${presu ? N0(Math.max(0, presu.ut - utAcum)) : '—'}</td><td class="f">${presu ? PCT(Math.max(0, presu.ut - utAcum), presu.ut) : '—'}</td></tr>
       ${fila('SUBTOTAL (sin IGV)', presu && presu.sub, T.antS, T.actS, T.acumS, true)}
     </tbody></table></div>
-    <p class="hint">El % de cada columna es sobre el presupuesto de esa fila. Utilidad: tasa fija del contrato. Gastos generales: el % editable de cada valorización (en «Anterior»/«Acumulado» es el % real de cada una de las valorizaciones anteriores, no un promedio). Presupuesto de gastos generales y utilidad: estimado con el % de esta valorización sobre el presupuesto total.</p>
     </div><div class="vld-rescol vld-mmres"><h4>Menor metrado acumulado</h4>
       <table class="vld-mm2"><thead><tr><th>Monto</th><th>% incidencia</th></tr></thead>
         <tbody><tr><td>${N0((menorMonto || 0) * (1 + ggActPct + utPct))}</td><td>${presu ? PCT((menorMonto || 0) * (1 + ggActPct + utPct), presu.sub) : '—'}</td></tr></tbody></table>
@@ -3855,11 +3895,50 @@ function valDetHTML() {
     <p class="hint">Metrado y monto ejecutado (${conProp ? 'aprobado + propuesta' : 'solo aprobado'}), con la jerarquía y el orden del cronograma. ${valDetFiltro.modo === 'completo' ? 'Todas las partidas del contrato.' : 'Solo lo ejecutado este mes.'}</p>
     ${controles}
     ${tablaDetalle}
-    ${valDetLeyenda}
     ${resumen}
   </div>`;
 }
 // versión imprimible: siempre la valorización completa (todas las partidas, todos los frentes), con el título oficial y firmas al pie
+// PAGINACIÓN DE LA VALORIZACIÓN (PDF A3 horizontal). El reparto de filas por hoja se calcula aquí, midiendo cada fila, en vez de dejarlo al navegador:
+// así cada hoja lleva su encabezado y sus márgenes, y el cuadro de cierre (costo directo + GG + utilidad) va pegado a las últimas partidas,
+// en la misma hoja si hay espacio; solo si no cabe pasa a una hoja nueva con su propio encabezado. Nunca queda un encabezado sin filas.
+// En el PDF no van la leyenda de colores, la nota bajo el cuadro ni el pie con las firmas; solo queda la nota del menor metrado.
+function valDetPaginar(ov) {
+  const hoja = ov.querySelector('.vld-hoja'); if (!hoja) return;
+  const tb1 = hoja.querySelector('table.vld-oc:not(.vld-pagres)'), tb2 = hoja.querySelector('table.vld-pagres');
+  if (!tb1 || !tb2 || !tb1.tHead || !tb1.tBodies[0]) return;
+  hoja.querySelectorAll(':scope > .legend2').forEach(e => e.remove());
+  const cierreTd = tb2.querySelector('td.vld-pagres-td');
+  cierreTd.querySelectorAll('.inf-pie').forEach(e => e.remove());
+  cierreTd.querySelectorAll('.vld-resfila > .vld-rescol:first-child > p.hint').forEach(e => e.remove());
+  const mm = 96 / 25.4, zoomAntes = hoja.style.zoom;
+  hoja.style.zoom = '1';   // medir en px reales (la vista previa va reducida con zoom)
+  const hHead = tb1.tHead.getBoundingClientRect().height;
+  const filas = [...tb1.tBodies[0].rows], hs = filas.map(r => r.getBoundingClientRect().height);
+  const hCierre = cierreTd.getBoundingClientRect().height;
+  hoja.style.zoom = zoomAntes;
+  const cap = 297 * mm - hHead - 29 * mm - 3 * mm;   // alto útil de cada hoja: A3 (297 mm) menos encabezado y menos 29 mm de margen inferior
+  const paginas = [[]]; let usado = 0;
+  filas.forEach((tr, i) => { if (usado + hs[i] > cap && paginas[paginas.length - 1].length) { paginas.push([]); usado = 0; } paginas[paginas.length - 1].push(tr); usado += hs[i]; });
+  const cabe = usado + hCierre + 6 * mm <= cap;       // ¿el cierre cabe debajo de las últimas partidas?
+  const colgroup = tb1.querySelector('colgroup'), thead = tb1.tHead, estilo = tb1.getAttribute('style') || '';
+  const cierre = cierreTd.querySelector('.vld-resumen');
+  const hojaPag = (contenido, ultima) => { const s = document.createElement('section'); s.className = 'vld-pag' + (ultima ? ' ultima' : ''); s.appendChild(contenido); return s; };
+  const tablaPartidas = (rows) => { const tb = document.createElement('table'); tb.className = tb1.className; tb.setAttribute('style', estilo); tb.appendChild(colgroup.cloneNode(true)); tb.appendChild(thead.cloneNode(true)); const body = document.createElement('tbody'); rows.forEach(r => body.appendChild(r)); tb.appendChild(body); return tb; };
+  const secciones = paginas.map((rows, i) => {
+    const ultimaPart = i === paginas.length - 1, cont = document.createElement('div'); cont.appendChild(tablaPartidas(rows));
+    if (ultimaPart && cabe && cierre) { const blk = document.createElement('div'); blk.className = 'vld-cierre-blk'; blk.appendChild(cierre); cont.appendChild(blk); }
+    return hojaPag(cont, ultimaPart && (cabe || !cierre));
+  });
+  if (!cabe && cierre) {   // hoja propia para el cierre: mismo encabezado (logo, título y datos de la obra), sin la fila de columnas
+    const tb = document.createElement('table'); tb.className = tb2.className; tb.setAttribute('style', estilo);
+    const th = document.createElement('thead'); th.innerHTML = tb2.tHead.innerHTML; tb.appendChild(th);
+    const body = document.createElement('tbody'); body.innerHTML = '<tr><td class="vld-pagres-td"></td></tr>'; body.querySelector('td').appendChild(cierre); tb.appendChild(body);
+    const cont = document.createElement('div'); cont.appendChild(tb); secciones.push(hojaPag(cont, true));
+  }
+  hoja.textContent = ''; secciones.forEach(s => hoja.appendChild(s));
+  hoja.dataset.cierre = cabe ? 'misma-hoja' : 'hoja-aparte'; hoja.dataset.paginas = secciones.length;
+}
 async function valDetImprimir() {
   if (!valDetId) return;
   const v = VAL.vals.find(x => x.id === valDetId); if (!v) return;
@@ -3891,15 +3970,17 @@ async function valDetImprimir() {
   const cabConTitulo = valDetTablaCab.replace('<thead>', '<thead>' + tituloRow);
   const html = `<div class="inf-hoja vld-hoja">
     <div><table class="oc-tb vld-oc vld-navy" style="min-width:0;width:1489px;margin:0 auto;">${valDetTablaColImpresion}${cabConTitulo}<tbody>${cuerpo}</tbody><tfoot><tr><td colspan="17" style="height:29mm;padding:0;border:0;border-top:2px solid #141c5e;background:transparent;"></td></tr></tfoot></table></div>
-    ${valDetLeyenda}
-    ${resumen}
-    <div class="inf-pie" style="margin-top:18px"><span>Sin IGV · lo aprobado es lo oficial${v.estado !== 'aprobada' ? ' (esta valorización aún está en propuesta)' : ''}. Generado por el Panel de Control de Obra.</span>
-      <div class="inf-firmas"><span>Elaborado por</span><span>Revisado por</span><span>V°B° Gerencia</span></div></div>
+    <div><table class="oc-tb vld-oc vld-navy vld-pagres" style="min-width:0;width:1489px;margin:0 auto;"><thead>${tituloRow.replace('colspan="17"', 'colspan="1"')}</thead><tbody><tr><td class="vld-pagres-td">
+      ${resumen}
+      <div class="inf-pie" style="margin-top:22px"><span>Sin IGV · lo aprobado es lo oficial${v.estado !== 'aprobada' ? ' (esta valorización aún está en propuesta)' : ''}. Generado por el Panel de Control de Obra.</span>
+        <div class="inf-firmas"><span>Elaborado por</span><span>Revisado por</span><span>V°B° Gerencia</span></div></div>
+    </td></tr></tbody><tfoot><tr><td style="height:29mm;padding:0;border:0;background:transparent;"></td></tr></tfoot></table></div>
   </div>`;
   document.querySelector('#informe')?.remove();
   const ov = document.createElement('div'); ov.id = 'informe'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-label', 'Valorización para imprimir');
   ov.innerHTML = `<div class="inf-bar"><b>Valorización N° ${v.numero} · A3 horizontal</b><span>En la ventana de impresión elige «Guardar como PDF», tamaño A3, horizontal y márgenes «Ninguno».</span><button type="button" class="pri" id="infImprimir">🖨 Imprimir / Guardar PDF</button><button type="button" id="infCerrar">Cerrar</button></div><div class="inf-scroll">${html}</div>`;
   document.body.appendChild(ov); document.body.classList.add('inf-abierto'); infZoom();
+  try { valDetPaginar(ov); } catch (e) { console.error(e); }
   ov.querySelector('#infCerrar').addEventListener('click', cerrarInforme);
   ov.querySelector('#infImprimir').addEventListener('click', () => { infTituloPrevio = document.title; document.title = `Valorizacion N${v.numero} - ${esc(obraNombre)}`; window.print(); });
 }
