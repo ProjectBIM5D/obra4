@@ -1446,6 +1446,33 @@ h1,h3,.card .value,.hhr-pie b{letter-spacing:-.2px;}
 .pre-sug em{display:block;font-style:normal;font-size:10.5px;color:var(--mut);} .pre-sug-v{padding:10px;font-size:12px;color:var(--mut);}
 @media (max-width:900px){.pre-dr-cols{grid-template-columns:minmax(0,1fr);} .pre-dr{width:100vw;}}
 @media (max-width:600px){.pre-dr-body{padding:12px 12px 20px;} .pre-dr-h{padding:12px;}}
+.pre-frs{padding:12px 16px 14px;} .pre-frs h3{margin:0 0 8px;font-size:13.5px;}
+.pre-frs .vl-tb td,.pre-frs .vl-tb th{font-size:12px;padding:7px 8px;} .pre-frs .vl-tb td.l{font-family:Inter,'Segoe UI',system-ui,sans-serif;font-weight:700;white-space:nowrap;} .pre-frs .vl-tb td.c{text-align:center;}
+/* Presupuesto: letra y filas más compactas, y las dos columnas del APU (venta / meta) con filas del mismo alto para leerlas lado a lado */
+.pre-kp .vl-k b{font-size:17px;} .pre-kp .vl-k small{font-size:10px;} .pre-kp .vl-k em{font-size:11px;}
+.pre-tool h3,.pre-frs h3{font-size:13px;} .pre-tool p.hint{font-size:11px;}
+.pre-tb td,.pre-tb th{font-size:11px;padding:4px 6px;} .pre-tb thead th{font-size:9.5px;padding:6px 5px;letter-spacing:.2px;}
+.pre-tb td:not(.l):not(.und){font-size:11.5px;} .pre-tb tr.tot td{font-size:11.5px;padding:7px 6px;}
+.pre-tb td.pre-nom{line-height:1.25;} .pre-cod{font-size:10.5px;} .pre-chev{font-size:10px;width:12px;}
+.pre-tb tbody tr.pre-n1 td{font-size:11.5px;}
+.pre-frs .vl-tb td,.pre-frs .vl-tb th{font-size:11.5px;padding:5px 8px;} .pre-frs .vl-tb thead th{font-size:9.5px;}
+.pre-dr-h{padding:12px 20px 10px;} .pre-dr-h small{font-size:10.5px;} .pre-dr-h h3{font-size:14px;}
+.pre-dr-body{padding:12px 20px 22px;} .pre-res{font-size:11.5px;padding:8px 14px;margin-bottom:12px;} .pre-res b{font-size:13px;}
+.pre-lado{padding:12px 14px;} .pre-lado h3{font-size:12.5px;margin-bottom:6px;} .pre-rend{font-size:11.5px;margin-bottom:6px;}
+.pre-lt{table-layout:fixed;}
+.pre-lt th,.pre-lt td{font-size:11px;padding:2px 5px;}
+.pre-lt thead th{font-size:9.5px;padding:6px 4px;letter-spacing:.2px;height:auto;}
+.pre-lt tbody td{height:27px;} .pre-lt tr.pre-sec td{height:22px;font-size:9.5px;padding:2px 8px;}
+.pre-lt td:not(.l){font-size:11.5px;}
+.pre-lt td.l{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;line-height:1.2;}
+.pre-lt th:nth-child(2){width:38px;} .pre-lt th:nth-child(3){width:56px;} .pre-lt th:nth-child(4){width:64px;} .pre-lt th:nth-child(5){width:64px;} .pre-lt th:nth-child(6){width:66px;} .pre-lt th:nth-child(7){width:26px;}
+.pre-lt .pre-in{width:100%;height:21px;padding:0 5px;font-size:11px;box-sizing:border-box;}
+.pre-lt td .pre-tag{font-size:8.5px;}
+.pre-rend .pre-in{width:70px;height:21px;padding:0 5px;font-size:11px;}
+.pre-pu{padding:6px 10px;font-size:11.5px;} .pre-pu b{font-size:13.5px;}
+.pre-add-t{font-size:11.5px;} .pre-add-b input{font-size:11px;padding:4px 8px;} .pre-add .pre-in{width:74px;height:26px;}
+.pre-sug button{font-size:11px;}
+@media (max-width:1280px){.pre-tm .und{display:none;}}
 </style>
 <script>
 document.documentElement.dataset.pane = 'resumen';
@@ -6051,32 +6078,53 @@ function preArbol(d) {
     }
   };
   (hijos.raiz || []).forEach(calc);
-  d.hijos = hijos;
+  d.hijos = hijos; d.idx = new Set(d.venta.map(n => n.nodo_id));
   d.tot = (hijos.raiz || []).reduce((t, n) => ({ v: t.v + n._v, con: t.con + n._con, m: t.m + n._m, np: t.np + n._np, nm: t.nm + n._nm, nmod: t.nmod + n._nmod }), { v: 0, con: 0, m: 0, np: 0, nm: 0, nmod: 0 });
+}
+// «Toda la obra»: junta los frentes en un solo árbol (cada frente es un grupo de primer nivel) y suma sus totales
+async function preDatosTodos(forzar) {
+  const ds = await Promise.all(COMPONENTES.map(c => preDatos(c.id, forzar)));
+  const hijos = { raiz: [].concat(...ds.map(d => d.hijos.raiz || [])) };
+  ds.forEach(d => Object.keys(d.hijos).forEach(k => { if (k !== 'raiz') hijos[k] = d.hijos[k]; }));
+  const tot = ds.reduce((a, d) => ({ v: a.v + d.tot.v, con: a.con + d.tot.con, m: a.m + d.tot.m, np: a.np + d.tot.np, nm: a.nm + d.tot.nm, nmod: a.nmod + d.tot.nmod }), { v: 0, con: 0, m: 0, np: 0, nm: 0, nmod: 0 });
+  PRE.todos = { esTodos: true, proy: { nombre: 'Toda la obra', codigo: 'todos' }, venta: [].concat(...ds.map(d => d.venta)), partidas: Object.assign({}, ...ds.map(d => d.partidas)), hijos, tot, meta: null, archivados: 0, ocId: null, frentes: ds };
+  if (!PRE.abiertos.todos) PRE.abiertos.todos = new Set(hijos.raiz.filter(n => hijos[n.nodo_id]).map(n => n.nodo_id));
+  return PRE.todos;
+}
+const preVista = () => PRE.frente === 'todos' ? PRE.todos : PRE.cache[PRE.frente];
+const preFrenteDe = (nodoId) => Object.values(PRE.cache).find(d => d.idx && d.idx.has(nodoId)) || null;   // frente al que pertenece una partida
+// resumen por frente (vista «Toda la obra» → Meta): estado, venta, meta y margen de cada uno, con acceso a su detalle
+function preFrentesHTML(d) {
+  const filas = d.frentes.map(f => {
+    const tt = f.tot, m = f.meta, mg = tt.con - tt.m, cl = mg > 0.004 ? 'pre-pos' : mg < -0.004 ? 'pre-neg' : '';
+    return `<tr><td class="l">${esc(String(f.proy.nombre))}</td><td class="c">${m ? `<span class="vl-pill ${PRE_EST[m.estado][1]}">${PRE_EST[m.estado][0]}</span>` : '<span class="vl-pill ar">Sin meta</span>'}</td><td>${preN(tt.v, 2)}</td><td>${tt.nm ? preN(tt.m, 2) : '—'}</td><td class="${cl}">${tt.nm ? preN(mg, 2) : '—'}</td><td class="${cl}">${tt.nm ? preP(tt.con ? mg / tt.con : 0) : '—'}</td><td class="c"><button type="button" data-prefr="${esc(f.proy.codigo)}" title="${m ? 'Ver el detalle de este frente' : 'Ir a crear su presupuesto meta'}">${m ? 'Abrir ›' : 'Crear ›'}</button></td></tr>`;
+  }).join('');
+  return `<div class="vl-card pre-frs"><h3>Presupuesto meta por frente</h3><div class="vl-tw"><table class="vl-tb"><thead><tr><th class="l">Frente</th><th>Meta</th><th>Venta S/</th><th>Meta S/</th><th>Margen S/</th><th>Margen %</th><th></th></tr></thead><tbody>${filas}</tbody></table></div></div>`;
 }
 async function preCargar() {
   const box = $('#preCuerpo'); if (!box) return;
   if (!RES_A || !(RES_A.proyectos || []).length) { box.innerHTML = '<div class="rg-msg">Cargando la obra…</div>'; return; }
-  if (!PRE.frente || !preProy(PRE.frente)) PRE.frente = seleccionada !== GENERAL && preProy(seleccionada) ? seleccionada : COMPONENTES[0].id;
-  if (!PRE.cache[PRE.frente]) box.innerHTML = '<div class="rg-msg">Consultando el presupuesto…</div>';
-  try { await preDatos(PRE.frente); }
+  const un = COMPONENTES.length === 1;   // con un solo frente no hay «Toda la obra»: es ese frente
+  if (!PRE.frente || (PRE.frente !== 'todos' && !preProy(PRE.frente)) || (un && PRE.frente === 'todos')) PRE.frente = un ? COMPONENTES[0].id : 'todos';
+  if (!preVista()) box.innerHTML = '<div class="rg-msg">Consultando el presupuesto…</div>';
+  try { if (PRE.frente === 'todos') await preDatosTodos(); else await preDatos(PRE.frente); }
   catch (e) { box.innerHTML = '<div class="rg-msg">Este módulo necesita <b>presupuesto_meta.sql</b> en la base. Pide al administrador que lo corra.<br><span class="mono" style="font-size:11px">' + esc(e.message) + '</span></div>'; return; }
   prePintar();
 }
 function prePintar() {
   const box = $('#preCuerpo'); if (!box) return;
-  const d = PRE.cache[PRE.frente]; if (!d) return;
-  $('#preFrentes').innerHTML = COMPONENTES.map(c => `<button class="seg-btn ${PRE.frente === c.id ? 'on' : ''}" data-prefr="${esc(c.id)}">${esc(String(c.nombre).replace(/^Puente\s+/i, ''))}</button>`).join(' ');
+  const d = preVista(); if (!d) return;
+  $('#preFrentes').innerHTML = (COMPONENTES.length > 1 ? `<button class="seg-btn ${PRE.frente === 'todos' ? 'on' : ''}" data-prefr="todos" title="Suma de todos los frentes">Toda la obra</button> ` : '') + COMPONENTES.map(c => `<button class="seg-btn ${PRE.frente === c.id ? 'on' : ''}" data-prefr="${esc(c.id)}">${esc(String(c.nombre).replace(/^Puente\s+/i, ''))}</button>`).join(' ');
   document.querySelectorAll('[data-premodo]').forEach(b => b.classList.toggle('on', b.dataset.premodo === PRE.modo));
   const adm = !!AUTH.admin, m = d.meta, meta = PRE.modo === 'meta', t = d.tot;
-  const margen = t.con - t.m, hayM = !!m && t.nm > 0;
+  const margen = t.con - t.m, hayM = (!!m || !!d.esTodos) && t.nm > 0, nMetas = d.esTodos ? d.frentes.filter(f => f.meta).length : 0;
   const kp = `<div class="vl-kp pre-kp">
     <div class="vl-k"><small>Presupuesto venta</small><b>${fmt(t.v, 2)}</b><em>Costo directo del contrato · ${t.np} partidas</em></div>
-    <div class="vl-k"><small>Presupuesto meta</small><b>${hayM ? fmt(t.m, 2) : '—'}</b><em>${m ? `${PRE_EST[m.estado][0]} · ${t.nm} de ${t.np} partidas con APU meta` : 'Aún no creado'}</em></div>
+    <div class="vl-k"><small>Presupuesto meta</small><b>${hayM ? fmt(t.m + (t.v - t.con), 2) : '—'}</b><em>${d.esTodos ? (nMetas ? `${nMetas} de ${d.frentes.length} frentes con meta · ${t.nm} de ${t.np} partidas` : 'Ningún frente tiene meta aún') : m ? `${PRE_EST[m.estado][0]} · ${t.nm} de ${t.np} partidas con APU meta` : 'Aún no creado'}</em></div>
     <div class="vl-k"><small>Margen meta</small><b class="${hayM ? (margen >= 0 ? 'pre-pos' : 'pre-neg') : ''}">${hayM ? fmt(margen, 2) : '—'}</b><em>${hayM ? `${preP(t.con ? margen / t.con : 0)} sobre la venta de esas partidas` : 'Venta − meta'}</em></div>
     <div class="vl-k"><small>Partidas ajustadas</small><b>${hayM ? t.nmod : '—'}</b><em>${hayM ? `de ${t.nm} con cambios en su APU` : 'Con cambios respecto a la venta'}</em></div></div>`;
   let cuerpo = '';
-  if (meta && !m) {
+  if (meta && !m && !d.esTodos) {
     cuerpo = `<div class="vl-card pre-vacio"><div class="pre-vacio-ic">🎯</div><h3>Aún no hay presupuesto meta para ${esc(String(d.proy.nombre))}</h3>
       <p class="hint">El meta es una copia del APU de venta que ajustas (insumos, cuantías, rendimientos, precios) sin tocar el contrato. ${d.archivados ? `Hay ${d.archivados} anterior${d.archivados === 1 ? '' : 'es'} archivado${d.archivados === 1 ? '' : 's'}.` : ''}</p>
       ${adm ? `<div class="field pre-mot"><label for="preMotivo">Motivo (opcional)</label><input id="preMotivo" type="text" maxlength="160" placeholder="Ej.: meta con rendimientos de la última obra"></div>
@@ -6084,10 +6132,9 @@ function prePintar() {
       <button type="button" class="btn-sec" data-pre-crear="vacio" title="Parte sin APU: copias solo las partidas que quieras ajustar">📄 Crear vacío</button></div>`
       : '<p class="hint"><b>Solo el administrador puede crear el presupuesto meta.</b> Inicia sesión como administrador.</p>'}</div>`;
   } else {
-    const faltan = meta && m && t.nm < t.np;
-    cuerpo = (meta && m ? preEstadoHTML(m, adm) : '') + `<div class="vl-card pre-card">
-      <div class="pre-tool"><div><h3>${meta ? 'Venta contra meta' : 'Presupuesto de venta'} · ${esc(String(d.proy.nombre))}</h3>
-        <p class="hint">${meta ? `Margen = venta − meta (positivo = ahorro). ${faltan ? `Faltan ${t.np - t.nm} partidas por copiar al meta; se marcan con «—». ` : ''}Toca una partida para ver y ${adm && m && m.estado === 'borrador' ? 'ajustar' : 'comparar'} su APU.` : 'Contrato principal a precios unitarios (costo directo). Es de solo lectura; toca una partida para ver su APU.'}</p></div>
+    cuerpo = (meta && m ? preEstadoHTML(m, adm) : '') + (meta && d.esTodos ? preFrentesHTML(d) : '') + `<div class="vl-card pre-card">
+      <div class="pre-tool"><div><h3>${meta ? 'Venta contra meta' : 'Presupuesto de venta'} · ${d.esTodos ? 'Toda la obra' : esc(String(d.proy.nombre))}</h3>
+        <p class="hint">${meta ? `Margen = venta − meta (positivo = ahorro). ${t.nm < t.np ? `${t.np - t.nm} partidas aún sin meta (—): en el total se cuentan a precio de venta. ` : ''}Toca una partida para ver y ${adm && m && m.estado === 'borrador' ? 'ajustar' : 'comparar'} su APU.` : 'Contrato principal a precios unitarios (costo directo). Es de solo lectura; toca una partida para ver su APU.'}</p></div>
         <div class="pre-tb-acc">${meta ? `<button type="button" class="icon-btn ${PRE.soloMod ? 'on' : ''}" data-pre-solomod title="Mostrar solo las partidas ajustadas" aria-label="Solo ajustadas"><svg viewBox="0 0 24 24"><path d="M3 5h18l-7 8v6l-4 2v-8L3 5Z"/></svg></button>` : ''}
         <button type="button" class="icon-btn" data-pre-exp="1" title="Expandir todo" aria-label="Expandir todo"><svg viewBox="0 0 24 24"><path d="m7 9 5 5 5-5M7 4l5 5 5-5" transform="translate(0 4)"/></svg></button>
         <button type="button" class="icon-btn" data-pre-exp="0" title="Contraer" aria-label="Contraer"><svg viewBox="0 0 24 24"><path d="m7 15 5-5 5 5M7 20l5-5 5 5" transform="translate(0 -6)"/></svg></button></div></div>
@@ -6128,7 +6175,7 @@ function preTabla(d, meta) {
   }).join('');
   const t = d.tot;
   const pie = meta
-    ? `<tr class="tot"><td class="l">TOTAL COSTO DIRECTO</td><td></td><td></td><td></td><td></td><td>${preN(t.v, 2)}</td><td>${t.nm ? preN(t.m, 2) : '—'}</td><td class="${t.con - t.m >= 0 ? 'pre-pos' : 'pre-neg'}">${t.nm ? preN(t.con - t.m, 2) : '—'}</td><td>${t.nm ? preP(t.con ? (t.con - t.m) / t.con : 0) : '—'}</td></tr>`
+    ? `<tr class="tot"><td class="l">TOTAL COSTO DIRECTO</td><td></td><td></td><td></td><td></td><td>${preN(t.v, 2)}</td><td>${t.nm ? preN(t.m + (t.v - t.con), 2) : '—'}</td><td class="${t.con - t.m >= 0 ? 'pre-pos' : 'pre-neg'}">${t.nm ? preN(t.con - t.m, 2) : '—'}</td><td>${t.nm ? preP(t.con ? (t.con - t.m) / t.con : 0) : '—'}</td></tr>`
     : `<tr class="tot"><td class="l">TOTAL COSTO DIRECTO</td><td></td><td></td><td></td><td>${preN(t.v, 2)}</td><td>100,0 %</td></tr>`;
   return `<thead>${cab}</thead><tbody>${cuerpo}${pie}</tbody>`;
 }
@@ -6145,7 +6192,7 @@ function preDrawerEl() {
 }
 function preCerrarAPU() { const el = document.getElementById('preDr'); if (!el) return; el.classList.remove('on'); document.getElementById('preBk').classList.remove('on'); PRE.dr = null; }
 async function preAbrirAPU(nodoId) {
-  const d = PRE.cache[PRE.frente], n = d.venta.find(x => x.nodo_id === nodoId); if (!n) return;
+  const d = preFrenteDe(nodoId), n = d && d.venta.find(x => x.nodo_id === nodoId); if (!n) return;
   PRE.dr = { nodoId, cargando: true };
   const el = preDrawerEl(); el.classList.add('on'); document.getElementById('preBk').classList.add('on');
   el.innerHTML = `<div class="pre-dr-h"><div><small>${esc(n.codigo)}</small><h3>${esc(n.nombre)}</h3></div><button type="button" class="icon-btn" data-pre-cerrar title="Cerrar" aria-label="Cerrar">✕</button></div><div class="pre-dr-body"><div class="rg-msg">Consultando el APU…</div></div>`;
@@ -6153,7 +6200,7 @@ async function preAbrirAPU(nodoId) {
 }
 async function preDrawerCargar() {
   if (!PRE.dr) return;
-  const d = PRE.cache[PRE.frente], n = d.venta.find(x => x.nodo_id === PRE.dr.nodoId), m = d.partidas[n.nodo_id], el = preDrawerEl();
+  const d = preFrenteDe(PRE.dr.nodoId), n = d.venta.find(x => x.nodo_id === PRE.dr.nodoId), m = d.partidas[n.nodo_id], el = preDrawerEl();
   const ids = [n.apu_venta_id, m && m.apu_meta_id].filter(Boolean);
   try {
     if (!ids.length) { PRE.dr = { nodoId: n.nodo_id, partidas: {}, lineas: {} }; preDrawerPintar(); return; }
@@ -6165,7 +6212,8 @@ async function preDrawerCargar() {
   } catch (e) { el.querySelector('.pre-dr-body').innerHTML = `<div class="rg-msg">No se pudo leer el APU: ${esc(e.message)}</div>`; }
 }
 function preDrawerPintar() {
-  const dr = PRE.dr, d = PRE.cache[PRE.frente]; if (!dr || !dr.partidas) return;
+  const dr = PRE.dr; if (!dr || !dr.partidas) return;
+  const d = preFrenteDe(dr.nodoId);
   const n = d.venta.find(x => x.nodo_id === dr.nodoId), m = d.partidas[n.nodo_id], meta = d.meta, el = preDrawerEl();
   const editable = !!AUTH.admin && !!meta && meta.estado === 'borrador' && !!m;
   const pv = dr.partidas[n.apu_venta_id], pm = m ? dr.partidas[m.apu_meta_id] : null;
@@ -6174,20 +6222,20 @@ function preDrawerPintar() {
   const usados = new Set(lm.map(l => l.origen_id).filter(Boolean));
   const nombre = (l) => l.recursos ? l.recursos.nombre : (l.sub ? l.sub.nombre : '—'), codigo = (l) => l.recursos ? l.recursos.codigo : (l.sub ? l.sub.codigo : '');
   const difLinea = (l) => { const o = l.origen_id && porOrigen[l.origen_id]; return !o ? 'nuevo' : (Number(o.cantidad) !== Number(l.cantidad) || Number(o.precio) !== Number(l.precio) || Number(o.cuadrilla || 0) !== Number(l.cuadrilla || 0)) ? 'cambio' : ''; };
-  const filaVenta = (l) => `<tr class="${m && !usados.has(l.id) ? 'pre-quit' : ''}"><td class="l" title="${esc(codigo(l))}">${esc(nombre(l))}</td><td class="c">${esc(l.unidad || '')}</td><td>${l.cuadrilla != null ? preQ(l.cuadrilla) : ''}</td><td>${preQ(l.cantidad)}</td><td>${preN(l.precio, 2)}</td><td>${preN(l.parcial, 2)}</td></tr>`;
-  const inp = (l, campo, v) => `<input class="pre-in" inputmode="decimal" value="${v == null ? '' : String(v).replace('.', ',')}" data-pre-lin="${l.id}" data-pre-campo="${campo}" aria-label="${campo}">`;
+  const filaVenta = (l) => `<tr class="${m && !usados.has(l.id) ? 'pre-quit' : ''}"><td class="l" title="${esc(codigo(l) + ' · ' + nombre(l))}">${esc(nombre(l))}</td><td class="c">${esc(l.unidad || '')}</td><td>${l.cuadrilla != null ? preQ(l.cuadrilla) : ''}</td><td>${preQ(l.cantidad)}</td><td>${preN(l.precio, 2)}</td><td>${preN(l.parcial, 2)}</td></tr>`;
+  const inp = (l, campo, v) => `<input class="pre-in" inputmode="decimal" value="${v == null ? '' : String(v)}" data-pre-lin="${l.id}" data-pre-campo="${campo}" aria-label="${campo}">`;
   const filaMeta = (l) => {
     const dl = difLinea(l), esSub = !!l.sub_partida_id, pct = String(l.unidad || '').startsWith('%');
     const cuad = l.cuadrilla != null ? (editable ? inp(l, 'cuadrilla', l.cuadrilla) : preQ(l.cuadrilla)) : '', cant = l.cuadrilla == null && editable ? inp(l, 'cantidad', l.cantidad) : preQ(l.cantidad);
     const prec = editable && !esSub && !pct ? inp(l, 'precio', l.precio) : preN(l.precio, 2);
-    return `<tr class="${dl ? 'pre-' + dl : ''}"><td class="l" title="${esc(codigo(l))}">${esc(nombre(l))}${dl === 'nuevo' ? ' <span class="pre-tag">nuevo</span>' : ''}</td><td class="c">${esc(l.unidad || '')}</td><td>${cuad}</td><td>${cant}</td><td>${prec}</td><td>${preN(l.parcial, 2)}</td>${editable ? `<td class="c"><button type="button" class="pre-x" data-pre-quitar="${l.id}" title="Quitar del APU meta" aria-label="Quitar">✕</button></td>` : ''}</tr>`;
+    return `<tr class="${dl ? 'pre-' + dl : ''}"><td class="l" title="${esc(codigo(l) + ' · ' + nombre(l))}">${esc(nombre(l))}${dl === 'nuevo' ? ' <span class="pre-tag">nuevo</span>' : ''}</td><td class="c">${esc(l.unidad || '')}</td><td>${cuad}</td><td>${cant}</td><td>${prec}</td><td>${preN(l.parcial, 2)}</td>${editable ? `<td class="c"><button type="button" class="pre-x" data-pre-quitar="${l.id}" title="Quitar del APU meta" aria-label="Quitar">✕</button></td>` : ''}</tr>`;
   };
   const tabla = (ls, fila, extraCol) => {
     const sec = PRE_SEC.map(([k, t]) => { const a = ls.filter(l => l.seccion === k); return a.length ? `<tr class="pre-sec"><td colspan="${extraCol ? 7 : 6}">${t}</td></tr>` + a.map(fila).join('') : ''; }).join('');
     return `<div class="vl-tw"><table class="vl-tb pre-lt"><thead><tr><th class="l">Insumo</th><th>Und</th><th>Cuad.</th><th>Cuantía</th><th>Precio</th><th>Parcial</th>${extraCol ? '<th></th>' : ''}</tr></thead><tbody>${sec}</tbody></table></div>`;
   };
   const pu = (p) => p ? Number(p.cud) : null, dv = pu(pv), dm = pu(pm), dif = dv != null && dm != null ? dv - dm : null;
-  const rend = (p, ed) => p ? `<div class="pre-rend"><span>Rendimiento</span>${ed ? `<input class="pre-in" inputmode="decimal" value="${String(p.rendimiento).replace('.', ',')}" data-pre-rend="${p.id}" aria-label="Rendimiento">` : `<b>${preQ(p.rendimiento)}</b>`}<span>${esc(p.unidad || '')}/día</span></div>` : '';
+  const rend = (p, ed) => p ? `<div class="pre-rend"><span>Rendimiento</span>${ed ? `<input class="pre-in" inputmode="decimal" value="${String(p.rendimiento)}" data-pre-rend="${p.id}" aria-label="Rendimiento">` : `<b>${preQ(p.rendimiento)}</b>`}<span>${esc(p.unidad || '')}/día</span></div>` : '';
   const ladoVenta = `<div class="vl-card pre-lado pre-lv"><h3>🔒 Venta (contrato)</h3>${pv ? rend(pv, false) + tabla(lv, filaVenta, false) + `<div class="pre-pu"><span>Costo unitario venta</span><b>${fmt(dv, 2)}</b></div>` : '<p class="hint">Esta partida no tiene APU de venta cargado.</p>'}</div>`;
   let ladoMeta;
   if (!meta) ladoMeta = `<div class="vl-card pre-lado pre-lm"><h3>🎯 Meta</h3><p class="hint">Todavía no hay presupuesto meta. Créalo en la vista «Meta» para ajustar este APU.</p></div>`;
@@ -6204,7 +6252,10 @@ function preAgregarHTML() {
 }
 async function preRecursos() { if (!PRE.rec) PRE.rec = await getTodo('/recursos?select=id,codigo,nombre,categoria,unidad,precio_unitario&order=codigo'); return PRE.rec; }
 async function preRefrescar() {
-  const cod = PRE.frente; await preDatos(cod, true);
+  const cod = PRE.frente, f = PRE.dr && preFrenteDe(PRE.dr.nodoId);
+  const cods = f ? [f.proy.codigo] : (cod === 'todos' ? COMPONENTES.map(c => c.id) : [cod]);
+  await Promise.all(cods.map(c => preDatos(c, true)));
+  if (cod === 'todos') await preDatosTodos(false);
   if (PRE.frente === cod) { prePintar(); if (PRE.dr) await preDrawerCargar(); }
 }
 async function preEjecutar(fn, args, ok, boton) {
@@ -6216,22 +6267,22 @@ async function preEjecutar(fn, args, ok, boton) {
 document.addEventListener('click', async (e) => {
   const t = e.target;
   let b = t.closest('[data-prefr]');
-  if (b) { PRE.frente = b.dataset.prefr; preCerrarAPU(); preCargar(); return; }
+  if (b) { PRE.frente = b.dataset.prefr; preCerrarAPU(); preCargar(); window.scrollTo({ top: 0 }); return; }
   if ((b = t.closest('[data-premodo]'))) { PRE.modo = b.dataset.premodo; prePintar(); return; }
   if ((b = t.closest('[data-pre-tog]'))) { const ab = PRE.abiertos[PRE.frente], id = b.dataset.preTog; if (ab.has(id)) ab.delete(id); else ab.add(id); prePintar(); return; }
-  if ((b = t.closest('[data-pre-exp]'))) { const d = PRE.cache[PRE.frente]; PRE.abiertos[PRE.frente] = b.dataset.preExp === '1' ? new Set(d.venta.filter(n => d.hijos[n.nodo_id]).map(n => n.nodo_id)) : new Set(d.venta.filter(n => n.nivel <= 1 && d.hijos[n.nodo_id]).map(n => n.nodo_id)); PRE.soloMod = false; prePintar(); return; }
+  if ((b = t.closest('[data-pre-exp]'))) { const d = preVista(); PRE.abiertos[PRE.frente] = b.dataset.preExp === '1' ? new Set(d.venta.filter(n => d.hijos[n.nodo_id]).map(n => n.nodo_id)) : new Set(d.venta.filter(n => n.nivel <= 1 && d.hijos[n.nodo_id]).map(n => n.nodo_id)); PRE.soloMod = false; prePintar(); return; }
   if (t.closest('[data-pre-solomod]')) { PRE.soloMod = !PRE.soloMod; prePintar(); return; }
   if ((b = t.closest('[data-preapu]'))) { preAbrirAPU(b.dataset.preapu); return; }
   if (t.closest('[data-pre-cerrar]')) { preCerrarAPU(); return; }
   if ((b = t.closest('[data-pre-crear]'))) {
-    const d = PRE.cache[PRE.frente], modo = b.dataset.preCrear, mot = ($('#preMotivo') || {}).value || null;
+    const d = preVista(), modo = b.dataset.preCrear, mot = ($('#preMotivo') || {}).value || null;
     if (!d.ocId) { toast('Este frente no tiene APU de venta cargado.', false); return; }
     const ok = await confirmar(modo === 'copia' ? `Crear el presupuesto meta de ${d.proy.nombre} copiando el APU de venta. Empieza con el mismo total y lo ajustas sin tocar el contrato.` : `Crear el presupuesto meta de ${d.proy.nombre} vacío. Copiarás al meta solo las partidas que quieras ajustar.`);
     if (!ok) return;
     await preEjecutar('presupuesto_meta_crear', { p_carga_origen: d.ocId, p_modo: modo, p_motivo: mot }, 'Presupuesto meta creado (borrador).', b); return;
   }
   if ((b = t.closest('[data-pre-acc]'))) {
-    const d = PRE.cache[PRE.frente], m = d.meta, acc = b.dataset.preAcc; if (!m) return;
+    const d = preVista(), m = d.meta, acc = b.dataset.preAcc; if (!m) return;
     const fn = { aprobar: 'presupuesto_meta_aprobar', reabrir: 'presupuesto_meta_reabrir', archivar: 'presupuesto_meta_archivar', eliminar: 'presupuesto_meta_eliminar' }[acc];
     const msg = { aprobar: 'Aprobar el presupuesto meta. Pasa a vigente y se guarda una foto de metrados y precios; ya no se podrá editar hasta reabrirlo.', reabrir: 'Reabrir el presupuesto meta. Vuelve a borrador y se descarta la foto guardada.', archivar: 'Archivar el presupuesto meta. Queda guardado pero sin uso, y podrás crear otro.', eliminar: 'Eliminar el presupuesto meta. Es un borrador sin aprobar y se borra para siempre.' }[acc];
     if (!(await confirmar(msg))) return;
@@ -6239,18 +6290,18 @@ document.addEventListener('click', async (e) => {
     if (ok && (acc === 'archivar' || acc === 'eliminar')) preCerrarAPU();
     return;
   }
-  if ((b = t.closest('[data-pre-copiar]'))) { const d = PRE.cache[PRE.frente]; await preEjecutar('apu_meta_partida_desde_venta', { p_carga: d.meta.carga_id, p_nodo: b.dataset.preCopiar }, 'Partida copiada al meta.', b); return; }
+  if ((b = t.closest('[data-pre-copiar]'))) { const d = preFrenteDe(PRE.dr.nodoId); await preEjecutar('apu_meta_partida_desde_venta', { p_carga: d.meta.carga_id, p_nodo: b.dataset.preCopiar }, 'Partida copiada al meta.', b); return; }
   if ((b = t.closest('[data-pre-quitar]'))) {
     if (!(await confirmar('Quitar este insumo del APU meta. La venta no cambia.'))) return;
     await preEjecutar('apu_meta_linea_quitar', { p_linea: b.dataset.preQuitar }, null, b); return;
   }
   if ((b = t.closest('[data-pre-sug]'))) {   // insumo elegido en el buscador
     const r = (PRE.rec || []).find(x => x.id === b.dataset.preSug); if (!r) return;
-    PRE.add = r; $('#preBuscar').value = `${r.codigo} · ${r.nombre}`; $('#preSug').hidden = true; $('#preAddP').value = String(r.precio_unitario).replace('.', ',');
+    PRE.add = r; $('#preBuscar').value = `${r.codigo} · ${r.nombre}`; $('#preSug').hidden = true; $('#preAddP').value = String(r.precio_unitario);
     $('#preAddC').placeholder = ['mano_obra', 'equipo'].includes(r.categoria) ? 'Cuadrilla' : 'Cuantía'; $('#preAddBt').disabled = false; $('#preAddC').focus(); return;
   }
   if (t.closest('#preAddBt')) {
-    const r = PRE.add, d = PRE.cache[PRE.frente], m = d.partidas[PRE.dr.nodoId]; if (!r || !m) return;
+    const r = PRE.add, d = preFrenteDe(PRE.dr.nodoId), m = d.partidas[PRE.dr.nodoId]; if (!r || !m) return;
     const num = (s) => { const v = Number(String(s).replace(',', '.')); return isFinite(v) && s !== '' ? v : null; };
     const c = num($('#preAddC').value), p = num($('#preAddP').value), porCuad = ['mano_obra', 'equipo'].includes(r.categoria);
     if (c == null || c < 0) { toast(porCuad ? 'Escribe la cuadrilla.' : 'Escribe la cuantía.', false); return; }
