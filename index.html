@@ -901,7 +901,7 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .vld-doctit h2{margin:2px 0;font-size:19px;letter-spacing:.4px;color:var(--tx);}
 .vld-docper{font-size:12px;font-weight:700;color:var(--tx2);letter-spacing:.2px;}
 .vld-docalc{font-size:10.5px;font-weight:400;color:var(--mut);margin-top:2px;text-transform:uppercase;letter-spacing:.3px;}   /* solo informativo: sin negrita, no es parte de la presentación */
-.vld-hoja{height:auto;min-height:0;overflow:visible;padding:0 12mm 25mm;font-family:'Arial Narrow',Arial,sans-serif;
+.vld-hoja{height:auto;min-height:0;overflow:visible;padding:0 12mm 29mm;font-family:'Arial Narrow',Arial,sans-serif;
   --tx:#1c2b3d;--tx2:#334155;--mut:#64748b;--line:#e3e8ef;--line2:#cbd5e1;--card:#fff;--input:#f1f5f9;color:#1c2b3d;}   /* siempre en claro, aunque el panel esté en modo oscuro al imprimir · sin padding arriba: ver nota junto a .vld-doctit-row */
 @media print{.vld-hoja{width:420mm !important;}}
 .oc-tb td.num{text-align:left;font-weight:700;}
@@ -1296,6 +1296,54 @@ h1,h3,.card .value,.hhr-pie b{letter-spacing:-.2px;}
 .vl-tI td.l{white-space:nowrap;} .vl-tI .vld-ver{margin-left:8px;padding:1px 9px;border:1px solid var(--line2);border-radius:999px;background:var(--card);color:var(--tx2);font-size:10.5px;font-weight:700;line-height:1.5;vertical-align:middle;} .vl-tI .vld-ver:hover{border-color:var(--naranja);color:var(--naranja);text-decoration:none;}
 .vl-tD .vl-pill{padding:1px 8px;font-size:10.5px;} .vl-tD .vl-pbar{vertical-align:middle;}
 .vl-tD td input.vl-gg{padding:2px 5px;}
+
+/* DETALLE DE LA VALORIZACIÓN con el estilo del Excel: cabecera en azul medio (no azul marino), SOLO el frente (Puente Charanal, Damas…) lleva relleno,
+   los niveles se distinguen por el color de la letra (rojo · azul · verde) y las partidas van en negro; las columnas ACTUAL llevan un fondo tenue */
+.vld-navy th.h0,.vld-navy th.h1{background:#2b6fb8;color:#fff;}
+.vld-navy th.h2{background:#4a89d0;color:#fff;}
+.vld-navy th.h1.hl{background:#1f5ca6;} .vld-navy th.h2.hl{background:#3a79bd;}
+.oc-tb tr.fr td{background:#64748b;color:#fff;}
+.oc-tb tr.gp2 td,.oc-tb tr.gp3 td,.oc-tb tr.gp4 td{background:transparent;}
+.oc-tb tr.gp2 td{color:#c8231e;} .oc-tb tr.gp3 td{color:#1f4fd0;} .oc-tb tr.gp4 td{color:#0e8f4f;}
+.oc-tb tr.pt td{color:#111827;} .oc-tb tr.pt td.f{color:var(--rg-am,#a85a08);}
+.oc-tb tr.pt td.hl,.oc-tb tr.gp2 td.hl,.oc-tb tr.gp3 td.hl,.oc-tb tr.gp4 td.hl{background:rgba(43,111,184,.09);} .oc-tb tr.fr td.hl{background:#748399;}
+.vld-tw2 .oc-tb tr.fr td:nth-child(-n+3){background:#64748b;}
+.vld-tw2 .oc-tb tr.gp2 td:nth-child(-n+3),.vld-tw2 .oc-tb tr.gp3 td:nth-child(-n+3),.vld-tw2 .oc-tb tr.gp4 td:nth-child(-n+3){background:var(--card);}
+.vld-sum thead th{background:#2b6fb8;} .vld-sum thead tr:last-child th{background:#4a89d0;} .vld-sum td.hl{background:rgba(43,111,184,.09);}
+.vld-mm2 thead th{background:#2b6fb8;}
+:root[data-theme="dark"] .vld-navy th.h0,:root[data-theme="dark"] .vld-navy th.h1{background:#234f86;} :root[data-theme="dark"] .vld-navy th.h2{background:#2f6aa8;} :root[data-theme="dark"] .vld-navy th.h1.hl{background:#1c437a;} :root[data-theme="dark"] .vld-navy th.h2.hl{background:#285b95;}
+:root[data-theme="dark"] .oc-tb tr.fr td,:root[data-theme="dark"] .vld-tw2 .oc-tb tr.fr td:nth-child(-n+3){background:#334155;color:#f1f5f9;}
+:root[data-theme="dark"] .oc-tb tr.gp2 td{background:transparent;color:#ff7b72;} :root[data-theme="dark"] .oc-tb tr.gp3 td{background:transparent;color:#8cadff;} :root[data-theme="dark"] .oc-tb tr.gp4 td{background:transparent;color:#4ade80;}
+:root[data-theme="dark"] .oc-tb tr.pt td{color:#e5e7eb;} :root[data-theme="dark"] .oc-tb tr.pt td.f{color:#f0a24b;}
+:root[data-theme="dark"] .oc-tb tr.pt td.hl,:root[data-theme="dark"] .oc-tb tr.gp2 td.hl,:root[data-theme="dark"] .oc-tb tr.gp3 td.hl,:root[data-theme="dark"] .oc-tb tr.gp4 td.hl{background:rgba(111,168,255,.10);} :root[data-theme="dark"] .oc-tb tr.fr td.hl{background:#3d4d63;}
+:root[data-theme="dark"] .vld-tw2 .oc-tb tr.gp2 td:nth-child(-n+3),:root[data-theme="dark"] .vld-tw2 .oc-tb tr.gp3 td:nth-child(-n+3),:root[data-theme="dark"] .vld-tw2 .oc-tb tr.gp4 td:nth-child(-n+3){background:var(--card);}
+:root[data-theme="dark"] .vld-sum thead th,:root[data-theme="dark"] .vld-mm2 thead th{background:#234f86;} :root[data-theme="dark"] .vld-sum thead tr:last-child th{background:#2f6aa8;} :root[data-theme="dark"] .vld-sum td.hl{background:rgba(111,168,255,.10);}
+@media print{.vld-hoja .oc-tb th,.vld-hoja .oc-tb td{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}
+
+/* detalle de la valorización: UNA sola tipografía (Arial Narrow) y UN solo tamaño en cabeceras, resúmenes y partidas; la jerarquía se marca con color, negrita y sangría */
+.vld-oc thead th{font-size:10px;font-weight:700;letter-spacing:0;}
+.oc-tb tr.pt td,.oc-tb tr.gp2 td,.oc-tb tr.gp3 td,.oc-tb tr.gp4 td,.oc-tb tr.gp td:nth-child(n+4){font-size:10px;letter-spacing:0;line-height:1.25;}
+.oc-tb tr.fr td,.oc-tb tr.fr td:nth-child(n+4){font-size:11px;letter-spacing:0;line-height:1.3;}
+.oc-tb tr.gp2 td,.oc-tb tr.gp3 td,.oc-tb tr.gp4 td{font-weight:700;}
+.oc-tb tr.pt td{font-weight:400;} .oc-tb tr.pt td.num{font-weight:600;}
+
+/* detalle de la valorización: partidas 1 punto más chicas y filas más bajas; el saldo ya no va en color de alerta */
+.oc-tb tr.pt td{font-size:9px;line-height:1.15;padding-top:2px;padding-bottom:2px;}
+.oc-tb tr.pt td.f{color:inherit;font-weight:inherit;}
+.oc-tb tr.pt td.c .vld-mn{font-size:9px;font-weight:800;}
+
+/* PDF de la valorización: bloque de datos de la obra (ENTIDAD · OBRA · CONTRATISTA · SUPERVISIÓN) y sin líneas en los bordes de la hoja */
+.vld-datos{margin-top:10px;text-align:left;font-family:'Arial Narrow',Arial,sans-serif;font-size:10px;line-height:1.35;color:#1c2b3d;}
+.vld-dato{display:flex;gap:12px;} .vld-dato b{flex:0 0 78px;font-weight:700;} .vld-dato span{flex:1;min-width:0;font-weight:400;white-space:normal;}
+.vld-oc thead tr.vld-doctit-row th,.vld-oc thead tr.vld-doctit-row{border:0 !important;box-shadow:none !important;outline:0 !important;}
+.vld-oc tfoot td{border-left:0 !important;border-right:0 !important;border-bottom:0 !important;}
+.vld-hoja{border:0;box-shadow:none;}
+/* partidas: solo la DESCRIPCIÓN baja a 9 px; códigos, unidades y cifras quedan en 10 px */
+.oc-tb tr.pt td{font-size:10px;} .oc-tb tr.pt td:nth-child(2){font-size:9px;} .oc-tb tr.pt td.c .vld-mn{font-size:10px;}
+
+/* detalle de la valorización: ACUMULADO % a 9 px con menos relleno (no desborda) y última columna del SALDO (%) centrada en todas las filas */
+.oc-tb.vld-oc tbody tr[class] td:nth-child(14){font-size:9px;padding-left:3px;padding-right:3px;letter-spacing:0;}
+.oc-tb.vld-oc tbody tr[class] td:last-child,.oc-tb.vld-oc thead tr th:last-child{text-align:center;}
 </style>
 <script>
 document.documentElement.dataset.pane = 'resumen';
@@ -3608,9 +3656,9 @@ function valDetAncestros(nodoId) {
 function valDetCuerpoTabla(list, proyectos, filtroFrente, modoTxt, listAgg, split) {
   const tieneAgg = Array.isArray(listAgg);
   const base = tieneAgg ? listAgg : list;
-  const N0 = (n) => Number(n || 0).toLocaleString('es-PE', { maximumFractionDigits: 2 });
-  const N2 = (n) => Number(n || 0).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-  const PCT = (n, base2) => base2 ? (n / base2 * 100).toFixed(2) + '%' : '—';
+  const N0 = (n) => Math.abs(Number(n || 0)) < 0.005 ? '-' : Number(n || 0).toLocaleString('es-PE', { maximumFractionDigits: 2 });   // un cero se muestra como «-»
+  const N2 = (n) => Math.abs(Number(n || 0)) < 0.005 ? '-' : Number(n || 0).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const PCT = (n, base2) => base2 && Math.abs(n / base2 * 100) >= 0.005 ? (n / base2 * 100).toFixed(2) + '%' : '-';
   const nomF = Object.fromEntries(proyectos.map(pp => [pp.id, String(pp.nombre).replace(/^Puente\s+/i, '')]));
   const ordenIdx = Object.fromEntries(proyectos.map(pp => [pp.id, COMPONENTES.findIndex(c2 => c2.id === pp.codigo)]));
   // agregados SIEMPRE completos (a partir de `base`), independientes de qué partidas se estén LISTANDO
@@ -3622,19 +3670,18 @@ function valDetCuerpoTabla(list, proyectos, filtroFrente, modoTxt, listAgg, spli
   const porFrente = {}; list.forEach(r => (porFrente[r.proyecto_id] || (porFrente[r.proyecto_id] = [])).push(r));
   const idsFrente = Object.keys(porFrente).sort((a, b) => (ordenIdx[a] ?? 99) - (ordenIdx[b] ?? 99));
   const mostrar = filtroFrente ? idsFrente.filter(id => id === filtroFrente) : idsFrente;
-  const filaPartida = (r) => {
-    const estado = r.saldoBruto <= 0.005 ? '<span class="vld-ok" title="Cumplido">✔</span>'
-      : r.menor > 0.005 ? `<span class="vld-mn" title="Menor metrado: ${N2(r.menor)}">MM ${N2(r.menor)}</span>`
-      : '<span class="vld-pend" title="Pendiente">●</span>';
+  const filaPartida = (r, pad) => {
+    // última columna del saldo: % de lo que falta sobre el presupuesto de la partida; si parte del saldo es menor metrado (no se ejecutará) sale «MM» (el número va en el globo)
+    const estado = r.menor > 0.005 && r.saldoBruto > 0.005 ? `<span class="vld-mn" title="Menor metrado: ${N2(r.menor)}">MM</span>` : PCT(r.saldoCD, r.presCD);
     return { cls: 'pt', title: esc(r.nombre), tds: [
       `<td class="l num">${esc(r.codigo_esp || '')}</td>`,
-      `<td class="l">${esc(String(r.nombre || '').toUpperCase())}</td>`,
+      `<td class="l"${pad ? ` style="padding-left:${pad}px"` : ''}>${esc(String(r.nombre || '').toUpperCase())}</td>`,
       `<td class="l">${esc(uniCorta(r.unidad))}</td>`,
       `<td class="sep">${N2(r.meta)}</td>`, `<td>${N2(r.pu)}</td>`, `<td>${N0(r.presCD)}</td>`,
       `<td class="sep">${N2(r.antM)}</td>`, `<td>${N0(r.antCD)}</td>`,
       `<td class="sep hl">${N2(r.actM)}</td>`, `<td class="hl">${N0(r.actCD)}</td>`, `<td class="hl">${PCT(r.actCD, r.presCD)}</td>`,
       `<td class="sep">${N2(r.acumM)}</td>`, `<td>${N0(r.acumCD)}</td>`, `<td>${PCT(r.acumCD, r.presCD)}</td>`,
-      `<td class="sep ${r.saldoBruto > 0.005 ? 'f' : ''}">${N2(r.saldoBruto)}</td>`, `<td class="${r.saldoBruto > 0.005 ? 'f' : ''}">${N0(r.saldoCD)}</td>`, `<td class="c">${estado}</td>`,
+      `<td class="sep">${N2(r.saldoBruto)}</td>`, `<td>${N0(r.saldoCD)}</td>`, `<td class="c">${estado}</td>`,
     ] };
   };
   const claseNivel = (nivel) => nivel <= 2 ? 'gp2' : nivel === 3 ? 'gp3' : 'gp4';
@@ -3644,7 +3691,7 @@ function valDetCuerpoTabla(list, proyectos, filtroFrente, modoTxt, listAgg, spli
     `<td class="sep"></td>`, `<td>${N0(ag.antCD)}</td>`,
     `<td class="sep hl"></td>`, `<td class="hl"><b>${N0(ag.actCD)}</b></td>`, `<td class="hl">${PCT(ag.actCD, ag.presCD)}</td>`,
     `<td class="sep"></td>`, `<td>${N0(ag.acumCD)}</td>`, `<td>${PCT(ag.acumCD, ag.presCD)}</td>`,
-    `<td class="sep"></td>`, `<td>${N0(Math.max(0, ag.presCD - ag.acumCD))}</td>`, `<td></td>`,
+    `<td class="sep"></td>`, `<td>${N0(Math.max(0, ag.presCD - ag.acumCD))}</td>`, `<td>${PCT(Math.max(0, ag.presCD - ag.acumCD), ag.presCD)}</td>`,
   ] });
   let filasObj = [];
   mostrar.forEach((pid) => {
@@ -3657,7 +3704,7 @@ function valDetCuerpoTabla(list, proyectos, filtroFrente, modoTxt, listAgg, spli
       for (let j = i; j < cad.length; j++) { const nodo = cad[j], pad = 10 + Math.max(0, nodo.nivel - 2) * 16;
         filasObj.push(filaResumenNivel(`gp ${claseNivel(nodo.nivel)}`, String(nodo.codigo).replace(/^[^.]+\./, ''), nodo.nombre, pad, aggNodo[nodo.id] || cero())); }
       abiertos = cad;
-      filasObj.push(filaPartida(r));
+      filasObj.push(filaPartida(r, cad.length ? 10 + Math.max(0, cad[cad.length - 1].nivel - 2) * 16 + 16 : 10));
     });
   });
   if (split) {
@@ -3770,7 +3817,7 @@ const valDetTablaCab = `<thead>
         <th class="h2 sep">Metrado</th><th class="h2">Parcial</th>
         <th class="h2 sep hl">Metrado</th><th class="h2 hl">Parcial</th><th class="h2 hl">%</th>
         <th class="h2 sep">Metrado</th><th class="h2">Parcial</th><th class="h2">%</th>
-        <th class="h2 sep">Metrado</th><th class="h2">Parcial</th><th class="h2" title="Estado">✓/●</th></tr>
+        <th class="h2 sep">Metrado</th><th class="h2">Parcial</th><th class="h2" title="Saldo como % del presupuesto. MM = menor metrado (no se ejecutará)">%</th></tr>
     </thead>`;
 const valDetLeyenda = `<div class="legend2" style="margin-top:8px"><span><i style="background:${C_EJEC}"></i>Ejecutado acumulado</span><span><i style="background:${C_SALDO}"></i>Falta ejecutar</span><span><i style="background:${C_MENOR}"></i>Menor metrado (no se ejecutará)</span></div>`;
 function valDetHTML() {
@@ -3828,18 +3875,22 @@ async function valDetImprimir() {
   const menorMonto = (listAgg || list).reduce((s, r) => s + (r.menor || 0) * (r.pu || 0), 0);
   const resumen = valDetResumenHTML(v, conProp, PRESU_CD_CACHE[v.tipo], menorMonto);
   const obraNombre = RES_A && RES_A.obra ? RES_A.obra.nombre : tx0('#obraNombre');
-  const obraSub = RES_A && RES_A.obra ? [RES_A.obra.entidad, RES_A.obra.cliente].filter(Boolean).join(' · ') : '';
+  const ob = (RES_A && RES_A.obra) || {};
+  // datos del encabezado (como en el Excel): salen del registro de la obra; si faltan, se usan el cliente, el nombre y la entidad de siempre
+  const datosObra = [['ENTIDAD:', ob.doc_entidad || ob.cliente], ['OBRA:', ob.doc_obra || obraNombre], ['CONTRATISTA:', ob.doc_contratista || ob.entidad], ['SUPERVISIÓN:', ob.doc_supervision]]
+    .filter(x => x[1]).map(([k, v2]) => `<div class="vld-dato"><b>${esc(k)}</b><span>${esc(String(v2).toUpperCase())}</span></div>`).join('');
   const nomFrente = frenteId ? (proyectos.find(p => p.id === frenteId) || {}).nombre : '';
   const alcanceTxt = [frenteId ? String(nomFrente || '').replace(/^Puente\s+/i, '') : 'Total obra', modo === 'mes' ? 'solo lo ejecutado este mes' : 'todas las partidas del contrato'].join(' · ');
   const encCod = valDocEncabezadoDer();
   const encLogo = valDocEncabezadoLogo();
   // el título va DENTRO del <thead> (como una fila más, con colspan) para que se repita en cada hoja impresa junto con la cabecera de columnas
-  const tituloRow = `<tr class="vld-doctit-row"><th colspan="17"><div class="vld-doctit-fila">${encLogo}<div class="vld-doctit"><div class="vld-docob"><b>${esc(obraNombre)}</b>${obraSub ? ` · ${esc(obraSub)}` : ''}</div>
+  const tituloRow = `<tr class="vld-doctit-row"><th colspan="17"><div class="vld-doctit-fila">${encLogo}<div class="vld-doctit">
       <h2>VALORIZACIÓN N° ${String(v.numero).padStart(3, '0')} - ${ABREV_VAL[v.tipo] || ''}</h2>
-      <div class="vld-docper">${esc(valDetPeriodoTxt(v))}</div><div class="vld-docalc">${esc(alcanceTxt)}</div></div>${encCod}</div></th></tr>`;
+      <div class="vld-docper">${esc(valDetPeriodoTxt(v))}</div><div class="vld-docalc">${esc(alcanceTxt)}</div></div>${encCod}</div>
+      <div class="vld-datos">${datosObra}</div></th></tr>`;
   const cabConTitulo = valDetTablaCab.replace('<thead>', '<thead>' + tituloRow);
   const html = `<div class="inf-hoja vld-hoja">
-    <div><table class="oc-tb vld-oc vld-navy" style="min-width:0;width:1489px;margin:0 auto;">${valDetTablaColImpresion}${cabConTitulo}<tbody>${cuerpo}</tbody><tfoot><tr><td colspan="17" style="height:25mm;padding:0;border:0;border-top:2px solid #141c5e;background:transparent;"></td></tr></tfoot></table></div>
+    <div><table class="oc-tb vld-oc vld-navy" style="min-width:0;width:1489px;margin:0 auto;">${valDetTablaColImpresion}${cabConTitulo}<tbody>${cuerpo}</tbody><tfoot><tr><td colspan="17" style="height:29mm;padding:0;border:0;border-top:2px solid #141c5e;background:transparent;"></td></tr></tfoot></table></div>
     ${valDetLeyenda}
     ${resumen}
     <div class="inf-pie" style="margin-top:18px"><span>Sin IGV · lo aprobado es lo oficial${v.estado !== 'aprobada' ? ' (esta valorización aún está en propuesta)' : ''}. Generado por el Panel de Control de Obra.</span>
