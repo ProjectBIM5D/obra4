@@ -1385,6 +1385,67 @@ h1,h3,.card .value,.hhr-pie b{letter-spacing:-.2px;}
 
 /* panel: el cuadro de cierre no va pegado a la tabla de partidas */
 .vld-card .vld-resumen{margin-top:30px;padding-top:24px;border-top:1px dashed var(--line2);}
+/* ═══ módulo Presupuesto (venta / meta) ═══ */
+.pre-pos{color:var(--green) !important;} .pre-neg{color:var(--red) !important;}
+.pre-kp .vl-k b{font-size:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.pre-card{padding:14px 16px 16px;}
+.pre-tool{display:flex;justify-content:space-between;align-items:flex-start;gap:10px 16px;margin-bottom:10px;flex-wrap:wrap;}
+.pre-tool h3{margin:0 0 2px;font-size:13.5px;} .pre-tool p.hint{margin:0;max-width:760px;}
+.pre-tb-acc{display:flex;gap:6px;flex:0 0 auto;} .pre-tb-acc .icon-btn.on{background:var(--blue);border-color:var(--blue);color:#fff;}
+.pre-tb{min-width:0;font-family:Inter,'Segoe UI',system-ui,sans-serif;}
+.pre-tb td,.pre-tb th{font-size:11.5px;padding:7px 5px;} @media (max-width:1280px){.pre-tm .und{display:none;}}
+.pre-tb thead th{font-size:10.5px;white-space:normal;line-height:1.15;padding:7px 5px;letter-spacing:0;}
+.pre-tb th.l,.pre-tb td.l{text-align:left;} .pre-tb td.c{text-align:center;}
+.pre-tb td.pre-nom{white-space:normal;min-width:170px;max-width:520px;line-height:1.3;}
+.pre-tm td:not(.l),.pre-tm th:not(.l){width:1%;}
+.pre-tb td:not(.l):not(.und),.pre-lt td:not(.l){font-family:'Arial Narrow',Arial,sans-serif;font-size:12.5px;}
+.pre-lt td:not(.l) .pre-in{font-family:inherit;}
+.pre-cod{font-weight:700;color:var(--mut);margin-right:4px;font-variant-numeric:tabular-nums;}
+.pre-chev{display:inline-block;width:14px;margin-right:2px;color:var(--mut);font-size:11px;transition:transform .12s;vertical-align:middle;} .pre-chev.on{transform:rotate(90deg);}
+.pre-g{cursor:pointer;font-weight:700;} .pre-p{cursor:pointer;}
+.pre-tb tbody tr.pre-n1 td{background:rgba(20,28,94,.11);} .pre-tb tbody tr.pre-n2 td{background:rgba(20,28,94,.065);} .pre-tb tbody tr.pre-n3 td{background:rgba(20,28,94,.03);}
+.pre-tb tbody tr.pre-g:hover td,.pre-tb tbody tr.pre-p:hover td{background:rgba(242,106,27,.10);}
+.pre-tb tr.pre-mod td:nth-child(5){font-weight:800;} .pre-cam{color:var(--naranja,#f26a1b);font-weight:800;}
+.pre-pc{position:relative;min-width:104px;} .pre-pc i{position:absolute;left:8px;bottom:4px;height:3px;border-radius:2px;background:#f26a1b;opacity:.75;max-width:calc(100% - 16px);} .pre-pc span{position:relative;}
+.pre-tb tr.tot td{font-weight:800;}
+:root[data-theme="dark"] .pre-tb tbody tr.pre-n1 td{background:rgba(255,255,255,.09);} :root[data-theme="dark"] .pre-tb tbody tr.pre-n2 td{background:rgba(255,255,255,.055);} :root[data-theme="dark"] .pre-tb tbody tr.pre-n3 td{background:rgba(255,255,255,.028);}
+.pre-estado{display:flex;justify-content:space-between;align-items:center;gap:10px 16px;flex-wrap:wrap;padding:10px 16px;}
+.pre-est-i{display:flex;align-items:center;gap:12px;min-width:0;} .pre-est-t{display:flex;flex-direction:column;min-width:0;} .pre-est-t b{font-size:13px;} .pre-est-t em{font-style:normal;font-size:11.5px;color:var(--mut);}
+.pre-est-b{display:flex;gap:8px;flex-wrap:wrap;} .vl-pill.ar{background:#64748b22;color:var(--mut);}
+.pre-vacio{text-align:center;padding:34px 18px 30px;} .pre-vacio h3{font-size:16px;margin:8px 0 6px;} .pre-vacio p.hint{max-width:560px;margin:0 auto 14px;font-size:12.5px;}
+.pre-vacio-ic{font-size:34px;line-height:1;} .pre-vacio-bt{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.pre-mot{max-width:420px;margin:0 auto 14px;text-align:left;} .pre-mot input{width:100%;}
+/* ventana lateral con el APU: venta a la izquierda, meta a la derecha */
+.pre-dr-bk{position:fixed;inset:0;z-index:640;background:rgba(2,6,23,.45);opacity:0;pointer-events:none;transition:opacity .18s;} .pre-dr-bk.on{opacity:1;pointer-events:auto;}
+.pre-dr{position:fixed;top:0;right:0;bottom:0;width:min(1240px,97vw);z-index:650;background:var(--bg);border-left:1px solid var(--line2);box-shadow:-20px 0 60px rgba(2,6,23,.35);display:flex;flex-direction:column;transform:translateX(104%);transition:transform .22s cubic-bezier(.2,.8,.2,1);}
+.pre-dr.on{transform:none;}
+.pre-dr-h{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:16px 20px 12px;border-bottom:1px solid var(--line);background:var(--card);}
+.pre-dr-h small{display:block;font-size:11.5px;color:var(--mut);font-weight:700;} .pre-dr-h h3{margin:2px 0 0;font-size:15px;line-height:1.3;}
+.pre-dr-body{flex:1;overflow:auto;padding:14px 20px 24px;}
+.pre-dr-cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:start;}
+.pre-lado{margin-bottom:0;min-width:0;} .pre-lado h3{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:13px;}
+.pre-lv{border-top:3px solid #141c5e;} .pre-lm{border-top:3px solid #f26a1b;}
+:root[data-theme="dark"] .pre-lv{border-top-color:#8f98ee;}
+.pre-lt{width:100%;min-width:0;font-family:Inter,'Segoe UI',system-ui,sans-serif;} .pre-lt th,.pre-lt td{font-size:11.5px;padding:5px 4px;white-space:nowrap;}
+.pre-lt tbody td{height:33px;} .pre-lt tr.pre-sec td{height:26px;}
+.pre-dr-cols{align-items:stretch;} .pre-lado{display:flex;flex-direction:column;} .pre-lado .vl-tw{margin-bottom:2px;} .pre-lado .pre-pu{margin-top:auto;} .pre-lado .pre-add{margin-bottom:10px;}
+.pre-lt th{font-size:10.5px;} .pre-lt td.l{white-space:normal;line-height:1.25;min-width:110px;} .pre-lt td.c{text-align:center;}
+.pre-lt tr.pre-sec td{background:var(--input);font-weight:800;font-size:10.5px;letter-spacing:.4px;text-transform:uppercase;color:var(--mut);text-align:left;padding:4px 8px;}
+.pre-lt tr.pre-cambio td{background:rgba(242,106,27,.12);} .pre-lt tr.pre-nuevo td{background:rgba(14,143,79,.12);}
+.pre-lt tr.pre-quit td{background:rgba(239,68,68,.09);color:var(--mut);} .pre-lt tr.pre-quit td.l{text-decoration:line-through;}
+.pre-tag{font-size:9.5px;font-weight:800;color:var(--green);border:1px solid currentColor;border-radius:6px;padding:0 4px;vertical-align:middle;}
+.pre-in{width:54px;font:inherit;font-size:11.5px;padding:3px 5px;border:1px solid var(--line2);border-radius:6px;background:var(--input);color:var(--tx);text-align:right;font-variant-numeric:tabular-nums;} .pre-in:focus{outline:2px solid var(--blue);outline-offset:-1px;}
+.pre-lt .vl-tb button.pre-x,.pre-x{border:0 !important;background:transparent !important;color:var(--mut) !important;padding:2px 6px !important;font-size:12px !important;cursor:pointer;} .pre-x:hover{color:var(--red) !important;}
+.pre-rend{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:12px;color:var(--mut);} .pre-rend b{color:var(--tx);} .pre-rend .pre-in{width:74px;}
+.pre-pu{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding:8px 10px;border-radius:8px;background:var(--input);font-size:12.5px;} .pre-pu b{font-size:15px;font-variant-numeric:tabular-nums;}
+.pre-res{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;margin-bottom:14px;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:var(--card);font-size:12.5px;color:var(--mut);} .pre-res b{font-size:14px;font-variant-numeric:tabular-nums;}
+.pre-add{margin-top:12px;padding-top:10px;border-top:1px dashed var(--line2);} .pre-add-t{font-size:12px;font-weight:800;margin-bottom:6px;}
+.pre-add-f{display:flex;gap:8px;align-items:center;flex-wrap:wrap;} .pre-add-b{position:relative;flex:1 1 220px;min-width:180px;} .pre-add-b input{width:100%;font:inherit;font-size:12px;padding:6px 9px;border:1px solid var(--line2);border-radius:8px;background:var(--input);color:var(--tx);}
+.pre-sug{position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:20;background:var(--card);border:1px solid var(--line2);border-radius:10px;box-shadow:0 14px 34px rgba(2,6,23,.28);max-height:260px;overflow:auto;}
+.pre-sug button{display:block;width:100%;text-align:left;border:0;background:transparent;color:var(--tx);font:inherit;font-size:12px;padding:7px 10px;cursor:pointer;line-height:1.3;} .pre-sug button:hover{background:var(--input);}
+.pre-sug em{display:block;font-style:normal;font-size:10.5px;color:var(--mut);} .pre-sug-v{padding:10px;font-size:12px;color:var(--mut);}
+@media (max-width:900px){.pre-dr-cols{grid-template-columns:minmax(0,1fr);} .pre-dr{width:100vw;}}
+@media (max-width:600px){.pre-dr-body{padding:12px 12px 20px;} .pre-dr-h{padding:12px;}}
 </style>
 <script>
 document.documentElement.dataset.pane = 'resumen';
@@ -1460,6 +1521,7 @@ document.documentElement.dataset.pane = 'resumen';
       <button data-pane="pts" title="Meta y real por día"><span class="ni">📆</span><span class="nt">Plan semanal</span></button>
       <button data-pane="ppc" title="Cumplimiento del plan"><span class="ni">📈</span><span class="nt">PPC</span></button>
       <button data-pane="valorizaciones" title="Valor ganado: valorizaciones mensuales del contrato, adicionales y mayores metrados"><span class="ni">💰</span><span class="nt">Valorizaciones</span></button>
+      <button data-pane="presupuesto" title="Presupuesto de venta (contrato) y presupuesto meta (copia del APU ajustable)"><span class="ni">🧮</span><span class="nt">Presupuesto</span></button>
       <button data-pane="hh" title="Histograma de horas-hombre planificadas desde el APU de la oferta"><span class="ni">👷</span><span class="nt">Horas-hombre</span></button>
       <button data-pane="produccion" class="disabled" title="Próximamente: aún sin datos reales cargados"><span class="ni">⚙️</span><span class="nt">Producción</span></button>
       <a href="visor/" id="visorLink" title="Modelo BIM del puente"><span class="ni">🧊</span><span class="nt">Visor 3D</span></a>
@@ -1660,6 +1722,18 @@ document.documentElement.dataset.pane = 'resumen';
         </p>
       </div>
       <div id="hhCuerpo"><div class="rg-msg">Consultando las horas planificadas…</div></div>
+    </section>
+
+    <!-- ═══════════ PRESUPUESTO (venta / meta) ═══════════ -->
+    <section class="pane" data-pane="presupuesto">
+      <div class="vl-top">
+        <p class="api" style="margin:0">Frente: <span id="preFrentes"></span></p>
+        <p class="api" style="margin:0">Ver:
+          <button class="seg-btn" data-premodo="venta" title="Presupuesto contractual: solo lectura">🔒 Venta</button>
+          <button class="seg-btn" data-premodo="meta" title="Presupuesto meta: copia del APU que se ajusta sin tocar el contrato">🎯 Meta</button>
+        </p>
+      </div>
+      <div id="preCuerpo"><div class="rg-msg">Consultando el presupuesto…</div></div>
     </section>
 
     <!-- ═══════════ PARTE DIARIO ═══════════ -->
@@ -2366,6 +2440,7 @@ document.querySelectorAll('#nav button').forEach(b => {
       pts: ['Plan semanal', 'Meta y real por día de las actividades del Look Ahead · PAC de la semana'],
       ppc: ['PPC', 'Porcentaje de actividades completadas: trazabilidad semanal y causas de incumplimiento'],
       valorizaciones: ['Valorizaciones', 'Valor ganado: lo valorizado mes a mes (contrato, adicionales y mayores metrados)'],
+      presupuesto: ['Presupuesto', 'Venta (contrato, solo lectura) y meta (copia del APU que se ajusta sin tocar el contrato)'],
       hh: ['Horas-hombre', 'Histograma planificado desde el APU de la oferta: metrado × cuantía, repartido en el plazo del cronograma'] };
     if (titles[b.dataset.pane]) { $('#pageTitle').textContent = titles[b.dataset.pane][0]; $('#pageSub').textContent = titles[b.dataset.pane][1]; }
     if (esCelular) celPantalla(PANES_ANCHOS.includes(b.dataset.pane));
@@ -2374,12 +2449,15 @@ document.querySelectorAll('#nav button').forEach(b => {
     if (b.dataset.pane === 'ppc') ppcCargar();
     if (b.dataset.pane === 'valorizaciones') valCargar();
     if (b.dataset.pane === 'hh') hhCargar();
+    if (b.dataset.pane === 'presupuesto') preCargar();
     if (b.dataset.pane === 'parte' && !$('#parteLA').hidden) plaCargar();
     $('#side').classList.remove('open'); $('#overlay').classList.remove('on');
   });
 });
 // ── confirmaciones dentro de la página: la ventana del navegador (confirm) saca de la pantalla completa; esta no ──
 function confirmarInfo(m) {
+  if (/presupuesto meta/i.test(m)) { const v = (m.match(/^(Aprobar|Reabrir|Archivar|Eliminar|Crear|Quitar)/) || [])[1]; return { titulo: v === 'Quitar' ? 'Quitar insumo' : v + ' presupuesto meta', si: v === 'Quitar' ? 'Quitar' : v, peligro: v === 'Eliminar' || v === 'Reabrir' }; }
+  if (/^Quitar este insumo/.test(m)) return { titulo: 'Quitar insumo', si: 'Quitar', peligro: true };
   if (/valorizaci[oó]n/i.test(m) && /^Aprobar/.test(m)) return { titulo: 'Aprobar valorización', si: 'Aprobar' };
   if (/valorizaci[oó]n/i.test(m) && /^Reabrir/.test(m)) return { titulo: 'Reabrir valorización', si: 'Reabrir', peligro: true };
   if (/sesi[oó]n/i.test(m)) return { titulo: 'Cerrar sesión', si: 'Cerrar sesión' };
@@ -5927,6 +6005,280 @@ async function hhAsegurar(per) {   // trae (una vez) el plan, la cobertura y las
     HH.cob || hhUna('cob', hhCobFetch), HH.gan || hhUna('gan', hhGanFetch)]);
   HH.datos.mes = mes; if (sem) HH.datos[per] = sem; HH.cob = cob; HH.gan = gan; hhCacheGuardar();
 }
+// ═══ PRESUPUESTO: VENTA (contrato, solo lectura) y META (copia del APU que el administrador ajusta) ═══
+// La venta sale de wbs_nodos + APU de la oferta; el meta es otra carga del mismo APU (apu_cargas.tipo = 'meta', estado borrador/vigente/archivado).
+// Todo cambio pasa por funciones de la base (presupuesto_meta.sql), que solo permiten escribir al administrador y nunca tocan la venta.
+const PRE = { frente: null, modo: 'venta', cache: {}, abiertos: {}, soloMod: false, rec: null, dr: null };
+const preN = (x, d = 2) => (x == null || x === '' || !isFinite(Number(x))) ? '—' : Number(x).toLocaleString('es-PE', { minimumFractionDigits: d, maximumFractionDigits: d });
+const preQ = (x) => (x == null || x === '') ? '—' : Number(x).toLocaleString('es-PE', { maximumFractionDigits: 4 });
+const preP = (x) => (x == null || !isFinite(x)) ? '—' : (x * 100).toLocaleString('es-PE', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + ' %';
+const PRE_SEC = [['mano_obra', 'Mano de obra'], ['material', 'Materiales'], ['equipo', 'Equipos'], ['subpartida', 'Subpartidas'], ['subcontrato', 'Subcontratos']];
+const PRE_EST = { borrador: ['Borrador', 'pr'], vigente: ['Vigente', 'ok'], archivado: ['Archivado', 'ar'] };
+async function preRpc(fn, args) {
+  const r = await fetch(`${API}/rpc/${fn}`, { method: 'POST', headers: { ...headers, 'Content-Type': 'application/json' }, body: JSON.stringify(args || {}) });
+  if (!r.ok) { const d = await r.json().catch(() => ({})); throw new Error(d.message || `HTTP ${r.status}`); }
+  const t = await r.text(); return t ? JSON.parse(t) : null;
+}
+const preProy = (cod) => ((RES_A && RES_A.proyectos) || []).find(p => p.codigo === cod);
+async function preDatos(cod, forzar) {
+  if (!forzar && PRE.cache[cod]) return PRE.cache[cod];
+  const proy = preProy(cod); if (!proy) throw new Error('Frente no encontrado');
+  const [venta, metas] = await Promise.all([
+    getTodo(`/v_presupuesto_venta?proyecto_id=eq.${proy.id}&select=nodo_id,padre_id,codigo,nivel,orden,nombre,es_hoja,unidad,metrado,pu_venta,parcial_venta,apu_venta_id,carga_venta_id&order=orden`),
+    get(`/v_presupuesto_meta_resumen?proyecto_ids=cs.{${proy.id}}&select=*&order=cargado_en.desc`)]);
+  const meta = metas.find(m => m.estado !== 'archivado') || null, partidas = {};
+  if (meta) (await getTodo(`/v_presupuesto_partida?carga_id=eq.${meta.carga_id}&select=nodo_id,pu_meta,parcial_meta,apu_meta_id,apu_venta_id,modificado&order=nodo_id`)).forEach(r => { partidas[r.nodo_id] = r; });
+  const ocId = (venta.find(n => n.carga_venta_id) || {}).carga_venta_id || null;
+  const d = { proy, venta, meta, partidas, archivados: metas.filter(m => m.estado === 'archivado').length, ocId };
+  preArbol(d);
+  if (!PRE.abiertos[cod]) PRE.abiertos[cod] = new Set(d.venta.filter(n => n.nivel <= 2 && d.hijos[n.nodo_id]).map(n => n.nodo_id));
+  return (PRE.cache[cod] = d);
+}
+// árbol del cronograma (frente → grupos → partidas) con los totales de cada rama
+function preArbol(d) {
+  const porId = {}, hijos = {};
+  d.venta.forEach(n => { porId[n.nodo_id] = n; });
+  d.venta.forEach(n => { const k = porId[n.padre_id] ? n.padre_id : 'raiz'; (hijos[k] = hijos[k] || []).push(n); });
+  Object.values(hijos).forEach(a => a.sort((x, y) => x.orden - y.orden));
+  const calc = (n) => {
+    const h = hijos[n.nodo_id] || [];
+    if (!h.length) {
+      const m = d.partidas[n.nodo_id];
+      n._v = Number(n.parcial_venta) || 0; n._np = 1; n._con = m ? n._v : 0; n._m = m ? Number(m.parcial_meta) || 0 : 0; n._nm = m ? 1 : 0; n._nmod = m && m.modificado ? 1 : 0;
+    } else {
+      n._v = n._con = n._m = n._np = n._nm = n._nmod = 0;
+      h.forEach(c => { calc(c); n._v += c._v; n._con += c._con; n._m += c._m; n._np += c._np; n._nm += c._nm; n._nmod += c._nmod; });
+    }
+  };
+  (hijos.raiz || []).forEach(calc);
+  d.hijos = hijos;
+  d.tot = (hijos.raiz || []).reduce((t, n) => ({ v: t.v + n._v, con: t.con + n._con, m: t.m + n._m, np: t.np + n._np, nm: t.nm + n._nm, nmod: t.nmod + n._nmod }), { v: 0, con: 0, m: 0, np: 0, nm: 0, nmod: 0 });
+}
+async function preCargar() {
+  const box = $('#preCuerpo'); if (!box) return;
+  if (!RES_A || !(RES_A.proyectos || []).length) { box.innerHTML = '<div class="rg-msg">Cargando la obra…</div>'; return; }
+  if (!PRE.frente || !preProy(PRE.frente)) PRE.frente = seleccionada !== GENERAL && preProy(seleccionada) ? seleccionada : COMPONENTES[0].id;
+  if (!PRE.cache[PRE.frente]) box.innerHTML = '<div class="rg-msg">Consultando el presupuesto…</div>';
+  try { await preDatos(PRE.frente); }
+  catch (e) { box.innerHTML = '<div class="rg-msg">Este módulo necesita <b>presupuesto_meta.sql</b> en la base. Pide al administrador que lo corra.<br><span class="mono" style="font-size:11px">' + esc(e.message) + '</span></div>'; return; }
+  prePintar();
+}
+function prePintar() {
+  const box = $('#preCuerpo'); if (!box) return;
+  const d = PRE.cache[PRE.frente]; if (!d) return;
+  $('#preFrentes').innerHTML = COMPONENTES.map(c => `<button class="seg-btn ${PRE.frente === c.id ? 'on' : ''}" data-prefr="${esc(c.id)}">${esc(String(c.nombre).replace(/^Puente\s+/i, ''))}</button>`).join(' ');
+  document.querySelectorAll('[data-premodo]').forEach(b => b.classList.toggle('on', b.dataset.premodo === PRE.modo));
+  const adm = !!AUTH.admin, m = d.meta, meta = PRE.modo === 'meta', t = d.tot;
+  const margen = t.con - t.m, hayM = !!m && t.nm > 0;
+  const kp = `<div class="vl-kp pre-kp">
+    <div class="vl-k"><small>Presupuesto venta</small><b>${fmt(t.v, 2)}</b><em>Costo directo del contrato · ${t.np} partidas</em></div>
+    <div class="vl-k"><small>Presupuesto meta</small><b>${hayM ? fmt(t.m, 2) : '—'}</b><em>${m ? `${PRE_EST[m.estado][0]} · ${t.nm} de ${t.np} partidas con APU meta` : 'Aún no creado'}</em></div>
+    <div class="vl-k"><small>Margen meta</small><b class="${hayM ? (margen >= 0 ? 'pre-pos' : 'pre-neg') : ''}">${hayM ? fmt(margen, 2) : '—'}</b><em>${hayM ? `${preP(t.con ? margen / t.con : 0)} sobre la venta de esas partidas` : 'Venta − meta'}</em></div>
+    <div class="vl-k"><small>Partidas ajustadas</small><b>${hayM ? t.nmod : '—'}</b><em>${hayM ? `de ${t.nm} con cambios en su APU` : 'Con cambios respecto a la venta'}</em></div></div>`;
+  let cuerpo = '';
+  if (meta && !m) {
+    cuerpo = `<div class="vl-card pre-vacio"><div class="pre-vacio-ic">🎯</div><h3>Aún no hay presupuesto meta para ${esc(String(d.proy.nombre))}</h3>
+      <p class="hint">El meta es una copia del APU de venta que ajustas (insumos, cuantías, rendimientos, precios) sin tocar el contrato. ${d.archivados ? `Hay ${d.archivados} anterior${d.archivados === 1 ? '' : 'es'} archivado${d.archivados === 1 ? '' : 's'}.` : ''}</p>
+      ${adm ? `<div class="field pre-mot"><label for="preMotivo">Motivo (opcional)</label><input id="preMotivo" type="text" maxlength="160" placeholder="Ej.: meta con rendimientos de la última obra"></div>
+      <div class="pre-vacio-bt"><button type="button" class="btn-sec pri" data-pre-crear="copia" title="Copia todo el APU de venta: el total del meta empieza igual a la venta">📋 Copiar desde venta</button>
+      <button type="button" class="btn-sec" data-pre-crear="vacio" title="Parte sin APU: copias solo las partidas que quieras ajustar">📄 Crear vacío</button></div>`
+      : '<p class="hint"><b>Solo el administrador puede crear el presupuesto meta.</b> Inicia sesión como administrador.</p>'}</div>`;
+  } else {
+    const faltan = meta && m && t.nm < t.np;
+    cuerpo = (meta && m ? preEstadoHTML(m, adm) : '') + `<div class="vl-card pre-card">
+      <div class="pre-tool"><div><h3>${meta ? 'Venta contra meta' : 'Presupuesto de venta'} · ${esc(String(d.proy.nombre))}</h3>
+        <p class="hint">${meta ? `Margen = venta − meta (positivo = ahorro). ${faltan ? `Faltan ${t.np - t.nm} partidas por copiar al meta; se marcan con «—». ` : ''}Toca una partida para ver y ${adm && m && m.estado === 'borrador' ? 'ajustar' : 'comparar'} su APU.` : 'Contrato principal a precios unitarios (costo directo). Es de solo lectura; toca una partida para ver su APU.'}</p></div>
+        <div class="pre-tb-acc">${meta ? `<button type="button" class="icon-btn ${PRE.soloMod ? 'on' : ''}" data-pre-solomod title="Mostrar solo las partidas ajustadas" aria-label="Solo ajustadas"><svg viewBox="0 0 24 24"><path d="M3 5h18l-7 8v6l-4 2v-8L3 5Z"/></svg></button>` : ''}
+        <button type="button" class="icon-btn" data-pre-exp="1" title="Expandir todo" aria-label="Expandir todo"><svg viewBox="0 0 24 24"><path d="m7 9 5 5 5-5M7 4l5 5 5-5" transform="translate(0 4)"/></svg></button>
+        <button type="button" class="icon-btn" data-pre-exp="0" title="Contraer" aria-label="Contraer"><svg viewBox="0 0 24 24"><path d="m7 15 5-5 5 5M7 20l5-5 5 5" transform="translate(0 -6)"/></svg></button></div></div>
+      <div class="vl-tw"><table class="vl-tb pre-tb ${meta ? 'pre-tm' : 'pre-tv'}">${preTabla(d, meta)}</table></div></div>`;
+  }
+  box.innerHTML = kp + cuerpo;
+}
+function preEstadoHTML(m, adm) {
+  const [txt, k] = PRE_EST[m.estado] || [m.estado, 'ar'], f = (s) => s ? new Date(s).toLocaleDateString('es-PE', { day: '2-digit', month: '2-digit', year: '2-digit' }) : '';
+  const bt = (acc, ic, t, tip, cls) => `<button type="button" class="btn-sec ${cls || ''}" data-pre-acc="${acc}" title="${esc(tip)}">${ic} ${t}</button>`;
+  const acc = !adm ? '' : m.estado === 'borrador'
+    ? bt('aprobar', '✔', 'Aprobar', 'Pasa a vigente y guarda una foto de metrados y precios', 'pri') + bt('archivar', '🗄', 'Archivar', 'Lo guarda sin usarlo') + bt('eliminar', '🗑', 'Eliminar', 'Borra este borrador (aún no aprobado)')
+    : m.estado === 'vigente' ? bt('reabrir', '↺', 'Reabrir', 'Vuelve a borrador para editarlo (se descarta la foto)') + bt('archivar', '🗄', 'Archivar', 'Lo guarda sin usarlo') : '';
+  return `<div class="vl-card pre-estado"><div class="pre-est-i"><span class="vl-pill ${k}">${txt}</span><span class="pre-est-t"><b>${esc(m.nombre || 'Presupuesto meta')}</b><em>Creado por ${esc(m.creado_por || '—')} · ${f(m.cargado_en)}${m.aprobado_en ? ' · aprobado ' + f(m.aprobado_en) : ''}${m.motivo ? ' · ' + esc(m.motivo) : ''}</em></span></div>
+    <div class="pre-est-b">${acc}</div></div>`;
+}
+function preTabla(d, meta) {
+  const filas = [], ab = PRE.abiertos[PRE.frente], solo = meta && PRE.soloMod;
+  const rec = (n) => {
+    if (solo && !n._nmod) return;
+    filas.push(n);
+    if (d.hijos[n.nodo_id] && (solo || ab.has(n.nodo_id))) d.hijos[n.nodo_id].forEach(rec);
+  };
+  (d.hijos.raiz || []).forEach(rec);
+  const tv = d.tot.v || 1;
+  const cab = meta
+    ? '<tr><th class="l">Partida</th><th class="und">Und</th><th>Metrado</th><th>P.U. venta</th><th>P.U. meta</th><th>Parcial venta</th><th>Parcial meta</th><th>Margen S/</th><th>Margen %</th></tr>'
+    : '<tr><th class="l">Partida</th><th class="und">Und</th><th>Metrado</th><th>P.U. S/</th><th>Parcial S/</th><th>% del total</th></tr>';
+  const cuerpo = filas.map(n => {
+    const grupo = !!d.hijos[n.nodo_id], m = d.partidas[n.nodo_id], sang = Math.max(0, n.nivel - 1) * 14;
+    const nom = `<td class="l pre-nom" style="padding-left:${10 + sang}px">${grupo ? `<span class="pre-chev ${ab.has(n.nodo_id) || solo ? 'on' : ''}">▸</span>` : '<span class="pre-chev pre-hoja"></span>'}<span class="pre-cod">${esc(n.codigo)}</span> ${esc(n.nombre)}</td>`;
+    const attr = grupo ? `data-pre-tog="${n.nodo_id}"` : `data-preapu="${n.nodo_id}"`, cls = `pre-n${Math.min(n.nivel, 4)} ${grupo ? 'pre-g' : 'pre-p' + (m && m.modificado ? ' pre-mod' : '')}`;
+    if (!meta) {
+      return `<tr class="${cls}" ${attr}>${nom}<td class="c und">${grupo ? '' : esc(n.unidad || '')}</td><td>${grupo ? '' : preN(n.metrado, 2)}</td><td>${grupo ? '' : preN(n.pu_venta, 2)}</td><td>${preN(n._v, 2)}</td><td class="pre-pc"><i style="width:${Math.min(100, n._v / tv * 100)}%"></i><span>${preP(n._v / tv)}</span></td></tr>`;
+    }
+    const conM = grupo ? n._nm > 0 : !!m, dif = n._con - n._m, pct = n._con ? dif / n._con : 0, cd = !conM ? '' : (dif > 0.004 ? 'pre-pos' : dif < -0.004 ? 'pre-neg' : '');
+    return `<tr class="${cls}" ${attr}>${nom}<td class="c und">${grupo ? '' : esc(n.unidad || '')}</td><td>${grupo ? '' : preN(n.metrado, 2)}</td><td>${grupo ? '' : preN(n.pu_venta, 2)}</td><td class="${!grupo && m && m.modificado ? 'pre-cam' : ''}">${grupo ? '' : (m ? preN(m.pu_meta, 2) : '—')}</td><td>${preN(n._v, 2)}</td><td>${conM ? preN(n._m, 2) : '—'}</td><td class="${cd}">${conM ? preN(dif, 2) : '—'}</td><td class="${cd}">${conM ? preP(pct) : '—'}</td></tr>`;
+  }).join('');
+  const t = d.tot;
+  const pie = meta
+    ? `<tr class="tot"><td class="l">TOTAL COSTO DIRECTO</td><td></td><td></td><td></td><td></td><td>${preN(t.v, 2)}</td><td>${t.nm ? preN(t.m, 2) : '—'}</td><td class="${t.con - t.m >= 0 ? 'pre-pos' : 'pre-neg'}">${t.nm ? preN(t.con - t.m, 2) : '—'}</td><td>${t.nm ? preP(t.con ? (t.con - t.m) / t.con : 0) : '—'}</td></tr>`
+    : `<tr class="tot"><td class="l">TOTAL COSTO DIRECTO</td><td></td><td></td><td></td><td>${preN(t.v, 2)}</td><td>100,0 %</td></tr>`;
+  return `<thead>${cab}</thead><tbody>${cuerpo}${pie}</tbody>`;
+}
+// ── APU de una partida: venta (solo lectura) a la izquierda · meta (editable) a la derecha ──
+function preDrawerEl() {
+  let el = document.getElementById('preDr');
+  if (!el) {
+    const bk = document.createElement('div'); bk.id = 'preBk'; bk.className = 'pre-dr-bk'; document.body.appendChild(bk);
+    el = document.createElement('aside'); el.id = 'preDr'; el.className = 'pre-dr'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); document.body.appendChild(el);
+    bk.addEventListener('click', preCerrarAPU);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && el.classList.contains('on') && !document.querySelector('.cf-fondo')) preCerrarAPU(); });
+  }
+  return el;
+}
+function preCerrarAPU() { const el = document.getElementById('preDr'); if (!el) return; el.classList.remove('on'); document.getElementById('preBk').classList.remove('on'); PRE.dr = null; }
+async function preAbrirAPU(nodoId) {
+  const d = PRE.cache[PRE.frente], n = d.venta.find(x => x.nodo_id === nodoId); if (!n) return;
+  PRE.dr = { nodoId, cargando: true };
+  const el = preDrawerEl(); el.classList.add('on'); document.getElementById('preBk').classList.add('on');
+  el.innerHTML = `<div class="pre-dr-h"><div><small>${esc(n.codigo)}</small><h3>${esc(n.nombre)}</h3></div><button type="button" class="icon-btn" data-pre-cerrar title="Cerrar" aria-label="Cerrar">✕</button></div><div class="pre-dr-body"><div class="rg-msg">Consultando el APU…</div></div>`;
+  await preDrawerCargar();
+}
+async function preDrawerCargar() {
+  if (!PRE.dr) return;
+  const d = PRE.cache[PRE.frente], n = d.venta.find(x => x.nodo_id === PRE.dr.nodoId), m = d.partidas[n.nodo_id], el = preDrawerEl();
+  const ids = [n.apu_venta_id, m && m.apu_meta_id].filter(Boolean);
+  try {
+    if (!ids.length) { PRE.dr = { nodoId: n.nodo_id, partidas: {}, lineas: {} }; preDrawerPintar(); return; }
+    const sel = 'id,apu_partida_id,seccion,unidad,cuadrilla,cantidad,precio,parcial,orden,modificado,origen_id,sub_partida_id,recursos(codigo,nombre),sub:apu_partidas!sub_partida_id(codigo,nombre)';
+    const [ps, ls] = await Promise.all([get(`/apu_partidas?id=in.(${ids.join(',')})&select=id,codigo,nombre,unidad,rendimiento,cud,modificado`), getTodo(`/apu_lineas?apu_partida_id=in.(${ids.join(',')})&select=${sel}&order=apu_partida_id,orden`)]);
+    const partidas = {}, lineas = {}; ps.forEach(p => { partidas[p.id] = p; lineas[p.id] = []; }); ls.forEach(l => { (lineas[l.apu_partida_id] = lineas[l.apu_partida_id] || []).push(l); });
+    if (!PRE.dr || PRE.dr.nodoId !== n.nodo_id) return;
+    PRE.dr = { nodoId: n.nodo_id, partidas, lineas }; preDrawerPintar();
+  } catch (e) { el.querySelector('.pre-dr-body').innerHTML = `<div class="rg-msg">No se pudo leer el APU: ${esc(e.message)}</div>`; }
+}
+function preDrawerPintar() {
+  const dr = PRE.dr, d = PRE.cache[PRE.frente]; if (!dr || !dr.partidas) return;
+  const n = d.venta.find(x => x.nodo_id === dr.nodoId), m = d.partidas[n.nodo_id], meta = d.meta, el = preDrawerEl();
+  const editable = !!AUTH.admin && !!meta && meta.estado === 'borrador' && !!m;
+  const pv = dr.partidas[n.apu_venta_id], pm = m ? dr.partidas[m.apu_meta_id] : null;
+  const lv = (dr.lineas[n.apu_venta_id] || []), lm = m ? (dr.lineas[m.apu_meta_id] || []) : [];
+  const porOrigen = {}; lv.forEach(l => { porOrigen[l.id] = l; });
+  const usados = new Set(lm.map(l => l.origen_id).filter(Boolean));
+  const nombre = (l) => l.recursos ? l.recursos.nombre : (l.sub ? l.sub.nombre : '—'), codigo = (l) => l.recursos ? l.recursos.codigo : (l.sub ? l.sub.codigo : '');
+  const difLinea = (l) => { const o = l.origen_id && porOrigen[l.origen_id]; return !o ? 'nuevo' : (Number(o.cantidad) !== Number(l.cantidad) || Number(o.precio) !== Number(l.precio) || Number(o.cuadrilla || 0) !== Number(l.cuadrilla || 0)) ? 'cambio' : ''; };
+  const filaVenta = (l) => `<tr class="${m && !usados.has(l.id) ? 'pre-quit' : ''}"><td class="l" title="${esc(codigo(l))}">${esc(nombre(l))}</td><td class="c">${esc(l.unidad || '')}</td><td>${l.cuadrilla != null ? preQ(l.cuadrilla) : ''}</td><td>${preQ(l.cantidad)}</td><td>${preN(l.precio, 2)}</td><td>${preN(l.parcial, 2)}</td></tr>`;
+  const inp = (l, campo, v) => `<input class="pre-in" inputmode="decimal" value="${v == null ? '' : String(v).replace('.', ',')}" data-pre-lin="${l.id}" data-pre-campo="${campo}" aria-label="${campo}">`;
+  const filaMeta = (l) => {
+    const dl = difLinea(l), esSub = !!l.sub_partida_id, pct = String(l.unidad || '').startsWith('%');
+    const cuad = l.cuadrilla != null ? (editable ? inp(l, 'cuadrilla', l.cuadrilla) : preQ(l.cuadrilla)) : '', cant = l.cuadrilla == null && editable ? inp(l, 'cantidad', l.cantidad) : preQ(l.cantidad);
+    const prec = editable && !esSub && !pct ? inp(l, 'precio', l.precio) : preN(l.precio, 2);
+    return `<tr class="${dl ? 'pre-' + dl : ''}"><td class="l" title="${esc(codigo(l))}">${esc(nombre(l))}${dl === 'nuevo' ? ' <span class="pre-tag">nuevo</span>' : ''}</td><td class="c">${esc(l.unidad || '')}</td><td>${cuad}</td><td>${cant}</td><td>${prec}</td><td>${preN(l.parcial, 2)}</td>${editable ? `<td class="c"><button type="button" class="pre-x" data-pre-quitar="${l.id}" title="Quitar del APU meta" aria-label="Quitar">✕</button></td>` : ''}</tr>`;
+  };
+  const tabla = (ls, fila, extraCol) => {
+    const sec = PRE_SEC.map(([k, t]) => { const a = ls.filter(l => l.seccion === k); return a.length ? `<tr class="pre-sec"><td colspan="${extraCol ? 7 : 6}">${t}</td></tr>` + a.map(fila).join('') : ''; }).join('');
+    return `<div class="vl-tw"><table class="vl-tb pre-lt"><thead><tr><th class="l">Insumo</th><th>Und</th><th>Cuad.</th><th>Cuantía</th><th>Precio</th><th>Parcial</th>${extraCol ? '<th></th>' : ''}</tr></thead><tbody>${sec}</tbody></table></div>`;
+  };
+  const pu = (p) => p ? Number(p.cud) : null, dv = pu(pv), dm = pu(pm), dif = dv != null && dm != null ? dv - dm : null;
+  const rend = (p, ed) => p ? `<div class="pre-rend"><span>Rendimiento</span>${ed ? `<input class="pre-in" inputmode="decimal" value="${String(p.rendimiento).replace('.', ',')}" data-pre-rend="${p.id}" aria-label="Rendimiento">` : `<b>${preQ(p.rendimiento)}</b>`}<span>${esc(p.unidad || '')}/día</span></div>` : '';
+  const ladoVenta = `<div class="vl-card pre-lado pre-lv"><h3>🔒 Venta (contrato)</h3>${pv ? rend(pv, false) + tabla(lv, filaVenta, false) + `<div class="pre-pu"><span>Costo unitario venta</span><b>${fmt(dv, 2)}</b></div>` : '<p class="hint">Esta partida no tiene APU de venta cargado.</p>'}</div>`;
+  let ladoMeta;
+  if (!meta) ladoMeta = `<div class="vl-card pre-lado pre-lm"><h3>🎯 Meta</h3><p class="hint">Todavía no hay presupuesto meta. Créalo en la vista «Meta» para ajustar este APU.</p></div>`;
+  else if (!m) ladoMeta = `<div class="vl-card pre-lado pre-lm"><h3>🎯 Meta</h3><p class="hint">Esta partida aún no se copió al meta.</p>${AUTH.admin && meta.estado === 'borrador' && n.apu_venta_id ? `<button type="button" class="btn-sec pri" data-pre-copiar="${n.nodo_id}">📋 Copiar APU de venta al meta</button>` : ''}</div>`;
+  else ladoMeta = `<div class="vl-card pre-lado pre-lm"><h3>🎯 Meta <span class="vl-pill ${PRE_EST[meta.estado][1]}">${PRE_EST[meta.estado][0]}</span></h3>${rend(pm, editable)}${tabla(lm, filaMeta, editable)}${editable ? preAgregarHTML() : (AUTH.admin ? `<p class="hint">${meta.estado === 'vigente' ? 'Está vigente: reábrelo para editar.' : ''}</p>` : '<p class="hint">Solo el administrador edita el meta.</p>')}
+    <div class="pre-pu"><span>Costo unitario meta</span><b>${fmt(dm, 2)}</b></div></div>`;
+  const resumen = dif != null ? `<div class="pre-res"><span>Diferencia por unidad (venta − meta)</span><b class="${dif >= 0 ? 'pre-pos' : 'pre-neg'}">${fmt(dif, 2)} · ${preP(dv ? dif / dv : 0)}</b><span>× ${preN(n.metrado, 2)} ${esc(n.unidad || '')} = <b class="${dif >= 0 ? 'pre-pos' : 'pre-neg'}">${fmt(dif * Number(n.metrado || 0), 2)}</b></span></div>` : '';
+  el.innerHTML = `<div class="pre-dr-h"><div><small>${esc(n.codigo)} · ${esc(n.unidad || '')} · metrado ${preN(n.metrado, 2)}</small><h3>${esc(n.nombre)}</h3></div><button type="button" class="icon-btn" data-pre-cerrar title="Cerrar" aria-label="Cerrar">✕</button></div>
+    <div class="pre-dr-body">${resumen}<div class="pre-dr-cols">${ladoVenta}${ladoMeta}</div></div>`;
+}
+function preAgregarHTML() {
+  return `<div class="pre-add"><div class="pre-add-t">➕ Agregar insumo</div><div class="pre-add-f"><div class="pre-add-b"><input id="preBuscar" type="search" placeholder="Buscar insumo (código o nombre)…" autocomplete="off"><div id="preSug" class="pre-sug" hidden></div></div>
+    <input class="pre-in" id="preAddC" inputmode="decimal" placeholder="Cuantía" aria-label="Cuantía"><input class="pre-in" id="preAddP" inputmode="decimal" placeholder="Precio" aria-label="Precio"><button type="button" class="btn-sec pri" id="preAddBt" disabled>Agregar</button></div></div>`;
+}
+async function preRecursos() { if (!PRE.rec) PRE.rec = await getTodo('/recursos?select=id,codigo,nombre,categoria,unidad,precio_unitario&order=codigo'); return PRE.rec; }
+async function preRefrescar() {
+  const cod = PRE.frente; await preDatos(cod, true);
+  if (PRE.frente === cod) { prePintar(); if (PRE.dr) await preDrawerCargar(); }
+}
+async function preEjecutar(fn, args, ok, boton) {
+  if (boton) boton.disabled = true;
+  try { await preRpc(fn, args); if (ok) toast(ok, true); await preRefrescar(); return true; }
+  catch (e) { toast(`No se pudo guardar: ${esc(e.message)}`, false); if (PRE.dr) preDrawerPintar(); if (boton) boton.disabled = false; return false; }
+}
+// ── eventos ──
+document.addEventListener('click', async (e) => {
+  const t = e.target;
+  let b = t.closest('[data-prefr]');
+  if (b) { PRE.frente = b.dataset.prefr; preCerrarAPU(); preCargar(); return; }
+  if ((b = t.closest('[data-premodo]'))) { PRE.modo = b.dataset.premodo; prePintar(); return; }
+  if ((b = t.closest('[data-pre-tog]'))) { const ab = PRE.abiertos[PRE.frente], id = b.dataset.preTog; if (ab.has(id)) ab.delete(id); else ab.add(id); prePintar(); return; }
+  if ((b = t.closest('[data-pre-exp]'))) { const d = PRE.cache[PRE.frente]; PRE.abiertos[PRE.frente] = b.dataset.preExp === '1' ? new Set(d.venta.filter(n => d.hijos[n.nodo_id]).map(n => n.nodo_id)) : new Set(d.venta.filter(n => n.nivel <= 1 && d.hijos[n.nodo_id]).map(n => n.nodo_id)); PRE.soloMod = false; prePintar(); return; }
+  if (t.closest('[data-pre-solomod]')) { PRE.soloMod = !PRE.soloMod; prePintar(); return; }
+  if ((b = t.closest('[data-preapu]'))) { preAbrirAPU(b.dataset.preapu); return; }
+  if (t.closest('[data-pre-cerrar]')) { preCerrarAPU(); return; }
+  if ((b = t.closest('[data-pre-crear]'))) {
+    const d = PRE.cache[PRE.frente], modo = b.dataset.preCrear, mot = ($('#preMotivo') || {}).value || null;
+    if (!d.ocId) { toast('Este frente no tiene APU de venta cargado.', false); return; }
+    const ok = await confirmar(modo === 'copia' ? `Crear el presupuesto meta de ${d.proy.nombre} copiando el APU de venta. Empieza con el mismo total y lo ajustas sin tocar el contrato.` : `Crear el presupuesto meta de ${d.proy.nombre} vacío. Copiarás al meta solo las partidas que quieras ajustar.`);
+    if (!ok) return;
+    await preEjecutar('presupuesto_meta_crear', { p_carga_origen: d.ocId, p_modo: modo, p_motivo: mot }, 'Presupuesto meta creado (borrador).', b); return;
+  }
+  if ((b = t.closest('[data-pre-acc]'))) {
+    const d = PRE.cache[PRE.frente], m = d.meta, acc = b.dataset.preAcc; if (!m) return;
+    const fn = { aprobar: 'presupuesto_meta_aprobar', reabrir: 'presupuesto_meta_reabrir', archivar: 'presupuesto_meta_archivar', eliminar: 'presupuesto_meta_eliminar' }[acc];
+    const msg = { aprobar: 'Aprobar el presupuesto meta. Pasa a vigente y se guarda una foto de metrados y precios; ya no se podrá editar hasta reabrirlo.', reabrir: 'Reabrir el presupuesto meta. Vuelve a borrador y se descarta la foto guardada.', archivar: 'Archivar el presupuesto meta. Queda guardado pero sin uso, y podrás crear otro.', eliminar: 'Eliminar el presupuesto meta. Es un borrador sin aprobar y se borra para siempre.' }[acc];
+    if (!(await confirmar(msg))) return;
+    const ok = await preEjecutar(fn, { p_carga: m.carga_id }, { aprobar: 'Presupuesto meta aprobado.', reabrir: 'Presupuesto meta reabierto.', archivar: 'Presupuesto meta archivado.', eliminar: 'Presupuesto meta eliminado.' }[acc], b);
+    if (ok && (acc === 'archivar' || acc === 'eliminar')) preCerrarAPU();
+    return;
+  }
+  if ((b = t.closest('[data-pre-copiar]'))) { const d = PRE.cache[PRE.frente]; await preEjecutar('apu_meta_partida_desde_venta', { p_carga: d.meta.carga_id, p_nodo: b.dataset.preCopiar }, 'Partida copiada al meta.', b); return; }
+  if ((b = t.closest('[data-pre-quitar]'))) {
+    if (!(await confirmar('Quitar este insumo del APU meta. La venta no cambia.'))) return;
+    await preEjecutar('apu_meta_linea_quitar', { p_linea: b.dataset.preQuitar }, null, b); return;
+  }
+  if ((b = t.closest('[data-pre-sug]'))) {   // insumo elegido en el buscador
+    const r = (PRE.rec || []).find(x => x.id === b.dataset.preSug); if (!r) return;
+    PRE.add = r; $('#preBuscar').value = `${r.codigo} · ${r.nombre}`; $('#preSug').hidden = true; $('#preAddP').value = String(r.precio_unitario).replace('.', ',');
+    $('#preAddC').placeholder = ['mano_obra', 'equipo'].includes(r.categoria) ? 'Cuadrilla' : 'Cuantía'; $('#preAddBt').disabled = false; $('#preAddC').focus(); return;
+  }
+  if (t.closest('#preAddBt')) {
+    const r = PRE.add, d = PRE.cache[PRE.frente], m = d.partidas[PRE.dr.nodoId]; if (!r || !m) return;
+    const num = (s) => { const v = Number(String(s).replace(',', '.')); return isFinite(v) && s !== '' ? v : null; };
+    const c = num($('#preAddC').value), p = num($('#preAddP').value), porCuad = ['mano_obra', 'equipo'].includes(r.categoria);
+    if (c == null || c < 0) { toast(porCuad ? 'Escribe la cuadrilla.' : 'Escribe la cuantía.', false); return; }
+    PRE.add = null;
+    await preEjecutar('apu_meta_linea_agregar', { p_partida: m.apu_meta_id, p_recurso: r.id, p_cantidad: porCuad ? 0 : c, p_precio: p, p_cuadrilla: porCuad ? c : null }, 'Insumo agregado al APU meta.', t.closest('#preAddBt')); return;
+  }
+});
+document.addEventListener('change', async (e) => {
+  const i = e.target.closest('.pre-in'); if (!i) return;
+  const num = (s) => { const v = Number(String(s).replace(',', '.')); return isFinite(v) && String(s).trim() !== '' ? v : null; };
+  if (i.dataset.preLin) {
+    const v = num(i.value); if (v == null || v < 0) { toast('Valor no válido.', false); preDrawerPintar(); return; }
+    await preEjecutar('apu_meta_linea_guardar', { p_linea: i.dataset.preLin, p_cantidad: null, p_precio: null, p_cuadrilla: null, ['p_' + i.dataset.preCampo]: v }, null, i);
+  } else if (i.dataset.preRend) {
+    const v = num(i.value); if (v == null || v <= 0) { toast('El rendimiento debe ser mayor que cero.', false); preDrawerPintar(); return; }
+    await preEjecutar('apu_meta_partida_rendimiento', { p_partida: i.dataset.preRend, p_rendimiento: v }, null, i);
+  }
+});
+document.addEventListener('input', async (e) => {
+  if (e.target.id !== 'preBuscar') return;
+  const q = e.target.value.trim().toLowerCase(), box = $('#preSug'); PRE.add = null; $('#preAddBt').disabled = true;
+  if (q.length < 2) { box.hidden = true; return; }
+  let rec; try { rec = await preRecursos(); } catch (x) { return; }
+  const hit = rec.filter(r => r.codigo.toLowerCase().includes(q) || r.nombre.toLowerCase().includes(q)).slice(0, 8);
+  box.innerHTML = hit.length ? hit.map(r => `<button type="button" data-pre-sug="${r.id}"><b>${esc(r.codigo)}</b> ${esc(r.nombre)}<em>${esc(r.unidad)} · S/ ${preN(r.precio_unitario, 2)}</em></button>`).join('') : '<div class="pre-sug-v">Sin coincidencias</div>';
+  box.hidden = false;
+});
+
 async function hhCargar() {
   const box = $('#hhCuerpo'); if (!box) return;
   try {
