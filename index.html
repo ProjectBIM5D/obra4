@@ -1473,6 +1473,12 @@ h1,h3,.card .value,.hhr-pie b{letter-spacing:-.2px;}
 .pre-add-t{font-size:11.5px;} .pre-add-b input{font-size:11px;padding:4px 8px;} .pre-add .pre-in{width:74px;height:26px;}
 .pre-sug button{font-size:11px;}
 @media (max-width:1280px){.pre-tm .und{display:none;}}
+/* APU: un punto menos de letra en los insumos y sangría por jerarquía (sección → insumo) */
+.pre-lt tbody td{font-size:10px;} .pre-lt td:not(.l){font-size:10.5px;} .pre-lt td .pre-tag{font-size:8px;}
+.pre-lt .pre-in{font-size:10px;}
+.pre-lt tr.pre-sec td{padding-left:8px;}
+.pre-lt tbody tr:not(.pre-sec) td.l{padding-left:22px;}
+@media (min-width:901px){.pre-lado .vl-tw{overflow-x:hidden;}}
 </style>
 <script>
 document.documentElement.dataset.pane = 'resumen';
