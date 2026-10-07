@@ -1618,6 +1618,89 @@ h1,h3,.card .value,.hhr-pie b{letter-spacing:-.2px;}
 /* Plan master: la suspensión es una franja gris sólida que tapa las barras de tarea (no se trabaja en ese periodo) */
 .pl-susp{fill:#dde3ec;opacity:1;pointer-events:none;} :root[data-theme="dark"] .pl-susp{fill:#2b3649;}
 .pl-lg.x{background:#dde3ec;border:1px solid #c0c9d6;}
+/* Plan master · línea base (venta): sin columna de sugerencia y con el nombre más ancho */
+.pl-left.pl-sinsug{width:600px;flex-basis:600px;}
+.pl-sinsug .pl-row,.pl-sinsug .pl-lh{grid-template-columns:minmax(0,1fr) 34px 54px 54px !important;}
+.pl-sinsug .pl-row>span:nth-child(5),.pl-sinsug .pl-lh>span:nth-child(5){display:none !important;}
+@media (max-width:1280px) and (min-width:901px){.pl-left.pl-sinsug{width:490px;flex-basis:490px;}}
+@media (max-width:900px){.pl-left.pl-sinsug{width:380px;flex-basis:380px;}}
+@media (max-width:600px){.pl-left.pl-sinsug{width:250px;flex-basis:250px;}}
+.pl-print .pl-left.pl-sinsug{width:560px;flex:0 0 560px;}
+/* Plan master: código de la partida con ancho fijo para que todos los nombres arranquen en la misma línea */
+.pl-row:not(.pl-g) .pre-cod{display:inline-block;min-width:54px;margin-right:2px;}
+/* Plan master: columna COD. propia (faseo de la partida / código de estructura del grupo) y nombre con sangría mínima */
+.pl-cod{text-align:left !important;font-family:Inter,'Segoe UI',system-ui,sans-serif !important;font-size:9.5px !important;color:var(--mut);overflow:hidden;text-overflow:ellipsis;padding-left:6px !important;}
+.pl-row.pl-g .pl-cod,.pl-row.pl-p .pl-cod{font-weight:700;color:var(--tx2);} .pl-lh .pl-cod{color:#fff;font-size:9px !important;}
+.pl-left{width:600px;flex-basis:600px;}
+.pl-row,.pl-lh{grid-template-columns:62px minmax(0,1fr) 34px 54px 54px 30px !important;}
+.pl-row>span:nth-child(n),.pl-lh>span:nth-child(n){display:block;}
+.pl-left.pl-sinsug{width:640px;flex-basis:640px;}
+.pl-sinsug .pl-row,.pl-sinsug .pl-lh{grid-template-columns:62px minmax(0,1fr) 34px 54px 54px !important;}
+.pl-sinsug .pl-row>span:nth-child(6),.pl-sinsug .pl-lh>span:nth-child(6){display:none !important;}
+.pl-sinsug .pl-row>span:nth-child(5),.pl-sinsug .pl-lh>span:nth-child(5){display:block !important;}
+@media (max-width:1280px) and (min-width:901px){
+  .pl-left{width:490px;flex-basis:490px;} .pl-left.pl-sinsug{width:530px;flex-basis:530px;}
+  .pl-row,.pl-lh{grid-template-columns:56px minmax(0,1fr) 32px 52px 52px 28px !important;} .pl-sinsug .pl-row,.pl-sinsug .pl-lh{grid-template-columns:56px minmax(0,1fr) 32px 52px 52px !important;}
+}
+@media (max-width:900px) and (min-width:601px){
+  .pl-left{width:400px;flex-basis:400px;} .pl-left.pl-sinsug{width:420px;flex-basis:420px;}
+  .pl-row,.pl-lh{grid-template-columns:54px minmax(0,1fr) 32px 52px 52px !important;}
+  .pl-row>span:nth-child(6),.pl-lh>span:nth-child(6){display:none !important;} .pl-row>span:nth-child(5),.pl-lh>span:nth-child(5){display:block !important;}
+}
+@media (max-width:600px){
+  .pl-left,.pl-left.pl-sinsug{width:250px;flex-basis:250px;}
+  .pl-row,.pl-lh,.pl-sinsug .pl-row,.pl-sinsug .pl-lh{grid-template-columns:minmax(0,1fr) 32px !important;}
+  .pl-row>span:nth-child(1),.pl-lh>span:nth-child(1),.pl-row>span:nth-child(n+4),.pl-lh>span:nth-child(n+4){display:none !important;}
+  .pl-row>span:nth-child(3),.pl-lh>span:nth-child(3){display:block !important;}
+}
+.pl-print .pl-left{width:580px;flex:0 0 580px;} .pl-print .pl-left.pl-sinsug{width:620px;flex:0 0 620px;}
+.pl-print .pl-row,.pl-print .pl-lh{grid-template-columns:62px minmax(0,1fr) 34px 54px 54px 30px !important;}
+.pl-print .pl-row>span,.pl-print .pl-lh>span{display:block !important;}
+.pl-print .pl-sinsug .pl-row,.pl-print .pl-sinsug .pl-lh{grid-template-columns:62px minmax(0,1fr) 34px 54px 54px !important;}
+.pl-print .pl-sinsug .pl-row>span:nth-child(6),.pl-print .pl-sinsug .pl-lh>span:nth-child(6){display:none !important;}
+@media (max-width:600px){.pl-left.pl-sinsug .pl-row>span:nth-child(5),.pl-left.pl-sinsug .pl-lh>span:nth-child(5){display:none !important;}}
+/* COD. más ancha: cabe el código de estructura de cuatro niveles (01.02.01.04) */
+.pl-left{width:614px;flex-basis:614px;} .pl-left.pl-sinsug{width:654px;flex-basis:654px;}
+.pl-row,.pl-lh{grid-template-columns:76px minmax(0,1fr) 34px 54px 54px 30px !important;}
+.pl-sinsug .pl-row,.pl-sinsug .pl-lh{grid-template-columns:76px minmax(0,1fr) 34px 54px 54px !important;}
+@media (max-width:1280px) and (min-width:901px){
+  .pl-left{width:504px;flex-basis:504px;} .pl-left.pl-sinsug{width:544px;flex-basis:544px;}
+  .pl-row,.pl-lh{grid-template-columns:70px minmax(0,1fr) 32px 52px 52px 28px !important;} .pl-sinsug .pl-row,.pl-sinsug .pl-lh{grid-template-columns:70px minmax(0,1fr) 32px 52px 52px !important;}
+}
+@media (max-width:900px) and (min-width:601px){
+  .pl-left{width:414px;flex-basis:414px;} .pl-left.pl-sinsug{width:434px;flex-basis:434px;}
+  .pl-row,.pl-lh{grid-template-columns:68px minmax(0,1fr) 32px 52px 52px !important;}
+}
+@media (max-width:600px){
+  .pl-left,.pl-left.pl-sinsug{width:250px;flex-basis:250px;}
+  .pl-row,.pl-lh,.pl-sinsug .pl-row,.pl-sinsug .pl-lh{grid-template-columns:minmax(0,1fr) 32px !important;}
+}
+.pl-print .pl-left{width:594px;flex:0 0 594px;} .pl-print .pl-left.pl-sinsug{width:634px;flex:0 0 634px;}
+.pl-print .pl-row,.pl-print .pl-lh{grid-template-columns:76px minmax(0,1fr) 34px 54px 54px 30px !important;}
+.pl-print .pl-sinsug .pl-row,.pl-print .pl-sinsug .pl-lh{grid-template-columns:76px minmax(0,1fr) 34px 54px 54px !important;}
+.pl-cod{padding-right:2px;}
+/* Plan master: títulos de columna centrados */
+.pl-lh>span,.pl-lh .pl-nom,.pl-lh .pl-cod{text-align:center !important;padding-left:0 !important;padding-right:0 !important;}
+/* COD.: un poco de holgura extra por si la tablet usa una fuente de reemplazo más ancha */
+.pl-left{width:618px;flex-basis:618px;} .pl-left.pl-sinsug{width:658px;flex-basis:658px;}
+.pl-row,.pl-lh{grid-template-columns:80px minmax(0,1fr) 34px 54px 54px 30px !important;}
+.pl-sinsug .pl-row,.pl-sinsug .pl-lh{grid-template-columns:80px minmax(0,1fr) 34px 54px 54px !important;}
+@media (max-width:1280px) and (min-width:901px){
+  .pl-left{width:508px;flex-basis:508px;} .pl-left.pl-sinsug{width:548px;flex-basis:548px;}
+  .pl-row,.pl-lh{grid-template-columns:74px minmax(0,1fr) 32px 52px 52px 28px !important;} .pl-sinsug .pl-row,.pl-sinsug .pl-lh{grid-template-columns:74px minmax(0,1fr) 32px 52px 52px !important;}
+}
+@media (max-width:900px) and (min-width:601px){
+  .pl-left{width:418px;flex-basis:418px;} .pl-left.pl-sinsug{width:438px;flex-basis:438px;}
+  .pl-row,.pl-lh{grid-template-columns:72px minmax(0,1fr) 32px 52px 52px !important;}
+}
+@media (max-width:600px){.pl-row,.pl-lh,.pl-sinsug .pl-row,.pl-sinsug .pl-lh{grid-template-columns:minmax(0,1fr) 32px !important;}}
+.pl-print .pl-left{width:598px;flex:0 0 598px;} .pl-print .pl-left.pl-sinsug{width:638px;flex:0 0 638px;}
+.pl-print .pl-row,.pl-print .pl-lh{grid-template-columns:80px minmax(0,1fr) 34px 54px 54px 30px !important;}
+.pl-print .pl-sinsug .pl-row,.pl-print .pl-sinsug .pl-lh{grid-template-columns:80px minmax(0,1fr) 34px 54px 54px !important;}
+/* Plan master · impresión con papel A4 / A3 / A2: el ancho del panel izquierdo sale de la hoja */
+.pl-print .pl-left,.pl-print .pl-left.pl-sinsug{width:var(--izq,598px) !important;flex:0 0 var(--izq,598px) !important;}
+.pl-papel{display:inline-flex;align-items:center;gap:6px;font-size:12px;} .pl-papel select{font:inherit;font-size:12px;padding:5px 8px;border-radius:7px;border:1px solid #475569;background:#0f172a;color:#fff;}
+.pl-a4 .pl-pcab h2{font-size:15px;} .pl-a4 .pl-pcab p{font-size:10px;} .pl-a4 .pl-pkp{gap:12px;} .pl-a4 .pl-pkp b{font-size:14px;} .pl-a4 .pl-plogo img{max-height:13mm;max-width:40mm;}
 </style>
 <script>
 document.documentElement.dataset.pane = 'resumen';
@@ -6509,7 +6592,7 @@ const plEditable = () => !!AUTH.admin && !!PL.plan && PL.plan.estado === 'borrad
 // periodos de suspensión (no suman al plazo contractual): de la obra completa o, si se mira un frente, también los de ese frente
 function plPpd(dias) {   // ancho disponible para el gráfico (sin la columna izquierda) ÷ días que hay que mostrar
   if (PL.zoom !== 'ajustar') return PL_PPD[PL.zoom];
-  const caja = $('#plCuerpo'), anc = innerWidth, izq = anc <= 600 ? 250 : anc <= 900 ? 360 : anc <= 1280 ? 450 : 560;
+  const caja = $('#plCuerpo'), anc = innerWidth, izq = (anc <= 600 ? 250 : anc <= 900 ? 418 : anc <= 1280 ? 508 : 618) + (PL.ver !== 'meta' && anc > 600 ? 40 : 0);
   const disp = Math.max(160, (caja ? caja.clientWidth : anc) - 24 - izq - 14);
   return Math.max(0.25, disp / Math.max(1, dias));
 }
@@ -6528,7 +6611,7 @@ async function plCargarLB() {
 async function plDatos() {
   const [ps, arbol, lbs] = await Promise.all([
     get(`/plan_versiones?obra_id=eq.${OBRA.id}&estado=neq.archivado&select=*&limit=1`),
-    getTodo('/v_wbs_arbol?select=nodo_id,proyecto_id,padre_id,codigo,nivel,orden,nombre,es_hoja,es_hito,concepto&order=orden'),
+    getTodo('/v_wbs_arbol?select=nodo_id,proyecto_id,padre_id,codigo,nivel,orden,nombre,es_hoja,es_hito,concepto,codigo_esp&order=orden'),
     get(`/linea_base_versiones?obra_id=eq.${OBRA.id}&select=id,numero,nombre,tipo_cambio,base_legal,resolucion,fecha_aprobacion,plazo_fin,cronograma_id&order=numero`).catch(() => [])]);
   PL.arbol = arbol; PL.hijos = {}; const porId = {}; arbol.forEach(n => { porId[n.nodo_id] = n; });
   arbol.forEach(n => { const k = porId[n.padre_id] ? n.padre_id : 'raiz'; (PL.hijos[k] = PL.hijos[k] || []).push(n); });
@@ -6570,7 +6653,7 @@ async function plModeloLB() {
   rows.forEach(r => {
     const n = PL.porCodigo[r.codigo]; if (!n || !r.inicio || !r.fin) return;
     const hito = !!r.es_hito, ded = r.estado === 'deductivo', s = plD(r.inicio), e = (hito || ded) ? s : plD(r.fin) + 1;
-    const o = { id: 'lb:' + r.codigo, nodo_id: n.nodo_id, codigo: r.codigo, nombre: r.nombre, partida: r.nombre, unidad: r.unidad, metrado: r.metrado, concepto: r.concepto, proyecto_id: r.proyecto_id,
+    const o = { id: 'lb:' + r.codigo, nodo_id: n.nodo_id, codigo: r.codigo, codigo_esp: n.codigo_esp, nombre: r.nombre, partida: r.nombre, unidad: r.unidad, metrado: r.metrado, concepto: r.concepto, proyecto_id: r.proyecto_id,
       hito, activa: !ded, tipo: hito ? 'hito' : 'partida', fijo: false, propia: false, s, e, d: e - s,
       dias: r.duracion != null ? Number(r.duracion) : Math.max(1, (plD(r.fin) + 1 - s) - plSuspDias(s, plD(r.fin) + 1)), so: null, eo: null, lbRow: r };
     PL.tm[o.id] = o; (PL.porNodo[n.nodo_id] = PL.porNodo[n.nodo_id] || []).push(o);
@@ -6611,7 +6694,7 @@ async function plCargar() {
 function plFilas() {
   const filas = [], proy = PL.frente === 'todos' ? null : (preProy(PL.frente) || {}).id;
   const raices = (PL.hijos.raiz || []).filter(n => !proy || n.proyecto_id === proy);
-  if (!PL.abiertos[PL.frente]) { const s = new Set(); PL.arbol.filter(n => n.nivel <= 2 && PL.hijos[n.nodo_id]).forEach(n => s.add(n.nodo_id)); PL.abiertos[PL.frente] = s; }
+  if (!PL.abiertos[PL.frente]) { const s = new Set(['__obra__']); PL.arbol.filter(n => n.nivel <= 2 && PL.hijos[n.nodo_id]).forEach(n => s.add(n.nodo_id)); PL.abiertos[PL.frente] = s; }
   const ab = PL.abiertos[PL.frente], crit = PL.soloCrit;
   const agg = (a, b) => ({ s: Math.min(a.s, b.s), e: Math.max(a.e, b.e), so: a.so == null ? b.so : (b.so == null ? a.so : Math.min(a.so, b.so)), eo: a.eo == null ? b.eo : (b.eo == null ? a.eo : Math.max(a.eo, b.eo)), crit: a.crit || b.crit, mod: a.mod || b.mod, n: a.n + b.n });
   const dato = (t) => ({ s: t.s, e: t.e, so: t.so, eo: t.eo, crit: !!t.crit, mod: t.so != null && (t.so !== t.s || t.eo !== t.e), n: 1 });
@@ -6636,6 +6719,12 @@ function plFilas() {
   };
   raices.forEach(r => rec(r, 0).forEach(f => filas.push(f)));
   if (!proy) (PL.porGrupo.obra || []).filter(x => !crit || x.crit).forEach(x => filas.push(filaPropia(x, 0)));
+  if (!proy && filas.length) {   // «OBRA 04»: resumen de todo el proyecto (frentes, adicionales, hitos y tareas propias), con el plazo contractual
+    const tot = filas.filter(f => f.prof === 0).reduce((a, f) => a ? agg(a, f) : { s: f.s, e: f.e, so: f.so, eo: f.eo, crit: f.crit, mod: f.mod, n: f.n }, null);
+    filas.forEach(f => { f.prof++; });
+    const raiz = { tipo: 'g', nodo: { nodo_id: '__obra__', codigo: '', nombre: String((OBRA && OBRA.nombre) || 'Obra').toUpperCase(), concepto: 'obra', nivel: 0 }, prof: 0, key: '__obra__', ...tot };
+    return ab.has('__obra__') || crit ? [raiz, ...filas] : [raiz];
+  }
   return filas;
 }
 function plPintar() {
@@ -6691,12 +6780,13 @@ function plGantt(filas, opc) {
   const t0 = PL.t0 = Math.floor(Math.min(PL.ini, ...Object.values(PL.tm).map(t => t.so == null ? Infinity : t.so)) / 7) * 7 - 7, t1 = PL.finE + 21, ppd = opc.ppd || plPpd(t1 - t0), W = Math.ceil((t1 - t0) * ppd), X = (n) => (n - t0) * ppd, H = filas.length * PL_H;
   const abre = PL.abiertos[PL.frente], solo = PL.soloCrit;
   // ── columna izquierda (HTML): nombre, duración, inicio, fin, sugerida ──
+  const profG = filas.filter(r => r.tipo === 'g').reduce((m, r) => Math.max(m, r.prof), 0), sangHoja = 2 + (profG + 1) * 5;   // las partidas arrancan todas en la misma vertical
   const izq = filas.map((r) => {
-    const n = r.nodo, grupo = r.tipo !== 't', t = r.tarea, nom = t ? (t.nombre || n.nombre) : n.nombre, sang = 4 + r.prof * 7, sel = !opc.print && t && PL.sel === t.id;
+    const n = r.nodo, grupo = r.tipo !== 't', t = r.tarea, nom = t ? (t.nombre || n.nombre) : n.nombre, sang = (r.tipo === 'p' || (t && t.tipo !== 'hito' && !(t.propia && !t.grupo_id))) ? sangHoja + (t && !t.propia && (PL.porNodo[n.nodo_id] || []).length > 1 ? 10 : 0) : 2 + r.prof * 5, sel = !opc.print && t && PL.sel === t.id;
     const dur = t ? t.dias : (r.e - r.s) - plSuspDias(r.s, r.e), ina = t && !t.activa && !t.hito, sug = t && t.activa && !t.hito && t.dias_sug_meta != null ? t.dias_sug_meta : null;
     const dif = sug != null && sug !== t.dias ? ' pl-difsug' : '';
     return `<div class="pl-row pl-${r.tipo}${t && t.hito ? ' pl-h' : ''}${ina ? ' pl-ina' : ''}${r.crit ? ' pl-crit' : ''}${sel ? ' pl-sel' : ''}${r.mod ? ' pl-mod' : ''} pl-n${Math.min(r.prof + 1, 4)}" ${grupo ? `data-pl-tog="${esc(r.key)}"` : `data-pl-tarea="${esc(r.key)}"`} style="height:${PL_H}px">`
-      + `<span class="pl-nom" style="padding-left:${sang}px" title="${esc(n.codigo + ' · ' + nom)}">${grupo ? `<span class="pre-chev ${abre.has(n.nodo_id) || solo ? 'on' : ''}">▸</span>` : '<span class="pre-chev pre-hoja"></span>'}<span class="pre-cod">${esc(n.codigo)}</span> ${t && t.hito ? '◆ ' : ''}${esc(nom)}${t && t.nueva ? ' <span class="pre-tag">nueva</span>' : ''}${t && t.propia && t.tipo === 'apoyo' ? ' <span class="pre-tag">apoyo</span>' : ''}${t && t.propia && t.tipo === 'no_contractual' ? ' <span class="pre-tag pl-tagnc">no contractual</span>' : ''}${n.concepto === 'adicional' && r.prof === 0 ? ' <span class="pre-tag">adicional</span>' : ''}</span>`
+      + `<span class="pl-cod" title="${esc(n.codigo ? 'Código único: ' + n.codigo : '')}">${esc(t ? (t.codigo_esp || t.codigo) : (n.codigo_esp || n.codigo))}</span><span class="pl-nom" style="padding-left:${sang}px" title="${esc(nom)}">${grupo ? `<span class="pre-chev ${abre.has(n.nodo_id) || solo ? 'on' : ''}">▸</span>` : '<span class="pre-chev pre-hoja"></span>'}${t && t.hito ? '◆ ' : ''}${esc(nom)}${t && t.nueva ? ' <span class="pre-tag">nueva</span>' : ''}${t && t.propia && t.tipo === 'apoyo' ? ' <span class="pre-tag">apoyo</span>' : ''}${t && t.propia && t.tipo === 'no_contractual' ? ' <span class="pre-tag pl-tagnc">no contractual</span>' : ''}${n.concepto === 'adicional' && n.nivel === 1 ? ' <span class="pre-tag">adicional</span>' : ''}</span>`
       + `<span class="c">${t && t.hito ? '—' : dur}</span><span>${plFmt(r.s)}</span><span>${t && t.hito ? '' : plFmt(r.e - 1)}</span><span class="pl-sug${dif}" title="${sug != null ? 'Días sugeridos por el APU meta' : ''}">${sug != null ? sug : ''}</span></div>`;
   }).join('');
   let m1 = '', m2 = '';
@@ -6746,7 +6836,7 @@ function plGantt(filas, opc) {
     links += `<path d="${d}" class="pl-lk${l._viol ? ' pl-lv' : ''}" marker-end="url(#plFl${l._viol ? 'r' : ''})"/>`;
   });
   const defs = `<defs><pattern id="plHatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#64748b" stroke-width="1.1" opacity=".5"/></pattern><marker id="plFl" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 8 4 0 8z" class="pl-fl"/></marker><marker id="plFlr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 8 4 0 8z" class="pl-flr"/></marker></defs>`;
-  return `<div class="pl-flex" style="--ph:${PL_H}px"><div class="pl-left"><div class="pl-lh"><span class="pl-nom">Tarea</span><span class="c">Días</span><span>Inicio</span><span>Fin</span><span title="Días sugeridos por el APU meta">Sug.</span></div>${izq}</div>`
+  return `<div class="pl-flex" style="--ph:${PL_H}px"><div class="pl-left${PL.ver !== 'meta' ? ' pl-sinsug' : ''}"><div class="pl-lh"><span class="pl-cod" title="Código de faseo de la partida (o código de estructura del grupo)">COD.</span><span class="pl-nom">Tarea</span><span class="c">Días</span><span>Inicio</span><span>Fin</span><span title="Días sugeridos por el APU meta">Sug.</span></div>${izq}</div>`
     + `<div class="pl-right" style="width:${W}px"><svg class="pl-hd" width="${W}" height="28" viewBox="0 0 ${W} 28">${m1}${m2}</svg>`
     + `<svg class="pl-sv" id="plSvg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" data-t0="${t0}" data-ppd="${ppd}">${defs}${zebra}${rej}${lineaHoy}${barras}${bandas}${barrasS}${links}</svg></div></div>`;
 }
@@ -6765,7 +6855,7 @@ function plCerrarTarea() { const el = document.getElementById('plDr'); if (!el) 
 function plAbrirTarea(id) { PL.sel = id; PL.add = null; const el = plDrawerEl(); el.classList.add('on'); document.getElementById('plBk').classList.add('on'); plDrawerPintar(); plPintar(); }
 function plDrawerPintar() {
   const t = PL.tm[PL.sel], el = plDrawerEl(); if (!t) return;
-  const ed = plEditable(), ro = ed ? '' : 'disabled', nodoTxt = (x) => `${esc(x.codigo)} · ${esc(x.nombre)}`, lb = plLbActual();
+  const ed = plEditable(), ro = ed ? '' : 'disabled', nodoTxt = (x) => `${esc(x.codigo_esp || x.codigo)} · ${esc(x.nombre)}`, lb = plLbActual();
   const fila = (l, esPred) => { const o = PL.tm[esPred ? l.predecesora_id : l.tarea_id]; if (!o) return '';
     return `<tr class="${l._viol ? 'pre-quit' : ''}"><td class="l" title="${esc(o.nombre)}">${nodoTxt(o)}</td><td><select class="pl-sel-t" ${ro} data-pl-dep-t="${l.tarea_id}|${l.predecesora_id}">${Object.keys(PL_TIPOS).map(k => `<option value="${k}" ${l.tipo === k ? 'selected' : ''}>${k}</option>`).join('')}</select></td>`
       + `<td><input class="pre-in" ${ro} inputmode="decimal" value="${Number(l.desfase_dias) || 0}" data-pl-dep-d="${l.tarea_id}|${l.predecesora_id}" aria-label="Desfase en días"></td><td class="c">${ed ? `<button type="button" class="pre-x" data-pl-dep-x="${l.tarea_id}|${l.predecesora_id}" title="Quitar el vínculo">✕</button>` : ''}</td></tr>`; };
@@ -6776,7 +6866,7 @@ function plDrawerPintar() {
   const dep = t.hol == null || t.hito || !t.activa ? '' : ` · ${t.crit ? '<span class="pre-neg"><b>Ruta crítica</b></span> · ' : ''}holgura ${Math.round(t.hol)} días`;
   const tipo = t.propia ? ({ apoyo: 'Actividad de apoyo (sin metrado)', hito: 'Hito propio', no_contractual: 'Trabajo no contractual (cuesta, no se valoriza)' }[t.tipo] || 'Tarea propia') : t.hito ? 'Hito' : (!t.activa ? 'Inactiva: deductivo total' : `${esc(t.unidad || '')} · metrado ${preN(t.metrado, 2)}`);
   const lbl = t.lbRow ? `Línea base LB${PL.ver} (venta): solo lectura.${t.lbRow.holgura != null ? ' Holgura ' + Math.round(t.lbRow.holgura) + ' días.' : ''}` : t.propia ? 'Tarea propia del plan master: no está en ninguna línea base.' : lb ? (t.so != null ? `${plLbTxt(lb)}: ${plFmt(t.so)}${t.hito ? '' : ` → ${plFmt(t.eo - 1)} (${t.eo - t.so} días)`}` : `${plLbTxt(lb)}: la partida no existía`) : 'Sin línea base elegida';
-  el.innerHTML = `<div class="pre-dr-h"><div><small>${esc(t.codigo)} · ${tipo}${dep}${t.concepto === 'adicional' ? ' · adicional' : ''}</small><h3>${esc(t.nombre)}</h3></div><button type="button" class="icon-btn" data-pl-cerrar title="Cerrar" aria-label="Cerrar">✕</button></div>
+  el.innerHTML = `<div class="pre-dr-h"><div><small>${esc(t.codigo_esp || t.codigo)}${t.codigo_esp ? ' (cód. ' + esc(t.codigo) + ')' : ''} · ${tipo}${dep}${t.concepto === 'adicional' ? ' · adicional' : ''}</small><h3>${esc(t.nombre)}</h3></div><button type="button" class="icon-btn" data-pl-cerrar title="Cerrar" aria-label="Cerrar">✕</button></div>
   <div class="pre-dr-body">
     <div class="vl-card"><div class="pl-form">
       <div class="field"><label for="plNom">Nombre de la tarea${t.propia ? ' *' : ''}</label><input id="plNom" type="text" ${ro} value="${esc(t.nombre === t.partida ? '' : t.nombre)}" placeholder="${esc(t.partida)}"></div>
@@ -6822,7 +6912,7 @@ document.addEventListener('click', async (e) => {
   if ((b = t.closest('[data-plfr]'))) { PL.frente = b.dataset.plfr; PL.reset = true; plCerrarTarea(); PL.reset = true; plPintar(); return; }
   if ((b = t.closest('[data-plzoom]'))) { PL.zoom = b.dataset.plzoom; PL.reset = true; plPintar(); return; }
   if ((b = t.closest('[data-pl-tog]'))) { const ab = PL.abiertos[PL.frente], id = b.dataset.plTog; if (ab.has(id)) ab.delete(id); else ab.add(id); plPintar(); return; }
-  if ((b = t.closest('[data-pl-exp]'))) { const proy = PL.frente === 'todos' ? null : (preProy(PL.frente) || {}).id, s = new Set(); PL.arbol.filter(n => PL.hijos[n.nodo_id] && (b.dataset.plExp === '1' || n.nivel <= 1)).forEach(n => s.add(n.nodo_id)); if (b.dataset.plExp === '1') Object.keys(PL.porNodo).forEach(k => { if (PL.porNodo[k].length > 1) s.add(k); }); PL.abiertos[PL.frente] = s; plPintar(); return; }
+  if ((b = t.closest('[data-pl-exp]'))) { const proy = PL.frente === 'todos' ? null : (preProy(PL.frente) || {}).id, s = new Set(); s.add('__obra__'); PL.arbol.filter(n => PL.hijos[n.nodo_id] && (b.dataset.plExp === '1' || n.nivel <= 1)).forEach(n => s.add(n.nodo_id)); if (b.dataset.plExp === '1') Object.keys(PL.porNodo).forEach(k => { if (PL.porNodo[k].length > 1) s.add(k); }); PL.abiertos[PL.frente] = s; plPintar(); return; }
   if (t.closest('[data-pl-crit]')) { PL.soloCrit = !PL.soloCrit; plPintar(); return; }
   if (t.closest('[data-pl-orig]')) { PL.origen = !PL.origen; plPintar(); return; }
   if (t.closest('[data-pl-vinc]')) { PL.vinc = !PL.vinc; plPintar(); return; }
@@ -6869,7 +6959,7 @@ document.addEventListener('click', async (e) => {
   if (t.closest('[data-pl-dup]')) { const x = PL.tm[PL.sel], nom = ($('#plNom').value || '').trim(); const id = await preRpc('plan_tarea_duplicar', { p_tarea: x.id, p_nombre: nom ? nom + ' (2)' : null }).catch(er => { toast(`No se pudo: ${esc(er.message)}`, false); return null; }); if (id) { toast('Tarea partida: ahora hay otra de la misma partida; cámbiale nombre y duración.', true); PL.abiertos[PL.frente].add(x.nodo_id); await plDatos(); plAbrirTarea(id); } return; }
   if (t.closest('[data-pl-quitar]')) { if (!(await confirmar('Quitar esta tarea del plan master. La partida y las demás tareas no cambian.'))) return; const x = PL.tm[PL.sel]; await plEjecutar('plan_tarea_quitar', { p_tarea: x.id }, 'Tarea quitada.'); return; }
   if ((b = t.closest('[data-pl-dep-x]'))) { const [a, p] = b.dataset.plDepX.split('|'); await plEjecutar('plan_dependencia_quitar', { p_tarea: a, p_pred: p }, null); return; }
-  if ((b = t.closest('[data-pl-sug]'))) { const x = PL.tm[b.dataset.plSug]; if (!x) return; PL.add = x; $('#plBuscar').value = `${x.codigo} · ${x.nombre}`; $('#plSug').hidden = true; $('#plAddBt').disabled = false; return; }
+  if ((b = t.closest('[data-pl-sug]'))) { const x = PL.tm[b.dataset.plSug]; if (!x) return; PL.add = x; $('#plBuscar').value = `${x.codigo_esp || x.codigo} · ${x.nombre}`; $('#plSug').hidden = true; $('#plAddBt').disabled = false; return; }
   if (t.closest('#plAddBt')) {
     const o = PL.add, x = PL.tm[PL.sel]; if (!o || !x) return; const dir = $('#plDir').value, des = Number(String($('#plDes').value).replace(',', '.')) || 0;
     const [a, p] = dir === 'pred' ? [x.id, o.id] : [o.id, x.id]; PL.add = null;
@@ -6895,12 +6985,17 @@ function plNuevaTarea() {
   if (raiz) $('#plNGrupo').value = raiz.nodo_id;
   setTimeout(() => { try { $('#plNNom').focus({ preventScroll: true }); } catch (e) {} }, 60);
 }
-// Impresión: A3 horizontal, con encabezado en cada hoja; el gráfico se ajusta al ancho de la hoja y las filas se reparten por hojas
+// Impresión: A4, A3 o A2 horizontal, con encabezado en cada hoja. Como en el Project: el tamaño de letra y de fila es el mismo en todos los papeles;
+// un papel más grande trae MÁS filas por hoja y más ancho de calendario (no se agranda nada). El reparto de filas sale de la altura de la hoja.
+const PL_PAPELES = { A4: { w: 297, h: 210, izq: [500, 540] }, A3: { w: 420, h: 297, izq: [598, 638] }, A2: { w: 594, h: 420, izq: [598, 638] } };
 function plImprimir() {
+  try { PL.papel = PL.papel || localStorage.getItem('obra-pl-papel') || 'A3'; } catch (e) { PL.papel = PL.papel || 'A3'; }
+  if (!PL_PAPELES[PL.papel]) PL.papel = 'A3';
+  const PP = PL_PAPELES[PL.papel];
   if (!PL.plan && PL.ver === 'meta') return;
   const filas = plFilas(); if (!filas.length) { toast('No hay tareas para imprimir con este filtro.', false); return; }
   const lbP = PL.ver !== 'meta' ? PL.lbs.find(l => l.numero === PL.ver) : null;
-  const mm = 96 / 25.4, pw = 420 * mm, ph = 297 * mm, pad = 12 * mm, izq = 520, util = pw - 2 * pad;
+  const mm = 96 / 25.4, pw = PP.w * mm, ph = PP.h * mm, pad = 12 * mm, izq = PL.ver !== 'meta' ? PP.izq[1] : PP.izq[0], util = pw - 2 * pad;
   const t0 = Math.floor(Math.min(PL.ini, ...Object.values(PL.tm).map(x => x.so == null ? Infinity : x.so)) / 7) * 7 - 7, t1 = PL.finE + 21, ppd = Math.max(0.3, (util - izq - 10) / (t1 - t0));
   const altoCab = 118, altoPie = 34, porHoja = Math.max(10, Math.floor((ph - 2 * pad - altoCab - altoPie - 30) / PL_H));
   const hojas = []; for (let i = 0; i < filas.length; i += porHoja) hojas.push(filas.slice(i, i + porHoja));
@@ -6912,7 +7007,7 @@ function plImprimir() {
   const logoB64 = RES_A && RES_A.obra ? RES_A.obra.logo_b64 : null, logo = logoB64 ? `<img class="vld-doclogo" src="${esc(logoB64)}" alt="Logo">` : '';
   const tituloP = lbP ? `LÍNEA BASE LB${lbP.numero}${lbP.tipo_cambio ? ' · ' + String(lbP.tipo_cambio).toUpperCase() : ''} (CONTRATO) · ${frNom.toUpperCase()}` : `PLAN MASTER (CRONOGRAMA META) · ${frNom.toUpperCase()}`;
   const subP = lbP ? `${lbP.nombre} · solo lectura${lbP.resolucion ? ' · ' + lbP.resolucion : ''} · impreso el ${hoy}` : `${PL.plan.nombre} · ${pe}${lb ? ` · comparado con LB${lb.numero}` : ''} · impreso el ${hoy}`;
-  const pagina = (filasHoja, n) => `<section class="pl-pag"><div class="pl-pcab">${logo ? `<div class="pl-plogo">${logo}</div>` : ''}<div class="pl-ptit"><small>${esc(String(obra).toUpperCase())}</small><h2>${esc(tituloP)}</h2>
+  const pagina = (filasHoja, n) => `<section class="pl-pag${PP.w < 330 ? ' pl-a4' : ''}" style="width:${PP.w}mm;height:${PP.h}mm;--izq:${izq}px"><div class="pl-pcab">${logo ? `<div class="pl-plogo">${logo}</div>` : ''}<div class="pl-ptit"><small>${esc(String(obra).toUpperCase())}</small><h2>${esc(tituloP)}</h2>
       <p>${esc(subP)}</p></div>
       <div class="pl-pkp"><span><b>${plFmt(PL.finE - 1)}</b>Fin de obra${finO ? ` (LB${lb.numero}: ${plFmt(finO - 1)})` : ''}</span><span><b>${calP - susP} días</b>Plazo de ejecución${susP ? ` (${calP} − ${susP} susp.)` : ''}</span><span><b>${crit}</b>Tareas críticas</span><span><b>${PL.conflictos}</b>Vínculos incumplidos</span></div></div>
     <div class="pl-print"><div class="pl-wrap">${plGantt(filasHoja, { ppd, print: true })}</div></div>
@@ -6920,9 +7015,10 @@ function plImprimir() {
   let pv = document.getElementById('plPv');
   if (!pv) { pv = document.createElement('div'); pv.id = 'plPv'; document.body.appendChild(pv); }
   const zoom = Math.min(1, (innerWidth - 40) / pw);
-  pv.innerHTML = `<div class="pl-pvbar"><b>Plan master · vista de impresión (A3 horizontal)</b><span>${hojas.length} hoja${hojas.length === 1 ? '' : 's'}</span><span class="pl-sp"></span><button type="button" class="btn-sec pri" data-pl-pv-imprimir>🖨 Imprimir / PDF</button><button type="button" class="btn-sec" data-pl-pv-cerrar>✕ Cerrar</button></div><div class="pl-pvhojas" style="--z:${zoom}">${hojas.map((h, i) => pagina(h, i + 1)).join('')}</div>`;
-  if (!document.getElementById('plPageCss')) { const s = document.createElement('style'); s.id = 'plPageCss'; s.textContent = '@page{size:A3 landscape;margin:0}'; document.head.appendChild(s); }
-  PL.temaPrevio = document.documentElement.dataset.theme; document.documentElement.dataset.theme = 'claro';   // la impresión siempre va en claro
+  pv.innerHTML = `<div class="pl-pvbar"><b>${PL.ver !== 'meta' ? 'Línea base' : 'Plan master'} · vista de impresión</b><label class="pl-papel">Papel <select id="plPapel">${Object.keys(PL_PAPELES).map(k => `<option value="${k}" ${PL.papel === k ? 'selected' : ''}>${k} horizontal · ${PL_PAPELES[k].w}×${PL_PAPELES[k].h} mm</option>`).join('')}</select></label><span>${filas.length} filas · ${porHoja} por hoja · ${hojas.length} hoja${hojas.length === 1 ? '' : 's'}</span><span class="pl-sp"></span><button type="button" class="btn-sec pri" data-pl-pv-imprimir>🖨 Imprimir / PDF</button><button type="button" class="btn-sec" data-pl-pv-cerrar>✕ Cerrar</button></div><div class="pl-pvhojas" style="--z:${zoom}">${hojas.map((h, i) => pagina(h, i + 1)).join('')}</div>`;
+  let sPag = document.getElementById('plPageCss'); if (!sPag) { sPag = document.createElement('style'); sPag.id = 'plPageCss'; document.head.appendChild(sPag); }
+  sPag.textContent = `@page{size:${PL.papel} landscape;margin:0}`;
+  if (PL.temaPrevio === undefined) { PL.temaPrevio = document.documentElement.dataset.theme; document.documentElement.dataset.theme = 'claro'; }   // la impresión siempre va en claro
   document.body.classList.add('con-pl-pv'); pv.scrollTop = 0;
 }
 function plCerrarImpresion() {
@@ -6934,6 +7030,7 @@ document.addEventListener('click', (e) => {
   if (e.target.closest('[data-pl-pv-cerrar]')) { plCerrarImpresion(); return; }
   if (e.target.closest('[data-pl-pv-imprimir]')) { setTimeout(() => window.print(), 50); return; }
 });
+document.addEventListener('change', (e) => { if (e.target.id === 'plPapel') { PL.papel = e.target.value; try { localStorage.setItem('obra-pl-papel', PL.papel); } catch (er) {} plImprimir(); } });
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && document.getElementById('plPv') && !document.querySelector('.cf-fondo')) plCerrarImpresion(); });
 let plRz = 0;
 window.addEventListener('resize', () => { clearTimeout(plRz); plRz = setTimeout(() => { if (PL.plan && PL.zoom === 'ajustar' && document.querySelector('.pane.on[data-pane="plan"]')) { PL.reset = true; plPintar(); } }, 200); });
@@ -6943,8 +7040,8 @@ document.addEventListener('input', (e) => {
   if (e.target.id !== 'plBuscar') return;
   const q = e.target.value.trim().toLowerCase(), box = $('#plSug'); PL.add = null; $('#plAddBt').disabled = true;
   if (q.length < 2) { box.hidden = true; return; }
-  const hit = Object.values(PL.tm).filter(x => x.id !== PL.sel && (x.codigo.toLowerCase().includes(q) || String(x.nombre).toLowerCase().includes(q))).slice(0, 8);
-  box.innerHTML = hit.length ? hit.map(x => `<button type="button" data-pl-sug="${x.id}"><b>${esc(x.codigo)}</b> ${esc(x.nombre)}<em>${plFmt(x.s)} → ${x.hito ? 'hito' : plFmt(x.e - 1)} · ${x.dias} días</em></button>`).join('') : '<div class="pre-sug-v">Sin coincidencias</div>';
+  const hit = Object.values(PL.tm).filter(x => x.id !== PL.sel && (x.codigo.toLowerCase().includes(q) || String(x.codigo_esp || '').toLowerCase().includes(q) || String(x.nombre).toLowerCase().includes(q))).slice(0, 8);
+  box.innerHTML = hit.length ? hit.map(x => `<button type="button" data-pl-sug="${x.id}"><b>${esc(x.codigo_esp || x.codigo)}</b> ${esc(x.nombre)}<em>${plFmt(x.s)} → ${x.hito ? 'hito' : plFmt(x.e - 1)} · ${x.dias} días</em></button>`).join('') : '<div class="pre-sug-v">Sin coincidencias</div>';
   box.hidden = false;
 });
 document.addEventListener('change', async (e) => {
