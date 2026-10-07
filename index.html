@@ -5688,7 +5688,8 @@ function laApuCalc(a, nodo, meta) {
   const diasSug = a.rend > 0 && M > 0 && !global ? Math.max(1, Math.ceil(M / a.rend)) : null;
   const agr = {};   // materiales (también los que vienen dentro de subpartidas), sumando el mismo insumo
   a.rec.filter(x => x.sec === 'material').forEach(x => { const k = x.nom + '|' + x.und; (agr[k] = agr[k] || { nom: x.nom, und: x.und, cant: 0 }).cant += M * x.cant; });
-  return { M, rend: a.rend, diasSug, pers: a.pers, hh: M * suma(hh, 'cant'), hhSub: M * suma(hh.filter(x => x.enSub), 'cant'), hm: M * suma(hm, 'cant'), hmSub: M * suma(hm.filter(x => x.enSub), 'cant'),
+  const persTot = a.rend > 0 ? suma(hh, 'cant') * a.rend / 8 : null;   // personas-equivalentes al rendimiento del APU = hh por unidad × rendimiento ÷ 8 h (incluye operadores y peones de las subpartidas)
+  return { M, rend: a.rend, diasSug, pers: a.pers, persTot, hhU: suma(hh, 'cant'), hmU: suma(hm, 'cant'), hh: M * suma(hh, 'cant'), hhSub: M * suma(hh.filter(x => x.enSub), 'cant'), hm: M * suma(hm, 'cant'), hmSub: M * suma(hm.filter(x => x.enSub), 'cant'),
            mat: Object.values(agr).filter(m => m.cant > 0).sort((x, y) => y.cant - x.cant) };
 }
 async function laApuRefrescar() {
@@ -5701,10 +5702,13 @@ async function laApuRefrescar() {
   const req = dias >= 1 && c.M > 0 && c.rend > 0 ? c.M / dias : null;
   const aviso = c.diasSug && dias >= 1 && dias < c.diasSug && req > c.rend * 1.0001
     ? `<div class="apu-av">⚠ Con ${dias} día${dias === 1 ? '' : 's'} hay que rendir ${laNum(req, 2)} ${u}/día; el APU ${a.tipo} rinde ${laNum(c.rend, 2)} ${u}/día (faltan ${c.diasSug - dias} día${c.diasSug - dias === 1 ? '' : 's'}, o más cuadrillas).</div>` : '';
-  box.innerHTML = `<div class="apu-h"><span class="apu-tag ${a.tipo === 'meta' ? '' : 'v'}">APU ${a.tipo === 'meta' ? 'META' : 'VENTA'}</span>Rendimiento <b>${laNum(c.rend, 2)} ${u}/día</b>${c.pers ? ` · cuadrilla <b>${laNum(c.pers, 1)}</b> pers.` : ''}</div>`
+  box.innerHTML = `<div class="apu-h"><span class="apu-tag ${a.tipo === 'meta' ? '' : 'v'}">APU ${a.tipo === 'meta' ? 'META' : 'VENTA'}</span>Rendimiento <b>${laNum(c.rend, 2)} ${u}/día</b>${c.pers ? ` · cuadrilla <b>${laNum(c.pers, 1)}</b>${c.persTot && c.persTot - c.pers > 0.05 ? ` + <b>${laNum(c.persTot - c.pers, 1)}</b> de subpartidas (operadores, peones) = <b>${laNum(c.persTot, 1)}</b>` : ''} pers.` : ''}</div>`
     + `<div class="apu-g">`
     + (c.diasSug ? `<div><span>Días sugeridos</span><b>${laNum(c.diasSug)}</b>${dias !== c.diasSug ? `<button type="button" class="btn-sec" data-apu-dias="${c.diasSug}">Usar ${c.diasSug}</button>` : ''}</div>` : '')
-    + (c.hh ? `<div><span>Horas-hombre</span><b>${laNum(c.hh)}</b>${c.hhSub ? `<small>${laNum(c.hhSub)} vienen de subpartidas</small>` : ''}</div>` : '') + (c.hm ? `<div><span>Horas-máquina</span><b>${laNum(c.hm)}</b>${c.hmSub ? `<small>${laNum(c.hmSub)} vienen de subpartidas</small>` : ''}</div>` : '') + `</div>`
+    + (c.hh ? `<div><span>Horas-hombre</span><b>${laNum(c.hh)}</b>${c.hhSub ? `<small>${laNum(c.hhSub)} vienen de subpartidas</small>` : ''}</div>` : '')
+    + (c.hh && dias >= 1 ? `<div><span>Personal con ${dias} día${dias === 1 ? '' : 's'}</span><b>${laNum(c.hh / (dias * 8), 1)}</b><small>horas-hombre ÷ (días × 8 h)</small></div>` : '')
+    + (c.hm ? `<div><span>Horas-máquina</span><b>${laNum(c.hm)}</b>${c.hmSub ? `<small>${laNum(c.hmSub)} vienen de subpartidas</small>` : ''}</div>` : '')
+    + (c.hm && dias >= 1 ? `<div><span>Equipos con ${dias} día${dias === 1 ? '' : 's'}</span><b>${laNum(c.hm / (dias * 8), 1)}</b><small>horas-máquina ÷ (días × 8 h)</small></div>` : '') + `</div>`
     + aviso
     + (c.mat.length ? `<details><summary>Materiales (${c.mat.length})</summary><ul>${c.mat.map(m => `<li><span title="${esc(m.nom)}">${esc(m.nom)}</span><b>${laNum(m.cant, 2)} ${esc(m.und || '')}</b></li>`).join('')}</ul></details>` : '');
   box.hidden = false;
