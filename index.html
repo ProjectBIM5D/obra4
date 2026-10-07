@@ -1486,6 +1486,14 @@ h1,h3,.card .value,.hhr-pie b{letter-spacing:-.2px;}
 .oc-curva th,.oc-curva td{padding:4px 5px;}
 .oc-curva tr.tot td{font-size:11px;padding:9px 5px;letter-spacing:0;border-right-width:1px;}
 .oc-curva tr.tot td.l{font-size:10.5px;letter-spacing:.4px;}
+/* Resumen de la valorización: la fila SUBTOTAL con menos negrita y sin letra espaciada (se veía densa y las cifras se cortaban);
+   columnas de monto un poco más anchas, y las cifras alineadas igual que en las filas de arriba */
+.vld-sum{min-width:900px;}
+.vld-sum col.cC{width:14.5%;} .vld-sum col.cP{width:12.5%;} .vld-sum col.cM{width:12.25%;} .vld-sum col.cQ{width:6%;}
+.vld-sum tr.tt td{font-weight:600;font-size:11.5px;letter-spacing:0;padding:11px 8px 11px 4px;border-top:2px solid #141c5e;}
+.vld-sum tr.tt td.l{font-weight:700;font-size:11px;letter-spacing:.3px;padding-left:12px;}
+.vld-sum tr.tt td:nth-child(even):not(.l){font-size:11px;font-weight:600;color:#3a4a8a;}
+:root[data-theme="dark"] .vld-sum tr.tt td:nth-child(even):not(.l){color:#b9c4f0;}
 </style>
 <script>
 document.documentElement.dataset.pane = 'resumen';
@@ -3884,7 +3892,7 @@ function valDetCuerpoTabla(list, proyectos, filtroFrente, modoTxt, listAgg, spli
 // tiene su propio % conocido, y se aplica igual en anterior/acumulado porque nunca cambia); los gastos generales sí variaron de una
 // valorización a otra, así que «anterior»/«acumulado» se arman sumando el GG real de CADA valorización anterior con SU PROPIO %.
 function valDetResumenHTML(v, conProp, presuCD, menorMonto) {
-  const N0 = (n) => Number(n || 0).toLocaleString('es-PE', { maximumFractionDigits: 2 });
+  const N0 = (n) => Number(n || 0).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });   // siempre 2 decimales (antes «109,938,567.1»)
   const histV = (VAL.ejec || []).filter(x => x.tipo === v.tipo && x.numero <= v.numero && (x.estado === 'aprobada' || conProp));
   const sumaHasta = (numMax, campo) => histV.filter(x => x.numero <= numMax).reduce((s, x) => s + (Number(x[campo]) || 0), 0);
   const T = {
@@ -3915,8 +3923,8 @@ function valDetResumenHTML(v, conProp, presuCD, menorMonto) {
     return `<tr${sub ? ' class="tt"' : ''}><td class="l">${label}</td>
       <td>${pres == null ? '—' : N0(pres)}</td>
       <td>${N0(ant)}</td><td>${PCT(ant, pres)}</td>
-      <td class="hl">${sub ? `<b>${N0(act)}</b>` : N0(act)}</td><td class="hl">${PCT(act, pres)}</td>
-      <td>${sub ? `<b>${N0(acum)}</b>` : N0(acum)}</td><td>${PCT(acum, pres)}</td>
+      <td class="hl">${N0(act)}</td><td class="hl">${PCT(act, pres)}</td>
+      <td>${N0(acum)}</td><td>${PCT(acum, pres)}</td>
       <td class="f">${pres == null ? '—' : N0(saldo)}</td><td class="f">${PCT(saldo, pres)}</td></tr>`; };
   return `<div class="vld-resumen"><div class="vld-resfila"><div class="vld-rescol">
     <h4>Presupuesto, costo directo, gastos generales y utilidad — toda la valorización</h4>
