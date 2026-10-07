@@ -1848,6 +1848,7 @@ html.tb-compacta #laApp .tb-seg .seg-btn[data-lagrupos]{padding:0;width:34px;}
 .la-apu .apu-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;}
 .la-apu .apu-g>div{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 10px;display:flex;flex-direction:column;gap:2px;}
 .la-apu .apu-g span{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--mut);} .la-apu .apu-g b{font-size:15px;color:var(--tx);font-variant-numeric:tabular-nums;}
+.la-apu .apu-g small{font-size:10.5px;color:var(--mut);}
 .la-apu .apu-g button{align-self:flex-start;margin-top:2px;padding:2px 10px;font-size:11px;}
 .la-apu .apu-av{margin-top:8px;padding:6px 10px;border-radius:8px;background:rgba(217,119,6,.14);color:var(--amber);font-weight:600;}
 .la-apu details{margin-top:8px;} .la-apu summary{cursor:pointer;font-weight:700;color:var(--tx);}
@@ -5654,21 +5655,41 @@ async function laApuCargar(nodoId) {
     const cand = ws.map(w => w.apu_partidas).filter(Boolean);
     const meta = cand.find(p => p.apu_cargas && p.apu_cargas.tipo === 'meta' && p.apu_cargas.estado !== 'archivado'), ofe = cand.find(p => p.apu_cargas && p.apu_cargas.tipo === 'oferta'), p = meta || ofe;
     if (p) {
-      const ls = await get(`/apu_lineas?apu_partida_id=eq.${p.id}&select=seccion,unidad,cuadrilla,cantidad,recursos(codigo,nombre),sub:apu_partidas!sub_partida_id(nombre)&order=orden`);
-      r = { tipo: meta ? 'meta' : 'venta', rend: Number(p.rendimiento), unidad: p.unidad, lineas: ls };
+      // las líneas de la partida y, nivel por nivel, las de sus subpartidas (concreto premezclado, equipo con operador, etc.)
+      const sel = 'apu_partida_id,seccion,unidad,cuadrilla,cantidad,sub_partida_id,recursos(codigo,nombre)', porPartida = {}, vistos = new Set();
+      let pend = [p.id];
+      for (let prof = 0; prof < 5 && pend.length; prof++) {
+        pend.forEach(id => vistos.add(id));
+        const ls = await getTodo(`/apu_lineas?apu_partida_id=in.(${pend.join(',')})&select=${sel}&order=apu_partida_id,orden`);
+        pend = [];
+        ls.forEach(l => { (porPartida[l.apu_partida_id] = porPartida[l.apu_partida_id] || []).push(l); if (l.sub_partida_id && !vistos.has(l.sub_partida_id) && !pend.includes(l.sub_partida_id)) pend.push(l.sub_partida_id); });
+      }
+      // recursos por UNIDAD de la partida: una subpartida entra multiplicada por su cuantía (los % de herramientas no son recursos)
+      const rec = [];
+      const expandir = (id, factor, prof, enSub) => {
+        if (prof > 5) return;
+        (porPartida[id] || []).forEach(l => {
+          const c = factor * Number(l.cantidad || 0);
+          if (l.sub_partida_id) expandir(l.sub_partida_id, c, prof + 1, true);
+          else if (l.recursos && !String(l.unidad || '').startsWith('%')) rec.push({ sec: l.seccion, und: l.unidad, cant: c, nom: l.recursos.nombre, enSub });
+        });
+      };
+      expandir(p.id, 1, 0, false);
+      const pers = (porPartida[p.id] || []).filter(l => l.seccion === 'mano_obra' && l.unidad === 'hh').reduce((s, l) => s + Number(l.cuadrilla || 0), 0);
+      r = { tipo: meta ? 'meta' : 'venta', rend: Number(p.rendimiento), unidad: p.unidad, rec, pers };
     }
   } catch (e) { r = null; }
   LA.apu[nodoId] = r; return r;
 }
 function laApuCalc(a, nodo, meta) {
-  const M = Number(meta) || 0, ls = a.lineas, suma = (arr, k) => arr.reduce((s, l) => s + Number(l[k] || 0), 0);
-  const mo = ls.filter(l => l.seccion === 'mano_obra' && l.unidad === 'hh');
-  const eq = ls.filter(l => (l.seccion === 'equipo' || l.seccion === 'subpartida') && l.unidad === 'hm');
-  const mat = ls.filter(l => l.seccion === 'material' && !String(l.unidad || '').startsWith('%') && l.recursos);
+  const M = Number(meta) || 0, suma = (arr, k) => arr.reduce((s, x) => s + x[k], 0);
+  const hh = a.rec.filter(x => x.sec === 'mano_obra' && x.und === 'hh'), hm = a.rec.filter(x => x.und === 'hm');
   const global = /^(glb|und|u|est|mes)$/i.test(String(nodo.unidad || '').trim());
   const diasSug = a.rend > 0 && M > 0 && !global ? Math.max(1, Math.ceil(M / a.rend)) : null;
-  return { M, rend: a.rend, diasSug, hh: M * suma(mo, 'cantidad'), hm: M * suma(eq, 'cantidad'), pers: suma(mo, 'cuadrilla'),
-           mat: mat.map(l => ({ nom: l.recursos.nombre, cant: M * Number(l.cantidad || 0), und: l.unidad })).filter(m => m.cant > 0) };
+  const agr = {};   // materiales (también los que vienen dentro de subpartidas), sumando el mismo insumo
+  a.rec.filter(x => x.sec === 'material').forEach(x => { const k = x.nom + '|' + x.und; (agr[k] = agr[k] || { nom: x.nom, und: x.und, cant: 0 }).cant += M * x.cant; });
+  return { M, rend: a.rend, diasSug, pers: a.pers, hh: M * suma(hh, 'cant'), hhSub: M * suma(hh.filter(x => x.enSub), 'cant'), hm: M * suma(hm, 'cant'), hmSub: M * suma(hm.filter(x => x.enSub), 'cant'),
+           mat: Object.values(agr).filter(m => m.cant > 0).sort((x, y) => y.cant - x.cant) };
 }
 async function laApuRefrescar() {
   const box = $('#laFApu'), id = $('#laFPart').value, n = LA.porId[id];
@@ -5683,7 +5704,7 @@ async function laApuRefrescar() {
   box.innerHTML = `<div class="apu-h"><span class="apu-tag ${a.tipo === 'meta' ? '' : 'v'}">APU ${a.tipo === 'meta' ? 'META' : 'VENTA'}</span>Rendimiento <b>${laNum(c.rend, 2)} ${u}/día</b>${c.pers ? ` · cuadrilla <b>${laNum(c.pers, 1)}</b> pers.` : ''}</div>`
     + `<div class="apu-g">`
     + (c.diasSug ? `<div><span>Días sugeridos</span><b>${laNum(c.diasSug)}</b>${dias !== c.diasSug ? `<button type="button" class="btn-sec" data-apu-dias="${c.diasSug}">Usar ${c.diasSug}</button>` : ''}</div>` : '')
-    + (c.hh ? `<div><span>Horas-hombre</span><b>${laNum(c.hh)}</b></div>` : '') + (c.hm ? `<div><span>Horas-máquina</span><b>${laNum(c.hm)}</b></div>` : '') + `</div>`
+    + (c.hh ? `<div><span>Horas-hombre</span><b>${laNum(c.hh)}</b>${c.hhSub ? `<small>${laNum(c.hhSub)} vienen de subpartidas</small>` : ''}</div>` : '') + (c.hm ? `<div><span>Horas-máquina</span><b>${laNum(c.hm)}</b>${c.hmSub ? `<small>${laNum(c.hmSub)} vienen de subpartidas</small>` : ''}</div>` : '') + `</div>`
     + aviso
     + (c.mat.length ? `<details><summary>Materiales (${c.mat.length})</summary><ul>${c.mat.map(m => `<li><span title="${esc(m.nom)}">${esc(m.nom)}</span><b>${laNum(m.cant, 2)} ${esc(m.und || '')}</b></li>`).join('')}</ul></details>` : '');
   box.hidden = false;
