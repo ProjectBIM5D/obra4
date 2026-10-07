@@ -1841,6 +1841,17 @@ html.tb-compacta #laSel{width:156px;max-width:156px;padding:0 22px 0 8px;} html.
 html.tb-compacta #ptLook{max-width:96px;} html.tb-compacta #ptSemSel{max-width:170px;} html.tb-compacta #ptComp{width:112px;max-width:112px;}
 html.tb-compacta #laApp .tb-seg .seg-btn[data-lagrupos]{padding:0;width:34px;}
 @media (max-width:900px){html.tb-compacta #laSel{width:146px;max-width:146px;font-size:12px;} html.tb-compacta #laComp{width:92px;max-width:92px;} html.tb-compacta :is(#laApp,#ptApp) .tb{gap:6px 6px;} html.tb-compacta :is(#laApp,#ptApp) .tb-g{gap:4px;} html.tb-compacta #laApp .tb-seg .seg-btn[data-lacols],html.tb-compacta #laApp .tb-seg .seg-btn[data-lagrupos]{width:29px;} html.tb-compacta #laSel{width:140px;max-width:140px;}}
+/* APU de la actividad (rendimiento, días sugeridos, horas y materiales) dentro del formulario del Look Ahead */
+.la-apu{margin:0 0 14px;padding:10px 12px;border:1px solid var(--line2);border-radius:10px;background:var(--input);font-size:12px;color:var(--tx2);}
+.la-apu .apu-h{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin-bottom:8px;} .la-apu .apu-h b{color:var(--tx);}
+.la-apu .apu-tag{font-size:10px;font-weight:800;letter-spacing:.4px;padding:2px 8px;border-radius:6px;background:var(--ic-blue-bg);color:var(--blue-tx);} .la-apu .apu-tag.v{background:rgba(100,116,139,.18);color:var(--mut);}
+.la-apu .apu-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;}
+.la-apu .apu-g>div{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 10px;display:flex;flex-direction:column;gap:2px;}
+.la-apu .apu-g span{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--mut);} .la-apu .apu-g b{font-size:15px;color:var(--tx);font-variant-numeric:tabular-nums;}
+.la-apu .apu-g button{align-self:flex-start;margin-top:2px;padding:2px 10px;font-size:11px;}
+.la-apu .apu-av{margin-top:8px;padding:6px 10px;border-radius:8px;background:rgba(217,119,6,.14);color:var(--amber);font-weight:600;}
+.la-apu details{margin-top:8px;} .la-apu summary{cursor:pointer;font-weight:700;color:var(--tx);}
+.la-apu ul{margin:6px 0 0;padding:0;list-style:none;display:grid;gap:3px;} .la-apu li{display:flex;justify-content:space-between;gap:10px;} .la-apu li span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 </style>
 <script>
 document.documentElement.dataset.pane = 'resumen';
@@ -2424,6 +2435,7 @@ document.documentElement.classList.add('dens-densa');   // tamaño único de las
             <div class="field" id="laf-meta"><label for="laFMeta">Metrado meta <span class="hint mono" id="laFUnd"></span></label><input id="laFMeta" type="number" min="0" step="0.01" placeholder="0.00"><span class="field-err">Ingresa el metrado (0 o más)</span></div>
             <div class="field" id="laf-pct"><label for="laFPrev" title="Cantidad ya ejecutada antes de este Look Ahead. Lo que se ejecute después llega solo desde el parte diario.">Ejecutado antes <span class="hint mono" id="laFUnd2"></span></label><input id="laFPrev" type="number" min="0" step="0.01" value="0"><span class="field-err">Ingresa 0 o más</span></div>
           </div>
+          <div id="laFApu" class="la-apu" hidden></div>
           <label class="la-chk" style="margin-bottom:14px"><input type="checkbox" id="laFCrit"> Actividad crítica (ruta crítica)</label>
           <div style="display:flex;flex-wrap:wrap;gap:8px">
             <button class="btn" type="submit" id="laFGuardar">Agregar</button>
@@ -5632,6 +5644,50 @@ function laInfoPartida() {
     + ` · saldo por programar: <b>${laNum(c.saldo, 2)}</b>`
     + (c.exc > 0.0001 ? ` · <b style="color:var(--amber)">⚠ lo ejecutado y lo planeado (${laNum(c.total, 2)}) excede el metrado de la partida en ${laNum(c.exc, 2)}</b>` : '');
 }
+// ── APU de la partida (meta si existe; si no, el de venta): rendimiento, días sugeridos, horas-hombre y materiales de la actividad ──
+LA.apu = {};
+async function laApuCargar(nodoId) {
+  if (LA.apu[nodoId] !== undefined) return LA.apu[nodoId];
+  let r = null;
+  try {
+    const ws = await get(`/wbs_apu?nodo_id=eq.${nodoId}&select=apu_partida_id,apu_partidas(id,rendimiento,unidad,carga_id,apu_cargas(tipo,estado))`);
+    const cand = ws.map(w => w.apu_partidas).filter(Boolean);
+    const meta = cand.find(p => p.apu_cargas && p.apu_cargas.tipo === 'meta' && p.apu_cargas.estado !== 'archivado'), ofe = cand.find(p => p.apu_cargas && p.apu_cargas.tipo === 'oferta'), p = meta || ofe;
+    if (p) {
+      const ls = await get(`/apu_lineas?apu_partida_id=eq.${p.id}&select=seccion,unidad,cuadrilla,cantidad,recursos(codigo,nombre),sub:apu_partidas!sub_partida_id(nombre)&order=orden`);
+      r = { tipo: meta ? 'meta' : 'venta', rend: Number(p.rendimiento), unidad: p.unidad, lineas: ls };
+    }
+  } catch (e) { r = null; }
+  LA.apu[nodoId] = r; return r;
+}
+function laApuCalc(a, nodo, meta) {
+  const M = Number(meta) || 0, ls = a.lineas, suma = (arr, k) => arr.reduce((s, l) => s + Number(l[k] || 0), 0);
+  const mo = ls.filter(l => l.seccion === 'mano_obra' && l.unidad === 'hh');
+  const eq = ls.filter(l => (l.seccion === 'equipo' || l.seccion === 'subpartida') && l.unidad === 'hm');
+  const mat = ls.filter(l => l.seccion === 'material' && !String(l.unidad || '').startsWith('%') && l.recursos);
+  const global = /^(glb|und|u|est|mes)$/i.test(String(nodo.unidad || '').trim());
+  const diasSug = a.rend > 0 && M > 0 && !global ? Math.max(1, Math.ceil(M / a.rend)) : null;
+  return { M, rend: a.rend, diasSug, hh: M * suma(mo, 'cantidad'), hm: M * suma(eq, 'cantidad'), pers: suma(mo, 'cuadrilla'),
+           mat: mat.map(l => ({ nom: l.recursos.nombre, cant: M * Number(l.cantidad || 0), und: l.unidad })).filter(m => m.cant > 0) };
+}
+async function laApuRefrescar() {
+  const box = $('#laFApu'), id = $('#laFPart').value, n = LA.porId[id];
+  if (!n) { box.hidden = true; return; }
+  const a = await laApuCargar(id);
+  if ($('#laFPart').value !== id) return;                 // cambió la partida mientras se leía
+  if (!a) { box.hidden = true; return; }
+  const c = laApuCalc(a, n, $('#laFMeta').value), dias = parseInt($('#laFDias').value, 10), u = esc(n.unidad || '');
+  const req = dias >= 1 && c.M > 0 && c.rend > 0 ? c.M / dias : null;
+  const aviso = c.diasSug && dias >= 1 && dias < c.diasSug && req > c.rend * 1.0001
+    ? `<div class="apu-av">⚠ Con ${dias} día${dias === 1 ? '' : 's'} hay que rendir ${laNum(req, 2)} ${u}/día; el APU ${a.tipo} rinde ${laNum(c.rend, 2)} ${u}/día (faltan ${c.diasSug - dias} día${c.diasSug - dias === 1 ? '' : 's'}, o más cuadrillas).</div>` : '';
+  box.innerHTML = `<div class="apu-h"><span class="apu-tag ${a.tipo === 'meta' ? '' : 'v'}">APU ${a.tipo === 'meta' ? 'META' : 'VENTA'}</span>Rendimiento <b>${laNum(c.rend, 2)} ${u}/día</b>${c.pers ? ` · cuadrilla <b>${laNum(c.pers, 1)}</b> pers.` : ''}</div>`
+    + `<div class="apu-g">`
+    + (c.diasSug ? `<div><span>Días sugeridos</span><b>${laNum(c.diasSug)}</b>${dias !== c.diasSug ? `<button type="button" class="btn-sec" data-apu-dias="${c.diasSug}">Usar ${c.diasSug}</button>` : ''}</div>` : '')
+    + (c.hh ? `<div><span>Horas-hombre</span><b>${laNum(c.hh)}</b></div>` : '') + (c.hm ? `<div><span>Horas-máquina</span><b>${laNum(c.hm)}</b></div>` : '') + `</div>`
+    + aviso
+    + (c.mat.length ? `<details><summary>Materiales (${c.mat.length})</summary><ul>${c.mat.map(m => `<li><span title="${esc(m.nom)}">${esc(m.nom)}</span><b>${laNum(m.cant, 2)} ${esc(m.und || '')}</b></li>`).join('')}</ul></details>` : '');
+  box.hidden = false;
+}
 function laFinTxt() {
   const ini = $('#laFIni').value, d = parseInt($('#laFDias').value, 10);
   $('#laFFin').textContent = (ini && d >= 1) ? `→ fin ${laFmt(laFecha(laDia(ini) + d - 1))}` : '';
@@ -5658,7 +5714,8 @@ function laFormAbrir(act, pre) {
     $('#laFAct').value = ''; $('#laFResp').value = ''; $('#laFCrit').checked = false;
     $('#laFIni').value = sem.fecha_inicio; $('#laFDias').value = ''; $('#laFMeta').value = ''; $('#laFPrev').value = 0;
   }
-  ['laFComp', 'laFElem', 'laFPart', 'laFBuscar'].forEach(id => { $('#' + id).disabled = !!act; });   // la partida no se cambia: se quita y se agrega otra
+  ['laFComp', 'laFElem', 'laFPart', 'laFBuscar'].forEach(id => { $('#' + id).disabled = !!act; });
+  $('#laFApu').hidden = true; laApuRefrescar();   // la partida no se cambia: se quita y se agrega otra
   laFinTxt();
   setTimeout(() => { try { $('#laFAct').focus({ preventScroll: true }); } catch (e) {} }, 50);
 }
@@ -5691,9 +5748,12 @@ function laIniciar() {
     laInfoPartida();
     const n = LA.porId[$('#laFPart').value];
     if (n && !LA.edit && !$('#laFMeta').value) { $('#laFMeta').value = laExcesoPartida(n.id, 0).saldo; laInfoPartida(); }   // por defecto: lo que falta por programar de la partida
+    laApuRefrescar();
   });
   ['laFIni', 'laFDias'].forEach(id => $('#' + id).addEventListener('input', laFinTxt));
-  $('#laFMeta').addEventListener('input', laInfoPartida);
+  $('#laFMeta').addEventListener('input', () => { laInfoPartida(); laApuRefrescar(); });
+  $('#laFDias').addEventListener('input', laApuRefrescar);
+  $('#laFApu').addEventListener('click', (e) => { const b = e.target.closest('[data-apu-dias]'); if (!b) return; $('#laFDias').value = b.dataset.apuDias; laFinTxt(); laApuRefrescar(); });
 
   $('#laForm').addEventListener('submit', async (e) => {
     e.preventDefault(); laMsg('');
