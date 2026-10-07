@@ -1479,6 +1479,13 @@ h1,h3,.card .value,.hhr-pie b{letter-spacing:-.2px;}
 .pre-lt tr.pre-sec td{padding-left:8px;}
 .pre-lt tbody tr:not(.pre-sec) td.l{padding-left:22px;}
 @media (min-width:901px){.pre-lado .vl-tw{overflow-x:hidden;}}
+/* Curva S oficial (programado vs ejecutado): en tablet y celular no existe «Arial Narrow» y se usa Arial/Helvetica, más ancha: las columnas de montos
+   se ensanchan y la fila MONTO TOTAL baja un punto y usa menos relleno para que las cifras no se pisen con las de al lado */
+.oc-curva{min-width:1200px;font-family:'Arial Narrow','Roboto Condensed','Helvetica Neue Condensed','Arial',sans-serif;}
+.oc-curva col.cN{width:36px;} .oc-curva col.cV{width:112px;} .oc-curva col.cP{width:60px;}
+.oc-curva th,.oc-curva td{padding:4px 5px;}
+.oc-curva tr.tot td{font-size:11px;padding:9px 5px;letter-spacing:0;border-right-width:1px;}
+.oc-curva tr.tot td.l{font-size:10.5px;letter-spacing:.4px;}
 </style>
 <script>
 document.documentElement.dataset.pane = 'resumen';
