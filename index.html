@@ -1701,6 +1701,94 @@ h1,h3,.card .value,.hhr-pie b{letter-spacing:-.2px;}
 .pl-print .pl-left,.pl-print .pl-left.pl-sinsug{width:var(--izq,598px) !important;flex:0 0 var(--izq,598px) !important;}
 .pl-papel{display:inline-flex;align-items:center;gap:6px;font-size:12px;} .pl-papel select{font:inherit;font-size:12px;padding:5px 8px;border-radius:7px;border:1px solid #475569;background:#0f172a;color:#fff;}
 .pl-a4 .pl-pcab h2{font-size:15px;} .pl-a4 .pl-pcab p{font-size:10px;} .pl-a4 .pl-pkp{gap:12px;} .pl-a4 .pl-pkp b{font-size:14px;} .pl-a4 .pl-plogo img{max-height:13mm;max-width:40mm;}
+/* Plan master · impresión: un punto menos de letra en las partidas, barras más bajas y fechas dd/mm a los lados de cada barra */
+.pl-print .pl-row .pl-nom{font-size:9px;} .pl-print .pl-row span{font-size:9.5px;} .pl-print .pl-row .pl-cod,.pl-print .pl-lh .pl-cod{font-size:8.5px !important;}
+.pl-fd{font:600 6.8px Inter,'Segoe UI',system-ui,sans-serif;fill:#334155;pointer-events:none;}
+/* Impresión sin hojas en blanco: cada hoja cabe dentro de la página y no se parte */
+@media print{
+  html,body{height:auto !important;overflow:visible !important;margin:0 !important;padding:0 !important;}
+  .pl-pvhojas .pl-pag{break-inside:avoid;page-break-inside:avoid;margin:0 !important;overflow:hidden;}
+}
+/* Impresión: filas de 15 px (más filas por hoja) */
+.pl-print .pl-row{height:var(--rh,15px) !important;} .pl-print .pl-row .pl-nom{line-height:var(--rh,15px);} .pl-print .pl-row>span{line-height:var(--rh,15px);}
+.pl-print .pl-row .pre-chev{font-size:8px;width:10px;margin-right:1px;}
+/* Plan master: panel izquierdo más angosto; letras y barras un punto menores en pantalla; filas de frente con fondo */
+.pl-left{width:570px;flex-basis:570px;} .pl-left.pl-sinsug{width:610px;flex-basis:610px;}
+@media (max-width:1280px) and (min-width:901px){.pl-left{width:470px;flex-basis:470px;} .pl-left.pl-sinsug{width:510px;flex-basis:510px;}}
+@media (max-width:900px) and (min-width:601px){.pl-left{width:390px;flex-basis:390px;} .pl-left.pl-sinsug{width:410px;flex-basis:410px;}}
+@media (max-width:600px){.pl-left,.pl-left.pl-sinsug{width:250px;flex-basis:250px;}}
+.pl-row .pl-nom{font-size:9px;} .pl-row>span{font-size:9.5px;} .pl-row .pl-cod{font-size:8.5px !important;} .pl-row .pre-chev{font-size:8px;}
+.pl-print .pl-left{width:var(--izq,598px) !important;flex:0 0 var(--izq,598px) !important;}
+.pl-row.pl-fr{background:#d6dff5;border-top:1px solid #aebbe6;border-bottom:1px solid #aebbe6;} .pl-row.pl-fr .pl-nom,.pl-row.pl-fr .pl-cod{color:#141c5e;font-weight:800;}
+.pl-row.pl-obra{background:#bcc8ec;} .pl-row.pl-obra .pl-nom,.pl-row.pl-obra .pl-cod{color:#141c5e;font-weight:800;}
+.pl-frbg{fill:#d6dff5;} .pl-obrabg{fill:#bcc8ec;}
+:root[data-theme="dark"] .pl-row.pl-fr{background:#26336b;border-color:#3a4a8f;} :root[data-theme="dark"] .pl-row.pl-fr .pl-nom,:root[data-theme="dark"] .pl-row.pl-fr .pl-cod{color:#e6ebff;}
+:root[data-theme="dark"] .pl-row.pl-obra{background:#33427f;} :root[data-theme="dark"] .pl-row.pl-obra .pl-nom,:root[data-theme="dark"] .pl-row.pl-obra .pl-cod{color:#fff;}
+:root[data-theme="dark"] .pl-frbg{fill:#26336b;} :root[data-theme="dark"] .pl-obrabg{fill:#33427f;}
+.pl-row.pl-fr:hover{background:#c9d4f1;}
+/* Plan master: vínculos de la ruta crítica en rojo y rótulos de los vínculos que pasan a otra hoja */
+.pl-lk.pl-lc{stroke:#e53935;stroke-width:1.4;opacity:1;} .pl-flc{fill:#e53935;}
+:root[data-theme="dark"] .pl-lk.pl-lc{stroke:#f05252;} :root[data-theme="dark"] .pl-flc{fill:#f05252;}
+.pl-ot{fill:#64748b;font-size:6px;} .pl-otc{fill:#c62828;}
+/* menú lateral por grupos plegables (Inicio · Planificación · Producción · Costos · Control de gestión · Recursos · Contrato · BIM · Administración) */
+.nav{gap:2px;padding:10px 10px 14px;}
+.nav-g{padding-top:2px;} .nav-g + .nav-g{border-top:1px solid rgba(128,140,190,.18);margin-top:4px;padding-top:6px;}
+.nav .nav-gh{padding:7px 10px 5px;font-size:10.5px;font-weight:800;letter-spacing:.7px;text-transform:uppercase;color:var(--mut);background:transparent;gap:8px;}
+.nav .nav-gh .ni{font-size:14px;width:20px;opacity:.9;} .nav .nav-gh:hover{background:transparent;color:var(--tx);}
+.nav-chev{margin-left:auto;width:8px;height:8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);transition:transform .15s;opacity:.7;margin-right:4px;margin-top:-3px;}
+.nav-g.cerrado .nav-chev{transform:rotate(-45deg);margin-top:0;}
+.nav-g.cerrado .nav-gb{display:none;}
+.nav-g.tiene-on > .nav-gh{color:var(--tx);}
+.nav-gb{display:flex;flex-direction:column;gap:1px;}
+.nav-gb > button,.nav-gb > a{padding:8px 10px 8px 14px !important;font-size:13px !important;}
+.nav-gb .ni{font-size:15px !important;width:22px !important;}
+.nav .prox{opacity:.5;cursor:default;} .nav .prox:hover{background:transparent !important;color:inherit !important;}
+.nav-tag{margin-left:auto;font-size:8.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;border:1px solid currentColor;border-radius:999px;padding:1px 6px;opacity:.7;}
+:root:not([data-theme="dark"]) .nav .nav-gh{color:#8f9ad8;} :root:not([data-theme="dark"]) .nav-g.tiene-on > .nav-gh{color:#fff;} :root:not([data-theme="dark"]) .nav-g + .nav-g{border-top-color:rgba(255,255,255,.1);}
+:root:not([data-theme="dark"]) .nav .nav-gh:hover{color:#fff;}
+@media (min-width:761px){
+  html.side-mini:not(.cel) .nav-gh,html.side-mini:not(.cel) .nav .prox{display:none !important;}   /* solo iconos: sin cabeceras ni lo que aún no existe */
+  html.side-mini:not(.cel) .nav-g.cerrado .nav-gb{display:flex;}
+  html.side-mini:not(.cel) .nav-gb > button,html.side-mini:not(.cel) .nav-gb > a{padding:12px 0 !important;justify-content:center;}
+  html.side-mini:not(.cel) .nav-g + .nav-g{margin-top:2px;padding-top:2px;}
+}
+/* Menú lateral: jerarquía clara. Cabecera de grupo = ficha con icono de color; pantallas = texto más suave, sangrado y con guía vertical; la activa en naranja */
+#nav{padding:10px 10px 16px;gap:0;}
+#nav .nav-g{margin:0;padding:0;border:0;} #nav .nav-g + .nav-g{border-top:0;margin-top:8px;padding-top:0;}
+#nav .nav-gh{width:100%;border-radius:10px;padding:7px 10px !important;font-size:11px !important;font-weight:800;letter-spacing:.9px;text-transform:uppercase;color:#e8ebff !important;background:rgba(255,255,255,.05);gap:10px;}
+#nav .nav-gh:hover{background:rgba(255,255,255,.1);}
+#nav .nav-gh .ni{width:24px;height:24px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;line-height:1;background:var(--gcb,rgba(255,255,255,.14));opacity:1;}
+#nav .nav-g[data-g="planificacion"]{--gcb:rgba(96,165,250,.32);} #nav .nav-g[data-g="produccion"]{--gcb:rgba(242,106,27,.34);} #nav .nav-g[data-g="costos"]{--gcb:rgba(52,211,153,.30);}
+#nav .nav-g[data-g="gestion"]{--gcb:rgba(167,139,250,.34);} #nav .nav-g[data-g="recursos"]{--gcb:rgba(45,212,191,.30);} #nav .nav-g[data-g="contrato"]{--gcb:rgba(251,191,36,.32);}
+#nav .nav-g[data-g="bim"]{--gcb:rgba(34,211,238,.30);} #nav .nav-g[data-g="admin"]{--gcb:rgba(148,163,184,.34);} #nav .nav-g[data-g="inicio"]{--gcb:rgba(255,255,255,.2);}
+#nav .nav-g.tiene-on > .nav-gh{background:rgba(242,106,27,.18);color:#fff !important;} #nav .nav-g.tiene-on > .nav-gh .ni{background:#f26a1b;}
+#nav .nav-chev{width:7px;height:7px;margin-right:3px;opacity:.55;}
+#nav .nav-gb{margin:5px 0 2px 22px;padding-left:9px;border-left:1px solid rgba(255,255,255,.17);gap:1px;}
+#nav .nav-gb .ni{display:none;}
+#nav .nav-gb > button,#nav .nav-gb > a{padding:6px 10px !important;font-size:12.5px !important;font-weight:500;color:#aeb7e6;border-radius:7px;min-width:0;gap:6px;}
+#nav .nav-gb > button:hover,#nav .nav-gb > a:hover{background:rgba(255,255,255,.08);color:#fff !important;}
+#nav .nav-gb > button.on{background:rgba(255,255,255,.13);color:#fff;font-weight:700;box-shadow:inset 3px 0 0 #f26a1b;}
+#nav .nav-gb .nt{min-width:0;overflow:hidden;text-overflow:ellipsis;}
+#nav .prox{opacity:1;color:#7d87bd !important;} #nav .prox:hover{background:transparent !important;color:#7d87bd !important;}
+#nav .nav-tag{flex:0 0 auto;margin-left:auto;font-size:7.5px;font-weight:800;letter-spacing:.5px;padding:1px 5px;border:1px solid rgba(255,255,255,.22);border-radius:999px;opacity:.85;}
+/* tema oscuro: mismo esquema */
+:root[data-theme="dark"] #nav .nav-gh{color:#e7ecf7 !important;background:rgba(255,255,255,.04);} :root[data-theme="dark"] #nav .nav-gb > button{color:#9aa6c4;} :root[data-theme="dark"] #nav .prox{color:#6b7694 !important;}
+/* solo iconos (tablet): sin cabeceras, con el icono de cada pantalla y un trazo entre grupos */
+@media (min-width:761px){
+  html.side-mini:not(.cel) #nav .nav-gb{margin:0;padding:0;border:0;}
+  html.side-mini:not(.cel) #nav .nav-gb .ni{display:block;}
+  html.side-mini:not(.cel) #nav .nav-gb > button,html.side-mini:not(.cel) #nav .nav-gb > a{padding:12px 0 !important;justify-content:center;}
+  html.side-mini:not(.cel) #nav .nav-g + .nav-g{margin-top:4px;padding-top:4px;border-top:1px solid rgba(255,255,255,.12);}
+  html.side-mini:not(.cel) #nav .nav-gb > button.on{box-shadow:inset 3px 0 0 #f26a1b;}
+}
+#nav .nav-gh{letter-spacing:.5px;font-size:10.5px !important;} #nav .nav-gh .nt{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+/* Dashboard: entrada directa, sin grupo «Inicio» */
+#nav > .nav-top{width:100%;border-radius:10px;padding:8px 10px !important;font-size:11.5px !important;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:#e8ebff !important;background:rgba(255,255,255,.05);gap:10px;margin-bottom:4px;}
+#nav > .nav-top:hover{background:rgba(255,255,255,.1);}
+#nav > .nav-top .ni{width:24px;height:24px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;line-height:1;background:rgba(255,255,255,.2);}
+#nav > .nav-top.on{background:rgba(242,106,27,.18);color:#fff !important;box-shadow:inset 3px 0 0 #f26a1b;} #nav > .nav-top.on .ni{background:#f26a1b;}
+:root[data-theme="dark"] #nav > .nav-top{color:#e7ecf7 !important;background:rgba(255,255,255,.04);}
+@media (min-width:761px){html.side-mini:not(.cel) #nav > .nav-top{padding:10px 0 !important;justify-content:center;margin-bottom:2px;} html.side-mini:not(.cel) #nav > .nav-top .ni{width:28px;height:28px;font-size:15px;}}
 </style>
 <script>
 document.documentElement.dataset.pane = 'resumen';
@@ -1769,18 +1857,77 @@ document.documentElement.dataset.pane = 'resumen';
       <p id="obraSub"></p>
     </div>
     <nav class="nav" id="nav">
-      <button data-pane="resumen" class="on" title="KPIs y avance general"><span class="ni">📊</span><span class="nt">Resumen</span></button>
-      <button data-pane="parte" title="Registrar avance"><span class="ni">📝</span><span class="nt">Parte diario</span></button>
-      <button data-pane="materiales" title="Registrar metas y avance"><span class="ni">🧱</span><span class="nt">Materiales</span></button>
-      <button data-pane="lookahead" title="Plan de 4 semanas"><span class="ni">📅</span><span class="nt">Look Ahead</span></button>
-      <button data-pane="pts" title="Meta y real por día"><span class="ni">📆</span><span class="nt">Plan semanal</span></button>
-      <button data-pane="ppc" title="Cumplimiento del plan"><span class="ni">📈</span><span class="nt">PPC</span></button>
-      <button data-pane="valorizaciones" title="Valor ganado: valorizaciones mensuales del contrato, adicionales y mayores metrados"><span class="ni">💰</span><span class="nt">Valorizaciones</span></button>
-      <button data-pane="presupuesto" title="Presupuesto de venta (contrato) y presupuesto meta (copia del APU ajustable)"><span class="ni">🧮</span><span class="nt">Presupuesto</span></button>
-      <button data-pane="plan" title="Plan master: cronograma meta con vínculos, ruta crítica y duraciones sugeridas por el APU meta"><span class="ni">🗓️</span><span class="nt">Plan master</span></button>
-      <button data-pane="hh" title="Histograma de horas-hombre planificadas desde el APU de la oferta"><span class="ni">👷</span><span class="nt">Horas-hombre</span></button>
-      <button data-pane="produccion" class="disabled" title="Próximamente: aún sin datos reales cargados"><span class="ni">⚙️</span><span class="nt">Producción</span></button>
-      <a href="visor/" id="visorLink" title="Modelo BIM del puente"><span class="ni">🧊</span><span class="nt">Visor 3D</span></a>
+      <button data-pane="resumen" class="nav-top on" title="KPIs y avance general"><span class="ni">🏠</span><span class="nt">Dashboard</span></button>
+      <div class="nav-g" data-g="planificacion">
+        <button type="button" class="nav-gh" data-grupo="planificacion" aria-expanded="true"><span class="ni">📅</span><span class="nt">Planificación</span><i class="nav-chev"></i></button>
+        <div class="nav-gb">
+          <button data-pane="plan" title="Cronograma meta con vínculos, ruta crítica y duraciones sugeridas por el APU meta; también las líneas base del contrato"><span class="ni">🗓️</span><span class="nt">Plan maestro</span></button>
+          <button data-pane="lookahead" title="Plan de 4 semanas"><span class="ni">📅</span><span class="nt">Look Ahead</span></button>
+          <button data-pane="pts" title="Meta y real por día"><span class="ni">📆</span><span class="nt">Plan semanal</span></button>
+          <button data-pane="ppc" title="Porcentaje de actividades completadas"><span class="ni">📈</span><span class="nt">PPC</span></button>
+        </div>
+      </div>
+      <div class="nav-g" data-g="produccion">
+        <button type="button" class="nav-gh" data-grupo="produccion" aria-expanded="true"><span class="ni">🏗️</span><span class="nt">Producción</span><i class="nav-chev"></i></button>
+        <div class="nav-gb">
+          <button data-pane="parte" title="Registrar avance"><span class="ni">📝</span><span class="nt">Parte diario</span></button>
+          <button type="button" class="prox" disabled title="Próximamente · avance físico real por partida y frente"><span class="ni">📐</span><span class="nt">Avance de obra</span><span class="nav-tag">pronto</span></button>
+          <button type="button" class="prox" disabled title="Próximamente · rendimiento real contra el APU meta"><span class="ni">⚙️</span><span class="nt">Rendimientos</span><span class="nav-tag">pronto</span></button>
+        </div>
+      </div>
+      <div class="nav-g" data-g="costos">
+        <button type="button" class="nav-gh" data-grupo="costos" aria-expanded="true"><span class="ni">💰</span><span class="nt">Costos</span><i class="nav-chev"></i></button>
+        <div class="nav-gb">
+          <button data-pane="presupuesto" title="Presupuesto de venta (contrato) y presupuesto meta (copia del APU ajustable)"><span class="ni">🧮</span><span class="nt">Presupuesto</span></button>
+          <button data-pane="valorizaciones" title="Valorizaciones mensuales del contrato, adicionales y mayores metrados"><span class="ni">💰</span><span class="nt">Valorizaciones</span></button>
+          <button type="button" class="prox" disabled title="Próximamente · costo real contra el presupuesto meta"><span class="ni">🧾</span><span class="nt">Costos reales</span><span class="nav-tag">pronto</span></button>
+        </div>
+      </div>
+      <div class="nav-g" data-g="gestion">
+        <button type="button" class="nav-gh" data-grupo="gestion" aria-expanded="true"><span class="ni">📊</span><span class="nt">Control de gestión</span><i class="nav-chev"></i></button>
+        <div class="nav-gb">
+          <button type="button" class="prox" disabled title="Próximamente · hoy se ve en el Dashboard"><span class="ni">📉</span><span class="nt">Curva S</span><span class="nav-tag">pronto</span></button>
+          <button type="button" class="prox" disabled title="Próximamente · PV, EV, AC, SPI y CPI"><span class="ni">🎯</span><span class="nt">Valor ganado</span><span class="nav-tag">pronto</span></button>
+          <button type="button" class="prox" disabled title="Próximamente · margen venta − costo real y proyección"><span class="ni">💹</span><span class="nt">Resultado operativo</span><span class="nav-tag">pronto</span></button>
+          <button type="button" class="prox" disabled title="Próximamente · pronóstico de costo, plazo e ingreso"><span class="ni">🔭</span><span class="nt">Proyecciones</span><span class="nav-tag">pronto</span></button>
+          <button type="button" class="prox" disabled title="Próximamente · tablero de indicadores"><span class="ni">📌</span><span class="nt">Indicadores KPI</span><span class="nav-tag">pronto</span></button>
+        </div>
+      </div>
+      <div class="nav-g" data-g="recursos">
+        <button type="button" class="nav-gh" data-grupo="recursos" aria-expanded="true"><span class="ni">📦</span><span class="nt">Recursos</span><i class="nav-chev"></i></button>
+        <div class="nav-gb">
+          <button data-pane="hh" title="Histograma de horas-hombre planificadas desde el APU de la oferta"><span class="ni">👷</span><span class="nt">Horas-hombre</span></button>
+          <button data-pane="materiales" title="Metas totales y avance mensual por frente"><span class="ni">🧱</span><span class="nt">Materiales</span></button>
+          <button type="button" class="prox" disabled title="Próximamente · horas-máquina y equipos en obra"><span class="ni">🚜</span><span class="nt">Equipos</span><span class="nav-tag">pronto</span></button>
+          <button type="button" class="prox" disabled title="Próximamente · consumo real de insumos"><span class="ni">🛢️</span><span class="nt">Consumos</span><span class="nav-tag">pronto</span></button>
+        </div>
+      </div>
+      <div class="nav-g" data-g="contrato">
+        <button type="button" class="nav-gh" data-grupo="contrato" aria-expanded="true"><span class="ni">📑</span><span class="nt">Contrato</span><i class="nav-chev"></i></button>
+        <div class="nav-gb">
+          <button type="button" class="prox" disabled title="Próximamente · LB0 a LB3 con resolución; hoy se ven desde Plan maestro → Ver"><span class="ni">📜</span><span class="nt">Contrato y líneas base</span><span class="nav-tag">pronto</span></button>
+          <button type="button" class="prox" disabled title="Próximamente · prestaciones adicionales y deductivos con resolución"><span class="ni">➕</span><span class="nt">Adicionales y deductivos</span><span class="nav-tag">pronto</span></button>
+          <button type="button" class="prox" disabled title="Próximamente · mayores y menores metrados"><span class="ni">📏</span><span class="nt">Mayores metrados</span><span class="nav-tag">pronto</span></button>
+          <button type="button" class="prox" disabled title="Próximamente · plazo contractual y suspensiones"><span class="ni">⏳</span><span class="nt">Ampliaciones y suspensiones</span><span class="nav-tag">pronto</span></button>
+          <button type="button" class="prox" disabled title="Próximamente · registro de eventos del contrato"><span class="ni">⚖️</span><span class="nt">Eventos y controversias</span><span class="nav-tag">pronto</span></button>
+        </div>
+      </div>
+      <div class="nav-g" data-g="bim">
+        <button type="button" class="nav-gh" data-grupo="bim" aria-expanded="true"><span class="ni">🏢</span><span class="nt">BIM / Modelo</span><i class="nav-chev"></i></button>
+        <div class="nav-gb">
+          <a href="visor/" id="visorLink" title="Modelo BIM del puente"><span class="ni">🧊</span><span class="nt">Visor 3D</span></a>
+          <button type="button" class="prox" disabled title="Próximamente · elementos del modelo ligados a partidas"><span class="ni">🧩</span><span class="nt">Elementos</span><span class="nav-tag">pronto</span></button>
+          <button type="button" class="prox" disabled title="Próximamente · avance coloreado sobre el modelo"><span class="ni">🎨</span><span class="nt">Avance 3D</span><span class="nav-tag">pronto</span></button>
+        </div>
+      </div>
+      <div class="nav-g" data-g="admin" id="navAdm" hidden>
+        <button type="button" class="nav-gh" data-grupo="admin" aria-expanded="true"><span class="ni">⚙️</span><span class="nt">Administración</span><i class="nav-chev"></i></button>
+        <div class="nav-gb">
+          <button type="button" class="prox" disabled title="Próximamente · altas, roles y accesos"><span class="ni">👥</span><span class="nt">Usuarios y roles</span><span class="nav-tag">pronto</span></button>
+          <button type="button" class="prox" disabled title="Próximamente · datos de la obra, frentes y logo"><span class="ni">🏗️</span><span class="nt">Obra y componentes</span><span class="nav-tag">pronto</span></button>
+          <button type="button" class="prox" disabled title="Próximamente · cronograma, APU y valorizaciones"><span class="ni">📥</span><span class="nt">Cargas de datos</span><span class="nav-tag">pronto</span></button>
+        </div>
+      </div>
     </nav>
     <button type="button" class="side-tg" id="sideToggle" title="Mostrar u ocultar el texto del menú" aria-label="Mostrar u ocultar el texto del menú"></button>
     <div class="side-foot">
@@ -2600,6 +2747,7 @@ if (esCelular || esTablet) {
 
 // ── modo administrador: ventana de acceso y estado ──
 function authUI() {
+  { const ga = document.getElementById('navAdm'); if (ga) ga.hidden = !AUTH.admin; }   // el grupo Administración solo lo ve el administrador
   $('#btnAdmin').textContent = AUTH.token ? '🔓 Salir' : '🔑 Entrar';
   $('#btnAdmin').title = AUTH.token ? `Sesión: ${AUTH.email} · ${AUTH.rol ? ROLES[AUTH.rol] || AUTH.rol : 'sin usuario registrado'}` : 'Iniciar sesión';
   $('#admEstado').innerHTML = AUTH.token ? (AUTH.admin ? '<b style="color:var(--amber)">🛡 Administrador</b>' : (AUTH.rol ? `<b>👤 ${esc(ROLES[AUTH.rol] || AUTH.rol)}</b>` : 'Sesión sin usuario')) : 'Administrador';
@@ -2694,7 +2842,7 @@ $('#admOjo').addEventListener('click', () => { const ver = $('#admPass').type ==
 ['admMail', 'admPass'].forEach(id => $('#' + id).addEventListener('input', () => marcarError(id === 'admMail' ? 'adm-mail' : 'adm-pass', false)));
 
 // ── navegación por botones (una sola página) ──
-document.querySelectorAll('#nav button').forEach(b => {
+document.querySelectorAll('#nav button[data-pane]').forEach(b => {
   if (b.classList.contains('disabled')) return;
   b.addEventListener('click', () => {
     document.querySelectorAll('#nav button').forEach(x => x.classList.remove('on'));
@@ -2726,6 +2874,17 @@ document.querySelectorAll('#nav button').forEach(b => {
     $('#side').classList.remove('open'); $('#overlay').classList.remove('on');
   });
 });
+// ── menú lateral por grupos plegables: se abre el grupo de la pantalla activa; el resto lo recuerda el navegador ──
+(function () {
+  let cerr = null; try { cerr = JSON.parse(localStorage.getItem('obra-nav-cerrados') || 'null'); } catch (e) {}
+  const grupos = [...document.querySelectorAll('#nav .nav-g')], guardar = () => { try { localStorage.setItem('obra-nav-cerrados', JSON.stringify(grupos.filter(g => g.classList.contains('cerrado')).map(g => g.dataset.g))); } catch (e) {} };
+  const poner = (g, cerrado) => { g.classList.toggle('cerrado', cerrado); const h = g.querySelector('.nav-gh'); if (h) h.setAttribute('aria-expanded', String(!cerrado)); };
+  grupos.forEach(g => poner(g, cerr ? cerr.includes(g.dataset.g) : !['inicio', 'planificacion'].includes(g.dataset.g)));   // primera visita: solo Inicio y Planificación abiertos
+  const marcar = () => { grupos.forEach(g => { const on = !!g.querySelector('button.on'); g.classList.toggle('tiene-on', on); if (on && g.classList.contains('cerrado')) poner(g, false); }); };
+  document.querySelectorAll('#nav .nav-gh').forEach(h => h.addEventListener('click', () => { const g = h.closest('.nav-g'); poner(g, !g.classList.contains('cerrado')); guardar(); }));
+  document.querySelectorAll('#nav button[data-pane]').forEach(b => b.addEventListener('click', marcar));
+  marcar();
+})();
 // ── confirmaciones dentro de la página: la ventana del navegador (confirm) saca de la pantalla completa; esta no ──
 function confirmarInfo(m) {
   if (/plan master|v[ií]nculos|duraci[oó]n sugerida|l[ií]nea base/i.test(m)) { const v = (m.match(/^(Crear|Aprobar|Reabrir|Archivar|Eliminar|Quitar|Ajuste|Aplicar|Sincronizar)/) || [])[1] || 'Confirmar'; return { titulo: { Ajuste: 'Ajustar fechas', Aplicar: 'Aplicar duraciones', Quitar: 'Quitar tarea', Sincronizar: 'Sincronizar con la línea base' }[v] || v + ' plan master', si: { Ajuste: 'Ajustar', Aplicar: 'Aplicar' }[v] || v, peligro: ['Eliminar', 'Reabrir', 'Quitar'].includes(v) }; }
@@ -6592,7 +6751,7 @@ const plEditable = () => !!AUTH.admin && !!PL.plan && PL.plan.estado === 'borrad
 // periodos de suspensión (no suman al plazo contractual): de la obra completa o, si se mira un frente, también los de ese frente
 function plPpd(dias) {   // ancho disponible para el gráfico (sin la columna izquierda) ÷ días que hay que mostrar
   if (PL.zoom !== 'ajustar') return PL_PPD[PL.zoom];
-  const caja = $('#plCuerpo'), anc = innerWidth, izq = (anc <= 600 ? 250 : anc <= 900 ? 418 : anc <= 1280 ? 508 : 618) + (PL.ver !== 'meta' && anc > 600 ? 40 : 0);
+  const caja = $('#plCuerpo'), anc = innerWidth, izq = (anc <= 600 ? 250 : anc <= 900 ? 390 : anc <= 1280 ? 470 : 570) + (PL.ver !== 'meta' && anc > 600 ? 40 : 0);
   const disp = Math.max(160, (caja ? caja.clientWidth : anc) - 24 - izq - 14);
   return Math.max(0.25, disp / Math.max(1, dias));
 }
@@ -6775,17 +6934,19 @@ function plPintar() {
 }
 function plGantt(filas, opc) {
   opc = opc || {};
+  const RH = opc.alto || PL_H;   // alto de fila (en la impresión es menor para que entren más filas por hoja)
   if (!filas.length) return '<div class="rg-msg">No hay tareas para mostrar con este filtro.</div>';
   const hoy = Math.floor(Date.now() / 86400000);
-  const t0 = PL.t0 = Math.floor(Math.min(PL.ini, ...Object.values(PL.tm).map(t => t.so == null ? Infinity : t.so)) / 7) * 7 - 7, t1 = PL.finE + 21, ppd = opc.ppd || plPpd(t1 - t0), W = Math.ceil((t1 - t0) * ppd), X = (n) => (n - t0) * ppd, H = filas.length * PL_H;
+  const t0 = PL.t0 = Math.floor(Math.min(PL.ini, ...Object.values(PL.tm).map(t => t.so == null ? Infinity : t.so)) / 7) * 7 - 7 - (opc.margen || 0), t1 = PL.finE + 21, ppd = opc.ppd || plPpd(t1 - t0), W = Math.ceil((t1 - t0) * ppd), X = (n) => (n - t0) * ppd, H = filas.length * RH;
   const abre = PL.abiertos[PL.frente], solo = PL.soloCrit;
   // ── columna izquierda (HTML): nombre, duración, inicio, fin, sugerida ──
+  const esFr = (r) => r.tipo === 'g' && r.nodo && r.nodo.nivel === 1, esObra = (r) => r.tipo === 'g' && r.nodo && r.nodo.nivel === 0;
   const profG = filas.filter(r => r.tipo === 'g').reduce((m, r) => Math.max(m, r.prof), 0), sangHoja = 2 + (profG + 1) * 5;   // las partidas arrancan todas en la misma vertical
   const izq = filas.map((r) => {
     const n = r.nodo, grupo = r.tipo !== 't', t = r.tarea, nom = t ? (t.nombre || n.nombre) : n.nombre, sang = (r.tipo === 'p' || (t && t.tipo !== 'hito' && !(t.propia && !t.grupo_id))) ? sangHoja + (t && !t.propia && (PL.porNodo[n.nodo_id] || []).length > 1 ? 10 : 0) : 2 + r.prof * 5, sel = !opc.print && t && PL.sel === t.id;
     const dur = t ? t.dias : (r.e - r.s) - plSuspDias(r.s, r.e), ina = t && !t.activa && !t.hito, sug = t && t.activa && !t.hito && t.dias_sug_meta != null ? t.dias_sug_meta : null;
     const dif = sug != null && sug !== t.dias ? ' pl-difsug' : '';
-    return `<div class="pl-row pl-${r.tipo}${t && t.hito ? ' pl-h' : ''}${ina ? ' pl-ina' : ''}${r.crit ? ' pl-crit' : ''}${sel ? ' pl-sel' : ''}${r.mod ? ' pl-mod' : ''} pl-n${Math.min(r.prof + 1, 4)}" ${grupo ? `data-pl-tog="${esc(r.key)}"` : `data-pl-tarea="${esc(r.key)}"`} style="height:${PL_H}px">`
+    return `<div class="pl-row pl-${r.tipo}${t && t.hito ? ' pl-h' : ''}${ina ? ' pl-ina' : ''}${r.crit ? ' pl-crit' : ''}${sel ? ' pl-sel' : ''}${r.mod ? ' pl-mod' : ''}${esFr(r) ? ' pl-fr' : ''}${esObra(r) ? ' pl-obra' : ''} pl-n${Math.min(r.prof + 1, 4)}" ${grupo ? `data-pl-tog="${esc(r.key)}"` : `data-pl-tarea="${esc(r.key)}"`} style="height:${RH}px">`
       + `<span class="pl-cod" title="${esc(n.codigo ? 'Código único: ' + n.codigo : '')}">${esc(t ? (t.codigo_esp || t.codigo) : (n.codigo_esp || n.codigo))}</span><span class="pl-nom" style="padding-left:${sang}px" title="${esc(nom)}">${grupo ? `<span class="pre-chev ${abre.has(n.nodo_id) || solo ? 'on' : ''}">▸</span>` : '<span class="pre-chev pre-hoja"></span>'}${t && t.hito ? '◆ ' : ''}${esc(nom)}${t && t.nueva ? ' <span class="pre-tag">nueva</span>' : ''}${t && t.propia && t.tipo === 'apoyo' ? ' <span class="pre-tag">apoyo</span>' : ''}${t && t.propia && t.tipo === 'no_contractual' ? ' <span class="pre-tag pl-tagnc">no contractual</span>' : ''}${n.concepto === 'adicional' && n.nivel === 1 ? ' <span class="pre-tag">adicional</span>' : ''}</span>`
       + `<span class="c">${t && t.hito ? '—' : dur}</span><span>${plFmt(r.s)}</span><span>${t && t.hito ? '' : plFmt(r.e - 1)}</span><span class="pl-sug${dif}" title="${sug != null ? 'Días sugeridos por el APU meta' : ''}">${sug != null ? sug : ''}</span></div>`;
   }).join('');
@@ -6796,25 +6957,32 @@ function plGantt(filas, opc) {
   let rej = ''; for (let a = Date.UTC(d0.getUTCFullYear(), d0.getUTCMonth(), 1) / 86400000; a < t1; ) { const d = new Date(a * 86400000); if (a >= t0) rej += `<line x1="${X(a)}" x2="${X(a)}" y1="0" y2="${H}" class="pl-gr"/>`; a = Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 1) / 86400000; }
   const hx = X(hoy), lineaHoy = hoy >= t0 && hoy <= t1 ? `<line x1="${hx}" x2="${hx}" y1="0" y2="${H}" class="pl-hoy"/>` : '';
   // ── barras ──
-  const pos = {}; let barras = '', barrasS = '', zebra = '';
+  const pos = {}; let barras = '', barrasS = '', zebra = '', etiq = '';
+  const bh = opc.print ? Math.max(5, RH - 8) : RH - 10, by = (RH - bh) / 2, fd = (n) => { const d = new Date(n * 86400000); return `${String(d.getUTCDate()).padStart(2, '0')}/${String(d.getUTCMonth() + 1).padStart(2, '0')}`; };
   filas.forEach((r, i) => {
-    const y = i * PL_H, x = X(r.s), w = Math.max(3, (r.e - r.s) * ppd), ed = !opc.print && plEditable();
-    if (i % 2) zebra += `<rect x="0" y="${y}" width="${W}" height="${PL_H}" class="pl-zb"/>`;
-    if (PL.origen && r.so != null && (r.so !== r.s || r.eo !== r.e)) barras += `<rect x="${X(r.so)}" y="${y + PL_H - 4}" width="${Math.max(2, (r.eo - r.so) * ppd)}" height="2.5" rx="1.2" class="pl-og"/>`;
+    const y = i * RH, x = X(r.s), w = Math.max(3, (r.e - r.s) * ppd), ed = !opc.print && plEditable();
+    if (esFr(r) || esObra(r)) zebra += `<rect x="0" y="${y}" width="${W}" height="${RH}" class="${esObra(r) ? 'pl-obrabg' : 'pl-frbg'}"/>`;
+    else if (i % 2) zebra += `<rect x="0" y="${y}" width="${W}" height="${RH}" class="pl-zb"/>`;
+    if (PL.origen && r.so != null && (r.so !== r.s || r.eo !== r.e)) barras += `<rect x="${X(r.so)}" y="${y + RH - 4}" width="${Math.max(2, (r.eo - r.so) * ppd)}" height="2.5" rx="1.2" class="pl-og"/>`;
     if (r.tipo === 't') {
       const t = r.tarea;
       if (t.hito) {
-        pos[t.id] = { i, x, w: 0, y: y + PL_H / 2 };
-        barras += `<g class="pl-b pl-bh${PL.sel === t.id ? ' pl-bs' : ''}" data-id="${t.id}"><path d="M${x} ${y + 3}l7 7-7 7-7-7z" class="pl-bar${ed ? ' pl-mv' : ''}" data-id="${t.id}"/></g>`;
+        pos[t.id] = { i, x, w: 0, y: y + RH / 2 };
+        barras += `<g class="pl-b pl-bh${PL.sel === t.id ? ' pl-bs' : ''}" data-id="${t.id}"><path d="M${x} ${y + RH / 2 - 6}l6 6-6 6-6-6z" class="pl-bar${ed ? ' pl-mv' : ''}" data-id="${t.id}"/></g>`;
       } else if (!t.activa) {
-        pos[t.id] = { i, x, w: 0, y: y + PL_H / 2 };
-        barras += `<g class="pl-b pl-bi${PL.sel === t.id ? ' pl-bs' : ''}" data-id="${t.id}"><rect x="${x - 3}" y="${y + 5}" width="6" height="10" rx="2" class="pl-bar" data-id="${t.id}"/></g>`;
+        pos[t.id] = { i, x, w: 0, y: y + RH / 2 };
+        barras += `<g class="pl-b pl-bi${PL.sel === t.id ? ' pl-bs' : ''}" data-id="${t.id}"><rect x="${x - 3}" y="${y + RH / 2 - 4}" width="6" height="8" rx="2" class="pl-bar" data-id="${t.id}"/></g>`;
       } else {
-        pos[t.id] = { i, x, w, y: y + PL_H / 2 };
-        barras += `<g class="pl-b pl-ty-${t.tipo}${t.crit ? ' pl-bc' : ''}${t.fijo ? ' pl-bf' : ''}${PL.sel === t.id ? ' pl-bs' : ''}" data-id="${t.id}"><rect x="${x}" y="${y + 4}" width="${w}" height="${PL_H - 8}" rx="3" class="pl-bar${ed ? ' pl-mv' : ''}" data-id="${t.id}"/>${ed ? `<rect x="${x + w - 5}" y="${y + 4}" width="6" height="${PL_H - 8}" class="pl-hr" data-id="${t.id}"/>` : ''}${t.fijo ? `<text x="${x + 3}" y="${y + PL_H / 2 + 3}" class="pl-pin">📌</text>` : ''}</g>`;
+        pos[t.id] = { i, x, w, y: y + RH / 2 };
+        barras += `<g class="pl-b pl-ty-${t.tipo}${t.crit ? ' pl-bc' : ''}${t.fijo ? ' pl-bf' : ''}${PL.sel === t.id ? ' pl-bs' : ''}" data-id="${t.id}"><rect x="${x}" y="${y + by}" width="${w}" height="${bh}" rx="${opc.print ? 2 : 3}" class="pl-bar${ed ? ' pl-mv' : ''}" data-id="${t.id}"/>${ed ? `<rect x="${x + w - 5}" y="${y + by}" width="6" height="${bh}" class="pl-hr" data-id="${t.id}"/>` : ''}${t.fijo ? `<text x="${x + 3}" y="${y + RH / 2 + 3}" class="pl-pin">📌</text>` : ''}</g>`;
       }
     } else {
       barrasS += `<g class="pl-sm${r.crit ? ' pl-bc' : ''}"><rect x="${x}" y="${y + 5}" width="${w}" height="4.5" class="pl-sb"/><path d="M${x} ${y + 5}v9l4-4.5zM${x + w} ${y + 5}v9l-4-4.5z" class="pl-sb"/></g>`;
+    }
+    if (opc.print && !(r.tipo === 't' && r.tarea && !r.tarea.activa && !r.tarea.hito)) {   // fechas de inicio y fin junto a la barra (dd/mm)
+      const yy = y + RH / 2 + 2.5, esHito = r.tipo === 't' && r.tarea && r.tarea.hito;
+      if (!esHito) etiq += `<text x="${x - 3}" y="${yy}" text-anchor="end" class="pl-fd">${fd(r.s)}</text>`;
+      etiq += `<text x="${esHito ? x + 9 : x + w + 3}" y="${yy}" class="pl-fd">${fd(esHito ? r.s : r.e - 1)}</text>`;
     }
   });
   // ── cabecera de tiempo ──
@@ -6827,18 +6995,31 @@ function plGantt(filas, opc) {
   if (PL.zoom === 'semana') for (let a = Math.ceil((t0 - 4) / 7) * 7 + 4; a < t1; a += 7) { const dd = new Date(a * 86400000); m2 += `<text x="${X(a) + 2}" y="25" class="pl-st">${dd.getUTCDate()}</text>`; }
   if (PL.zoom === 'dia') for (let a = t0; a < t1; a++) { const dd = new Date(a * 86400000); m2 += `<text x="${X(a) + ppd / 2}" y="25" class="pl-st" text-anchor="middle">${dd.getUTCDate()}</text>`; }
   // ── vínculos (flechas en codo) ──
-  let links = '';
+  let links = '', etqL = '';
   if (PL.vinc) PL.deps.forEach(l => {
-    const a = pos[l.predecesora_id], b = pos[l.tarea_id]; if (!a || !b) return;
+    let a = pos[l.predecesora_id], b = pos[l.tarea_id], offA = false, offB = false;
+    if (opc.gidx) {   // impresión: si un extremo está en otra hoja, se calcula su posición virtual y la línea se recorta en el borde de la hoja
+      const gA = opc.gidx[l.predecesora_id], gB = opc.gidx[l.tarea_id];
+      const virt = (id, g) => { const tt = PL.tm[id]; if (!tt) return null; return { x: X(tt.s), w: (tt.hito || !tt.activa) ? 0 : Math.max(3, (tt.e - tt.s) * ppd), y: (g - opc.desde) * RH + RH / 2 }; };
+      if (!a && b && gA !== undefined) { a = virt(l.predecesora_id, gA); offA = !!a; }
+      else if (a && !b && gB !== undefined) { b = virt(l.tarea_id, gB); offB = !!b; }
+    }
+    if (!a || !b) return;
     const finPred = l.tipo === 'FC' || l.tipo === 'FF', iniSuc = l.tipo === 'FC' || l.tipo === 'CC';
-    const x1 = finPred ? a.x + a.w : a.x, x2 = iniSuc ? b.x : b.x + b.w, y1 = a.y, y2 = b.y, xo = finPred ? x1 + 6 : x1 - 6, xi = iniSuc ? x2 - 6 : x2 + 6, ym = y2 > y1 ? y2 - PL_H / 2 + 1 : y2 + PL_H / 2 - 1;
-    const d = (finPred && iniSuc && xi >= xo) ? `M${x1} ${y1}H${xi}V${y2}H${x2}` : `M${x1} ${y1}H${xo}V${ym}H${xi}V${y2}H${x2}`;
-    links += `<path d="${d}" class="pl-lk${l._viol ? ' pl-lv' : ''}" marker-end="url(#plFl${l._viol ? 'r' : ''})"/>`;
+    const x1 = finPred ? a.x + a.w : a.x, x2 = iniSuc ? b.x : b.x + b.w, y1 = a.y, y2 = b.y, xo = finPred ? x1 + 6 : x1 - 6, xi = iniSuc ? x2 - 6 : x2 + 6, ym = y2 > y1 ? y2 - RH / 2 + 1 : y2 + RH / 2 - 1;
+    const directo = finPred && iniSuc && xi >= xo;
+    const d = directo ? `M${x1} ${y1}H${xi}V${y2}H${x2}` : `M${x1} ${y1}H${xo}V${ym}H${xi}V${y2}H${x2}`;
+    const tp = PL.tm[l.predecesora_id], ts = PL.tm[l.tarea_id], crit = !l._viol && !!tp && !!ts && tp.crit && ts.crit;   // vínculo de la ruta crítica: rojo
+    links += `<path d="${d}" class="pl-lk${l._viol ? ' pl-lv' : crit ? ' pl-lc' : ''}" marker-end="url(#plFl${l._viol ? 'r' : crit ? 'c' : ''})"/>`;
+    if (offA || offB) {   // rótulo con el código de la tarea que está en otra hoja
+      const otra = offA ? l.predecesora_id : l.tarea_id, yOtra = offA ? y1 : y2, arriba = yOtra < 0, to = PL.tm[otra], xl = offA ? (directo ? xi : xo) : xi;
+      etqL += `<text x="${xl + 2}" y="${arriba ? 6 : H - 2}" class="pl-fd pl-ot${crit ? ' pl-otc' : ''}">${arriba ? '↑' : '↓'} ${esc(to ? (to.codigo_esp || to.codigo) : '')}</text>`;
+    }
   });
-  const defs = `<defs><pattern id="plHatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#64748b" stroke-width="1.1" opacity=".5"/></pattern><marker id="plFl" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 8 4 0 8z" class="pl-fl"/></marker><marker id="plFlr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 8 4 0 8z" class="pl-flr"/></marker></defs>`;
-  return `<div class="pl-flex" style="--ph:${PL_H}px"><div class="pl-left${PL.ver !== 'meta' ? ' pl-sinsug' : ''}"><div class="pl-lh"><span class="pl-cod" title="Código de faseo de la partida (o código de estructura del grupo)">COD.</span><span class="pl-nom">Tarea</span><span class="c">Días</span><span>Inicio</span><span>Fin</span><span title="Días sugeridos por el APU meta">Sug.</span></div>${izq}</div>`
+  const defs = `<defs><pattern id="plHatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#64748b" stroke-width="1.1" opacity=".5"/></pattern><marker id="plFl" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 8 4 0 8z" class="pl-fl"/></marker><marker id="plFlc" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 8 4 0 8z" class="pl-flc"/></marker><marker id="plFlr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 8 4 0 8z" class="pl-flr"/></marker></defs>`;
+  return `<div class="pl-flex" style="--ph:${RH}px"><div class="pl-left${PL.ver !== 'meta' ? ' pl-sinsug' : ''}"><div class="pl-lh"><span class="pl-cod" title="Código de faseo de la partida (o código de estructura del grupo)">COD.</span><span class="pl-nom">Tarea</span><span class="c">Días</span><span>Inicio</span><span>Fin</span><span title="Días sugeridos por el APU meta">Sug.</span></div>${izq}</div>`
     + `<div class="pl-right" style="width:${W}px"><svg class="pl-hd" width="${W}" height="28" viewBox="0 0 ${W} 28">${m1}${m2}</svg>`
-    + `<svg class="pl-sv" id="plSvg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" data-t0="${t0}" data-ppd="${ppd}">${defs}${zebra}${rej}${lineaHoy}${barras}${bandas}${barrasS}${links}</svg></div></div>`;
+    + `<svg class="pl-sv" id="plSvg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" data-t0="${t0}" data-ppd="${ppd}">${defs}${zebra}${rej}${lineaHoy}${barras}${bandas}${barrasS}${etiq}${links}${etqL}</svg></div></div>`;
 }
 // ── ventana de la tarea: edición, sugeridas y vínculos ──
 function plDrawerEl() {
@@ -6987,6 +7168,7 @@ function plNuevaTarea() {
 }
 // Impresión: A4, A3 o A2 horizontal, con encabezado en cada hoja. Como en el Project: el tamaño de letra y de fila es el mismo en todos los papeles;
 // un papel más grande trae MÁS filas por hoja y más ancho de calendario (no se agranda nada). El reparto de filas sale de la altura de la hoja.
+const PL_HP = 15;   // alto de fila al imprimir
 const PL_PAPELES = { A4: { w: 297, h: 210, izq: [500, 540] }, A3: { w: 420, h: 297, izq: [598, 638] }, A2: { w: 594, h: 420, izq: [598, 638] } };
 function plImprimir() {
   try { PL.papel = PL.papel || localStorage.getItem('obra-pl-papel') || 'A3'; } catch (e) { PL.papel = PL.papel || 'A3'; }
@@ -6996,9 +7178,10 @@ function plImprimir() {
   const filas = plFilas(); if (!filas.length) { toast('No hay tareas para imprimir con este filtro.', false); return; }
   const lbP = PL.ver !== 'meta' ? PL.lbs.find(l => l.numero === PL.ver) : null;
   const mm = 96 / 25.4, pw = PP.w * mm, ph = PP.h * mm, pad = 12 * mm, izq = PL.ver !== 'meta' ? PP.izq[1] : PP.izq[0], util = pw - 2 * pad;
-  const t0 = Math.floor(Math.min(PL.ini, ...Object.values(PL.tm).map(x => x.so == null ? Infinity : x.so)) / 7) * 7 - 7, t1 = PL.finE + 21, ppd = Math.max(0.3, (util - izq - 10) / (t1 - t0));
-  const altoCab = 118, altoPie = 34, porHoja = Math.max(10, Math.floor((ph - 2 * pad - altoCab - altoPie - 30) / PL_H));
+  const t0 = Math.floor(Math.min(PL.ini, ...Object.values(PL.tm).map(x => x.so == null ? Infinity : x.so)) / 7) * 7 - 7 - 16, t1 = PL.finE + 21, ppd = Math.max(0.3, (util - izq - 10) / (t1 - t0));
+  const altoCab = 118, altoPie = 34, porHoja = Math.max(10, Math.floor((ph - 2 * pad - altoCab - altoPie - 30) / PL_HP));
   const hojas = []; for (let i = 0; i < filas.length; i += porHoja) hojas.push(filas.slice(i, i + porHoja));
+  const gidx = {}; filas.forEach((r, gi) => { if (r.tipo === 't' && r.tarea) gidx[r.tarea.id] = gi; });   // fila de cada tarea en todo el listado (para los vínculos entre hojas)
   const T = PL.tm, ids = Object.keys(T), lb = lbP ? null : plLbActual(), act = ids.filter(i => T[i].activa && !T[i].hito && T[i].eo != null);
   const finO = act.reduce((m, i) => Math.max(m, T[i].eo), 0), calP = PL.finE - PL.ini, susP = plSuspDias(PL.ini, PL.finE), crit = ids.filter(i => T[i].crit).length;
   const frNom = PL.frente === 'todos' ? 'Toda la obra' : String((COMPONENTES.find(c => c.id === PL.frente) || {}).nombre || PL.frente);
@@ -7007,15 +7190,15 @@ function plImprimir() {
   const logoB64 = RES_A && RES_A.obra ? RES_A.obra.logo_b64 : null, logo = logoB64 ? `<img class="vld-doclogo" src="${esc(logoB64)}" alt="Logo">` : '';
   const tituloP = lbP ? `LÍNEA BASE LB${lbP.numero}${lbP.tipo_cambio ? ' · ' + String(lbP.tipo_cambio).toUpperCase() : ''} (CONTRATO) · ${frNom.toUpperCase()}` : `PLAN MASTER (CRONOGRAMA META) · ${frNom.toUpperCase()}`;
   const subP = lbP ? `${lbP.nombre} · solo lectura${lbP.resolucion ? ' · ' + lbP.resolucion : ''} · impreso el ${hoy}` : `${PL.plan.nombre} · ${pe}${lb ? ` · comparado con LB${lb.numero}` : ''} · impreso el ${hoy}`;
-  const pagina = (filasHoja, n) => `<section class="pl-pag${PP.w < 330 ? ' pl-a4' : ''}" style="width:${PP.w}mm;height:${PP.h}mm;--izq:${izq}px"><div class="pl-pcab">${logo ? `<div class="pl-plogo">${logo}</div>` : ''}<div class="pl-ptit"><small>${esc(String(obra).toUpperCase())}</small><h2>${esc(tituloP)}</h2>
+  const pagina = (filasHoja, n, desde) => `<section class="pl-pag${PP.w < 330 ? ' pl-a4' : ''}" style="width:${PP.w}mm;height:${PP.h - 2}mm;--izq:${izq}px;--rh:${PL_HP}px"><div class="pl-pcab">${logo ? `<div class="pl-plogo">${logo}</div>` : ''}<div class="pl-ptit"><small>${esc(String(obra).toUpperCase())}</small><h2>${esc(tituloP)}</h2>
       <p>${esc(subP)}</p></div>
       <div class="pl-pkp"><span><b>${plFmt(PL.finE - 1)}</b>Fin de obra${finO ? ` (LB${lb.numero}: ${plFmt(finO - 1)})` : ''}</span><span><b>${calP - susP} días</b>Plazo de ejecución${susP ? ` (${calP} − ${susP} susp.)` : ''}</span><span><b>${crit}</b>Tareas críticas</span><span><b>${PL.conflictos}</b>Vínculos incumplidos</span></div></div>
-    <div class="pl-print"><div class="pl-wrap">${plGantt(filasHoja, { ppd, print: true })}</div></div>
+    <div class="pl-print"><div class="pl-wrap">${plGantt(filasHoja, { ppd, print: true, margen: 16, alto: PL_HP, gidx, desde })}</div></div>
     <div class="pl-ppie"><span><i class="pl-lg a"></i>Tarea <i class="pl-lg r"></i>Ruta crítica <i class="pl-lg s"></i>Resumen <i class="pl-lg g"></i>Línea base <i class="pl-lg h">◆</i>Hito <i class="pl-lg x"></i>Suspensión</span><span>Página ${n} de ${hojas.length}</span></div></section>`;
   let pv = document.getElementById('plPv');
   if (!pv) { pv = document.createElement('div'); pv.id = 'plPv'; document.body.appendChild(pv); }
   const zoom = Math.min(1, (innerWidth - 40) / pw);
-  pv.innerHTML = `<div class="pl-pvbar"><b>${PL.ver !== 'meta' ? 'Línea base' : 'Plan master'} · vista de impresión</b><label class="pl-papel">Papel <select id="plPapel">${Object.keys(PL_PAPELES).map(k => `<option value="${k}" ${PL.papel === k ? 'selected' : ''}>${k} horizontal · ${PL_PAPELES[k].w}×${PL_PAPELES[k].h} mm</option>`).join('')}</select></label><span>${filas.length} filas · ${porHoja} por hoja · ${hojas.length} hoja${hojas.length === 1 ? '' : 's'}</span><span class="pl-sp"></span><button type="button" class="btn-sec pri" data-pl-pv-imprimir>🖨 Imprimir / PDF</button><button type="button" class="btn-sec" data-pl-pv-cerrar>✕ Cerrar</button></div><div class="pl-pvhojas" style="--z:${zoom}">${hojas.map((h, i) => pagina(h, i + 1)).join('')}</div>`;
+  pv.innerHTML = `<div class="pl-pvbar"><b>${PL.ver !== 'meta' ? 'Línea base' : 'Plan master'} · vista de impresión</b><label class="pl-papel">Papel <select id="plPapel">${Object.keys(PL_PAPELES).map(k => `<option value="${k}" ${PL.papel === k ? 'selected' : ''}>${k} horizontal · ${PL_PAPELES[k].w}×${PL_PAPELES[k].h} mm</option>`).join('')}</select></label><span>${filas.length} filas · ${porHoja} por hoja · ${hojas.length} hoja${hojas.length === 1 ? '' : 's'}</span><span class="pl-sp"></span><button type="button" class="btn-sec pri" data-pl-pv-imprimir>🖨 Imprimir / PDF</button><button type="button" class="btn-sec" data-pl-pv-cerrar>✕ Cerrar</button></div><div class="pl-pvhojas" style="--z:${zoom}">${hojas.map((h, i) => pagina(h, i + 1, i * porHoja)).join('')}</div>`;
   let sPag = document.getElementById('plPageCss'); if (!sPag) { sPag = document.createElement('style'); sPag.id = 'plPageCss'; document.head.appendChild(sPag); }
   sPag.textContent = `@page{size:${PL.papel} landscape;margin:0}`;
   if (PL.temaPrevio === undefined) { PL.temaPrevio = document.documentElement.dataset.theme; document.documentElement.dataset.theme = 'claro'; }   // la impresión siempre va en claro
