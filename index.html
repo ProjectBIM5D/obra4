@@ -5859,7 +5859,7 @@ async function renderHHResumen() {
   // Todo sigue el mes elegido en la Curva S (curvaPopupFijo): acumulado hasta ese mes, el mes solo, y lo ganado hasta ese mes.
   const dona = $('#hhrDona'); if (!dona || !DATA || !RES_A) return;
   try { await hhAsegurar('mes'); }
-  catch (e) { dona.innerHTML = '<h3>Horas-hombre</h3><div class="rg-msg">Aparecen cuando la base tenga el APU de la oferta cargado (apu_hh.sql).</div>'; return; }
+  catch (e) { dona.innerHTML = '<h3>Horas-hombre</h3><div class="rg-msg">Aparecen cuando la base tenga el APU de la oferta cargado (apu_hh.sql).<br><span class="mono" style="font-size:10.5px;opacity:.8">' + esc(e && e.message || e) + '</span></div>'; return; }
   const nf = (n) => Math.round(n).toLocaleString('es-PE'), pc1 = (x) => (x * 100).toLocaleString('es-PE', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + ' %';
   const proys = RES_A.proyectos || [], frCod = seleccionada === GENERAL ? null : seleccionada, frId = frCod ? (proys.find(p => p.codigo === frCod) || {}).id : null;
   const frNom = frCod ? String((COMPONENTES.find(c => c.id === frCod) || {}).nombre || frCod).replace(/^Puente\s+/i, '') : 'toda la obra';
@@ -6342,7 +6342,7 @@ async function hhCargar() {
     if (!HH.datos[HH.per]) box.innerHTML = '<div class="rg-msg">Consultando las horas planificadas…</div>';
     await hhAsegurar(HH.per);
   } catch (e) {
-    box.innerHTML = '<div class="rg-msg">Este módulo necesita las tablas del APU y la carga de la oferta. Pide al administrador que corra <b>apu_hh.sql</b> y los <b>apu_oferta_*.sql</b> en la base.</div>'; return;
+    box.innerHTML = '<div class="rg-msg">Este módulo necesita las tablas del APU y la carga de la oferta. Pide al administrador que corra <b>apu_hh.sql</b> y los <b>apu_oferta_*.sql</b> en la base.<br><span class="mono" style="font-size:10.5px;opacity:.8">' + esc(e && e.message || e) + '</span></div>'; return;
   }
   hhPintar();
 }
