@@ -1494,6 +1494,54 @@ h1,h3,.card .value,.hhr-pie b{letter-spacing:-.2px;}
 .vld-sum tr.tt td.l{font-weight:700;font-size:11px;letter-spacing:.3px;padding-left:12px;}
 .vld-sum tr.tt td:nth-child(even):not(.l){font-size:11px;font-weight:600;color:#3a4a8a;}
 :root[data-theme="dark"] .vld-sum tr.tt td:nth-child(even):not(.l){color:#b9c4f0;}
+/* ═══ módulo Plan master (Gantt del cronograma meta) ═══ */
+.pl-card{padding:12px 14px 14px;}
+.pl-wrap{overflow:auto;max-height:calc(100vh - 330px);min-height:320px;border:1px solid var(--line);border-radius:10px;background:var(--card);position:relative;}
+.pl-flex{display:flex;min-width:max-content;align-items:flex-start;}
+.pl-left{position:sticky;left:0;z-index:4;width:500px;flex:0 0 500px;background:var(--card);border-right:2px solid var(--line2);}
+.pl-row,.pl-lh{display:grid;grid-template-columns:minmax(0,1fr) 38px 58px 58px 34px;align-items:center;box-sizing:border-box;font-size:11px;}
+.pl-lh{position:sticky;top:0;z-index:5;height:32px;background:#141c5e;color:#fff;font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.2px;}
+.pl-lh span,.pl-row span{padding:0 4px;white-space:nowrap;text-align:right;font-family:'Arial Narrow',Arial,sans-serif;font-variant-numeric:tabular-nums;} .pl-lh .pl-nom,.pl-row .pl-nom{text-align:left;font-family:Inter,'Segoe UI',system-ui,sans-serif;} .pl-lh .c,.pl-row .c{text-align:center;}
+.pl-row{height:24px;border-bottom:1px solid var(--line);cursor:pointer;} .pl-row:hover{background:rgba(242,106,27,.09);}
+.pl-row .pl-nom{overflow:hidden;text-overflow:ellipsis;font-size:11px;line-height:24px;}
+.pl-g{font-weight:700;} .pl-p{font-weight:600;}
+.pl-n1{background:rgba(20,28,94,.11);} .pl-n2{background:rgba(20,28,94,.065);} .pl-n3{background:rgba(20,28,94,.03);}
+.pl-row.pl-crit .pl-nom{color:#c2410c;} .pl-row.pl-sel{outline:2px solid var(--blue);outline-offset:-2px;}
+.pl-difsug{color:var(--naranja,#f26a1b);font-weight:800;} .pl-sug{color:var(--mut);}
+.pl-right{position:relative;flex:0 0 auto;}
+.pl-hd{display:block;position:sticky;top:0;z-index:3;background:var(--card);} .pl-sv{display:block;}
+.pl-mh{fill:var(--input);stroke:var(--line2);stroke-width:.5;} .pl-mt{font:700 10px Inter,'Segoe UI',system-ui,sans-serif;fill:var(--tx2);} .pl-st{font:9px Inter,system-ui,sans-serif;fill:var(--mut);}
+.pl-gr{stroke:var(--line);stroke-width:1;} .pl-zb{fill:rgba(20,28,94,.03);} .pl-hoy{stroke:#ef4444;stroke-width:1.5;stroke-dasharray:4 3;}
+.pl-bar{fill:#141c5e;} .pl-bc .pl-bar{fill:#f26a1b;} .pl-mv{cursor:grab;} .pl-mv:active{cursor:grabbing;} .pl-hr{fill:rgba(255,255,255,.35);cursor:ew-resize;}
+.pl-b:hover .pl-bar{filter:brightness(1.18);} .pl-bs .pl-bar{stroke:var(--blue);stroke-width:2.5;}
+.pl-sb{fill:#475569;} .pl-sm.pl-bc .pl-sb{fill:#c2410c;}
+.pl-og{fill:#94a3b8;} .pl-pin{font-size:9px;pointer-events:none;}
+.pl-lk{fill:none;stroke:#8592a8;stroke-width:1.1;opacity:.85;} .pl-lv{stroke:#dc2626;stroke-width:1.6;opacity:1;} .pl-fl{fill:#8592a8;} .pl-flr{fill:#dc2626;}
+:root[data-theme="dark"] .pl-bar{fill:#8f98ee;} :root[data-theme="dark"] .pl-zb{fill:rgba(255,255,255,.03);} :root[data-theme="dark"] .pl-sb{fill:#94a3b8;}
+:root[data-theme="dark"] .pl-n1{background:rgba(255,255,255,.09);} :root[data-theme="dark"] .pl-n2{background:rgba(255,255,255,.055);} :root[data-theme="dark"] .pl-n3{background:rgba(255,255,255,.028);}
+.pl-dr{width:min(560px,100vw);}
+.pl-form .field{margin-bottom:8px;} .pl-form input[type=text],.pl-form input[type=date],.pl-form input[type=number]{width:100%;font:inherit;font-size:12px;padding:6px 9px;border:1px solid var(--line2);border-radius:8px;background:var(--input);color:var(--tx);box-sizing:border-box;}
+.pl-f3{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:10px;} .pl-fin{padding:6px 2px;font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;}
+.pl-sugs{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin:0 0 10px;font-size:11.5px;color:var(--mut);}
+.pl-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;}
+.pl-dr-cols{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;margin:12px 0;} .pl-dr-cols .vl-card,.pl-dr .vl-card{margin-bottom:0;} .pl-dr .vl-card h3{font-size:12.5px;margin:0 0 6px;}
+.pl-lk-t{table-layout:auto;} .pl-lk-t td.l{white-space:normal;line-height:1.25;font-size:11px;} .pl-lk-t .pre-in{width:52px;}
+.pl-sel-t{font:inherit;font-size:11.5px;padding:4px 6px;border:1px solid var(--line2);border-radius:7px;background:var(--input);color:var(--tx);}
+@media (max-width:900px){.pl-left{width:340px;flex-basis:340px;} .pl-row,.pl-lh{grid-template-columns:minmax(0,1fr) 34px 54px 54px 0;} .pl-row>span:nth-child(5),.pl-lh>span:nth-child(5){display:none;} .pl-wrap{max-height:calc(100vh - 260px);}}
+@media (max-width:600px){.pl-left{width:250px;flex-basis:250px;} .pl-row,.pl-lh{grid-template-columns:minmax(0,1fr) 34px 0 0 0;} .pl-row>span:nth-child(n+3),.pl-lh>span:nth-child(n+3){display:none;} .pl-f3{grid-template-columns:1fr;}}
+/* Plan master: la ruta crítica se resalta solo en las tareas (no en los grupos) */
+.pl-row.pl-g.pl-crit .pl-nom,.pl-row.pl-p.pl-crit .pl-nom{color:inherit;}
+.pl-sm.pl-bc .pl-sb{fill:#475569;}
+:root[data-theme="dark"] .pl-sm.pl-bc .pl-sb{fill:#94a3b8;}
+.pl-row.pl-t.pl-crit .pl-nom{color:#c2410c;} :root[data-theme="dark"] .pl-row.pl-t.pl-crit .pl-nom{color:#fb923c;}
+@media (max-width:1280px) and (min-width:901px){.pl-left{width:410px;flex-basis:410px;} .pl-row,.pl-lh{grid-template-columns:minmax(0,1fr) 34px 54px 54px 30px;}}
+/* Plan master: hitos (rombo), tareas inactivas por deductivo total y selector de línea base */
+.pl-bh .pl-bar{fill:#141c5e;} .pl-bi .pl-bar{fill:#94a3b8;opacity:.8;}
+:root[data-theme="dark"] .pl-bh .pl-bar{fill:#8f98ee;}
+.pl-row.pl-ina .pl-nom{text-decoration:line-through;color:var(--mut);} .pl-row.pl-ina span{color:var(--mut);}
+.pl-row.pl-h .pl-nom{font-weight:700;}
+.pl-lbsel{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--mut);margin-right:4px;} .pl-lbsel select{font:inherit;font-size:11.5px;padding:6px 8px;border:1px solid var(--line2);border-radius:8px;background:var(--card);color:var(--tx);max-width:240px;}
+@media (max-width:700px){.pl-lbsel span{display:none;} .pl-lbsel select{max-width:150px;}}
 </style>
 <script>
 document.documentElement.dataset.pane = 'resumen';
@@ -1570,6 +1618,7 @@ document.documentElement.dataset.pane = 'resumen';
       <button data-pane="ppc" title="Cumplimiento del plan"><span class="ni">📈</span><span class="nt">PPC</span></button>
       <button data-pane="valorizaciones" title="Valor ganado: valorizaciones mensuales del contrato, adicionales y mayores metrados"><span class="ni">💰</span><span class="nt">Valorizaciones</span></button>
       <button data-pane="presupuesto" title="Presupuesto de venta (contrato) y presupuesto meta (copia del APU ajustable)"><span class="ni">🧮</span><span class="nt">Presupuesto</span></button>
+      <button data-pane="plan" title="Plan master: cronograma meta con vínculos, ruta crítica y duraciones sugeridas por el APU meta"><span class="ni">🗓️</span><span class="nt">Plan master</span></button>
       <button data-pane="hh" title="Histograma de horas-hombre planificadas desde el APU de la oferta"><span class="ni">👷</span><span class="nt">Horas-hombre</span></button>
       <button data-pane="produccion" class="disabled" title="Próximamente: aún sin datos reales cargados"><span class="ni">⚙️</span><span class="nt">Producción</span></button>
       <a href="visor/" id="visorLink" title="Modelo BIM del puente"><span class="ni">🧊</span><span class="nt">Visor 3D</span></a>
@@ -1782,6 +1831,19 @@ document.documentElement.dataset.pane = 'resumen';
         </p>
       </div>
       <div id="preCuerpo"><div class="rg-msg">Consultando el presupuesto…</div></div>
+    </section>
+
+    <!-- ═══════════ PLAN MASTER (cronograma meta) ═══════════ -->
+    <section class="pane" data-pane="plan">
+      <div class="vl-top">
+        <p class="api" style="margin:0">Frente: <span id="plFrentes"></span></p>
+        <p class="api" style="margin:0">Escala:
+          <button class="seg-btn" data-plzoom="mes" title="Vista mensual">Mes</button>
+          <button class="seg-btn" data-plzoom="semana" title="Vista semanal">Semana</button>
+          <button class="seg-btn" data-plzoom="dia" title="Vista diaria">Día</button>
+        </p>
+      </div>
+      <div id="plCuerpo"><div class="rg-msg">Consultando el plan master…</div></div>
     </section>
 
     <!-- ═══════════ PARTE DIARIO ═══════════ -->
@@ -2489,6 +2551,7 @@ document.querySelectorAll('#nav button').forEach(b => {
       ppc: ['PPC', 'Porcentaje de actividades completadas: trazabilidad semanal y causas de incumplimiento'],
       valorizaciones: ['Valorizaciones', 'Valor ganado: lo valorizado mes a mes (contrato, adicionales y mayores metrados)'],
       presupuesto: ['Presupuesto', 'Venta (contrato, solo lectura) y meta (copia del APU que se ajusta sin tocar el contrato)'],
+      plan: ['Plan master', 'Cronograma meta: tu plan de ejecución con vínculos, ruta crítica y duraciones sugeridas por el APU meta'],
       hh: ['Horas-hombre', 'Histograma planificado desde el APU de la oferta: metrado × cuantía, repartido en el plazo del cronograma'] };
     if (titles[b.dataset.pane]) { $('#pageTitle').textContent = titles[b.dataset.pane][0]; $('#pageSub').textContent = titles[b.dataset.pane][1]; }
     if (esCelular) celPantalla(PANES_ANCHOS.includes(b.dataset.pane));
@@ -2497,6 +2560,7 @@ document.querySelectorAll('#nav button').forEach(b => {
     if (b.dataset.pane === 'ppc') ppcCargar();
     if (b.dataset.pane === 'valorizaciones') valCargar();
     if (b.dataset.pane === 'hh') hhCargar();
+    if (b.dataset.pane === 'plan') plCargar();
     if (b.dataset.pane === 'presupuesto') preCargar();
     if (b.dataset.pane === 'parte' && !$('#parteLA').hidden) plaCargar();
     $('#side').classList.remove('open'); $('#overlay').classList.remove('on');
@@ -2504,6 +2568,7 @@ document.querySelectorAll('#nav button').forEach(b => {
 });
 // ── confirmaciones dentro de la página: la ventana del navegador (confirm) saca de la pantalla completa; esta no ──
 function confirmarInfo(m) {
+  if (/plan master|v[ií]nculos|duraci[oó]n sugerida|l[ií]nea base/i.test(m)) { const v = (m.match(/^(Crear|Aprobar|Reabrir|Archivar|Eliminar|Quitar|Ajuste|Aplicar|Sincronizar)/) || [])[1] || 'Confirmar'; return { titulo: { Ajuste: 'Ajustar fechas', Aplicar: 'Aplicar duraciones', Quitar: 'Quitar tarea', Sincronizar: 'Sincronizar con la línea base' }[v] || v + ' plan master', si: { Ajuste: 'Ajustar', Aplicar: 'Aplicar' }[v] || v, peligro: ['Eliminar', 'Reabrir', 'Quitar'].includes(v) }; }
   if (/presupuesto meta/i.test(m)) { const v = (m.match(/^(Aprobar|Reabrir|Archivar|Eliminar|Crear|Quitar)/) || [])[1]; return { titulo: v === 'Quitar' ? 'Quitar insumo' : v + ' presupuesto meta', si: v === 'Quitar' ? 'Quitar' : v, peligro: v === 'Eliminar' || v === 'Reabrir' }; }
   if (/^Quitar este insumo/.test(m)) return { titulo: 'Quitar insumo', si: 'Quitar', peligro: true };
   if (/valorizaci[oó]n/i.test(m) && /^Aprobar/.test(m)) return { titulo: 'Aprobar valorización', si: 'Aprobar' };
@@ -6349,6 +6414,379 @@ document.addEventListener('input', async (e) => {
   const hit = rec.filter(r => r.codigo.toLowerCase().includes(q) || r.nombre.toLowerCase().includes(q)).slice(0, 8);
   box.innerHTML = hit.length ? hit.map(r => `<button type="button" data-pre-sug="${r.id}"><b>${esc(r.codigo)}</b> ${esc(r.nombre)}<em>${esc(r.unidad)} · S/ ${preN(r.precio_unitario, 2)}</em></button>`).join('') : '<div class="pre-sug-v">Sin coincidencias</div>';
   box.hidden = false;
+});
+
+// ═══ PLAN MASTER (cronograma META): Gantt con vínculos, ruta crítica y duraciones sugeridas por el APU meta ═══
+// Nace como copia del cronograma contractual vigente (línea base): partidas del contrato y de los adicionales, hitos y vínculos (plan_master.sql).
+// Las tareas apuntan a las partidas del contrato (el código de partida es permanente); el administrador mueve barras, cambia duraciones
+// (la sugerida del APU es solo una referencia) y arma vínculos FC / CC / FF / CF con desfase. La línea gris compara con la línea base que elijas
+// (LB0 contrato original, LB1…, vigente; lineas_base.sql). Un deductivo TOTAL deja la tarea inactiva; uno parcial la deja activa.
+// Todo se dibuja en SVG (como el resto de gráficos del panel) y las ediciones pasan por funciones de la base (solo administrador, solo borrador).
+const PL = { frente: 'todos', zoom: 'mes', origen: true, vinc: true, soloCrit: false, abiertos: {}, plan: null, tareas: [], deps: [], tm: {}, porNodo: {}, preds: {}, succs: {}, sel: null, add: null, cargado: false, arbol: [], hijos: {}, lbs: [], lb: undefined, lbMap: null, lbCache: {}, reset: false, t0: null };
+const PL_H = 24, PL_PPD = { mes: 2.2, semana: 6, dia: 18 };
+const PL_TIPOS = { FC: 'Fin → Comienzo', CC: 'Comienzo → Comienzo', FF: 'Fin → Fin', CF: 'Comienzo → Fin' };
+const plD = (s) => { const x = String(s).slice(0, 10); return Date.UTC(+x.slice(0, 4), +x.slice(5, 7) - 1, +x.slice(8, 10)) / 86400000; };   // fecha → n.º de día
+const plF = (n) => new Date(n * 86400000).toISOString().slice(0, 10);
+const plFmt = (n) => { const d = new Date(n * 86400000); return `${String(d.getUTCDate()).padStart(2, '0')}/${String(d.getUTCMonth() + 1).padStart(2, '0')}/${String(d.getUTCFullYear()).slice(2)}`; };
+const plEditable = () => !!AUTH.admin && !!PL.plan && PL.plan.estado === 'borrador';
+const plLbActual = () => PL.lbs.find(l => l.numero === PL.lb) || null;
+const plLbTxt = (l) => l ? `LB${l.numero}` : '';
+
+async function plCargarLB() {
+  PL.lbMap = null; const lb = plLbActual(); if (!lb) return;
+  if (!PL.lbCache[lb.id]) { const m = {}; (await getTodo(`/linea_base_partidas?version_id=eq.${lb.id}&select=codigo,inicio,fin,estado,metrado,parcial_cd&order=codigo`)).forEach(r => { m[r.codigo] = r; }); PL.lbCache[lb.id] = m; }
+  PL.lbMap = PL.lbCache[lb.id];
+}
+async function plDatos() {
+  const [ps, arbol, lbs] = await Promise.all([
+    get(`/plan_versiones?obra_id=eq.${OBRA.id}&estado=neq.archivado&select=*&limit=1`),
+    getTodo('/v_wbs_arbol?select=nodo_id,proyecto_id,padre_id,codigo,nivel,orden,nombre,es_hoja,es_hito,concepto&order=orden'),
+    get(`/linea_base_versiones?obra_id=eq.${OBRA.id}&select=id,numero,nombre,tipo_cambio,base_legal,resolucion,fecha_aprobacion,plazo_fin,cronograma_id&order=numero`).catch(() => [])]);
+  PL.arbol = arbol; PL.hijos = {}; const porId = {}; arbol.forEach(n => { porId[n.nodo_id] = n; });
+  arbol.forEach(n => { const k = porId[n.padre_id] ? n.padre_id : 'raiz'; (PL.hijos[k] = PL.hijos[k] || []).push(n); });
+  Object.values(PL.hijos).forEach(a => a.sort((x, y) => x.orden - y.orden));
+  PL.lbs = lbs; if (PL.lb === undefined) PL.lb = lbs.length ? lbs[lbs.length - 1].numero : null;
+  PL.plan = ps[0] || null; PL.tareas = []; PL.deps = [];
+  if (PL.plan) [PL.tareas, PL.deps] = await Promise.all([
+    getTodo(`/v_plan_tareas?plan_id=eq.${PL.plan.id}&select=*&order=orden,id`),
+    getTodo(`/v_plan_dependencias?plan_id=eq.${PL.plan.id}&select=tarea_id,predecesora_id,tipo,desfase_dias&order=tarea_id,predecesora_id`)]);
+  await plCargarLB();
+  plModelo();
+}
+// modelo en memoria: fechas como n.º de día (s = inicio, e = fin + 1), vínculos, ruta crítica y conflictos.
+// Un hito o una tarea inactiva (deductivo total) tiene duración efectiva 0 pero conserva sus vínculos (la secuencia no se rompe).
+function plModelo() {
+  PL.tm = {}; PL.porNodo = {}; const sinLB = !PL.lbs.length;
+  PL.tareas.forEach(t => {
+    const o = { ...t, s: plD(t.inicio), dias: Number(t.dias) }; o.d = (t.hito || !t.activa) ? 0 : o.dias; o.e = o.s + o.d;
+    const lb = PL.lbMap && PL.lbMap[t.codigo];
+    if (lb && lb.inicio) { o.so = plD(lb.inicio); o.eo = t.hito ? o.so : plD(lb.fin) + 1; o.lbEstado = lb.estado; }
+    else if (sinLB && t.ini_origen) { o.so = plD(t.ini_origen); o.eo = t.hito ? o.so : plD(t.fin_origen) + 1; }
+    else { o.so = null; o.eo = null; o.nueva = !!PL.lbMap && !lb; }
+    PL.tm[t.id] = o; (PL.porNodo[t.nodo_id] = PL.porNodo[t.nodo_id] || []).push(o);
+  });
+  plCPM();
+}
+const plReq = (l, p, s) => { const L = Number(l.desfase_dias) || 0, h = s.hito ? 1 : 0; return l.tipo === 'FC' ? p.e + L - h : l.tipo === 'CC' ? p.s + L : l.tipo === 'FF' ? p.e + L - s.d - h : p.s + L - s.d; };   // inicio mínimo de la sucesora
+function plCPM() {
+  const T = PL.tm, ids = Object.keys(T), preds = {}, succs = {};
+  PL.deps.forEach(l => { if (!T[l.tarea_id] || !T[l.predecesora_id]) return; (preds[l.tarea_id] = preds[l.tarea_id] || []).push(l); (succs[l.predecesora_id] = succs[l.predecesora_id] || []).push(l); });
+  const indeg = {}; ids.forEach(i => { indeg[i] = (preds[i] || []).length; });
+  const cola = ids.filter(i => !indeg[i]), orden = [];
+  for (let k = 0; k < cola.length; k++) { const i = cola[k]; orden.push(i); (succs[i] || []).forEach(l => { if (--indeg[l.tarea_id] === 0) cola.push(l.tarea_id); }); }
+  PL.preds = preds; PL.succs = succs; PL.orden = orden; PL.ciclo = orden.length < ids.length;
+  const act = ids.filter(i => T[i].activa && !T[i].hito);
+  const fin = (act.length ? act : ids).reduce((m, i) => Math.max(m, T[i].e), 0); PL.finE = fin; PL.ini = (act.length ? act : ids).reduce((m, i) => Math.min(m, T[i].s), Infinity);
+  let conflictos = 0;
+  PL.deps.forEach(l => { const p = T[l.predecesora_id], s = T[l.tarea_id]; if (!p || !s) return; l._viol = plReq(l, p, s) > s.s + 0.001; if (l._viol) conflictos++; });
+  PL.conflictos = conflictos;
+  const finTodo = ids.reduce((m, i) => Math.max(m, T[i].e), 0);
+  orden.slice().reverse().forEach(i => {
+    const t = T[i]; let lf = finTodo;
+    (succs[i] || []).forEach(l => { const s = T[l.tarea_id], L = Number(l.desfase_dias) || 0; const h = s.hito ? 1 : 0, c = l.tipo === 'FC' ? s.ls - L + h : l.tipo === 'CC' ? s.ls - L + t.d : l.tipo === 'FF' ? s.lf - L + h : s.lf - L + t.d; if (c < lf) lf = c; });
+    t.lf = lf; t.ls = lf - t.d; t.hol = t.lf - t.e; t.crit = t.activa && !t.hito && t.hol <= 0.001;
+  });
+}
+async function plCargar() {
+  const box = $('#plCuerpo'); if (!box) return;
+  if (!RES_A || !OBRA || !(RES_A.proyectos || []).length) { box.innerHTML = '<div class="rg-msg">Cargando la obra…</div>'; return; }
+  if (!PL.cargado) box.innerHTML = '<div class="rg-msg">Consultando el plan master…</div>';
+  try { await plDatos(); PL.cargado = true; }
+  catch (e) { box.innerHTML = '<div class="rg-msg">Este módulo necesita <b>plan_master.sql</b> y <b>lineas_base.sql</b> en la base. Pide al administrador que los corra.<br><span class="mono" style="font-size:11px">' + esc(e.message) + '</span></div>'; return; }
+  plPintar();
+}
+// filas del Gantt: frente → grupos → partidas/tareas (más el adicional y los hitos); cada rama trae su inicio y fin (los resúmenes se calculan)
+function plFilas() {
+  const filas = [], proy = PL.frente === 'todos' ? null : (preProy(PL.frente) || {}).id;
+  const raices = (PL.hijos.raiz || []).filter(n => !proy || n.proyecto_id === proy);
+  if (!PL.abiertos[PL.frente]) { const s = new Set(); PL.arbol.filter(n => n.nivel <= 2 && PL.hijos[n.nodo_id]).forEach(n => s.add(n.nodo_id)); PL.abiertos[PL.frente] = s; }
+  const ab = PL.abiertos[PL.frente], crit = PL.soloCrit;
+  const agg = (a, b) => ({ s: Math.min(a.s, b.s), e: Math.max(a.e, b.e), so: a.so == null ? b.so : (b.so == null ? a.so : Math.min(a.so, b.so)), eo: a.eo == null ? b.eo : (b.eo == null ? a.eo : Math.max(a.eo, b.eo)), crit: a.crit || b.crit, mod: a.mod || b.mod, n: a.n + b.n });
+  const dato = (t) => ({ s: t.s, e: t.e, so: t.so, eo: t.eo, crit: !!t.crit, mod: t.so != null && (t.so !== t.s || t.eo !== t.e), n: 1 });
+  const rec = (n, prof) => {
+    const hijos = PL.hijos[n.nodo_id];
+    if (hijos && hijos.length) {
+      const sub = []; hijos.forEach(h => rec(h, prof + 1).forEach(f => sub.push(f)));
+      if (!sub.length) return [];
+      const tot = sub.filter(f => f.prof === prof + 1).reduce((a, f) => a ? agg(a, f) : { s: f.s, e: f.e, so: f.so, eo: f.eo, crit: f.crit, mod: f.mod, n: f.n }, null);
+      const fila = { tipo: 'g', nodo: n, prof, key: n.nodo_id, ...tot };
+      if (crit && !fila.crit) return [];
+      return ab.has(n.nodo_id) || crit ? [fila, ...sub] : [fila];
+    }
+    const ts = (PL.porNodo[n.nodo_id] || []).filter(t => !crit || t.crit);
+    if (!ts.length) return [];
+    if (ts.length === 1) return [{ tipo: 't', nodo: n, tarea: ts[0], prof, key: ts[0].id, ...dato(ts[0]) }];
+    const tot = ts.map(dato).reduce((a, f) => a ? agg(a, f) : f, null), fila = { tipo: 'p', nodo: n, prof, key: n.nodo_id, ...tot };
+    return ab.has(n.nodo_id) || crit ? [fila, ...ts.map(t => ({ tipo: 't', nodo: n, tarea: t, prof: prof + 1, key: t.id, ...dato(t) }))] : [fila];
+  };
+  raices.forEach(r => rec(r, 0).forEach(f => filas.push(f)));
+  return filas;
+}
+function plPintar() {
+  const box = $('#plCuerpo'); if (!box) return;
+  const w0 = $('#plWrap'), guardado = w0 && !PL.reset ? [w0.scrollLeft, w0.scrollTop] : null; PL.reset = false;
+  if (COMPONENTES.length === 1) PL.frente = COMPONENTES[0].id;
+  $('#plFrentes').innerHTML = (COMPONENTES.length > 1 ? `<button class="seg-btn ${PL.frente === 'todos' ? 'on' : ''}" data-plfr="todos">Toda la obra</button> ` : '') + COMPONENTES.map(c => `<button class="seg-btn ${PL.frente === c.id ? 'on' : ''}" data-plfr="${esc(c.id)}">${esc(String(c.nombre).replace(/^Puente\s+/i, ''))}</button>`).join(' ');
+  document.querySelectorAll('[data-plzoom]').forEach(b => b.classList.toggle('on', b.dataset.plzoom === PL.zoom));
+  const adm = !!AUTH.admin, p = PL.plan;
+  if (!p) {
+    box.innerHTML = `<div class="vl-card pre-vacio"><div class="pre-vacio-ic">🗓️</div><h3>Aún no hay plan master</h3>
+      <p class="hint">El plan master es el cronograma META: tu plan de ejecución, con duraciones sugeridas por el APU meta (no obligatorias) y vínculos de predecesoras y sucesoras. Nace como copia de la línea base contractual vigente (partidas del contrato y de los adicionales, hitos, fechas, duraciones y vínculos) y lo ajustas sin tocar el contrato. De ahí se arma el Look Ahead.</p>
+      ${adm ? `<div class="field pre-mot"><label for="plMotivo">Motivo (opcional)</label><input id="plMotivo" type="text" maxlength="160" placeholder="Ej.: plan con rendimientos meta y frentes en paralelo"></div>
+      <div class="pre-vacio-bt"><button type="button" class="btn-sec pri" data-pl-crear title="Copia el cronograma contractual vigente">📋 Copiar desde la línea base vigente</button></div>` : '<p class="hint"><b>Solo el administrador puede crear el plan master.</b> Inicia sesión como administrador.</p>'}</div>`;
+    return;
+  }
+  const filas = plFilas(), T = PL.tm, ids = Object.keys(T), lb = plLbActual(), lbn = lb ? plLbTxt(lb) : 'la línea base';
+  const act = ids.filter(i => T[i].activa && !T[i].hito && T[i].eo != null);
+  const finO = act.reduce((m, i) => Math.max(m, T[i].eo), 0), iniO = act.reduce((m, i) => Math.min(m, T[i].so), Infinity);
+  const durP = PL.finE - PL.ini, durO = finO && isFinite(iniO) ? finO - iniO : null, mod = ids.filter(i => T[i].so != null && (T[i].so !== T[i].s || T[i].eo !== T[i].e)).length;
+  const crit = ids.filter(i => T[i].crit).length, dif = durO == null ? null : durP - durO, nuevas = ids.filter(i => T[i].nueva).length;
+  const kp = `<div class="vl-kp pre-kp">
+    <div class="vl-k"><small>Fin de obra · plan master</small><b>${plFmt(PL.finE - 1)}</b><em>${finO ? `${lbn} ${plFmt(finO - 1)} · ${PL.finE - finO > 0 ? '+' : ''}${PL.finE - finO} días` : (lb ? '—' : 'Sin comparación')}</em></div>
+    <div class="vl-k"><small>Duración total</small><b>${durP} días</b><em>${dif == null ? '' : `${lbn} ${durO} días · ${dif > 0 ? '+' : ''}${dif} días`}</em></div>
+    <div class="vl-k"><small>Ruta crítica</small><b>${crit} tareas</b><em>Holgura ≤ 0 con las fechas actuales</em></div>
+    <div class="vl-k"><small>Tareas ajustadas</small><b>${mod}</b><em>de ${ids.length}${nuevas ? ` · ${nuevas} nuevas frente a ${lbn}` : ''} · ${PL.conflictos ? `<span class="pre-neg">${PL.conflictos} vínculos incumplidos</span>` : 'vínculos al día'}</em></div></div>`;
+  const pe = PRE_EST[p.estado] || [p.estado, 'ar'], f = (s) => s ? new Date(s).toLocaleDateString('es-PE', { day: '2-digit', month: '2-digit', year: '2-digit' }) : '';
+  const bt = (acc, ic, t, tip, cls) => `<button type="button" class="btn-sec ${cls || ''}" data-pl-acc="${acc}" title="${esc(tip)}">${ic} ${t}</button>`;
+  const ed = plEditable(), desact = !!(RES_A.version && p.origen_id && p.origen_id !== RES_A.version.id);
+  const acc = !adm ? '' : p.estado === 'borrador'
+    ? bt('sincronizar', '⟳', 'Sincronizar', 'Trae de la línea base vigente las partidas nuevas (adicionales) y los hitos que falten, y actualiza deductivos y fechas de referencia; no toca tus fechas ni vínculos', desact ? 'pri' : '') + bt('ajustar', '⇢', 'Ajustar a vínculos', 'Empuja las tareas que incumplen un vínculo (no mueve las demás ni las de fecha fija)') + bt('compactar', '⇤', 'Compactar', 'Adelanta cada tarea con vínculos lo antes posible (salvo las de fecha fija)') + bt('sugeridas', '⚙', 'Aplicar sugeridas', 'Pone en cada tarea la duración sugerida por el APU meta (solo donde existe)') + bt('aprobar', '✔', 'Aprobar', 'Pasa a vigente', 'pri') + bt('archivar', '🗄', 'Archivar', 'Lo guarda sin usarlo') + bt('eliminar', '🗑', 'Eliminar', 'Borra este borrador (aún no aprobado)')
+    : p.estado === 'vigente' ? bt('reabrir', '↺', 'Reabrir', 'Vuelve a borrador para editarlo') + bt('archivar', '🗄', 'Archivar', 'Lo guarda sin usarlo') : '';
+  const estado = `<div class="vl-card pre-estado"><div class="pre-est-i"><span class="vl-pill ${pe[1]}">${pe[0]}</span><span class="pre-est-t"><b>${esc(p.nombre)}</b><em>Creado por ${esc(p.creado_por || '—')} · ${f(p.creado_en)}${p.aprobado_en ? ' · aprobado ' + f(p.aprobado_en) : ''}${p.motivo ? ' · ' + esc(p.motivo) : ''}${desact ? ' · <span class="pre-neg">la línea base vigente cambió: sincroniza</span>' : ''}</em></span></div><div class="pre-est-b">${acc}</div></div>`;
+  const vigId = (RES_A.version || {}).id;
+  const sel = PL.lbs.length ? `<label class="pl-lbsel" title="Qué línea base se dibuja como línea gris bajo cada barra"><span>Comparar con</span><select id="plLb"><option value="">Ninguna</option>${PL.lbs.map(l => `<option value="${l.numero}" ${PL.lb === l.numero ? 'selected' : ''}>LB${l.numero}${l.cronograma_id === vigId ? ' · vigente' : ''} — ${esc(String(l.tipo_cambio || l.nombre).slice(0, 34))}</option>`).join('')}</select></label>` : '';
+  const barra = `<div class="pre-tool"><div><h3>Gantt del plan master${PL.frente === 'todos' ? '' : ' · ' + esc(String((COMPONENTES.find(c => c.id === PL.frente) || {}).nombre || ''))}</h3>
+      <p class="hint">${ed ? 'Arrastra una barra para moverla y su borde derecho para cambiar la duración; toca una tarea para editarla y armar vínculos. ' : ''}Naranja = ruta crítica · línea gris bajo la barra = ${lb ? lbn : 'línea base elegida'} · rojo = vínculo incumplido · ◆ = hito · tachado = deductivo total.</p></div>
+      <div class="pre-tb-acc">${sel}<button type="button" class="icon-btn ${PL.soloCrit ? 'on' : ''}" data-pl-crit title="Solo la ruta crítica" aria-label="Solo ruta crítica"><svg viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/></svg></button>
+      <button type="button" class="icon-btn ${PL.origen ? 'on' : ''}" data-pl-orig title="Mostrar la línea base elegida (línea gris)" aria-label="Línea base"><svg viewBox="0 0 24 24"><path d="M4 8h16M4 16h10"/></svg></button>
+      <button type="button" class="icon-btn ${PL.vinc ? 'on' : ''}" data-pl-vinc title="Mostrar los vínculos" aria-label="Vínculos"><svg viewBox="0 0 24 24"><path d="M5 6h5v12h9M16 15l3 3-3 3"/></svg></button>
+      <button type="button" class="icon-btn" data-pl-exp="1" title="Expandir todo" aria-label="Expandir todo"><svg viewBox="0 0 24 24"><path d="m7 9 5 5 5-5M7 4l5 5 5-5" transform="translate(0 4)"/></svg></button>
+      <button type="button" class="icon-btn" data-pl-exp="0" title="Contraer" aria-label="Contraer"><svg viewBox="0 0 24 24"><path d="m7 15 5-5 5 5M7 20l5-5 5 5" transform="translate(0 -6)"/></svg></button></div></div>`;
+  box.innerHTML = kp + estado + `<div class="vl-card pre-card pl-card">${barra}<div class="pl-wrap" id="plWrap">${plGantt(filas)}</div></div>`;
+  const w = $('#plWrap'); if (w) { if (guardado) { w.scrollLeft = guardado[0]; w.scrollTop = guardado[1]; } else if (PL.t0 != null) w.scrollLeft = Math.max(0, (Math.floor(Date.now() / 86400000) - PL.t0) * PL_PPD[PL.zoom] - 120); }
+}
+function plGantt(filas) {
+  if (!filas.length) return '<div class="rg-msg">No hay tareas para mostrar con este filtro.</div>';
+  const ppd = PL_PPD[PL.zoom], hoy = Math.floor(Date.now() / 86400000);
+  const t0 = PL.t0 = Math.floor(Math.min(PL.ini, ...Object.values(PL.tm).map(t => t.so == null ? Infinity : t.so)) / 7) * 7 - 7, t1 = PL.finE + 21, W = Math.ceil((t1 - t0) * ppd), X = (n) => (n - t0) * ppd, H = filas.length * PL_H;
+  const abre = PL.abiertos[PL.frente], solo = PL.soloCrit;
+  // ── columna izquierda (HTML): nombre, duración, inicio, fin, sugerida ──
+  const izq = filas.map((r) => {
+    const n = r.nodo, grupo = r.tipo !== 't', t = r.tarea, nom = t ? (t.nombre || n.nombre) : n.nombre, sang = 6 + r.prof * 11, sel = t && PL.sel === t.id;
+    const dur = t ? t.dias : r.e - r.s, ina = t && !t.activa && !t.hito, sug = t && t.activa && !t.hito && t.dias_sug_meta != null ? t.dias_sug_meta : null;
+    const dif = sug != null && sug !== t.dias ? ' pl-difsug' : '';
+    return `<div class="pl-row pl-${r.tipo}${t && t.hito ? ' pl-h' : ''}${ina ? ' pl-ina' : ''}${r.crit ? ' pl-crit' : ''}${sel ? ' pl-sel' : ''}${r.mod ? ' pl-mod' : ''} pl-n${Math.min(r.prof + 1, 4)}" ${grupo ? `data-pl-tog="${esc(r.key)}"` : `data-pl-tarea="${esc(r.key)}"`} style="height:${PL_H}px">`
+      + `<span class="pl-nom" style="padding-left:${sang}px" title="${esc(n.codigo + ' · ' + nom)}">${grupo ? `<span class="pre-chev ${abre.has(n.nodo_id) || solo ? 'on' : ''}">▸</span>` : '<span class="pre-chev pre-hoja"></span>'}<span class="pre-cod">${esc(n.codigo)}</span> ${t && t.hito ? '◆ ' : ''}${esc(nom)}${t && t.nueva ? ' <span class="pre-tag">nueva</span>' : ''}${n.concepto === 'adicional' && r.prof === 0 ? ' <span class="pre-tag">adicional</span>' : ''}</span>`
+      + `<span class="c">${t && t.hito ? '—' : dur}</span><span>${plFmt(r.s)}</span><span>${t && t.hito ? '' : plFmt(r.e - 1)}</span><span class="pl-sug${dif}" title="${sug != null ? 'Días sugeridos por el APU meta' : ''}">${sug != null ? sug : ''}</span></div>`;
+  }).join('');
+  // ── cabecera de tiempo ──
+  let m1 = '', m2 = '';
+  const d0 = new Date(t0 * 86400000);
+  for (let a = Date.UTC(d0.getUTCFullYear(), d0.getUTCMonth(), 1) / 86400000; a < t1; ) {
+    const d = new Date(a * 86400000), sig = Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 1) / 86400000, x = Math.max(0, X(a)), x2 = Math.min(W, X(sig));
+    if (x2 > x) m1 += `<g><rect x="${x}" y="0" width="${x2 - x}" height="16" class="pl-mh"/><text x="${x + 4}" y="12" class="pl-mt">${MESES_ES[d.getUTCMonth()]}-${String(d.getUTCFullYear()).slice(2)}</text></g>`;
+    a = sig;
+  }
+  if (PL.zoom === 'semana') for (let a = Math.ceil((t0 - 4) / 7) * 7 + 4; a < t1; a += 7) { const dd = new Date(a * 86400000); m2 += `<text x="${X(a) + 2}" y="28" class="pl-st">${dd.getUTCDate()}</text>`; }
+  if (PL.zoom === 'dia') for (let a = t0; a < t1; a++) { const dd = new Date(a * 86400000); m2 += `<text x="${X(a) + ppd / 2}" y="28" class="pl-st" text-anchor="middle">${dd.getUTCDate()}</text>`; }
+  // ── rejilla vertical (cada mes) y línea de hoy ──
+  let rej = ''; for (let a = Date.UTC(d0.getUTCFullYear(), d0.getUTCMonth(), 1) / 86400000; a < t1; ) { const d = new Date(a * 86400000); if (a >= t0) rej += `<line x1="${X(a)}" x2="${X(a)}" y1="0" y2="${H}" class="pl-gr"/>`; a = Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 1) / 86400000; }
+  const hx = X(hoy), lineaHoy = hoy >= t0 && hoy <= t1 ? `<line x1="${hx}" x2="${hx}" y1="0" y2="${H}" class="pl-hoy"/>` : '';
+  // ── barras ──
+  const pos = {}; let barras = '', zebra = '';
+  filas.forEach((r, i) => {
+    const y = i * PL_H, x = X(r.s), w = Math.max(3, (r.e - r.s) * ppd), ed = plEditable();
+    if (i % 2) zebra += `<rect x="0" y="${y}" width="${W}" height="${PL_H}" class="pl-zb"/>`;
+    if (PL.origen && r.so != null && (r.so !== r.s || r.eo !== r.e)) barras += `<rect x="${X(r.so)}" y="${y + PL_H - 6}" width="${Math.max(2, (r.eo - r.so) * ppd)}" height="3" rx="1.5" class="pl-og"/>`;
+    if (r.tipo === 't') {
+      const t = r.tarea;
+      if (t.hito) {
+        pos[t.id] = { i, x, w: 0, y: y + PL_H / 2 };
+        barras += `<g class="pl-b pl-bh${PL.sel === t.id ? ' pl-bs' : ''}" data-id="${t.id}"><path d="M${x} ${y + 5}l7 7-7 7-7-7z" class="pl-bar${ed ? ' pl-mv' : ''}" data-id="${t.id}"/></g>`;
+      } else if (!t.activa) {
+        pos[t.id] = { i, x, w: 0, y: y + PL_H / 2 };
+        barras += `<g class="pl-b pl-bi${PL.sel === t.id ? ' pl-bs' : ''}" data-id="${t.id}"><rect x="${x - 3}" y="${y + 7}" width="6" height="10" rx="2" class="pl-bar" data-id="${t.id}"/></g>`;
+      } else {
+        pos[t.id] = { i, x, w, y: y + PL_H / 2 };
+        barras += `<g class="pl-b${t.crit ? ' pl-bc' : ''}${t.fijo ? ' pl-bf' : ''}${PL.sel === t.id ? ' pl-bs' : ''}" data-id="${t.id}"><rect x="${x}" y="${y + 5}" width="${w}" height="${PL_H - 12}" rx="3" class="pl-bar${ed ? ' pl-mv' : ''}" data-id="${t.id}"/>${ed ? `<rect x="${x + w - 5}" y="${y + 5}" width="6" height="${PL_H - 12}" class="pl-hr" data-id="${t.id}"/>` : ''}${t.fijo ? `<text x="${x + 3}" y="${y + PL_H / 2 + 3}" class="pl-pin">📌</text>` : ''}</g>`;
+      }
+    } else {
+      barras += `<g class="pl-sm${r.crit ? ' pl-bc' : ''}"><rect x="${x}" y="${y + 7}" width="${w}" height="5" class="pl-sb"/><path d="M${x} ${y + 7}v10l5-5zM${x + w} ${y + 7}v10l-5-5z" class="pl-sb"/></g>`;
+    }
+  });
+  // ── vínculos (flechas en codo) ──
+  let links = '';
+  if (PL.vinc) PL.deps.forEach(l => {
+    const a = pos[l.predecesora_id], b = pos[l.tarea_id]; if (!a || !b) return;
+    const finPred = l.tipo === 'FC' || l.tipo === 'FF', iniSuc = l.tipo === 'FC' || l.tipo === 'CC';
+    const x1 = finPred ? a.x + a.w : a.x, x2 = iniSuc ? b.x : b.x + b.w, y1 = a.y, y2 = b.y, xo = finPred ? x1 + 6 : x1 - 6, xi = iniSuc ? x2 - 6 : x2 + 6, ym = y2 > y1 ? y2 - PL_H / 2 + 1 : y2 + PL_H / 2 - 1;
+    const d = (finPred && iniSuc && xi >= xo) ? `M${x1} ${y1}H${xi}V${y2}H${x2}` : `M${x1} ${y1}H${xo}V${ym}H${xi}V${y2}H${x2}`;
+    links += `<path d="${d}" class="pl-lk${l._viol ? ' pl-lv' : ''}" marker-end="url(#plFl${l._viol ? 'r' : ''})"/>`;
+  });
+  const defs = `<defs><marker id="plFl" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 8 4 0 8z" class="pl-fl"/></marker><marker id="plFlr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 8 4 0 8z" class="pl-flr"/></marker></defs>`;
+  return `<div class="pl-flex" style="--ph:${PL_H}px"><div class="pl-left"><div class="pl-lh"><span class="pl-nom">Tarea</span><span class="c">Días</span><span>Inicio</span><span>Fin</span><span title="Días sugeridos por el APU meta">Sug.</span></div>${izq}</div>`
+    + `<div class="pl-right" style="width:${W}px"><svg class="pl-hd" width="${W}" height="32" viewBox="0 0 ${W} 32">${m1}${m2}</svg>`
+    + `<svg class="pl-sv" id="plSvg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" data-t0="${t0}" data-ppd="${ppd}">${defs}${zebra}${rej}${lineaHoy}${barras}${links}</svg></div></div>`;
+}
+// ── ventana de la tarea: edición, sugeridas y vínculos ──
+function plDrawerEl() {
+  let el = document.getElementById('plDr');
+  if (!el) {
+    const bk = document.createElement('div'); bk.id = 'plBk'; bk.className = 'pre-dr-bk'; document.body.appendChild(bk);
+    el = document.createElement('aside'); el.id = 'plDr'; el.className = 'pre-dr pl-dr'; el.setAttribute('role', 'dialog'); document.body.appendChild(el);
+    bk.addEventListener('click', plCerrarTarea);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && el.classList.contains('on') && !document.querySelector('.cf-fondo')) plCerrarTarea(); });
+  }
+  return el;
+}
+function plCerrarTarea() { const el = document.getElementById('plDr'); if (!el) return; el.classList.remove('on'); document.getElementById('plBk').classList.remove('on'); PL.sel = null; PL.add = null; if (PL.plan) plPintar(); }
+function plAbrirTarea(id) { PL.sel = id; PL.add = null; const el = plDrawerEl(); el.classList.add('on'); document.getElementById('plBk').classList.add('on'); plDrawerPintar(); plPintar(); }
+function plDrawerPintar() {
+  const t = PL.tm[PL.sel], el = plDrawerEl(); if (!t) return;
+  const ed = plEditable(), ro = ed ? '' : 'disabled', nodoTxt = (x) => `${esc(x.codigo)} · ${esc(x.nombre)}`, lb = plLbActual();
+  const fila = (l, esPred) => { const o = PL.tm[esPred ? l.predecesora_id : l.tarea_id]; if (!o) return '';
+    return `<tr class="${l._viol ? 'pre-quit' : ''}"><td class="l" title="${esc(o.nombre)}">${nodoTxt(o)}</td><td><select class="pl-sel-t" ${ro} data-pl-dep-t="${l.tarea_id}|${l.predecesora_id}">${Object.keys(PL_TIPOS).map(k => `<option value="${k}" ${l.tipo === k ? 'selected' : ''}>${k}</option>`).join('')}</select></td>`
+      + `<td><input class="pre-in" ${ro} inputmode="decimal" value="${Number(l.desfase_dias) || 0}" data-pl-dep-d="${l.tarea_id}|${l.predecesora_id}" aria-label="Desfase en días"></td><td class="c">${ed ? `<button type="button" class="pre-x" data-pl-dep-x="${l.tarea_id}|${l.predecesora_id}" title="Quitar el vínculo">✕</button>` : ''}</td></tr>`; };
+  const preds = PL.deps.filter(l => l.tarea_id === t.id), sucs = PL.deps.filter(l => l.predecesora_id === t.id);
+  const tabla = (ls, esPred) => ls.length ? `<div class="vl-tw"><table class="vl-tb pre-lt pl-lk-t"><thead><tr><th class="l">${esPred ? 'Predecesora' : 'Sucesora'}</th><th>Tipo</th><th>Desfase</th><th></th></tr></thead><tbody>${ls.map(l => fila(l, esPred)).join('')}</tbody></table></div>` : `<p class="hint" style="margin:2px 0 8px">Sin ${esPred ? 'predecesoras' : 'sucesoras'}.</p>`;
+  const sugM = t.dias_sug_meta, sugV = t.dias_sug_venta, puedeDur = t.activa && !t.hito;
+  const sug = !puedeDur ? '' : (sugM != null || sugV != null) ? `<div class="pl-sugs"><span>Duración sugerida (referencia, no obligatoria):</span>${sugM != null ? `<button type="button" class="btn-sec" ${ro} data-pl-aplicar="${sugM}" title="metrado ÷ rendimiento del APU meta (${preQ(t.rend_meta)} ${esc(t.unidad || '')}/día)">APU meta: <b>${sugM} d</b> · aplicar</button>` : ''}${sugV != null ? `<button type="button" class="btn-sec" ${ro} data-pl-aplicar="${sugV}" title="metrado ÷ rendimiento del APU de venta (${preQ(t.rend_venta)} ${esc(t.unidad || '')}/día)">APU venta: <b>${sugV} d</b></button>` : ''}</div>` : '<p class="hint" style="margin:0 0 8px">Sin duración sugerida (partida global o sin rendimiento en el APU).</p>';
+  const dep = t.hol == null || t.hito || !t.activa ? '' : ` · ${t.crit ? '<span class="pre-neg"><b>Ruta crítica</b></span> · ' : ''}holgura ${Math.round(t.hol)} días`;
+  const tipo = t.hito ? 'Hito' : (!t.activa ? 'Inactiva: deductivo total' : `${esc(t.unidad || '')} · metrado ${preN(t.metrado, 2)}`);
+  const lbl = lb ? (t.so != null ? `${plLbTxt(lb)}: ${plFmt(t.so)}${t.hito ? '' : ` → ${plFmt(t.eo - 1)} (${t.eo - t.so} días)`}` : `${plLbTxt(lb)}: la partida no existía`) : 'Sin línea base elegida';
+  el.innerHTML = `<div class="pre-dr-h"><div><small>${esc(t.codigo)} · ${tipo}${dep}${t.concepto === 'adicional' ? ' · adicional' : ''}</small><h3>${esc(t.nombre)}</h3></div><button type="button" class="icon-btn" data-pl-cerrar title="Cerrar" aria-label="Cerrar">✕</button></div>
+  <div class="pre-dr-body">
+    <div class="vl-card"><div class="pl-form">
+      <div class="field"><label for="plNom">Nombre de la tarea</label><input id="plNom" type="text" ${ro} value="${esc(t.nombre === t.partida ? '' : t.nombre)}" placeholder="${esc(t.partida)}"></div>
+      <div class="pl-f3"><div class="field"><label for="plIni">Inicio</label><input id="plIni" type="date" ${ro} value="${plF(t.s)}"></div>
+        <div class="field"><label for="plDias">Duración (días)</label><input id="plDias" type="number" min="1" step="1" ${ro}${puedeDur ? '' : ' disabled'} value="${t.dias}"></div>
+        <div class="field"><label>Fin</label><div class="pl-fin" id="plFinTxt">${t.hito ? '—' : plFmt(t.s + t.dias - 1)}</div></div></div>
+      <label class="adm-check"><input type="checkbox" id="plFijo" ${ro} ${t.fijo ? 'checked' : ''}> Fecha fija (los ajustes automáticos no la mueven)</label>
+      <p class="hint" style="margin:6px 0 10px">${lbl}</p>
+      ${sug}
+      ${ed ? `<div class="pl-btns"><button type="button" class="btn-sec pri" data-pl-guardar>Guardar cambios</button>${t.hito ? '' : '<button type="button" class="btn-sec" data-pl-dup title="Crea otra tarea de la misma partida (p. ej. por elemento o etapa)">⧉ Partir en otra tarea</button>'}${(PL.porNodo[t.nodo_id] || []).length > 1 ? '<button type="button" class="btn-sec" data-pl-quitar>🗑 Quitar</button>' : ''}</div>` : '<p class="hint">Solo el administrador edita el plan, y solo mientras está en borrador.</p>'}
+    </div></div>
+    <div class="pl-dr-cols"><div class="vl-card"><h3>Predecesoras</h3>${tabla(preds, true)}</div><div class="vl-card"><h3>Sucesoras</h3>${tabla(sucs, false)}</div></div>
+    ${ed ? `<div class="vl-card"><h3>➕ Agregar vínculo</h3><div class="pre-add-f"><select id="plDir" class="pl-sel-t"><option value="pred">Esta tarea depende de…</option><option value="suc">De esta tarea depende…</option></select>
+      <div class="pre-add-b"><input id="plBuscar" type="search" placeholder="Buscar tarea (código o nombre)…" autocomplete="off"><div id="plSug" class="pre-sug" hidden></div></div>
+      <select id="plTipo" class="pl-sel-t" title="${Object.entries(PL_TIPOS).map(([k, v]) => k + ' = ' + v).join(' · ')}">${Object.keys(PL_TIPOS).map(k => `<option value="${k}">${k}</option>`).join('')}</select>
+      <input class="pre-in" id="plDes" inputmode="decimal" value="0" aria-label="Desfase en días" title="Desfase en días (negativo = adelanto)"><button type="button" class="btn-sec pri" id="plAddBt" disabled>Agregar</button></div></div>` : ''}
+  </div>`;
+}
+async function plEjecutar(fn, args, ok) {
+  try { const r = await preRpc(fn, args); if (ok) toast(typeof ok === 'function' ? ok(r) : ok, true); await plDatos(); plPintar(); if (PL.sel && PL.tm[PL.sel]) plDrawerPintar(); else if (PL.sel) plCerrarTarea(); return true; }
+  catch (e) { toast(`No se pudo guardar: ${esc(e.message)}`, false); try { await plDatos(); plPintar(); if (PL.sel && PL.tm[PL.sel]) plDrawerPintar(); } catch (x) {} return false; }
+}
+// ajuste de fechas por vínculos: «ajustar» solo empuja lo que incumple; «compactar» adelanta lo que tiene vínculos
+async function plReprogramar(modo) {
+  const T = {}; Object.keys(PL.tm).forEach(i => { T[i] = { ...PL.tm[i] }; }); const mov = [];
+  PL.orden.forEach(i => {
+    const t = T[i]; if (t.fijo || !(PL.preds[i] || []).length) return;
+    const req = Math.max(...PL.preds[i].map(l => plReq(l, T[l.predecesora_id], t)));
+    const nuevo = modo === 'compactar' ? req : Math.max(t.s, req);
+    if (Math.abs(nuevo - t.s) > 0.001) { t.s = nuevo; t.e = nuevo + t.d; }
+  });
+  Object.keys(T).forEach(i => { if (T[i].s !== PL.tm[i].s) mov.push({ id: i, inicio: plF(T[i].s), dias: T[i].dias }); });
+  if (!mov.length) { toast(modo === 'compactar' ? 'Nada que adelantar: todas las tareas ya están lo más temprano posible.' : 'Todos los vínculos se cumplen; no hay nada que empujar.', true); return; }
+  const act = Object.values(T).filter(t => t.activa && !t.hito), finNuevo = act.reduce((m, t) => Math.max(m, t.e), 0);
+  if (!(await confirmar(`Ajuste de fechas por vínculos: se moverán ${mov.length} tareas y el fin de obra pasa del ${plFmt(PL.finE - 1)} al ${plFmt(finNuevo - 1)}.`))) return;
+  await plEjecutar('plan_tareas_guardar', { p_plan: PL.plan.id, p_cambios: mov }, `${mov.length} tareas reprogramadas.`);
+}
+// ── eventos ──
+document.addEventListener('click', async (e) => {
+  const t = e.target; let b;
+  if (!document.querySelector('.pane.on[data-pane="plan"]') && !t.closest('#plDr')) return;
+  if (PL.arrastrado) return;
+  if ((b = t.closest('[data-plfr]'))) { PL.frente = b.dataset.plfr; PL.reset = true; plCerrarTarea(); PL.reset = true; plPintar(); return; }
+  if ((b = t.closest('[data-plzoom]'))) { PL.zoom = b.dataset.plzoom; PL.reset = true; plPintar(); return; }
+  if ((b = t.closest('[data-pl-tog]'))) { const ab = PL.abiertos[PL.frente], id = b.dataset.plTog; if (ab.has(id)) ab.delete(id); else ab.add(id); plPintar(); return; }
+  if ((b = t.closest('[data-pl-exp]'))) { const proy = PL.frente === 'todos' ? null : (preProy(PL.frente) || {}).id, s = new Set(); PL.arbol.filter(n => PL.hijos[n.nodo_id] && (b.dataset.plExp === '1' || n.nivel <= 1)).forEach(n => s.add(n.nodo_id)); if (b.dataset.plExp === '1') Object.keys(PL.porNodo).forEach(k => { if (PL.porNodo[k].length > 1) s.add(k); }); PL.abiertos[PL.frente] = s; plPintar(); return; }
+  if (t.closest('[data-pl-crit]')) { PL.soloCrit = !PL.soloCrit; plPintar(); return; }
+  if (t.closest('[data-pl-orig]')) { PL.origen = !PL.origen; plPintar(); return; }
+  if (t.closest('[data-pl-vinc]')) { PL.vinc = !PL.vinc; plPintar(); return; }
+  if ((b = t.closest('[data-pl-tarea]'))) { plAbrirTarea(b.dataset.plTarea); return; }
+  if (t.closest('[data-pl-cerrar]')) { plCerrarTarea(); return; }
+  if ((b = t.closest('[data-pl-crear]'))) {
+    if (!(await confirmar('Crear el plan master copiando la línea base contractual vigente (partidas del contrato y de los adicionales, hitos, fechas y vínculos). El contractual no se toca.'))) return;
+    b.disabled = true; await plEjecutar('plan_meta_crear', { p_obra: OBRA.id, p_motivo: ($('#plMotivo') || {}).value || null }, 'Plan master creado (borrador).'); return;
+  }
+  if ((b = t.closest('[data-pl-acc]'))) {
+    const acc = b.dataset.plAcc;
+    if (acc === 'ajustar' || acc === 'compactar') { await plReprogramar(acc); return; }
+    if (acc === 'sincronizar') {
+      if (!(await confirmar('Sincronizar el plan con la línea base vigente: entran las partidas nuevas (adicionales) y los hitos que falten, se actualizan las fechas de referencia y los deductivos totales pasan a inactivos. Tus fechas y vínculos no cambian.'))) return;
+      await plEjecutar('plan_meta_sincronizar', { p_plan: PL.plan.id }, (r) => r && (r.nuevas || r.reenlazadas) ? `Plan sincronizado: ${r.nuevas} tareas nuevas${r.reenlazadas ? `, ${r.reenlazadas} re-enlazadas` : ''}.` : 'El plan ya estaba al día con la línea base.'); return;
+    }
+    if (acc === 'sugeridas') {
+      const cambios = Object.values(PL.tm).filter(x => x.activa && !x.hito && x.dias_sug_meta != null && x.dias_sug_meta !== x.dias && !x.fijo).map(x => ({ id: x.id, dias: x.dias_sug_meta }));
+      if (!cambios.length) { toast('No hay duraciones sugeridas distintas a las actuales.', true); return; }
+      if (!(await confirmar(`Aplicar la duración sugerida por el APU meta a ${cambios.length} tareas (las de fecha fija no se tocan). Después usa «Ajustar a vínculos» para acomodar las fechas.`))) return;
+      await plEjecutar('plan_tareas_guardar', { p_plan: PL.plan.id, p_cambios: cambios }, `${cambios.length} duraciones actualizadas.`); return;
+    }
+    const msg = { aprobar: 'Aprobar el plan master. Pasa a vigente y ya no se edita hasta reabrirlo.', reabrir: 'Reabrir el plan master. Vuelve a borrador para editarlo.', archivar: 'Archivar el plan master. Queda guardado pero sin uso, y podrás crear otro.', eliminar: 'Eliminar el plan master. Es un borrador sin aprobar y se borra para siempre.' }[acc];
+    if (!(await confirmar(msg))) return;
+    const ok = await plEjecutar('plan_meta_estado', { p_plan: PL.plan.id, p_accion: acc }, { aprobar: 'Plan master aprobado.', reabrir: 'Plan master reabierto.', archivar: 'Plan master archivado.', eliminar: 'Plan master eliminado.' }[acc]);
+    if (ok && (acc === 'archivar' || acc === 'eliminar')) plCerrarTarea();
+    return;
+  }
+  if ((b = t.closest('[data-pl-aplicar]'))) { const x = $('#plDias'); if (x) { x.value = b.dataset.plAplicar; plFinTxt(); } return; }
+  if (t.closest('[data-pl-guardar]')) {
+    const x = PL.tm[PL.sel], ini = $('#plIni').value, dias = x.hito ? x.dias : parseInt($('#plDias').value, 10);
+    if (!ini || !(dias >= 1)) { toast('Revisa el inicio y la duración (mínimo 1 día).', false); return; }
+    await plEjecutar('plan_tarea_guardar', { p_tarea: x.id, p_inicio: ini, p_dias: dias, p_fijo: $('#plFijo').checked, p_nombre: $('#plNom').value }, 'Tarea actualizada.'); return;
+  }
+  if (t.closest('[data-pl-dup]')) { const x = PL.tm[PL.sel], nom = ($('#plNom').value || '').trim(); const id = await preRpc('plan_tarea_duplicar', { p_tarea: x.id, p_nombre: nom ? nom + ' (2)' : null }).catch(er => { toast(`No se pudo: ${esc(er.message)}`, false); return null; }); if (id) { toast('Tarea partida: ahora hay otra de la misma partida; cámbiale nombre y duración.', true); PL.abiertos[PL.frente].add(x.nodo_id); await plDatos(); plAbrirTarea(id); } return; }
+  if (t.closest('[data-pl-quitar]')) { if (!(await confirmar('Quitar esta tarea del plan master. La partida y las demás tareas no cambian.'))) return; const x = PL.tm[PL.sel]; await plEjecutar('plan_tarea_quitar', { p_tarea: x.id }, 'Tarea quitada.'); return; }
+  if ((b = t.closest('[data-pl-dep-x]'))) { const [a, p] = b.dataset.plDepX.split('|'); await plEjecutar('plan_dependencia_quitar', { p_tarea: a, p_pred: p }, null); return; }
+  if ((b = t.closest('[data-pl-sug]'))) { const x = PL.tm[b.dataset.plSug]; if (!x) return; PL.add = x; $('#plBuscar').value = `${x.codigo} · ${x.nombre}`; $('#plSug').hidden = true; $('#plAddBt').disabled = false; return; }
+  if (t.closest('#plAddBt')) {
+    const o = PL.add, x = PL.tm[PL.sel]; if (!o || !x) return; const dir = $('#plDir').value, des = Number(String($('#plDes').value).replace(',', '.')) || 0;
+    const [a, p] = dir === 'pred' ? [x.id, o.id] : [o.id, x.id]; PL.add = null;
+    await plEjecutar('plan_dependencia_guardar', { p_tarea: a, p_pred: p, p_tipo: $('#plTipo').value, p_desfase: des }, 'Vínculo agregado.'); return;
+  }
+});
+function plFinTxt() { const i = $('#plIni'), d = $('#plDias'), o = $('#plFinTxt'); if (i && d && o && i.value && parseInt(d.value, 10) >= 1) o.textContent = plFmt(plD(i.value) + parseInt(d.value, 10) - 1); }
+document.addEventListener('input', (e) => {
+  if (e.target.id === 'plIni' || e.target.id === 'plDias') { plFinTxt(); return; }
+  if (e.target.id !== 'plBuscar') return;
+  const q = e.target.value.trim().toLowerCase(), box = $('#plSug'); PL.add = null; $('#plAddBt').disabled = true;
+  if (q.length < 2) { box.hidden = true; return; }
+  const hit = Object.values(PL.tm).filter(x => x.id !== PL.sel && (x.codigo.toLowerCase().includes(q) || String(x.nombre).toLowerCase().includes(q))).slice(0, 8);
+  box.innerHTML = hit.length ? hit.map(x => `<button type="button" data-pl-sug="${x.id}"><b>${esc(x.codigo)}</b> ${esc(x.nombre)}<em>${plFmt(x.s)} → ${x.hito ? 'hito' : plFmt(x.e - 1)} · ${x.dias} días</em></button>`).join('') : '<div class="pre-sug-v">Sin coincidencias</div>';
+  box.hidden = false;
+});
+document.addEventListener('change', async (e) => {
+  const s = e.target;
+  if (s.id === 'plLb') { PL.lb = s.value === '' ? null : +s.value; try { await plCargarLB(); plModelo(); plPintar(); if (PL.sel && PL.tm[PL.sel]) plDrawerPintar(); } catch (er) { toast(`No se pudo leer la línea base: ${esc(er.message)}`, false); } return; }
+  if (s.dataset && (s.dataset.plDepT || s.dataset.plDepD)) {
+    const [a, p] = (s.dataset.plDepT || s.dataset.plDepD).split('|'), l = PL.deps.find(x => x.tarea_id === a && x.predecesora_id === p); if (!l) return;
+    const tipo = s.dataset.plDepT ? s.value : l.tipo, des = s.dataset.plDepD ? (Number(String(s.value).replace(',', '.')) || 0) : Number(l.desfase_dias);
+    await plEjecutar('plan_dependencia_guardar', { p_tarea: a, p_pred: p, p_tipo: tipo, p_desfase: des }, null);
+  }
+});
+// ── arrastrar barras: mover (cuerpo) y cambiar duración (borde derecho) ──
+document.addEventListener('pointerdown', (e) => {
+  const el = e.target.closest('.pl-mv, .pl-hr'); if (!el || !plEditable()) return;
+  const svg = $('#plSvg'), t = PL.tm[el.dataset.id]; if (!svg || !t) return;
+  const ppd = +svg.dataset.ppd, modo = el.classList.contains('pl-hr') ? 'dur' : 'mov', x0 = e.clientX, g = svg.querySelector(`g[data-id="${t.id}"]`), bar = g.querySelector('.pl-bar'), hr = g.querySelector('.pl-hr');
+  const bx = +(bar.getAttribute('x') || 0), bw = +(bar.getAttribute('width') || 0); let dd = 0; PL.arrastrado = false;
+  try { el.setPointerCapture && el.setPointerCapture(e.pointerId); } catch (er) {}
+  const mover = (ev) => {
+    dd = Math.round((ev.clientX - x0) / ppd); if (Math.abs(ev.clientX - x0) > 3) PL.arrastrado = true;
+    if (modo === 'mov') { if (t.hito) bar.setAttribute('transform', `translate(${dd * ppd} 0)`); else { bar.setAttribute('x', bx + dd * ppd); if (hr) hr.setAttribute('x', bx + dd * ppd + bw - 5); } }
+    else { const w = Math.max(ppd, bw + dd * ppd); bar.setAttribute('width', w); if (hr) hr.setAttribute('x', bx + w - 5); }
+  };
+  const fin = async () => {
+    document.removeEventListener('pointermove', mover); document.removeEventListener('pointerup', fin);
+    const huboArrastre = PL.arrastrado && dd; setTimeout(() => { PL.arrastrado = false; }, 0);
+    if (!huboArrastre) { if (PL.plan) plPintar(); return; }
+    const ini = modo === 'mov' ? t.s + dd : t.s, dias = modo === 'dur' ? Math.max(1, t.dias + dd) : t.dias;
+    await plEjecutar('plan_tarea_guardar', { p_tarea: t.id, p_inicio: plF(ini), p_dias: dias, p_fijo: null, p_nombre: null }, null);
+  };
+  document.addEventListener('pointermove', mover); document.addEventListener('pointerup', fin);
+});
+document.addEventListener('click', (e) => {   // clic en una barra (sin arrastrar) abre la tarea
+  const g = e.target.closest('.pl-b'); if (g && document.querySelector('.pane.on[data-pane="plan"]') && !PL.arrastrado) plAbrirTarea(g.dataset.id);
 });
 
 async function hhCargar() {
