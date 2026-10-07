@@ -21,7 +21,7 @@
   --tx:#141b29; --tx2:#3f4c65; --mut:#5c6b85;
   --blue:#2f6fed; --blue-tx:#1d4ed8; --green:#0e8f4f; --amber:#b45309; --red:#ef4444;
   --input:#f5f7fc; --mono:'Inter','Segoe UI',system-ui,sans-serif;
-  --side-w:210px;
+  --side-w:244px;
   --shadow:0 1px 2px rgba(30,41,70,.05), 0 1px 8px rgba(30,41,70,.04);
   --ic-neutral-bg:#eef2fa; --ic-neutral-fg:#3f4c65;
   --ic-blue-bg:#e7effe;    --ic-blue-fg:#2f6fed;
@@ -1789,6 +1789,18 @@ h1,h3,.card .value,.hhr-pie b{letter-spacing:-.2px;}
 #nav > .nav-top.on{background:rgba(242,106,27,.18);color:#fff !important;box-shadow:inset 3px 0 0 #f26a1b;} #nav > .nav-top.on .ni{background:#f26a1b;}
 :root[data-theme="dark"] #nav > .nav-top{color:#e7ecf7 !important;background:rgba(255,255,255,.04);}
 @media (min-width:761px){html.side-mini:not(.cel) #nav > .nav-top{padding:10px 0 !important;justify-content:center;margin-bottom:2px;} html.side-mini:not(.cel) #nav > .nav-top .ni{width:28px;height:28px;font-size:15px;}}
+/* Menú: la pantalla elegida va en naranja sólido (destaca sobre todo lo demás); el grupo que la contiene queda discreto */
+#nav .nav-gb > button.on,#nav > .nav-top.on{background:#f26a1b !important;color:#fff !important;font-weight:700;box-shadow:0 3px 10px rgba(242,106,27,.38) !important;}
+#nav .nav-gb > button.on:hover{background:#ff7a2b !important;}
+#nav > .nav-top.on .ni{background:rgba(255,255,255,.28);}
+#nav .nav-g.tiene-on > .nav-gh{background:rgba(255,255,255,.11);color:#fff !important;} #nav .nav-g.tiene-on > .nav-gh .ni{background:var(--gcb,rgba(255,255,255,.2));}
+#nav .nav-g.tiene-on > .nav-gb{border-left-color:rgba(242,106,27,.7);}
+@media (min-width:761px){
+  html.side-mini:not(.cel) #nav .nav-gb > button.on{background:#f26a1b !important;box-shadow:0 3px 10px rgba(242,106,27,.38) !important;}
+  html.side-mini:not(.cel) #nav > .nav-top.on{background:#f26a1b !important;}
+}
+/* «pronto»: un punto discreto en lugar de la etiqueta (ocupaba demasiado y cortaba los nombres) */
+#nav .nav-tag{font-size:0 !important;width:6px;height:6px;padding:0 !important;border:0 !important;border-radius:50%;background:rgba(255,255,255,.35);margin-left:auto;flex:0 0 6px;opacity:1;}
 </style>
 <script>
 document.documentElement.dataset.pane = 'resumen';
@@ -1908,7 +1920,7 @@ document.documentElement.dataset.pane = 'resumen';
           <button type="button" class="prox" disabled title="Próximamente · LB0 a LB3 con resolución; hoy se ven desde Plan maestro → Ver"><span class="ni">📜</span><span class="nt">Contrato y líneas base</span><span class="nav-tag">pronto</span></button>
           <button type="button" class="prox" disabled title="Próximamente · prestaciones adicionales y deductivos con resolución"><span class="ni">➕</span><span class="nt">Adicionales y deductivos</span><span class="nav-tag">pronto</span></button>
           <button type="button" class="prox" disabled title="Próximamente · mayores y menores metrados"><span class="ni">📏</span><span class="nt">Mayores metrados</span><span class="nav-tag">pronto</span></button>
-          <button type="button" class="prox" disabled title="Próximamente · plazo contractual y suspensiones"><span class="ni">⏳</span><span class="nt">Ampliaciones y suspensiones</span><span class="nav-tag">pronto</span></button>
+          <button type="button" class="prox" disabled title="Próximamente · plazo contractual y suspensiones"><span class="ni">⏳</span><span class="nt">Ampliaciones de plazo</span><span class="nav-tag">pronto</span></button>
           <button type="button" class="prox" disabled title="Próximamente · registro de eventos del contrato"><span class="ni">⚖️</span><span class="nt">Eventos y controversias</span><span class="nav-tag">pronto</span></button>
         </div>
       </div>
@@ -2874,14 +2886,19 @@ document.querySelectorAll('#nav button[data-pane]').forEach(b => {
     $('#side').classList.remove('open'); $('#overlay').classList.remove('on');
   });
 });
-// ── menú lateral por grupos plegables: se abre el grupo de la pantalla activa; el resto lo recuerda el navegador ──
+// ── menú lateral: un solo grupo abierto a la vez (acordeón). Al elegir una pantalla se abre su grupo y se cierran los demás ──
 (function () {
-  let cerr = null; try { cerr = JSON.parse(localStorage.getItem('obra-nav-cerrados') || 'null'); } catch (e) {}
-  const grupos = [...document.querySelectorAll('#nav .nav-g')], guardar = () => { try { localStorage.setItem('obra-nav-cerrados', JSON.stringify(grupos.filter(g => g.classList.contains('cerrado')).map(g => g.dataset.g))); } catch (e) {} };
+  const grupos = [...document.querySelectorAll('#nav .nav-g')];
   const poner = (g, cerrado) => { g.classList.toggle('cerrado', cerrado); const h = g.querySelector('.nav-gh'); if (h) h.setAttribute('aria-expanded', String(!cerrado)); };
-  grupos.forEach(g => poner(g, cerr ? cerr.includes(g.dataset.g) : !['inicio', 'planificacion'].includes(g.dataset.g)));   // primera visita: solo Inicio y Planificación abiertos
-  const marcar = () => { grupos.forEach(g => { const on = !!g.querySelector('button.on'); g.classList.toggle('tiene-on', on); if (on && g.classList.contains('cerrado')) poner(g, false); }); };
-  document.querySelectorAll('#nav .nav-gh').forEach(h => h.addEventListener('click', () => { const g = h.closest('.nav-g'); poner(g, !g.classList.contains('cerrado')); guardar(); }));
+  const abrirSolo = (g) => { grupos.forEach(x => poner(x, x !== g)); };
+  document.querySelectorAll('#nav .nav-gh').forEach(h => h.addEventListener('click', () => {
+    const g = h.closest('.nav-g');
+    if (g.classList.contains('cerrado')) abrirSolo(g); else poner(g, true);
+  }));
+  const marcar = () => {
+    grupos.forEach(g => g.classList.toggle('tiene-on', !!g.querySelector('button.on')));
+    abrirSolo(grupos.find(g => g.querySelector('button.on')) || null);   // el Dashboard no tiene grupo: se cierran todos
+  };
   document.querySelectorAll('#nav button[data-pane]').forEach(b => b.addEventListener('click', marcar));
   marcar();
 })();
