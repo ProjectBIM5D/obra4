@@ -1893,6 +1893,9 @@ html.tb-compacta #laApp .tb-seg .seg-btn[data-lagrupos]{padding:0;width:34px;}
 .lb-tb td,.lb-tb th{white-space:normal;vertical-align:top;} .lb-tb td.c{white-space:nowrap;} .lb-sub{font-size:11px;color:var(--mut);font-weight:500;line-height:1.3;}
 .lb-cmp{display:inline-flex;align-items:center;gap:8px;flex:0 0 auto;} .lb-cmp select{max-width:260px;}
 #lbFicha:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(620px,calc(100vw - 20px));max-height:calc(100vh - 24px);overflow-y:auto;margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
+/* el Gantt en Contrato: sin la barra de selección de plan */
+#plEspacio[data-donde="plan"] #plVerP{display:none;}
+#plFotoDlg:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(560px,calc(100vw - 20px));margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
 </style>
 <script>
 document.documentElement.dataset.pane = 'resumen';
@@ -1965,7 +1968,7 @@ document.documentElement.classList.add('dens-densa');   // tamaño único de las
       <div class="nav-g" data-g="planificacion">
         <button type="button" class="nav-gh" data-grupo="planificacion" aria-expanded="true"><span class="ni">📅</span><span class="nt">Planificación</span><i class="nav-chev"></i></button>
         <div class="nav-gb">
-          <button data-pane="plan" title="Cronograma meta con vínculos, ruta crítica y duraciones sugeridas por el APU meta; también las líneas base del contrato"><span class="ni">🗓️</span><span class="nt">Plan maestro</span></button>
+          <button data-pane="plan" title="Plan de ejecución (meta) con vínculos, ruta crítica y duraciones sugeridas por el APU meta; compara contra las líneas base del contrato"><span class="ni">🗓️</span><span class="nt">Plan maestro</span></button>
           <button data-pane="lookahead" title="Plan de 4 semanas"><span class="ni">📅</span><span class="nt">Look Ahead</span></button>
           <button data-pane="pts" title="Meta y real por día"><span class="ni">📆</span><span class="nt">Plan semanal</span></button>
           <button data-pane="ppc" title="Porcentaje de actividades completadas"><span class="ni">📈</span><span class="nt">PPC</span></button>
@@ -2244,11 +2247,13 @@ document.documentElement.classList.add('dens-densa');   // tamaño único de las
     </section>
 
     <!-- ═══════════ PLAN MASTER (cronograma meta) ═══════════ -->
-    <section class="pane" data-pane="lineasbase"><div id="lbPanel"></div></section>
+    <section class="pane" data-pane="lineasbase"><div id="lbPanel"></div>
+      <div id="lbGanttSlot" style="margin-top:14px"><div class="lb-cab"><div><h3 style="margin:0 0 3px">Cronograma de la línea base</h3><p class="hint" style="margin:0">Solo lectura, tal como está en el Project de esa línea base: fechas, ruta crítica y vínculos. Elige otra en «Línea base». El plan de ejecución se trabaja en Planificación › Plan maestro.</p></div></div><div id="lbGanttBox"></div></div></section>
     <section class="pane" data-pane="plan">
+      <div id="plEspacio" data-donde="plan">
       <div class="vl-top">
         <p class="api" style="margin:0">Frente: <span id="plFrentes"></span></p>
-        <p class="api" style="margin:0">Ver: <select id="plVer" class="pl-sel-t" title="Plan master (meta, editable) o una línea base del contrato (venta, solo lectura)"></select></p>
+        <p class="api" style="margin:0" id="plVerP">Línea base: <select id="plVer" class="pl-sel-t" title="Línea base del contrato que se muestra (solo lectura)"></select></p>
         <p class="api" style="margin:0">Escala:
           <button class="seg-btn" data-plzoom="mes" title="Vista mensual">Mes</button>
           <button class="seg-btn" data-plzoom="semana" title="Vista semanal">Semana</button>
@@ -2256,6 +2261,7 @@ document.documentElement.classList.add('dens-densa');   // tamaño único de las
         </p>
       </div>
       <div id="plCuerpo"><div class="rg-msg">Consultando el plan master…</div></div>
+      </div>
     </section>
 
     <!-- ═══════════ PARTE DIARIO ═══════════ -->
@@ -2965,7 +2971,7 @@ document.querySelectorAll('#nav button[data-pane]').forEach(b => {
     if (b.dataset.pane === 'ppc') ppcCargar();
     if (b.dataset.pane === 'valorizaciones') valCargar();
     if (b.dataset.pane === 'hh') hhCargar();
-    if (b.dataset.pane === 'plan') plCargar();
+    if (b.dataset.pane === 'plan') { PL.ver = 'meta'; PL.reset = true; plMontar('plan'); plCargar(); }
     if (b.dataset.pane === 'lineasbase') lbPanelCargar();
     if (b.dataset.pane === 'presupuesto') preCargar();
     if (b.dataset.pane === 'parte' && !$('#parteLA').hidden) plaCargar();
@@ -7306,7 +7312,7 @@ function plPpd(dias) {   // ancho disponible para el gráfico (sin la columna iz
   const disp = Math.max(160, (caja ? caja.clientWidth : anc) - 24 - izq - 14);
   return Math.max(0.25, disp / Math.max(1, dias));
 }
-const plSusp = () => ((typeof DATA !== 'undefined' && DATA && DATA.eventosPlazo) || []).filter(e => e.tipo === 'suspension' && (!e.proyecto_id_codigo || PL.frente === 'todos' || e.proyecto_id_codigo === PL.frente)).map(e => ({ a: plD(e.fecha_inicio), b: plD(e.fecha_fin) + 1 }));
+const plSusp = () => PL.ver === 0 ? [] : ((typeof DATA !== 'undefined' && DATA && DATA.eventosPlazo) || []).filter(e => e.tipo === 'suspension' && (!e.proyecto_id_codigo || PL.frente === 'todos' || e.proyecto_id_codigo === PL.frente)).map(e => ({ a: plD(e.fecha_inicio), b: plD(e.fecha_fin) + 1 }));
 const plSuspDias = (a, b) => plSusp().reduce((s, x) => s + Math.max(0, Math.min(b, x.b) - Math.max(a, x.a)), 0);
 const plIniLab = (s) => { let v = s, c = true; while (c) { c = false; plSusp().forEach(x => { if (v >= x.a && v < x.b) { v = x.b; c = true; } }); } return v; };   // primer día laborable desde s
 const plFinLab = (s, dias) => { const d = Math.max(1, dias); let e = s + d; for (let k = 0; k < 20; k++) { const ne = s + d + plSuspDias(s, e); if (ne === e) break; e = ne; } return e; };   // fin + 1 de una tarea de «dias» laborables que empieza en s
@@ -7401,6 +7407,12 @@ function plCPM() {
     t.lf = lf; t.ls = lf - t.d; t.hol = t.lf - t.e; t.crit = t.activa && !t.hito && t.hol <= 0.001;
   });
 }
+function plMontar(donde) {   // el mismo Gantt se usa en dos pantallas: Plan master (editable) y Contrato (cronograma de una línea base, solo lectura)
+  const e = document.getElementById('plEspacio'); if (!e) return;
+  const dest = donde === 'contrato' ? document.getElementById('lbGanttBox') : document.querySelector('.pane[data-pane="plan"]');
+  if (dest && e.parentNode !== dest) dest.appendChild(e); e.dataset.donde = donde;
+}
+const plActivo = () => !!document.querySelector('.pane.on[data-pane="plan"], .pane.on[data-pane="lineasbase"]');
 async function plCargar() {
   const box = $('#plCuerpo'); if (!box) return;
   if (!RES_A || !OBRA || !(RES_A.proyectos || []).length) { box.innerHTML = '<div class="rg-msg">Cargando la obra…</div>'; return; }
@@ -7453,7 +7465,8 @@ function plPintar() {
   $('#plFrentes').innerHTML = (COMPONENTES.length > 1 ? `<button class="seg-btn ${PL.frente === 'todos' ? 'on' : ''}" data-plfr="todos">Toda la obra</button> ` : '') + COMPONENTES.map(c => `<button class="seg-btn ${PL.frente === c.id ? 'on' : ''}" data-plfr="${esc(c.id)}">${esc(String(c.nombre).replace(/^Puente\s+/i, ''))}</button>`).join(' ');
   document.querySelectorAll('[data-plzoom]').forEach(b => b.classList.toggle('on', b.dataset.plzoom === PL.zoom));
   const adm = !!AUTH.admin, p = PL.plan, lbMode = PL.ver !== 'meta', lbv = lbMode ? PL.lbs.find(l => l.numero === PL.ver) : null, vigIdV = (RES_A.version || {}).id;
-  $('#plVer').innerHTML = `<option value="meta" ${!lbMode ? 'selected' : ''}>Plan master · meta (editable)</option>` + PL.lbs.map(l => `<option value="${l.numero}" ${PL.ver === l.numero ? 'selected' : ''}>LB${l.numero}${l.cronograma_id === vigIdV ? ' · vigente' : ''} · ${esc(String(l.tipo_cambio || l.nombre).slice(0, 30))} (venta · solo lectura)</option>`).join('');
+  const enContrato = (document.getElementById('plEspacio') || {}).dataset && document.getElementById('plEspacio').dataset.donde === 'contrato';
+  $('#plVer').innerHTML = (enContrato ? '' : `<option value="meta" ${!lbMode ? 'selected' : ''}>Plan master · meta (editable)</option>`) + (enContrato ? PL.lbs : []).map(l => `<option value="${l.numero}" ${PL.ver === l.numero ? 'selected' : ''}>LB${l.numero}${l.cronograma_id === vigIdV ? ' · vigente' : ''} · ${esc(String(l.tipo_cambio || l.nombre).slice(0, 30))} · solo lectura</option>`).join('');
   if (!p && !lbMode) {
     box.innerHTML = `<div class="vl-card pre-vacio"><div class="pre-vacio-ic">🗓️</div><h3>Aún no hay plan master</h3>
       <p class="hint">El plan master es el cronograma META: tu plan de ejecución, con duraciones sugeridas por el APU meta (no obligatorias) y vínculos de predecesoras y sucesoras. Nace como copia de la línea base contractual vigente (partidas del contrato y de los adicionales, hitos, fechas, duraciones y vínculos) y lo ajustas sin tocar el contrato. De ahí se arma el Look Ahead.</p>
@@ -7475,8 +7488,8 @@ function plPintar() {
   const ib = (acc, ic, tip, cls) => `<button type="button" class="pl-ib ${cls || ''}" data-pl-acc="${acc}" title="${esc(tip)}" aria-label="${esc(tip)}">${ic}</button>`;
   const ed = plEditable(), desact = !!(p && RES_A.version && p.origen_id && p.origen_id !== RES_A.version.id);
   const acc = (!adm || lbMode) ? '' : p.estado === 'borrador'
-    ? ib('nueva', '＋', 'Agregar tarea: actividad de apoyo, hito o trabajo no contractual', 'pri') + ib('sincronizar', '⟳', 'Sincronizar con la línea base vigente: trae partidas nuevas (adicionales) e hitos que falten y actualiza deductivos y fechas de referencia; no toca tus fechas ni vínculos', desact ? 'pri' : '') + ib('ajustar', '⇢', 'Ajustar a vínculos: empuja las tareas que incumplen un vínculo (no mueve las demás ni las de fecha fija)') + ib('compactar', '⇤', 'Compactar: adelanta cada tarea con vínculos lo antes posible (salvo las de fecha fija)') + ib('sugeridas', '⚙', 'Aplicar las duraciones sugeridas por el APU meta (solo donde existen)') + '<i class="pl-sep"></i>' + ib('aprobar', '✔', 'Aprobar: pasa a vigente', 'pri') + ib('archivar', '🗄', 'Archivar: lo guarda sin usarlo') + ib('eliminar', '🗑', 'Eliminar este borrador (aún no aprobado)')
-    : p.estado === 'vigente' ? ib('reabrir', '↺', 'Reabrir: vuelve a borrador para editarlo') + ib('archivar', '🗄', 'Archivar: lo guarda sin usarlo') : '';
+    ? ib('guardar', '💾', 'Guardar una versión (foto) del plan tal como está ahora: no cambia el plan y queda en Contrato › Versiones del plan master') + ib('nueva', '＋', 'Agregar tarea: actividad de apoyo, hito o trabajo no contractual', 'pri') + ib('sincronizar', '⟳', 'Sincronizar con la línea base vigente: trae partidas nuevas (adicionales) e hitos que falten y actualiza deductivos y fechas de referencia; no toca tus fechas ni vínculos', desact ? 'pri' : '') + ib('ajustar', '⇢', 'Ajustar a vínculos: empuja las tareas que incumplen un vínculo (no mueve las demás ni las de fecha fija)') + ib('compactar', '⇤', 'Compactar: adelanta cada tarea con vínculos lo antes posible (salvo las de fecha fija)') + ib('sugeridas', '⚙', 'Aplicar las duraciones sugeridas por el APU meta (solo donde existen)') + '<i class="pl-sep"></i>' + ib('aprobar', '✔', 'Aprobar: pasa a vigente', 'pri') + ib('archivar', '🗄', 'Archivar: lo guarda sin usarlo') + ib('eliminar', '🗑', 'Eliminar este borrador (aún no aprobado)')
+    : p.estado === 'vigente' ? ib('guardar', '💾', 'Guardar una versión (foto) del plan tal como está ahora') + ib('reabrir', '↺', 'Reabrir: vuelve a borrador para editarlo') + ib('archivar', '🗄', 'Archivar: lo guarda sin usarlo') : '';
   const estado = lbMode ? `<div class="vl-card pl-estado"><span class="vl-pill ar">Solo lectura</span><span class="pl-est-t"><b>LB${PL.ver} · ${esc(lbv ? lbv.nombre : '')}</b><em>Presupuesto de venta (contrato)${lbv && lbv.tipo_cambio ? ' · ' + esc(lbv.tipo_cambio) : ''}${lbv && lbv.base_legal ? ' · ' + esc(lbv.base_legal) : ''}${lbv && lbv.resolucion ? ' · ' + esc(lbv.resolucion) : ''}${lbv && lbv.fecha_aprobacion ? ' · aprobada ' + plFmt(plD(lbv.fecha_aprobacion)) : ''}${lbv && lbv.plazo_fin ? ' · plazo al ' + plFmt(plD(lbv.plazo_fin)) : ''}</em></span></div>`
     : `<div class="vl-card pl-estado"><span class="vl-pill ${pe[1]}">${pe[0]}</span><span class="pl-est-t"><b>${esc(p.nombre)}</b><em>Creado por ${esc(p.creado_por || '—')} · ${f(p.creado_en)}${p.aprobado_en ? ' · aprobado ' + f(p.aprobado_en) : ''}${p.motivo ? ' · ' + esc(p.motivo) : ''}${desact ? ' · <span class="pre-neg">la línea base vigente cambió: sincroniza</span>' : ''}</em></span><span class="pl-acc">${acc}</span></div>`;
   const vigId = (RES_A.version || {}).id;
@@ -7648,7 +7661,7 @@ async function plReprogramar(modo) {
 // ── eventos ──
 document.addEventListener('click', async (e) => {
   const t = e.target; let b;
-  if (!document.querySelector('.pane.on[data-pane="plan"]') && !t.closest('#plDr')) return;
+  if (!plActivo() && !t.closest('#plDr')) return;
   if (PL.arrastrado) return;
   if ((b = t.closest('[data-plfr]'))) { PL.frente = b.dataset.plfr; PL.reset = true; plCerrarTarea(); PL.reset = true; plPintar(); return; }
   if ((b = t.closest('[data-plzoom]'))) { PL.zoom = b.dataset.plzoom; PL.reset = true; plPintar(); return; }
@@ -7667,8 +7680,10 @@ document.addEventListener('click', async (e) => {
     const acc = b.dataset.plAcc;
     if (acc === 'ajustar' || acc === 'compactar') { await plReprogramar(acc); return; }
     if (acc === 'nueva') { plNuevaTarea(); return; }
+    if (acc === 'guardar') { plGuardarDlg(); return; }
     if (acc === 'sincronizar') {
-      if (!(await confirmar('Sincronizar el plan con la línea base vigente: entran las partidas nuevas (adicionales) y los hitos que falten, se actualizan las fechas de referencia y los deductivos totales pasan a inactivos. Tus fechas y vínculos no cambian.'))) return;
+      if (!(await confirmar('Sincronizar el plan con la línea base vigente: entran las partidas nuevas (adicionales) y los hitos que falten, se actualizan las fechas de referencia y los deductivos totales pasan a inactivos. Tus fechas y vínculos no cambian. Antes se guarda una versión del plan tal como está.'))) return;
+      if (!(await plFotoAuto('Plan antes de sincronizar con LB' + plLbVigNum(), 'Foto automática antes de sincronizar con la línea base vigente'))) return;
       await plEjecutar('plan_meta_sincronizar', { p_plan: PL.plan.id }, (r) => r && (r.nuevas || r.reenlazadas) ? `Plan sincronizado: ${r.nuevas} tareas nuevas${r.reenlazadas ? `, ${r.reenlazadas} re-enlazadas` : ''}.` : 'El plan ya estaba al día con la línea base.'); return;
     }
     if (acc === 'sugeridas') {
@@ -7678,7 +7693,8 @@ document.addEventListener('click', async (e) => {
       await plEjecutar('plan_tareas_guardar', { p_plan: PL.plan.id, p_cambios: cambios }, `${cambios.length} duraciones actualizadas.`); return;
     }
     const msg = { aprobar: 'Aprobar el plan master. Pasa a vigente y ya no se edita hasta reabrirlo.', reabrir: 'Reabrir el plan master. Vuelve a borrador para editarlo.', archivar: 'Archivar el plan master. Queda guardado pero sin uso, y podrás crear otro.', eliminar: 'Eliminar el plan master. Es un borrador sin aprobar y se borra para siempre.' }[acc];
-    if (!(await confirmar(msg))) return;
+    if (!(await confirmar(msg + (acc === 'archivar' ? ' Antes se guarda una versión del plan.' : '')))) return;
+    if (acc === 'archivar' && !(await plFotoAuto('Plan archivado', 'Foto automática al archivar el plan'))) return;
     const ok = await plEjecutar('plan_meta_estado', { p_plan: PL.plan.id, p_accion: acc }, { aprobar: 'Plan master aprobado.', reabrir: 'Plan master reabierto.', archivar: 'Plan master archivado.', eliminar: 'Plan master eliminado.' }[acc]);
     if (ok && (acc === 'archivar' || acc === 'eliminar')) plCerrarTarea();
     return;
@@ -7958,7 +7974,7 @@ async function lbEnviar() {
 }
 
 // ═══ Pantalla «Contrato y líneas base» ═══════════════════════════════════════════════════════════════════════════════════════════════════
-const LBP = { vers: [], parts: {}, deps: {}, cargado: false, a: null, b: null };
+const LBP = { vers: [], parts: {}, deps: {}, cargado: false, a: null, b: null, ver: null, snaps: [], snapsErr: null, snap: null };
 async function lbPanelCargar(forzar) {
   const box = $('#lbPanel'); if (!box) return;
   if (!LBP.cargado || forzar) {
@@ -7967,12 +7983,19 @@ async function lbPanelCargar(forzar) {
       const vs = await get(`/linea_base_versiones?obra_id=eq.${OBRA.id}&select=*&order=numero`), ids = vs.map(v => v.id);
       const ps = ids.length ? await getTodo(`/linea_base_partidas?version_id=in.(${ids.join(',')})&select=version_id,codigo,nombre,es_hito,estado,metrado,parcial_cd,inicio,fin&order=version_id,codigo`) : [];
       const ds = ids.length ? await getTodo(`/linea_base_dependencias?version_id=in.(${ids.join(',')})&select=version_id,codigo&order=version_id,codigo,pred_codigo`) : [];
+      try { LBP.snaps = await get(`/plan_versiones_guardadas?obra_id=eq.${OBRA.id}&select=id,numero,nombre,motivo,lb_numero,creado_por,creado_en,inicio,fin,n_tareas&order=numero`); LBP.snapsErr = null; } catch (e) { LBP.snaps = []; LBP.snapsErr = e; }
       LBP.vers = vs; LBP.parts = {}; ps.forEach(p => (LBP.parts[p.version_id] = LBP.parts[p.version_id] || []).push(p));
       LBP.deps = {}; ds.forEach(d => { LBP.deps[d.version_id] = (LBP.deps[d.version_id] || 0) + 1; }); LBP.cargado = true;
       if (!LBP.b || !vs.some(v => v.id === LBP.b)) { LBP.b = vs.length ? vs[vs.length - 1].id : null; LBP.a = vs.length > 1 ? vs[0].id : null; }
     } catch (e) { box.innerHTML = `<div class="rg-msg">${msgCarga('Líneas base', e)}</div>`; return; }
   }
-  lbPanelPintar();
+  lbPanelPintar(); lbGanttMostrar();
+}
+async function lbGanttMostrar() {   // monta el Gantt en la pantalla y lo dibuja con la línea base elegida (la vigente por defecto)
+  const slot = $('#lbGanttSlot'); if (!slot) return;
+  slot.hidden = !LBP.vers.length; if (!LBP.vers.length) return;
+  if (LBP.ver == null || !LBP.vers.some(v => v.numero === LBP.ver)) { const vig = LBP.vers.find(v => v.cronograma_id && v.cronograma_id === (RES_A.version || {}).id) || LBP.vers[LBP.vers.length - 1]; LBP.ver = vig.numero; lbPanelPintar(); }
+  PL.ver = LBP.ver; PL.reset = true; plMontar('contrato'); await plCargar();
 }
 function lbComparar(a, b) {   // por código: qué partidas son nuevas, salieron o cambiaron de metrado o de fechas
   const A = new Map((LBP.parts[a.id] || []).map(p => [p.codigo, p])), B = new Map((LBP.parts[b.id] || []).map(p => [p.codigo, p]));
@@ -7992,6 +8015,62 @@ function lbComparar(a, b) {   // por código: qué partidas son nuevas, salieron
   r.plazo = a.plazo_fin && b.plazo_fin ? dia(b.plazo_fin) - dia(a.plazo_fin) : null;
   return r;
 }
+// ── versiones guardadas del plan master (fotos de solo lectura) ──
+const plLbVigNum = () => { const v = (PL.lbs || []).find(l => l.cronograma_id === (RES_A.version || {}).id); return v ? v.numero : '?'; };
+async function plFotoAuto(nombre, motivo) {   // guarda la foto; si no se puede (p. ej. falta el SQL en la base), pregunta si seguir sin ella
+  try { await preRpc('plan_guardar_version', { p_plan: PL.plan.id, p_nombre: nombre, p_motivo: motivo }); LBP.cargado = false; return true; }
+  catch (e) { return await confirmar(`No se pudo guardar la versión del plan (${e.message}). ¿Continuar de todos modos? Puede que falte correr plan_versiones_guardadas.sql en la base.`); }
+}
+function plGuardarDlg() {
+  let m = document.getElementById('plFotoDlg');
+  if (!m) { m = document.createElement('form'); m.id = 'plFotoDlg'; m.className = 'pform la-form'; m.hidden = true; document.body.appendChild(m); }
+  m.innerHTML = `<h3 style="margin:0 0 4px;font-size:14px">Guardar versión del plan master</h3><p class="hint" style="margin:0 0 10px">Es una foto de solo lectura: fechas, duraciones y vínculos tal como están ahora, y la línea base sobre la que están. El plan no cambia. La verás en Contrato › Versiones del plan master.</p>
+    <div class="field"><label for="pfNom">Nombre</label><input id="pfNom" type="text" maxlength="120" value="Plan master · ${new Date().toLocaleDateString('es-PE')}"></div>
+    <div class="field"><label for="pfMot">Motivo (opcional)</label><input id="pfMot" type="text" maxlength="160" placeholder="Ej. Antes de la ampliación N° 02"></div>
+    <div class="sug-acc"><button class="btn" type="submit">Guardar versión</button><button class="btn-sec" type="button" id="pfCancel">Cancelar</button></div>`;
+  const fondo = document.getElementById('lbFondo') || (() => { const f = document.createElement('div'); f.id = 'lbFondo'; f.hidden = true; document.body.appendChild(f); return f; })();
+  const cerrar = () => { m.hidden = true; fondo.hidden = true; document.documentElement.classList.remove('la-modal'); };
+  m.hidden = false; fondo.hidden = false; document.documentElement.classList.add('la-modal'); fondo.onclick = cerrar; $('#pfCancel').onclick = cerrar; setTimeout(() => $('#pfNom').select(), 50);
+  m.onsubmit = async (e) => {
+    e.preventDefault(); const btn = m.querySelector('button[type=submit]'); btn.disabled = true;
+    try { await preRpc('plan_guardar_version', { p_plan: PL.plan.id, p_nombre: $('#pfNom').value, p_motivo: $('#pfMot').value }); cerrar(); LBP.cargado = false; toast('Versión del plan guardada. Está en Contrato › Versiones del plan master.', true, 'pl'); }
+    catch (er) { btn.disabled = false; toast(`No se pudo guardar: ${esc(er.message)}`, false, 'pl'); }
+  };
+}
+async function lbSnapComparar(id) {   // la foto elegida frente al plan actual, por tarea
+  const box = $('#lbSnapCmp'); if (!box) return; box.innerHTML = '<div class="rg-msg">Comparando…</div>'; LBP.snap = id;
+  try {
+    const [s] = await get(`/plan_versiones_guardadas?id=eq.${id}&select=numero,nombre,tareas`); const [pl] = await get(`/plan_versiones?obra_id=eq.${OBRA.id}&estado=neq.archivado&select=id,nombre`);
+    if (!pl) { box.innerHTML = '<p class="hint">No hay un plan master activo para comparar.</p>'; return; }
+    const act = await getTodo(`/v_plan_tareas?plan_id=eq.${pl.id}&select=id,codigo,nombre,inicio,fin,dias,activa&order=orden,id`);
+    const A = s.tareas, porId = new Map(act.map(x => [x.id, x])), porCod = new Map(act.map(x => [x.codigo + '|' + x.nombre, x])), usados = new Set();
+    const dia = (d) => Math.floor(Date.parse(d + 'T00:00:00Z') / 86400000);
+    let movidas = 0, durCambia = 0, quitadas = 0, iguales = 0; const mov = [];
+    A.forEach(a => {
+      const b = porId.get(a.id) || porCod.get(a.codigo + '|' + a.nombre); if (!b) { quitadas++; return; } usados.add(b.id);
+      const di = dia(b.inicio) - dia(a.inicio), df = dia(b.fin) - dia(a.fin);
+      if (di || df) { movidas++; mov.push({ codigo: a.codigo, nombre: a.nombre, ini: di, fin: df }); } else iguales++;
+      if (Number(a.dias) !== Number(b.dias)) durCambia++;
+    });
+    const nuevas = act.filter(x => !usados.has(x.id)).length, finA = A.reduce((m, a) => a.fin > m ? a.fin : m, ''), finB = act.reduce((m, a) => a.fin > m ? a.fin : m, '');
+    mov.sort((x, y) => Math.abs(y.fin) - Math.abs(x.fin));
+    const pp = (v) => (v > 0 ? '+' : '') + v, f = (d) => plFmt(plD(d));
+    box.innerHTML = `<div class="vl-kp pre-kp">
+      <div class="vl-k"><small>Fin de obra</small><b>${pp(dia(finB) - dia(finA))} días</b><em>${f(finA)} → ${f(finB)}</em></div>
+      <div class="vl-k"><small>Tareas movidas</small><b>${movidas}</b><em>de ${A.length} · ${iguales} iguales</em></div>
+      <div class="vl-k"><small>Duración cambiada</small><b>${durCambia}</b><em>tareas con otra duración</em></div>
+      <div class="vl-k"><small>Altas y bajas</small><b>+${nuevas} / −${quitadas}</b><em>tareas nuevas / que ya no están</em></div></div>`
+      + (mov.length ? `<div class="vl-tw"><table class="vl-tb"><thead><tr><th class="l">Tareas cuyo fin más se movió (${esc(s.nombre)} → plan actual)</th><th>Inicio (d)</th><th>Fin (d)</th></tr></thead><tbody>${mov.slice(0, 8).map(m => `<tr><td class="l"><span class="mono">${esc(m.codigo)}</span> ${esc(String(m.nombre || '').slice(0, 64))}</td><td>${pp(m.ini)}</td><td class="${m.fin > 0 ? 'pre-neg' : m.fin < 0 ? 'pre-pos' : ''}">${pp(m.fin)}</td></tr>`).join('')}</tbody></table></div>` : '<p class="hint">El plan actual no se ha movido respecto a esa versión.</p>');
+  } catch (e) { box.innerHTML = `<div class="rg-msg">${esc(e.message)}</div>`; }
+}
+function lbSnapsHtml(f, adm) {   // tarjeta «Versiones del plan master»
+  const cab = '<h3 style="margin:0 0 3px">Versiones del plan master</h3><p class="hint" style="margin:0">Fotos de solo lectura del plan de ejecución, guardadas antes de cada cambio grande (sincronizar con una línea base nueva, archivar) o a mano con 💾 en Plan maestro. Sirven para saber qué se planeaba antes de una ampliación.</p>';
+  if (LBP.snapsErr) return `<div class="vl-card" style="margin-top:12px"><div class="lb-cab"><div>${cab}${adm ? '<p class="hint" style="color:var(--amber)">Falta correr <b>plan_versiones_guardadas.sql</b> en la base.</p>' : ''}</div></div></div>`;
+  const filas = LBP.snaps.map(s => `<tr><td class="l"><b>PM-${s.numero}</b></td><td class="l">${esc(s.nombre)}${s.motivo ? `<div class="lb-sub">${esc(s.motivo)}</div>` : ''}</td><td>${f(String(s.creado_en).slice(0, 10))}<div class="lb-sub">${esc(s.creado_por || '')}</div></td><td>${s.lb_numero == null ? '—' : 'LB' + s.lb_numero}</td><td>${s.n_tareas}</td><td>${f(s.inicio)} → ${f(s.fin)}</td>
+      <td class="c"><button type="button" class="icon-btn ${LBP.snap === s.id ? 'on' : ''}" data-lbp-snap="${s.id}" title="Comparar esta versión con el plan actual" aria-label="Comparar con el plan actual"><svg viewBox="0 0 24 24"><path d="M7 7h11l-3-3m3 3-3 3M17 17H6l3-3m-3 3 3 3"/></svg></button></td></tr>`).join('');
+  return `<div class="vl-card" style="margin-top:12px"><div class="lb-cab"><div>${cab}</div></div>
+    <div class="vl-tw"><table class="vl-tb lb-tb"><thead><tr><th class="l">Versión</th><th class="l">Nombre</th><th>Guardada</th><th>Sobre</th><th>Tareas</th><th>Fechas del plan</th><th></th></tr></thead><tbody>${filas || '<tr><td colspan="7" class="l">Todavía no hay versiones guardadas. En Plan maestro, el botón 💾 guarda la primera; «Sincronizar» y «Archivar» guardan una sola antes de cambiar el plan.</td></tr>'}</tbody></table></div><div id="lbSnapCmp"></div></div>`;
+}
 function lbPanelPintar() {
   const box = $('#lbPanel'), adm = !!AUTH.admin, vig = (RES_A.version || {}).id;
   const f = (s) => s ? plFmt(plD(s)) : '—', n2 = (v) => Number(v).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -8000,7 +8079,7 @@ function lbPanelPintar() {
     return `<tr><td class="l"><b>LB${l.numero}</b>${l.cronograma_id && l.cronograma_id === vig ? ' <span class="vl-pill ok">vigente</span>' : ''}<div class="lb-sub">${esc(l.nombre)}</div></td>
       <td class="l">${esc(l.tipo_cambio || '—')}${l.base_legal ? `<div class="lb-sub">${esc(l.base_legal)}</div>` : ''}</td><td class="l">${esc(l.resolucion || '—')}<div class="lb-sub">${f(l.fecha_aprobacion)}</div></td>
       <td>${f(l.plazo_fin)}</td><td>${ps.length - hitos}${hitos ? `<div class="lb-sub">+ ${hitos} hitos</div>` : ''}</td><td>${n2(cd)}</td><td>${LBP.deps[l.id] || 0}</td>
-      <td class="c"><button type="button" class="icon-btn" data-lbp-ver="${l.numero}" title="Ver esta línea base en el Gantt (solo lectura)" aria-label="Ver en el Gantt"><svg viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></button>${adm ? `<button type="button" class="icon-btn" data-lbp-ficha="${l.id}" title="Editar la ficha: tipo de cambio, base legal, resolución, fecha y plazo" aria-label="Editar ficha"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4Z"/></svg></button>` : ''}</td></tr>`;
+      <td class="c"><button type="button" class="icon-btn ${LBP.ver === l.numero ? 'on' : ''}" data-lbp-ver="${l.numero}" title="Ver el cronograma de esta línea base (solo lectura)" aria-label="Ver en el Gantt"><svg viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></button>${adm ? `<button type="button" class="icon-btn" data-lbp-ficha="${l.id}" title="Editar la ficha: tipo de cambio, base legal, resolución, fecha y plazo" aria-label="Editar ficha"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4Z"/></svg></button>` : ''}</td></tr>`;
   }).join('');
   const opt = (sel) => LBP.vers.map(l => `<option value="${l.id}" ${l.id === sel ? 'selected' : ''}>LB${l.numero} · ${esc(String(l.tipo_cambio || l.nombre).slice(0, 40))}</option>`).join('');
   const A = LBP.vers.find(v => v.id === LBP.a), B = LBP.vers.find(v => v.id === LBP.b);
@@ -8017,7 +8096,7 @@ function lbPanelPintar() {
   box.innerHTML = `<div class="vl-card"><div class="lb-cab"><div><h3 style="margin:0 0 3px">Líneas base del contrato</h3><p class="hint" style="margin:0">Cada una es una foto de solo lectura del cronograma valorizado: partidas con su código permanente, fechas, metrados, costos y vínculos. La vigente es la que alimenta las demás pantallas.</p></div>
       ${adm ? '<button type="button" class="btn-sec pri" data-lbp-cargar title="Cargar una línea base: CAO (Excel) + Gantt de Project (XML)">⇪ Cargar línea base</button>' : ''}</div>
     <div class="vl-tw"><table class="vl-tb lb-tb"><thead><tr><th class="l">Línea base</th><th class="l">Cambio</th><th class="l">Resolución</th><th>Fin de plazo</th><th>Partidas</th><th>Costo directo S/</th><th>Vínculos</th><th></th></tr></thead><tbody>${filas || '<tr><td colspan="8" class="l">Todavía no hay líneas base.</td></tr>'}</tbody></table></div></div>
-    <div class="vl-card" style="margin-top:12px"><div class="lb-cab"><h3 style="margin:0">Comparar dos líneas base</h3><span class="lb-cmp"><select id="lbpA" class="pl-sel-t">${opt(LBP.a)}</select> <span>→</span> <select id="lbpB" class="pl-sel-t">${opt(LBP.b)}</select></span></div>${cmp}</div>`;
+    ${lbSnapsHtml(f, adm)}<div class="vl-card" style="margin-top:12px"><div class="lb-cab"><h3 style="margin:0">Comparar dos líneas base</h3><span class="lb-cmp"><select id="lbpA" class="pl-sel-t">${opt(LBP.a)}</select> <span>→</span> <select id="lbpB" class="pl-sel-t">${opt(LBP.b)}</select></span></div>${cmp}</div>`;
 }
 function lbFichaAbrir(id) {
   const l = LBP.vers.find(v => v.id === id); if (!l) return;
@@ -8044,10 +8123,12 @@ function lbFichaAbrir(id) {
   };
 }
 document.addEventListener('click', (e) => {
-  const v = e.target.closest('[data-lbp-ver]'); if (v) { PL.ver = +v.dataset.lbpVer; document.querySelector('#nav button[data-pane="plan"]').click(); return; }
+  const v = e.target.closest('[data-lbp-ver]'); if (v) { LBP.ver = +v.dataset.lbpVer; lbPanelPintar(); lbGanttMostrar().then(() => { const s = $('#lbGanttSlot'); if (s) s.scrollIntoView({ behavior: 'smooth', block: 'start' }); }); return; }
+  const sn = e.target.closest('[data-lbp-snap]'); if (sn) { lbSnapComparar(sn.dataset.lbpSnap).then(() => lbPanelPintarMarca()); return; }
   const fi = e.target.closest('[data-lbp-ficha]'); if (fi) { lbFichaAbrir(fi.dataset.lbpFicha); return; }
   if (e.target.closest('[data-lbp-cargar]')) lbAbrir();
 });
+function lbPanelPintarMarca() { document.querySelectorAll('[data-lbp-snap]').forEach(b => b.classList.toggle('on', b.dataset.lbpSnap === LBP.snap)); }
 document.addEventListener('change', (e) => { if (e.target.id === 'lbpA' || e.target.id === 'lbpB') { LBP.a = $('#lbpA').value; LBP.b = $('#lbpB').value; lbPanelPintar(); } });
 
 document.addEventListener('click', (e) => {
@@ -8059,7 +8140,7 @@ document.addEventListener('click', (e) => {
 document.addEventListener('change', (e) => { if (e.target.id === 'plPapel') { PL.papel = e.target.value; try { localStorage.setItem('obra-pl-papel', PL.papel); } catch (er) {} plImprimir(); } });
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && document.getElementById('plPv') && !document.querySelector('.cf-fondo')) plCerrarImpresion(); });
 let plRz = 0;
-window.addEventListener('resize', () => { clearTimeout(plRz); plRz = setTimeout(() => { if (PL.plan && PL.zoom === 'ajustar' && document.querySelector('.pane.on[data-pane="plan"]')) { PL.reset = true; plPintar(); } }, 200); });
+window.addEventListener('resize', () => { clearTimeout(plRz); plRz = setTimeout(() => { if ((PL.plan || PL.ver !== 'meta') && PL.zoom === 'ajustar' && plActivo()) { PL.reset = true; plPintar(); } }, 200); });
 function plFinTxt() { const i = $('#plIni'), d = $('#plDias'), o = $('#plFinTxt'); if (i && d && o && i.value && parseInt(d.value, 10) >= 1) o.textContent = plFmt(plFinLab(plIniLab(plD(i.value)), parseInt(d.value, 10)) - 1); }
 document.addEventListener('input', (e) => {
   if (e.target.id === 'plIni' || e.target.id === 'plDias') { plFinTxt(); return; }
@@ -8074,7 +8155,7 @@ document.addEventListener('input', (e) => {
 document.addEventListener('change', async (e) => {
   const s = e.target;
   if (s.id === 'plVer') {
-    const nuevo = s.value === 'meta' ? 'meta' : +s.value, previo = PL.ver; PL.ver = nuevo; PL.reset = true;
+    const nuevo = s.value === 'meta' ? 'meta' : +s.value, previo = PL.ver; PL.ver = nuevo; PL.reset = true; if (typeof nuevo === 'number') { LBP.ver = nuevo; lbPanelPintar(); }
     try { if (nuevo === 'meta') plModelo(); else await plModeloLB(); const dr = document.getElementById('plDr'); if (dr) { dr.classList.remove('on'); document.getElementById('plBk').classList.remove('on'); } PL.sel = null; plPintar(); }
     catch (er) { PL.ver = previo; toast(`No se pudo leer la línea base: ${esc(er.message)}`, false); if (previo === 'meta') plModelo(); plPintar(); }
     return;
@@ -8109,7 +8190,7 @@ document.addEventListener('pointerdown', (e) => {
   document.addEventListener('pointermove', mover); document.addEventListener('pointerup', fin);
 });
 document.addEventListener('click', (e) => {   // clic en una barra (sin arrastrar) abre la tarea
-  const g = e.target.closest('.pl-b'); if (g && document.querySelector('.pane.on[data-pane="plan"]') && !PL.arrastrado) plAbrirTarea(g.dataset.id);
+  const g = e.target.closest('.pl-b'); if (g && plActivo() && !PL.arrastrado) plAbrirTarea(g.dataset.id);
 });
 
 async function hhCargar() {
