@@ -5224,6 +5224,7 @@ function laCaso(txt) {   // "RELLENO PARA ESTRUCTURAS CON MATERIAL DE PRESTAMO" 
 const LA_RGB = ['15,118,110', '47,111,237', '217,119,6', '124,58,237', '219,39,119'];
 const laColorRgb = (cod) => LA_RGB[Math.max(0, COMPONENTES.findIndex(c => c.id === cod)) % LA_RGB.length];
 function laCadena(nodoId) { const c = []; let n = LA.porId[nodoId]; while (n && n.padre_id) { n = LA.porId[n.padre_id]; if (n) c.unshift(n); } return c; }   // ancestros, de la raíz al padre
+const laColsSinPartida = (tipo, nodoId, grupoId, proyectoId) => (tipo && tipo !== 'partida') ? { tipo, grupo_id: nodoId ? null : (grupoId || null), proyecto_id: nodoId ? null : proyectoId } : {};
 const LA_TIPO = { apoyo: 'APOYO', hito: 'HITO', no_contractual: 'NO CONTR.' };   // actividades que no son partida: del plan master, sin metrado ni costo (avance en %)
 function laCadenaF(f) { return f.nodo_id ? laCadena(f.nodo_id) : (f.grupo_id && LA.porId[f.grupo_id] ? [...laCadena(f.grupo_id), LA.porId[f.grupo_id]] : []); }
 function laArbol(filas) {
@@ -5437,7 +5438,7 @@ async function laSugAgregar() {
   if (!marcadas.length) { laMsg('Marca al menos una actividad.', false); return; }
   const base = LA.det.reduce((m, f) => Math.max(m, f.orden), 0), btn = $('#laSugAgregar'); btn.disabled = true;
   try {
-    await laEnviar('POST', '/lookahead_actividades', marcadas.map((x, i) => ({ lookahead_id: look.id, nodo_id: x.t.nodo_id, tipo: x.t.tipo || 'partida', grupo_id: x.t.nodo_id ? null : (x.t.grupo_id || null), proyecto_id: x.t.nodo_id ? null : x.t.proyecto_id, tarea_id: x.t.id, actividad: x.nom, orden: base + i + 1, critico: false, fecha_inicio: x.ini, dias: x.dias, metrado_meta: x.meta, acumulado_previo: x.previo })));
+    await laEnviar('POST', '/lookahead_actividades', marcadas.map((x, i) => ({ lookahead_id: look.id, nodo_id: x.t.nodo_id, ...laColsSinPartida(x.t.tipo, x.t.nodo_id, x.t.grupo_id, x.t.proyecto_id), tarea_id: x.t.id, actividad: x.nom, orden: base + i + 1, critico: false, fecha_inicio: x.ini, dias: x.dias, metrado_meta: x.meta, acumulado_previo: x.previo })));
     LA.sugSel = new Set(); $('#laSug').hidden = true; await laCargarDetalle(); laMsg(`${marcadas.length} actividad${marcadas.length === 1 ? '' : 'es'} agregada${marcadas.length === 1 ? '' : 's'} desde el plan master. Ajusta fechas y metrado donde haga falta (clic en la fila).`, true);
   } catch (err) { laMsg(`No se pudo agregar: ${laErr(err)}`, false); btn.disabled = false; }
 }
@@ -5952,7 +5953,7 @@ function laIniciar() {
         const pend = rows.filter(r => Number(r.pct_avance) < 1 && Number(r.metrado_meta) - Number(r.acumulado) > 0.0001);
         reprog = pend.filter(r => r.fecha_fin < s.fecha_inicio).length;
         const nuevas = pend.map((r, i) => { const tarde = r.fecha_fin < s.fecha_inicio;
-          return { lookahead_id: nuevo.id, nodo_id: r.nodo_id, tipo: r.tipo, grupo_id: r.grupo_id, proyecto_id: r.nodo_id ? null : r.proyecto_id, tarea_id: r.tarea_id, actividad: r.actividad_propia, orden: i + 1, detalle: r.detalle, critico: r.critico, fecha_inicio: tarde ? s.fecha_inicio : r.fecha_inicio, dias: Math.min(r.dias, 28), metrado_meta: Math.round((Number(r.metrado_meta) - Number(r.acumulado)) * 10000) / 10000, acumulado_previo: 0, responsable: r.responsable }; });
+          return { lookahead_id: nuevo.id, nodo_id: r.nodo_id, ...laColsSinPartida(r.tipo, r.nodo_id, r.grupo_id, r.proyecto_id), tarea_id: r.tarea_id, actividad: r.actividad_propia, orden: i + 1, detalle: r.detalle, critico: r.critico, fecha_inicio: tarde ? s.fecha_inicio : r.fecha_inicio, dias: Math.min(r.dias, 28), metrado_meta: Math.round((Number(r.metrado_meta) - Number(r.acumulado)) * 10000) / 10000, acumulado_previo: 0, responsable: r.responsable }; });
         if (nuevas.length) { await laEnviar('POST', '/lookahead_actividades', nuevas); copiadas = nuevas.length; }
       }
       $('#laNuevoBox').hidden = true; LA.sel = nuevo.id; try { localStorage.setItem('obra-la-sel', LA.sel); } catch (x) {}
