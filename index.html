@@ -5339,8 +5339,11 @@ function laSugCalc() {
     //   meta del bloque = parte de la tarea que cae en la ventana + (si la tarea ya se venía registrando) lo que se debía llevar hecho antes y no se hizo
     const dT = Math.max(1, laDia(t.fin) - laDia(t.inicio) + 1), d0 = laDia(w0), d1 = laDia(w1), ti = laDia(t.inicio), tf = laDia(t.fin);
     const frac = (a, b) => Math.min(1, Math.max(0, (Math.min(b, tf) - Math.max(a, ti) + 1) / dT));
-    const enBloque = share * frac(d0, d1), atraso = pv.length ? Math.max(0, share * frac(ti, d0 - 1) - ejec) : 0;
-    const meta = share > 0 ? Math.round(Math.max(0, Math.min(share - ejec, enBloque + atraso)) * 100) / 100 : 0;
+    // tarea que ya se venía registrando: lo que FALTA (metrado − ejecutado) se reparte entre los días que le quedan a la tarea y el bloque toma su parte
+    // (atrasada: lo que falta baja a esta ventana; adelantada: baja la parte de este bloque y queda menos para el siguiente). Sin registros previos: solo su tramo del bloque.
+    const rest = Math.max(1, tf - Math.max(ti, d0) + 1), ov = Math.max(0, Math.min(d1, tf) - Math.max(d0, ti) + 1), falta = share - ejec;
+    const resp = pv.length ? (tf < d0 ? falta : falta * Math.min(1, ov / rest)) : share * frac(d0, d1);
+    const meta = share > 0 ? Math.round(Math.max(0, Math.min(falta, resp)) * 100) / 100 : 0;
     if (share > 0 && meta <= 0) continue;                                                 // va adelantado: no falta nada para esta ventana
     const ini = enVentana ? (t.inicio > w0 ? t.inicio : w0) : w0;
     const finT = enVentana ? t.fin : laFecha(laDia(w0) + Math.max(1, t.dias) - 1), fin = finT < w1 ? finT : w1;
@@ -6091,7 +6094,7 @@ function ptBlqInfo(f) {   // lo programado en las semanas del bloque (Plan de ca
   }
   const sum = PT.det.filter(x => x.actividad_id === f.actividad_id).reduce((s, x) => s + Number(x.plan_total || 0), 0), tol = Math.max(0.0001, obj * 0.001);
   const cls = Math.abs(sum - obj) <= tol ? 'ok' : (sum > obj ? 'sobre' : 'falta');
-  const tit = cls === 'ok' ? 'El plan de las semanas suma justo la parte de la meta del Look Ahead que cae en el bloque' : cls === 'sobre' ? 'Lo programado supera la meta del Look Ahead (por ejemplo, después de repartir un atraso)' : 'Falta programar: hay semanas del bloque sin plan, o con menos que la meta del Look Ahead';
+  const tit = cls === 'ok' ? 'El plan de las semanas suma justo la parte de la meta del Look Ahead que cae en el bloque' : cls === 'sobre' ? 'Lo programado supera la meta del Look Ahead (por ejemplo, después de repartir un atraso)' : 'Falta programar: hay semanas del bloque sin plan, o con menos que la meta del Look Ahead (lo que cae después del bloque pasa al siguiente Look Ahead)';
   return { txt: `${num4(sum)} / ${num4(obj)}`, cls, tit: `${tit}. Meta del Look Ahead en el bloque: ${num4(obj)} ${f.unidad || ''}` };
 }
 const ptBlqCelda = (f) => { const i = ptBlqInfo(f); return `<td class="n blq ${i.cls}" data-c="blq" title="${esc(i.tit)}">${i.txt}</td>`; };
@@ -6134,10 +6137,61 @@ const ptSemanaDe = (mapa, semIni) => { const lun = laDia(semIni); return [0, 1, 
 const ptTotalAct = (a) => Math.max(0, Number(a.metrado_meta) - Number(a.acumulado_previo));   // lo que la actividad tiene por hacer según el Look Ahead
 // Plan de cada semana al CREARLO: el metrado de la actividad se parte en proporción a sus días de trabajo (L–S) desde el inicio del bloque,
 // así las semanas del bloque suman justo lo que dice el Look Ahead. (Si hubo atraso, «Repartir» recalcula lo que falta.)
+const ptVencida = (a, semIni) => laDia(a.fecha_fin) < laDia(semIni);   // ya debió terminar antes de esta semana
+async function ptContexto() {   // plan master + lo ejecutado de cada tarea en los demás Look Ahead
+  try { if (!LA.plan) await laSugCargar(); } catch (e) {}
+  let otros = []; try { otros = await getTodo(`/v_lookahead_detalle?obra_id=eq.${OBRA.id}&lookahead_id=neq.${PT.look}&select=lookahead_id,tarea_id,nodo_id,real_total&order=semana`); } catch (e) {}
+  return { otros };
+}
+function ptTareaDe(a) {   // tarea del plan master de la que nace la actividad (por vínculo, o la única tarea de su partida)
+  if (!LA.plan || LA.plan.sin) return null;
+  const v = LA.plan.tareas.find(x => x.id === a.tarea_id); if (v) return v;
+  const u = a.nodo_id ? LA.plan.tareas.filter(x => x.tipo === 'partida' && x.nodo_id === a.nodo_id && x.activa !== false && !x.hito) : [];
+  return !a.tarea_id && u.length === 1 ? u[0] : null;
+}
+function ptShareT(t) {   // metrado que le toca a la tarea (la partida se reparte entre sus tareas según sus días); apoyo / hito / no contractual: 100 %
+  if (t.tipo !== 'partida') return 100;
+  const h = LA.plan.tareas.filter(x => x.nodo_id === t.nodo_id && x.tipo === 'partida' && x.activa !== false && !x.hito), sum = h.reduce((s, x) => s + Number(x.dias || 0), 0) || 1;
+  return Number(t.metrado || 0) * Number(t.dias || 0) / sum;
+}
+// Lo que falta de la actividad desde esta semana, repartido entre los días de trabajo que le quedan:
+//   · si la actividad viene de UNA tarea del plan master: lo que falta de la TAREA (metrado − todo lo ejecutado) entre los días que le quedan a la tarea, aunque pasen del Look Ahead
+//     (en estas semanas se ve la parte que cae dentro del bloque; el resto llega al siguiente Look Ahead);
+//   · si no hay tarea (actividad a mano) o la partida se parte en varias actividades: la meta de la actividad entre los días de la actividad.
+//   · vencida (ya pasó su fecha fin): lo que falta se programa en los días de trabajo de esta semana.
+function ptMapaSaldo(a, semIni, hechoEste, ctx) {
+  const lun = laDia(semIni), tar = ptTareaDe(a), esta = { fecha_inicio: semIni, fecha_fin: laFecha(lun + 5) };
+  const solo = tar && PT.acts.filter(x => x.tarea_id === tar.id || (!x.tarea_id && x.nodo_id && x.nodo_id === tar.nodo_id)).length === 1;
+  if (tar && solo) {
+    const ej = (ctx.otros || []).filter(r => r.tarea_id === tar.id || (!r.tarea_id && tar.nodo_id && r.nodo_id === tar.nodo_id)).reduce((s, r) => s + Number(r.real_total || 0), 0) + hechoEste;
+    const falta = Math.max(0, ptShareT(tar) - ej);
+    return laDia(tar.fin) < lun ? ptReparto(esta, semIni, falta) : ptReparto({ fecha_inicio: tar.inicio, fecha_fin: tar.fin }, semIni, falta);
+  }
+  const falta = Math.max(0, ptTotalAct(a) - hechoEste);
+  return ptVencida(a, semIni) ? ptReparto(esta, semIni, falta) : ptReparto(a, semIni, falta);
+}
 async function ptFilasNuevas(actividades, planId, semIni) {
-  const look = ptLookAct(), bloqueIni = laSemana(look.semana).fecha_inicio;
-  return actividades.map((a, i) => { const p = ptSemanaDe(ptReparto(a, bloqueIni, ptTotalAct(a)), semIni);
-    return { plan_id: planId, actividad_id: a.id, orden: i + 1, plan_l: p[0], plan_m: p[1], plan_x: p[2], plan_j: p[3], plan_v: p[4], plan_s: p[5], plan_d: p[6] }; });
+  const look = ptLookAct(), bloqueIni = laSemana(look.semana).fecha_inicio, lun = laDia(semIni);
+  // semana que ya empezó (actual o pasada): se re-planifica DESDE LO EJECUTADO, así lo que no se hizo antes se reparte solo entre los días que le quedan.
+  // semana futura: el metrado se parte por días desde el inicio del bloque (todavía no hay nada ejecutado que corregir).
+  const enCurso = lun <= laDia(laHoy()), hecho = {};
+  let ctx = null;
+  if (enCurso && actividades.length) {
+    const prev = await get(`/avance_diario?actividad_id=in.(${actividades.map(a => a.id).join(',')})&fecha=lt.${semIni}&select=actividad_id,cantidad`);
+    prev.forEach(r => { hecho[r.actividad_id] = (hecho[r.actividad_id] || 0) + Number(r.cantidad); }); ctx = await ptContexto();
+  }
+  return actividades.map((a, i) => {
+    const mapa = enCurso ? ptMapaSaldo(a, semIni, hecho[a.id] || 0, ctx) : ptReparto(a, bloqueIni, ptTotalAct(a));
+    const p = ptSemanaDe(mapa, semIni);
+    return { plan_id: planId, actividad_id: a.id, orden: i + 1, plan_l: p[0], plan_m: p[1], plan_x: p[2], plan_j: p[3], plan_v: p[4], plan_s: p[5], plan_d: p[6] };
+  });
+}
+async function ptProlongar(acts, semIni) {   // las atrasadas pasan a terminar el sábado de la semana donde se reprograman (se ve en la barra del Look Ahead)
+  if (!laEditable(ptLookAct())) return 0;
+  let n = 0; const sab = laDia(semIni) + 5;
+  for (const a of acts) { if (!ptVencida(a, semIni)) continue; await laEnviar('PATCH', `/lookahead_actividades?id=eq.${a.id}`, { dias: Math.max(1, sab - laDia(a.fecha_inicio) + 1) }); n++; }
+  if (n && LA.sel === PT.look) { try { await laCargarDetalle(); } catch (e) {} }
+  return n;
 }
 
 // ── panel congelado con divisor arrastrable, para tablas anchas (Valorizaciones): mismo mecanismo del divisor que Look Ahead/Semanal,
@@ -6294,12 +6348,14 @@ function ptIniciar() {
   $('#ptCrear').addEventListener('click', async () => {
     const look = ptLookAct(); if (!look || ptPlan()) return;
     const s = ptSemFechas(), d0 = laDia(s.fecha_inicio), d1 = d0 + 6;
-    const cand = PT.acts.filter(a => laDia(a.fecha_fin) >= d0 && laDia(a.fecha_inicio) <= d1 && Number(a.pct_avance) < 1);
-    if (!await confirmar(`Crear el plan de la semana ${PT.sem} con ${cand.length} actividad${cand.length === 1 ? '' : 'es'} del Look Ahead que caen en esa semana?`)) return;
+    const cand = PT.acts.filter(a => Number(a.pct_avance) < 1 && ((laDia(a.fecha_fin) >= d0 && laDia(a.fecha_inicio) <= d1) || (laDia(a.fecha_fin) < d0 && ptTotalAct(a) > 0.0001)));
+    const atr = cand.filter(a => laDia(a.fecha_fin) < d0).length;
+    if (!await confirmar(`Crear el plan de la semana ${PT.sem} con ${cand.length} actividad${cand.length === 1 ? '' : 'es'} del Look Ahead${atr ? ` (${atr} atrasada${atr === 1 ? '' : 's'}: lo que falta se programa esta semana y su fecha fin se prolonga)` : ' que caen en esa semana'}?`)) return;
     try {
       const [plan] = await ptEnviar('POST', '/planes_semanales', { lookahead_id: look.id, semana: PT.sem, estado: 'borrador' });
       const filas = await ptFilasNuevas(cand, plan.id, s.fecha_inicio);
       if (filas.length) await ptEnviar('POST', '/plan_semanal_actividades', filas);
+      await ptProlongar(cand, s.fecha_inicio);
       await ptCargarLook(); ptMsg(`Plan de la semana ${PT.sem} creado con ${filas.length} actividad${filas.length === 1 ? '' : 'es'}. Ajusta el Plan de cada día si hace falta.`, true);
     } catch (err) { ptMsg(`No se pudo crear el plan: ${ptErr(err)}`, false); }
   });
@@ -6309,26 +6365,28 @@ function ptIniciar() {
     try {
       const [fila] = await ptFilasNuevas([a], plan.id, ptSemFechas().fecha_inicio);
       fila.orden = PT.det.filter(f => f.semana === PT.sem).reduce((m, f) => Math.max(m, f.orden), 0) + 1;
-      await ptEnviar('POST', '/plan_semanal_actividades', fila); await ptCargarLook(); ptMsg('Actividad agregada al plan de la semana.', true);
+      await ptEnviar('POST', '/plan_semanal_actividades', fila); await ptProlongar([a], ptSemFechas().fecha_inicio); await ptCargarLook(); ptMsg('Actividad agregada al plan de la semana.', true);
     } catch (err) { ptMsg(`No se pudo agregar: ${ptErr(err)}`, false); }
   });
   $('#ptRepartir').addEventListener('click', async () => {   // re-planifica desde lo ejecutado: lo que falta de cada actividad se reparte desde esta semana hasta su fin
     const plan = ptPlan(), look = ptLookAct(); if (!plan || plan.estado !== 'borrador' || !look) return;
     const filas = PT.det.filter(f => f.semana === PT.sem), acts = filas.map(f => PT.acts.find(a => a.id === f.actividad_id)).filter(Boolean), semIni = ptSemFechas().fecha_inicio;
     const sigs = []; for (let n = PT.sem; n < look.semana + look.semanas; n++) { const p = PT.planes.find(x => x.semana === n); if (p && p.estado === 'borrador') sigs.push(p); }
-    if (!acts.length || !await confirmar(`¿Repartir de nuevo desde la semana ${PT.sem}? Para ${acts.length} actividad${acts.length === 1 ? '' : 'es'} se toma lo que falta (meta del Look Ahead menos lo ya ejecutado) y se reparte entre sus días restantes, en esta semana${sigs.length > 1 ? ' y en las ' + (sigs.length - 1) + ' siguiente' + (sigs.length > 2 ? 's' : '') + ' del bloque que ya tengan plan' : ''}. Lo escrito en las filas Plan de esas semanas se reemplaza.`)) return;
+    if (!acts.length || !await confirmar(`¿Repartir de nuevo desde la semana ${PT.sem}? Para ${acts.length} actividad${acts.length === 1 ? '' : 'es'} se toma lo que falta (meta del Look Ahead menos lo ya ejecutado): lo que sigue en curso se reparte entre los días que le quedan a su tarea del plan master (aunque pasen del Look Ahead) y lo atrasado (fecha fin ya vencida) se programa esta semana. Se aplica en esta semana${sigs.length > 1 ? ' y en las ' + (sigs.length - 1) + ' siguiente' + (sigs.length > 2 ? 's' : '') + ' del bloque que ya tengan plan' : ''}. Lo escrito en las filas Plan de esas semanas se reemplaza.`)) return;
     try {
       const ids = acts.map(a => a.id), prev = await get(`/avance_diario?actividad_id=in.(${ids.join(',')})&fecha=lt.${semIni}&select=actividad_id,cantidad`);
       const hecho = {}; prev.forEach(r => { hecho[r.actividad_id] = (hecho[r.actividad_id] || 0) + Number(r.cantidad); });
+      const ctx = await ptContexto();
       for (const a of acts) {
-        const mapa = ptReparto(a, semIni, Math.max(0, ptTotalAct(a) - (hecho[a.id] || 0)));
-        for (const p of sigs) {
+        const mapa = ptMapaSaldo(a, semIni, hecho[a.id] || 0, ctx), soloEsta = Object.keys(mapa).every(k => +k < laDia(semIni) + 7);   // lo vencido se programa solo esta semana
+        for (const p of (soloEsta ? sigs.filter(x => x.semana === PT.sem) : sigs)) {
           if (!PT.det.some(f => f.semana === p.semana && f.actividad_id === a.id)) continue;
           const v = ptSemanaDe(mapa, laSemana(p.semana).fecha_inicio);
           await ptEnviar('PATCH', `/plan_semanal_actividades?plan_id=eq.${p.id}&actividad_id=eq.${a.id}`, { plan_l: v[0], plan_m: v[1], plan_x: v[2], plan_j: v[3], plan_v: v[4], plan_s: v[5], plan_d: v[6] });
         }
       }
-      await ptCargarLook(); ptMsg(`Plan repartido de nuevo desde la semana ${PT.sem}, con lo que falta de cada actividad.`, true);
+      const prolong = await ptProlongar(acts, semIni);
+      await ptCargarLook(); ptMsg(`Plan repartido de nuevo desde la semana ${PT.sem}, con lo que falta de cada actividad.${prolong ? ` ${prolong} atrasada${prolong === 1 ? '' : 's'} se programó${prolong === 1 ? '' : 'on'} esta semana y su fecha fin se prolongó.` : ''}`, true);
     } catch (err) { ptMsg(`No se pudo repartir: ${ptErr(err)}`, false); }
   });
   $('#ptCerrar').addEventListener('click', async () => {
