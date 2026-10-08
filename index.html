@@ -1853,6 +1853,15 @@ html.tb-compacta #laApp .tb-seg .seg-btn[data-lagrupos]{padding:0;width:34px;}
 .la-apu .apu-av{margin-top:8px;padding:6px 10px;border-radius:8px;background:rgba(217,119,6,.14);color:var(--amber);font-weight:600;}
 .la-apu details{margin-top:8px;} .la-apu summary{cursor:pointer;font-weight:700;color:var(--tx);}
 .la-apu ul{margin:6px 0 0;padding:0;list-style:none;display:grid;gap:3px;} .la-apu li{display:flex;justify-content:space-between;gap:10px;} .la-apu li span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+/* actividades sin partida (apoyo / hito / no contractual) */
+.la-b.hito{width:14px !important;margin-left:6px;border-radius:2px;transform:rotate(45deg) scale(.82);}
+.la-b.hito em,.la-b.hito span{display:none;}
+.la-b.hito i{width:100% !important;}
+.sug-q{display:flex;gap:8px;margin:0 0 6px;} .sug-q input{flex:1 1 auto;min-width:0;} .sug-q select{flex:0 0 auto;max-width:150px;}
+/* contexto (frente › grupo) de una tarea en el buscador de vínculos y en las tablas de predecesoras / sucesoras */
+.pre-sug em.rt{margin:1px 0 1px;font-size:10.5px;color:var(--tx2);}
+.pl-frtag{display:inline-block;margin-right:6px;padding:0 6px;border-radius:5px;background:var(--ic-blue-bg);color:var(--blue-tx);font-size:9.5px;font-weight:800;letter-spacing:.3px;text-transform:uppercase;vertical-align:1px;}
+.pl-ctx{display:block;font-size:10.5px;color:var(--mut);font-weight:500;white-space:normal;line-height:1.3;margin-top:1px;}
 </style>
 <script>
 document.documentElement.dataset.pane = 'resumen';
@@ -5196,12 +5205,14 @@ function laCaso(txt) {   // "RELLENO PARA ESTRUCTURAS CON MATERIAL DE PRESTAMO" 
 const LA_RGB = ['15,118,110', '47,111,237', '217,119,6', '124,58,237', '219,39,119'];
 const laColorRgb = (cod) => LA_RGB[Math.max(0, COMPONENTES.findIndex(c => c.id === cod)) % LA_RGB.length];
 function laCadena(nodoId) { const c = []; let n = LA.porId[nodoId]; while (n && n.padre_id) { n = LA.porId[n.padre_id]; if (n) c.unshift(n); } return c; }   // ancestros, de la raíz al padre
+const LA_TIPO = { apoyo: 'APOYO', hito: 'HITO', no_contractual: 'NO CONTR.' };   // actividades que no son partida: del plan master, sin metrado ni costo (avance en %)
+function laCadenaF(f) { return f.nodo_id ? laCadena(f.nodo_id) : (f.grupo_id && LA.porId[f.grupo_id] ? [...laCadena(f.grupo_id), LA.porId[f.grupo_id]] : []); }
 function laArbol(filas) {
-  const orden = (f) => (LA.porId[f.nodo_id] || {}).orden || 0;
+  const orden = (f) => (LA.porId[f.nodo_id || f.grupo_id] || {}).orden || 0;
   const ord = [...filas].sort((a, b) => orden(a) - orden(b) || a.orden - b.orden);
   const out = []; let prev = [];
   for (const f of ord) {
-    const cad = laCadena(f.nodo_id); let i = 0;
+    const cad = laCadenaF(f); let i = 0;
     while (i < cad.length && i < prev.length && prev[i].id === cad[i].id) i++;
     for (let k = i; k < cad.length; k++) out.push({ t: true, nodo: cad[k], nivel: k, acts: [], cod: f.proyecto, anc: cad.slice(0, k).map(n => n.id) });
     prev = cad; out.push({ t: false, f, nivel: cad.length, anc: cad.map(n => n.id) });
@@ -5282,7 +5293,7 @@ async function laSugCargar(forzar) {
     try {
       const vs = await get(`/plan_versiones?obra_id=eq.${OBRA.id}&estado=neq.archivado&select=id,nombre,estado&order=estado.desc`);
       if (vs.length) {
-        const tareas = await getTodo(`/v_plan_tareas?plan_id=eq.${vs[0].id}&select=id,nodo_id,proyecto_id,codigo,nombre,partida,unidad,metrado,inicio,dias,fin,tipo,hito,activa,orden&order=orden`);
+        const tareas = await getTodo(`/v_plan_tareas?plan_id=eq.${vs[0].id}&select=id,nodo_id,proyecto_id,grupo_id,codigo,nombre,partida,unidad,metrado,inicio,dias,fin,tipo,hito,activa,orden&order=orden`);
         LA.plan = { sin: false, id: vs[0].id, nombre: vs[0].nombre, estado: vs[0].estado, tareas };
       }
     } catch (e) { LA.plan = { sin: true, tareas: [], error: e }; }
@@ -5296,20 +5307,24 @@ function laSugCalc() {
   const look = laActual(); if (!look || !LA.plan || LA.plan.sin) return null;
   const sem = laSemana(look.semana); if (!sem) return null;
   const w0 = sem.fecha_inicio, w1 = laFecha(laDia(w0) + look.semanas * 7 - 1);
-  const tareas = LA.plan.tareas.filter(t => t.tipo === 'partida' && t.nodo_id && !t.hito && t.activa !== false && (!LA.comp || t.proyecto_id === (DATA.proyectos.find(p => p.codigo === LA.comp) || {}).id));
+  const tareas = LA.plan.tareas.filter(t => (t.tipo !== 'partida' || (t.nodo_id && !t.hito)) && t.proyecto_id && t.activa !== false && (!LA.comp || t.proyecto_id === (DATA.proyectos.find(p => p.codigo === LA.comp) || {}).id));
   const porNodo = {}; LA.plan.tareas.forEach(t => { if (t.nodo_id && t.tipo === 'partida' && !t.hito && t.activa !== false) (porNodo[t.nodo_id] = porNodo[t.nodo_id] || []).push(t); });
-  const cubierta = (t) => LA.det.some(a => a.tarea_id === t.id || (!a.tarea_id && a.nodo_id === t.nodo_id));
-  const previas = (t) => (LA.prev || []).filter(p => p.tarea_id === t.id || (!p.tarea_id && p.nodo_id === t.nodo_id && porNodo[t.nodo_id].length === 1));
-  const faltan = [];
+  const esPart = (t) => t.tipo === 'partida';
+  const cubierta = (t) => LA.det.some(a => a.tarea_id === t.id || (esPart(t) && !a.tarea_id && a.nodo_id === t.nodo_id));
+  const previas = (t) => (LA.prev || []).filter(p => p.tarea_id === t.id || (esPart(t) && !p.tarea_id && p.nodo_id === t.nodo_id && (porNodo[t.nodo_id] || []).length === 1));
+  const faltan = [], otras = [];
   for (const t of tareas) {
     if (cubierta(t)) continue;
     const pv = previas(t);
     const sumDias = (porNodo[t.nodo_id] || [t]).reduce((s, x) => s + Number(x.dias || 0), 0) || 1;
-    const share = Number(t.metrado || 0) * Number(t.dias || 0) / sumDias;               // metrado que le toca a ESTA tarea (la partida se reparte entre sus tareas según sus días)
+    const share = esPart(t) ? Number(t.metrado || 0) * Number(t.dias || 0) / sumDias : 100;   // metrado que le toca a ESTA tarea (la partida se reparte entre sus tareas según sus días); apoyo, hito y no contractual: 100 %
     const ejec = pv.reduce((s, p) => s + Number(p.real_total || 0), 0);                   // lo realmente ejecutado de la tarea (parte diario), sumado en todos los Look Ahead
     if (share > 0 && ejec >= share - 0.0001) continue;                                    // ya se completó
     const enVentana = t.inicio <= w1 && t.fin >= w0, atrasada = t.fin < w0 && pv.length > 0;
-    if (!enVentana && !atrasada) continue;
+    if (!enVentana && !atrasada) {   // fuera de estas semanas: se puede ADELANTAR (o tomar una de antes que nunca se planificó); empieza al inicio de la ventana
+      otras.push({ nom: t.partida && t.nombre === t.partida ? laCaso(t.nombre) : t.nombre, t, ini: w0, dias: Math.min(Math.max(1, Number(t.dias || 1)), look.semanas * 7), meta: Math.round((share - ejec) * 100) / 100, previo: 0, share, ejec, futura: t.inicio > w1 });
+      continue;
+    }
     // la actividad cubre solo el tramo de la tarea que cae en la ventana; el metrado se parte en proporción al tiempo:
     //   meta del bloque = parte de la tarea que cae en la ventana + (si la tarea ya se venía registrando) lo que se debía llevar hecho antes y no se hizo
     const dT = Math.max(1, laDia(t.fin) - laDia(t.inicio) + 1), d0 = laDia(w0), d1 = laDia(w1), ti = laDia(t.inicio), tf = laDia(t.fin);
@@ -5319,16 +5334,17 @@ function laSugCalc() {
     if (share > 0 && meta <= 0) continue;                                                 // va adelantado: no falta nada para esta ventana
     const ini = enVentana ? (t.inicio > w0 ? t.inicio : w0) : w0;
     const finT = enVentana ? t.fin : laFecha(laDia(w0) + Math.max(1, t.dias) - 1), fin = finT < w1 ? finT : w1;
-    faltan.push({ nom: t.nombre === t.partida ? laCaso(t.nombre) : t.nombre, t, ini, dias: Math.max(1, laDia(fin) - laDia(ini) + 1), meta, previo: 0, share, ejec, atrasada: !enVentana });
+    faltan.push({ nom: t.partida && t.nombre === t.partida ? laCaso(t.nombre) : t.nombre, t, ini, dias: Math.max(1, laDia(fin) - laDia(ini) + 1), meta, previo: 0, share, ejec, atrasada: !enVentana });
   }
   const fuera = [];
   for (const a of LA.det) {
-    const t = LA.plan.tareas.find(x => x.id === a.tarea_id) || (() => { const u = porNodo[a.nodo_id]; return !a.tarea_id && u && u.length === 1 ? u[0] : null; })();
+    const t = LA.plan.tareas.find(x => x.id === a.tarea_id) || (() => { const u = a.nodo_id && porNodo[a.nodo_id]; return !a.tarea_id && u && u.length === 1 ? u[0] : null; })();
     if (!t) continue;
     const di = laDia(a.fecha_inicio) - laDia(t.inicio), df = laDia(a.fecha_fin) - laDia(t.fin);
     if (di < 0 || df > 0) fuera.push({ a, t, di, df });
   }
-  return { w0, w1, faltan, fuera };
+  otras.sort((a, b) => (a.futura ? 0 : 1) - (b.futura ? 0 : 1) || String(a.t.inicio).localeCompare(String(b.t.inicio)));
+  return { w0, w1, faltan, otras, fuera };
 }
 async function laSugRefrescar() {
   try {
@@ -5338,6 +5354,7 @@ async function laSugRefrescar() {
     if (!$('#laSug').hidden) laSugRender();
   } catch (e) {}
 }
+const esPartX = (t) => t.tipo === 'partida';
 function laSugRender() {
   const look = laActual(), cuerpo = $('#laSugCuerpo'); if (!look) return;
   $('#laSugTit').textContent = `Plan master · semanas ${look.semana} a ${look.semana + look.semanas - 1}`;
@@ -5346,23 +5363,39 @@ function laSugRender() {
   const editable = laEditable(look), proy = (id) => String((DATA.proyectos.find(p => p.id === id) || {}).nombre || '').replace('Puente ', '');
   $('#laSugSub').innerHTML = `Plan «${esc(LA.plan.nombre)}» (${esc(LA.plan.estado)}) · ventana ${laFmt(c.w0)} → ${laFmt(c.w1)}${LA.comp ? ' · ' + esc(String((DATA.proyectos.find(p => p.codigo === LA.comp) || {}).nombre || LA.comp).replace('Puente ', '')) : ''}`;
   let h = `<div class="sug-h">Faltan en el Look Ahead <span class="n">${c.faltan.length}</span>${c.faltan.length && editable ? '<label><input type="checkbox" id="laSugTodo"> Todas</label>' : ''}</div>`;
-  h += c.faltan.length ? `<div class="sug-l">` + c.faltan.map((x, i) => `<label class="sug-f"><input type="checkbox" data-sug="${i}" ${editable ? '' : 'disabled'}><span class="nm" title="${esc(x.nom)}">${esc(x.nom)}</span><span class="sb">${esc(x.t.codigo || '')} · ${esc(proy(x.t.proyecto_id))} · ${laFmt(x.ini)} → ${laFmt(laFecha(laDia(x.ini) + x.dias - 1))} · ${laNum(x.meta, 2)} ${esc(x.t.unidad || '')}${x.share > 0 && x.meta < x.share - 0.005 ? ' de ' + laNum(x.share, 2) + ' (' + Math.round(x.meta / x.share * 100) + '%)' : ''}${x.ejec ? ' · ya ejecutado ' + laNum(x.ejec, 2) : ''}</span>${x.atrasada ? '<span class="tg at">ATRASADA</span>' : ''}</label>`).join('') + '</div>'
+  h += c.faltan.length ? `<div class="sug-l">` + c.faltan.map((x, i) => `<label class="sug-f"><input type="checkbox" data-sug="${i}" ${editable ? '' : 'disabled'}><span class="nm" title="${esc(x.nom)}">${esc(x.nom)}</span><span class="sb">${LA_TIPO[x.t.tipo] ? '<b>' + LA_TIPO[x.t.tipo] + '</b> · ' : ''}${esc(x.t.codigo || '')} · ${esc(proy(x.t.proyecto_id))} · ${laFmt(x.ini)} → ${laFmt(laFecha(laDia(x.ini) + x.dias - 1))} · ${laNum(x.meta, 2)} ${esc(esPartX(x.t) ? (x.t.unidad || '') : '%')}${x.share > 0 && x.meta < x.share - 0.005 ? ' de ' + laNum(x.share, 2) + ' (' + Math.round(x.meta / x.share * 100) + '%)' : ''}${x.ejec ? ' · ya ejecutado ' + laNum(x.ejec, 2) : ''}</span>${x.atrasada ? '<span class="tg at">ATRASADA</span>' : ''}</label>`).join('') + '</div>'
     : '<div class="sug-l"><div class="sug-vacio">Todo lo que el plan master programa en estas semanas ya tiene actividad.</div></div>';
+  h += `<div class="sug-h">Adelantar otras tareas del plan <span class="n">${c.otras.length}</span></div>`
+    + `<div class="sug-q"><input id="laSugQ" type="search" placeholder="Buscar por nombre o código…" autocomplete="off"><select id="laSugTipo" aria-label="Tipo"><option value="">Todas</option><option value="apoyo">Apoyo</option><option value="hito">Hitos</option><option value="no_contractual">No contractual</option><option value="partida">Partidas</option></select></div><div class="sug-l" id="laSugOtras"></div>`;
   h += `<div class="sug-h">Fuera de las fechas del plan <span class="n">${c.fuera.length}</span></div>`;
   h += c.fuera.length ? `<div class="sug-l">` + c.fuera.map(x => `<div class="sug-f sf"><span class="nm" title="${esc(laNom(x.a))}">${esc(laNom(x.a))}</span><span class="sb">Actividad ${laFmt(x.a.fecha_inicio)} → ${laFmt(x.a.fecha_fin)} · plan ${laFmt(x.t.inicio)} → ${laFmt(x.t.fin)}</span><span class="tg at">${[x.di < 0 ? `empieza ${-x.di} d antes` : '', x.df > 0 ? `termina ${x.df} d después` : ''].filter(Boolean).join(' · ')}</span></div>`).join('') + '</div>'
     : '<div class="sug-l"><div class="sug-vacio">Las actividades vinculadas al plan están dentro de sus fechas.</div></div>';
-  h += `<div class="sug-acc">${c.faltan.length && editable ? '<button class="btn" type="button" id="laSugAgregar" disabled>Agregar seleccionadas</button>' : ''}<button class="btn-sec" type="button" id="laSugCerrar2">Cerrar</button></div>`
+  h += `<div class="sug-acc">${(c.faltan.length || c.otras.length) && editable ? '<button class="btn" type="button" id="laSugAgregar" disabled>Agregar seleccionadas</button>' : ''}<button class="btn-sec" type="button" id="laSugCerrar2">Cerrar</button></div>`
     + (editable ? '' : '<p class="hint" style="margin-top:8px">Este Look Ahead está cerrado: solo lectura.</p>');
-  cuerpo.innerHTML = h; cuerpo._calc = c;
+  cuerpo.innerHTML = h; cuerpo._calc = c; laSugOtrasRender();
+  const b = $('#laSugAgregar'); if (b) laSugContar();
+}
+function laSugContar() {   // habilita el botón según lo marcado (sugeridas + las que se adelantan)
+  const n = document.querySelectorAll('#laSugCuerpo input[data-sug]:checked').length + (LA.sugSel ? LA.sugSel.size : 0), b = $('#laSugAgregar');
+  if (b) { b.disabled = !n; b.textContent = n ? `Agregar seleccionadas (${n})` : 'Agregar seleccionadas'; }
+}
+function laSugOtrasRender() {
+  const c = $('#laSugCuerpo')._calc, cont = $('#laSugOtras'); if (!c || !cont) return;
+  const look = laActual(), editable = laEditable(look), q = limpiaTxt(($('#laSugQ') || {}).value), tp = ($('#laSugTipo') || {}).value || '';
+  const proy = (id) => String((DATA.proyectos.find(p => p.id === id) || {}).nombre || '').replace('Puente ', '');
+  const arr = c.otras.filter(x => (!tp || x.t.tipo === tp) && (!q || limpiaTxt(x.nom + ' ' + (x.t.codigo || '') + ' ' + proy(x.t.proyecto_id)).includes(q)));
+  const fin = (x) => laFmt(laFecha(laDia(x.ini) + x.dias - 1));
+  cont.innerHTML = arr.slice(0, 40).map(x => `<label class="sug-f"><input type="checkbox" data-otra="${x.t.id}" ${LA.sugSel && LA.sugSel.has(x.t.id) ? 'checked' : ''} ${editable ? '' : 'disabled'}><span class="nm" title="${esc(x.nom)}">${esc(x.nom)}</span><span class="sb">${LA_TIPO[x.t.tipo] ? '<b>' + LA_TIPO[x.t.tipo] + '</b> · ' : ''}${esc(x.t.codigo || '')} · ${esc(proy(x.t.proyecto_id))} · plan ${laFmt(x.t.inicio)} → ${laFmt(x.t.fin)} · entraría ${laFmt(x.ini)} → ${fin(x)} · ${laNum(x.meta, 2)} ${esc(x.t.tipo === 'partida' ? (x.t.unidad || '') : '%')}</span><span class="tg">${x.futura ? 'ADELANTAR' : 'DE ANTES'}</span></label>`).join('')
+    + (arr.length > 40 ? `<div class="sug-vacio">y ${arr.length - 40} más: afina con el buscador</div>` : '') || '<div class="sug-vacio">Ninguna tarea coincide.</div>';
 }
 async function laSugAgregar() {
   const look = laActual(), c = $('#laSugCuerpo')._calc; if (!look || !c) return;
-  const marcadas = [...document.querySelectorAll('#laSugCuerpo input[data-sug]:checked')].map(i => c.faltan[+i.dataset.sug]);
+  const marcadas = [...document.querySelectorAll('#laSugCuerpo input[data-sug]:checked')].map(i => c.faltan[+i.dataset.sug]).concat(c.otras.filter(x => LA.sugSel && LA.sugSel.has(x.t.id)));
   if (!marcadas.length) { laMsg('Marca al menos una actividad.', false); return; }
   const base = LA.det.reduce((m, f) => Math.max(m, f.orden), 0), btn = $('#laSugAgregar'); btn.disabled = true;
   try {
-    await laEnviar('POST', '/lookahead_actividades', marcadas.map((x, i) => ({ lookahead_id: look.id, nodo_id: x.t.nodo_id, tarea_id: x.t.id, actividad: x.nom, orden: base + i + 1, critico: false, fecha_inicio: x.ini, dias: x.dias, metrado_meta: x.meta, acumulado_previo: x.previo })));
-    $('#laSug').hidden = true; await laCargarDetalle(); laMsg(`${marcadas.length} actividad${marcadas.length === 1 ? '' : 'es'} agregada${marcadas.length === 1 ? '' : 's'} desde el plan master. Ajusta fechas y metrado donde haga falta (clic en la fila).`, true);
+    await laEnviar('POST', '/lookahead_actividades', marcadas.map((x, i) => ({ lookahead_id: look.id, nodo_id: x.t.nodo_id, tipo: x.t.tipo || 'partida', grupo_id: x.t.nodo_id ? null : (x.t.grupo_id || null), proyecto_id: x.t.nodo_id ? null : x.t.proyecto_id, tarea_id: x.t.id, actividad: x.nom, orden: base + i + 1, critico: false, fecha_inicio: x.ini, dias: x.dias, metrado_meta: x.meta, acumulado_previo: x.previo })));
+    LA.sugSel = new Set(); $('#laSug').hidden = true; await laCargarDetalle(); laMsg(`${marcadas.length} actividad${marcadas.length === 1 ? '' : 'es'} agregada${marcadas.length === 1 ? '' : 's'} desde el plan master. Ajusta fechas y metrado donde haga falta (clic en la fila).`, true);
   } catch (err) { laMsg(`No se pudo agregar: ${laErr(err)}`, false); btn.disabled = false; }
 }
 
@@ -5383,7 +5416,7 @@ function laBarra(f, d0, nd) {
   const a = laDia(f.fecha_inicio) - d0, b = laDia(f.fecha_fin) - d0;
   if (b < 0 || a > nd - 1) return '';                                  // cae fuera de la ventana de 5 semanas
   const vs = Math.max(a, 0), ve = Math.min(b, nd - 1), w = (ve - vs + 1) * LA_DW - 2;
-  const cls = [f.critico ? 'cr' : (f.concepto === 'adicional' ? 'ad' : ''), a < 0 ? 'cortaI' : '', b > nd - 1 ? 'cortaD' : ''].join(' ');
+  const cls = [f.critico ? 'cr' : (f.concepto === 'adicional' ? 'ad' : ''), a < 0 ? 'cortaI' : '', b > nd - 1 ? 'cortaD' : '', f.tipo === 'hito' ? 'hito' : ''].join(' ');
   const pct = Math.max(0, Math.min(1, Number(f.pct_avance) || 0));
   const txt = Math.round(pct * 100) + '%', dentro = pct * w >= 34;   // el % va al final de la parte ejecutada; si esa parte es muy corta, justo después
   const lbl = pct > 0 && w >= 34 ? (dentro ? `<em>${txt}</em>` : '') : '';
@@ -5444,7 +5477,7 @@ function laRender() {
 
   const hoyLinea = (hoyIdx >= 0 && hoyIdx < nd) ? `<i class="la-hoy" style="left:${hoyIdx * LA_DW}px;width:${LA_DW}px;opacity:.2"></i>` : '';
   // solo el nombre de la actividad; el código único, el código de especificación y el detalle quedan en el texto al pasar el cursor
-  const celdaAct = (f, nivel) => `<td class="act" style="--lvl:${nivel || 0}" title="${esc(laNom(f) + (f.actividad_propia ? ' — partida: ' + laCaso(f.partida) : '') + ' · ' + f.nodo_codigo + (f.codigo_esp ? ' · ' + f.codigo_esp : ''))}"><span class="nom">${f.critico ? '<span class="dot" title="Crítica"></span>' : ''}${esc(String(laNom(f)).toUpperCase())}${f.concepto === 'adicional' ? '<span class="tag-adi">ADI</span>' : ''}</span></td>`;
+  const celdaAct = (f, nivel) => `<td class="act" style="--lvl:${nivel || 0}" title="${esc(laNom(f) + (f.actividad_propia ? ' — partida: ' + laCaso(f.partida) : '') + ' · ' + f.nodo_codigo + (f.codigo_esp ? ' · ' + f.codigo_esp : ''))}"><span class="nom">${f.critico ? '<span class="dot" title="Crítica"></span>' : ''}${esc(String(laNom(f)).toUpperCase())}${f.concepto === 'adicional' ? '<span class="tag-adi">ADI</span>' : ''}${LA_TIPO[f.tipo] ? `<span class="tag-adi" title="Del plan master: sin metrado ni costo; el avance se mide en %">${LA_TIPO[f.tipo]}</span>` : ''}</span></td>`;
   const celda = (c, f, nivel) => ({
     wbs: () => `<td class="mono">${esc(f.nodo_codigo)}</td>`, part: () => `<td title="${esc(laCaso(f.partida))}" style="max-width:240px;overflow:hidden;text-overflow:ellipsis">${esc(laCaso(f.partida))}</td>`, crit: () => `<td class="c">${f.critico ? '<span class="dot"></span>' : ''}</td>`,
     puente: () => `<td>${esc(String(f.proyecto_nombre || '').replace('Puente ', ''))}</td>`, act: () => celdaAct(f, nivel),
@@ -5531,10 +5564,10 @@ function laTipHtml(f, editar) {
   const pct = Math.max(0, Math.min(1, Number(f.pct_avance) || 0)), tipo = f.critico ? 'cr' : (f.concepto === 'adicional' ? 'ad' : 'n');
   const pend = Math.max(0, Number(f.metrado_meta || 0) - Number(f.acumulado || 0)), u = esc(f.unidad || '');
   const fila = (k, v) => `<dt>${k}</dt><dd>${v}</dd>`;
-  const badges = [f.critico ? '<span class="lt-b cr">● Ruta crítica</span>' : '', f.concepto === 'adicional' ? '<span class="lt-b ad">Adicional</span>' : '',
+  const badges = [LA_TIPO[f.tipo] ? `<span class="lt-b">${LA_TIPO[f.tipo]}</span>` : '', f.critico ? '<span class="lt-b cr">● Ruta crítica</span>' : '', f.concepto === 'adicional' ? '<span class="lt-b ad">Adicional</span>' : '',
                   `<span class="lt-b">${esc(String(f.proyecto_nombre || '').replace('Puente ', ''))}</span>`].join('');
   return `<div class="lt-head"><div class="lt-badges">${badges}</div><div class="lt-nom">${esc(laNom(f))}</div>`
-    + `<div class="lt-cod">${esc(f.nodo_codigo)}${f.codigo_esp ? ' · ' + esc(f.codigo_esp) : ''}</div>${f.actividad_propia ? `<div class="lt-det">Partida: ${esc(laCaso(f.partida))}</div>` : (f.detalle ? `<div class="lt-det">${esc(f.detalle)}</div>` : '')}</div>`
+    + `<div class="lt-cod">${esc(f.nodo_codigo)}${f.codigo_esp ? ' · ' + esc(f.codigo_esp) : ''}</div>${f.nodo_id && f.actividad_propia ? `<div class="lt-det">Partida: ${esc(laCaso(f.partida))}</div>` : (f.detalle ? `<div class="lt-det">${esc(f.detalle)}</div>` : '')}</div>`
     + `<dl class="lt-body">${fila('Fechas', `${laFmt(f.fecha_inicio)} → ${laFmt(f.fecha_fin)}`)}${fila('Duración', `${f.dias} día${f.dias === 1 ? '' : 's'}`)}`
     + `${fila('Meta', `${laNum(f.metrado_meta, 2)} ${u}`)}${fila('Ejecutado', `${laNum(f.acumulado, 2)} ${u}`)}${fila('Pendiente', `${laNum(pend, 2)} ${u}`)}`
     + `<div class="lt-prog"><span>Avance</span><i class="lt-pista"><b style="width:${(pct * 100).toFixed(1)}%"></b></i><strong>${Math.round(pct * 100)}%</strong></div>`
@@ -5740,7 +5773,10 @@ function laFormAbrir(act, pre) {
     $('#laFIni').value = sem.fecha_inicio; $('#laFDias').value = ''; $('#laFMeta').value = ''; $('#laFPrev').value = 0;
   }
   ['laFComp', 'laFElem', 'laFPart', 'laFBuscar'].forEach(id => { $('#' + id).disabled = !!act; });
-  $('#laFApu').hidden = true; laApuRefrescar();   // la partida no se cambia: se quita y se agrega otra
+  LA.sinPartida = !!(act && !act.nodo_id);
+  ['laf-comp', 'laf-elem', 'laf-part', 'laFInfo'].forEach(id => { const e = document.getElementById(id); if (e) e.style.display = LA.sinPartida ? 'none' : ''; });
+  if (LA.sinPartida) { $('#laFTitulo').textContent = `Editar actividad · ${LA_TIPO[act.tipo] || ''}`; $('#laFUnd').textContent = '(%)'; $('#laFUnd2').textContent = '(%)'; }
+  $('#laFApu').hidden = true; if (!LA.sinPartida) laApuRefrescar();   // la partida no se cambia: se quita y se agrega otra
   laFinTxt();
   setTimeout(() => { try { $('#laFAct').focus({ preventScroll: true }); } catch (e) {} }, 50);
 }
@@ -5754,16 +5790,18 @@ function laIniciar() {
   $('#laPrev').addEventListener('click', () => mover(-1)); $('#laNext').addEventListener('click', () => mover(1));
   $('#laComp').addEventListener('change', (e) => { LA.comp = e.target.value; laRender(); });
   $('#laAgregar').addEventListener('click', () => laFormAbrir(null));
-  $('#laSugBtn').addEventListener('click', async () => { laMsg(''); $('#laForm').hidden = true; $('#laNuevoBox').hidden = true; $('#laSug').hidden = false; $('#laSugCuerpo').innerHTML = '<div class="sug-vacio">Leyendo el plan master…</div>'; await laSugCargar(true); laSugRender(); });
+  $('#laSugBtn').addEventListener('click', async () => { laMsg(''); $('#laForm').hidden = true; $('#laNuevoBox').hidden = true; LA.sugSel = new Set(); $('#laSug').hidden = false; $('#laSugCuerpo').innerHTML = '<div class="sug-vacio">Leyendo el plan master…</div>'; await laSugCargar(true); laSugRender(); });
   $('#laSug').addEventListener('click', (e) => {
     if (e.target.closest('#laSugCerrar, #laSugCerrar2')) { $('#laSug').hidden = true; return; }
     if (e.target.closest('#laSugAgregar')) laSugAgregar();
   });
   $('#laSug').addEventListener('change', (e) => {
     if (e.target.id === 'laSugTodo') document.querySelectorAll('#laSugCuerpo input[data-sug]').forEach(i => { i.checked = e.target.checked; });
-    const n = document.querySelectorAll('#laSugCuerpo input[data-sug]:checked').length, b = $('#laSugAgregar');
-    if (b) { b.disabled = !n; b.textContent = n ? `Agregar seleccionadas (${n})` : 'Agregar seleccionadas'; }
+    if (e.target.dataset && e.target.dataset.otra) { LA.sugSel = LA.sugSel || new Set(); if (e.target.checked) LA.sugSel.add(e.target.dataset.otra); else LA.sugSel.delete(e.target.dataset.otra); }
+    if (e.target.id === 'laSugTipo') laSugOtrasRender();
+    laSugContar();
   });
+  $('#laSug').addEventListener('input', (e) => { if (e.target.id === 'laSugQ') laSugOtrasRender(); });
   $('#laFCancel').addEventListener('click', () => { $('#laForm').hidden = true; });
   $('#laFComp').addEventListener('change', laLlenarElementos);
   $('#laFElem').addEventListener('change', () => { laLlenarPartidas(); });
@@ -5787,7 +5825,9 @@ function laIniciar() {
     let ok = true;
     const v = (id, bad) => { marcarError(id, bad); if (bad) ok = false; };
     const actividad = $('#laFAct').value.trim();
-    v('laf-act', !LA.edit && !actividad); v('laf-comp', !$('#laFComp').value); v('laf-elem', !$('#laFElem').value); v('laf-part', !nodo); v('laf-ini', !ini);
+    v('laf-act', !LA.edit && !actividad);
+    if (!LA.sinPartida) { v('laf-comp', !$('#laFComp').value); v('laf-elem', !$('#laFElem').value); v('laf-part', !nodo); }
+    v('laf-ini', !ini);
     v('laf-dias', !(dias >= 1)); v('laf-meta', !(meta >= 0)); v('laf-pct', !(prev >= 0));
     if (!ok) return;
     const fin = laFecha(laDia(ini) + dias - 1), sem = laSemana(look.semana), fVentana = laFecha(laDia(sem.fecha_inicio) + look.semanas * 7 - 1);
@@ -5839,7 +5879,7 @@ function laIniciar() {
         const pend = rows.filter(r => Number(r.pct_avance) < 1 && Number(r.metrado_meta) - Number(r.acumulado) > 0.0001);
         reprog = pend.filter(r => r.fecha_fin < s.fecha_inicio).length;
         const nuevas = pend.map((r, i) => { const tarde = r.fecha_fin < s.fecha_inicio;
-          return { lookahead_id: nuevo.id, nodo_id: r.nodo_id, tarea_id: r.tarea_id, actividad: r.actividad_propia, orden: i + 1, detalle: r.detalle, critico: r.critico, fecha_inicio: tarde ? s.fecha_inicio : r.fecha_inicio, dias: Math.min(r.dias, 28), metrado_meta: Math.round((Number(r.metrado_meta) - Number(r.acumulado)) * 10000) / 10000, acumulado_previo: 0, responsable: r.responsable }; });
+          return { lookahead_id: nuevo.id, nodo_id: r.nodo_id, tipo: r.tipo, grupo_id: r.grupo_id, proyecto_id: r.nodo_id ? null : r.proyecto_id, tarea_id: r.tarea_id, actividad: r.actividad_propia, orden: i + 1, detalle: r.detalle, critico: r.critico, fecha_inicio: tarde ? s.fecha_inicio : r.fecha_inicio, dias: Math.min(r.dias, 28), metrado_meta: Math.round((Number(r.metrado_meta) - Number(r.acumulado)) * 10000) / 10000, acumulado_previo: 0, responsable: r.responsable }; });
         if (nuevas.length) { await laEnviar('POST', '/lookahead_actividades', nuevas); copiadas = nuevas.length; }
       }
       $('#laNuevoBox').hidden = true; LA.sel = nuevo.id; try { localStorage.setItem('obra-la-sel', LA.sel); } catch (x) {}
@@ -5994,7 +6034,7 @@ function ptRender() {
       const dis = !editable;
       return `<td class="${tipo === 'plan' ? 'pl' : 'rl'} ${k >= 5 ? 'fs' : ''} ${fuera ? 'fuera' : ''}"><input class="dia ${tipo}" type="number" min="0" step="0.01" ${dis ? 'disabled' : ''} value="${v ? v : ''}" data-fila="${f.fila_id}" data-tipo="${tipo}" data-k="${k}" data-act="${f.actividad_id}" data-fecha="${d}" title="${tipo === 'plan' ? 'Meta' : 'Ejecutado'} del ${LET_PT[k]} ${d.slice(8, 10)}/${d.slice(5, 7)}"></td>`;
     }).join('');
-    hIz += `<tr class="fila-izq act-row" data-fila="${f.fila_id}" data-r="${r}"><td class="act" style="--lvl:${nivel}" title="${esc(laNom(f) + (f.actividad_propia ? ' — partida: ' + laCaso(f.partida) : '') + ' · ' + f.nodo_codigo + (f.codigo_esp ? ' · ' + f.codigo_esp : ''))}"><span class="nom">${f.critico ? '<span class="dot" title="Crítica"></span>' : ''}${esc(String(laNom(f)).toUpperCase())}${f.concepto === 'adicional' ? '<span class="tag-adi">ADI</span>' : ''}${editable ? ` <button class="quitar" title="Quitar del plan de la semana" data-quitar="${f.fila_id}">✕</button>` : ''}</span></td>`
+    hIz += `<tr class="fila-izq act-row" data-fila="${f.fila_id}" data-r="${r}"><td class="act" style="--lvl:${nivel}" title="${esc(laNom(f) + (f.actividad_propia ? ' — partida: ' + laCaso(f.partida) : '') + ' · ' + f.nodo_codigo + (f.codigo_esp ? ' · ' + f.codigo_esp : ''))}"><span class="nom">${f.critico ? '<span class="dot" title="Crítica"></span>' : ''}${esc(String(laNom(f)).toUpperCase())}${f.concepto === 'adicional' ? '<span class="tag-adi">ADI</span>' : ''}${LA_TIPO[f.tipo] ? `<span class="tag-adi" title="Del plan master: sin metrado ni costo; el avance se mide en %">${LA_TIPO[f.tipo]}</span>` : ''}${editable ? ` <button class="quitar" title="Quitar del plan de la semana" data-quitar="${f.fila_id}">✕</button>` : ''}</span></td>`
       + `<td class="c">${esc(f.unidad || '')}</td><td class="n" data-c="acum">${num2(f.acum_anterior)}</td></tr>`;
     hDe += `<tr class="fila-plan act-row" data-fila="${f.fila_id}" data-r="${r}"><td class="medida">Plan</td>${celdas('plan')}<td class="n" data-c="plan_total" style="font-weight:700">${num2(f.plan_total)}</td>`
       + `<td rowspan="2" class="n" data-c="spi">${f.spi == null ? '' : (f.spi * 100).toFixed(0) + '%'}</td>`
@@ -6399,7 +6439,7 @@ async function plaLista() {
   $('#plaGuardar').disabled = cerrada;
   $('#plaLista').innerHTML = `<table style="min-width:640px"><thead><tr><th>Actividad</th><th>Und</th><th>Plan del día</th><th>Ejecutado el ${laFmt(fecha)}</th><th>Acumulado</th></tr></thead><tbody>`
     + acts.map(a => { const p = PLA.planes[a.id], plan = p ? Number(p[DIAS_PT[k]] || 0) : null, v = PLA.avance[a.id];
-      return `<tr><td><b style="color:var(--tx)">${a.critico ? '<span class="dot" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#ef4444;margin-right:6px"></span>' : ''}${esc(a.actividad_propia || laCaso(a.partida))}</b><br><span class="mono" style="font-size:10.5px;color:var(--mut)">${esc(a.nodo_codigo)} · ${esc(String(a.proyecto_nombre).replace('Puente ', ''))}${a.actividad_propia ? ' · ' + esc(laCaso(a.partida)) : ''}${a.detalle ? ' · ' + esc(a.detalle) : ''}</span></td>`
+      return `<tr><td><b style="color:var(--tx)">${a.critico ? '<span class="dot" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#ef4444;margin-right:6px"></span>' : ''}${esc(a.actividad_propia || laCaso(a.partida))}</b><br><span class="mono" style="font-size:10.5px;color:var(--mut)">${esc(a.nodo_codigo)} · ${esc(String(a.proyecto_nombre).replace('Puente ', ''))}${a.nodo_id && a.actividad_propia ? ' · ' + esc(laCaso(a.partida)) : (LA_TIPO[a.tipo] ? ' · ' + LA_TIPO[a.tipo] : '')}${a.detalle ? ' · ' + esc(a.detalle) : ''}</span></td>`
         + `<td>${esc(a.unidad || '')}</td><td class="mono">${plan == null ? '—' : num2(plan)}</td>`
         + `<td><input type="number" min="0" step="0.01" data-act="${a.id}" value="${v ? Number(v.cantidad) : ''}" ${cerrada ? 'disabled' : ''} style="width:110px"></td><td class="mono">${num2(a.acumulado)} / ${num2(a.metrado_meta)}</td></tr>`; }).join('') + '</tbody></table>'
     + (cerrada ? '<p class="hint" style="padding:8px 12px;color:var(--amber)">🔒 La semana de esa fecha está cerrada: el parte ya no se puede modificar.</p>' : '');
@@ -7031,6 +7071,15 @@ async function plCargarLB() {
   if (!PL.lbCache[lb.id]) { const m = {}; (await getTodo(`/linea_base_partidas?version_id=eq.${lb.id}&select=codigo,inicio,fin,estado,metrado,parcial_cd&order=codigo`)).forEach(r => { m[r.codigo] = r; }); PL.lbCache[lb.id] = m; }
   PL.lbMap = PL.lbCache[lb.id];
 }
+function plRuta(x) {   // {frente, ruta, txt}: «Charanal» + «Superestructura › Losa» (los dos niveles de arriba de la tarea, sin repetir el puente)
+  if (PL._arb !== PL.arbol) { PL._arb = PL.arbol; PL._pid = {}; PL.arbol.forEach(n => { PL._pid[n.nodo_id] = n; }); }
+  let n = x.nodo_id ? PL._pid[(PL._pid[x.nodo_id] || {}).padre_id] : PL._pid[x.grupo_id];
+  const cad = []; while (n) { if (n.nivel >= 2) cad.unshift(String(n.nombre)); n = PL._pid[n.padre_id]; }
+  const fr = String((DATA.proyectos.find(p => p.id === x.proyecto_id) || {}).nombre || '').replace(/^Puente\s+/i, '');
+  const ruta = cad.slice(-2).join(' › ');
+  return { frente: fr, ruta, txt: fr + ' ' + cad.join(' ') };
+}
+const plCtx = (x) => { const r = plRuta(x); return (r.frente ? `<span class="pl-frtag">${esc(r.frente)}</span>` : '') + esc(r.ruta); };
 async function plDatos() {
   const [ps, arbol, lbs] = await Promise.all([
     get(`/plan_versiones?obra_id=eq.${OBRA.id}&estado=neq.archivado&select=*&limit=1`),
@@ -7302,7 +7351,7 @@ function plDrawerPintar() {
   const t = PL.tm[PL.sel], el = plDrawerEl(); if (!t) return;
   const ed = plEditable(), ro = ed ? '' : 'disabled', nodoTxt = (x) => `${esc(x.codigo_esp || x.codigo)} · ${esc(x.nombre)}`, lb = plLbActual();
   const fila = (l, esPred) => { const o = PL.tm[esPred ? l.predecesora_id : l.tarea_id]; if (!o) return '';
-    return `<tr class="${l._viol ? 'pre-quit' : ''}"><td class="l" title="${esc(o.nombre)}">${nodoTxt(o)}</td><td><select class="pl-sel-t" ${ro} data-pl-dep-t="${l.tarea_id}|${l.predecesora_id}">${Object.keys(PL_TIPOS).map(k => `<option value="${k}" ${l.tipo === k ? 'selected' : ''}>${k}</option>`).join('')}</select></td>`
+    return `<tr class="${l._viol ? 'pre-quit' : ''}"><td class="l" title="${esc(o.nombre)}">${nodoTxt(o)}<span class="pl-ctx">${plCtx(o)}</span></td><td><select class="pl-sel-t" ${ro} data-pl-dep-t="${l.tarea_id}|${l.predecesora_id}">${Object.keys(PL_TIPOS).map(k => `<option value="${k}" ${l.tipo === k ? 'selected' : ''}>${k}</option>`).join('')}</select></td>`
       + `<td><input class="pre-in" ${ro} inputmode="decimal" value="${Number(l.desfase_dias) || 0}" data-pl-dep-d="${l.tarea_id}|${l.predecesora_id}" aria-label="Desfase en días"></td><td class="c">${ed ? `<button type="button" class="pre-x" data-pl-dep-x="${l.tarea_id}|${l.predecesora_id}" title="Quitar el vínculo">✕</button>` : ''}</td></tr>`; };
   const preds = PL.deps.filter(l => l.tarea_id === t.id), sucs = PL.deps.filter(l => l.predecesora_id === t.id);
   const tabla = (ls, esPred) => ls.length ? `<div class="vl-tw"><table class="vl-tb pre-lt pl-lk-t"><thead><tr><th class="l">${esPred ? 'Predecesora' : 'Sucesora'}</th><th>Tipo</th><th>Desfase</th><th></th></tr></thead><tbody>${ls.map(l => fila(l, esPred)).join('')}</tbody></table></div>` : `<p class="hint" style="margin:2px 0 8px">Sin ${esPred ? 'predecesoras' : 'sucesoras'}.</p>`;
@@ -7325,7 +7374,7 @@ function plDrawerPintar() {
     </div></div>
     <div class="pl-dr-cols"><div class="vl-card"><h3>Predecesoras</h3>${tabla(preds, true)}</div><div class="vl-card"><h3>Sucesoras</h3>${tabla(sucs, false)}</div></div>
     ${ed ? `<div class="vl-card"><h3>➕ Agregar vínculo</h3><div class="pre-add-f"><select id="plDir" class="pl-sel-t"><option value="pred">Esta tarea depende de…</option><option value="suc">De esta tarea depende…</option></select>
-      <div class="pre-add-b"><input id="plBuscar" type="search" placeholder="Buscar tarea (código o nombre)…" autocomplete="off"><div id="plSug" class="pre-sug" hidden></div></div>
+      <div class="pre-add-b"><input id="plBuscar" type="search" placeholder="Buscar tarea (código, nombre, frente o grupo)…" autocomplete="off"><div id="plSug" class="pre-sug" hidden></div></div>
       <select id="plTipo" class="pl-sel-t" title="${Object.entries(PL_TIPOS).map(([k, v]) => k + ' = ' + v).join(' · ')}">${Object.keys(PL_TIPOS).map(k => `<option value="${k}">${k}</option>`).join('')}</select>
       <input class="pre-in" id="plDes" inputmode="decimal" value="0" aria-label="Desfase en días" title="Desfase en días (negativo = adelanto)"><button type="button" class="btn-sec pri" id="plAddBt" disabled>Agregar</button></div></div>` : ''}
   </div>`;
@@ -7404,7 +7453,7 @@ document.addEventListener('click', async (e) => {
   if (t.closest('[data-pl-dup]')) { const x = PL.tm[PL.sel], nom = ($('#plNom').value || '').trim(); const id = await preRpc('plan_tarea_duplicar', { p_tarea: x.id, p_nombre: nom ? nom + ' (2)' : null }).catch(er => { toast(`No se pudo: ${esc(er.message)}`, false); return null; }); if (id) { toast('Tarea partida: ahora hay otra de la misma partida; cámbiale nombre y duración.', true); PL.abiertos[PL.frente].add(x.nodo_id); await plDatos(); plAbrirTarea(id); } return; }
   if (t.closest('[data-pl-quitar]')) { if (!(await confirmar('Quitar esta tarea del plan master. La partida y las demás tareas no cambian.'))) return; const x = PL.tm[PL.sel]; await plEjecutar('plan_tarea_quitar', { p_tarea: x.id }, 'Tarea quitada.'); return; }
   if ((b = t.closest('[data-pl-dep-x]'))) { const [a, p] = b.dataset.plDepX.split('|'); await plEjecutar('plan_dependencia_quitar', { p_tarea: a, p_pred: p }, null); return; }
-  if ((b = t.closest('[data-pl-sug]'))) { const x = PL.tm[b.dataset.plSug]; if (!x) return; PL.add = x; $('#plBuscar').value = `${x.codigo_esp || x.codigo} · ${x.nombre}`; $('#plSug').hidden = true; $('#plAddBt').disabled = false; return; }
+  if ((b = t.closest('[data-pl-sug]'))) { const x = PL.tm[b.dataset.plSug]; if (!x) return; PL.add = x; $('#plBuscar').value = `${x.codigo_esp || x.codigo} · ${x.nombre} — ${plRuta(x).frente}`; $('#plSug').hidden = true; $('#plAddBt').disabled = false; return; }
   if (t.closest('#plAddBt')) {
     const o = PL.add, x = PL.tm[PL.sel]; if (!o || !x) return; const dir = $('#plDir').value, des = Number(String($('#plDes').value).replace(',', '.')) || 0;
     const [a, p] = dir === 'pred' ? [x.id, o.id] : [o.id, x.id]; PL.add = null;
@@ -7487,8 +7536,9 @@ document.addEventListener('input', (e) => {
   if (e.target.id !== 'plBuscar') return;
   const q = e.target.value.trim().toLowerCase(), box = $('#plSug'); PL.add = null; $('#plAddBt').disabled = true;
   if (q.length < 2) { box.hidden = true; return; }
-  const hit = Object.values(PL.tm).filter(x => x.id !== PL.sel && (x.codigo.toLowerCase().includes(q) || String(x.codigo_esp || '').toLowerCase().includes(q) || String(x.nombre).toLowerCase().includes(q))).slice(0, 8);
-  box.innerHTML = hit.length ? hit.map(x => `<button type="button" data-pl-sug="${x.id}"><b>${esc(x.codigo_esp || x.codigo)}</b> ${esc(x.nombre)}<em>${plFmt(x.s)} → ${x.hito ? 'hito' : plFmt(x.e - 1)} · ${x.dias} días</em></button>`).join('') : '<div class="pre-sug-v">Sin coincidencias</div>';
+  const palabras = q.split(/\s+/).filter(Boolean);
+  const hit = Object.values(PL.tm).filter(x => { if (x.id === PL.sel) return false; const txt = (String(x.codigo || '') + ' ' + String(x.codigo_esp || '') + ' ' + String(x.nombre) + ' ' + plRuta(x).txt).toLowerCase(); return palabras.every(p => txt.includes(p)); }).slice(0, 12);
+  box.innerHTML = hit.length ? hit.map(x => `<button type="button" data-pl-sug="${x.id}"><b>${esc(x.codigo_esp || x.codigo)}</b> ${esc(x.nombre)}<em class="rt">${plCtx(x)}</em><em>${plFmt(x.s)} → ${x.hito ? 'hito' : plFmt(x.e - 1)} · ${x.dias} días</em></button>`).join('') : '<div class="pre-sug-v">Sin coincidencias</div>';
   box.hidden = false;
 });
 document.addEventListener('change', async (e) => {
