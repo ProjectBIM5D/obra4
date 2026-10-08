@@ -1837,7 +1837,7 @@ html.tb-compacta #laAgregar,html.tb-compacta #ptCrear{width:36px;padding:0;font-
 html.tb-compacta #ptAgregar{padding:0 10px;}
 html.tb-compacta :is(#laEstado,#ptEstado) .tx{display:none;}
 html.tb-compacta :is(#laApp,#ptApp) .tb .badge{padding:0 7px;}
-html.tb-compacta #laSel{width:156px;max-width:156px;padding:0 22px 0 8px;} html.tb-compacta #laComp{width:124px;max-width:124px;padding:0 22px 0 8px;}
+html.tb-compacta #laSel{width:170px;max-width:170px;padding:0 22px 0 8px;} html.tb-compacta #laComp{width:140px;max-width:140px;padding:0 22px 0 8px;}
 html.tb-compacta #ptLook{max-width:96px;} html.tb-compacta #ptSemSel{max-width:170px;} html.tb-compacta #ptComp{width:112px;max-width:112px;}
 html.tb-compacta #laApp .tb-seg .seg-btn[data-lagrupos]{padding:0;width:34px;}
 @media (max-width:900px){html.tb-compacta #laSel{width:146px;max-width:146px;font-size:12px;} html.tb-compacta #laComp{width:92px;max-width:92px;} html.tb-compacta :is(#laApp,#ptApp) .tb{gap:6px 6px;} html.tb-compacta :is(#laApp,#ptApp) .tb-g{gap:4px;} html.tb-compacta #laApp .tb-seg .seg-btn[data-lacols],html.tb-compacta #laApp .tb-seg .seg-btn[data-lagrupos]{width:29px;} html.tb-compacta #laSel{width:140px;max-width:140px;}}
@@ -1862,6 +1862,7 @@ html.tb-compacta #laApp .tb-seg .seg-btn[data-lagrupos]{padding:0;width:34px;}
 .pre-sug em.rt{margin:1px 0 1px;font-size:10.5px;color:var(--tx2);}
 .pl-frtag{display:inline-block;margin-right:6px;padding:0 6px;border-radius:5px;background:var(--ic-blue-bg);color:var(--blue-tx);font-size:9.5px;font-weight:800;letter-spacing:.3px;text-transform:uppercase;vertical-align:1px;}
 .pl-ctx{display:block;font-size:10.5px;color:var(--mut);font-weight:500;white-space:normal;line-height:1.3;margin-top:1px;}
+.pt-tabla td.blq{font-size:11px;white-space:nowrap;font-variant-numeric:tabular-nums;} .pt-tabla td.blq.ok{color:var(--green);font-weight:700;} .pt-tabla td.blq.falta{color:var(--amber);} .pt-tabla td.blq.sobre{color:var(--red);font-weight:700;}
 </style>
 <script>
 document.documentElement.dataset.pane = 'resumen';
@@ -2386,10 +2387,6 @@ document.documentElement.classList.add('dens-densa');   // tamaño único de las
             <select id="laComp" class="tb-sel" aria-label="Frente"></select>
           </div>
           <div class="tb-g">
-            <span class="tb-seg" role="group" aria-label="Columnas">
-              <button type="button" class="seg-btn" data-lacols="resumen" title="Columnas principales (resumen)" aria-label="Columnas principales"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h11M4 17h6"/></svg></button>
-              <button type="button" class="seg-btn" data-lacols="todas" title="Todas las columnas" aria-label="Todas las columnas"><svg viewBox="0 0 24 24"><path d="M3.5 6h17M3.5 12h17M3.5 18h17M9 4v16M15 4v16"/></svg></button>
-            </span>
             <span class="tb-seg" role="group" aria-label="Grupos">
               <button type="button" class="seg-btn" data-lagrupos="abrir" title="Expandir todos los grupos" aria-label="Expandir todos los grupos">⊞</button>
               <button type="button" class="seg-btn" data-lagrupos="cerrar" title="Contraer los grupos (deja el puente y su primer nivel)" aria-label="Contraer los grupos">⊟</button>
@@ -2445,6 +2442,7 @@ document.documentElement.classList.add('dens-densa');   // tamaño único de las
             <div class="field" id="laf-meta"><label for="laFMeta">Metrado meta <span class="hint mono" id="laFUnd"></span></label><input id="laFMeta" type="number" min="0" step="0.01" placeholder="0.00"><span class="field-err">Ingresa el metrado (0 o más)</span></div>
             <div class="field" id="laf-pct"><label for="laFPrev" title="Cantidad ya ejecutada antes de este Look Ahead. Lo que se ejecute después llega solo desde el parte diario.">Ejecutado antes <span class="hint mono" id="laFUnd2"></span></label><input id="laFPrev" type="number" min="0" step="0.01" value="0"><span class="field-err">Ingresa 0 o más</span></div>
           </div>
+          <p class="hint" id="laFSugMeta" hidden style="margin:-6px 0 12px"></p>
           <div id="laFApu" class="la-apu" hidden></div>
           <label class="la-chk" style="margin-bottom:14px"><input type="checkbox" id="laFCrit"> Actividad crítica (ruta crítica)</label>
           <div style="display:flex;flex-wrap:wrap;gap:8px">
@@ -2494,6 +2492,7 @@ document.documentElement.classList.add('dens-densa');   // tamaño único de las
               <button type="button" class="tb-btn" id="ptAgregar" data-tbmas title="Agregar al plan una actividad del Look Ahead">＋<span class="tb-t"> Actividad</span> ▾</button>
               <div class="tb-menu tb-lista" id="ptAgregarMenu" hidden></div>
             </span>
+            <button type="button" class="tb-btn" id="ptRepartir" title="Repartir de nuevo el Plan de esta semana desde el Look Ahead (reemplaza lo escrito en las filas Plan)">⟳<span class="tb-t"> Repartir</span></button>
             <button type="button" class="tb-btn" id="ptCerrar" title="Cerrar la semana: el plan y el parte diario de esa semana ya no se podrán modificar">🔒<span class="tb-t"> Cerrar semana</span></button>
             <button type="button" class="tb-btn adm" id="ptReabrir" hidden title="Solo administrador: vuelve a habilitar el plan y el parte diario de la semana">🔓<span class="tb-t"> Reabrir</span></button>
           </div>
@@ -5143,7 +5142,6 @@ $('#matAvForm').addEventListener('submit', async (e) => {
 // con el avance encima (azul; rojo si es crítica; verde azulado si es del adicional).
 // ============================================================================
 const LA = { cargado: false, semanas: [], looks: [], sel: null, det: [], nodos: [], porId: {}, comp: '', crit: false, cols: 'resumen', edit: null };
-try { if (localStorage.getItem('obra-la-cols') === 'todas') LA.cols = 'todas'; } catch (e) {}
 LA.colap = new Set(); try { LA.colap = new Set(JSON.parse(localStorage.getItem('obra-la-colap') || '[]')); } catch (e) {}   // grupos contraídos (ids de partidas-título)
 const LA_DW = 26;   // ancho de un día en la línea de tiempo (px)
 const LA_COLORES = ['#0f766e', '#4f5bd5', '#d97706', '#7c3aed', '#db2777'];
@@ -5303,6 +5301,18 @@ async function laSugCargar(forzar) {
     catch (e) { LA.prev = []; }
   }
 }
+function laMetaPlan(nodoId, ini, dias) {   // metrado que el plan master asigna a la partida entre ini y ini+dias-1 (tarea de 319 días y actividad de 27 → 27/319 del metrado)
+  if (!LA.plan || LA.plan.sin || !nodoId || !ini || !(dias >= 1)) return null;
+  const ts = LA.plan.tareas.filter(x => x.tipo === 'partida' && x.nodo_id === nodoId && x.activa !== false && !x.hito);
+  if (!ts.length) return null;
+  const sumDias = ts.reduce((s, x) => s + Number(x.dias || 0), 0) || 1, a0 = laDia(ini), a1 = a0 + dias - 1;
+  let meta = 0, hit = 0;
+  for (const x of ts) {
+    const t0 = laDia(x.inicio), t1 = laDia(x.fin), dT = Math.max(1, t1 - t0 + 1), ov = Math.min(a1, t1) - Math.max(a0, t0) + 1;
+    if (ov <= 0) continue; hit++; meta += Number(x.metrado || 0) * Number(x.dias || 0) / sumDias * Math.min(1, ov / dT);
+  }
+  return hit ? { meta: Math.round(meta * 10000) / 10000, total: Number(ts[0].metrado || 0), tareas: ts.length } : null;
+}
 function laSugCalc() {
   const look = laActual(); if (!look || !LA.plan || LA.plan.sin) return null;
   const sem = laSemana(look.semana); if (!sem) return null;
@@ -5343,14 +5353,21 @@ function laSugCalc() {
     const di = laDia(a.fecha_inicio) - laDia(t.inicio), df = laDia(a.fecha_fin) - laDia(t.fin);
     if (di < 0 || df > 0) fuera.push({ a, t, di, df });
   }
+  const exceso = [], porN = {};
+  LA.det.forEach(a => { if (a.nodo_id && a.tipo === 'partida') (porN[a.nodo_id] = porN[a.nodo_id] || []).push(a); });
+  for (const [nid, arr] of Object.entries(porN)) {
+    const ini = arr.map(a => a.fecha_inicio).sort()[0], fin = arr.map(a => a.fecha_fin).sort().pop(), s = laMetaPlan(nid, ini, laDia(fin) - laDia(ini) + 1);
+    const suma = arr.reduce((x, a) => x + Number(a.metrado_meta || 0), 0);
+    if (s && s.meta > 0 && suma > s.meta * 1.15 + 1e-6) exceso.push({ a: arr[0], n: arr.length, suma, s });
+  }
   otras.sort((a, b) => (a.futura ? 0 : 1) - (b.futura ? 0 : 1) || String(a.t.inicio).localeCompare(String(b.t.inicio)));
-  return { w0, w1, faltan, otras, fuera };
+  return { w0, w1, faltan, otras, fuera, exceso };
 }
 async function laSugRefrescar() {
   try {
     await laSugCargar(); const c = laSugCalc(), b = $('#laSugN'); if (!b) return;
-    const n = c ? c.faltan.length + c.fuera.length : 0;
-    b.hidden = !n; b.textContent = n; b.title = c ? `${c.faltan.length} por agregar · ${c.fuera.length} fuera de las fechas del plan` : '';
+    const n = c ? c.faltan.length + c.fuera.length + c.exceso.length : 0;
+    b.hidden = !n; b.textContent = n; b.title = c ? `${c.faltan.length} por agregar · ${c.fuera.length} fuera de las fechas del plan · ${c.exceso.length} con metrado mayor al del plan` : '';
     if (!$('#laSug').hidden) laSugRender();
   } catch (e) {}
 }
@@ -5370,6 +5387,9 @@ function laSugRender() {
   h += `<div class="sug-h">Fuera de las fechas del plan <span class="n">${c.fuera.length}</span></div>`;
   h += c.fuera.length ? `<div class="sug-l">` + c.fuera.map(x => `<div class="sug-f sf"><span class="nm" title="${esc(laNom(x.a))}">${esc(laNom(x.a))}</span><span class="sb">Actividad ${laFmt(x.a.fecha_inicio)} → ${laFmt(x.a.fecha_fin)} · plan ${laFmt(x.t.inicio)} → ${laFmt(x.t.fin)}</span><span class="tg at">${[x.di < 0 ? `empieza ${-x.di} d antes` : '', x.df > 0 ? `termina ${x.df} d después` : ''].filter(Boolean).join(' · ')}</span></div>`).join('') + '</div>'
     : '<div class="sug-l"><div class="sug-vacio">Las actividades vinculadas al plan están dentro de sus fechas.</div></div>';
+  h += `<div class="sug-h">Metrado mayor al tramo del plan <span class="n">${c.exceso.length}</span></div>`;
+  h += c.exceso.length ? `<div class="sug-l">` + c.exceso.map(x => `<div class="sug-f sf"><span class="nm" title="${esc(laNom(x.a))}">${esc(laNom(x.a))}${x.n > 1 ? ' (+' + (x.n - 1) + ' más de la partida)' : ''}</span><span class="sb">Look Ahead ${laNum(x.suma, 4)} ${esc(x.a.unidad || '')} · el plan asigna ${laNum(x.s.meta, 4)} a esas fechas (${x.s.total ? Math.round(x.s.meta / x.s.total * 100) : 0} % de ${laNum(x.s.total, 2)})</span>${x.n === 1 && editable ? `<button type="button" class="btn-sec" data-ajmeta="${x.a.id}|${x.s.meta}" style="padding:2px 10px;font-size:11px">Usar ${laNum(x.s.meta, 4)}</button>` : '<span class="tg at">REVISAR</span>'}</div>`).join('') + '</div>'
+    : '<div class="sug-l"><div class="sug-vacio">Ninguna partida pasa del tramo que le asigna el plan.</div></div>';
   h += `<div class="sug-acc">${(c.faltan.length || c.otras.length) && editable ? '<button class="btn" type="button" id="laSugAgregar" disabled>Agregar seleccionadas</button>' : ''}<button class="btn-sec" type="button" id="laSugCerrar2">Cerrar</button></div>`
     + (editable ? '' : '<p class="hint" style="margin-top:8px">Este Look Ahead está cerrado: solo lectura.</p>');
   cuerpo.innerHTML = h; cuerpo._calc = c; laSugOtrasRender();
@@ -5446,7 +5466,6 @@ function laRender() {
   est.style.cssText = look ? (look.estado === 'cerrado' ? 'background:#8393b226;color:var(--mut)' : 'background:#6b76e026;color:var(--blue-tx)') : '';
   $('#laAgregar').disabled = !editable; $('#laCerrar').disabled = !(look && look.estado === 'borrador');
   $('#laReabrir').hidden = !(AUTH.admin && look && look.estado === 'cerrado'); $('#laEliminar').hidden = !(AUTH.admin && look);
-  document.querySelectorAll('[data-lacols]').forEach(b => b.classList.toggle('on', b.dataset.lacols === LA.cols));
   $('#laComp').innerHTML = '<option value="">Todos</option>' + COMPONENTES.map(c => `<option value="${esc(c.id)}">${esc(c.nombre)}</option>`).join('');
   $('#laComp').value = LA.comp;
 
@@ -5746,6 +5765,17 @@ async function laApuRefrescar() {
     + (c.mat.length ? `<details><summary>Materiales (${c.mat.length})</summary><ul>${c.mat.map(m => `<li><span title="${esc(m.nom)}">${esc(m.nom)}</span><b>${laNum(m.cant, 2)} ${esc(m.und || '')}</b></li>`).join('')}</ul></details>` : '');
   box.hidden = false;
 }
+async function laSugMetaRefrescar() {   // «el plan master asigna X a estas fechas» (la partida partida en el tiempo) con botón para usarlo
+  const box = $('#laFSugMeta'); if (!box) return;
+  const id = $('#laFPart').value, n = LA.porId[id], ini = $('#laFIni').value, dias = parseInt($('#laFDias').value, 10);
+  if (!n || LA.sinPartida || !ini || !(dias >= 1)) { box.hidden = true; return; }
+  try { await laSugCargar(); } catch (e) {}
+  if ($('#laFPart').value !== id) return;
+  const s = laMetaPlan(id, ini, dias), actual = parseFloat($('#laFMeta').value);
+  if (!s || s.meta <= 0 || Math.abs((actual || 0) - s.meta) <= Math.max(0.0001, s.meta * 0.01)) { box.hidden = true; return; }
+  box.innerHTML = `Según el plan master, a estas fechas le toca <b>${laNum(s.meta, 4)} ${esc(n.unidad || '')}</b> (${s.total ? Math.round(s.meta / s.total * 100) : 0} % de ${laNum(s.total, 2)}). <button type="button" class="btn-sec" data-usar-meta="${s.meta}" style="padding:2px 10px;font-size:11px;margin-left:6px">Usar ${laNum(s.meta, 4)}</button>`;
+  box.hidden = false;
+}
 function laFinTxt() {
   const ini = $('#laFIni').value, d = parseInt($('#laFDias').value, 10);
   $('#laFFin').textContent = (ini && d >= 1) ? `→ fin ${laFmt(laFecha(laDia(ini) + d - 1))}` : '';
@@ -5776,15 +5806,12 @@ function laFormAbrir(act, pre) {
   LA.sinPartida = !!(act && !act.nodo_id);
   ['laf-comp', 'laf-elem', 'laf-part', 'laFInfo'].forEach(id => { const e = document.getElementById(id); if (e) e.style.display = LA.sinPartida ? 'none' : ''; });
   if (LA.sinPartida) { $('#laFTitulo').textContent = `Editar actividad · ${LA_TIPO[act.tipo] || ''}`; $('#laFUnd').textContent = '(%)'; $('#laFUnd2').textContent = '(%)'; }
-  $('#laFApu').hidden = true; if (!LA.sinPartida) laApuRefrescar();   // la partida no se cambia: se quita y se agrega otra
+  $('#laFApu').hidden = true; $('#laFSugMeta').hidden = true; if (!LA.sinPartida) { laApuRefrescar(); laSugMetaRefrescar(); }   // la partida no se cambia: se quita y se agrega otra
   laFinTxt();
   setTimeout(() => { try { $('#laFAct').focus({ preventScroll: true }); } catch (e) {} }, 50);
 }
 
 function laIniciar() {
-  document.querySelectorAll('[data-lacols]').forEach(b => b.addEventListener('click', () => {
-    LA.cols = b.dataset.lacols; try { localStorage.setItem('obra-la-cols', LA.cols); } catch (e) {} laRender();
-  }));
   $('#laSel').addEventListener('change', async (e) => { LA.sel = e.target.value; try { localStorage.setItem('obra-la-sel', LA.sel); } catch (x) {} await laCargarDetalle(); });
   const mover = async (d) => { const i = LA.looks.findIndex(l => l.id === LA.sel); const n = LA.looks[i + d]; if (n) { LA.sel = n.id; try { localStorage.setItem('obra-la-sel', LA.sel); } catch (x) {} await laCargarDetalle(); } };
   $('#laPrev').addEventListener('click', () => mover(-1)); $('#laNext').addEventListener('click', () => mover(1));
@@ -5793,7 +5820,10 @@ function laIniciar() {
   $('#laSugBtn').addEventListener('click', async () => { laMsg(''); $('#laForm').hidden = true; $('#laNuevoBox').hidden = true; LA.sugSel = new Set(); $('#laSug').hidden = false; $('#laSugCuerpo').innerHTML = '<div class="sug-vacio">Leyendo el plan master…</div>'; await laSugCargar(true); laSugRender(); });
   $('#laSug').addEventListener('click', (e) => {
     if (e.target.closest('#laSugCerrar, #laSugCerrar2')) { $('#laSug').hidden = true; return; }
-    if (e.target.closest('#laSugAgregar')) laSugAgregar();
+    if (e.target.closest('#laSugAgregar')) { laSugAgregar(); return; }
+    const aj = e.target.closest('[data-ajmeta]');
+    if (aj) { const [id, v] = aj.dataset.ajmeta.split('|'); aj.disabled = true;
+      laEnviar('PATCH', `/lookahead_actividades?id=eq.${id}`, { metrado_meta: Number(v) }).then(async () => { await laCargarDetalle(); laMsg('Metrado ajustado al tramo del plan master.', true); }).catch(err => { aj.disabled = false; laMsg(`No se pudo ajustar: ${laErr(err)}`, false); }); }
   });
   $('#laSug').addEventListener('change', (e) => {
     if (e.target.id === 'laSugTodo') document.querySelectorAll('#laSugCuerpo input[data-sug]').forEach(i => { i.checked = e.target.checked; });
@@ -5811,10 +5841,11 @@ function laIniciar() {
     laInfoPartida();
     const n = LA.porId[$('#laFPart').value];
     if (n && !LA.edit && !$('#laFMeta').value) { $('#laFMeta').value = laExcesoPartida(n.id, 0).saldo; laInfoPartida(); }   // por defecto: lo que falta por programar de la partida
-    laApuRefrescar();
+    laApuRefrescar(); laSugMetaRefrescar();
   });
-  ['laFIni', 'laFDias'].forEach(id => $('#' + id).addEventListener('input', laFinTxt));
-  $('#laFMeta').addEventListener('input', () => { laInfoPartida(); laApuRefrescar(); });
+  ['laFIni', 'laFDias'].forEach(id => $('#' + id).addEventListener('input', () => { laFinTxt(); laSugMetaRefrescar(); }));
+  $('#laFSugMeta').addEventListener('click', (e) => { const b = e.target.closest('[data-usar-meta]'); if (!b) return; $('#laFMeta').value = b.dataset.usarMeta; laInfoPartida(); laApuRefrescar(); laSugMetaRefrescar(); });
+  $('#laFMeta').addEventListener('input', () => { laInfoPartida(); laApuRefrescar(); laSugMetaRefrescar(); });
   $('#laFDias').addEventListener('input', laApuRefrescar);
   $('#laFApu').addEventListener('click', (e) => { const b = e.target.closest('[data-apu-dias]'); if (!b) return; $('#laFDias').value = b.dataset.apuDias; laFinTxt(); laApuRefrescar(); });
 
@@ -5996,7 +6027,7 @@ function ptRender() {
   const editable = !!plan && plan.estado === 'borrador';   // cerrado = bloqueado para todos hasta «Reabrir»
   $('#ptReabrir').hidden = !(AUTH.admin && plan && plan.estado === 'cerrado');
   // solo se muestran los botones que sirven en este momento
-  $('#ptCrear').hidden = !!plan; $('#ptCerrar').hidden = !editable; $('#ptAgregar').parentElement.hidden = !editable;
+  $('#ptCrear').hidden = !!plan; $('#ptCerrar').hidden = !editable; $('#ptRepartir').hidden = !editable; $('#ptAgregar').parentElement.hidden = !editable;
   const enPlan = new Set(PT.det.filter(f => f.semana === PT.sem).map(f => f.actividad_id));
   const libres = PT.acts.filter(a => !enPlan.has(a.id));
   $('#ptAgregarMenu').innerHTML = libres.length ? libres.map(a => `<button type="button" data-add="${a.id}" title="${esc(a.nodo_codigo)}"><span class="nm">${esc(String(laNom(a)).toUpperCase())}</span><small>${esc(a.unidad || '')}</small></button>`).join('') : '<p class="hint" style="margin:8px 10px">No quedan actividades del Look Ahead por agregar.</p>';
@@ -6011,16 +6042,16 @@ function ptRender() {
   const hoy = laHoy();
   const dias = [...Array(7).keys()].map(k => laFecha(d0 + k));
   // dos paneles con las mismas filas: a la izquierda la actividad, a la derecha los días (Plan / Real) y el análisis
-  let hIz = `<thead><tr><th class="izq act">ACTIVIDAD</th><th>UND</th><th>ACUM. ANT.</th></tr></thead><tbody>`;
+  let hIz = `<thead><tr><th class="izq act">ACTIVIDAD</th><th>UND</th><th>ACUM. ANT.</th><th title="Lo programado en las semanas del bloque frente a la meta de la actividad en el Look Ahead">PLAN BLOQUE</th></tr></thead><tbody>`;
   let hDe = `<thead><tr><th>MEDIDA</th>` + dias.map((d, k) => `<th class="${dias[k] === hoy ? 'hoy' : ''}">${LET_PT[k]}<br><span style="font-weight:500">${d.slice(8, 10)}/${d.slice(5, 7)}</span></th>`).join('')
     + `<th>TOTAL</th><th>SPI</th><th>PAC<br>SÍ</th><th>PAC<br>NO</th><th>CAUSA DE INCUMPLIMIENTO</th><th>RESTRICCIONES</th><th>COMENTARIOS</th></tr></thead><tbody>`;
   const arbol = laArbol(filas);
   const NCd = 1 + 7 + 1 + 3 + 3;   // columnas del panel derecho
   const atr = (it, r) => `data-nodo="${it.nodo.id}" data-r="${r}" style="--cc:${laColor(it.cod)};--ccr:${laColorRgb(it.cod)}"`;
   const tituloPt = (it, r) => [
-    `<tr class="tit n${Math.min(it.nivel, 3)}" ${atr(it, r)}><td colspan="3" title="Clic para contraer o expandir"><span class="nom" style="--lvl:${it.nivel};padding-left:calc(10px + ${it.nivel} * 14px)">${laTituloNom(it)}</span></td></tr>`,
+    `<tr class="tit n${Math.min(it.nivel, 3)}" ${atr(it, r)}><td colspan="4" title="Clic para contraer o expandir"><span class="nom" style="--lvl:${it.nivel};padding-left:calc(10px + ${it.nivel} * 14px)">${laTituloNom(it)}</span></td></tr>`,
     `<tr class="tit n${Math.min(it.nivel, 3)}" ${atr(it, r)}><td colspan="${NCd}"></td></tr>`];
-  if (!filas.length) { hIz += `<tr><td colspan="3" style="padding:22px;text-align:center;color:var(--mut);white-space:normal">${PT.det.some(f => f.semana === PT.sem) ? 'Ninguna actividad cumple el filtro.' : 'Este plan todavía no tiene actividades: usa «＋ Agregar».'}</td></tr>`; hDe += `<tr><td colspan="${NCd}" style="height:70px"></td></tr>`; }
+  if (!filas.length) { hIz += `<tr><td colspan="4" style="padding:22px;text-align:center;color:var(--mut);white-space:normal">${PT.det.some(f => f.semana === PT.sem) ? 'Ninguna actividad cumple el filtro.' : 'Este plan todavía no tiene actividades: usa «＋ Agregar».'}</td></tr>`; hDe += `<tr><td colspan="${NCd}" style="height:70px"></td></tr>`; }
   const opcCausa = (v) => '<option value="">—</option>' + PT.causas.map(c => `<option value="${c.codigo}" ${c.codigo === v ? 'selected' : ''}>${esc(c.nombre)}</option>`).join('');
   let nFila = 0;
   for (const it of arbol) {
@@ -6035,7 +6066,7 @@ function ptRender() {
       return `<td class="${tipo === 'plan' ? 'pl' : 'rl'} ${k >= 5 ? 'fs' : ''} ${fuera ? 'fuera' : ''}"><input class="dia ${tipo}" type="number" min="0" step="0.01" ${dis ? 'disabled' : ''} value="${v ? v : ''}" data-fila="${f.fila_id}" data-tipo="${tipo}" data-k="${k}" data-act="${f.actividad_id}" data-fecha="${d}" title="${tipo === 'plan' ? 'Meta' : 'Ejecutado'} del ${LET_PT[k]} ${d.slice(8, 10)}/${d.slice(5, 7)}"></td>`;
     }).join('');
     hIz += `<tr class="fila-izq act-row" data-fila="${f.fila_id}" data-r="${r}"><td class="act" style="--lvl:${nivel}" title="${esc(laNom(f) + (f.actividad_propia ? ' — partida: ' + laCaso(f.partida) : '') + ' · ' + f.nodo_codigo + (f.codigo_esp ? ' · ' + f.codigo_esp : ''))}"><span class="nom">${f.critico ? '<span class="dot" title="Crítica"></span>' : ''}${esc(String(laNom(f)).toUpperCase())}${f.concepto === 'adicional' ? '<span class="tag-adi">ADI</span>' : ''}${LA_TIPO[f.tipo] ? `<span class="tag-adi" title="Del plan master: sin metrado ni costo; el avance se mide en %">${LA_TIPO[f.tipo]}</span>` : ''}${editable ? ` <button class="quitar" title="Quitar del plan de la semana" data-quitar="${f.fila_id}">✕</button>` : ''}</span></td>`
-      + `<td class="c">${esc(f.unidad || '')}</td><td class="n" data-c="acum">${num2(f.acum_anterior)}</td></tr>`;
+      + `<td class="c">${esc(f.unidad || '')}</td><td class="n" data-c="acum">${num2(f.acum_anterior)}</td>${ptBlqCelda(f)}</tr>`;
     hDe += `<tr class="fila-plan act-row" data-fila="${f.fila_id}" data-r="${r}"><td class="medida">Plan</td>${celdas('plan')}<td class="n" data-c="plan_total" style="font-weight:700">${num2(f.plan_total)}</td>`
       + `<td rowspan="2" class="n" data-c="spi">${f.spi == null ? '' : (f.spi * 100).toFixed(0) + '%'}</td>`
       + `<td rowspan="2" data-c="si" class="${f.pac === true ? 'si' : ''}">${f.pac === true ? 'X' : ''}</td><td rowspan="2" data-c="no" class="${f.pac === false ? 'no' : ''}">${f.pac === false ? 'X' : ''}</td>`
@@ -6049,6 +6080,21 @@ function ptRender() {
   PT_PANES.sync();
 }
 
+const num4 = (v) => Number(v || 0).toLocaleString('es-PE', { maximumFractionDigits: Math.abs(Number(v || 0)) < 10 ? 4 : 2 });
+function ptBlqInfo(f) {   // lo programado en las semanas del bloque (Plan de cada día) frente a la parte de la meta del Look Ahead que cae en esas semanas
+  const a = PT.acts.find(x => x.id === f.actividad_id), look = ptLookAct();
+  let obj = a ? ptTotalAct(a) : Number(f.metrado_meta || 0);
+  if (a && look) {
+    const lun0 = laDia(laSemana(look.semana).fecha_inicio), fin0 = lun0 + look.semanas * 7 - 1, ini = Math.max(laDia(a.fecha_inicio), lun0), fin = laDia(a.fecha_fin);
+    const lab = (d1, d2) => { let n = 0; for (let d = d1; d <= d2; d++) if (((d - lun0) % 7 + 7) % 7 < 6) n++; return n; };
+    const todos = lab(ini, fin), enBloque = lab(ini, Math.min(fin, fin0)); if (todos > 0) obj = obj * enBloque / todos;
+  }
+  const sum = PT.det.filter(x => x.actividad_id === f.actividad_id).reduce((s, x) => s + Number(x.plan_total || 0), 0), tol = Math.max(0.0001, obj * 0.001);
+  const cls = Math.abs(sum - obj) <= tol ? 'ok' : (sum > obj ? 'sobre' : 'falta');
+  const tit = cls === 'ok' ? 'El plan de las semanas suma justo la parte de la meta del Look Ahead que cae en el bloque' : cls === 'sobre' ? 'Lo programado supera la meta del Look Ahead (por ejemplo, después de repartir un atraso)' : 'Falta programar: hay semanas del bloque sin plan, o con menos que la meta del Look Ahead';
+  return { txt: `${num4(sum)} / ${num4(obj)}`, cls, tit: `${tit}. Meta del Look Ahead en el bloque: ${num4(obj)} ${f.unidad || ''}` };
+}
+const ptBlqCelda = (f) => { const i = ptBlqInfo(f); return `<td class="n blq ${i.cls}" data-c="blq" title="${esc(i.tit)}">${i.txt}</td>`; };
 function ptKpis(filas) {
   const k = ptPacTexto(filas), meta = Number((PT.det[0] || {}).pac_meta || 0.9), cumple = k.pac != null && k.pac >= meta, chip = $('#ptPacChip');
   chip.textContent = k.pac == null ? 'PAC —' : 'PAC ' + Math.round(k.pac * 100) + '%';
@@ -6061,6 +6107,7 @@ function ptActualizarFila(f) {
   ptRecalc(f);
   const q = (c, tr) => document.querySelector(`#ptFrame tr[data-fila="${f.fila_id}"]${tr || ''} [data-c="${c}"]`);
   const set = (c, txt, cls, tr) => { const e = q(c, tr); if (e) { e.textContent = txt; if (cls !== undefined) e.className = cls; } };
+  { const e = document.querySelector(`#ptFrame tr.fila-izq[data-fila="${f.fila_id}"] [data-c="blq"]`), i = ptBlqInfo(f); if (e) { e.textContent = i.txt; e.className = 'n blq ' + i.cls; e.title = i.tit; } }
   set('plan_total', num2(f.plan_total), 'n', '.fila-plan'); set('real_total', num2(f.real_total), 'n', '.fila-real');
   set('spi', f.spi == null ? '' : (f.spi * 100).toFixed(0) + '%', 'n'); set('si', f.pac === true ? 'X' : '', f.pac === true ? 'si' : ''); set('no', f.pac === false ? 'X' : '', f.pac === false ? 'no' : '');
   ptKpis(PT.det.filter(x => x.semana === PT.sem && (!PT.comp || x.proyecto === PT.comp)));
@@ -6075,22 +6122,21 @@ function ptResumenSemanas() {
 }
 
 // ── plan de la semana: reparte lo que falta de cada actividad entre sus días de trabajo (L–S) ──
-function ptRepartir(a, semIni, avPrevio) {
-  const ini = laDia(a.fecha_inicio), fin = laDia(a.fecha_fin), lun = laDia(semIni), dom = lun + 6;
-  const laborables = (d1, d2) => { let n = 0; for (let d = d1; d <= d2; d++) if (((d - lun) % 7 + 7) % 7 < 6) n++; return n; };   // L a S
-  const desde = Math.max(ini, lun), enSemana = laborables(desde, Math.min(fin, dom)), restantes = laborables(desde, fin);
-  const faltante = Math.max(0, Number(a.metrado_meta) - (Number(a.acumulado_previo) + (avPrevio || 0)));
-  const res = [0, 0, 0, 0, 0, 0, 0];
-  if (!enSemana || !restantes || faltante <= 0) return res;
-  const porDia = faltante / restantes;
-  for (let d = desde; d <= Math.min(fin, dom); d++) { const k = d - lun; if (k < 6) res[k] = Math.round(porDia * 100) / 100; }
-  return res;
+function ptReparto(a, refIni, faltante) {   // {n.º de día: cantidad}; el redondeo se compensa día a día y el último cierra exacto, así lo repartido suma justo «faltante»
+  const ini = laDia(a.fecha_inicio), fin = laDia(a.fecha_fin), lun = laDia(refIni), desde = Math.max(ini, lun), dias = [];
+  for (let d = desde; d <= fin; d++) if (((d - lun) % 7 + 7) % 7 < 6) dias.push(d);
+  const out = {}; if (!dias.length || !(faltante > 0)) return out;
+  const R = dias.length, r4 = (v) => Math.round(v * 1e4) / 1e4; let prev = 0;
+  dias.forEach((d, i) => { const acum = i === R - 1 ? r4(faltante) : r4(faltante * (i + 1) / R); out[d] = r4(acum - prev); prev = acum; });
+  return out;
 }
+const ptSemanaDe = (mapa, semIni) => { const lun = laDia(semIni); return [0, 1, 2, 3, 4, 5, 6].map(k => mapa[lun + k] || 0); };
+const ptTotalAct = (a) => Math.max(0, Number(a.metrado_meta) - Number(a.acumulado_previo));   // lo que la actividad tiene por hacer según el Look Ahead
+// Plan de cada semana al CREARLO: el metrado de la actividad se parte en proporción a sus días de trabajo (L–S) desde el inicio del bloque,
+// así las semanas del bloque suman justo lo que dice el Look Ahead. (Si hubo atraso, «Repartir» recalcula lo que falta.)
 async function ptFilasNuevas(actividades, planId, semIni) {
-  const ids = actividades.map(a => a.id);
-  const prev = ids.length ? await get(`/avance_diario?actividad_id=in.(${ids.join(',')})&fecha=lt.${semIni}&select=actividad_id,cantidad`) : [];
-  const sumPrev = {}; prev.forEach(r => { sumPrev[r.actividad_id] = (sumPrev[r.actividad_id] || 0) + Number(r.cantidad); });
-  return actividades.map((a, i) => { const p = ptRepartir(a, semIni, sumPrev[a.id] || 0);
+  const look = ptLookAct(), bloqueIni = laSemana(look.semana).fecha_inicio;
+  return actividades.map((a, i) => { const p = ptSemanaDe(ptReparto(a, bloqueIni, ptTotalAct(a)), semIni);
     return { plan_id: planId, actividad_id: a.id, orden: i + 1, plan_l: p[0], plan_m: p[1], plan_x: p[2], plan_j: p[3], plan_v: p[4], plan_s: p[5], plan_d: p[6] }; });
 }
 
@@ -6265,6 +6311,25 @@ function ptIniciar() {
       fila.orden = PT.det.filter(f => f.semana === PT.sem).reduce((m, f) => Math.max(m, f.orden), 0) + 1;
       await ptEnviar('POST', '/plan_semanal_actividades', fila); await ptCargarLook(); ptMsg('Actividad agregada al plan de la semana.', true);
     } catch (err) { ptMsg(`No se pudo agregar: ${ptErr(err)}`, false); }
+  });
+  $('#ptRepartir').addEventListener('click', async () => {   // re-planifica desde lo ejecutado: lo que falta de cada actividad se reparte desde esta semana hasta su fin
+    const plan = ptPlan(), look = ptLookAct(); if (!plan || plan.estado !== 'borrador' || !look) return;
+    const filas = PT.det.filter(f => f.semana === PT.sem), acts = filas.map(f => PT.acts.find(a => a.id === f.actividad_id)).filter(Boolean), semIni = ptSemFechas().fecha_inicio;
+    const sigs = []; for (let n = PT.sem; n < look.semana + look.semanas; n++) { const p = PT.planes.find(x => x.semana === n); if (p && p.estado === 'borrador') sigs.push(p); }
+    if (!acts.length || !await confirmar(`¿Repartir de nuevo desde la semana ${PT.sem}? Para ${acts.length} actividad${acts.length === 1 ? '' : 'es'} se toma lo que falta (meta del Look Ahead menos lo ya ejecutado) y se reparte entre sus días restantes, en esta semana${sigs.length > 1 ? ' y en las ' + (sigs.length - 1) + ' siguiente' + (sigs.length > 2 ? 's' : '') + ' del bloque que ya tengan plan' : ''}. Lo escrito en las filas Plan de esas semanas se reemplaza.`)) return;
+    try {
+      const ids = acts.map(a => a.id), prev = await get(`/avance_diario?actividad_id=in.(${ids.join(',')})&fecha=lt.${semIni}&select=actividad_id,cantidad`);
+      const hecho = {}; prev.forEach(r => { hecho[r.actividad_id] = (hecho[r.actividad_id] || 0) + Number(r.cantidad); });
+      for (const a of acts) {
+        const mapa = ptReparto(a, semIni, Math.max(0, ptTotalAct(a) - (hecho[a.id] || 0)));
+        for (const p of sigs) {
+          if (!PT.det.some(f => f.semana === p.semana && f.actividad_id === a.id)) continue;
+          const v = ptSemanaDe(mapa, laSemana(p.semana).fecha_inicio);
+          await ptEnviar('PATCH', `/plan_semanal_actividades?plan_id=eq.${p.id}&actividad_id=eq.${a.id}`, { plan_l: v[0], plan_m: v[1], plan_x: v[2], plan_j: v[3], plan_v: v[4], plan_s: v[5], plan_d: v[6] });
+        }
+      }
+      await ptCargarLook(); ptMsg(`Plan repartido de nuevo desde la semana ${PT.sem}, con lo que falta de cada actividad.`, true);
+    } catch (err) { ptMsg(`No se pudo repartir: ${ptErr(err)}`, false); }
   });
   $('#ptCerrar').addEventListener('click', async () => {
     const plan = ptPlan(); if (!plan || !await confirmar(`¿Cerrar la semana ${PT.sem}? El plan y el parte diario de esa semana ya no se podrán modificar desde el panel.`)) return;
