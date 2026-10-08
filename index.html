@@ -1884,6 +1884,15 @@ html.tb-compacta #laApp .tb-seg .seg-btn[data-lagrupos]{padding:0;width:34px;}
 @media (max-width:1180px){.la-tbody{grid-template-columns:1fr;}}
 
 .pt-tabla td.rit{font-size:11px;font-weight:800;white-space:nowrap;font-variant-numeric:tabular-nums;} .pt-tabla td.rit.ok{color:var(--green);} .pt-tabla td.rit.mid{color:var(--amber);} .pt-tabla td.rit.bad{color:var(--red);}
+/* cargador de líneas base */
+#lbFondo{position:fixed;inset:0;z-index:119;background:rgba(2,6,23,.55);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);}
+#lbCarga:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(880px,calc(100vw - 20px));max-height:calc(100vh - 24px);overflow-y:auto;margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
+#lbCarga input[type=file]{font-size:12px;width:100%;}
+/* pantalla Contrato y líneas base */
+.lb-cab{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:10px 16px;margin-bottom:10px;} .lb-cab>div{flex:1 1 320px;min-width:0;}
+.lb-tb td,.lb-tb th{white-space:normal;vertical-align:top;} .lb-tb td.c{white-space:nowrap;} .lb-sub{font-size:11px;color:var(--mut);font-weight:500;line-height:1.3;}
+.lb-cmp{display:inline-flex;align-items:center;gap:8px;flex:0 0 auto;} .lb-cmp select{max-width:260px;}
+#lbFicha:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(620px,calc(100vw - 20px));max-height:calc(100vh - 24px);overflow-y:auto;margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
 </style>
 <script>
 document.documentElement.dataset.pane = 'resumen';
@@ -2000,7 +2009,7 @@ document.documentElement.classList.add('dens-densa');   // tamaño único de las
       <div class="nav-g" data-g="contrato">
         <button type="button" class="nav-gh" data-grupo="contrato" aria-expanded="true"><span class="ni">📑</span><span class="nt">Contrato</span><i class="nav-chev"></i></button>
         <div class="nav-gb">
-          <button type="button" class="prox" disabled title="Próximamente · LB0 a LB3 con resolución; hoy se ven desde Plan maestro → Ver"><span class="ni">📜</span><span class="nt">Contrato y líneas base</span><span class="nav-tag">pronto</span></button>
+          <button type="button" data-pane="lineasbase" title="Líneas base del contrato (LB0 a LB3): ficha, comparación y carga"><span class="ni">📜</span><span class="nt">Contrato y líneas base</span></button>
           <button type="button" class="prox" disabled title="Próximamente · prestaciones adicionales y deductivos con resolución"><span class="ni">➕</span><span class="nt">Adicionales y deductivos</span><span class="nav-tag">pronto</span></button>
           <button type="button" class="prox" disabled title="Próximamente · mayores y menores metrados"><span class="ni">📏</span><span class="nt">Mayores metrados</span><span class="nav-tag">pronto</span></button>
           <button type="button" class="prox" disabled title="Próximamente · plazo contractual y suspensiones"><span class="ni">⏳</span><span class="nt">Ampliaciones de plazo</span><span class="nav-tag">pronto</span></button>
@@ -2235,6 +2244,7 @@ document.documentElement.classList.add('dens-densa');   // tamaño único de las
     </section>
 
     <!-- ═══════════ PLAN MASTER (cronograma meta) ═══════════ -->
+    <section class="pane" data-pane="lineasbase"><div id="lbPanel"></div></section>
     <section class="pane" data-pane="plan">
       <div class="vl-top">
         <p class="api" style="margin:0">Frente: <span id="plFrentes"></span></p>
@@ -2945,6 +2955,7 @@ document.querySelectorAll('#nav button[data-pane]').forEach(b => {
       ppc: ['PPC', 'Porcentaje de actividades completadas: trazabilidad semanal y causas de incumplimiento'],
       valorizaciones: ['Valorizaciones', 'Valor ganado: lo valorizado mes a mes (contrato, adicionales y mayores metrados)'],
       presupuesto: ['Presupuesto', 'Venta (contrato, solo lectura) y meta (copia del APU que se ajusta sin tocar el contrato)'],
+      lineasbase: ['Contrato y líneas base', 'LB0 a LB3: inicio de contrato, suspensión, adicional y deductivo, ampliación · ficha, comparación y carga'],
       plan: ['Plan master', 'Cronograma meta: tu plan de ejecución con vínculos, ruta crítica y duraciones sugeridas por el APU meta'],
       hh: ['Horas-hombre', 'Histograma planificado desde el APU de la oferta: metrado × cuantía, repartido en el plazo del cronograma'] };
     if (titles[b.dataset.pane]) { $('#pageTitle').textContent = titles[b.dataset.pane][0]; $('#pageSub').textContent = titles[b.dataset.pane][1]; }
@@ -2955,6 +2966,7 @@ document.querySelectorAll('#nav button[data-pane]').forEach(b => {
     if (b.dataset.pane === 'valorizaciones') valCargar();
     if (b.dataset.pane === 'hh') hhCargar();
     if (b.dataset.pane === 'plan') plCargar();
+    if (b.dataset.pane === 'lineasbase') lbPanelCargar();
     if (b.dataset.pane === 'presupuesto') preCargar();
     if (b.dataset.pane === 'parte' && !$('#parteLA').hidden) plaCargar();
     $('#side').classList.remove('open'); $('#overlay').classList.remove('on');
@@ -4641,17 +4653,97 @@ document.addEventListener('click', async (e) => {
 //      qué no se llega al metrado planeado) así que se actualiza siempre, aunque el Excel no traiga meses abiertos.
 // NO toca: gastos generales históricos, «Nueva Curva S» / programado oficial, ni crea valorizaciones nuevas — eso
 // sigue siendo trabajo del script de Python (uso puntual, no la actualización de rutina de un mes abierto).
-let _xlsxProm = null;
-function valCargarXLSX() {
-  if (window.XLSX) return Promise.resolve();
-  if (_xlsxProm) return _xlsxProm;
-  return _xlsxProm = new Promise((res, rej) => {
-    const s = document.createElement('script');
-    s.src = 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
-    s.onload = () => res(); s.onerror = () => { _xlsxProm = null; rej(new Error('No se pudo cargar la librería para leer Excel (revisa la conexión a internet).')); };
-    document.head.appendChild(s);
+// ═══ Lector de Excel (.xlsx) propio: sin librerías ni internet ═══════════════════════════════════════════════════════════════════════════════
+// Un .xlsx es un zip de XML. Se descomprime con DecompressionStream (el navegador) y se leen hojas, textos compartidos y estilos (para reconocer fechas).
+//   const wb = await xlsxLeer(arrayBuffer, { cellDates: true });   wb.SheetNames → nombres; wb.filas(nombre, { defval }) → filas como arreglos (valores sin formato)
+async function xlsxLeer(buf, opc) {
+  opc = opc || {};
+  const dec = new TextDecoder('utf-8'), v = new DataView(buf), u8 = new Uint8Array(buf);
+  const inflar = async (datos) => new Uint8Array(await new Response(new Blob([datos]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).arrayBuffer());
+  let fin = -1;
+  for (let i = u8.length - 22; i >= Math.max(0, u8.length - 65557); i--) if (v.getUint32(i, true) === 0x06054b50) { fin = i; break; }
+  if (fin < 0) throw new Error('El archivo no es un .xlsx válido (¿es un .xls antiguo? guárdalo como .xlsx).');
+  const nEnt = v.getUint16(fin + 10, true), archivos = new Map(); let p = v.getUint32(fin + 16, true);
+  for (let k = 0; k < nEnt; k++) {
+    if (v.getUint32(p, true) !== 0x02014b50) break;
+    const met = v.getUint16(p + 10, true), csz = v.getUint32(p + 20, true), nl = v.getUint16(p + 28, true), el = v.getUint16(p + 30, true), cl = v.getUint16(p + 32, true), lo = v.getUint32(p + 42, true);
+    const nombre = dec.decode(u8.subarray(p + 46, p + 46 + nl)); p += 46 + nl + el + cl;
+    if (!/^xl\/(workbook\.xml|_rels\/workbook\.xml\.rels|sharedStrings\.xml|styles\.xml|worksheets\/[^/]+\.xml)$/.test(nombre)) continue;
+    const ini = lo + 30 + v.getUint16(lo + 26, true) + v.getUint16(lo + 28, true), datos = u8.subarray(ini, ini + csz);
+    archivos.set(nombre, met === 0 ? datos : await inflar(datos));
+  }
+  const xml = (n) => { const d = archivos.get(n); if (!d) return null; const doc = new DOMParser().parseFromString(dec.decode(d), 'application/xml'); if (doc.getElementsByTagName('parsererror').length) throw new Error('XML dañado en ' + n); return doc; };
+  const hijos = (el, nombre) => [...el.children].filter(x => x.localName === nombre);
+  const wbDoc = xml('xl/workbook.xml'); if (!wbDoc) throw new Error('El .xlsx no tiene libro de trabajo.');
+  const rels = {}; const relDoc = xml('xl/_rels/workbook.xml.rels'); if (relDoc) [...relDoc.getElementsByTagName('Relationship')].forEach(r => { rels[r.getAttribute('Id')] = r.getAttribute('Target'); });
+  const d1904 = [...wbDoc.getElementsByTagName('workbookPr')].some(e => e.getAttribute('date1904') === '1' || e.getAttribute('date1904') === 'true');
+  const hojasDef = [...wbDoc.getElementsByTagName('sheet')].map(s => {
+    let t = rels[s.getAttribute('r:id') || s.getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships', 'id')] || '';
+    t = t.replace(/^\/?(xl\/)?/, ''); return { nombre: s.getAttribute('name'), ruta: 'xl/' + t, oculta: (s.getAttribute('state') || 'visible') !== 'visible' };
   });
+  // textos compartidos
+  const textos = []; const ssDoc = xml('xl/sharedStrings.xml');
+  if (ssDoc) [...ssDoc.documentElement.children].filter(x => x.localName === 'si').forEach(si => {
+    textos.push([...si.getElementsByTagName('t')].filter(t => ['si', 'r'].includes(t.parentNode.localName)).map(t => t.textContent).join(''));
+  });
+  // estilos que son fecha
+  const esFecha = []; const stDoc = xml('xl/styles.xml');
+  if (stDoc) {
+    const custom = {}; [...stDoc.getElementsByTagName('numFmt')].forEach(n => { custom[n.getAttribute('numFmtId')] = n.getAttribute('formatCode') || ''; });
+    const celdaXfs = [...stDoc.getElementsByTagName('cellXfs')][0];
+    const dFmt = (id) => { id = String(id); if (+id >= 164 && custom[id] != null) { const f = custom[id].replace(/"[^"]*"|\[[^\]]*\]|\\./g, ''); return /[dmyhs]/i.test(f) && !/^(general|0|#)/i.test(f.trim()); } const n = +id; return (n >= 14 && n <= 22) || (n >= 27 && n <= 36) || (n >= 45 && n <= 47) || (n >= 50 && n <= 58); };
+    if (celdaXfs) hijos(celdaXfs, 'xf').forEach(x => esFecha.push(dFmt(x.getAttribute('numFmtId'))));
+  }
+  const aFecha = (s) => {   // serie de Excel → Date (misma hora de reloj que se ve en Excel)
+    if (d1904) s += 1462; if (s < 61) s += 1;
+    const ms = Math.round((s - 25569) * 86400) * 1000, u = new Date(ms);
+    return new Date(u.getUTCFullYear(), u.getUTCMonth(), u.getUTCDate(), u.getUTCHours(), u.getUTCMinutes(), u.getUTCSeconds());
+  };
+  const colNum = (ref) => { let c = 0; for (const ch of ref) { const k = ch.charCodeAt(0); if (k < 65 || k > 90) break; c = c * 26 + (k - 64); } return c - 1; };
+  const cache = {};
+  const leerHoja = (h) => {   // → { f0, c0, f1, c1, celdas: Map(fila → Map(col → valor)) }
+    if (cache[h.nombre]) return cache[h.nombre];
+    const doc = xml(h.ruta); if (!doc) throw new Error('No encuentro la hoja ' + h.nombre);
+    const celdas = new Map(); let f0 = 1e9, c0 = 1e9, f1 = -1, c1 = -1;
+    const dim = doc.getElementsByTagName('dimension')[0];   // el rango declarado de la hoja (puede incluir filas con solo formato)
+    if (dim) { const m = /^([A-Z]+)(\d+)(?::([A-Z]+)(\d+))?$/.exec(dim.getAttribute('ref') || ''); if (m) { c0 = colNum(m[1]); f0 = +m[2] - 1; c1 = m[3] ? colNum(m[3]) : c0; f1 = m[4] ? +m[4] - 1 : f0; } }
+    const datos = [...doc.getElementsByTagName('sheetData')][0];
+    if (datos) hijos(datos, 'row').forEach(rw => {
+      let rn = parseInt(rw.getAttribute('r'), 10) - 1, auto = 0;
+      hijos(rw, 'c').forEach(c => {
+        const ref = c.getAttribute('r'), col = ref ? colNum(ref) : auto, fila = ref ? parseInt(ref.replace(/^[A-Z]+/, ''), 10) - 1 : (isNaN(rn) ? 0 : rn); auto = col + 1;
+        if (fila < f0) f0 = fila; if (fila > f1) f1 = fila; if (col < c0) c0 = col; if (col > c1) c1 = col;   // (como SheetJS: una celda con solo formato también cuenta para el rango)
+        const t = c.getAttribute('t') || 'n', vEl = hijos(c, 'v')[0]; let val;
+        if (t === 'inlineStr') { const is = hijos(c, 'is')[0]; val = is ? [...is.getElementsByTagName('t')].filter(x => ['is', 'r'].includes(x.parentNode.localName)).map(x => x.textContent).join('') : ''; }
+        else if (!vEl) return;
+        else if (t === 's') val = textos[parseInt(vEl.textContent, 10)];
+        else if (t === 'str') val = vEl.textContent;
+        else if (t === 'b') val = vEl.textContent === '1';
+        else if (t === 'e') val = null;
+        else if (t === 'd') val = opc.cellDates ? new Date(vEl.textContent) : vEl.textContent;
+        else { val = parseFloat(vEl.textContent); if (!isFinite(val)) return; if (opc.cellDates && esFecha[parseInt(c.getAttribute('s') || '0', 10)]) val = aFecha(val); }
+        if (val === undefined) return;
+        let fm = celdas.get(fila); if (!fm) celdas.set(fila, fm = new Map()); fm.set(col, val);
+      });
+    });
+    return cache[h.nombre] = { f0, c0, f1, c1, celdas };
+  };
+  return {
+    SheetNames: hojasDef.map(h => h.nombre), hojas: hojasDef,
+    filas(nombre, o) {   // filas como arreglos desde la esquina superior izquierda de lo usado (igual que SheetJS con header:1, raw:true)
+      o = o || {}; const h = hojasDef.find(x => x.nombre === nombre); if (!h) throw new Error('No existe la hoja ' + nombre);
+      const s = leerHoja(h); if (s.f1 < 0) return []; const out = [];
+      for (let f = s.f0; f <= s.f1; f++) {
+        const fm = s.celdas.get(f), fila = [];
+        if (o.defval !== undefined) for (let c = s.c0; c <= s.c1; c++) fila[c - s.c0] = fm && fm.has(c) ? fm.get(c) : o.defval;
+        else if (fm) fm.forEach((val, c) => { fila[c - s.c0] = val; });
+        out.push(fila);
+      }
+      return out;
+    }
+  };
 }
+
 function valImpNorm(s) { return String(s == null ? '' : s).normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/\s+/g, ' ').trim(); }
 function valImpEspNorm(s) { return String(s == null ? '' : s).trim().replace(/[.…\s]+$/, ''); }
 function valImpLeerHoja(aoa, primera) {   // aoa: array-of-arrays (SheetJS sheet_to_json con header:1) · igual que leer_hojas() del script
@@ -4670,13 +4762,12 @@ function valImpLeerHoja(aoa, primera) {   // aoa: array-of-arrays (SheetJS sheet
 // lee y verifica el Excel (hojas 07/09/06 — igual que el script), SIN escribir nada todavía: lo comparten los dos
 // botones («Actualizar valorizaciones» y «Nueva valorización»), cada uno decide después qué meses le tocan.
 async function valImpLeerExcel(file) {
-  await valCargarXLSX();
   const buf = await file.arrayBuffer();
-  const wbx = XLSX.read(buf, { type: 'array', cellDates: true });
+  const wbx = await xlsxLeer(buf, { cellDates: true });   // lector propio: no necesita internet
   const n07 = wbx.SheetNames.find(n => n.startsWith('07.')), n09 = wbx.SheetNames.find(n => n.startsWith('09.'));
   if (!n07 || !n09) throw new Error('No encuentro las hojas «07. Met. Ejec.» y «09. Val N°xx» en el Excel.');
-  const ws7 = XLSX.utils.sheet_to_json(wbx.Sheets[n07], { header: 1, raw: true });
-  const ws9 = XLSX.utils.sheet_to_json(wbx.Sheets[n09], { header: 1, raw: true });
+  const ws7 = wbx.filas(n07);
+  const ws9 = wbx.filas(n09);
   const h7 = valImpLeerHoja(ws7, 16), h9 = valImpLeerHoja(ws9, 18);
   if (h7.length !== h9.length) throw new Error(`Las hojas «${n07}» (${h7.length} partidas) y «${n09}» (${h9.length}) no calzan en cantidad.`);
   const hdr13 = ws7[12] || [];
@@ -4692,7 +4783,7 @@ async function valImpLeerExcel(file) {
   const n06 = wbx.SheetNames.find(n => n.startsWith('06.'));
   const oficiales = {};
   if (n06) {
-    const ws6 = XLSX.utils.sheet_to_json(wbx.Sheets[n06], { header: 1, raw: true }).slice(0, 40);
+    const ws6 = wbx.filas(n06).slice(0, 40);
     const cab06 = ws6.find(r => r && r.some(x => typeof x === 'string' && /^VAL N/i.test(x.trim())));
     const fila06 = ws6.find(r => r && ['1.0.0', '1.0.0.'].includes(String(r[1] || '').trim()));
     if (cab06 && fila06) cab06.forEach((x, c) => { const m = /^VAL N.\s*(\d+)/i.exec(String(x || '').trim()); if (m && fila06[c] != null && fila06[c] !== '') oficiales[+m[1]] = Number(fila06[c]); });
@@ -7373,7 +7464,7 @@ function plPintar() {
   const filas = plFilas(), T = PL.tm, ids = Object.keys(T), lb = lbMode ? null : plLbActual(), lbn = lb ? plLbTxt(lb) : 'la línea base';
   const act = ids.filter(i => T[i].activa && !T[i].hito && T[i].eo != null);
   const finO = act.reduce((m, i) => Math.max(m, T[i].eo), 0), iniO = act.reduce((m, i) => Math.min(m, T[i].so), Infinity);
-  const calP = PL.finE - PL.ini, susP = plSuspDias(PL.ini, PL.finE), durP = calP - susP, durO = finO && isFinite(iniO) ? (finO - iniO) - plSuspDias(iniO, finO) : null, mod = ids.filter(i => T[i].so != null && (T[i].so !== T[i].s || T[i].eo !== T[i].e)).length;
+  const calP = PL.finE - PL.ini, susP = (lbMode && PL.ver === 0) ? 0 : plSuspDias(PL.ini, PL.finE), durP = calP - susP, durO = finO && isFinite(iniO) ? (finO - iniO) - plSuspDias(iniO, finO) : null, mod = ids.filter(i => T[i].so != null && (T[i].so !== T[i].s || T[i].eo !== T[i].e)).length;
   const crit = ids.filter(i => T[i].crit).length, dif = durO == null ? null : durP - durO, nuevas = ids.filter(i => T[i].nueva).length;
   const kp = `<div class="vl-kp pre-kp">
     <div class="vl-k"><small>Fin de obra · ${lbMode ? 'LB' + PL.ver : 'plan master'}</small><b>${plFmt(PL.finE - 1)}</b><em>${finO ? `${lbn} ${plFmt(finO - 1)} · ${PL.finE - finO > 0 ? '+' : ''}${PL.finE - finO} días` : (lb ? '—' : 'Sin comparación')}</em></div>
@@ -7677,7 +7768,290 @@ function plCerrarImpresion() {
   const pv = document.getElementById('plPv'); if (pv) pv.remove(); const s = document.getElementById('plPageCss'); if (s) s.remove();
   document.body.classList.remove('con-pl-pv'); if (PL.temaPrevio !== undefined) { if (PL.temaPrevio) document.documentElement.dataset.theme = PL.temaPrevio; else delete document.documentElement.dataset.theme; PL.temaPrevio = undefined; }
 }
+// ═══ CARGADOR DE LÍNEAS BASE (Gantt de Project en XML + CAO en Excel) ═══════════════════════════════════════════════════════════════
+// Todo se lee y valida en el navegador (no hace falta Python ni Project instalado); solo si cuadra se manda a linea_base_cargar() (administrador).
+// El CÓDIGO de cada partida es permanente: se toma del cronograma vigente alineando las partidas del CAO con las de la base por nombre y orden.
+const LBC = { res: null };
+const lbNorm = (s) => String(s == null ? '' : s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '');
+function lbSim(a, b) {   // parecido de dos nombres (coeficiente de Dice sobre pares de letras)
+  a = lbNorm(a); b = lbNorm(b); if (a === b) return 1; if (a.length < 2 || b.length < 2) return 0;
+  const bg = (s) => { const m = new Map(); for (let i = 0; i < s.length - 1; i++) { const k = s.slice(i, i + 2); m.set(k, (m.get(k) || 0) + 1); } return m; };
+  const A = bg(a), B = bg(b); let n = 0; A.forEach((v, k) => { if (B.has(k)) n += Math.min(v, B.get(k)); });
+  return 2 * n / (a.length + b.length - 2);
+}
+function lbAlinear(A, B, kA, kB, minSim) {   // par[i] = índice de B que corresponde a A[i] (o -1): subsecuencia común más larga por nombre y, en los huecos, el más parecido
+  const n = A.length, m = B.length, T = Array.from({ length: n + 1 }, () => new Int32Array(m + 1));
+  for (let i = n - 1; i >= 0; i--) for (let j = m - 1; j >= 0; j--) T[i][j] = kA(A[i]) === kB(B[j]) ? T[i + 1][j + 1] + 1 : Math.max(T[i + 1][j], T[i][j + 1]);
+  const par = new Array(n).fill(-1); let i = 0, j = 0;
+  while (i < n && j < m) { if (kA(A[i]) === kB(B[j])) { par[i] = j; i++; j++; } else if (T[i + 1][j] >= T[i][j + 1]) i++; else j++; }
+  const usados = new Set(par.filter(x => x >= 0));
+  for (let a = 0; a < n; a++) {   // lo que quedó sin pareja: el más parecido entre los vecinos ya emparejados
+    if (par[a] >= 0) continue;
+    let lo = -1, hi = m; for (let x = a - 1; x >= 0; x--) if (par[x] >= 0) { lo = par[x]; break; } for (let x = a + 1; x < n; x++) if (par[x] >= 0) { hi = par[x]; break; }
+    let mejor = -1, ms = minSim; for (let b = lo + 1; b < hi; b++) { if (usados.has(b)) continue; const s = lbSim(A[a].nombre, B[b].nombre); if (s >= ms) { ms = s; mejor = b; } }
+    if (mejor >= 0) { par[a] = mejor; usados.add(mejor); }
+  }
+  return par;
+}
+// una hoja de componente del CAO: encabezado ITEM/PARTIDAS/UND/cantidad(es)/P.U./PARCIAL y sus partidas (las que tienen unidad)
+function lbHoja(filas) {
+  const h = filas.findIndex(r => r && String(r[0] == null ? '' : r[0]).trim().toUpperCase() === 'ITEM'); if (h < 0) return null;
+  const enc = (filas[h] || []).map(v => String(v == null ? '' : v).replace(/\s+/g, ' ').trim());
+  const cUnd = enc.findIndex(t => /^UND/i.test(t)), cPu = enc.findIndex(t => /^P\.?\s?U/i.test(t)), cPar = enc.findIndex(t => /^PARCIAL/i.test(t));
+  if (cUnd < 0 || cPu < 0 || cPar < 0 || cPu <= cUnd + 1) return null;
+  const cant = []; for (let c = cUnd + 1; c < cPu; c++) cant.push(c);
+  const nu = (v) => typeof v === 'number' && isFinite(v) ? v : 0, tres = cant.length >= 3, out = [];
+  for (let i = h + 1; i < filas.length; i++) {
+    const r = filas[i] || [], item = r[0], und = r[cUnd];
+    if (item == null || item === '' || und == null || und === '' || typeof r[cPar] !== 'number') continue;
+    out.push({ fila: i + 1, item: String(item).trim(), nombre: String(r[1] == null ? '' : r[1]).replace(/\s+/g, ' ').trim(), unidad: String(und).trim(),
+      metrado_contrato: tres ? nu(r[cant[0]]) : null, metrado_deductivo: tres ? nu(r[cant[1]]) : null, metrado: nu(r[cant[tres ? 2 : 0]]), precio_unitario: nu(r[cPu]), parcial: nu(r[cPar]) });
+  }
+  return { partidas: out };
+}
+// Gantt de Project guardado como XML (Archivo › Guardar como › XML): tareas, fechas, ruta crítica, holgura y predecesoras
+function lbLeerXML(txt) {
+  const doc = new DOMParser().parseFromString(txt, 'application/xml');
+  if (doc.getElementsByTagName('parsererror').length) throw new Error('El Gantt no es un XML válido de Project.');
+  const els = [...doc.getElementsByTagName('Task')]; if (!els.length) throw new Error('El XML no tiene tareas: guarda el Gantt desde Project como «XML».');
+  const hrs = (d) => { const m = /PT(\d+)H(\d+)M/.exec(d || ''); return m ? (+m[1] + (+m[2]) / 60) : 0; };
+  const tareas = [];
+  els.forEach(el => {
+    const g = (n) => { const c = [...el.children].find(x => x.localName === n); return c ? c.textContent : ''; };
+    const nivel = parseInt(g('OutlineLevel'), 10); if (!(nivel >= 1) || !g('Name')) return;
+    const preds = [...el.children].filter(x => x.localName === 'PredecessorLink').map(p => {
+      const gp = (n) => { const c = [...p.children].find(x => x.localName === n); return c ? c.textContent : ''; };
+      return { uid: gp('PredecessorUID'), tipo: ({ 0: 'FF', 1: 'FC', 2: 'CF', 3: 'CC' })[parseInt(gp('Type'), 10)] || 'FC', lag: Math.round((parseFloat(gp('LinkLag')) || 0) / 4800 * 100) / 100 };
+    });
+    tareas.push({ uid: g('UID'), esquema: g('OutlineNumber').trim(), nivel, nombre: g('Name').replace(/\s+/g, ' ').trim(), resumen: g('Summary') === '1', hito: g('Milestone') === '1',
+      critica: g('Critical') === '1', inicio: g('Start').slice(0, 10), fin: g('Finish').slice(0, 10), dur: Math.round(hrs(g('Duration')) / 8 * 100) / 100,
+      holgura: g('TotalSlack') === '' ? null : Math.round((parseFloat(g('TotalSlack')) || 0) / 4800 * 10) / 10, costo: (parseFloat(g('Cost')) || 0) / 100, preds });
+  });
+  return tareas;
+}
+async function lbProcesar(buf, xmlTxt, num) {   // → resultado con errores, avisos, filas y vínculos listos para cargar
+  const wb = await xlsxLeer(buf), tareas = lbLeerXML(xmlTxt);
+  const R = { errores: [], avisos: [], comps: [], partidas: [], deps: [], hojas: 0 }, falla = (m) => R.errores.push(m), aviso = (m) => R.avisos.push(m);
+  const proys = (RES_A && RES_A.proyectos) || [], core = (p) => lbNorm(String(p.nombre).replace(/^puente\s+(las?|los?|el)?\s*/i, ''));
+  const filasDe = (n) => wb.filas(n, { defval: null });
+  // RESUMEN: costo directo por puente (contrato y adicional) para comprobar las sumas
+  const resumen = {};
+  const nres = wb.SheetNames.find(n => /resumen/i.test(n));
+  if (nres) { let enAdi = false; filasDe(nres).forEach(r => { const t = lbNorm(r[1]); if (/^adicional/.test(t)) enAdi = true; const v = r.slice(4).find(x => typeof x === 'number'); const p = proys.find(q => t === lbNorm(q.nombre) || (/^puente/.test(t) && t.includes(core(q)))); if (p && v != null) { const k = p.id + (enAdi ? ':adi' : ':con'); if (resumen[k] == null) resumen[k] = v; } }); }
+  else aviso('El CAO no tiene hoja RESUMEN: no se comprueban las sumas por puente.');
+  const hayCostos = tareas.some(t => !t.resumen && t.costo > 0);   // algunos Gantt no traen costos (el N° 0 no los tiene): entonces se valida por nombre, cantidad, orden y sumas del CAO
+  if (!hayCostos) aviso('El Gantt no trae costos cargados: las partidas se emparejan y validan por nombre, cantidad y orden, y los montos contra el RESUMEN del CAO.');
+  const catalogo = (PL.arbol || []);
+  const raiz = tareas.find(t => t.nivel === 1), sumarios = tareas.filter(t => t.resumen && t.nivel === 2);
+  const codTarea = {};   // uid de la tarea → código permanente
+  let primeraHoja = true;
+  for (const nombreHoja of wb.SheetNames) {
+    const adi = /^adi/i.test(nombreHoja), info = lbHoja(filasDe(nombreHoja));
+    if (!info) continue;
+    // a qué puente pertenece la hoja
+    let proy = proys.find(p => lbNorm(nombreHoja).includes(core(p)));
+    if (!proy && adi) { const f = filasDe(nombreHoja).slice(0, 14); proy = proys.find(p => f.some(r => (r || []).some(c => lbNorm(c).includes(lbNorm(p.nombre))))); }
+    if (!proy) { if (info.partidas.length > 5) aviso(`La hoja «${nombreHoja}» no corresponde a ningún puente de la obra: se omite.`); continue; }
+    R.hojas++;
+    const concepto = adi ? 'adicional' : 'contrato', P = info.partidas;
+    const comp = adi ? sumarios.find(t => /adicional/i.test(t.nombre)) : sumarios.find(t => lbNorm(t.nombre).includes(core(proy)));
+    if (!comp) { falla(`${nombreHoja}: no encuentro en el Gantt la tarea resumen de ese ${adi ? 'adicional' : 'puente'}.`); continue; }
+    const hojasG = tareas.filter(t => t.esquema.startsWith(comp.esquema + '.') && !t.resumen);
+    const B = catalogo.filter(n => n.proyecto_id === proy.id && n.es_hoja && n.concepto === concepto).sort((a, b) => a.orden - b.orden);
+    if (P.length !== hojasG.length) { falla(`${nombreHoja}: el CAO tiene ${P.length} partidas y el Gantt ${hojasG.length} tareas.`); continue; }
+    const par = lbAlinear(P, B, x => lbNorm(x.nombre), x => lbNorm(x.nombre), 0.75);
+    let suma = 0, sinCod = 0, malCosto = 0, malNombre = 0, difEsp = 0;
+    P.forEach((p, i) => {
+      const t = hojasG[i], sim = lbSim(p.nombre, t.nombre), nodo = par[i] >= 0 ? B[par[i]] : null;
+      if (hayCostos && Math.abs(p.parcial - t.costo) > 0.05) { malCosto++; if (R.errores.length < 40) falla(`${nombreHoja} fila ${p.fila}: el CAO dice S/ ${p.parcial.toLocaleString('es-PE')} y el Gantt S/ ${t.costo.toLocaleString('es-PE')} («${p.nombre.slice(0, 34)}»).`); }
+      if (sim < 0.6) { malNombre++; if (R.errores.length < 40) falla(`${nombreHoja} fila ${p.fila}: el nombre del CAO «${p.nombre.slice(0, 30)}» no se parece al del Gantt «${t.nombre.slice(0, 30)}» (${Math.round(sim * 100)} %).`); }
+      if (!nodo) { sinCod++; aviso(`${nombreHoja} fila ${p.fila}: «${p.item} ${p.nombre.slice(0, 40)}» no existe en el cronograma vigente: se omite.`); return; }
+      if (nodo.codigo_esp && p.item && lbNorm(nodo.codigo_esp) !== lbNorm(p.item)) { difEsp++; aviso(`${nombreHoja} fila ${p.fila}: el código del CAO (${p.item}) difiere del vigente (${nodo.codigo_esp}) para «${p.nombre.slice(0, 34)}»: se emparejó por nombre.`); }
+      suma += p.parcial; codTarea[t.uid] = nodo.codigo;
+      R.partidas.push({ codigo: nodo.codigo, proyecto_id: proy.id, nivel: nodo.nivel, orden: nodo.orden, nombre: p.nombre, unidad: p.unidad, concepto, es_hito: false,
+        metrado_contrato: p.metrado_contrato, metrado_deductivo: p.metrado_deductivo, metrado: p.metrado, precio_unitario: p.precio_unitario, parcial_cd: p.parcial,
+        inicio: t.inicio, fin: t.fin, duracion: t.dur, critica: t.critica, holgura: t.holgura });
+    });
+    const ref = resumen[proy.id + (adi ? ':adi' : ':con')], sumaTodo = P.reduce((s, p) => s + p.parcial, 0);
+    if (ref != null && Math.abs(sumaTodo - ref) > 1) falla(`${nombreHoja}: las partidas suman S/ ${sumaTodo.toLocaleString('es-PE', { minimumFractionDigits: 2 })} y el RESUMEN dice S/ ${ref.toLocaleString('es-PE', { minimumFractionDigits: 2 })}.`);
+    R.comps.push({ hoja: nombreHoja, puente: String(proy.nombre).replace(/^Puente\s+/i, ''), adi, partidas: P.length, tareas: hojasG.length, emparejadas: P.length - sinCod, sinCodigo: sinCod, monto: sumaTodo, resumen: ref == null ? null : ref, vigentes: B.length, malCosto, malNombre, difEsp });
+  }
+  if (!R.comps.length) falla('No encontré ninguna hoja de puente en el CAO.');
+  // hitos
+  const hitosV = catalogo.filter(n => n.es_hito);
+  tareas.filter(t => t.hito && !t.resumen && t.nivel <= 2).forEach(t => {
+    const n = hitosV.find(h => lbNorm(h.nombre) === lbNorm(t.nombre)); if (!n) { aviso(`Hito «${t.nombre}» sin equivalente en el cronograma vigente: se omite.`); return; }
+    codTarea[t.uid] = n.codigo;
+    R.partidas.push({ codigo: n.codigo, proyecto_id: null, nivel: n.nivel, orden: n.orden, nombre: t.nombre, unidad: null, concepto: 'hito', es_hito: true, metrado_contrato: null, metrado_deductivo: null, metrado: null,
+      precio_unitario: null, parcial_cd: null, inicio: t.inicio, fin: t.fin, duracion: 0, critica: t.critica, holgura: t.holgura });
+  });
+  // vínculos (solo entre partidas e hitos que quedaron con código)
+  const visto = new Set();
+  tareas.forEach(t => (t.preds || []).forEach(p => { const a = codTarea[t.uid], b = codTarea[p.uid]; if (!a || !b || a === b) return; const k = a + '|' + b; if (visto.has(k)) return; visto.add(k); R.deps.push({ codigo: a, pred_codigo: b, tipo: p.tipo, desfase_dias: p.lag }); }));
+  R.plazo = raiz ? raiz.fin : null; R.inicio = raiz ? raiz.inicio : null; R.durRaiz = raiz ? raiz.dur : null; R.tareas = tareas.length;
+  R.totalCD = R.partidas.reduce((s, p) => s + (p.parcial_cd || 0), 0);
+  return R;
+}
+
+// ── ventana «Cargar línea base» ──
+async function lbAbrir() {
+  if (!PL.arbol || !PL.arbol.length) { try { await plDatos(); } catch (e) { toast(`No se pudo leer el cronograma vigente: ${esc(e.message)}`, false, 'lb'); return; } }
+  let m = document.getElementById('lbCarga');
+  if (!m) {
+    m = document.createElement('form'); m.id = 'lbCarga'; m.className = 'pform la-form'; m.hidden = true; document.body.appendChild(m);
+    const f = document.createElement('div'); f.id = 'lbFondo'; f.hidden = true; document.body.appendChild(f);
+    f.addEventListener('click', () => lbCerrar());
+    m.addEventListener('submit', (e) => e.preventDefault());
+    m.addEventListener('click', (e) => { if (e.target.closest('#lbLeerBt')) lbLeer(); else if (e.target.closest('#lbCargarBt')) lbEnviar(); else if (e.target.closest('#lbCerrar')) lbCerrar(); });
+    m.addEventListener('change', (e) => { if (e.target.id === 'lbFCao' || e.target.id === 'lbFXml') { LBC.res = null; $('#lbCargarBt').disabled = true; if ($('#lbFCao').files[0] && $('#lbFXml').files[0]) lbLeer(); } });
+  }
+  const usados = new Set((PL.lbs || []).map(l => l.numero)); let n = 0; while (usados.has(n) && n < 20) n++;
+  m.innerHTML = `<div style="display:flex;align-items:flex-start;gap:10px"><div style="flex:1;min-width:0"><h3 style="margin:0 0 4px;font-size:14px">Cargar línea base</h3>
+      <p class="hint" style="margin:0 0 10px">Sube el <b>CAO</b> (Excel) y el <b>Gantt</b> guardado desde Project como <b>XML</b> (Archivo › Guardar como › XML). Se valida todo antes de guardar; si ya existía esa línea base, se reemplaza. La línea base vigente no se puede reemplazar.</p></div>
+      <button class="btn-sec" type="button" id="lbCerrar" title="Cerrar" aria-label="Cerrar" style="padding:4px 11px">✕</button></div>
+    <div class="row2"><div class="field"><label for="lbNum">N.º de línea base</label><input id="lbNum" type="number" min="0" step="1" value="${n}"></div>
+      <div class="field"><label for="lbNom">Nombre</label><input id="lbNom" type="text" maxlength="120" placeholder="Ej. Cronograma N° 00 - Inicio de contrato"></div></div>
+    <div class="row2"><div class="field"><label for="lbTipo">Tipo de cambio</label><input id="lbTipo" type="text" maxlength="80" placeholder="original · suspensión · adicional y deductivo · ampliación"></div>
+      <div class="field"><label for="lbLegal">Base legal</label><input id="lbLegal" type="text" maxlength="80" placeholder="Ej. Art. 202 RLC"></div></div>
+    <div class="row2"><div class="field"><label for="lbRes">Resolución</label><input id="lbRes" type="text" maxlength="80"></div>
+      <div class="field"><label for="lbFecha">Fecha de aprobación</label><input id="lbFecha" type="date"></div></div>
+    <div class="row2"><div class="field"><label for="lbPlazo">Fin de plazo</label><input id="lbPlazo" type="date"></div><div class="field"><label>&nbsp;</label><span class="hint" id="lbPlazoTxt" style="padding-top:8px;display:block"></span></div></div>
+    <div class="row2"><div class="field"><label for="lbFCao">CAO (Excel)</label><input id="lbFCao" type="file" accept=".xlsx,.xlsm"></div>
+      <div class="field"><label for="lbFXml">Gantt (XML de Project)</label><input id="lbFXml" type="file" accept=".xml"></div></div>
+    <div id="lbVista" aria-live="polite"></div>
+    <div class="sug-acc"><button class="btn-sec" type="button" id="lbLeerBt">Leer y validar</button><button class="btn" type="button" id="lbCargarBt" disabled>Cargar línea base</button></div>`;
+  m.hidden = false; $('#lbFondo').hidden = false; document.documentElement.classList.add('la-modal'); LBC.res = null;
+}
+function lbCerrar() { const m = $('#lbCarga'); if (m) m.hidden = true; const f = $('#lbFondo'); if (f) f.hidden = true; document.documentElement.classList.remove('la-modal'); }
+async function lbLeer() {
+  const fc = $('#lbFCao').files[0], fx = $('#lbFXml').files[0], vista = $('#lbVista');
+  if (!fc || !fx) { vista.innerHTML = '<div class="sug-vacio">Elige los dos archivos: el CAO (.xlsx) y el Gantt (.xml).</div>'; return; }
+  vista.innerHTML = '<div class="sug-vacio">Leyendo y validando…</div>'; $('#lbCargarBt').disabled = true;
+  try {
+    const R = await lbProcesar(await fc.arrayBuffer(), await fx.text()); LBC.res = R; lbVista(R);
+    if (!$('#lbPlazo').value && R.plazo) $('#lbPlazo').value = R.plazo;
+  } catch (e) { LBC.res = null; vista.innerHTML = `<div class="sug-l"><div class="sug-vacio" style="color:var(--red)">${esc(e.message)}</div></div>`; }
+}
+function lbVista(R) {
+  const n = (v) => Number(v).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const filas = R.comps.map(c => `<tr><td class="l">${esc(c.puente)}${c.adi ? ' <span class="tag-adi">ADI</span>' : ''}</td><td class="n">${c.partidas}</td><td class="n">${c.tareas}</td><td class="n ${c.sinCodigo ? 'pre-neg' : ''}">${c.emparejadas}</td><td class="n">${n(c.monto)}</td><td class="n">${c.resumen == null ? '—' : n(c.resumen)}</td></tr>`).join('');
+  const lista = (arr, tit, cls) => arr.length ? `<div class="sug-h">${tit} <span class="n">${arr.length}</span></div><div class="sug-l">${arr.slice(0, 12).map(x => `<div class="sug-f sf"><span class="nm" style="white-space:normal;${cls}">${esc(x)}</span></div>`).join('')}${arr.length > 12 ? `<div class="sug-vacio">y ${arr.length - 12} más</div>` : ''}</div>` : '';
+  $('#lbVista').innerHTML = `<div class="sug-h">Lo que se leyó <span class="n">${R.partidas.length} partidas e hitos · ${R.deps.length} vínculos</span></div>
+    <div class="vl-tw"><table class="vl-tb"><thead><tr><th class="l">Puente</th><th>Partidas CAO</th><th>Tareas Gantt</th><th>Con código</th><th>Costo directo S/</th><th>RESUMEN S/</th></tr></thead><tbody>${filas}</tbody></table></div>
+    <p class="hint" style="margin:6px 0">Gantt: ${R.tareas} tareas · ${R.inicio ? plFmt(plD(R.inicio)) : '—'} → ${R.plazo ? plFmt(plD(R.plazo)) : '—'}${R.durRaiz ? ' · ' + R.durRaiz + ' días' : ''} · costo directo total S/ ${n(R.totalCD)}</p>`
+    + lista(R.errores, 'Lo que no cuadra (hay que corregirlo)', 'color:var(--red)') + lista(R.avisos, 'Avisos', 'color:var(--amber)')
+    + (R.errores.length ? '<p class="hint" style="color:var(--red)">No se puede cargar mientras haya diferencias entre el CAO y el Gantt.</p>' : '<p class="hint" style="color:var(--green)">✔ Todo cuadra: puedes cargar la línea base.</p>');
+  $('#lbCargarBt').disabled = !!R.errores.length || !R.partidas.length;
+}
+async function lbEnviar() {
+  const R = LBC.res; if (!R || R.errores.length) return;
+  const numero = parseInt($('#lbNum').value, 10); if (!(numero >= 0)) { toast('Indica el número de la línea base.', false, 'lb'); return; }
+  const existe = (PL.lbs || []).some(l => l.numero === numero);
+  if (!await confirmar(`¿Cargar la LB${numero} con ${R.partidas.length} partidas e hitos y ${R.deps.length} vínculos?${existe ? ' Ya existe: se reemplaza.' : ''}`)) return;
+  const btn = $('#lbCargarBt'); btn.disabled = true;
+  try {
+    await preRpc('linea_base_cargar', { p_obra: OBRA.id, p_numero: numero, p_nombre: $('#lbNom').value, p_tipo: $('#lbTipo').value, p_base_legal: $('#lbLegal').value, p_resolucion: $('#lbRes').value,
+      p_fecha: $('#lbFecha').value || null, p_plazo_fin: $('#lbPlazo').value || null, p_notas: null, p_partidas: R.partidas, p_deps: R.deps });
+    toast(`LB${numero} cargada: ${R.partidas.length} partidas e hitos, ${R.deps.length} vínculos. Ya puedes elegirla en «Ver» y «Comparar con».`, true, 'lb');
+    lbCerrar(); PL.lbVer = {}; PL.lbCache = {}; await plDatos(); LBP.cargado = false; if (document.documentElement.dataset.pane === 'lineasbase') await lbPanelCargar(true);
+  } catch (e) { btn.disabled = false; toast(`No se pudo cargar: ${esc(e.message)}`, false, 'lb'); }
+}
+
+// ═══ Pantalla «Contrato y líneas base» ═══════════════════════════════════════════════════════════════════════════════════════════════════
+const LBP = { vers: [], parts: {}, deps: {}, cargado: false, a: null, b: null };
+async function lbPanelCargar(forzar) {
+  const box = $('#lbPanel'); if (!box) return;
+  if (!LBP.cargado || forzar) {
+    box.innerHTML = '<div class="rg-msg">Leyendo las líneas base…</div>';
+    try {
+      const vs = await get(`/linea_base_versiones?obra_id=eq.${OBRA.id}&select=*&order=numero`), ids = vs.map(v => v.id);
+      const ps = ids.length ? await getTodo(`/linea_base_partidas?version_id=in.(${ids.join(',')})&select=version_id,codigo,nombre,es_hito,estado,metrado,parcial_cd,inicio,fin&order=version_id,codigo`) : [];
+      const ds = ids.length ? await getTodo(`/linea_base_dependencias?version_id=in.(${ids.join(',')})&select=version_id,codigo&order=version_id,codigo,pred_codigo`) : [];
+      LBP.vers = vs; LBP.parts = {}; ps.forEach(p => (LBP.parts[p.version_id] = LBP.parts[p.version_id] || []).push(p));
+      LBP.deps = {}; ds.forEach(d => { LBP.deps[d.version_id] = (LBP.deps[d.version_id] || 0) + 1; }); LBP.cargado = true;
+      if (!LBP.b || !vs.some(v => v.id === LBP.b)) { LBP.b = vs.length ? vs[vs.length - 1].id : null; LBP.a = vs.length > 1 ? vs[0].id : null; }
+    } catch (e) { box.innerHTML = `<div class="rg-msg">${msgCarga('Líneas base', e)}</div>`; return; }
+  }
+  lbPanelPintar();
+}
+function lbComparar(a, b) {   // por código: qué partidas son nuevas, salieron o cambiaron de metrado o de fechas
+  const A = new Map((LBP.parts[a.id] || []).map(p => [p.codigo, p])), B = new Map((LBP.parts[b.id] || []).map(p => [p.codigo, p]));
+  const r = { nueva: 0, quitada: 0, deductivo: 0, metrado: 0, fechas: 0, igual: 0, mov: [] };
+  const dia = (s) => s ? Math.floor(Date.parse(s + 'T00:00:00Z') / 86400000) : null;
+  B.forEach((pb, k) => {
+    const pa = A.get(k); if (!pa) { r.nueva++; return; }
+    if (pb.estado === 'deductivo' && pa.estado === 'activa') { r.deductivo++; return; }
+    if (Math.abs(Number(pa.metrado || 0) - Number(pb.metrado || 0)) > 1e-6) r.metrado++;
+    else if (pa.inicio !== pb.inicio || pa.fin !== pb.fin) r.fechas++; else r.igual++;
+    const d = dia(pb.fin) - dia(pa.fin); if (d) r.mov.push({ codigo: k, nombre: pb.nombre, dias: d });
+  });
+  A.forEach((pa, k) => { if (!B.has(k)) r.quitada++; });
+  r.mov.sort((x, y) => Math.abs(y.dias) - Math.abs(x.dias));
+  const suma = (m) => [...m.values()].reduce((s, p) => s + Number(p.parcial_cd || 0), 0);
+  r.cdA = suma(A); r.cdB = suma(B); r.nA = A.size; r.nB = B.size;
+  r.plazo = a.plazo_fin && b.plazo_fin ? dia(b.plazo_fin) - dia(a.plazo_fin) : null;
+  return r;
+}
+function lbPanelPintar() {
+  const box = $('#lbPanel'), adm = !!AUTH.admin, vig = (RES_A.version || {}).id;
+  const f = (s) => s ? plFmt(plD(s)) : '—', n2 = (v) => Number(v).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const filas = LBP.vers.map(l => {
+    const ps = LBP.parts[l.id] || [], cd = ps.reduce((s, p) => s + Number(p.parcial_cd || 0), 0), hitos = ps.filter(p => p.es_hito).length;
+    return `<tr><td class="l"><b>LB${l.numero}</b>${l.cronograma_id && l.cronograma_id === vig ? ' <span class="vl-pill ok">vigente</span>' : ''}<div class="lb-sub">${esc(l.nombre)}</div></td>
+      <td class="l">${esc(l.tipo_cambio || '—')}${l.base_legal ? `<div class="lb-sub">${esc(l.base_legal)}</div>` : ''}</td><td class="l">${esc(l.resolucion || '—')}<div class="lb-sub">${f(l.fecha_aprobacion)}</div></td>
+      <td>${f(l.plazo_fin)}</td><td>${ps.length - hitos}${hitos ? `<div class="lb-sub">+ ${hitos} hitos</div>` : ''}</td><td>${n2(cd)}</td><td>${LBP.deps[l.id] || 0}</td>
+      <td class="c"><button type="button" class="icon-btn" data-lbp-ver="${l.numero}" title="Ver esta línea base en el Gantt (solo lectura)" aria-label="Ver en el Gantt"><svg viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></button>${adm ? `<button type="button" class="icon-btn" data-lbp-ficha="${l.id}" title="Editar la ficha: tipo de cambio, base legal, resolución, fecha y plazo" aria-label="Editar ficha"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4Z"/></svg></button>` : ''}</td></tr>`;
+  }).join('');
+  const opt = (sel) => LBP.vers.map(l => `<option value="${l.id}" ${l.id === sel ? 'selected' : ''}>LB${l.numero} · ${esc(String(l.tipo_cambio || l.nombre).slice(0, 40))}</option>`).join('');
+  const A = LBP.vers.find(v => v.id === LBP.a), B = LBP.vers.find(v => v.id === LBP.b);
+  let cmp = '<p class="hint">Hace falta cargar al menos dos líneas base para compararlas.</p>';
+  if (A && B && A.id !== B.id) {
+    const [x, y] = A.numero < B.numero ? [A, B] : [B, A], r = lbComparar(x, y), pp = (v) => (v > 0 ? '+' : '') + v;
+    cmp = `<div class="vl-kp pre-kp">
+      <div class="vl-k"><small>Plazo</small><b>${r.plazo == null ? '—' : pp(r.plazo) + ' días'}</b><em>LB${x.numero} ${f(x.plazo_fin)} → LB${y.numero} ${f(y.plazo_fin)}</em></div>
+      <div class="vl-k"><small>Costo directo</small><b>${(r.cdB - r.cdA >= 0 ? '+' : '−') + n2(Math.abs(r.cdB - r.cdA))}</b><em>S/ ${n2(r.cdA)} → S/ ${n2(r.cdB)}</em></div>
+      <div class="vl-k"><small>Partidas</small><b>${r.nA} → ${r.nB}</b><em>${r.nueva} nuevas · ${r.quitada} que salen · ${r.deductivo} con deductivo total</em></div>
+      <div class="vl-k"><small>Cambios</small><b>${r.fechas + r.metrado}</b><em>${r.fechas} de fechas · ${r.metrado} de metrado · ${r.igual} iguales</em></div></div>`
+      + (r.mov.length ? `<div class="vl-tw"><table class="vl-tb"><thead><tr><th class="l">Partidas cuyo fin más se movió (LB${x.numero} → LB${y.numero})</th><th>Días</th></tr></thead><tbody>${r.mov.slice(0, 8).map(m => `<tr><td class="l"><span class="mono">${esc(m.codigo)}</span> ${esc(String(m.nombre || '').slice(0, 70))}</td><td class="${m.dias > 0 ? 'pre-neg' : 'pre-pos'}">${pp(m.dias)}</td></tr>`).join('')}</tbody></table></div>` : '');
+  }
+  box.innerHTML = `<div class="vl-card"><div class="lb-cab"><div><h3 style="margin:0 0 3px">Líneas base del contrato</h3><p class="hint" style="margin:0">Cada una es una foto de solo lectura del cronograma valorizado: partidas con su código permanente, fechas, metrados, costos y vínculos. La vigente es la que alimenta las demás pantallas.</p></div>
+      ${adm ? '<button type="button" class="btn-sec pri" data-lbp-cargar title="Cargar una línea base: CAO (Excel) + Gantt de Project (XML)">⇪ Cargar línea base</button>' : ''}</div>
+    <div class="vl-tw"><table class="vl-tb lb-tb"><thead><tr><th class="l">Línea base</th><th class="l">Cambio</th><th class="l">Resolución</th><th>Fin de plazo</th><th>Partidas</th><th>Costo directo S/</th><th>Vínculos</th><th></th></tr></thead><tbody>${filas || '<tr><td colspan="8" class="l">Todavía no hay líneas base.</td></tr>'}</tbody></table></div></div>
+    <div class="vl-card" style="margin-top:12px"><div class="lb-cab"><h3 style="margin:0">Comparar dos líneas base</h3><span class="lb-cmp"><select id="lbpA" class="pl-sel-t">${opt(LBP.a)}</select> <span>→</span> <select id="lbpB" class="pl-sel-t">${opt(LBP.b)}</select></span></div>${cmp}</div>`;
+}
+function lbFichaAbrir(id) {
+  const l = LBP.vers.find(v => v.id === id); if (!l) return;
+  let m = document.getElementById('lbFicha');
+  if (!m) { m = document.createElement('form'); m.id = 'lbFicha'; m.className = 'pform la-form'; m.hidden = true; document.body.appendChild(m); }
+  m.innerHTML = `<h3 style="margin:0 0 4px;font-size:14px">Ficha de la LB${l.numero}</h3><p class="hint" style="margin:0 0 10px">Los datos que sustentan esta línea base. Un campo vacío no borra lo que ya estaba.</p>
+    <div class="field"><label for="lfNom">Nombre</label><input id="lfNom" type="text" maxlength="120" value="${esc(l.nombre || '')}"></div>
+    <div class="row2"><div class="field"><label for="lfTipo">Tipo de cambio</label><input id="lfTipo" type="text" maxlength="80" value="${esc(l.tipo_cambio || '')}" placeholder="original · suspensión · adicional y deductivo · ampliación"></div>
+      <div class="field"><label for="lfLegal">Base legal</label><input id="lfLegal" type="text" maxlength="80" value="${esc(l.base_legal || '')}" placeholder="Ej. Art. 202 RLC"></div></div>
+    <div class="row2"><div class="field"><label for="lfRes">Resolución</label><input id="lfRes" type="text" maxlength="80" value="${esc(l.resolucion || '')}"></div>
+      <div class="field"><label for="lfFecha">Fecha de aprobación</label><input id="lfFecha" type="date" value="${l.fecha_aprobacion || ''}"></div></div>
+    <div class="row2"><div class="field"><label for="lfPlazo">Fin de plazo</label><input id="lfPlazo" type="date" value="${l.plazo_fin || ''}"></div><div class="field"></div></div>
+    <div class="sug-acc"><button class="btn" type="submit">Guardar</button><button class="btn-sec" type="button" id="lfCancel">Cancelar</button></div>`;
+  const fondo = document.getElementById('lbFondo') || (() => { const f = document.createElement('div'); f.id = 'lbFondo'; f.hidden = true; document.body.appendChild(f); return f; })();
+  const cerrar = () => { m.hidden = true; fondo.hidden = true; document.documentElement.classList.remove('la-modal'); };
+  m.hidden = false; fondo.hidden = false; document.documentElement.classList.add('la-modal'); fondo.onclick = cerrar; $('#lfCancel').onclick = cerrar;
+  m.onsubmit = async (e) => {
+    e.preventDefault(); const btn = m.querySelector('button[type=submit]'); btn.disabled = true;
+    try {
+      await preRpc('linea_base_ficha', { p_id: id, p_nombre: $('#lfNom').value || null, p_tipo: $('#lfTipo').value || null, p_base_legal: $('#lfLegal').value || null, p_resolucion: $('#lfRes').value || null,
+        p_fecha: $('#lfFecha').value || null, p_plazo_fin: $('#lfPlazo').value || null, p_documentos: null, p_notas: null });
+      cerrar(); toast(`Ficha de la LB${l.numero} guardada.`, true, 'lb'); LBP.cargado = false; await lbPanelCargar(true); try { await plDatos(); } catch (x) {}
+    } catch (er) { btn.disabled = false; toast(`No se pudo guardar: ${esc(er.message)}`, false, 'lb'); }
+  };
+}
 document.addEventListener('click', (e) => {
+  const v = e.target.closest('[data-lbp-ver]'); if (v) { PL.ver = +v.dataset.lbpVer; document.querySelector('#nav button[data-pane="plan"]').click(); return; }
+  const fi = e.target.closest('[data-lbp-ficha]'); if (fi) { lbFichaAbrir(fi.dataset.lbpFicha); return; }
+  if (e.target.closest('[data-lbp-cargar]')) lbAbrir();
+});
+document.addEventListener('change', (e) => { if (e.target.id === 'lbpA' || e.target.id === 'lbpB') { LBP.a = $('#lbpA').value; LBP.b = $('#lbpB').value; lbPanelPintar(); } });
+
+document.addEventListener('click', (e) => {
+  if (e.target.closest('[data-pl-lbcargar]')) { lbAbrir(); return; }
   if (e.target.closest('[data-pl-print]')) { plImprimir(); return; }
   if (e.target.closest('[data-pl-pv-cerrar]')) { plCerrarImpresion(); return; }
   if (e.target.closest('[data-pl-pv-imprimir]')) { setTimeout(() => window.print(), 50); return; }
