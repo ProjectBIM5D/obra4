@@ -5278,6 +5278,7 @@ function msgCarga(modulo, e) {
 }
 async function laCargar(forzar) {
   if (LA.cargado && !forzar) { laRender(); return; }
+  if (typeof OBRA === 'undefined' || !OBRA || !OBRA.id) return;   // la obra todavía no llegó (arranque): se vuelve a pedir al abrir la pantalla
   try {
     const [semanas, looks] = await Promise.all([
       get(`/semanas_obra?obra_id=eq.${OBRA.id}&select=numero,fecha_inicio,fecha_fin&order=numero`),
