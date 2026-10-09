@@ -3019,6 +3019,7 @@ document.querySelectorAll('#nav button[data-pane]').forEach(b => {
 })();
 // ── confirmaciones dentro de la página: la ventana del navegador (confirm) saca de la pantalla completa; esta no ──
 function confirmarInfo(m) {
+  if (/^Eliminar la l[ií]nea base/i.test(m)) return { titulo: 'Eliminar línea base', si: 'Eliminar', peligro: true };
   if (/(evento|registro) de plazo/i.test(m)) return { titulo: 'Eliminar registro de plazo', si: 'Eliminar', peligro: true };
   if (/plan master|v[ií]nculos|duraci[oó]n sugerida|l[ií]nea base/i.test(m)) { const v = (m.match(/^(Crear|Aprobar|Reabrir|Archivar|Eliminar|Quitar|Ajuste|Aplicar|Sincronizar)/) || [])[1] || 'Confirmar'; return { titulo: { Ajuste: 'Ajustar fechas', Aplicar: 'Aplicar duraciones', Quitar: 'Quitar tarea', Sincronizar: 'Sincronizar con la línea base' }[v] || v + ' plan master', si: { Ajuste: 'Ajustar', Aplicar: 'Aplicar' }[v] || v, peligro: ['Eliminar', 'Reabrir', 'Quitar'].includes(v) }; }
   if (/presupuesto meta/i.test(m)) { const v = (m.match(/^(Aprobar|Reabrir|Archivar|Eliminar|Crear|Quitar)/) || [])[1]; return { titulo: v === 'Quitar' ? 'Quitar insumo' : v + ' presupuesto meta', si: v === 'Quitar' ? 'Quitar' : v, peligro: v === 'Eliminar' || v === 'Reabrir' }; }
@@ -7386,11 +7387,11 @@ async function plDatos() {
   const [ps, arbol, lbs] = await Promise.all([
     lite ? Promise.resolve(PL.plan ? [PL.plan] : []) : get(`/plan_versiones?obra_id=eq.${OBRA.id}&estado=neq.archivado&select=*&limit=1`),
     plArbolRaw(),
-    lite && LBP.cargado ? Promise.resolve(LBP.vers) : get(`/linea_base_versiones?obra_id=eq.${OBRA.id}&select=id,numero,nombre,tipo_cambio,base_legal,resolucion,fecha_aprobacion,plazo_fin,cronograma_id&order=numero`).catch(() => [])]);
+    lite && LBP.cargado ? Promise.resolve(LBP.vers) : get(`/linea_base_versiones?obra_id=eq.${OBRA.id}&select=id,numero,nombre,tipo_cambio,base_legal,resolucion,fecha_aprobacion,plazo_fin,cronograma_id,estado&order=numero`).catch(() => get(`/linea_base_versiones?obra_id=eq.${OBRA.id}&select=id,numero,nombre,tipo_cambio,base_legal,resolucion,fecha_aprobacion,plazo_fin,cronograma_id&order=numero`)).catch(() => [])]);
   PL.arbol = arbol; PL.hijos = {}; const porId = {}; arbol.forEach(n => { porId[n.nodo_id] = n; });
   arbol.forEach(n => { const k = porId[n.padre_id] ? n.padre_id : 'raiz'; (PL.hijos[k] = PL.hijos[k] || []).push(n); });
   Object.values(PL.hijos).forEach(a => a.sort((x, y) => x.orden - y.orden));
-  PL.lbs = lbs; if (PL.lb === undefined) PL.lb = lbs.length ? lbs[lbs.length - 1].numero : null;
+  PL.lbs = lbs; if (PL.lb === undefined) { const ok = lbs.filter(l => (l.estado || 'aprobada') === 'aprobada'); PL.lb = ok.length ? ok[ok.length - 1].numero : (lbs.length ? lbs[lbs.length - 1].numero : null); }
   PL.porCodigo = {}; arbol.forEach(n => { PL.porCodigo[n.codigo] = n; });
   if (!lite) {
     PL.plan = ps[0] || null; PL.tareas = []; PL.depsPlan = [];
@@ -7517,7 +7518,7 @@ function plPintar() {
   document.querySelectorAll('[data-plzoom]').forEach(b => b.classList.toggle('on', b.dataset.plzoom === PL.zoom));
   const adm = !!AUTH.admin, p = PL.plan, lbMode = PL.ver !== 'meta', lbv = lbMode ? PL.lbs.find(l => l.numero === PL.ver) : null, vigIdV = (RES_A.version || {}).id;
   const enContrato = (document.getElementById('plEspacio') || {}).dataset && document.getElementById('plEspacio').dataset.donde === 'contrato';
-  $('#plVer').innerHTML = (enContrato ? '' : `<option value="meta" ${!lbMode ? 'selected' : ''}>Plan master · meta (editable)</option>`) + (enContrato ? PL.lbs : []).map(l => `<option value="${l.numero}" ${PL.ver === l.numero ? 'selected' : ''}>LB${l.numero}${l.cronograma_id === vigIdV ? ' · vigente' : ''} · ${esc(String(l.tipo_cambio || l.nombre).slice(0, 30))} · solo lectura</option>`).join('');
+  $('#plVer').innerHTML = (enContrato ? '' : `<option value="meta" ${!lbMode ? 'selected' : ''}>Plan master · meta (editable)</option>`) + (enContrato ? PL.lbs : []).map(l => `<option value="${l.numero}" ${PL.ver === l.numero ? 'selected' : ''}>LB${l.numero}${l.cronograma_id === vigIdV ? ' · vigente' : ''}${l.estado && l.estado !== 'aprobada' ? ' · ' + l.estado : ''} · ${esc(String(l.tipo_cambio || l.nombre).slice(0, 30))} · solo lectura</option>`).join('');
   if (!p && !lbMode) {
     box.innerHTML = `<div class="vl-card pre-vacio"><div class="pre-vacio-ic">🗓️</div><h3>Aún no hay plan master</h3>
       <p class="hint">El plan master es el cronograma META: tu plan de ejecución, con duraciones sugeridas por el APU meta (no obligatorias) y vínculos de predecesoras y sucesoras. Nace como copia de la línea base contractual vigente (partidas del contrato y de los adicionales, hitos, fechas, duraciones y vínculos) y lo ajustas sin tocar el contrato. De ahí se arma el Look Ahead.</p>
@@ -7544,7 +7545,7 @@ function plPintar() {
   const estado = lbMode ? `<div class="vl-card pl-estado"><span class="vl-pill ar">Solo lectura</span><span class="pl-est-t"><b>LB${PL.ver} · ${esc(lbv ? lbv.nombre : '')}</b><em>Presupuesto de venta (contrato)${lbv && lbv.tipo_cambio ? ' · ' + esc(lbv.tipo_cambio) : ''}${lbv && lbv.base_legal ? ' · ' + esc(lbv.base_legal) : ''}${lbv && lbv.resolucion ? ' · ' + esc(lbv.resolucion) : ''}${lbv && lbv.fecha_aprobacion ? ' · aprobada ' + plFmt(plD(lbv.fecha_aprobacion)) : ''}${lbv && lbv.plazo_fin ? ' · plazo al ' + plFmt(plD(lbv.plazo_fin)) : ''}</em></span></div>`
     : `<div class="vl-card pl-estado"><span class="vl-pill ${pe[1]}">${pe[0]}</span><span class="pl-est-t"><b>${esc(p.nombre)}</b><em>Creado por ${esc(p.creado_por || '—')} · ${f(p.creado_en)}${p.aprobado_en ? ' · aprobado ' + f(p.aprobado_en) : ''}${p.motivo ? ' · ' + esc(p.motivo) : ''}${desact ? ' · <span class="pre-neg">la línea base vigente cambió: sincroniza</span>' : ''}</em></span><span class="pl-acc">${acc}</span></div>`;
   const vigId = (RES_A.version || {}).id;
-  const sel = (PL.lbs.length && !lbMode) ? `<label class="pl-lbsel" title="Qué línea base se dibuja como línea gris bajo cada barra"><span>Comparar con</span><select id="plLb"><option value="">Ninguna</option>${PL.lbs.map(l => `<option value="${l.numero}" ${PL.lb === l.numero ? 'selected' : ''}>LB${l.numero}${l.cronograma_id === vigId ? ' · vigente' : ''} — ${esc(String(l.tipo_cambio || l.nombre).slice(0, 34))}</option>`).join('')}</select></label>` : '';
+  const sel = (PL.lbs.length && !lbMode) ? `<label class="pl-lbsel" title="Qué línea base se dibuja como línea gris bajo cada barra"><span>Comparar con</span><select id="plLb"><option value="">Ninguna</option>${PL.lbs.filter(l => (l.estado || 'aprobada') !== 'improcedente' || PL.lb === l.numero).map(l => `<option value="${l.numero}" ${PL.lb === l.numero ? 'selected' : ''}>LB${l.numero}${l.cronograma_id === vigId ? ' · vigente' : ''}${l.estado && l.estado !== 'aprobada' ? ' · ' + l.estado : ''} — ${esc(String(l.tipo_cambio || l.nombre).slice(0, 34))}</option>`).join('')}</select></label>` : '';
   const ayuda = `${ed ? 'Arrastra una barra para moverla y su borde derecho para cambiar la duración; toca una tarea para editarla y armar vínculos. ' : ''}${lbMode ? 'Línea base del contrato (venta), solo lectura. ' : ''}Rojo = ruta crítica · azul = tarea · línea gris bajo la barra = ${lb ? lbn : 'línea base elegida'} · naranja = vínculo incumplido · ◆ = hito · tachado = deductivo total · franja gris = suspensión (no suma al plazo).`;
   const barra = `<div class="pl-tool"><h3>Gantt${PL.frente === 'todos' ? '' : ' · ' + esc(String((COMPONENTES.find(c => c.id === PL.frente) || {}).nombre || ''))}</h3><span class="pl-info" tabindex="0" title="${esc(ayuda)}">ⓘ</span><span class="pl-sp"></span>${sel}
       ${lbMode ? '' : '<button type="button" class="icon-btn" data-pl-versiones title="Versiones guardadas del plan master (fotos antes de cada cambio grande)" aria-label="Versiones del plan"><svg viewBox="0 0 24 24"><path d="M3 5h18v4H3zM5 9v10h14V9M10 13h4"/></svg></button>'}
@@ -8127,10 +8128,10 @@ function lbPanelPintar() {
   const f = (s) => s ? plFmt(plD(s)) : '—', n2 = (v) => Number(v).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   const filas = LBP.vers.map(l => {
     const rr = LBP.res[l.id], ps = LBP.parts[l.id] || [], cd = rr ? Number(rr.costo_directo) : ps.reduce((s, p) => s + Number(p.parcial_cd || 0), 0), hitos = rr ? rr.hitos : ps.filter(p => p.es_hito).length, nPart = rr ? rr.partidas : ps.length - hitos, nDeps = rr ? rr.vinculos : (LBP.deps[l.id] || 0);
-    return `<tr><td class="l"><b>LB${l.numero}</b>${l.cronograma_id && l.cronograma_id === vig ? ' <span class="vl-pill ok">vigente</span>' : ''}<div class="lb-sub">${esc(l.nombre)}</div></td>
+    return `<tr${l.estado === 'improcedente' ? ' style="opacity:.7"' : ''}><td class="l"><b>LB${l.numero}</b>${l.cronograma_id && l.cronograma_id === vig ? ' <span class="vl-pill ok">vigente</span>' : ''}${l.estado === 'improcedente' ? ' <span class="vl-pill no">improcedente</span>' : l.estado === 'propuesta' ? ' <span class="vl-pill pr">propuesta</span>' : ''}<div class="lb-sub">${esc(l.nombre)}</div></td>
       <td class="l">${esc(l.tipo_cambio || '—')}${l.base_legal ? `<div class="lb-sub">${esc(l.base_legal)}</div>` : ''}</td><td class="l">${esc(l.resolucion || '—')}<div class="lb-sub">${f(l.fecha_aprobacion)}</div></td>
       <td>${f(l.plazo_fin)}</td><td>${nPart}${hitos ? `<div class="lb-sub">+ ${hitos} hitos</div>` : ''}</td><td>${n2(cd)}</td><td>${nDeps}</td>
-      <td class="c"><button type="button" class="icon-btn ${LBP.ver === l.numero ? 'on' : ''}" data-lbp-ver="${l.numero}" title="Ver el cronograma de esta línea base (solo lectura)" aria-label="Ver en el Gantt"><svg viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></button>${adm ? `<button type="button" class="icon-btn" data-lbp-ficha="${l.id}" title="Editar la ficha: tipo de cambio, base legal, resolución, fecha y plazo" aria-label="Editar ficha"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4Z"/></svg></button>` : ''}</td></tr>`;
+      <td class="c"><button type="button" class="icon-btn ${LBP.ver === l.numero ? 'on' : ''}" data-lbp-ver="${l.numero}" title="Ver el cronograma de esta línea base (solo lectura)" aria-label="Ver en el Gantt"><svg viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></button>${adm ? `<button type="button" class="icon-btn" data-lbp-ficha="${l.id}" title="Editar la ficha: tipo de cambio, base legal, resolución, fecha y plazo" aria-label="Editar ficha"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4Z"/></svg></button>` : ''}${adm && !l.cronograma_id && (l.estado || 'aprobada') !== 'aprobada' ? `<button type="button" class="icon-btn" data-lbp-del="${l.id}" title="Eliminar esta línea base (solo si no procede y nadie la usa)" aria-label="Eliminar línea base"><svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button>` : ''}</td></tr>`;
   }).join('');
   box.innerHTML = `<div class="vl-card"><div class="lb-cab"><div><h3 style="margin:0 0 3px">Líneas base del contrato</h3><p class="hint" style="margin:0">Cada una es una foto de solo lectura del cronograma valorizado: partidas con su código permanente, fechas, metrados, costos y vínculos. La vigente es la que alimenta las demás pantallas.</p></div>
       ${adm ? '<button type="button" class="btn-sec pri" data-lbp-cargar title="Cargar una línea base: CAO (Excel) + Gantt de Project (XML)">⇪ Cargar línea base</button>' : ''}</div>
@@ -8146,7 +8147,8 @@ function lbFichaAbrir(id) {
       <div class="field"><label for="lfLegal">Base legal</label><input id="lfLegal" type="text" maxlength="80" value="${esc(l.base_legal || '')}" placeholder="Ej. Art. 202 RLC"></div></div>
     <div class="row2"><div class="field"><label for="lfRes">Resolución</label><input id="lfRes" type="text" maxlength="80" value="${esc(l.resolucion || '')}"></div>
       <div class="field"><label for="lfFecha">Fecha de aprobación</label><input id="lfFecha" type="date" value="${l.fecha_aprobacion || ''}"></div></div>
-    <div class="row2"><div class="field"><label for="lfPlazo">Fin de plazo</label><input id="lfPlazo" type="date" value="${l.plazo_fin || ''}"></div><div class="field"></div></div>
+    <div class="row2"><div class="field"><label for="lfPlazo">Fin de plazo</label><input id="lfPlazo" type="date" value="${l.plazo_fin || ''}"></div>
+      <div class="field"><label for="lfEst">Estado</label><select id="lfEst" ${l.cronograma_id ? 'disabled title="Es el cronograma vigente"' : ''}>${[['aprobada', 'Aprobada'], ['propuesta', 'Propuesta (en trámite)'], ['improcedente', 'Improcedente']].map(([k, tx]) => `<option value="${k}" ${(l.estado || 'aprobada') === k ? 'selected' : ''}>${tx}</option>`).join('')}</select></div></div>
     <div class="sug-acc"><button class="btn" type="submit">Guardar</button><button class="btn-sec" type="button" id="lfCancel">Cancelar</button></div>`;
   const fondo = document.getElementById('lbFondo') || (() => { const f = document.createElement('div'); f.id = 'lbFondo'; f.hidden = true; document.body.appendChild(f); return f; })();
   const cerrar = () => { m.hidden = true; fondo.hidden = true; document.documentElement.classList.remove('la-modal'); };
@@ -8156,6 +8158,7 @@ function lbFichaAbrir(id) {
     try {
       await preRpc('linea_base_ficha', { p_id: id, p_nombre: $('#lfNom').value || null, p_tipo: $('#lfTipo').value || null, p_base_legal: $('#lfLegal').value || null, p_resolucion: $('#lfRes').value || null,
         p_fecha: $('#lfFecha').value || null, p_plazo_fin: $('#lfPlazo').value || null, p_documentos: null, p_notas: null });
+      if (!$('#lfEst').disabled && $('#lfEst').value !== (l.estado || 'aprobada')) await preRpc('linea_base_estado', { p_id: id, p_estado: $('#lfEst').value });
       cerrar(); toast(`Ficha de la LB${l.numero} guardada.`, true, 'lb'); LBP.cargado = false; await lbPanelCargar(true); try { await plDatos(); } catch (x) {}
     } catch (er) { btn.disabled = false; toast(`No se pudo guardar: ${esc(er.message)}`, false, 'lb'); }
   };
@@ -8209,8 +8212,8 @@ async function plzCargar(forzar) {
     const [ev, comp, lbs] = await Promise.all([
       get(`/plazo_eventos?obra_id=eq.${OBRA.id}&select=*&order=fecha_inicio,creado_en`),
       get(`/v_plazo_componente?obra_id=eq.${OBRA.id}&select=proyecto_id,codigo,fecha_inicio,plazo_dias`),
-      LBP.cargado ? Promise.resolve(LBP.vers) : get(`/linea_base_versiones?obra_id=eq.${OBRA.id}&select=id,numero,nombre,tipo_cambio,resolucion,plazo_fin,cronograma_id&order=numero`).catch(() => [])]);
-    PLZ.ev = ev; PLZ.comp = comp; PLZ.lbs = lbs; PLZ.cargado = true; PLZ.gestion = ev.length ? 'numero' in ev[0] : true;
+      LBP.cargado ? Promise.resolve(LBP.vers) : get(`/linea_base_versiones?obra_id=eq.${OBRA.id}&select=id,numero,nombre,tipo_cambio,resolucion,plazo_fin,cronograma_id,estado&order=numero`).catch(() => get(`/linea_base_versiones?obra_id=eq.${OBRA.id}&select=id,numero,nombre,tipo_cambio,resolucion,plazo_fin,cronograma_id&order=numero`)).catch(() => [])]);
+    PLZ.ev = ev; PLZ.comp = comp; PLZ.lbs = lbs.filter(l => (l.estado || 'aprobada') !== 'improcedente'); PLZ.cargado = true; PLZ.gestion = ev.length ? 'numero' in ev[0] : true;
     plzPintar();
   } catch (e) { box.innerHTML = msgCarga('Plazo y ampliaciones', e); }
 }
@@ -8568,7 +8571,18 @@ document.addEventListener('click', async (e) => {
   if (!(await confirmar(`Eliminar el registro de plazo «${plzNombre(x)}»${x.det.length > 1 ? ' (' + x.det.length + ' frentes)' : ''}. El fin de plazo se recalcula sin él.`))) return;
   try { await preRpc('plazo_evento_eliminar', { p_id: x.ids[0] }); toast('Registro de plazo eliminado.', true, 'plz'); await plzRefrescar(); } catch (er) { toast(`No se pudo eliminar: ${esc(er.message)}`, false, 'plz'); }
 });
+async function lbEliminar(id) {
+  const l = LBP.vers.find(v => v.id === id); if (!l) return;
+  const rr = LBP.res[l.id], n = rr ? rr.partidas : 0;
+  if (!(await confirmar(`Eliminar la línea base LB${l.numero} «${l.nombre}» con sus ${n} partidas y sus vínculos. Solo se permite si no es la vigente, no está aprobada y nadie la usa. No se puede deshacer.`))) return;
+  try {
+    await preRpc('linea_base_eliminar', { p_id: id }); toast(`LB${l.numero} eliminada.`, true, 'lb');
+    if (LBP.ver === l.numero) LBP.ver = null; LBP.cargado = false; PL.lbVer = {}; PL.lbCache = {};
+    await lbPanelCargar(true); try { await plDatos(); } catch (x) {}
+  } catch (er) { toast(`No se pudo eliminar: ${esc(er.message)}`, false, 'lb'); }
+}
 document.addEventListener('click', (e) => {
+  const dl = e.target.closest('[data-lbp-del]'); if (dl) { lbEliminar(dl.dataset.lbpDel); return; }
   const v = e.target.closest('[data-lbp-ver]'); if (v) { LBP.ver = +v.dataset.lbpVer; lbPanelPintar(); lbGanttMostrar().then(() => { const s = $('#lbGanttSlot'); if (s) s.scrollIntoView({ behavior: 'smooth', block: 'start' }); }); return; }
   const fi = e.target.closest('[data-lbp-ficha]'); if (fi) { lbFichaAbrir(fi.dataset.lbpFicha); return; }
   if (e.target.closest('[data-lbp-cargar]')) lbAbrir();
