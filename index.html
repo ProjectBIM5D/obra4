@@ -7334,21 +7334,29 @@ function plRuta(x) {   // {frente, ruta, txt}: «Charanal» + «Superestructura 
   return { frente: fr, ruta, txt: fr + ' ' + cad.join(' ') };
 }
 const plCtx = (x) => { const r = plRuta(x); return (r.frente ? `<span class="pl-frtag">${esc(r.frente)}</span>` : '') + esc(r.ruta); };
+function plArbolRaw() {   // el árbol de partidas del cronograma vigente cambia muy poco: se pide una vez por versión y se reutiliza (también se adelanta desde Contrato)
+  const k = (RES_A.version || {}).id || 'x';
+  if (!PL._arbolP || PL._arbolK !== k) { PL._arbolK = k; PL._arbolP = getTodo('/v_wbs_arbol?select=nodo_id,proyecto_id,padre_id,codigo,nivel,orden,nombre,es_hoja,es_hito,concepto,codigo_esp&order=orden').catch(e => { PL._arbolP = null; throw e; }); }
+  return PL._arbolP;
+}
 async function plDatos() {
+  const lite = PL.ver !== 'meta';   // viendo el cronograma de una línea base (Contrato): no hace falta el plan master ni la línea base de comparación
   const [ps, arbol, lbs] = await Promise.all([
-    get(`/plan_versiones?obra_id=eq.${OBRA.id}&estado=neq.archivado&select=*&limit=1`),
-    getTodo('/v_wbs_arbol?select=nodo_id,proyecto_id,padre_id,codigo,nivel,orden,nombre,es_hoja,es_hito,concepto,codigo_esp&order=orden'),
-    get(`/linea_base_versiones?obra_id=eq.${OBRA.id}&select=id,numero,nombre,tipo_cambio,base_legal,resolucion,fecha_aprobacion,plazo_fin,cronograma_id&order=numero`).catch(() => [])]);
+    lite ? Promise.resolve(PL.plan ? [PL.plan] : []) : get(`/plan_versiones?obra_id=eq.${OBRA.id}&estado=neq.archivado&select=*&limit=1`),
+    plArbolRaw(),
+    lite && LBP.cargado ? Promise.resolve(LBP.vers) : get(`/linea_base_versiones?obra_id=eq.${OBRA.id}&select=id,numero,nombre,tipo_cambio,base_legal,resolucion,fecha_aprobacion,plazo_fin,cronograma_id&order=numero`).catch(() => [])]);
   PL.arbol = arbol; PL.hijos = {}; const porId = {}; arbol.forEach(n => { porId[n.nodo_id] = n; });
   arbol.forEach(n => { const k = porId[n.padre_id] ? n.padre_id : 'raiz'; (PL.hijos[k] = PL.hijos[k] || []).push(n); });
   Object.values(PL.hijos).forEach(a => a.sort((x, y) => x.orden - y.orden));
   PL.lbs = lbs; if (PL.lb === undefined) PL.lb = lbs.length ? lbs[lbs.length - 1].numero : null;
   PL.porCodigo = {}; arbol.forEach(n => { PL.porCodigo[n.codigo] = n; });
-  PL.plan = ps[0] || null; PL.tareas = []; PL.depsPlan = [];
-  if (PL.plan) [PL.tareas, PL.depsPlan] = await Promise.all([
-    getTodo(`/v_plan_tareas?plan_id=eq.${PL.plan.id}&select=*&order=orden,id`),
-    getTodo(`/v_plan_dependencias?plan_id=eq.${PL.plan.id}&select=tarea_id,predecesora_id,tipo,desfase_dias&order=tarea_id,predecesora_id`)]);
-  await plCargarLB();
+  if (!lite) {
+    PL.plan = ps[0] || null; PL.tareas = []; PL.depsPlan = [];
+    // el plan (tareas y vínculos) y la línea base de comparación se leen a la vez
+    const tareasP = PL.plan ? Promise.all([getTodo(`/v_plan_tareas?plan_id=eq.${PL.plan.id}&select=*&order=orden,id`), getTodo(`/v_plan_dependencias?plan_id=eq.${PL.plan.id}&select=tarea_id,predecesora_id,tipo,desfase_dias&order=tarea_id,predecesora_id`)]) : Promise.resolve([[], []]);
+    const [[tareas, deps]] = await Promise.all([tareasP, plCargarLB()]);
+    PL.tareas = tareas; PL.depsPlan = deps;
+  }
   if (PL.ver !== 'meta' && PL.lbs.some(l => l.numero === PL.ver)) await plModeloLB(); else { PL.ver = 'meta'; plModelo(); }
 }
 // modelo en memoria: fechas como n.º de día (s = inicio, e = fin + 1), vínculos, ruta crítica y conflictos.
@@ -7971,20 +7979,28 @@ async function lbEnviar() {
     await preRpc('linea_base_cargar', { p_obra: OBRA.id, p_numero: numero, p_nombre: $('#lbNom').value, p_tipo: $('#lbTipo').value, p_base_legal: $('#lbLegal').value, p_resolucion: $('#lbRes').value,
       p_fecha: $('#lbFecha').value || null, p_plazo_fin: $('#lbPlazo').value || null, p_notas: null, p_partidas: R.partidas, p_deps: R.deps });
     toast(`LB${numero} cargada: ${R.partidas.length} partidas e hitos, ${R.deps.length} vínculos. Ya puedes elegirla en «Ver» y «Comparar con».`, true, 'lb');
-    lbCerrar(); PL.lbVer = {}; PL.lbCache = {}; await plDatos(); LBP.cargado = false; if (document.documentElement.dataset.pane === 'lineasbase') await lbPanelCargar(true);
+    lbCerrar(); PL.lbVer = {}; PL.lbCache = {}; LBP.cargado = false; await plDatos(); if (document.documentElement.dataset.pane === 'lineasbase') await lbPanelCargar(true);
   } catch (e) { btn.disabled = false; toast(`No se pudo cargar: ${esc(e.message)}`, false, 'lb'); }
 }
 
 // ═══ Pantalla «Contrato y líneas base» ═══════════════════════════════════════════════════════════════════════════════════════════════════
-const LBP = { vers: [], parts: {}, deps: {}, cargado: false, ver: null };
+const LBP = { vers: [], parts: {}, deps: {}, res: {}, cargado: false, ver: null };
+// adelanto en segundo plano: cuando la obra ya cargó y el panel está en reposo, se trae el árbol de partidas (lo usan Plan maestro y Contrato), así esas pantallas abren sin esperarlo
+(function adelantarCronograma() { let n = 0; const iv = setInterval(() => { n++; try { if (typeof OBRA !== 'undefined' && OBRA && OBRA.id && RES_A && RES_A.version) { clearInterval(iv); setTimeout(() => { plArbolRaw().catch(() => {}); }, 2500); } } catch (e) {} if (n > 20) clearInterval(iv); }, 1500); })();
 async function lbPanelCargar(forzar) {
   const box = $('#lbPanel'); if (!box) return;
   if (!LBP.cargado || forzar) {
     box.innerHTML = '<div class="rg-msg">Leyendo las líneas base…</div>';
     try {
-      const vs = await get(`/linea_base_versiones?obra_id=eq.${OBRA.id}&select=*&order=numero`), ids = vs.map(v => v.id);
-      const ps = ids.length ? await getTodo(`/linea_base_partidas?version_id=in.(${ids.join(',')})&select=version_id,codigo,nombre,es_hito,estado,metrado,parcial_cd,inicio,fin&order=version_id,codigo`) : [];
-      const ds = ids.length ? await getTodo(`/linea_base_dependencias?version_id=in.(${ids.join(',')})&select=version_id,codigo&order=version_id,codigo,pred_codigo`) : [];
+      const [vs, res] = await Promise.all([get(`/linea_base_versiones?obra_id=eq.${OBRA.id}&select=*&order=numero`),
+        get(`/v_linea_base_resumen?obra_id=eq.${OBRA.id}&select=version_id,partidas,hitos,costo_directo,vinculos`).catch(() => null)]);
+      plArbolRaw().catch(() => {});   // adelanta el árbol de partidas que necesita el cronograma de abajo
+      LBP.res = {}; let ps = [], ds = [];
+      if (res) res.forEach(r => { LBP.res[r.version_id] = r; });
+      else {   // la base todavía no tiene la vista v_linea_base_resumen (lineas_base_cargar.sql): se cuentan las partidas aparte
+        const ids = vs.map(v => v.id);
+        [ps, ds] = ids.length ? await Promise.all([getTodo(`/linea_base_partidas?version_id=in.(${ids.join(',')})&select=version_id,es_hito,parcial_cd&order=version_id,codigo`), getTodo(`/linea_base_dependencias?version_id=in.(${ids.join(',')})&select=version_id&order=version_id,codigo,pred_codigo`)]) : [[], []];
+      }
       LBP.vers = vs; LBP.parts = {}; ps.forEach(p => (LBP.parts[p.version_id] = LBP.parts[p.version_id] || []).push(p));
       LBP.deps = {}; ds.forEach(d => { LBP.deps[d.version_id] = (LBP.deps[d.version_id] || 0) + 1; }); LBP.cargado = true;
     } catch (e) { box.innerHTML = `<div class="rg-msg">${msgCarga('Líneas base', e)}</div>`; return; }
@@ -8068,10 +8084,10 @@ function lbPanelPintar() {
   const box = $('#lbPanel'), adm = !!AUTH.admin, vig = (RES_A.version || {}).id;
   const f = (s) => s ? plFmt(plD(s)) : '—', n2 = (v) => Number(v).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   const filas = LBP.vers.map(l => {
-    const ps = LBP.parts[l.id] || [], cd = ps.reduce((s, p) => s + Number(p.parcial_cd || 0), 0), hitos = ps.filter(p => p.es_hito).length;
+    const rr = LBP.res[l.id], ps = LBP.parts[l.id] || [], cd = rr ? Number(rr.costo_directo) : ps.reduce((s, p) => s + Number(p.parcial_cd || 0), 0), hitos = rr ? rr.hitos : ps.filter(p => p.es_hito).length, nPart = rr ? rr.partidas : ps.length - hitos, nDeps = rr ? rr.vinculos : (LBP.deps[l.id] || 0);
     return `<tr><td class="l"><b>LB${l.numero}</b>${l.cronograma_id && l.cronograma_id === vig ? ' <span class="vl-pill ok">vigente</span>' : ''}<div class="lb-sub">${esc(l.nombre)}</div></td>
       <td class="l">${esc(l.tipo_cambio || '—')}${l.base_legal ? `<div class="lb-sub">${esc(l.base_legal)}</div>` : ''}</td><td class="l">${esc(l.resolucion || '—')}<div class="lb-sub">${f(l.fecha_aprobacion)}</div></td>
-      <td>${f(l.plazo_fin)}</td><td>${ps.length - hitos}${hitos ? `<div class="lb-sub">+ ${hitos} hitos</div>` : ''}</td><td>${n2(cd)}</td><td>${LBP.deps[l.id] || 0}</td>
+      <td>${f(l.plazo_fin)}</td><td>${nPart}${hitos ? `<div class="lb-sub">+ ${hitos} hitos</div>` : ''}</td><td>${n2(cd)}</td><td>${nDeps}</td>
       <td class="c"><button type="button" class="icon-btn ${LBP.ver === l.numero ? 'on' : ''}" data-lbp-ver="${l.numero}" title="Ver el cronograma de esta línea base (solo lectura)" aria-label="Ver en el Gantt"><svg viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></button>${adm ? `<button type="button" class="icon-btn" data-lbp-ficha="${l.id}" title="Editar la ficha: tipo de cambio, base legal, resolución, fecha y plazo" aria-label="Editar ficha"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4Z"/></svg></button>` : ''}</td></tr>`;
   }).join('');
   box.innerHTML = `<div class="vl-card"><div class="lb-cab"><div><h3 style="margin:0 0 3px">Líneas base del contrato</h3><p class="hint" style="margin:0">Cada una es una foto de solo lectura del cronograma valorizado: partidas con su código permanente, fechas, metrados, costos y vínculos. La vigente es la que alimenta las demás pantallas.</p></div>
