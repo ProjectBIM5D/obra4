@@ -1816,6 +1816,7 @@ h1,h3,.card .value,.hhr-pie b{letter-spacing:-.2px;}
 .sug-f .tg{grid-column:3;grid-row:1 / span 2;font-size:10.5px;font-weight:800;padding:2px 8px;border-radius:7px;background:var(--input);color:var(--tx2);white-space:nowrap;} .sug-f.sf .tg{grid-column:2;}
 .sug-f .tg.at{background:rgba(217,119,6,.16);color:var(--amber);}
 .sug-vacio{padding:12px;color:var(--mut);font-size:12.5px;}
+.la-sinplan{color:#b45309;font-weight:700;cursor:help;} .la-aviso{color:#b45309;}
 .sug-acc{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
 /* ═══ Look Ahead y Plan semanal: barra de herramientas en una sola fila, filas bajas y barras finas ═══ */
 html.dens-densa{--rh:24px;--rh0:28px;--rh1:24px;--rh2:22px;--rh3:21px;--bh:12px;--bt:6px;--fb:8.5px;}
@@ -2456,6 +2457,8 @@ document.documentElement.classList.add('dens-densa');   // tamaño único de las
             <div class="field"><label for="laNSem">Semana</label><select id="laNSem"></select></div>
             <div class="field"><label>&nbsp;</label><label class="la-chk" style="font-weight:500"><input type="checkbox" id="laNCopiar" checked> Copiar las actividades pendientes del Look Ahead anterior</label></div>
           </div>
+          <label class="la-chk" style="font-weight:500;margin:0 0 6px"><input type="checkbox" id="laNPlan" disabled> Cargar lo que el plan master programa en estas semanas</label>
+          <p class="hint" id="laNPlanMsg" style="margin:0 0 12px">Leyendo el plan master…</p>
           <button class="btn" type="submit" id="laNCrear">Crear Look Ahead</button>
           <button class="btn-sec" type="button" id="laNCancel">Cancelar</button>
         </form>
@@ -5490,6 +5493,7 @@ function laSugCalc() {
 async function laSugRefrescar() {
   try {
     await laSugCargar(); const c = laSugCalc(), b = $('#laSugN'); if (!b) return;
+    if (!!document.querySelector('#laInfo .la-sinplan') !== !!(LA.plan && LA.plan.sin && !LA.plan.error) && laActual()) laRender();
     const n = c ? c.faltan.length + c.fuera.length + c.exceso.length : 0;
     b.hidden = !n; b.textContent = n; b.title = c ? `${c.faltan.length} por agregar · ${c.fuera.length} fuera de las fechas del plan · ${c.exceso.length} con metrado mayor al del plan` : '';
     if (!$('#laSug').hidden) laSugRender();
@@ -5600,7 +5604,8 @@ function laRender() {
   const filas = LA.det.filter(f => (!LA.comp || f.proyecto === LA.comp));
   const plan = filas.reduce((s, f) => s + Number(f.planeado || 0), 0), ejec = filas.reduce((s, f) => s + Number(f.ejecutado || 0), 0);
   $('#laInfo').innerHTML = `<b>Semanas ${look.semana} a ${look.semana + look.semanas - 1}</b> (${look.semanas} semanas): ${laFmt(sem.fecha_inicio)} → ${laFmt(laFecha(d0 + nd - 1))} · ${filas.length} actividad${filas.length === 1 ? '' : 'es'}`
-    + ` · Planeado S/ ${laNum(plan)} · Ejecutado S/ ${laNum(ejec)}${look.fuente ? ' · <span class="mono">' + esc(look.fuente) + '</span>' : ''}`;
+    + ` · Planeado S/ ${laNum(plan)} · Ejecutado S/ ${laNum(ejec)}${look.fuente ? ' · <span class="mono">' + esc(look.fuente) + '</span>' : ''}`
+    + (LA.plan && LA.plan.sin && !LA.plan.error ? ' · <span class="la-sinplan" title="No hay plan master (vigente ni borrador): este Look Ahead no tiene control de brechas ni reparto del metrado según el plan. Créalo en Planificación › Plan maestro.">⚠ Sin plan master</span>' : '');
 
   const cols = LA_COLS.filter(c => LA.cols === 'todas' || c.res);
   // ── encabezado: mismas columnas del Excel + bloques de semana con los días (L M M J V S D) ──
@@ -6036,6 +6041,11 @@ function laIniciar() {
     $('#laNSem').innerHTML = libres.map(s => `<option value="${s.numero}">Semana ${s.numero} · ${laFmt(s.fecha_inicio)} – ${laFmt(s.fecha_fin)}${s.numero === actual ? ' · (esta semana)' : ''}</option>`).join('');
     if (porDefecto != null) $('#laNSem').value = porDefecto;
     $('#laNCopiar').disabled = !LA.looks.length; $('#laNCopiar').checked = !!LA.looks.length;
+    const chk = $('#laNPlan'), msg = $('#laNPlanMsg'); chk.disabled = true; chk.checked = false; msg.textContent = 'Leyendo el plan master…'; msg.className = 'hint';
+    laSugCargar(true).then(() => {
+      if (LA.plan && !LA.plan.sin) { chk.disabled = false; chk.checked = true; msg.textContent = `Plan «${LA.plan.nombre}» (${LA.plan.estado}): se agregan las tareas que programa en esas 5 semanas y todavía no están (también las atrasadas).`; }
+      else { msg.className = 'hint la-aviso'; msg.textContent = LA.plan && LA.plan.error ? 'No se pudo leer el plan master: se crea sin él.' : 'No hay plan master (vigente ni borrador). El Look Ahead se crea igual, pero sin control de brechas ni reparto del metrado según el plan. Créalo en Planificación › Plan maestro.'; }
+    });
   });
   $('#laNCancel').addEventListener('click', () => { $('#laNuevoBox').hidden = true; });
   $('#laNuevoBox').addEventListener('submit', async (e) => {
@@ -6056,9 +6066,21 @@ function laIniciar() {
           return { lookahead_id: nuevo.id, nodo_id: r.nodo_id, ...laColsSinPartida(r.tipo, r.nodo_id, r.grupo_id, r.proyecto_id), tarea_id: r.tarea_id, actividad: r.actividad_propia, orden: i + 1, detalle: r.detalle, critico: r.critico, fecha_inicio: tarde ? s.fecha_inicio : r.fecha_inicio, dias: Math.min(r.dias, 28), metrado_meta: Math.round((Number(r.metrado_meta) - Number(r.acumulado)) * 10000) / 10000, acumulado_previo: 0, responsable: r.responsable }; });
         if (nuevas.length) { await laEnviar('POST', '/lookahead_actividades', nuevas); copiadas = nuevas.length; }
       }
+      const delPlan = $('#laNPlan').checked && LA.plan && !LA.plan.sin;
       $('#laNuevoBox').hidden = true; LA.sel = nuevo.id; try { localStorage.setItem('obra-la-sel', LA.sel); } catch (x) {}
       await laCargar(true);
-      laMsg(`Look Ahead de la semana ${sem} creado${copiadas ? ` con ${copiadas} actividad${copiadas === 1 ? '' : 'es'} pendiente${copiadas === 1 ? '' : 's'} del anterior (con su saldo)${reprog ? `, ${reprog} reprogramada${reprog === 1 ? '' : 's'} por haber quedado atrasada${reprog === 1 ? '' : 's'}` : ''}` : ''}. Ya puedes agregar actividades.`, true);
+      let dePlan = 0;
+      if (delPlan) {   // lo que el plan programa en la ventana y todavía no está (las copiadas ya cuentan como cubiertas)
+        try {
+          await laSugCargar(true); const c = laSugCalc();
+          if (c && c.faltan.length) {
+            const base = LA.det.reduce((m, f) => Math.max(m, f.orden), 0);
+            await laEnviar('POST', '/lookahead_actividades', c.faltan.map((x, i) => ({ lookahead_id: nuevo.id, nodo_id: x.t.nodo_id, ...laColsSinPartida(x.t.tipo, x.t.nodo_id, x.t.grupo_id, x.t.proyecto_id), tarea_id: x.t.id, actividad: x.nom, orden: base + i + 1, critico: false, fecha_inicio: x.ini, dias: x.dias, metrado_meta: x.meta, acumulado_previo: x.previo })));
+            dePlan = c.faltan.length; await laCargarDetalle();
+          }
+        } catch (err2) { laMsg(`El Look Ahead se creó, pero no se pudo cargar el plan master: ${laErr(err2)}`, false); return; }
+      }
+      laMsg(`Look Ahead de la semana ${sem} creado${dePlan ? ` con ${dePlan} actividad${dePlan === 1 ? '' : 'es'} del plan master${copiadas ? ' y' : ''}` : ''}${copiadas ? ` con ${copiadas} actividad${copiadas === 1 ? '' : 'es'} pendiente${copiadas === 1 ? '' : 's'} del anterior (con su saldo)${reprog ? `, ${reprog} reprogramada${reprog === 1 ? '' : 's'} por haber quedado atrasada${reprog === 1 ? '' : 's'}` : ''}` : ''}${!delPlan && LA.plan && LA.plan.sin ? '. Ojo: no hay plan master, así que no hay control de brechas' : ''}. Ya puedes agregar actividades.`, true);
     } catch (err) { laMsg(`No se pudo crear: ${laErr(err)}`, false); }
     finally { btn.disabled = false; }
   });
@@ -7703,7 +7725,7 @@ document.addEventListener('click', async (e) => {
       if (!(await confirmar(`Aplicar la duración sugerida por el APU meta a ${cambios.length} tareas (las de fecha fija no se tocan). Después usa «Ajustar a vínculos» para acomodar las fechas.`))) return;
       await plEjecutar('plan_tareas_guardar', { p_plan: PL.plan.id, p_cambios: cambios }, `${cambios.length} duraciones actualizadas.`); return;
     }
-    const msg = { aprobar: 'Aprobar el plan master. Pasa a vigente y ya no se edita hasta reabrirlo.', reabrir: 'Reabrir el plan master. Vuelve a borrador para editarlo.', archivar: 'Archivar el plan master. Queda guardado pero sin uso, y podrás crear otro.', eliminar: 'Eliminar el plan master. Es un borrador sin aprobar y se borra para siempre.' }[acc];
+    const msg = { aprobar: 'Aprobar el plan master. Pasa a vigente y ya no se edita hasta reabrirlo.', reabrir: 'Reabrir el plan master. Vuelve a borrador para editarlo.', archivar: 'Archivar el plan master. Queda guardado pero sin uso, y podrás crear otro.', eliminar: 'Eliminar el plan master. Es un borrador sin aprobar y se borra para siempre. Si algún Look Ahead ya tiene actividades ligadas a sus tareas, no se deja eliminar: se archiva.' }[acc];
     if (!(await confirmar(msg + (acc === 'archivar' ? ' Antes se guarda una versión del plan.' : '')))) return;
     if (acc === 'archivar' && !(await plFotoAuto('Plan archivado', 'Foto automática al archivar el plan'))) return;
     const ok = await plEjecutar('plan_meta_estado', { p_plan: PL.plan.id, p_accion: acc }, { aprobar: 'Plan master aprobado.', reabrir: 'Plan master reabierto.', archivar: 'Plan master archivado.', eliminar: 'Plan master eliminado.' }[acc]);
