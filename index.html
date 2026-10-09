@@ -828,6 +828,11 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .oc-tb td.pend{color:var(--mut);}
 :root[data-theme="dark"] .oc-tb thead th{color:#f3e6dc;} :root[data-theme="dark"] .oc-tb .h0{background:#4a3527;} :root[data-theme="dark"] .oc-tb .h1{background:#4b3335;} :root[data-theme="dark"] .oc-tb .h2{background:#3a2a2c;}
 :root[data-theme="dark"] .oc-tb tr.susp td{background:#1e2c45;color:#cfe0f7;} :root[data-theme="dark"] .oc-tb tr.tot td{background:#4a3527;color:#f3e6dc;}
+.vl-pill.no{background:#ef444422;color:#b91c1c;}
+.plz-svgw{overflow-x:auto;} .plz-svgw svg{display:block;min-width:720px;width:100%;height:auto;} .plz-svgw text{fill:var(--tx2);font-size:10.5px;font-family:inherit;} .plz-svgw text.b{fill:var(--tx);font-weight:700;}
+.plz-leg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:11px;color:var(--mut);margin-top:6px;} .plz-leg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px;}
+.plz-cad{display:grid;grid-template-columns:repeat(var(--n,4),minmax(0,1fr));gap:8px;} @media (max-width:900px){.plz-cad{grid-template-columns:1fr 1fr;}} .plz-lb{border:1px solid var(--line);border-radius:10px;padding:7px 12px;min-width:0;background:var(--card);} .plz-lb b{font-size:12px;display:block;} .plz-lb span{display:block;font-size:15px;font-weight:800;font-variant-numeric:tabular-nums;} .plz-lb em{display:block;font-style:normal;font-size:11px;color:var(--mut);line-height:1.3;} .plz-lb.vig{border-color:var(--blue);}
+.plz-nota{font-size:11.5px;margin:8px 0 0;color:var(--mut);} .plz-nota.al{color:#b45309;font-weight:600;}
 .vl-pill{display:inline-block;font-size:10.5px;font-weight:800;padding:2px 9px;border-radius:999px;} .vl-pill.ok{background:#10b98122;color:var(--green);} .vl-pill.pr{background:#f59e0b26;color:var(--rg-am,#a85a08);}
 .vl-pbar{display:inline-block;vertical-align:middle;width:64px;height:7px;border-radius:4px;background:var(--line);overflow:hidden;margin-right:6px;} .vl-pbar i{display:block;height:100%;background:var(--blue);}
 .vl-tb button{font:inherit;font-size:11px;font-weight:700;padding:3px 10px;border-radius:7px;border:1px solid var(--line2);background:var(--card);color:var(--tx);cursor:pointer;} .vl-tb button:hover{border-color:var(--blue);color:var(--blue);}
@@ -1894,7 +1899,7 @@ html.tb-compacta #laApp .tb-seg .seg-btn[data-lagrupos]{padding:0;width:34px;}
 .lb-tb td,.lb-tb th{white-space:normal;vertical-align:middle;} .lb-tb td{padding:4px 10px;} .lb-tb th{padding:6px 10px;} .lb-tb td.c{white-space:nowrap;} .lb-sub{font-size:11px;color:var(--mut);font-weight:500;line-height:1.3;}
 .lb-tb .lb-sub{display:inline;margin-left:6px;} .lb-tb td:nth-child(5){white-space:nowrap;} .lb-tb .icon-btn{width:28px;height:28px;border-radius:7px;} .lb-tb .icon-btn svg{width:15px;height:15px;} .lb-tb .vl-pill{margin-left:4px;}
 .lb-cmp{display:inline-flex;align-items:center;gap:8px;flex:0 0 auto;} .lb-cmp select{max-width:260px;}
-#lbFicha:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(620px,calc(100vw - 20px));max-height:calc(100vh - 24px);overflow-y:auto;margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
+#lbFicha:not([hidden]),#plzForm:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(620px,calc(100vw - 20px));max-height:calc(100vh - 24px);overflow-y:auto;margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
 /* el Gantt en Contrato: sin la barra de selección de plan */
 #plEspacio[data-donde="plan"] #plVerP{display:none;}
 #plFotoDlg:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(560px,calc(100vw - 20px));margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
@@ -2018,7 +2023,7 @@ document.documentElement.classList.add('dens-densa');   // tamaño único de las
           <button type="button" data-pane="lineasbase" title="Líneas base del contrato (LB0 a LB3): ficha, comparación y carga"><span class="ni">📜</span><span class="nt">Contrato y líneas base</span></button>
           <button type="button" class="prox" disabled title="Próximamente · prestaciones adicionales y deductivos con resolución"><span class="ni">➕</span><span class="nt">Adicionales y deductivos</span><span class="nav-tag">pronto</span></button>
           <button type="button" class="prox" disabled title="Próximamente · mayores y menores metrados"><span class="ni">📏</span><span class="nt">Mayores metrados</span><span class="nav-tag">pronto</span></button>
-          <button type="button" class="prox" disabled title="Próximamente · plazo contractual y suspensiones"><span class="ni">⏳</span><span class="nt">Ampliaciones de plazo</span><span class="nav-tag">pronto</span></button>
+          <button type="button" data-pane="plazo" title="Plazo contractual: suspensiones, ampliaciones y adicionales de plazo, con su resolución y la línea base que los incorpora"><span class="ni">⏳</span><span class="nt">Ampliaciones de plazo</span></button>
           <button type="button" class="prox" disabled title="Próximamente · registro de eventos del contrato"><span class="ni">⚖️</span><span class="nt">Eventos y controversias</span><span class="nav-tag">pronto</span></button>
         </div>
       </div>
@@ -2250,6 +2255,7 @@ document.documentElement.classList.add('dens-densa');   // tamaño único de las
     </section>
 
     <!-- ═══════════ PLAN MASTER (cronograma meta) ═══════════ -->
+    <section class="pane" data-pane="plazo"><div id="plzPanel"></div></section>
     <section class="pane" data-pane="lineasbase"><div id="lbPanel"></div>
       <div id="lbGanttSlot" style="margin-top:14px"><div class="lb-cab"><div><h3 style="margin:0 0 3px">Cronograma de la línea base</h3><p class="hint" style="margin:0">Solo lectura, tal como está en el Project de esa línea base: fechas, ruta crítica y vínculos. Elige otra en «Línea base». El plan de ejecución se trabaja en Planificación › Plan maestro.</p></div></div><div id="lbGanttBox"></div></div></section>
     <section class="pane" data-pane="plan">
@@ -2966,6 +2972,7 @@ document.querySelectorAll('#nav button[data-pane]').forEach(b => {
       ppc: ['PPC', 'Porcentaje de actividades completadas: trazabilidad semanal y causas de incumplimiento'],
       valorizaciones: ['Valorizaciones', 'Valor ganado: lo valorizado mes a mes (contrato, adicionales y mayores metrados)'],
       presupuesto: ['Presupuesto', 'Venta (contrato, solo lectura) y meta (copia del APU que se ajusta sin tocar el contrato)'],
+      plazo: ['Plazo y ampliaciones', 'Suspensiones, ampliaciones y adicionales de plazo: qué cambió, con qué resolución y cómo queda el fin de obra'],
       lineasbase: ['Contrato y líneas base', 'LB0 a LB3: inicio de contrato, suspensión, adicional y deductivo, ampliación · ficha, comparación y carga'],
       plan: ['Plan master', 'Cronograma meta: tu plan de ejecución con vínculos, ruta crítica y duraciones sugeridas por el APU meta'],
       hh: ['Horas-hombre', 'Histograma planificado desde el APU de la oferta: metrado × cuantía, repartido en el plazo del cronograma'] };
@@ -2978,6 +2985,7 @@ document.querySelectorAll('#nav button[data-pane]').forEach(b => {
     if (b.dataset.pane === 'hh') hhCargar();
     if (b.dataset.pane === 'plan') { PL.ver = 'meta'; PL.reset = true; plMontar('plan'); plCargar(); }
     if (b.dataset.pane === 'lineasbase') lbPanelCargar();
+    if (b.dataset.pane === 'plazo') plzCargar();
     if (b.dataset.pane === 'presupuesto') preCargar();
     if (b.dataset.pane === 'parte' && !$('#parteLA').hidden) plaCargar();
     $('#side').classList.remove('open'); $('#overlay').classList.remove('on');
@@ -3001,6 +3009,7 @@ document.querySelectorAll('#nav button[data-pane]').forEach(b => {
 })();
 // ── confirmaciones dentro de la página: la ventana del navegador (confirm) saca de la pantalla completa; esta no ──
 function confirmarInfo(m) {
+  if (/evento de plazo/i.test(m)) return { titulo: 'Eliminar evento de plazo', si: 'Eliminar', peligro: true };
   if (/plan master|v[ií]nculos|duraci[oó]n sugerida|l[ií]nea base/i.test(m)) { const v = (m.match(/^(Crear|Aprobar|Reabrir|Archivar|Eliminar|Quitar|Ajuste|Aplicar|Sincronizar)/) || [])[1] || 'Confirmar'; return { titulo: { Ajuste: 'Ajustar fechas', Aplicar: 'Aplicar duraciones', Quitar: 'Quitar tarea', Sincronizar: 'Sincronizar con la línea base' }[v] || v + ' plan master', si: { Ajuste: 'Ajustar', Aplicar: 'Aplicar' }[v] || v, peligro: ['Eliminar', 'Reabrir', 'Quitar'].includes(v) }; }
   if (/presupuesto meta/i.test(m)) { const v = (m.match(/^(Aprobar|Reabrir|Archivar|Eliminar|Crear|Quitar)/) || [])[1]; return { titulo: v === 'Quitar' ? 'Quitar insumo' : v + ' presupuesto meta', si: v === 'Quitar' ? 'Quitar' : v, peligro: v === 'Eliminar' || v === 'Reabrir' }; }
   if (/^Quitar este insumo/.test(m)) return { titulo: 'Quitar insumo', si: 'Quitar', peligro: true };
@@ -5002,7 +5011,7 @@ function aplicarResumen(A, B) {   // A = obra, componentes, Curva S y avance · 
   const idToCodigo = Object.fromEntries(proyectos.map(p => [p.id, p.codigo]));
   RES_A = A; RES_B = B;
   const curvaMensual = armarCurvaMensual(ejecDesdeValorizaciones(A), A.progRows, idToCodigo);
-  const eventosPlazo = A.plazoEventos.map(e => ({ ...e, proyecto_id_codigo: e.proyecto_id ? idToCodigo[e.proyecto_id] : null }));
+  const eventosPlazo = A.plazoEventos.filter(e => !e.estado || e.estado === 'aprobada').map(e => ({ ...e, proyecto_id_codigo: e.proyecto_id ? idToCodigo[e.proyecto_id] : null }));
   const hayAdicional = A.progRows.some(r => r.concepto === 'adicional');
   if (!hayAdicional && alcance !== 'contrato') alcance = 'contrato';
   DATA = { proyectos, partidas: A.partidas, avance: A.avance, programado: A.programado, curvaMensual, eventosPlazo, materiales: b.materiales, matMetas: combinarMetas(b.matMetasTabla, b.metasVal),
@@ -5041,7 +5050,7 @@ async function bootResumen() {
       // "concepto" (contrato / adicional) existe si la base ya corrió curva_s_adicional.sql; si no, se lee sin él
       get(`/curva_s_mensual?${filtroProy}&select=proyecto_id,concepto,periodo,programado_parcial,programado_acumulado,ejecutado_parcial,ejecutado_acumulado&order=periodo`)
         .catch(() => get(`/curva_s_mensual?${filtroProy}&select=proyecto_id,periodo,programado_parcial,programado_acumulado,ejecutado_parcial,ejecutado_acumulado&order=periodo`)),
-      get(`/plazo_eventos?obra_id=eq.${obra.id}&select=id,proyecto_id,tipo,descripcion,fecha_inicio,fecha_fin`),
+      get(`/plazo_eventos?obra_id=eq.${obra.id}&select=id,proyecto_id,tipo,descripcion,fecha_inicio,fecha_fin,estado`).catch(() => get(`/plazo_eventos?obra_id=eq.${obra.id}&select=id,proyecto_id,tipo,descripcion,fecha_inicio,fecha_fin`)),
       version ? opcional(get(`/v_curva_s_programada?version_id=eq.${version.id}&select=proyecto_id,concepto,periodo_orden,etiqueta,periodo_tipo,fecha_inicio,fecha_fin,programado_parcial&order=periodo_orden`)) : Promise.resolve([]),
       opcional(get(`/v_plazo_componente?obra_id=eq.${obra.id}&select=codigo,fecha_inicio,plazo_dias,fecha_fin_original,dias_suspension,dias_ampliacion,dias_otros,fecha_fin_vigente`)),
       // valorizaciones (valor ganado): ejecutado por mes, frente, tipo y estado (aprobada / propuesta)
@@ -8141,6 +8150,152 @@ function lbFichaAbrir(id) {
     } catch (er) { btn.disabled = false; toast(`No se pudo guardar: ${esc(er.message)}`, false, 'lb'); }
   };
 }
+// ═══ PLAZO CONTRACTUAL: suspensiones, ampliaciones y adicionales de plazo (tabla plazo_eventos) ═══
+// Solo los eventos APROBADOS suman al plazo; los solicitados se siguen en la tabla pero no mueven el fin de obra. Cada evento puede indicar la línea base que lo incorpora.
+const PLZ = { ev: [], comp: [], lbs: [], cargado: false, gestion: true };
+const PLZ_TIPO = { suspension: 'Suspensión', ampliacion: 'Ampliación', adicional: 'Adicional', otro: 'Otro' };
+const PLZ_COL = { suspension: '#8592a8', ampliacion: '#f26a1b', adicional: '#7c3aed', otro: '#10b981' };
+const plzAprob = (e) => !e.estado || e.estado === 'aprobada';
+const plzOrden = (id) => { const p = (DATA.proyectos || []).find(x => x.id === id); return p && p.orden != null ? Number(p.orden) : 99; };   // orden de los frentes de la obra: Charanal, Damas, Bocana, Peña
+const plzNomFr = (id) => { const p = (DATA.proyectos || []).find(x => x.id === id); return p ? String(p.nombre || p.codigo).replace('Puente ', '') : '—'; };
+async function plzCargar(forzar) {
+  const box = $('#plzPanel'); if (!box) return;
+  if (typeof OBRA === 'undefined' || !OBRA || !OBRA.id || typeof DATA === 'undefined' || !DATA || !DATA.proyectos) { box.innerHTML = '<div class="rg-msg">Leyendo la obra…</div>'; setTimeout(() => { if (document.documentElement.dataset.pane === 'plazo') plzCargar(); }, 1200); return; }
+  if (!PLZ.cargado || forzar) box.innerHTML = '<div class="rg-msg">Leyendo el plazo de la obra…</div>';
+  try {
+    const [ev, comp, lbs] = await Promise.all([
+      get(`/plazo_eventos?obra_id=eq.${OBRA.id}&select=*&order=fecha_inicio,creado_en`),
+      get(`/v_plazo_componente?obra_id=eq.${OBRA.id}&select=proyecto_id,codigo,fecha_inicio,plazo_dias`),
+      LBP.cargado ? Promise.resolve(LBP.vers) : get(`/linea_base_versiones?obra_id=eq.${OBRA.id}&select=id,numero,nombre,tipo_cambio,resolucion,plazo_fin,cronograma_id&order=numero`).catch(() => [])]);
+    PLZ.ev = ev; PLZ.comp = comp; PLZ.lbs = lbs; PLZ.cargado = true; PLZ.gestion = ev.length ? 'estado' in ev[0] : true;
+    plzPintar();
+  } catch (e) { box.innerHTML = msgCarga('Plazo y ampliaciones', e); }
+}
+function plzCalc() {
+  const ap = PLZ.ev.filter(plzAprob), dia = (e) => plD(e.fecha_fin) - plD(e.fecha_inicio) + 1;
+  const comp = PLZ.comp.map(c => {
+    const mios = ap.filter(e => !e.proyecto_id || e.proyecto_id === c.proyecto_id), suma = (f) => mios.filter(e => f(e.tipo)).reduce((s, e) => s + dia(e), 0);
+    const ini = plD(c.fecha_inicio), fo = ini + Number(c.plazo_dias) - 1, susp = suma(x => x === 'suspension'), amp = suma(x => x === 'ampliacion'), otros = suma(x => x !== 'suspension' && x !== 'ampliacion');
+    return { id: c.proyecto_id, nombre: plzNomFr(c.proyecto_id), ini, plazo: Number(c.plazo_dias), fo, susp, amp, otros, fin: fo + susp + amp + otros, mios };
+  }).sort((a, b) => plzOrden(a.id) - plzOrden(b.id));
+  const ini = comp.length ? Math.min(...comp.map(c => c.ini)) : 0, fo = comp.length ? Math.max(...comp.map(c => c.fo)) : 0, fin = comp.length ? Math.max(...comp.map(c => c.fin)) : 0;
+  return { comp, ini, fo, fin, cierra: comp.find(c => c.fin === fin), hoy: plD(laHoy()) };
+}
+function plzSvg(c) {
+  if (!c.comp.length) return '';
+  const W = 980, L = 96, R = 70, RH = 30, T = 24, H = T + c.comp.length * RH + 10, d0 = c.ini - 3, d1 = c.fin + 12, x = (d) => L + (d - d0) / (d1 - d0) * (W - L - R);
+  const MES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Plazo por frente: original, suspensiones y ampliaciones">`;
+  const a = new Date(d0 * 86400000), fin = new Date(d1 * 86400000);
+  for (let y = a.getUTCFullYear(), m = a.getUTCMonth() + 1; Date.UTC(y, m, 1) <= fin.getTime(); m++) {
+    if (m > 11) { m = 0; y++; }
+    const n = Date.UTC(y, m, 1) / 86400000, xx = x(n);
+    s += `<line x1="${xx.toFixed(1)}" y1="${T - 4}" x2="${xx.toFixed(1)}" y2="${H - 6}" stroke="var(--line)" stroke-width="1"/><text x="${(xx + 3).toFixed(1)}" y="${T - 9}">${MES[m]}${m === 0 || (y === a.getUTCFullYear() && m === a.getUTCMonth()) ? ' ' + String(y).slice(2) : ''}</text>`;
+  }
+  c.comp.forEach((r, i) => {
+    const y0 = T + i * RH;
+    s += `<text class="b" x="${L - 8}" y="${y0 + 19}" text-anchor="end">${esc(r.nombre)}</text>`
+      + `<rect x="${x(r.ini).toFixed(1)}" y="${y0 + 9}" width="${Math.max(2, x(r.fin + 1) - x(r.ini)).toFixed(1)}" height="12" rx="4" fill="#141c5e" opacity=".88"><title>${esc(r.nombre)}: ${plFmt(r.ini)} → ${plFmt(r.fin)} (plazo original ${r.plazo} d)</title></rect>`
+      + `<line x1="${x(r.fo + 1).toFixed(1)}" y1="${y0 + 3}" x2="${x(r.fo + 1).toFixed(1)}" y2="${y0 + 27}" stroke="var(--tx)" stroke-width="1.5" stroke-dasharray="3 2"><title>Fin del plazo original: ${plFmt(r.fo)}</title></line>`;
+    PLZ.ev.filter(e => !e.proyecto_id || e.proyecto_id === r.id).forEach(e => {
+      const ap = plzAprob(e); if (e.estado === 'denegada') return;
+      const e0 = plD(e.fecha_inicio), e1 = plD(e.fecha_fin) + 1, col = PLZ_COL[e.tipo] || '#10b981';
+      s += `<rect x="${x(e0).toFixed(1)}" y="${y0 + 5}" width="${Math.max(2, x(e1) - x(e0)).toFixed(1)}" height="20" rx="3" fill="${ap ? col : 'none'}" ${ap ? 'opacity=".95"' : `stroke="${col}" stroke-width="1.5" stroke-dasharray="4 2"`}><title>${esc(PLZ_TIPO[e.tipo] || e.tipo)}${ap ? '' : ' (solicitada)'}: ${plFmt(e0)} → ${plFmt(e1 - 1)} · ${e1 - e0} d${e.descripcion ? ' · ' + esc(e.descripcion) : ''}</title></rect>`;
+    });
+    s += `<text class="b" x="${(x(r.fin + 1) + 6).toFixed(1)}" y="${y0 + 19}">${plFmt(r.fin)}</text>`;
+  });
+  if (c.hoy >= d0 && c.hoy <= d1) s += `<line x1="${x(c.hoy).toFixed(1)}" y1="${T - 4}" x2="${x(c.hoy).toFixed(1)}" y2="${H - 6}" stroke="#dc2626" stroke-width="1.5"/><text x="${(x(c.hoy) + 4).toFixed(1)}" y="${H - 10}" style="fill:#dc2626;font-weight:700">hoy</text>`;
+  return s + '</svg>';
+}
+function plzPintar() {
+  const box = $('#plzPanel'), adm = !!AUTH.admin, c = plzCalc(), f = (n) => plFmt(n), fs = (s) => s ? plFmt(plD(s)) : '—';
+  const dias = (e) => plD(e.fecha_fin) - plD(e.fecha_inicio) + 1;
+  const tot = c.fin - c.ini + 1, trans = Math.max(0, Math.min(tot, c.hoy - c.ini + 1)), quedan = c.fin - c.hoy;
+  const gan = c.fin - c.fo, dSusp = c.comp.length ? Math.max(...c.comp.map(r => r.susp)) : 0, dAmp = c.comp.length ? Math.max(...c.comp.map(r => r.amp)) : 0;
+  const nPend = PLZ.ev.filter(e => e.estado === 'solicitada').length;
+  const kpis = `<div class="vl-kp">
+    <div class="vl-k"><small>Plazo original</small><b>${c.comp.length ? Math.round(c.fo - c.ini + 1) : 0} días</b><em>${f(c.ini)} → ${f(c.fo)}</em></div>
+    <div class="vl-k"><small>Días reconocidos</small><b>+${gan} días</b><em>suspensión ${dSusp} · ampliaciones ${dAmp}${gan - dSusp - dAmp > 0 ? ' · otros ' + (gan - dSusp - dAmp) : ''}${nPend ? ` · ${nPend} solicitada${nPend === 1 ? '' : 's'}` : ''}</em></div>
+    <div class="vl-k"><small>Fin vigente</small><b>${f(c.fin)}</b><em>cierra ${c.cierra ? esc(c.cierra.nombre) : '—'}</em></div>
+    <div class="vl-k"><small>Tiempo transcurrido</small><b>${tot ? Math.round(trans / tot * 100) : 0} %</b><em>${quedan >= 0 ? `quedan ${quedan} d` : `vencido hace ${-quedan} d`} · día ${trans} de ${tot}</em></div></div>`;
+  // evolución del plazo por línea base
+  const vigId = (RES_A.version || {}).id; let ant = null;
+  const cad = PLZ.lbs.map(l => { const fin = l.plazo_fin ? plD(l.plazo_fin) : null, dif = fin != null && ant != null ? fin - ant : null; if (fin != null) ant = fin;
+    return `<div class="plz-lb${l.cronograma_id && l.cronograma_id === vigId ? ' vig' : ''}"><b>LB${l.numero}${l.cronograma_id && l.cronograma_id === vigId ? ' · vigente' : ''}</b><span>${fin != null ? f(fin) : '—'}</span><em>${dif ? (dif > 0 ? '+' : '') + dif + ' d · ' : dif === 0 ? 'sin cambio · ' : ''}${esc(l.tipo_cambio || l.nombre || '')}</em></div>`; }).join('');
+  const lbV = PLZ.lbs.find(l => l.cronograma_id && l.cronograma_id === vigId);
+  let nota = '';
+  if (lbV && lbV.plazo_fin) { const dif = plD(lbV.plazo_fin) - c.fin; nota = dif === 0 ? `<p class="plz-nota">✔ El fin vigente coincide con el fin de plazo de la LB${lbV.numero} (${f(c.fin)}).</p>` : `<p class="plz-nota al">⚠ La LB${lbV.numero} declara fin de plazo ${fs(lbV.plazo_fin)}, pero los eventos aprobados dan ${f(c.fin)} (${dif > 0 ? '+' : ''}${dif} d). Revisa los eventos o la ficha de la línea base.</p>`; }
+  const tbComp = c.comp.map(r => `<tr><td class="l"><b>${esc(r.nombre)}</b></td><td>${f(r.ini)}</td><td>${r.plazo}</td><td>${f(r.fo)}</td><td>${r.susp ? '+' + r.susp : '—'}</td><td>${r.amp ? '+' + r.amp : '—'}</td><td>${r.otros ? '+' + r.otros : '—'}</td><td><b>${f(r.fin)}</b></td><td>${r.fin >= c.hoy ? r.fin - c.hoy : '—'}</td></tr>`).join('');
+  const lbSel = (n) => n == null ? '—' : 'LB' + n;
+  const filas = PLZ.ev.map(e => {
+    const est = e.estado || 'aprobada', pill = est === 'aprobada' ? '<span class="vl-pill ok">aprobada</span>' : est === 'solicitada' ? '<span class="vl-pill pr">solicitada</span>' : '<span class="vl-pill no">denegada</span>';
+    return `<tr${est === 'aprobada' ? '' : ' style="opacity:.8"'}><td class="l"><b style="color:${PLZ_COL[e.tipo] || 'inherit'}">${esc(PLZ_TIPO[e.tipo] || e.tipo)}</b></td><td class="l">${e.proyecto_id ? esc(plzNomFr(e.proyecto_id)) : 'Toda la obra'}</td>
+      <td class="l">${esc(e.descripcion || '—')}${e.causal || e.base_legal ? `<span class="lb-sub">${esc([e.causal, e.base_legal].filter(Boolean).join(' · '))}</span>` : ''}</td>
+      <td>${fs(e.fecha_inicio)}</td><td>${fs(e.fecha_fin)}</td><td>${dias(e)}</td><td class="l">${esc(e.resolucion || '—')}${e.fecha_resolucion ? `<span class="lb-sub">${fs(e.fecha_resolucion)}</span>` : ''}</td><td>${pill}</td><td>${lbSel(e.lb_numero)}</td>
+      <td class="c">${adm ? `<button type="button" class="icon-btn" data-plz-edit="${e.id}" title="Editar el evento" aria-label="Editar"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4Z"/></svg></button><button type="button" class="icon-btn" data-plz-del="${e.id}" title="Eliminar el evento" aria-label="Eliminar"><svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button>` : ''}</td></tr>`;
+  }).join('');
+  box.innerHTML = kpis
+    + `<div class="vl-card"><div class="lb-cab"><div><h3 style="margin:0 0 3px">Plazo por frente</h3><p class="hint" style="margin:0">Barra: del inicio al fin vigente de cada frente. Línea discontinua: fin del plazo original. Las franjas son los eventos que se sumaron.</p></div></div>
+      <div class="plz-svgw">${plzSvg(c)}</div>
+      <div class="plz-leg">${Object.entries(PLZ_TIPO).map(([k, v]) => `<span><i style="background:${PLZ_COL[k]}"></i>${v}</span>`).join('')}<span><i style="border:1.5px dashed var(--mut);background:none"></i>solicitada (no suma)</span><span><i style="background:#dc2626"></i>hoy</span></div></div>`
+    + (cad ? `<div class="vl-card"><div class="lb-cab"><div><h3 style="margin:0 0 3px">Fin de plazo en cada línea base</h3><p class="hint" style="margin:0">Cómo fue cambiando el plazo contractual según el cronograma aprobado.</p></div></div><div class="plz-cad" style="--n:${Math.min(PLZ.lbs.length, 5)}">${cad}</div>${nota}</div>` : '')
+    + `<div class="vl-card"><div class="lb-cab"><div><h3 style="margin:0 0 3px">Plazo vigente por frente</h3><p class="hint" style="margin:0">Fin vigente = inicio + plazo original − 1 + días aprobados que le tocan (los de toda la obra y los de ese frente).</p></div></div>
+      <div class="vl-tw"><table class="vl-tb lb-tb"><thead><tr><th class="l">Frente</th><th>Inicio</th><th>Plazo (d)</th><th>Fin original</th><th>Suspensión</th><th>Ampliación</th><th>Otros</th><th>Fin vigente</th><th>Quedan (d)</th></tr></thead><tbody>${tbComp || '<tr><td colspan="9" class="l">No hay plazos por frente registrados.</td></tr>'}</tbody></table></div></div>`
+    + `<div class="vl-card"><div class="lb-cab"><div><h3 style="margin:0 0 3px">Eventos de plazo</h3><p class="hint" style="margin:0">Suspensiones, ampliaciones y adicionales de plazo. Solo los aprobados suman al plazo; una solicitud queda en seguimiento hasta que se apruebe.</p></div>
+      ${adm ? '<button type="button" class="btn-sec pri" data-plz-nuevo title="Registrar un evento de plazo">＋ Nuevo evento</button>' : ''}</div>
+      ${PLZ.gestion ? '' : '<p class="plz-nota al">Falta correr <code>plazo_eventos_gestion.sql</code> en la base para registrar causal, resolución, estado y línea base.</p>'}
+      <div class="vl-tw"><table class="vl-tb lb-tb"><thead><tr><th class="l">Tipo</th><th class="l">Alcance</th><th class="l">Descripción</th><th>Desde</th><th>Hasta</th><th>Días</th><th class="l">Resolución</th><th>Estado</th><th>LB</th><th></th></tr></thead><tbody>${filas || '<tr><td colspan="10" class="l">Todavía no hay eventos de plazo.</td></tr>'}</tbody></table></div></div>`;
+}
+function plzFormAbrir(id) {
+  const e = id ? PLZ.ev.find(x => x.id === id) : null; if (id && !e) return;
+  let m = document.getElementById('plzForm');
+  if (!m) { m = document.createElement('form'); m.id = 'plzForm'; m.className = 'pform la-form'; m.hidden = true; document.body.appendChild(m); }
+  const v = (k) => esc(e && e[k] != null ? e[k] : ''), op = (val, txt, sel) => `<option value="${val}"${sel ? ' selected' : ''}>${txt}</option>`;
+  m.innerHTML = `<h3 style="margin:0 0 4px;font-size:14px">${e ? 'Editar evento de plazo' : 'Nuevo evento de plazo'}</h3><p class="hint" style="margin:0 0 10px">Suma días de calendario al plazo del frente (o de toda la obra) solo cuando está aprobado.</p>
+    <div class="row2"><div class="field"><label for="pzTipo">Tipo</label><select id="pzTipo">${Object.entries(PLZ_TIPO).map(([k, t]) => op(k, t, (e ? e.tipo : 'ampliacion') === k)).join('')}</select></div>
+      <div class="field"><label for="pzAlc">Alcance</label><select id="pzAlc">${op('', 'Toda la obra', !e || !e.proyecto_id)}${(DATA.proyectos || []).slice().sort((x, y) => plzOrden(x.id) - plzOrden(y.id)).map(p => op(p.id, esc(plzNomFr(p.id)), e && e.proyecto_id === p.id)).join('')}</select></div></div>
+    <div class="field"><label for="pzDesc">Descripción</label><input id="pzDesc" type="text" maxlength="140" value="${v('descripcion')}" placeholder="Ej. Ampliación de plazo N° 02"></div>
+    <div class="row2"><div class="field"><label for="pzIni">Desde</label><input id="pzIni" type="date" value="${v('fecha_inicio')}" required></div><div class="field"><label for="pzFin">Hasta</label><input id="pzFin" type="date" value="${v('fecha_fin')}" required></div></div>
+    <p class="hint" id="pzDias" style="margin:-4px 0 10px"></p>
+    <div class="row2"><div class="field"><label for="pzCausal">Causal</label><input id="pzCausal" type="text" maxlength="160" value="${v('causal')}" placeholder="Ej. Atrasos por causas no atribuibles al contratista"></div><div class="field"><label for="pzLegal">Base legal</label><input id="pzLegal" type="text" maxlength="80" value="${v('base_legal')}" placeholder="Ej. Art. 197 RLCE"></div></div>
+    <div class="row2"><div class="field"><label for="pzRes">Resolución</label><input id="pzRes" type="text" maxlength="80" value="${v('resolucion')}"></div><div class="field"><label for="pzFRes">Fecha de resolución</label><input id="pzFRes" type="date" value="${v('fecha_resolucion')}"></div></div>
+    <div class="row2"><div class="field"><label for="pzEst">Estado</label><select id="pzEst">${[['aprobada', 'Aprobada (suma al plazo)'], ['solicitada', 'Solicitada (en trámite)'], ['denegada', 'Denegada']].map(([k, t]) => op(k, t, (e ? e.estado || 'aprobada' : 'aprobada') === k)).join('')}</select></div>
+      <div class="field"><label for="pzLb">Línea base que lo incorpora</label><select id="pzLb">${op('', 'Ninguna todavía', !e || e.lb_numero == null)}${PLZ.lbs.map(l => op(l.numero, 'LB' + l.numero + (l.tipo_cambio ? ' · ' + esc(l.tipo_cambio) : ''), e && e.lb_numero === l.numero)).join('')}</select></div></div>
+    <div class="field"><label for="pzNotas">Notas</label><input id="pzNotas" type="text" maxlength="200" value="${v('notas')}"></div>
+    <div class="sug-acc"><button class="btn" type="submit">Guardar</button><button class="btn-sec" type="button" id="pzCancel">Cancelar</button></div>`;
+  const fondo = document.getElementById('lbFondo') || (() => { const f = document.createElement('div'); f.id = 'lbFondo'; f.hidden = true; document.body.appendChild(f); return f; })();
+  const cerrar = () => { m.hidden = true; fondo.hidden = true; document.documentElement.classList.remove('la-modal'); };
+  const dias = () => { const a = $('#pzIni').value, b = $('#pzFin').value; $('#pzDias').textContent = a && b ? (plD(b) >= plD(a) ? `${plD(b) - plD(a) + 1} días de calendario` : 'La fecha final es anterior a la inicial') : ''; };
+  $('#pzIni').oninput = $('#pzFin').oninput = dias; dias();
+  m.hidden = false; fondo.hidden = false; document.documentElement.classList.add('la-modal'); fondo.onclick = cerrar; $('#pzCancel').onclick = cerrar;
+  m.onsubmit = async (ev) => {
+    ev.preventDefault(); const btn = m.querySelector('button[type=submit]'); btn.disabled = true;
+    try {
+      await preRpc('plazo_evento_guardar', { p_id: e ? e.id : null, p_obra: OBRA.id, p_proyecto: $('#pzAlc').value || null, p_tipo: $('#pzTipo').value, p_descripcion: $('#pzDesc').value || null, p_inicio: $('#pzIni').value, p_fin: $('#pzFin').value,
+        p_resolucion: $('#pzRes').value || null, p_fecha_resolucion: $('#pzFRes').value || null, p_base_legal: $('#pzLegal').value || null, p_causal: $('#pzCausal').value || null, p_estado: $('#pzEst').value, p_lb: $('#pzLb').value === '' ? null : +$('#pzLb').value, p_notas: $('#pzNotas').value || null });
+      cerrar(); toast('Evento de plazo guardado.', true, 'plz'); await plzRefrescar();
+    } catch (er) { btn.disabled = false; toast(`No se pudo guardar: ${esc(er.message)}${/function|schema cache|404/i.test(er.message) ? ' · ¿falta correr plazo_eventos_gestion.sql?' : ''}`, false, 'plz'); }
+  };
+}
+async function plzRefrescar() {   // recarga la pantalla y deja al resto del panel (Curva S, Gantt, horas-hombre) con los plazos nuevos
+  await plzCargar(true);
+  try {
+    const idToCodigo = Object.fromEntries((DATA.proyectos || []).map(p => [p.id, p.codigo]));
+    RES_A.plazoEventos = PLZ.ev.map(e => ({ id: e.id, proyecto_id: e.proyecto_id, tipo: e.tipo, descripcion: e.descripcion, fecha_inicio: e.fecha_inicio, fecha_fin: e.fecha_fin, estado: e.estado }));
+    DATA.eventosPlazo = RES_A.plazoEventos.filter(plzAprob).map(e => ({ ...e, proyecto_id_codigo: e.proyecto_id ? idToCodigo[e.proyecto_id] : null }));
+    const pl = await get(`/v_plazo_componente?obra_id=eq.${OBRA.id}&select=codigo,fecha_inicio,plazo_dias,fecha_fin_original,dias_suspension,dias_ampliacion,dias_otros,fecha_fin_vigente`);
+    RES_A.plazos = pl; DATA.plazos = pl; PL.reset = true; LBP.cargado = false;
+    renderAll();
+  } catch (x) {}
+}
+document.addEventListener('click', async (e) => {
+  if (e.target.closest('[data-plz-nuevo]')) { plzFormAbrir(null); return; }
+  const ed = e.target.closest('[data-plz-edit]'); if (ed) { plzFormAbrir(ed.dataset.plzEdit); return; }
+  const de = e.target.closest('[data-plz-del]'); if (!de) return;
+  const x = PLZ.ev.find(y => y.id === de.dataset.plzDel); if (!x) return;
+  if (!(await confirmar(`Eliminar el evento de plazo «${x.descripcion || PLZ_TIPO[x.tipo]}» (${plD(x.fecha_fin) - plD(x.fecha_inicio) + 1} días). El fin de plazo se recalcula sin él.`))) return;
+  try { await preRpc('plazo_evento_eliminar', { p_id: x.id }); toast('Evento de plazo eliminado.', true, 'plz'); await plzRefrescar(); } catch (er) { toast(`No se pudo eliminar: ${esc(er.message)}`, false, 'plz'); }
+});
 document.addEventListener('click', (e) => {
   const v = e.target.closest('[data-lbp-ver]'); if (v) { LBP.ver = +v.dataset.lbpVer; lbPanelPintar(); lbGanttMostrar().then(() => { const s = $('#lbGanttSlot'); if (s) s.scrollIntoView({ behavior: 'smooth', block: 'start' }); }); return; }
   const fi = e.target.closest('[data-lbp-ficha]'); if (fi) { lbFichaAbrir(fi.dataset.lbpFicha); return; }
