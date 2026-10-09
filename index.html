@@ -1890,7 +1890,8 @@ html.tb-compacta #laApp .tb-seg .seg-btn[data-lagrupos]{padding:0;width:34px;}
 #lbCarga input[type=file]{font-size:12px;width:100%;}
 /* pantalla Contrato y líneas base */
 .lb-cab{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:10px 16px;margin-bottom:10px;} .lb-cab>div{flex:1 1 320px;min-width:0;}
-.lb-tb td,.lb-tb th{white-space:normal;vertical-align:top;} .lb-tb td.c{white-space:nowrap;} .lb-sub{font-size:11px;color:var(--mut);font-weight:500;line-height:1.3;}
+.lb-tb td,.lb-tb th{white-space:normal;vertical-align:middle;} .lb-tb td{padding:4px 10px;} .lb-tb th{padding:6px 10px;} .lb-tb td.c{white-space:nowrap;} .lb-sub{font-size:11px;color:var(--mut);font-weight:500;line-height:1.3;}
+.lb-tb .lb-sub{display:inline;margin-left:6px;} .lb-tb td:nth-child(5){white-space:nowrap;} .lb-tb .icon-btn{width:28px;height:28px;border-radius:7px;} .lb-tb .icon-btn svg{width:15px;height:15px;} .lb-tb .vl-pill{margin-left:4px;}
 .lb-cmp{display:inline-flex;align-items:center;gap:8px;flex:0 0 auto;} .lb-cmp select{max-width:260px;}
 #lbFicha:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(620px,calc(100vw - 20px));max-height:calc(100vh - 24px);overflow-y:auto;margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
 /* el Gantt en Contrato: sin la barra de selección de plan */
