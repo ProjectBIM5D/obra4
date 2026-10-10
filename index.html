@@ -1910,7 +1910,7 @@ html.tb-compacta #laApp .tb-seg .seg-btn[data-lagrupos]{padding:0;width:34px;}
 .lb-tb td,.lb-tb th{white-space:normal;vertical-align:middle;} .lb-tb td{padding:4px 10px;} .lb-tb th{padding:6px 10px;} .lb-tb td.c{white-space:nowrap;} .lb-sub{font-size:11px;color:var(--mut);font-weight:500;line-height:1.3;}
 .lb-tb .lb-sub{display:inline;margin-left:6px;} .lb-tb td:nth-child(5){white-space:nowrap;} .lb-tb .icon-btn{width:28px;height:28px;border-radius:7px;} .lb-tb .icon-btn svg{width:15px;height:15px;} .lb-tb .vl-pill{margin-left:4px;}
 .lb-cmp{display:inline-flex;align-items:center;gap:8px;flex:0 0 auto;} .lb-cmp select{max-width:260px;}
-#lbFicha:not([hidden]),#plzForm:not([hidden]),#lbObs:not([hidden]),#adiForm:not([hidden]),#adiLim:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(620px,calc(100vw - 20px));max-height:calc(100vh - 24px);overflow-y:auto;margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
+#lbFicha:not([hidden]),#plzForm:not([hidden]),#lbObs:not([hidden]),#adiForm:not([hidden]),#adiLim:not([hidden]),#adiXls:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(620px,calc(100vw - 20px));max-height:calc(100vh - 24px);overflow-y:auto;margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
 /* el Gantt en Contrato: sin la barra de selección de plan */
 #plEspacio[data-donde="plan"] #plVerP{display:none;}
 #plFotoDlg:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(560px,calc(100vw - 20px));margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
@@ -7902,6 +7902,21 @@ function lbLeerXML(txt) {
   });
   return tareas;
 }
+function lbCuadroCAO(filas) {   // {contrato:{gg,ut}, adicional:{gg,ut}} como proporciones del costo directo, del cuadro RESUMEN del CAO (cada bloque trae los suyos)
+  const out = {}, cd = {}, gg = {}, ut = {}; let blk = 'contrato';
+  (filas || []).forEach(r => {
+    const t = String((r || []).find(c => typeof c === 'string' && c.trim()) || '').replace(/\s+/g, ' ').trim().toUpperCase();
+    if (/^ADICIONAL\s*N/.test(t)) { blk = 'adicional'; return; }
+    if (/^PRESUPUESTO TOTAL/.test(t)) { blk = 'total'; return; }
+    if (blk === 'total') return;
+    const monto = (r || []).find(x => typeof x === 'number' && Math.abs(x) > 1.5); if (monto == null) return;
+    if (/^COSTO DIRECTO/.test(t) && cd[blk] == null) cd[blk] = monto;
+    else if (/^GASTOS GENERALES/.test(t) && gg[blk] == null) gg[blk] = monto;
+    else if (/^UTILIDAD/.test(t) && ut[blk] == null) ut[blk] = monto;
+  });
+  ['contrato', 'adicional'].forEach(k => { if (cd[k] && gg[k] != null) out[k] = { gg: gg[k] / cd[k], ut: (ut[k] || 0) / cd[k] }; });
+  return out;
+}
 async function lbProcesar(buf, xmlTxt, num) {   // → resultado con errores, avisos, filas y vínculos listos para cargar
   const wb = await xlsxLeer(buf), tareas = lbLeerXML(xmlTxt);
   const R = { errores: [], avisos: [], comps: [], partidas: [], deps: [], hojas: 0 }, falla = (m) => R.errores.push(m), aviso = (m) => R.avisos.push(m);
@@ -7912,6 +7927,8 @@ async function lbProcesar(buf, xmlTxt, num) {   // → resultado con errores, av
   const nres = wb.SheetNames.find(n => /resumen/i.test(n));
   if (nres) { let enAdi = false; filasDe(nres).forEach(r => { const t = lbNorm(r[1]); if (/^adicional/.test(t)) enAdi = true; const v = r.slice(4).find(x => typeof x === 'number'); const p = proys.find(q => t === lbNorm(q.nombre) || (/^puente/.test(t) && t.includes(core(q)))); if (p && v != null) { const k = p.id + (enAdi ? ':adi' : ':con'); if (resumen[k] == null) resumen[k] = v; } }); }
   else aviso('El CAO no tiene hoja RESUMEN: no se comprueban las sumas por puente.');
+  const cuadro = nres ? lbCuadroCAO(filasDe(nres)) : {}; R.cuadro = cuadro;
+  if (nres && !cuadro.contrato) aviso('No encontré el cuadro de gastos generales en el RESUMEN: las partidas quedan sin sus porcentajes propios (el panel los estimará con los del contrato).');
   const hayCostos = tareas.some(t => !t.resumen && t.costo > 0);   // algunos Gantt no traen costos (el N° 0 no los tiene): entonces se valida por nombre, cantidad, orden y sumas del CAO
   if (!hayCostos) aviso('El Gantt no trae costos cargados: las partidas se emparejan y validan por nombre, cantidad y orden, y los montos contra el RESUMEN del CAO.');
   const catalogo = (PL.arbol || []);
@@ -7943,7 +7960,8 @@ async function lbProcesar(buf, xmlTxt, num) {   // → resultado con errores, av
       suma += p.parcial; codTarea[t.uid] = nodo.codigo;
       R.partidas.push({ codigo: nodo.codigo, proyecto_id: proy.id, nivel: nodo.nivel, orden: nodo.orden, nombre: p.nombre, unidad: p.unidad, concepto, es_hito: false,
         metrado_contrato: p.metrado_contrato, metrado_deductivo: p.metrado_deductivo, metrado: p.metrado, precio_unitario: p.precio_unitario, parcial_cd: p.parcial,
-        inicio: t.inicio, fin: t.fin, duracion: t.dur, critica: t.critica, holgura: t.holgura });
+        inicio: t.inicio, fin: t.fin, duracion: t.dur, critica: t.critica, holgura: t.holgura,
+        gg_pct: (cuadro[concepto] || {}).gg ?? null, utilidad_pct: (cuadro[concepto] || {}).ut ?? null });
     });
     const ref = resumen[proy.id + (adi ? ':adi' : ':con')], sumaTodo = P.reduce((s, p) => s + p.parcial, 0);
     if (ref != null && Math.abs(sumaTodo - ref) > 1) falla(`${nombreHoja}: las partidas suman S/ ${sumaTodo.toLocaleString('es-PE', { minimumFractionDigits: 2 })} y el RESUMEN dice S/ ${ref.toLocaleString('es-PE', { minimumFractionDigits: 2 })}.`);
@@ -8012,6 +8030,7 @@ function lbVista(R) {
   $('#lbVista').innerHTML = `<div class="sug-h">Lo que se leyó <span class="n">${R.partidas.length} partidas e hitos · ${R.deps.length} vínculos</span></div>
     <div class="vl-tw"><table class="vl-tb"><thead><tr><th class="l">Puente</th><th>Partidas CAO</th><th>Tareas Gantt</th><th>Con código</th><th>Costo directo S/</th><th>RESUMEN S/</th></tr></thead><tbody>${filas}</tbody></table></div>
     <p class="hint" style="margin:6px 0">Gantt: ${R.tareas} tareas · ${R.inicio ? plFmt(plD(R.inicio)) : '—'} → ${R.plazo ? plFmt(plD(R.plazo)) : '—'}${R.durRaiz ? ' · ' + R.durRaiz + ' días' : ''} · costo directo total S/ ${n(R.totalCD)}</p>`
+    + (R.cuadro && (R.cuadro.contrato || R.cuadro.adicional) ? `<p class="hint" style="margin:0 0 6px">Gastos generales leídos del RESUMEN (propios de cada concepto): ${[R.cuadro.contrato ? 'contrato ' + (R.cuadro.contrato.gg * 100).toFixed(2) + ' %' : '', R.cuadro.adicional ? 'adicional ' + (R.cuadro.adicional.gg * 100).toFixed(2) + ' %' : ''].filter(Boolean).join(' · ')} · utilidad ${((R.cuadro.contrato || R.cuadro.adicional).ut * 100).toFixed(1)} %</p>` : '')
     + lista(R.errores, 'Lo que no cuadra (hay que corregirlo)', 'color:var(--red)') + lista(R.avisos, 'Avisos', 'color:var(--amber)')
     + (R.errores.length ? '<p class="hint" style="color:var(--red)">No se puede cargar mientras haya diferencias entre el CAO y el Gantt.</p>' : '<p class="hint" style="color:var(--green)">✔ Todo cuadra: puedes cargar la línea base.</p>');
   $('#lbCargarBt').disabled = !!R.errores.length || !R.partidas.length;
@@ -8175,7 +8194,7 @@ function lbFichaAbrir(id) {
 // ═══ ADICIONALES Y DEDUCTIVOS: lo que cambió en cada línea base (calculado de las partidas) + el registro legal numerado (tabla prestaciones) ═══
 // Los montos salen de las líneas base APROBADAS: adicional = partidas nuevas con concepto adicional; deductivo = partidas del contrato que bajan o salen.
 // El límite (% de adicionales netos sobre el monto del contrato) es un parámetro editable de la obra.
-const ADI = { lbs: [], pre: [], reg: [], cd0: 0, limite: 15, f: { gg: 0, ut: 0, igv: 0.18 }, plazo: [], cargado: false, sinSql: false };
+const ADI = { lbs: [], pre: [], reg: [], cd0: 0, limite: 15, f: { gg: 0, ut: 0, igv: 0.18 }, plazo: [], cs: { contrato: 0, adicional: 0 }, val: { contrato: 0, adicional: 0 }, cargado: false, sinSql: false };
 const ADI_EST = { solicitada: ['solicitada', 'pr'], aprobada: ['aprobada', 'ok'], aprobada_parcial: ['aprobada parcial', 'pp'], improcedente: ['improcedente', 'no'] };
 const adiN = (v) => Number(v || 0).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const adiN0 = (n) => String(n).padStart(2, '0');
@@ -8186,71 +8205,111 @@ async function adiCargar(forzar) {
   if (!ADI.cargado || forzar) box.innerHTML = '<div class="rg-msg">Leyendo adicionales y deductivos…</div>';
   try {
     const vig = (RES_A.version || {}).id;
-    const [lbs, pre, reg, res, ob, cr, plz] = await Promise.all([
-      get(`/linea_base_versiones?obra_id=eq.${OBRA.id}&select=id,numero,nombre,tipo_cambio,estado,cronograma_id,plazo_fin&order=numero`).catch(() => get(`/linea_base_versiones?obra_id=eq.${OBRA.id}&select=id,numero,nombre,tipo_cambio,cronograma_id,plazo_fin&order=numero`)),
+    const [lbs, pre, reg, res, ob, cr, plz, csp, vej] = await Promise.all([
+      get(`/linea_base_versiones?obra_id=eq.${OBRA.id}&select=id,numero,nombre,tipo_cambio,estado,cronograma_id,plazo_fin,resolucion,fecha_aprobacion&order=numero`).catch(() => get(`/linea_base_versiones?obra_id=eq.${OBRA.id}&select=id,numero,nombre,tipo_cambio,cronograma_id,plazo_fin,resolucion,fecha_aprobacion&order=numero`)),
       get(`/v_lb_prestaciones?obra_id=eq.${OBRA.id}&select=*&order=numero`).catch(() => null),
       get(`/prestaciones?obra_id=eq.${OBRA.id}&select=*&order=tipo,numero`).catch(() => null),
       get(`/v_linea_base_resumen?obra_id=eq.${OBRA.id}&select=version_id,numero,costo_directo`).catch(() => []),
       get(`/obras?id=eq.${OBRA.id}&select=limite_adicionales_pct`).catch(() => []),
       vig ? get(`/cronograma_versiones?id=eq.${vig}&select=gg_pct,utilidad_pct,igv_pct`).catch(() => []) : Promise.resolve([]),
-      get(`/plazo_eventos?obra_id=eq.${OBRA.id}&select=adicional,tipo,numero,estado,grupo,fecha_inicio,fecha_fin`).catch(() => [])]);
+      get(`/plazo_eventos?obra_id=eq.${OBRA.id}&select=adicional,tipo,numero,estado,grupo,fecha_inicio,fecha_fin`).catch(() => []),
+      vig ? getTodo(`/v_curva_s_programada?version_id=eq.${vig}&select=concepto,programado_parcial&order=periodo_orden,concepto,proyecto_id`).catch(() => []) : Promise.resolve([]),
+      getTodo(`/v_ejecutado_mes?${FILTRO_PROY}&select=tipo,estado,monto_subtotal&order=proyecto_id,tipo,mes,estado`).catch(() => [])]);
     ADI.lbs = lbs; ADI.pre = pre || []; ADI.reg = reg || []; ADI.sinSql = pre === null || reg === null;
     const l0 = lbs.find(l => l.numero === 0) || lbs[0], r0 = l0 ? res.find(r => r.version_id === l0.id) : null;
     ADI.cd0 = r0 ? Number(r0.costo_directo) : 0;
     ADI.limite = ob[0] && ob[0].limite_adicionales_pct != null ? Number(ob[0].limite_adicionales_pct) : 15;
     ADI.f = cr[0] ? { gg: Number(cr[0].gg_pct), ut: Number(cr[0].utilidad_pct), igv: Number(cr[0].igv_pct) } : { gg: 0, ut: 0, igv: 0.18 };
-    ADI.plazo = plz; ADI.cargado = true;
+    ADI.plazo = plz; ADI.cs = { contrato: 0, adicional: 0 }; ADI.val = { contrato: 0, adicional: 0 };
+    csp.forEach(r => { ADI.cs[r.concepto === 'adicional' ? 'adicional' : 'contrato'] += Number(r.programado_parcial || 0); });
+    vej.filter(r => r.estado === 'aprobada').forEach(r => { ADI.val[r.tipo === 'adicional' ? 'adicional' : 'contrato'] += Number(r.monto_subtotal || 0); });
+    ADI.cargado = true;
     adiPintar();
   } catch (e) { box.innerHTML = msgCarga('Adicionales y deductivos', e); }
 }
+// El REGISTRO sale de las líneas base: cada LB que trae partidas adicionales o reduce partidas del contrato genera su «Adicional N° k» / «Deductivo vinculado N° k».
+// Los datos legales que no vienen en ningún archivo (resolución, causal, solicitud…) se completan en la tabla `prestaciones`, que solo AGREGA sobre lo derivado.
+// Los gastos generales son los PROPIOS de cada partida (gg_pct): vienen del CAO que ya se sube en «Cargar línea base»; no se sube nada más.
+function adiDerivar() {
+  const porNum = new Map(ADI.lbs.map(l => [l.numero, l])), orden = ADI.pre.slice().sort((a, b) => a.numero - b.numero), der = []; let kA = 0, kD = 0;
+  orden.forEach(p => {
+    const l = porNum.get(p.numero) || {}, ap = !l.estado || l.estado === 'aprobado', base = { lb_numero: p.numero, estado: ap ? 'aprobada' : 'solicitada', resolucion: l.resolucion || null, fecha_resolucion: l.fecha_aprobacion || null, descripcion: l.tipo_cambio || null, completo: p.gg_completo !== false && p.gg_completo != null, lbEstado: l.estado || 'aprobado' };
+    if (p.adicional_partidas > 0) { kA++; der.push({ ...base, tipo: 'adicional', numero: kA, partidas: p.adicional_partidas, cd: Number(p.adicional_cd), gg: Number(p.adicional_gg || 0), ut: Number(p.adicional_ut || 0) }); }
+    if (p.deductivo_partidas > 0) { kD++; der.push({ ...base, tipo: 'deductivo', numero: kD, partidas: p.deductivo_partidas, cd: -Number(p.deductivo_cd), gg: -Number(p.deductivo_gg || 0), ut: -Number(p.deductivo_ut || 0) }); }
+  });
+  // lo legal que el usuario completó se superpone a lo derivado; lo que no tiene línea base todavía (en trámite) queda aparte
+  const filas = der.map(d => { const m = ADI.reg.find(r => r.tipo === d.tipo && r.lb_numero === d.lb_numero);
+    if (!m) return { ...d, id: null };
+    const cd = m.monto_cd != null ? Number(m.monto_cd) : d.cd, k = d.cd ? cd / d.cd : 1;
+    return { ...d, id: m.id, numero: m.numero, estado: m.estado, descripcion: m.descripcion || d.descripcion, causal: m.causal, base_legal: m.base_legal, resolucion: m.resolucion || d.resolucion, fecha_resolucion: m.fecha_resolucion || d.fecha_resolucion,
+      fecha_solicitud: m.fecha_solicitud, notas: m.notas, cd, gg: d.gg * k, ut: d.ut * k, digitado: m.monto_cd != null }; });
+  ADI.reg.filter(r => !der.some(d => d.tipo === r.tipo && d.lb_numero === r.lb_numero)).forEach(r => filas.push({ tipo: r.tipo, numero: r.numero, lb_numero: r.lb_numero, estado: r.estado, id: r.id, descripcion: r.descripcion, causal: r.causal, base_legal: r.base_legal,
+    resolucion: r.resolucion, fecha_resolucion: r.fecha_resolucion, fecha_solicitud: r.fecha_solicitud, notas: r.notas, cd: r.monto_cd != null ? Number(r.monto_cd) : null, gg: null, ut: null, completo: false, digitado: true, suelta: true }));
+  return filas;
+}
 function adiPintar() {
-  const box = $('#adiPanel'), adm = !!AUTH.admin, f2 = (s) => s ? plFmt(plD(s)) : '—';
-  const aprob = (l) => !l.estado || l.estado === 'aprobado', porLB = new Map(ADI.pre.map(p => [p.numero, p]));
-  const lbOk = ADI.lbs.filter(aprob).map(l => porLB.get(l.numero)).filter(Boolean);
-  const adic = lbOk.reduce((s, p) => s + Number(p.adicional_cd), 0), dedu = -lbOk.reduce((s, p) => s + Number(p.deductivo_cd), 0), mayo = lbOk.reduce((s, p) => s + Number(p.mayores_cd), 0);
-  const neto = adic - dedu, pct = ADI.cd0 ? neto / ADI.cd0 * 100 : 0, fac = (1 + ADI.f.gg + ADI.f.ut) * (1 + ADI.f.igv), uso = ADI.limite ? Math.min(100, Math.max(0, pct / ADI.limite * 100)) : 0;
-  const nAd = lbOk.reduce((s, p) => s + p.adicional_partidas, 0), nDe = lbOk.reduce((s, p) => s + p.deductivo_partidas, 0);
+  const box = $('#adiPanel'), adm = !!AUTH.admin, f2 = (s) => s ? plFmt(plD(s)) : '—', aprob = (l) => !l.estado || l.estado === 'aprobado', porLB = new Map(ADI.pre.map(p => [p.numero, p]));
+  const filas = adiDerivar(), kc = 1 + ADI.f.gg + ADI.f.ut, igv = ADI.f.igv;
+  // importes de cada registro: costo directo, GG propios, utilidad, sub total, IGV y total (si faltan los GG de las partidas, se estima con el contrato y se avisa)
+  const monto = (r) => { if (r.cd == null) return null; const real = r.completo && r.gg != null, gg = real ? r.gg : r.cd * ADI.f.gg, ut = real ? r.ut : r.cd * ADI.f.ut, sub = r.cd + gg + ut; return { cd: r.cd, gg, ut, sub, igv: sub * igv, total: sub * (1 + igv), real }; };
+  const cuentan = filas.filter(r => adiCuenta(r) && r.cd != null), suma = (tp, k) => cuentan.filter(r => r.tipo === tp).reduce((s, r) => s + monto(r)[k], 0);
+  const adic = suma('adicional', 'cd'), dedu = suma('deductivo', 'cd'), neto = adic - dedu, pct = ADI.cd0 ? neto / ADI.cd0 * 100 : 0, uso = ADI.limite ? Math.min(100, Math.max(0, pct / ADI.limite * 100)) : 0;
+  const nAd = cuentan.filter(r => r.tipo === 'adicional').reduce((s, r) => s + (r.partidas || 0), 0), nDe = cuentan.filter(r => r.tipo === 'deductivo').reduce((s, r) => s + (r.partidas || 0), 0);
+  const adSub = suma('adicional', 'sub'), adTot = suma('adicional', 'total'), deTot = suma('deductivo', 'total'), estimado = cuentan.some(r => !monto(r).real);
+  const lbOk = ADI.lbs.filter(aprob).map(l => porLB.get(l.numero)).filter(Boolean), mayo = lbOk.reduce((s, p) => s + Number(p.mayores_cd), 0);
   const lim = adm ? ` <button type="button" class="icon-btn" data-adi-limite title="Cambiar el límite de adicionales (% del monto del contrato)" aria-label="Cambiar el límite" style="width:22px;height:22px;vertical-align:middle"><svg viewBox="0 0 24 24" style="width:12px;height:12px"><path d="M4 20h4L19 9l-4-4L4 16v4Z"/></svg></button>` : '';
   const kpis = `<div class="vl-kp">
     <div class="vl-k"><small>Costo directo del contrato</small><b>S/ ${adiN(ADI.cd0)}</b><em>LB0 · inicio de contrato</em></div>
-    <div class="vl-k"><small>Adicionales</small><b>+ S/ ${adiN(adic)}</b><em>${nAd} partida${nAd === 1 ? '' : 's'} · con GG, utilidad e IGV S/ ${adiN(adic * fac)}</em></div>
-    <div class="vl-k"><small>Deductivos vinculados</small><b>− S/ ${adiN(dedu)}</b><em>${nDe} partida${nDe === 1 ? '' : 's'} · con GG, utilidad e IGV S/ ${adiN(dedu * fac)}</em></div>
+    <div class="vl-k"><small>Adicionales</small><b>+ S/ ${adiN(adic)}</b><em>${nAd} partida${nAd === 1 ? '' : 's'} · con sus GG propios, utilidad e IGV S/ ${adiN(adTot)}${estimado ? ' (estimado)' : ''}</em></div>
+    <div class="vl-k"><small>Deductivos vinculados</small><b>− S/ ${adiN(dedu)}</b><em>${nDe} partida${nDe === 1 ? '' : 's'} · con GG, utilidad e IGV S/ ${adiN(deTot)}</em></div>
     <div class="vl-k"><small>Adicionales netos</small><b>${adiN(pct)} %</b><em>S/ ${adiN(neto)} · límite ${adiN(ADI.limite)} %${lim}</em><div class="adi-bar" title="${adiN(uso)} % del límite"><i style="width:${uso.toFixed(1)}%;background:${uso >= 90 ? '#dc2626' : uso >= 60 ? '#f59e0b' : '#10b981'}"></i></div></div></div>`;
-  // lo que cambió en cada línea base
+  const aviso = pct > ADI.limite ? `<p class="plz-nota al">⚠ Los adicionales netos (${adiN(pct)} %) superan el límite de ${adiN(ADI.limite)} %: revisa el trámite que corresponde.</p>` : (uso >= 80 ? `<p class="plz-nota al">⚠ Ya se usó el ${adiN(uso)} % del límite de adicionales.</p>` : '');
+  // conciliación: del costo directo de las líneas base a lo que programa la Curva S y a lo valorizado
+  const cdCon = ADI.cd0 - dedu + mayo, tot = (v) => adiN(v), pc = (a, b) => b ? adiN(a / b * 100) + ' %' : '—', cs = ADI.cs, va = ADI.val, hayCs = cs.contrato > 0 || cs.adicional > 0;
+  const dif = (a, b) => { const d = a - b; return Math.abs(d) < 0.5 ? '<span style="color:var(--green)">0.00 ✔</span>' : `<b style="color:#b45309">${d > 0 ? '+' : '−'} ${adiN(Math.abs(d))}</b>`; };
+  const conc = `<div class="vl-card"><div class="lb-cab"><div><h3 style="margin:0 0 3px">Relación con la Curva S y la valorización</h3><p class="hint" style="margin:0">La Curva S programa el <b>contrato</b> ya con los deductivos vinculados restados y los <b>adicionales</b> como una serie aparte. Cada concepto lleva sus gastos generales propios (los de sus partidas, que vienen del CAO que ya subiste): contrato × ${kc.toFixed(4)}; el adicional, el suyo.</p></div></div>
+      <div class="vl-tw"><table class="vl-tb lb-tb"><thead><tr><th class="l">Concepto</th><th>Costo directo S/</th><th>Con GG y utilidad S/</th><th>En la Curva S S/</th><th>Diferencia</th><th>Valorizado aprobado S/</th><th>Avance</th></tr></thead><tbody>
+        <tr><td class="l">Contrato original <span class="lb-sub">LB0</span></td><td>${tot(ADI.cd0)}</td><td>${tot(ADI.cd0 * kc)}</td><td>—</td><td></td><td></td><td></td></tr>
+        <tr><td class="l">− Deductivos vinculados y ajustes <span class="lb-sub">líneas base aprobadas</span></td><td>${dedu || mayo ? (mayo - dedu < 0 ? '− ' : '+ ') + tot(Math.abs(mayo - dedu)) : '—'}</td><td>${dedu || mayo ? (mayo - dedu < 0 ? '− ' : '+ ') + tot(Math.abs(mayo - dedu) * kc) : '—'}</td><td>—</td><td></td><td></td><td></td></tr>
+        <tr><td class="l"><b>Contrato vigente</b></td><td><b>${tot(cdCon)}</b></td><td>${tot(cdCon * kc)}</td><td>${hayCs ? '<b>' + tot(cs.contrato) + '</b>' : '—'}</td><td>${hayCs ? dif(cs.contrato, cdCon * kc) : ''}</td><td>${tot(va.contrato)}</td><td>${pc(va.contrato, cs.contrato)}</td></tr>
+        <tr><td class="l"><b>Adicionales</b> <span class="lb-sub">serie aparte en la Curva S</span></td><td><b>${tot(adic)}</b></td><td>${tot(adSub)}${estimado ? ' <span class="lb-sub">estimado</span>' : ''}</td><td>${hayCs ? '<b>' + tot(cs.adicional) + '</b>' : '—'}</td><td>${hayCs ? dif(cs.adicional, adSub) : ''}</td><td>${tot(va.adicional)}</td><td>${pc(va.adicional, cs.adicional)}</td></tr>
+        <tr class="tot"><td class="l">Total</td><td>${tot(cdCon + adic)}</td><td>${tot(cdCon * kc + adSub)}</td><td>${hayCs ? tot(cs.contrato + cs.adicional) : '—'}</td><td>${hayCs ? dif(cs.contrato + cs.adicional, cdCon * kc + adSub) : ''}</td><td>${tot(va.contrato + va.adicional)}</td><td>${pc(va.contrato + va.adicional, cs.contrato + cs.adicional)}</td></tr>
+      </tbody></table></div>
+      ${estimado ? '<p class="plz-nota al">⚠ A alguna línea base le faltan los gastos generales propios de sus partidas: se estimó con los del contrato. Vuelve a cargar su CAO en «Contrato y líneas base» (o ejecuta el SQL de relleno) y quedará exacto.</p>' : ''}
+      ${va.adicional === 0 && adic ? '<p class="plz-nota">Aún no hay valorizado aprobado de adicionales: la valorización del adicional empieza cuando se aprueba su resolución y se valoriza el avance de sus partidas.</p>' : ''}</div>`;
+  // qué cambió en cada línea base
   const filasLB = ADI.lbs.filter(l => l.numero > 0).map(l => {
-    const p = porLB.get(l.numero), neto = p ? Number(p.adicional_cd) + Number(p.deductivo_cd) + Number(p.mayores_cd) : 0, nada = !p || (!p.adicional_partidas && !p.deductivo_partidas && !p.mayores_partidas);
-    const regs = ADI.reg.filter(r => r.lb_numero === l.numero);
+    const p = porLB.get(l.numero), nada = !p || (!p.adicional_partidas && !p.deductivo_partidas && !p.mayores_partidas), neto2 = p ? Number(p.adicional_cd) + Number(p.deductivo_cd) + Number(p.mayores_cd) : 0;
+    const regs = filas.filter(r => r.lb_numero === l.numero);
     return `<tr><td class="l"><b>LB${l.numero}</b>${l.cronograma_id && l.cronograma_id === (RES_A.version || {}).id ? ' <span class="vl-pill ok">vigente</span>' : ''}${l.estado === 'observado' ? ' <span class="vl-pill no">observado</span>' : l.estado === 'presentado' ? ' <span class="vl-pill pr">en revisión</span>' : ''}<span class="lb-sub">${esc(l.tipo_cambio || l.nombre || '')}</span></td>
-      <td>${nada ? '—' : p.adicional_partidas ? `<b>+ ${adiN(p.adicional_cd)}</b><span class="lb-sub">${p.adicional_partidas} partidas</span>` : '—'}</td>
-      <td>${nada ? '—' : p.deductivo_partidas ? `<b>− ${adiN(-p.deductivo_cd)}</b><span class="lb-sub">${p.deductivo_partidas} partidas</span>` : '—'}</td>
-      <td>${nada ? '—' : p.mayores_partidas ? `<b>+ ${adiN(p.mayores_cd)}</b><span class="lb-sub">${p.mayores_partidas} partidas</span>` : '—'}</td>
-      <td><b>${nada ? '—' : (neto >= 0 ? '+ ' : '− ') + adiN(Math.abs(neto))}</b></td>
-      <td class="l">${regs.length ? regs.map(r => `${r.tipo === 'adicional' ? 'Adicional' : 'Deductivo'} N° ${adiN0(r.numero)}`).join(', ') : (nada ? '' : '<span class="lb-sub">sin registrar</span>')}</td>
-      <td class="c">${adm && !nada ? `<button type="button" class="icon-btn" data-adi-nuevo-lb="${l.numero}" title="Registrar el adicional o deductivo de esta línea base" aria-label="Registrar"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>` : ''}</td></tr>`;
+      <td>${nada || !p.adicional_partidas ? '—' : `<b>+ ${adiN(p.adicional_cd)}</b><span class="lb-sub">${p.adicional_partidas} partidas</span>`}</td>
+      <td>${nada || !p.deductivo_partidas ? '—' : `<b>− ${adiN(-p.deductivo_cd)}</b><span class="lb-sub">${p.deductivo_partidas} partidas</span>`}</td>
+      <td>${nada || !p.mayores_partidas ? '—' : `<b>+ ${adiN(p.mayores_cd)}</b><span class="lb-sub">${p.mayores_partidas} partidas</span>`}</td>
+      <td><b>${nada ? '—' : (neto2 >= 0 ? '+ ' : '− ') + adiN(Math.abs(neto2))}</b></td>
+      <td class="l">${regs.map(r => `${r.tipo === 'adicional' ? 'Adicional' : 'Deductivo'} N° ${adiN0(r.numero)}`).join(', ')}</td></tr>`;
   }).join('');
-  // registro numerado
-  const montoDe = (r) => { if (r.monto_cd != null) return { v: Number(r.monto_cd), auto: false }; const p = r.lb_numero != null ? porLB.get(r.lb_numero) : null; if (!p) return null; return { v: r.tipo === 'adicional' ? Number(p.adicional_cd) : -Number(p.deductivo_cd), auto: true }; };
+  // registro (derivado) y datos legales
   const diasPlazo = (r) => { if (r.tipo !== 'adicional') return null; const rx = new RegExp('adicional\\D{0,12}0*' + r.numero + '\\b', 'i'), g = new Map();
     ADI.plazo.filter(e => e.adicional && rx.test(e.adicional) && (e.estado === 'aprobada' || e.estado === 'aprobada_parcial' || e.estado === 'solicitada')).forEach(e => { const k = e.grupo || e.fecha_inicio + e.fecha_fin, d = plD(e.fecha_fin) - plD(e.fecha_inicio) + 1; g.set(k, Math.max(g.get(k) || 0, d)); });
     const v = [...g.values()]; return v.length ? { n: v.length, d: v.reduce((s, x) => s + x, 0) } : null; };
-  const orden = ADI.reg.slice().sort((a, b) => a.tipo === b.tipo ? b.numero - a.numero : (a.tipo === 'adicional' ? -1 : 1));
+  const orden = filas.slice().sort((a, b) => a.tipo === b.tipo ? b.numero - a.numero : (a.tipo === 'adicional' ? -1 : 1));
   const filasReg = orden.map(r => {
-    const [etq, cls] = ADI_EST[r.estado] || [r.estado, 'pr'], mo = montoDe(r), dp = diasPlazo(r);
-    return `<tr${r.estado === 'improcedente' ? ' style="opacity:.75"' : ''}><td class="l"><b style="color:${r.tipo === 'adicional' ? '#f26a1b' : '#0ea5a4'}">${r.tipo === 'adicional' ? 'Adicional' : 'Deductivo vinculado'} N° ${adiN0(r.numero)}</b>${[r.descripcion, r.causal, r.base_legal].filter(Boolean).map(esc).join(' · ') ? `<span class="lb-sub">${[r.descripcion, r.causal, r.base_legal].filter(Boolean).map(esc).join(' · ')}</span>` : ''}</td>
+    const [etq, cls] = ADI_EST[r.estado] || [r.estado, 'pr'], mo = monto(r), dp = diasPlazo(r), signo = r.tipo === 'adicional' ? '+' : '−', pctGG = mo && mo.cd ? mo.gg / mo.cd * 100 : null;
+    const sub = [r.descripcion, r.causal, r.base_legal].filter(Boolean).map(esc).join(' · ');
+    return `<tr${r.estado === 'improcedente' ? ' style="opacity:.75"' : ''}><td class="l"><b style="color:${r.tipo === 'adicional' ? '#f26a1b' : '#0ea5a4'}">${r.tipo === 'adicional' ? 'Adicional' : 'Deductivo vinculado'} N° ${adiN0(r.numero)}</b>${r.suelta ? ' <span class="vl-pill pr">en trámite</span>' : ''}${sub ? `<span class="lb-sub">${sub}</span>` : ''}</td>
       <td><span class="vl-pill ${cls}">${etq}</span></td><td class="l">${esc(r.resolucion || '—')}${r.fecha_resolucion ? `<span class="lb-sub">${f2(r.fecha_resolucion)}</span>` : ''}</td>
       <td>${r.lb_numero == null ? '—' : 'LB' + r.lb_numero}</td>
-      <td>${mo ? `<b>${r.tipo === 'adicional' ? '+' : '−'} ${adiN(mo.v)}</b><span class="lb-sub">${mo.auto ? 'de la línea base' : 'digitado'} · con GG, util. e IGV ${adiN(mo.v * fac)}</span>` : '—'}</td>
+      <td>${mo ? `<b>${signo} ${adiN(mo.total)}</b><span class="lb-sub">CD ${adiN(mo.cd)} · GG ${adiN(mo.gg)}${pctGG != null ? ' (' + adiN(pctGG) + ' %)' : ''} · Util. ${adiN(mo.ut)} · IGV ${adiN(mo.igv)}${mo.real ? '' : ' · estimado'}</span>` : '—'}</td>
       <td class="l">${dp ? `${dp.n} ampliación${dp.n === 1 ? '' : 'es'} de plazo · <b>+${dp.d} d</b>` : r.tipo === 'adicional' ? '<span class="lb-sub">sin ampliación ligada</span>' : ''}</td>
-      <td class="c">${adm ? `<button type="button" class="icon-btn" data-adi-edit="${r.id}" title="Editar" aria-label="Editar"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4Z"/></svg></button><button type="button" class="icon-btn" data-adi-del="${r.id}" title="Eliminar" aria-label="Eliminar"><svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button>` : ''}</td></tr>`;
+      <td class="c">${adm ? `<button type="button" class="icon-btn" data-adi-edit="${r.id || ''}" data-adi-tipo="${r.tipo}" data-adi-lb="${r.lb_numero == null ? '' : r.lb_numero}" data-adi-num="${r.numero}" title="Completar los datos legales (resolución, causal, estado…)" aria-label="Editar"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4Z"/></svg></button>${r.id ? `<button type="button" class="icon-btn" data-adi-del="${r.id}" title="Quitar los datos legales que completaste (el registro sigue saliendo de la línea base)" aria-label="Quitar"><svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button>` : ''}` : ''}</td></tr>`;
   }).join('');
-  const aviso = pct > ADI.limite ? `<p class="plz-nota al">⚠ Los adicionales netos (${adiN(pct)} %) superan el límite de ${adiN(ADI.limite)} %: revisa el trámite que corresponde.</p>` : (uso >= 80 ? `<p class="plz-nota al">⚠ Ya se usó el ${adiN(uso)} % del límite de adicionales.</p>` : '');
-  box.innerHTML = kpis + aviso
-    + `<div class="vl-card"><div class="lb-cab"><div><h3 style="margin:0 0 3px">Qué cambió en cada línea base</h3><p class="hint" style="margin:0">Calculado de las partidas, sin digitar nada: <b>adicional</b> = partidas nuevas con concepto adicional; <b>deductivo</b> = partidas del contrato que bajan o salen; <b>mayores</b> = partidas del contrato que suben. Los montos son costo directo (S/). Solo suman las líneas base aprobadas.</p></div></div>
-      <div class="vl-tw"><table class="vl-tb lb-tb"><thead><tr><th class="l">Línea base</th><th>Adicional S/</th><th>Deductivo S/</th><th>Mayores S/</th><th>Neto S/</th><th class="l">Registro</th><th></th></tr></thead><tbody>${filasLB || '<tr><td colspan="7" class="l">Todavía no hay una segunda línea base para comparar.</td></tr>'}</tbody></table></div></div>`
-    + `<div class="vl-card"><div class="lb-cab"><div><h3 style="margin:0 0 3px">Registro de adicionales y deductivos</h3><p class="hint" style="margin:0">Trazabilidad legal numerada (Adicional N° 01, Deductivo vinculado N° 01…) con su estado, resolución y la línea base que lo incorpora. El monto se toma de la línea base; solo se digita si la resolución difiere. Si en el registro de plazo escribes «Adicional N° 03» en la ampliación, aquí aparece ligada.</p></div>
-      ${adm ? '<button type="button" class="btn-sec pri" data-adi-nuevo title="Registrar un adicional o un deductivo vinculado">＋ Nuevo registro</button>' : ''}</div>
-      ${ADI.sinSql ? '<p class="plz-nota al">Falta correr <code>adicionales_deductivos.sql</code> en la base para ver el registro y registrar resoluciones.</p>' : ''}
-      <div class="vl-tw"><table class="vl-tb lb-tb plz-reg"><thead><tr><th class="l">Registro</th><th>Estado</th><th class="l">Resolución</th><th>LB</th><th class="l">Monto (costo directo)</th><th class="l">Plazo</th><th></th></tr></thead><tbody>${filasReg || '<tr><td colspan="7" class="l">Todavía no hay registros: usa «＋» en la línea base que trajo el adicional.</td></tr>'}</tbody></table></div></div>`;
+  box.innerHTML = kpis + aviso + conc
+    + `<div class="vl-card"><div class="lb-cab"><div><h3 style="margin:0 0 3px">Registro de adicionales y deductivos</h3><p class="hint" style="margin:0">Sale solo de las líneas base: cada una que trae partidas adicionales o reduce partidas del contrato genera su «Adicional N° 01» / «Deductivo vinculado N° 01», con el estado y la resolución de la ficha de esa línea base y los gastos generales propios de sus partidas. Con el lápiz completas lo que ningún archivo trae (causal, solicitud) o corriges el N°. Si en una ampliación de plazo eliges el adicional, aquí aparece ligada.</p></div>
+      ${adm ? '<button type="button" class="btn-sec pri" data-adi-nuevo title="Solo para un adicional en trámite que todavía no está en ninguna línea base">＋ En trámite</button>' : ''}</div>
+      ${ADI.sinSql ? '<p class="plz-nota al">Falta correr <code>adicionales_deductivos.sql</code> y <code>adicionales_automatico.sql</code> en la base.</p>' : ''}
+      <div class="vl-tw"><table class="vl-tb lb-tb plz-reg"><thead><tr><th class="l">Registro</th><th>Estado</th><th class="l">Resolución</th><th>LB</th><th class="l">Presupuesto (con IGV)</th><th class="l">Plazo</th><th></th></tr></thead><tbody>${filasReg || '<tr><td colspan="7" class="l">Todavía no hay adicionales ni deductivos en las líneas base cargadas.</td></tr>'}</tbody></table></div></div>`
+    + `<div class="vl-card"><div class="lb-cab"><div><h3 style="margin:0 0 3px">Qué cambió en cada línea base</h3><p class="hint" style="margin:0">De dónde salen los registros, calculado de las partidas: <b>adicional</b> = partidas nuevas con concepto adicional; <b>deductivo</b> = partidas del contrato que bajan o salen; <b>mayores</b> = partidas del contrato que suben. Montos de costo directo (S/). Solo suman las líneas base aprobadas.</p></div></div>
+      <div class="vl-tw"><table class="vl-tb lb-tb"><thead><tr><th class="l">Línea base</th><th>Adicional S/</th><th>Deductivo S/</th><th>Mayores S/</th><th>Neto S/</th><th class="l">Registro generado</th></tr></thead><tbody>${filasLB || '<tr><td colspan="6" class="l">Todavía no hay una segunda línea base para comparar.</td></tr>'}</tbody></table></div></div>`;
 }
 function adiFormAbrir(id, pre) {
   const e = id ? ADI.reg.find(x => x.id === id) : null; if (id && !e) return;
@@ -8258,9 +8317,9 @@ function adiFormAbrir(id, pre) {
   if (!m) { m = document.createElement('form'); m.id = 'adiForm'; m.className = 'pform la-form'; m.hidden = true; document.body.appendChild(m); }
   const v = (k, d) => esc(e && e[k] != null ? e[k] : (pre && pre[k] != null ? pre[k] : (d || ''))), op = (val, txt, sel) => `<option value="${val}"${sel ? ' selected' : ''}>${txt}</option>`, q = (s) => m.querySelector(s);
   const tipo0 = e ? e.tipo : (pre && pre.tipo) || 'adicional', est0 = e ? e.estado : 'aprobada', lb0 = e ? e.lb_numero : (pre ? pre.lb_numero : null);
-  m.innerHTML = `<h3 style="margin:0 0 4px;font-size:14px">${e ? 'Editar ' + (e.tipo === 'adicional' ? 'adicional' : 'deductivo vinculado') + ' N° ' + adiN0(e.numero) : 'Nuevo registro'}</h3><p class="hint" style="margin:0 0 10px">El monto sale de la línea base elegida; escríbelo solo si la resolución aprobó otro.</p>
+  m.innerHTML = `<h3 style="margin:0 0 4px;font-size:14px">${e ? 'Datos legales · ' + (e.tipo === 'adicional' ? 'Adicional' : 'Deductivo vinculado') + ' N° ' + adiN0(e.numero) : pre && pre.numero ? 'Datos legales · ' + (tipo0 === 'adicional' ? 'Adicional' : 'Deductivo vinculado') + ' N° ' + adiN0(pre.numero) : 'Adicional en trámite'}</h3><p class="hint" style="margin:0 0 10px">${pre && pre.lb_numero != null ? 'El registro y su monto ya salen de la línea base; aquí solo completas lo que ningún archivo trae.' : 'Para un adicional que todavía no está en ninguna línea base. Cuando llegue en un CAO aprobado, este registro se une solo con él.'}</p>
     <div class="row3"><div class="field"><label for="adTipo">Tipo</label><select id="adTipo">${op('adicional', 'Adicional', tipo0 === 'adicional')}${op('deductivo', 'Deductivo vinculado', tipo0 === 'deductivo')}</select></div>
-      <div class="field"><label for="adNum">N°</label><input id="adNum" type="number" min="1" max="99" value="${e ? e.numero : ''}" placeholder="automático"></div>
+      <div class="field"><label for="adNum">N°</label><input id="adNum" type="number" min="1" max="99" value="${e ? e.numero : (pre && pre.numero != null ? pre.numero : '')}" placeholder="automático"></div>
       <div class="field"><label for="adEst">Estado</label><select id="adEst">${[['solicitada', 'Solicitada'], ['aprobada', 'Aprobada'], ['aprobada_parcial', 'Aprobada parcial'], ['improcedente', 'Improcedente']].map(([k, t]) => op(k, t, est0 === k)).join('')}</select></div></div>
     <div class="field"><label for="adDesc">Descripción</label><input id="adDesc" type="text" maxlength="160" value="${v('descripcion')}" placeholder="Ej. Prestación adicional de obra N° 01: defensa ribereña"></div>
     <div class="row2"><div class="field"><label for="adLb">Línea base que lo incorpora</label><select id="adLb">${op('', 'Ninguna todavía', lb0 == null)}${ADI.lbs.filter(l => l.numero > 0).map(l => op(l.numero, 'LB' + l.numero + (l.tipo_cambio ? ' · ' + esc(l.tipo_cambio) : ''), lb0 === l.numero)).join('')}</select></div>
@@ -8303,7 +8362,11 @@ document.addEventListener('click', async (e) => {
   if (e.target.closest('[data-adi-nuevo]')) { adiFormAbrir(null, null); return; }
   const nl = e.target.closest('[data-adi-nuevo-lb]'); if (nl) { const n = +nl.dataset.adiNuevoLb, p = ADI.pre.find(x => x.numero === n), l = ADI.lbs.find(x => x.numero === n);
     adiFormAbrir(null, { tipo: p && p.adicional_partidas ? 'adicional' : 'deductivo', lb_numero: n, descripcion: l && l.tipo_cambio ? l.tipo_cambio : '' }); return; }
-  const ed = e.target.closest('[data-adi-edit]'); if (ed) { adiFormAbrir(ed.dataset.adiEdit, null); return; }
+  const ed = e.target.closest('[data-adi-edit]'); if (ed) {
+    if (ed.dataset.adiEdit) { adiFormAbrir(ed.dataset.adiEdit, null); return; }
+    const d = adiDerivar().find(x => x.tipo === ed.dataset.adiTipo && String(x.lb_numero) === ed.dataset.adiLb);
+    adiFormAbrir(null, d ? { tipo: d.tipo, lb_numero: d.lb_numero, numero: d.numero, descripcion: d.descripcion, resolucion: d.resolucion, fecha_resolucion: d.fecha_resolucion } : { tipo: ed.dataset.adiTipo, lb_numero: +ed.dataset.adiLb || null, numero: +ed.dataset.adiNum });
+    return; }
   if (e.target.closest('[data-adi-limite]')) { adiLimiteAbrir(); return; }
   const de = e.target.closest('[data-adi-del]'); if (!de) return;
   const r = ADI.reg.find(x => x.id === de.dataset.adiDel); if (!r) return;
@@ -8363,6 +8426,9 @@ async function plzCargar(forzar) {
       LBP.cargado ? Promise.resolve(LBP.vers) : get(`/linea_base_versiones?obra_id=eq.${OBRA.id}&select=id,numero,nombre,tipo_cambio,resolucion,plazo_fin,cronograma_id,estado&order=numero`).catch(() => get(`/linea_base_versiones?obra_id=eq.${OBRA.id}&select=id,numero,nombre,tipo_cambio,resolucion,plazo_fin,cronograma_id&order=numero`)).catch(() => [])]);
     PLZ.ev = ev; PLZ.comp = comp; PLZ.lbs = lbs.filter(l => (l.estado || 'aprobado') === 'aprobado'); PLZ.cargado = true; PLZ.gestion = ev.length ? 'numero' in ev[0] : true;
     plzPintar();
+    PLZ.adics = PLZ.adics || [];
+    Promise.all([get(`/v_lb_prestaciones?obra_id=eq.${OBRA.id}&select=numero,adicional_partidas&order=numero`), get(`/prestaciones?obra_id=eq.${OBRA.id}&tipo=eq.adicional&select=numero&order=numero`)])
+      .then(([vp, pg]) => { const n = new Set(); let k = 0; vp.forEach(p => { if (p.adicional_partidas > 0) n.add(++k); }); pg.forEach(p => n.add(p.numero)); PLZ.adics = [...n].sort((a, b) => a - b); }).catch(() => {});
   } catch (e) { box.innerHTML = msgCarga('Plazo y ampliaciones', e); }
 }
 // Plazo CONTRACTUAL (suspensión, ampliación, adicional) y fin PROYECTADO de cada frente (más los desplazamientos que usan su holgura y no mueven el contrato).
@@ -8591,7 +8657,7 @@ function plzFormAbrir(key) {
       <div class="field"><label for="pzNum">N°</label><input id="pzNum" type="number" min="1" max="99" inputmode="numeric" value="${e && e.numero != null ? e.numero : ''}" placeholder="automático"></div>
       <div class="field"><label for="pzEst">Estado</label><select id="pzEst">${estados.map(([k, t]) => op(k, t, (e ? e.estado : 'aprobada') === k)).join('')}</select></div></div>
     <div class="row2"><div class="field"><label for="pzDesc">Descripción</label><input id="pzDesc" type="text" maxlength="140" value="${v('descripcion')}" placeholder="Ej. Mayores metrados del adicional"></div>
-      <div class="field"><label for="pzAdic">Adicional o referencia</label><input id="pzAdic" type="text" maxlength="100" value="${v('adicional')}" placeholder="Ej. Adicional N° 03"></div></div>
+      <div class="field"><label for="pzAdic">Adicional o referencia</label><input id="pzAdic" type="text" maxlength="100" list="pzAdicList" autocomplete="off" value="${v('adicional')}" placeholder="Elige o escribe: Adicional N° 01"><datalist id="pzAdicList">${(PLZ.adics || []).map(n => `<option value="Adicional N° ${adiN0(n)}"></option>`).join('')}</datalist></div></div>
     <div id="pzBDias"><div class="field"><label>Días por frente <span class="hint" style="font-weight:400">(cada frente tiene sus propios días)</span></label>
       <div class="vl-tw"><table class="vl-tb lb-tb pz-dt" id="pzTbl"><thead><tr><th></th><th class="l">Frente</th><th>Fin actual</th><th>Solicitados</th><th>Aprobados</th><th>Nuevo fin</th></tr></thead><tbody>${filasHtml}</tbody></table></div>
       <div class="pz-calc" style="margin-top:6px"><input id="pzMismos" type="number" min="1" max="999" inputmode="numeric" placeholder="días" style="max-width:90px"><button type="button" class="btn-sec" id="pzAplicar" title="Pone esos días como solicitados en los frentes marcados (o en todos si no hay ninguno)">Mismos días a los marcados</button></div></div></div>
