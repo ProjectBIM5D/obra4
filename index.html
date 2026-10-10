@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
 <!-- si se añade a la pantalla de inicio (tablet/celular) se abre sin la barra del navegador -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -523,7 +523,7 @@ textarea{resize:vertical;min-height:70px;font-family:inherit;}
 .lt-edit:active{filter:brightness(.92);} .lt-edit{touch-action:manipulation;-webkit-tap-highlight-color:transparent;min-height:42px;}
 /* formularios del Look Ahead: ventana flotante */
 #laFondo{position:fixed;inset:0;z-index:119;background:rgba(2,6,23,.55);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);}
-#laForm:not([hidden]),#laNuevoBox:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(600px,calc(100vw - 20px));max-height:calc(100vh - 24px);overflow-y:auto;margin:0;
+#laForm:not([hidden]),#laNuevoBox:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(600px,calc(100vw - 20px));max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;margin:0;
   border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
 html.la-modal{overflow:hidden;}
 
@@ -1038,7 +1038,7 @@ html.cel .pt-sem{padding:6px 10px;}
 @media (orientation:landscape){
   html.cel #main{padding:8px 12px 16px;}
   html.cel .topbar{margin-bottom:6px;} html.cel .sub{display:none;}
-  html.cel .la-wrap{max-height:calc(100vh - 24px);}
+  html.cel .la-wrap{max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);}
   html.cel .pt-semanas{margin-bottom:8px;} html.cel .pt-kpis{margin-bottom:8px;}
   html.cel .pane[data-pane="lookahead"] :is(.btn-sec,.btn),html.cel .pane[data-pane="pts"] :is(.btn-sec,.btn),html.cel .pane[data-pane="ppc"] :is(.btn-sec,.btn){padding:4px 10px;font-size:11px;}
   html.cel .pane :is(.icon-btn){width:30px;height:30px;} html.cel #menuBtn{width:30px;height:30px;}
@@ -1825,7 +1825,7 @@ h1,h3,.card .value,.hhr-pie b{letter-spacing:-.2px;}
 #nav .nav-tag{font-size:0 !important;width:6px;height:6px;padding:0 !important;border:0 !important;border-radius:50%;background:rgba(255,255,255,.35);margin-left:auto;flex:0 0 6px;opacity:1;}
 /* Look Ahead por actividad: ventana «Plan master» (sugeridas y brechas) y contador del botón */
 .tb-num{display:inline-block;min-width:18px;height:18px;line-height:18px;padding:0 5px;margin-left:6px;border-radius:9px;background:#f26a1b;color:#fff;font-size:11px;font-weight:800;text-align:center;vertical-align:1px;}
-#laSug:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(820px,calc(100vw - 20px));max-height:calc(100vh - 24px);overflow-y:auto;margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
+#laSug:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(820px,calc(100vw - 20px));max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
 .sug-h{display:flex;align-items:center;gap:10px;margin:12px 0 4px;font-size:12px;font-weight:800;color:var(--tx);text-transform:uppercase;letter-spacing:.4px;}
 .sug-h .n{display:inline-block;min-width:20px;padding:1px 7px;border-radius:10px;background:var(--input);color:var(--tx2);font-size:11px;text-align:center;}
 .sug-h label{margin-left:auto;font-size:11.5px;font-weight:600;text-transform:none;letter-spacing:0;color:var(--tx2);display:inline-flex;align-items:center;gap:6px;cursor:pointer;}
@@ -1909,7 +1909,7 @@ html.tb-compacta #laApp .tb-seg .seg-btn[data-lagrupos]{padding:0;width:34px;}
 .pt-tabla td.rit{font-size:11px;font-weight:800;white-space:nowrap;font-variant-numeric:tabular-nums;} .pt-tabla td.rit.ok{color:var(--green);} .pt-tabla td.rit.mid{color:var(--amber);} .pt-tabla td.rit.bad{color:var(--red);}
 /* cargador de líneas base */
 #lbFondo{position:fixed;inset:0;z-index:119;background:rgba(2,6,23,.55);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);}
-#lbCarga:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(880px,calc(100vw - 20px));max-height:calc(100vh - 24px);overflow-y:auto;margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
+#lbCarga:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(880px,calc(100vw - 20px));max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
 #lbCarga input[type=file]{font-size:12px;width:100%;}
 /* pantalla Contrato y líneas base */
 .lb-cab{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:10px 16px;margin-bottom:10px;} .lb-cab>div{flex:1 1 320px;min-width:0;}
@@ -1921,11 +1921,11 @@ td.c .icon-btn+.icon-btn{margin-left:6px;}
 .met-fila{display:grid;grid-template-columns:130px minmax(0,1fr) 150px 38px;gap:8px;align-items:start;margin-bottom:6px;} .met-fila select,.met-fila input{width:100%;min-width:0;} .mf-mu{display:flex;align-items:center;gap:6px;} .mf-u{font-size:11px;color:var(--mut);min-width:28px;} .met-fila .icon-btn{width:38px;height:38px;}
 @media (max-width:560px){.met-fila{grid-template-columns:1fr 38px;} .met-fila .mf-fr{grid-column:1;} .met-fila .mf-pt{grid-column:1 / span 2;} .met-fila .mf-mu{grid-column:1;}} .lb-tb .vl-pill{margin-left:4px;}
 .lb-cmp{display:inline-flex;align-items:center;gap:8px;flex:0 0 auto;} .lb-cmp select{max-width:260px;}
-#lbFicha:not([hidden]),#plzForm:not([hidden]),#lbObs:not([hidden]),#adiForm:not([hidden]),#adiLim:not([hidden]),#metForm:not([hidden]),#adiXls:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(620px,calc(100vw - 20px));max-height:calc(100vh - 24px);overflow-y:auto;margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
+#lbFicha:not([hidden]),#plzForm:not([hidden]),#lbObs:not([hidden]),#adiForm:not([hidden]),#adiLim:not([hidden]),#metForm:not([hidden]),#adiXls:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(620px,calc(100vw - 20px));max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
 /* el Gantt en Contrato: sin la barra de selección de plan */
 #plEspacio[data-donde="plan"] #plVerP{display:none;}
 #plFotoDlg:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(560px,calc(100vw - 20px));margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
-#plVersiones:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(940px,calc(100vw - 20px));max-height:calc(100vh - 24px);overflow-y:auto;margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
+#plVersiones:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(940px,calc(100vw - 20px));max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
 </style>
 <script>
 document.documentElement.dataset.pane = 'resumen';
@@ -8326,6 +8326,13 @@ function metFormAbrir(id, pre) {
     const n = MET.N[nid]; if (!n) return; f.dataset.nid = nid; f.querySelector('.mf-p').value = txtDe(nid); f.querySelector('.mf-ruta').textContent = n.ruta || '';
     cerrarDD(); total(); f.querySelector('.mf-m').focus();
   };
+  const reubicar = () => {   // se calcula sobre el área visible (descontando el teclado en tablet / celular)
+    if (!act || dd.hidden) return;
+    const vv = window.visualViewport, t0 = vv ? vv.offsetTop : 0, l0 = vv ? vv.offsetLeft : 0, H = vv ? vv.height : window.innerHeight, Wv = vv ? vv.width : window.innerWidth;
+    const r = act.getBoundingClientRect(), W = Math.min(Math.max(r.width, 440), Wv - 16), left = Math.max(l0 + 8, Math.min(r.left, l0 + Wv - W - 8)), abajo = t0 + H - r.bottom - 12, arriba = r.top - t0 - 12, sube = abajo < 200 && arriba > abajo;
+    dd.style.left = left + 'px'; dd.style.width = W + 'px'; dd.style.maxHeight = Math.max(120, Math.min(320, sube ? arriba : abajo)) + 'px';
+    if (sube) { dd.style.top = 'auto'; dd.style.bottom = (window.innerHeight - r.top + 4) + 'px'; } else { dd.style.bottom = 'auto'; dd.style.top = (r.bottom + 4) + 'px'; }
+  };
   const abrirDD = (inp) => {
     act = inp; const f = inp.closest('.met-fila'), fid = f.querySelector('.mf-f').value; if (!fid) { cerrarDD(); return; }
     const igual = f.dataset.nid && norm(inp.value) === norm(txtDe(f.dataset.nid)), t = igual ? [] : norm(inp.value).split(/\s+/).filter(Boolean);
@@ -8333,15 +8340,13 @@ function metFormAbrir(id, pre) {
     dd.innerHTML = L.length ? L.slice(0, MAX).map(x => `<div class="mf-o${x.id === f.dataset.nid ? ' on' : ''}" data-id="${x.id}"><b>${esc(x.cod)}</b> · ${esc(x.nom)}<small>${esc(x.ruta || 'Sin grupo')}${x.uni ? ' · ' + esc(x.uni) : ''}</small></div>`).join('') + (L.length > MAX ? `<div class="mf-mas">… y ${L.length - MAX} más · escribe para filtrar</div>` : '')
       : '<div class="mf-mas">Ninguna partida de este frente coincide.</div>';
     sel = -1; dd.hidden = false;
-    const r = inp.getBoundingClientRect(), W = Math.min(Math.max(r.width, 440), window.innerWidth - r.left - 12), abajo = window.innerHeight - r.bottom - 12, arriba = r.top - 12, sube = abajo < 200 && arriba > abajo;
-    dd.style.left = r.left + 'px'; dd.style.width = W + 'px'; dd.style.maxHeight = Math.max(140, Math.min(320, sube ? arriba : abajo)) + 'px';
-    if (sube) { dd.style.top = 'auto'; dd.style.bottom = (window.innerHeight - r.top + 4) + 'px'; } else { dd.style.bottom = 'auto'; dd.style.top = (r.bottom + 4) + 'px'; }
+    reubicar();
     const on = dd.querySelector('.mf-o.on'); if (on) on.scrollIntoView({ block: 'nearest' });
   };
   dd.onmousedown = (ev) => { ev.preventDefault(); const o = ev.target.closest('.mf-o'); if (o && act) elegir(act.closest('.met-fila'), o.dataset.id); };
   const mover = (d) => { const os = [...dd.querySelectorAll('.mf-o')]; if (!os.length) return; sel = (sel + d + os.length) % os.length; os.forEach((o, i) => o.classList.toggle('hl', i === sel)); os[sel].scrollIntoView({ block: 'nearest' }); };
   m.hidden = false; fondo.hidden = false; document.documentElement.classList.add('la-modal'); fondo.onclick = cerrar; q('#mfCancel').onclick = cerrar;
-  m.onscroll = cerrarDD;
+  m.onscroll = reubicar; if (window.visualViewport) { window.visualViewport.onresize = reubicar; window.visualViewport.onscroll = reubicar; }
   m.oninput = (ev) => {
     const p = ev.target.closest('.mf-p');
     if (p) { const f = p.closest('.met-fila'); f.dataset.nid = ''; f.querySelector('.mf-ruta').textContent = ''; abrirDD(p); }
@@ -9416,6 +9421,42 @@ async function informeAlArrancar() {   // ?informe=1 abre el informe apenas carg
   }
   bootResumen().then(restaurarVista).then(informeAlArrancar);
   cargarPartidasForm().catch(err => pmsg(`No se pudo conectar con la API (${err.message}).`, false));
+})();
+</script>
+<script>
+/* Tablet y celular: ningún campo del panel (salvo el inicio de sesión) pide autocompletar contraseñas, direcciones ni tarjetas,
+   y al enfocar un campo se desplaza a la zona visible, por encima del teclado. */
+(function () {
+  var KEEP = { pMail: 1, pPass: 1, admMail: 1, admPass: 1 }, SKIP = { checkbox: 1, radio: 1, file: 1, button: 1, submit: 1, reset: 1, range: 1, color: 1, image: 1, hidden: 1 };
+  function limpiar(raiz) {
+    if (!raiz || raiz.nodeType !== 1) return;
+    var L = raiz.matches && raiz.matches('input,textarea,select,form') ? [raiz] : [];
+    if (raiz.querySelectorAll) L = L.concat([].slice.call(raiz.querySelectorAll('input,textarea,select,form')));
+    L.forEach(function (c) {
+      if (c.dataset.sinAuto === '1' || KEEP[c.id] || (c.tagName === 'FORM' && (c.id === 'pForm' || c.id === 'admForm'))) return;
+      c.dataset.sinAuto = '1';
+      if (c.tagName === 'FORM') { c.setAttribute('autocomplete', 'off'); return; }
+      if (SKIP[(c.getAttribute('type') || 'text').toLowerCase()]) return;
+      c.setAttribute('autocomplete', 'off');
+      c.setAttribute('data-lpignore', 'true'); c.setAttribute('data-1p-ignore', ''); c.setAttribute('data-bwignore', 'true'); c.setAttribute('data-form-type', 'other');
+      if (!c.getAttribute('name')) c.setAttribute('name', 'o4_' + (c.id || Math.random().toString(36).slice(2, 8)));
+    });
+  }
+  limpiar(document.body);
+  new MutationObserver(function (ms) { ms.forEach(function (m) { m.addedNodes.forEach(limpiar); }); }).observe(document.body, { childList: true, subtree: true });
+  function visible(el) {
+    var p = el.parentElement;
+    while (p && p !== document.body && p !== document.documentElement) { var o = getComputedStyle(p).overflowY; if ((o === 'auto' || o === 'scroll') && p.scrollHeight > p.clientHeight + 4) break; p = p.parentElement; }
+    if (!p || p === document.body || p === document.documentElement) { try { el.scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch (e) {} return; }
+    var rp = p.getBoundingClientRect(), re = el.getBoundingClientRect(), vv = window.visualViewport, base = vv ? Math.min(p.clientHeight, vv.height) : p.clientHeight;
+    p.scrollTo({ top: p.scrollTop + (re.top - rp.top) - (base - re.height) / 2, behavior: 'smooth' });
+  }
+  var tmr = 0;
+  function enfocado(ms) { var a = document.activeElement; if (!a || !a.matches || !a.matches('input,textarea,select')) return; clearTimeout(tmr); tmr = setTimeout(function () { visible(a); }, ms); }
+  if (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) {
+    document.addEventListener('focusin', function () { enfocado(320); });
+    if (window.visualViewport) window.visualViewport.addEventListener('resize', function () { enfocado(120); });
+  }
 })();
 </script>
 </body>
