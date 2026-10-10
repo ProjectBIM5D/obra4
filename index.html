@@ -1921,8 +1921,9 @@ td.c .icon-btn+.icon-btn{margin-left:6px;}
 .met-fila{display:grid;grid-template-columns:130px minmax(0,1fr) 150px 38px;gap:8px;align-items:start;margin-bottom:6px;} .met-fila select,.met-fila input{width:100%;min-width:0;} .mf-mu{display:flex;align-items:center;gap:6px;} .mf-u{font-size:11px;color:var(--mut);min-width:28px;} .met-fila .icon-btn{width:38px;height:38px;}
 @media (max-width:560px){.met-fila{grid-template-columns:1fr 38px;} .met-fila .mf-fr{grid-column:1;} .met-fila .mf-pt{grid-column:1 / span 2;} .met-fila .mf-mu{grid-column:1;}} .lb-tb .vl-pill{margin-left:4px;}
 .ctv-tb td{vertical-align:top;} .ctv-tb td.l{white-space:normal;min-width:230px;} .ctv-n{color:#b45309;} .ctv-ti{color:var(--tx);font-weight:600;font-size:12.5px;}
-.ctv-tg{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;padding:0;margin:0 6px 0 -4px;border:0;background:none;border-radius:6px;cursor:pointer;color:var(--mut);vertical-align:middle;}
-.ctv-tg svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;transition:transform .15s;} .ctv-tg.on svg{transform:rotate(90deg);} .ctv-tg:hover{background:var(--input);color:var(--blue);}
+.ctv-row{cursor:pointer;} .ctv-row:hover>td,.ctv-row:focus-visible>td{background:var(--input);} .ctv-row:focus-visible{outline:2px solid var(--blue);outline-offset:-2px;} .ctv-row:hover .ctv-n{text-decoration:underline;}
+.ctv-tg{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;padding:0;margin:0 6px 0 -4px;border:0;background:none;border-radius:6px;color:var(--mut);vertical-align:middle;}
+.ctv-tg svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;transition:transform .15s;} .ctv-tg.on svg{transform:rotate(90deg);} .ctv-row:hover .ctv-tg{color:var(--blue);}
 .ctv-tb .vl-pill+.vl-pill{margin-left:4px;} .ctv-tb td.ctr .lb-sub{display:block;margin-top:3px;}
 .ctv-sub td{background:var(--input);padding:10px 14px 12px 38px;}
 .ctv-tl{margin:2px 0 4px 6px;border-left:2px solid var(--line2);} .ctv-solo{margin-top:8px;}
@@ -8490,7 +8491,7 @@ function ctvPintar() {
     ${kPlazo}
     <div class="vl-k"><small>Reconocido</small><b>S/ ${metN(rsum('monto_sub'))}</b><em>${rsum('dias')} día${rsum('dias') === 1 ? '' : 's'} · ${nRes('favorable')} a favor · ${nRes('parcial')} parcial · ${nRes('desfavorable')} en contra</em></div></div>`;
   const ic = { ed: '<svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4Z"/></svg>', del: '<svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>', add: '<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>', chev: '<svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>' };
-  const monto = (m, d) => (m != null || d != null) ? `${m != null ? `<b>${metN(m)}</b>` : ''}${d != null ? `<span class="lb-sub">${d} día${d === 1 ? '' : 's'}</span>` : ''}` : '<span class="lb-sub">—</span>';
+  const monto = (m, d) => (m != null || d != null) ? `${m != null ? `<b>S/ ${metN(m)}</b>` : ''}${d != null ? `<span class="lb-sub">${d} día${d === 1 ? '' : 's'}</span>` : ''}` : '<span class="lb-sub">—</span>';
   const evItem = (e) => {
     const n = e.fecha_limite ? plD(e.fecha_limite) - hoy : null, r = e.resultado ? CTV_RESULT[e.resultado] : null;
     const lim = e.fecha_limite ? `<span class="ctv-lim${n < 0 ? ' venc' : n <= 7 ? ' cerca' : ''}" title="Plazo para responder o impugnar">Plazo ${f2(e.fecha_limite)}${n < 0 ? ' · vencido' : n === 0 ? ' · hoy' : n <= 7 ? ` · ${n} d` : ''}</span>` : '';
@@ -8503,10 +8504,10 @@ function ctvPintar() {
     const abierto = CTV.exp.has(c.id), r = c.res ? CTV_RESULT[c.res] : null;
     const prox = c.venc ? `<span class="ctv-lim venc">${esc(ctvEtq(c.venc.e))} · venció ${f2(c.venc.e.fecha_limite)}</span>`
       : c.prox ? `<b>${f2(c.prox.e.fecha_limite)}</b><span class="lb-sub">${c.prox.n === 0 ? 'vence hoy' : `en ${c.prox.n} día${c.prox.n === 1 ? '' : 's'}`} · ${esc(ctvEtq(c.prox.e))}</span>` : '<span class="lb-sub">—</span>';
-    return `<tr><td class="l"><button type="button" class="ctv-tg${abierto ? ' on' : ''}" data-ctv-tg="${c.id}" aria-expanded="${abierto}" title="${abierto ? 'Ocultar' : 'Ver'} la línea de tiempo">${ic.chev}</button><b class="ctv-n">${esc(ctvNum(c))}</b>
+    return `<tr class="ctv-row${abierto ? ' on' : ''}" data-ctv-row="${c.id}" tabindex="0" aria-expanded="${abierto}" title="${abierto ? 'Ocultar' : 'Ver'} la línea de tiempo"><td class="l"><span class="ctv-tg${abierto ? ' on' : ''}" aria-hidden="true">${ic.chev}</span><b class="ctv-n">${esc(ctvNum(c))}</b>
         <span class="lb-sub ctv-ti">${esc(c.titulo)}</span><span class="lb-sub">${esc(CTV_MAT[c.materia] || c.materia)}${c.referencia ? ' · ' + esc(c.referencia) : ''} · plantea ${c.parte === 'entidad' ? 'la Entidad' : 'el contratista'}</span></td>
       <td class="ctr"><span class="vl-pill ${c.cls}">${c.estado}</span>${r ? `<span class="vl-pill ${r[1]}" title="Resultado para el contratista">${r[0]}</span>` : ''}<span class="lb-sub">${c.ultimo ? esc(ctvEtq(c.ultimo)) + ' · ' + f2(c.ultimo.fecha) : 'sin actuaciones'}</span></td>
-      <td>${monto(c.monto_sub, c.dias)}</td><td>${c.rec ? monto(c.rec.monto_sub, c.rec.dias) : '<span class="lb-sub">—</span>'}</td><td class="l">${prox}</td>
+      <td class="ctr">${monto(c.monto_sub, c.dias)}</td><td class="ctr">${c.rec ? monto(c.rec.monto_sub, c.rec.dias) : '<span class="lb-sub">—</span>'}</td><td class="ctr">${prox}</td>
       <td class="c">${adm ? `<button type="button" class="icon-btn" data-ctv-evnuevo="${c.id}" title="Agregar una actuación" aria-label="Agregar actuación">${ic.add}</button><button type="button" class="icon-btn" data-ctv-edit="${c.id}" title="Editar la controversia" aria-label="Editar">${ic.ed}</button><button type="button" class="icon-btn" data-ctv-del="${c.id}" title="Eliminar la controversia y su línea de tiempo" aria-label="Eliminar">${ic.del}</button>` : ''}</td></tr>
       ${abierto ? `<tr class="ctv-sub"><td colspan="6" class="l">${c.notas ? `<p class="hint" style="margin:0 0 6px">${esc(c.notas)}</p>` : ''}${c.E.length ? `<div class="ctv-tl">${c.E.map(evItem).join('')}</div>` : '<p class="hint" style="margin:0">Todavía no hay actuaciones: registra el planteamiento, la solicitud a la JRD, su decisión…</p>'}</td></tr>` : ''}`;
   }).join('');
@@ -8515,7 +8516,7 @@ function ctvPintar() {
     + `<div class="vl-card"><div class="lb-cab"><div><h3 style="margin:0 0 3px">Controversias</h3><p class="hint" style="margin:0">Cada controversia (N° 01, N° 02…) tiene su línea de tiempo: planteamiento → solicitud a la JRD → <b>Decisión N° 01 de la JRD</b> → conciliación o arbitraje → cierre. El estado sale de la actuación más avanzada; los montos son subtotal sin IGV.</p></div>
       ${adm ? '<button type="button" class="btn-sec pri" data-ctv-nuevo title="Registrar una controversia">＋ Nueva controversia</button>' : ''}</div>
       ${CTV.sinSql ? '<p class="plz-nota al">Falta correr <code>eventos_controversias.sql</code> en la base para registrar controversias y eventos.</p>' : ''}
-      <div class="vl-tw"><table class="vl-tb lb-tb plz-reg ctv-tb"><thead><tr><th class="l">Controversia</th><th class="ctr">Estado</th><th>En discusión S/ (sin IGV)</th><th>Reconocido S/ (sin IGV)</th><th class="l">Plazo</th><th></th></tr></thead>
+      <div class="vl-tw"><table class="vl-tb lb-tb plz-reg ctv-tb"><thead><tr><th class="l">Controversia</th><th class="ctr">Estado</th><th class="ctr">En discusión</th><th class="ctr">Reconocido</th><th class="ctr">Plazo</th><th></th></tr></thead>
         <tbody>${filas || '<tr><td colspan="6" class="l">Todavía no hay controversias registradas.</td></tr>'}</tbody></table></div></div>`
     + `<div class="vl-card"><div class="lb-cab"><div><h3 style="margin:0 0 3px">Eventos del contrato</h3><p class="hint" style="margin:0">Hechos y comunicaciones que no pertenecen a una controversia.</p></div>
       ${adm ? '<button type="button" class="btn-sec" data-ctv-evnuevo="" title="Registrar un evento del contrato">＋ Nuevo evento</button>' : ''}</div>${sueltos}</div>`;
@@ -8585,10 +8586,11 @@ function ctvEventoAbrir(id, ctvId) {
     } catch (er) { btn.disabled = false; toast(`No se pudo guardar: ${esc(er.message)}${/function|schema cache|404/i.test(er.message) ? ' · ¿falta correr eventos_controversias.sql?' : ''}`, false, 'ctv'); }
   };
 }
+function ctvAlternar(id) { if (!CTV.exp) return; if (CTV.exp.has(id)) CTV.exp.delete(id); else CTV.exp.add(id); ctvPintar(); }
+document.addEventListener('keydown', (e) => { const r = e.target.closest && e.target.closest('[data-ctv-row]'); if (r && e.target === r && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); ctvAlternar(r.dataset.ctvRow); } });
 document.addEventListener('click', async (e) => {
   if (e.target.closest('[data-ctv-nuevo]')) { ctvFormAbrir(null); return; }
-  const tg = e.target.closest('[data-ctv-tg]'); if (tg) { const id = tg.dataset.ctvTg; if (CTV.exp.has(id)) CTV.exp.delete(id); else CTV.exp.add(id); ctvPintar(); return; }
-  const en = e.target.closest('[data-ctv-evnuevo]'); if (en) { ctvEventoAbrir(null, en.dataset.ctvEvnuevo || ''); return; }
+    const en = e.target.closest('[data-ctv-evnuevo]'); if (en) { ctvEventoAbrir(null, en.dataset.ctvEvnuevo || ''); return; }
   const ee = e.target.closest('[data-ctv-evedit]'); if (ee) { ctvEventoAbrir(ee.dataset.ctvEvedit, null); return; }
   const ed = e.target.closest('[data-ctv-edit]'); if (ed) { ctvFormAbrir(ed.dataset.ctvEdit); return; }
   const ev = e.target.closest('[data-ctv-evdel]');
@@ -8598,7 +8600,8 @@ document.addEventListener('click', async (e) => {
     try { await preRpc('contrato_evento_eliminar', { p_id: x.id }); toast('Evento eliminado.', true, 'ctv'); await ctvCargar(true); } catch (er) { toast(`No se pudo eliminar: ${esc(er.message)}`, false, 'ctv'); }
     return;
   }
-  const de = e.target.closest('[data-ctv-del]'); if (!de) return;
+  const de = e.target.closest('[data-ctv-del]');
+  if (!de) { const rw = e.target.closest('[data-ctv-row]'); if (rw) ctvAlternar(rw.dataset.ctvRow); return; }
   const c = CTV.ctv.find(r => r.id === de.dataset.ctvDel); if (!c) return;
   if (!(await confirmar(`Eliminar «${ctvNum(c)}» y toda su línea de tiempo. No cambia ampliaciones, adicionales ni valorizaciones.`))) return;
   try { await preRpc('controversia_eliminar', { p_id: c.id }); toast('Controversia eliminada.', true, 'ctv'); await ctvCargar(true); } catch (er) { toast(`No se pudo eliminar: ${esc(er.message)}`, false, 'ctv'); }
