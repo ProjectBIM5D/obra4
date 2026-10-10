@@ -842,6 +842,7 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .plz-lb.pend{border-style:dashed;} .plz-lb.mal{border-color:#b45309;} .lb-tb.plz-reg td{vertical-align:top;} .lb-tb.plz-reg .lb-sub{display:block;margin-left:0;}
 .row3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;} @media (max-width:560px){.row3{grid-template-columns:1fr;}}
 .pz-dt input[type=number]{width:60px;text-align:right;padding:4px 5px;} .vl-tb.pz-dt{min-width:0;} .vl-tb.pz-dt th,.vl-tb.pz-dt td{padding:5px 6px;white-space:normal;} .pz-dt td{vertical-align:middle;} .pz-dt .pz-on{width:16px;height:16px;}
+.adi-bar{height:6px;border-radius:99px;background:var(--line);margin-top:6px;overflow:hidden;} .adi-bar i{display:block;height:100%;border-radius:99px;}
 .plz-nota{font-size:11.5px;margin:8px 0 0;color:var(--mut);} .plz-nota.al{color:#b45309;font-weight:600;}
 .vl-pill{display:inline-block;font-size:10.5px;font-weight:800;padding:2px 9px;border-radius:999px;} .vl-pill.ok{background:#10b98122;color:var(--green);} .vl-pill.pr{background:#f59e0b26;color:var(--rg-am,#a85a08);}
 .vl-pbar{display:inline-block;vertical-align:middle;width:64px;height:7px;border-radius:4px;background:var(--line);overflow:hidden;margin-right:6px;} .vl-pbar i{display:block;height:100%;background:var(--blue);}
@@ -1909,7 +1910,7 @@ html.tb-compacta #laApp .tb-seg .seg-btn[data-lagrupos]{padding:0;width:34px;}
 .lb-tb td,.lb-tb th{white-space:normal;vertical-align:middle;} .lb-tb td{padding:4px 10px;} .lb-tb th{padding:6px 10px;} .lb-tb td.c{white-space:nowrap;} .lb-sub{font-size:11px;color:var(--mut);font-weight:500;line-height:1.3;}
 .lb-tb .lb-sub{display:inline;margin-left:6px;} .lb-tb td:nth-child(5){white-space:nowrap;} .lb-tb .icon-btn{width:28px;height:28px;border-radius:7px;} .lb-tb .icon-btn svg{width:15px;height:15px;} .lb-tb .vl-pill{margin-left:4px;}
 .lb-cmp{display:inline-flex;align-items:center;gap:8px;flex:0 0 auto;} .lb-cmp select{max-width:260px;}
-#lbFicha:not([hidden]),#plzForm:not([hidden]),#lbObs:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(620px,calc(100vw - 20px));max-height:calc(100vh - 24px);overflow-y:auto;margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
+#lbFicha:not([hidden]),#plzForm:not([hidden]),#lbObs:not([hidden]),#adiForm:not([hidden]),#adiLim:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(620px,calc(100vw - 20px));max-height:calc(100vh - 24px);overflow-y:auto;margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
 /* el Gantt en Contrato: sin la barra de selección de plan */
 #plEspacio[data-donde="plan"] #plVerP{display:none;}
 #plFotoDlg:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(560px,calc(100vw - 20px));margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
@@ -2031,7 +2032,7 @@ document.documentElement.classList.add('dens-densa');   // tamaño único de las
         <button type="button" class="nav-gh" data-grupo="contrato" aria-expanded="true"><span class="ni">📑</span><span class="nt">Contrato</span><i class="nav-chev"></i></button>
         <div class="nav-gb">
           <button type="button" data-pane="lineasbase" title="Líneas base del contrato (LB0 a LB3): ficha, comparación y carga"><span class="ni">📜</span><span class="nt">Contrato y líneas base</span></button>
-          <button type="button" class="prox" disabled title="Próximamente · prestaciones adicionales y deductivos con resolución"><span class="ni">➕</span><span class="nt">Adicionales y deductivos</span><span class="nav-tag">pronto</span></button>
+          <button type="button" data-pane="adicionales" title="Prestaciones adicionales y deductivos vinculados: lo que trajo cada línea base, su resolución y el límite"><span class="ni">➕</span><span class="nt">Adicionales y deductivos</span></button>
           <button type="button" class="prox" disabled title="Próximamente · mayores y menores metrados"><span class="ni">📏</span><span class="nt">Mayores metrados</span><span class="nav-tag">pronto</span></button>
           <button type="button" data-pane="plazo" title="Plazo contractual: suspensiones, ampliaciones y adicionales de plazo, con su resolución y la línea base que los incorpora"><span class="ni">⏳</span><span class="nt">Ampliaciones de plazo</span></button>
           <button type="button" class="prox" disabled title="Próximamente · registro de eventos del contrato"><span class="ni">⚖️</span><span class="nt">Eventos y controversias</span><span class="nav-tag">pronto</span></button>
@@ -2265,6 +2266,7 @@ document.documentElement.classList.add('dens-densa');   // tamaño único de las
     </section>
 
     <!-- ═══════════ PLAN MASTER (cronograma meta) ═══════════ -->
+    <section class="pane" data-pane="adicionales"><div id="adiPanel"></div></section>
     <section class="pane" data-pane="plazo"><div id="plzPanel"></div></section>
     <section class="pane" data-pane="lineasbase"><div id="lbPanel"></div>
       <div id="lbGanttSlot" style="margin-top:14px"><div class="lb-cab"><div><h3 style="margin:0 0 3px">Cronograma de la línea base</h3><p class="hint" style="margin:0">Solo lectura, tal como está en el Project de esa línea base: fechas, ruta crítica y vínculos. Elige otra en «Línea base». El plan de ejecución se trabaja en Planificación › Plan maestro.</p></div></div><div id="lbGanttBox"></div></div></section>
@@ -2982,6 +2984,7 @@ document.querySelectorAll('#nav button[data-pane]').forEach(b => {
       ppc: ['PPC', 'Porcentaje de actividades completadas: trazabilidad semanal y causas de incumplimiento'],
       valorizaciones: ['Valorizaciones', 'Valor ganado: lo valorizado mes a mes (contrato, adicionales y mayores metrados)'],
       presupuesto: ['Presupuesto', 'Venta (contrato, solo lectura) y meta (copia del APU que se ajusta sin tocar el contrato)'],
+      adicionales: ['Adicionales y deductivos', 'Prestaciones adicionales y deductivos vinculados: lo que trajo cada línea base, su resolución y cuánto va del límite'],
       plazo: ['Plazo y ampliaciones', 'Suspensiones, ampliaciones y adicionales de plazo: qué cambió, con qué resolución y cómo queda el fin de obra'],
       lineasbase: ['Contrato y líneas base', 'LB0 a LB3: inicio de contrato, suspensión, adicional y deductivo, ampliación · ficha, comparación y carga'],
       plan: ['Plan master', 'Cronograma meta: tu plan de ejecución con vínculos, ruta crítica y duraciones sugeridas por el APU meta'],
@@ -2996,6 +2999,7 @@ document.querySelectorAll('#nav button[data-pane]').forEach(b => {
     if (b.dataset.pane === 'plan') { PL.ver = 'meta'; PL.reset = true; plMontar('plan'); plCargar(); }
     if (b.dataset.pane === 'lineasbase') lbPanelCargar();
     if (b.dataset.pane === 'plazo') plzCargar();
+    if (b.dataset.pane === 'adicionales') adiCargar();
     if (b.dataset.pane === 'presupuesto') preCargar();
     if (b.dataset.pane === 'parte' && !$('#parteLA').hidden) plaCargar();
     $('#side').classList.remove('open'); $('#overlay').classList.remove('on');
@@ -8168,6 +8172,145 @@ function lbFichaAbrir(id) {
     } catch (er) { btn.disabled = false; toast(`No se pudo guardar: ${esc(er.message)}`, false, 'lb'); }
   };
 }
+// ═══ ADICIONALES Y DEDUCTIVOS: lo que cambió en cada línea base (calculado de las partidas) + el registro legal numerado (tabla prestaciones) ═══
+// Los montos salen de las líneas base APROBADAS: adicional = partidas nuevas con concepto adicional; deductivo = partidas del contrato que bajan o salen.
+// El límite (% de adicionales netos sobre el monto del contrato) es un parámetro editable de la obra.
+const ADI = { lbs: [], pre: [], reg: [], cd0: 0, limite: 15, f: { gg: 0, ut: 0, igv: 0.18 }, plazo: [], cargado: false, sinSql: false };
+const ADI_EST = { solicitada: ['solicitada', 'pr'], aprobada: ['aprobada', 'ok'], aprobada_parcial: ['aprobada parcial', 'pp'], improcedente: ['improcedente', 'no'] };
+const adiN = (v) => Number(v || 0).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const adiN0 = (n) => String(n).padStart(2, '0');
+const adiCuenta = (r) => r.estado === 'aprobada' || r.estado === 'aprobada_parcial';
+async function adiCargar(forzar) {
+  const box = $('#adiPanel'); if (!box) return;
+  if (typeof OBRA === 'undefined' || !OBRA || !OBRA.id) { box.innerHTML = '<div class="rg-msg">Leyendo la obra…</div>'; setTimeout(() => { if (document.documentElement.dataset.pane === 'adicionales') adiCargar(); }, 1200); return; }
+  if (!ADI.cargado || forzar) box.innerHTML = '<div class="rg-msg">Leyendo adicionales y deductivos…</div>';
+  try {
+    const vig = (RES_A.version || {}).id;
+    const [lbs, pre, reg, res, ob, cr, plz] = await Promise.all([
+      get(`/linea_base_versiones?obra_id=eq.${OBRA.id}&select=id,numero,nombre,tipo_cambio,estado,cronograma_id,plazo_fin&order=numero`).catch(() => get(`/linea_base_versiones?obra_id=eq.${OBRA.id}&select=id,numero,nombre,tipo_cambio,cronograma_id,plazo_fin&order=numero`)),
+      get(`/v_lb_prestaciones?obra_id=eq.${OBRA.id}&select=*&order=numero`).catch(() => null),
+      get(`/prestaciones?obra_id=eq.${OBRA.id}&select=*&order=tipo,numero`).catch(() => null),
+      get(`/v_linea_base_resumen?obra_id=eq.${OBRA.id}&select=version_id,numero,costo_directo`).catch(() => []),
+      get(`/obras?id=eq.${OBRA.id}&select=limite_adicionales_pct`).catch(() => []),
+      vig ? get(`/cronograma_versiones?id=eq.${vig}&select=gg_pct,utilidad_pct,igv_pct`).catch(() => []) : Promise.resolve([]),
+      get(`/plazo_eventos?obra_id=eq.${OBRA.id}&select=adicional,tipo,numero,estado,grupo,fecha_inicio,fecha_fin`).catch(() => [])]);
+    ADI.lbs = lbs; ADI.pre = pre || []; ADI.reg = reg || []; ADI.sinSql = pre === null || reg === null;
+    const l0 = lbs.find(l => l.numero === 0) || lbs[0], r0 = l0 ? res.find(r => r.version_id === l0.id) : null;
+    ADI.cd0 = r0 ? Number(r0.costo_directo) : 0;
+    ADI.limite = ob[0] && ob[0].limite_adicionales_pct != null ? Number(ob[0].limite_adicionales_pct) : 15;
+    ADI.f = cr[0] ? { gg: Number(cr[0].gg_pct), ut: Number(cr[0].utilidad_pct), igv: Number(cr[0].igv_pct) } : { gg: 0, ut: 0, igv: 0.18 };
+    ADI.plazo = plz; ADI.cargado = true;
+    adiPintar();
+  } catch (e) { box.innerHTML = msgCarga('Adicionales y deductivos', e); }
+}
+function adiPintar() {
+  const box = $('#adiPanel'), adm = !!AUTH.admin, f2 = (s) => s ? plFmt(plD(s)) : '—';
+  const aprob = (l) => !l.estado || l.estado === 'aprobado', porLB = new Map(ADI.pre.map(p => [p.numero, p]));
+  const lbOk = ADI.lbs.filter(aprob).map(l => porLB.get(l.numero)).filter(Boolean);
+  const adic = lbOk.reduce((s, p) => s + Number(p.adicional_cd), 0), dedu = -lbOk.reduce((s, p) => s + Number(p.deductivo_cd), 0), mayo = lbOk.reduce((s, p) => s + Number(p.mayores_cd), 0);
+  const neto = adic - dedu, pct = ADI.cd0 ? neto / ADI.cd0 * 100 : 0, fac = (1 + ADI.f.gg + ADI.f.ut) * (1 + ADI.f.igv), uso = ADI.limite ? Math.min(100, Math.max(0, pct / ADI.limite * 100)) : 0;
+  const nAd = lbOk.reduce((s, p) => s + p.adicional_partidas, 0), nDe = lbOk.reduce((s, p) => s + p.deductivo_partidas, 0);
+  const lim = adm ? ` <button type="button" class="icon-btn" data-adi-limite title="Cambiar el límite de adicionales (% del monto del contrato)" aria-label="Cambiar el límite" style="width:22px;height:22px;vertical-align:middle"><svg viewBox="0 0 24 24" style="width:12px;height:12px"><path d="M4 20h4L19 9l-4-4L4 16v4Z"/></svg></button>` : '';
+  const kpis = `<div class="vl-kp">
+    <div class="vl-k"><small>Costo directo del contrato</small><b>S/ ${adiN(ADI.cd0)}</b><em>LB0 · inicio de contrato</em></div>
+    <div class="vl-k"><small>Adicionales</small><b>+ S/ ${adiN(adic)}</b><em>${nAd} partida${nAd === 1 ? '' : 's'} · con GG, utilidad e IGV S/ ${adiN(adic * fac)}</em></div>
+    <div class="vl-k"><small>Deductivos vinculados</small><b>− S/ ${adiN(dedu)}</b><em>${nDe} partida${nDe === 1 ? '' : 's'} · con GG, utilidad e IGV S/ ${adiN(dedu * fac)}</em></div>
+    <div class="vl-k"><small>Adicionales netos</small><b>${adiN(pct)} %</b><em>S/ ${adiN(neto)} · límite ${adiN(ADI.limite)} %${lim}</em><div class="adi-bar" title="${adiN(uso)} % del límite"><i style="width:${uso.toFixed(1)}%;background:${uso >= 90 ? '#dc2626' : uso >= 60 ? '#f59e0b' : '#10b981'}"></i></div></div></div>`;
+  // lo que cambió en cada línea base
+  const filasLB = ADI.lbs.filter(l => l.numero > 0).map(l => {
+    const p = porLB.get(l.numero), neto = p ? Number(p.adicional_cd) + Number(p.deductivo_cd) + Number(p.mayores_cd) : 0, nada = !p || (!p.adicional_partidas && !p.deductivo_partidas && !p.mayores_partidas);
+    const regs = ADI.reg.filter(r => r.lb_numero === l.numero);
+    return `<tr><td class="l"><b>LB${l.numero}</b>${l.cronograma_id && l.cronograma_id === (RES_A.version || {}).id ? ' <span class="vl-pill ok">vigente</span>' : ''}${l.estado === 'observado' ? ' <span class="vl-pill no">observado</span>' : l.estado === 'presentado' ? ' <span class="vl-pill pr">en revisión</span>' : ''}<span class="lb-sub">${esc(l.tipo_cambio || l.nombre || '')}</span></td>
+      <td>${nada ? '—' : p.adicional_partidas ? `<b>+ ${adiN(p.adicional_cd)}</b><span class="lb-sub">${p.adicional_partidas} partidas</span>` : '—'}</td>
+      <td>${nada ? '—' : p.deductivo_partidas ? `<b>− ${adiN(-p.deductivo_cd)}</b><span class="lb-sub">${p.deductivo_partidas} partidas</span>` : '—'}</td>
+      <td>${nada ? '—' : p.mayores_partidas ? `<b>+ ${adiN(p.mayores_cd)}</b><span class="lb-sub">${p.mayores_partidas} partidas</span>` : '—'}</td>
+      <td><b>${nada ? '—' : (neto >= 0 ? '+ ' : '− ') + adiN(Math.abs(neto))}</b></td>
+      <td class="l">${regs.length ? regs.map(r => `${r.tipo === 'adicional' ? 'Adicional' : 'Deductivo'} N° ${adiN0(r.numero)}`).join(', ') : (nada ? '' : '<span class="lb-sub">sin registrar</span>')}</td>
+      <td class="c">${adm && !nada ? `<button type="button" class="icon-btn" data-adi-nuevo-lb="${l.numero}" title="Registrar el adicional o deductivo de esta línea base" aria-label="Registrar"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>` : ''}</td></tr>`;
+  }).join('');
+  // registro numerado
+  const montoDe = (r) => { if (r.monto_cd != null) return { v: Number(r.monto_cd), auto: false }; const p = r.lb_numero != null ? porLB.get(r.lb_numero) : null; if (!p) return null; return { v: r.tipo === 'adicional' ? Number(p.adicional_cd) : -Number(p.deductivo_cd), auto: true }; };
+  const diasPlazo = (r) => { if (r.tipo !== 'adicional') return null; const rx = new RegExp('adicional\\D{0,12}0*' + r.numero + '\\b', 'i'), g = new Map();
+    ADI.plazo.filter(e => e.adicional && rx.test(e.adicional) && (e.estado === 'aprobada' || e.estado === 'aprobada_parcial' || e.estado === 'solicitada')).forEach(e => { const k = e.grupo || e.fecha_inicio + e.fecha_fin, d = plD(e.fecha_fin) - plD(e.fecha_inicio) + 1; g.set(k, Math.max(g.get(k) || 0, d)); });
+    const v = [...g.values()]; return v.length ? { n: v.length, d: v.reduce((s, x) => s + x, 0) } : null; };
+  const orden = ADI.reg.slice().sort((a, b) => a.tipo === b.tipo ? b.numero - a.numero : (a.tipo === 'adicional' ? -1 : 1));
+  const filasReg = orden.map(r => {
+    const [etq, cls] = ADI_EST[r.estado] || [r.estado, 'pr'], mo = montoDe(r), dp = diasPlazo(r);
+    return `<tr${r.estado === 'improcedente' ? ' style="opacity:.75"' : ''}><td class="l"><b style="color:${r.tipo === 'adicional' ? '#f26a1b' : '#0ea5a4'}">${r.tipo === 'adicional' ? 'Adicional' : 'Deductivo vinculado'} N° ${adiN0(r.numero)}</b>${[r.descripcion, r.causal, r.base_legal].filter(Boolean).map(esc).join(' · ') ? `<span class="lb-sub">${[r.descripcion, r.causal, r.base_legal].filter(Boolean).map(esc).join(' · ')}</span>` : ''}</td>
+      <td><span class="vl-pill ${cls}">${etq}</span></td><td class="l">${esc(r.resolucion || '—')}${r.fecha_resolucion ? `<span class="lb-sub">${f2(r.fecha_resolucion)}</span>` : ''}</td>
+      <td>${r.lb_numero == null ? '—' : 'LB' + r.lb_numero}</td>
+      <td>${mo ? `<b>${r.tipo === 'adicional' ? '+' : '−'} ${adiN(mo.v)}</b><span class="lb-sub">${mo.auto ? 'de la línea base' : 'digitado'} · con GG, util. e IGV ${adiN(mo.v * fac)}</span>` : '—'}</td>
+      <td class="l">${dp ? `${dp.n} ampliación${dp.n === 1 ? '' : 'es'} de plazo · <b>+${dp.d} d</b>` : r.tipo === 'adicional' ? '<span class="lb-sub">sin ampliación ligada</span>' : ''}</td>
+      <td class="c">${adm ? `<button type="button" class="icon-btn" data-adi-edit="${r.id}" title="Editar" aria-label="Editar"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4Z"/></svg></button><button type="button" class="icon-btn" data-adi-del="${r.id}" title="Eliminar" aria-label="Eliminar"><svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button>` : ''}</td></tr>`;
+  }).join('');
+  const aviso = pct > ADI.limite ? `<p class="plz-nota al">⚠ Los adicionales netos (${adiN(pct)} %) superan el límite de ${adiN(ADI.limite)} %: revisa el trámite que corresponde.</p>` : (uso >= 80 ? `<p class="plz-nota al">⚠ Ya se usó el ${adiN(uso)} % del límite de adicionales.</p>` : '');
+  box.innerHTML = kpis + aviso
+    + `<div class="vl-card"><div class="lb-cab"><div><h3 style="margin:0 0 3px">Qué cambió en cada línea base</h3><p class="hint" style="margin:0">Calculado de las partidas, sin digitar nada: <b>adicional</b> = partidas nuevas con concepto adicional; <b>deductivo</b> = partidas del contrato que bajan o salen; <b>mayores</b> = partidas del contrato que suben. Los montos son costo directo (S/). Solo suman las líneas base aprobadas.</p></div></div>
+      <div class="vl-tw"><table class="vl-tb lb-tb"><thead><tr><th class="l">Línea base</th><th>Adicional S/</th><th>Deductivo S/</th><th>Mayores S/</th><th>Neto S/</th><th class="l">Registro</th><th></th></tr></thead><tbody>${filasLB || '<tr><td colspan="7" class="l">Todavía no hay una segunda línea base para comparar.</td></tr>'}</tbody></table></div></div>`
+    + `<div class="vl-card"><div class="lb-cab"><div><h3 style="margin:0 0 3px">Registro de adicionales y deductivos</h3><p class="hint" style="margin:0">Trazabilidad legal numerada (Adicional N° 01, Deductivo vinculado N° 01…) con su estado, resolución y la línea base que lo incorpora. El monto se toma de la línea base; solo se digita si la resolución difiere. Si en el registro de plazo escribes «Adicional N° 03» en la ampliación, aquí aparece ligada.</p></div>
+      ${adm ? '<button type="button" class="btn-sec pri" data-adi-nuevo title="Registrar un adicional o un deductivo vinculado">＋ Nuevo registro</button>' : ''}</div>
+      ${ADI.sinSql ? '<p class="plz-nota al">Falta correr <code>adicionales_deductivos.sql</code> en la base para ver el registro y registrar resoluciones.</p>' : ''}
+      <div class="vl-tw"><table class="vl-tb lb-tb plz-reg"><thead><tr><th class="l">Registro</th><th>Estado</th><th class="l">Resolución</th><th>LB</th><th class="l">Monto (costo directo)</th><th class="l">Plazo</th><th></th></tr></thead><tbody>${filasReg || '<tr><td colspan="7" class="l">Todavía no hay registros: usa «＋» en la línea base que trajo el adicional.</td></tr>'}</tbody></table></div></div>`;
+}
+function adiFormAbrir(id, pre) {
+  const e = id ? ADI.reg.find(x => x.id === id) : null; if (id && !e) return;
+  let m = document.getElementById('adiForm');
+  if (!m) { m = document.createElement('form'); m.id = 'adiForm'; m.className = 'pform la-form'; m.hidden = true; document.body.appendChild(m); }
+  const v = (k, d) => esc(e && e[k] != null ? e[k] : (pre && pre[k] != null ? pre[k] : (d || ''))), op = (val, txt, sel) => `<option value="${val}"${sel ? ' selected' : ''}>${txt}</option>`, q = (s) => m.querySelector(s);
+  const tipo0 = e ? e.tipo : (pre && pre.tipo) || 'adicional', est0 = e ? e.estado : 'aprobada', lb0 = e ? e.lb_numero : (pre ? pre.lb_numero : null);
+  m.innerHTML = `<h3 style="margin:0 0 4px;font-size:14px">${e ? 'Editar ' + (e.tipo === 'adicional' ? 'adicional' : 'deductivo vinculado') + ' N° ' + adiN0(e.numero) : 'Nuevo registro'}</h3><p class="hint" style="margin:0 0 10px">El monto sale de la línea base elegida; escríbelo solo si la resolución aprobó otro.</p>
+    <div class="row3"><div class="field"><label for="adTipo">Tipo</label><select id="adTipo">${op('adicional', 'Adicional', tipo0 === 'adicional')}${op('deductivo', 'Deductivo vinculado', tipo0 === 'deductivo')}</select></div>
+      <div class="field"><label for="adNum">N°</label><input id="adNum" type="number" min="1" max="99" value="${e ? e.numero : ''}" placeholder="automático"></div>
+      <div class="field"><label for="adEst">Estado</label><select id="adEst">${[['solicitada', 'Solicitada'], ['aprobada', 'Aprobada'], ['aprobada_parcial', 'Aprobada parcial'], ['improcedente', 'Improcedente']].map(([k, t]) => op(k, t, est0 === k)).join('')}</select></div></div>
+    <div class="field"><label for="adDesc">Descripción</label><input id="adDesc" type="text" maxlength="160" value="${v('descripcion')}" placeholder="Ej. Prestación adicional de obra N° 01: defensa ribereña"></div>
+    <div class="row2"><div class="field"><label for="adLb">Línea base que lo incorpora</label><select id="adLb">${op('', 'Ninguna todavía', lb0 == null)}${ADI.lbs.filter(l => l.numero > 0).map(l => op(l.numero, 'LB' + l.numero + (l.tipo_cambio ? ' · ' + esc(l.tipo_cambio) : ''), lb0 === l.numero)).join('')}</select></div>
+      <div class="field"><label for="adMonto">Monto costo directo S/ <span class="hint" style="font-weight:400" id="adAuto"></span></label><input id="adMonto" type="number" step="0.01" min="0" value="${e && e.monto_cd != null ? e.monto_cd : ''}" placeholder="de la línea base"></div></div>
+    <div class="row2"><div class="field"><label for="adCausal">Causal</label><input id="adCausal" type="text" maxlength="160" value="${v('causal')}"></div><div class="field"><label for="adLegal">Base legal</label><input id="adLegal" type="text" maxlength="80" value="${v('base_legal')}" placeholder="Ej. Art. 205 RLCE"></div></div>
+    <div class="row3"><div class="field"><label for="adFSol">Fecha de solicitud</label><input id="adFSol" type="date" value="${v('fecha_solicitud')}"></div><div class="field"><label for="adRes">Resolución</label><input id="adRes" type="text" maxlength="80" value="${v('resolucion')}"></div><div class="field"><label for="adFRes">Fecha de resolución</label><input id="adFRes" type="date" value="${v('fecha_resolucion')}"></div></div>
+    <div class="field"><label for="adNotas">Notas</label><input id="adNotas" type="text" maxlength="200" value="${v('notas')}"></div>
+    <div class="sug-acc"><button class="btn" type="submit">Guardar</button><button class="btn-sec" type="button" id="adCancel">Cancelar</button></div>`;
+  const fondo = document.getElementById('lbFondo') || (() => { const x = document.createElement('div'); x.id = 'lbFondo'; x.hidden = true; document.body.appendChild(x); return x; })();
+  const cerrar = () => { m.hidden = true; fondo.hidden = true; document.documentElement.classList.remove('la-modal'); };
+  const auto = () => { const n = q('#adLb').value, p = n === '' ? null : ADI.pre.find(x => x.numero === +n), tp = q('#adTipo').value; q('#adAuto').textContent = p ? `· calculado: S/ ${adiN(tp === 'adicional' ? p.adicional_cd : -p.deductivo_cd)}` : ''; };
+  q('#adLb').onchange = auto; q('#adTipo').onchange = auto; auto();
+  m.hidden = false; fondo.hidden = false; document.documentElement.classList.add('la-modal'); fondo.onclick = cerrar; q('#adCancel').onclick = cerrar;
+  m.onsubmit = async (ev) => {
+    ev.preventDefault(); const btn = q('button[type=submit]'); btn.disabled = true;
+    try {
+      await preRpc('prestacion_guardar', { p_id: e ? e.id : null, p_obra: OBRA.id, p_tipo: q('#adTipo').value, p_numero: q('#adNum').value ? +q('#adNum').value : null, p_descripcion: q('#adDesc').value || null, p_estado: q('#adEst').value,
+        p_resolucion: q('#adRes').value || null, p_fecha_resolucion: q('#adFRes').value || null, p_fecha_solicitud: q('#adFSol').value || null, p_causal: q('#adCausal').value || null, p_base_legal: q('#adLegal').value || null,
+        p_lb: q('#adLb').value === '' ? null : +q('#adLb').value, p_monto_cd: q('#adMonto').value === '' ? null : +q('#adMonto').value, p_notas: q('#adNotas').value || null });
+      cerrar(); toast('Registro guardado.', true, 'adi'); await adiCargar(true);
+    } catch (er) { btn.disabled = false; toast(`No se pudo guardar: ${esc(er.message)}${/function|schema cache|404/i.test(er.message) ? ' · ¿falta correr adicionales_deductivos.sql?' : ''}`, false, 'adi'); }
+  };
+}
+function adiLimiteAbrir() {
+  let m = document.getElementById('adiLim');
+  if (!m) { m = document.createElement('form'); m.id = 'adiLim'; m.className = 'pform la-form'; m.hidden = true; document.body.appendChild(m); }
+  m.innerHTML = `<h3 style="margin:0 0 4px;font-size:14px">Límite de adicionales</h3><p class="hint" style="margin:0 0 10px">Porcentaje máximo de adicionales netos (adicionales − deductivos vinculados) sobre el monto del contrato. 15 % es un valor de referencia: ajústalo a lo que fije tu contrato o la norma aplicable.</p>
+    <div class="field"><label for="adLimV">Límite (%)</label><input id="adLimV" type="number" step="0.1" min="0.1" max="100" value="${ADI.limite}"></div>
+    <div class="sug-acc"><button class="btn" type="submit">Guardar</button><button class="btn-sec" type="button" id="adLimC">Cancelar</button></div>`;
+  const fondo = document.getElementById('lbFondo') || (() => { const x = document.createElement('div'); x.id = 'lbFondo'; x.hidden = true; document.body.appendChild(x); return x; })();
+  const cerrar = () => { m.hidden = true; fondo.hidden = true; document.documentElement.classList.remove('la-modal'); };
+  m.hidden = false; fondo.hidden = false; document.documentElement.classList.add('la-modal'); fondo.onclick = cerrar; m.querySelector('#adLimC').onclick = cerrar;
+  m.onsubmit = async (ev) => {
+    ev.preventDefault(); const n = parseFloat(String(m.querySelector('#adLimV').value).replace(',', '.'));
+    if (!(n > 0 && n <= 100)) { toast('El límite va entre 0 y 100 %.', false, 'adi'); return; }
+    try { await preRpc('obra_limite_guardar', { p_obra: OBRA.id, p_pct: n }); cerrar(); toast('Límite actualizado.', true, 'adi'); await adiCargar(true); } catch (er) { toast(`No se pudo guardar: ${esc(er.message)}`, false, 'adi'); }
+  };
+}
+document.addEventListener('click', async (e) => {
+  if (e.target.closest('[data-adi-nuevo]')) { adiFormAbrir(null, null); return; }
+  const nl = e.target.closest('[data-adi-nuevo-lb]'); if (nl) { const n = +nl.dataset.adiNuevoLb, p = ADI.pre.find(x => x.numero === n), l = ADI.lbs.find(x => x.numero === n);
+    adiFormAbrir(null, { tipo: p && p.adicional_partidas ? 'adicional' : 'deductivo', lb_numero: n, descripcion: l && l.tipo_cambio ? l.tipo_cambio : '' }); return; }
+  const ed = e.target.closest('[data-adi-edit]'); if (ed) { adiFormAbrir(ed.dataset.adiEdit, null); return; }
+  if (e.target.closest('[data-adi-limite]')) { adiLimiteAbrir(); return; }
+  const de = e.target.closest('[data-adi-del]'); if (!de) return;
+  const r = ADI.reg.find(x => x.id === de.dataset.adiDel); if (!r) return;
+  if (!(await confirmar(`Eliminar el registro de prestación «${r.tipo === 'adicional' ? 'Adicional' : 'Deductivo vinculado'} N° ${adiN0(r.numero)}». No cambia las líneas base.`))) return;
+  try { await preRpc('prestacion_eliminar', { p_id: r.id }); toast('Registro eliminado.', true, 'adi'); await adiCargar(true); } catch (er) { toast(`No se pudo eliminar: ${esc(er.message)}`, false, 'adi'); }
+});
+
 // ═══ PLAZO CONTRACTUAL: registro de ampliaciones de plazo, suspensiones y desplazamientos (tabla plazo_eventos) ═══
 // Cada REGISTRO (p. ej. «Ampliación de plazo N° 03») es un grupo de filas: una por frente afectado, con SUS PROPIOS días (un adicional puede dar 20 días a Charanal, 10 a Bocana y 30 a Damas).
 // Estados: solicitada · aprobada · aprobada parcial · improcedente. Solo cuentan para el plazo las aprobadas y las aprobadas parcial (con los días aprobados).
