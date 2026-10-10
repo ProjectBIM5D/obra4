@@ -1920,8 +1920,21 @@ html.tb-compacta #laApp .tb-seg .seg-btn[data-lagrupos]{padding:0;width:34px;}
 td.c .icon-btn+.icon-btn{margin-left:6px;}
 .met-fila{display:grid;grid-template-columns:130px minmax(0,1fr) 150px 38px;gap:8px;align-items:start;margin-bottom:6px;} .met-fila select,.met-fila input{width:100%;min-width:0;} .mf-mu{display:flex;align-items:center;gap:6px;} .mf-u{font-size:11px;color:var(--mut);min-width:28px;} .met-fila .icon-btn{width:38px;height:38px;}
 @media (max-width:560px){.met-fila{grid-template-columns:1fr 38px;} .met-fila .mf-fr{grid-column:1;} .met-fila .mf-pt{grid-column:1 / span 2;} .met-fila .mf-mu{grid-column:1;}} .lb-tb .vl-pill{margin-left:4px;}
+.ctv-tb td{vertical-align:top;} .ctv-tb td.l{white-space:normal;min-width:230px;} .ctv-n{color:#b45309;} .ctv-ti{color:var(--tx);font-weight:600;font-size:12.5px;}
+.ctv-tg{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;padding:0;margin:0 6px 0 -4px;border:0;background:none;border-radius:6px;cursor:pointer;color:var(--mut);vertical-align:middle;}
+.ctv-tg svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;transition:transform .15s;} .ctv-tg.on svg{transform:rotate(90deg);} .ctv-tg:hover{background:var(--input);color:var(--blue);}
+.ctv-tb .vl-pill+.vl-pill{margin-left:4px;} .ctv-tb td.ctr .lb-sub{display:block;margin-top:3px;}
+.ctv-sub td{background:var(--input);padding:10px 14px 12px 38px;}
+.ctv-tl{margin:2px 0 4px 6px;border-left:2px solid var(--line2);} .ctv-solo{margin-top:8px;}
+.ctv-it{display:grid;grid-template-columns:76px minmax(0,1fr) auto;gap:10px;align-items:start;padding:7px 8px 7px 14px;position:relative;}
+.ctv-it::before{content:"";position:absolute;left:-7px;top:12px;width:10px;height:10px;border-radius:50%;background:var(--card);border:2px solid var(--line2);box-sizing:border-box;} .ctv-it.dec::before{background:var(--blue);border-color:var(--blue);}
+.ctv-f{font-size:12px;color:var(--mut);font-variant-numeric:tabular-nums;padding-top:2px;}
+.ctv-d{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;min-width:0;} .ctv-d .lb-sub{flex-basis:100%;} .ctv-doc{font-size:12px;color:var(--mut);} .ctv-ch{flex-basis:100%;display:flex;flex-wrap:wrap;gap:4px 12px;} .ctv-ch:empty{display:none;}
+.ctv-rec,.ctv-lim{font-size:11px;color:var(--mut);font-weight:600;} .ctv-lim.cerca{color:#b45309;} .ctv-lim.venc{color:#b91c1c;font-weight:800;}
+.ctv-ac{display:flex;gap:6px;} .ctv-ac .icon-btn{width:34px;height:34px;padding:0;border-radius:8px;font-size:0;} .ctv-ac .icon-btn svg{width:18px;height:18px;} .ctv-ac .icon-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--input);} .ctv-ac .icon-btn[aria-label^="Eliminar"]:hover{border-color:var(--red);color:var(--red);}
+@media (max-width:560px){.ctv-it{grid-template-columns:1fr auto;} .ctv-f{grid-column:1 / span 2;} .ctv-sub td{padding-left:14px;}}
 .lb-cmp{display:inline-flex;align-items:center;gap:8px;flex:0 0 auto;} .lb-cmp select{max-width:260px;}
-#lbFicha:not([hidden]),#plzForm:not([hidden]),#lbObs:not([hidden]),#adiForm:not([hidden]),#adiLim:not([hidden]),#metForm:not([hidden]),#adiXls:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(620px,calc(100vw - 20px));max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
+#lbFicha:not([hidden]),#plzForm:not([hidden]),#lbObs:not([hidden]),#adiForm:not([hidden]),#adiLim:not([hidden]),#metForm:not([hidden]),#ctvForm:not([hidden]),#evtForm:not([hidden]),#adiXls:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(620px,calc(100vw - 20px));max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
 /* el Gantt en Contrato: sin la barra de selección de plan */
 #plEspacio[data-donde="plan"] #plVerP{display:none;}
 #plFotoDlg:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(560px,calc(100vw - 20px));margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
@@ -2046,7 +2059,7 @@ document.documentElement.classList.add('dens-densa');   // tamaño único de las
           <button type="button" data-pane="adicionales" title="Prestaciones adicionales y deductivos vinculados: lo que trajo cada línea base, su resolución y el límite"><span class="ni">➕</span><span class="nt">Adicionales y deductivos</span></button>
           <button type="button" data-pane="metrados" title="Mayores metrados: se registran como un adicional (solicitado, autorizado, aprobado, valorizado, pagado); el menor metrado va en una tarjeta"><span class="ni">📏</span><span class="nt">Mayores metrados</span></button>
           <button type="button" data-pane="plazo" title="Plazo contractual: suspensiones, ampliaciones y adicionales de plazo, con su resolución y la línea base que los incorpora"><span class="ni">⏳</span><span class="nt">Ampliaciones de plazo</span></button>
-          <button type="button" class="prox" disabled title="Próximamente · registro de eventos del contrato"><span class="ni">⚖️</span><span class="nt">Eventos y controversias</span><span class="nav-tag">pronto</span></button>
+          <button type="button" data-pane="controversias" title="Controversias con su línea de tiempo (JRD, conciliación, arbitraje) y eventos del contrato"><span class="ni">⚖️</span><span class="nt">Eventos y controversias</span></button>
         </div>
       </div>
       <div class="nav-g" data-g="bim">
@@ -2280,6 +2293,7 @@ document.documentElement.classList.add('dens-densa');   // tamaño único de las
     <section class="pane" data-pane="metrados"><div id="metPanel"></div></section>
     <section class="pane" data-pane="adicionales"><div id="adiPanel"></div></section>
     <section class="pane" data-pane="plazo"><div id="plzPanel"></div></section>
+    <section class="pane" data-pane="controversias"><div id="ctvPanel"></div></section>
     <section class="pane" data-pane="lineasbase"><div id="lbPanel"></div>
       <div id="lbGanttSlot" style="margin-top:14px"><div class="lb-cab"><div><h3 style="margin:0 0 3px">Cronograma de la línea base</h3><p class="hint" style="margin:0">Solo lectura, tal como está en el Project de esa línea base: fechas, ruta crítica y vínculos. Elige otra en «Línea base». El plan de ejecución se trabaja en Planificación › Plan maestro.</p></div></div><div id="lbGanttBox"></div></div></section>
     <section class="pane" data-pane="plan">
@@ -2998,6 +3012,7 @@ document.querySelectorAll('#nav button[data-pane]').forEach(b => {
       presupuesto: ['Presupuesto', 'Venta (contrato, solo lectura) y meta (copia del APU que se ajusta sin tocar el contrato)'],
       metrados: ['Mayores metrados', 'Registro de mayores metrados con su estado y resolución · el menor metrado, en una tarjeta'],
       adicionales: ['Adicionales y deductivos', 'Prestaciones adicionales y deductivos vinculados: lo que trajo cada línea base, su resolución y cuánto va del límite'],
+      controversias: ['Eventos y controversias', 'Controversias con su línea de tiempo (JRD, conciliación, arbitraje) y los eventos del contrato'],
       plazo: ['Plazo y ampliaciones', 'Suspensiones, ampliaciones y adicionales de plazo: qué cambió, con qué resolución y cómo queda el fin de obra'],
       lineasbase: ['Contrato y líneas base', 'LB0 a LB3: inicio de contrato, suspensión, adicional y deductivo, ampliación · ficha, comparación y carga'],
       plan: ['Plan master', 'Cronograma meta: tu plan de ejecución con vínculos, ruta crítica y duraciones sugeridas por el APU meta'],
@@ -3014,6 +3029,7 @@ document.querySelectorAll('#nav button[data-pane]').forEach(b => {
     if (b.dataset.pane === 'plazo') plzCargar();
     if (b.dataset.pane === 'adicionales') adiCargar();
     if (b.dataset.pane === 'metrados') metCargar();
+    if (b.dataset.pane === 'controversias') ctvCargar();
     if (b.dataset.pane === 'presupuesto') preCargar();
     if (b.dataset.pane === 'parte' && !$('#parteLA').hidden) plaCargar();
     $('#side').classList.remove('open'); $('#overlay').classList.remove('on');
@@ -8396,6 +8412,196 @@ document.addEventListener('click', async (e) => {
   const r = MET.reg.find(x => x.id === de.dataset.metDel); if (!r) return;
   if (!(await confirmar(`Eliminar el registro de prestación «Mayor metrado N° ${String(r.numero).padStart(2, '0')}». No cambia las valorizaciones.`))) return;
   try { await preRpc('mayor_metrado_eliminar', { p_id: r.id }); toast('Mayor metrado eliminado.', true, 'met'); await metCargar(true); } catch (er) { toast(`No se pudo eliminar: ${esc(er.message)}`, false, 'met'); }
+});
+
+// ═══ EVENTOS Y CONTROVERSIAS: controversias numeradas con su línea de tiempo (planteamiento → JRD → decisión → arbitraje → cierre) y eventos sueltos del contrato ═══
+// El estado de cada controversia NO se digita: sale de su actuación más avanzada. Los montos son subtotal sin IGV.
+const CTV = { ctv: [], ev: [], refs: [], C: [], S: [], exp: null, cargado: false, sinSql: false };
+const CTV_MAT = { ampliacion_plazo: 'Ampliación de plazo', adicional: 'Adicional o deductivo', mayor_metrado: 'Mayor metrado', valorizacion: 'Valorización', linea_base: 'Línea base', resolucion_contrato: 'Resolución de contrato', otro: 'Otra materia' };
+const CTV_TIPO = { planteamiento: 'Planteamiento de la controversia', carta: 'Carta o comunicación', notificacion: 'Notificación', acta: 'Acta o reunión', respuesta: 'Respuesta de la otra parte', solicitud_jrd: 'Solicitud a la JRD', decision_jrd: 'Decisión de la JRD',
+  conciliacion: 'Conciliación', arbitraje: 'Arbitraje (solicitud o instalación)', laudo: 'Laudo arbitral', cumplimiento: 'Cumplimiento de lo decidido', cierre: 'Cierre de la controversia', otro: 'Otro evento' };
+const CTV_GRUPOS = [['Trámite', ['planteamiento', 'carta', 'notificacion', 'acta', 'respuesta']], ['JRD y conciliación', ['solicitud_jrd', 'decision_jrd', 'conciliacion']], ['Arbitraje', ['arbitraje', 'laudo']], ['Cierre', ['cumplimiento', 'cierre']], ['Otros', ['otro']]];
+const CTV_NUM = ['solicitud_jrd', 'decision_jrd', 'conciliacion', 'laudo'];                         // se numeran solos: «Decisión N° 01 de la JRD»
+const CTV_RES = ['decision_jrd', 'conciliacion', 'laudo', 'cumplimiento', 'cierre'];                // traen resultado y lo reconocido
+const CTV_RANK = { planteamiento: 0, carta: 0, notificacion: 0, acta: 0, respuesta: 0, otro: 0, solicitud_jrd: 1, conciliacion: 1.5, decision_jrd: 2, arbitraje: 3, laudo: 4, cumplimiento: 5, cierre: 6 };
+const CTV_ESTADO = [[0, 'Planteada', 'pr'], [1, 'En la JRD', 'pp'], [1.5, 'En conciliación', 'pp'], [2, 'Decidida', 'pp'], [3, 'En arbitraje', 'no'], [4, 'Laudada', 'pp'], [5, 'Cumplida', 'ok'], [6, 'Cerrada', 'ok']];
+const CTV_RESULT = { favorable: ['a favor', 'ok'], parcial: ['parcial', 'pr'], desfavorable: ['en contra', 'no'] };
+const ctvHoy = () => { const d = new Date(); return Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86400000; };
+const ctvEtq = (e) => { const n = e.numero != null ? String(e.numero).padStart(2, '0') : '';
+  if (e.tipo === 'decision_jrd') return `Decisión N° ${n} de la JRD`; if (e.tipo === 'solicitud_jrd') return `Solicitud N° ${n} a la JRD`;
+  if (e.tipo === 'conciliacion') return `Conciliación N° ${n}`; if (e.tipo === 'laudo') return `Laudo N° ${n}`;
+  return CTV_TIPO[e.tipo] || e.tipo; };
+const ctvNum = (c) => `Controversia N° ${String(c.numero).padStart(2, '0')}`;
+async function ctvCargar(forzar) {
+  const box = $('#ctvPanel'); if (!box) return;
+  if (typeof OBRA === 'undefined' || !OBRA || !OBRA.id) { box.innerHTML = '<div class="rg-msg">Leyendo la obra…</div>'; setTimeout(() => { if (document.documentElement.dataset.pane === 'controversias') ctvCargar(); }, 1200); return; }
+  if (!CTV.cargado || forzar) box.innerHTML = '<div class="rg-msg">Leyendo eventos y controversias…</div>';
+  try {
+    const [ctv, ev, plz, pre, lbs, vals] = await Promise.all([
+      get(`/controversias?obra_id=eq.${OBRA.id}&select=*&order=numero`).catch(() => null),
+      get(`/contrato_eventos?obra_id=eq.${OBRA.id}&select=*&order=fecha,creado_en`).catch(() => null),
+      get(`/plazo_eventos?obra_id=eq.${OBRA.id}&select=tipo,numero,grupo&order=tipo,numero`).catch(() => []),
+      get(`/prestaciones?obra_id=eq.${OBRA.id}&select=tipo,numero&order=tipo,numero`).catch(() => []),
+      get(`/linea_base_versiones?obra_id=eq.${OBRA.id}&select=numero&order=numero`).catch(() => []),
+      get(`/valorizaciones?select=tipo,numero&order=tipo,numero`).catch(() => [])]);
+    CTV.sinSql = ctv === null || ev === null; CTV.ctv = ctv || []; CTV.ev = ev || [];
+    // registros a los que puede referirse una controversia (lista de ayuda del campo «Se refiere a»)
+    const refs = [], vistos = new Set(), P = { ampliacion: 'Ampliación de plazo', suspension: 'Suspensión', adicional: 'Adicional de plazo', desplazamiento: 'Desplazamiento', otro: 'Registro de plazo' };
+    (plz || []).forEach(p => { const k = p.grupo || `${p.tipo}-${p.numero}`; if (vistos.has(k)) return; vistos.add(k); refs.push(`${P[p.tipo] || 'Registro de plazo'} N° ${adiN0(p.numero)}`); });
+    (pre || []).forEach(p => refs.push(`${{ adicional: 'Adicional', deductivo: 'Deductivo vinculado', mayor: 'Mayor metrado' }[p.tipo] || 'Prestación'} N° ${adiN0(p.numero)}`));
+    (lbs || []).forEach(l => refs.push(`Línea base LB${l.numero}`));
+    (vals || []).forEach(v => refs.push(`${{ contrato: 'Valorización', adicional: 'Valorización de adicional', mayores_metrados: 'Valorización de mayores metrados' }[v.tipo] || 'Valorización'} N° ${adiN0(v.numero)}`));
+    CTV.refs = [...new Set(refs)];
+    ctvCalcular();
+    if (CTV.exp === null) CTV.exp = new Set(CTV.C.length <= 3 ? CTV.C.filter(c => !c.cerrada).map(c => c.id) : []);
+    CTV.cargado = true; ctvPintar();
+  } catch (e) { box.innerHTML = msgCarga('Eventos y controversias', e); }
+}
+function ctvCalcular() {
+  const hoy = ctvHoy(), orden = (a, b) => String(a.fecha).localeCompare(String(b.fecha)) || String(a.creado_en).localeCompare(String(b.creado_en));
+  CTV.hoy = hoy;
+  CTV.C = CTV.ctv.map(c => {
+    const E = CTV.ev.filter(e => e.controversia_id === c.id).sort(orden);
+    const rank = E.reduce((m, e) => Math.max(m, CTV_RANK[e.tipo] || 0), 0), est = CTV_ESTADO.find(x => x[0] === rank) || CTV_ESTADO[0], cerrada = rank >= 5;
+    const conRes = E.filter(e => e.resultado), res = conRes.length ? conRes[conRes.length - 1].resultado : null;
+    const rec = E.filter(e => CTV_RES.includes(e.tipo) && (e.monto_sub != null || e.dias != null)).slice(-1)[0] || null;
+    const pl = cerrada ? [] : E.filter(e => e.fecha_limite).map(e => ({ e, n: plD(e.fecha_limite) - hoy, atendido: E.some(x => orden(x, e) > 0 && (CTV_RANK[x.tipo] || 0) >= (CTV_RANK[e.tipo] || 0)) })).filter(p => !p.atendido);
+    const prox = pl.filter(p => p.n >= 0).sort((a, b) => a.n - b.n)[0] || null, venc = pl.filter(p => p.n < 0).sort((a, b) => b.n - a.n)[0] || null;
+    return { ...c, E, rank, estado: est[1], cls: est[2], cerrada, res, rec, prox, venc, ultimo: E[E.length - 1] || null };
+  });
+  CTV.S = CTV.ev.filter(e => !e.controversia_id).sort((a, b) => orden(b, a));
+}
+function ctvPintar() {
+  const box = $('#ctvPanel'), adm = !!AUTH.admin, f2 = (s) => s ? plFmt(plD(s)) : '—', hoy = CTV.hoy;
+  const ab = CTV.C.filter(c => !c.cerrada), cerr = CTV.C.filter(c => c.cerrada), conRes = CTV.C.filter(c => c.rec || c.res);
+  const sum = (L, k) => L.reduce((s, c) => s + Number(c[k] || 0), 0), rsum = (k) => conRes.reduce((s, c) => s + Number((c.rec && c.rec[k]) || 0), 0);
+  const nEst = (r) => ab.filter(c => c.rank === r).length, nRes = (r) => CTV.C.filter(c => c.res === r).length;
+  // plazo más próximo (de controversias abiertas y de eventos sueltos) y vencidos sin atender
+  const cand = []; ab.forEach(c => { if (c.prox) cand.push({ n: c.prox.n, e: c.prox.e, c }); });
+  CTV.S.forEach(e => { if (e.fecha_limite) { const n = plD(e.fecha_limite) - hoy; if (n >= 0) cand.push({ n, e, c: null }); } });
+  cand.sort((a, b) => a.n - b.n); const p0 = cand[0], venc = ab.filter(c => c.venc);
+  const kPlazo = venc.length
+    ? `<div class="vl-k" style="--kc:#ef4444"><small>Plazo vencido</small><b style="color:#b91c1c">${venc.length} sin atender</b><em>${esc(ctvNum(venc[0]))}: ${esc(ctvEtq(venc[0].venc.e))} · venció el ${f2(venc[0].venc.e.fecha_limite)}</em></div>`
+    : p0 ? `<div class="vl-k" style="--kc:${p0.n <= 7 ? '#f59e0b' : '#10b981'}"><small>Próximo plazo</small><b>${f2(p0.e.fecha_limite)}</b><em>${p0.n === 0 ? 'vence hoy' : `en ${p0.n} día${p0.n === 1 ? '' : 's'}`} · ${esc(ctvEtq(p0.e))}${p0.c ? ' · ' + esc(ctvNum(p0.c)) : ''}</em></div>`
+      : '<div class="vl-k"><small>Próximo plazo</small><b>Ninguno</b><em>sin plazos por vencer</em></div>';
+  const kpis = `<div class="vl-kp">
+    <div class="vl-k"><small>Controversias abiertas</small><b>${ab.length}</b><em>${nEst(0)} planteada${nEst(0) === 1 ? '' : 's'} · ${nEst(1) + nEst(1.5)} en JRD o conciliación · ${nEst(2)} decidida${nEst(2) === 1 ? '' : 's'} · ${nEst(3) + nEst(4)} en arbitraje</em></div>
+    <div class="vl-k"><small>En discusión</small><b>S/ ${metN(sum(ab, 'monto_sub'))}</b><em>${sum(ab, 'dias')} día${sum(ab, 'dias') === 1 ? '' : 's'} de plazo · subtotal sin IGV</em></div>
+    ${kPlazo}
+    <div class="vl-k"><small>Reconocido</small><b>S/ ${metN(rsum('monto_sub'))}</b><em>${rsum('dias')} día${rsum('dias') === 1 ? '' : 's'} · ${nRes('favorable')} a favor · ${nRes('parcial')} parcial · ${nRes('desfavorable')} en contra</em></div></div>`;
+  const ic = { ed: '<svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4Z"/></svg>', del: '<svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>', add: '<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>', chev: '<svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>' };
+  const monto = (m, d) => (m != null || d != null) ? `${m != null ? `<b>${metN(m)}</b>` : ''}${d != null ? `<span class="lb-sub">${d} día${d === 1 ? '' : 's'}</span>` : ''}` : '<span class="lb-sub">—</span>';
+  const evItem = (e) => {
+    const n = e.fecha_limite ? plD(e.fecha_limite) - hoy : null, r = e.resultado ? CTV_RESULT[e.resultado] : null;
+    const lim = e.fecha_limite ? `<span class="ctv-lim${n < 0 ? ' venc' : n <= 7 ? ' cerca' : ''}" title="Plazo para responder o impugnar">Plazo ${f2(e.fecha_limite)}${n < 0 ? ' · vencido' : n === 0 ? ' · hoy' : n <= 7 ? ` · ${n} d` : ''}</span>` : '';
+    const rec = (e.monto_sub != null || e.dias != null) ? `<span class="ctv-rec">Reconocido ${e.monto_sub != null ? 'S/ ' + metN(e.monto_sub) : ''}${e.monto_sub != null && e.dias != null ? ' · ' : ''}${e.dias != null ? e.dias + ' día' + (e.dias === 1 ? '' : 's') : ''}</span>` : '';
+    return `<div class="ctv-it${CTV_RES.includes(e.tipo) ? ' dec' : ''}"><span class="ctv-f">${f2(e.fecha)}</span>
+      <div class="ctv-d"><b>${esc(ctvEtq(e))}</b>${e.documento ? `<span class="ctv-doc">${esc(e.documento)}</span>` : ''}${r ? `<span class="vl-pill ${r[1]}">${r[0]}</span>` : ''}${e.descripcion ? `<span class="lb-sub">${esc(e.descripcion)}</span>` : ''}<span class="ctv-ch">${rec}${lim}</span></div>
+      <div class="ctv-ac">${adm ? `<button type="button" class="icon-btn" data-ctv-evedit="${e.id}" title="Editar" aria-label="Editar">${ic.ed}</button><button type="button" class="icon-btn" data-ctv-evdel="${e.id}" title="Eliminar" aria-label="Eliminar">${ic.del}</button>` : ''}</div></div>`;
+  };
+  const filas = CTV.C.slice().sort((a, b) => (a.cerrada - b.cerrada) || (b.numero - a.numero)).map(c => {
+    const abierto = CTV.exp.has(c.id), r = c.res ? CTV_RESULT[c.res] : null;
+    const prox = c.venc ? `<span class="ctv-lim venc">${esc(ctvEtq(c.venc.e))} · venció ${f2(c.venc.e.fecha_limite)}</span>`
+      : c.prox ? `<b>${f2(c.prox.e.fecha_limite)}</b><span class="lb-sub">${c.prox.n === 0 ? 'vence hoy' : `en ${c.prox.n} día${c.prox.n === 1 ? '' : 's'}`} · ${esc(ctvEtq(c.prox.e))}</span>` : '<span class="lb-sub">—</span>';
+    return `<tr><td class="l"><button type="button" class="ctv-tg${abierto ? ' on' : ''}" data-ctv-tg="${c.id}" aria-expanded="${abierto}" title="${abierto ? 'Ocultar' : 'Ver'} la línea de tiempo">${ic.chev}</button><b class="ctv-n">${esc(ctvNum(c))}</b>
+        <span class="lb-sub ctv-ti">${esc(c.titulo)}</span><span class="lb-sub">${esc(CTV_MAT[c.materia] || c.materia)}${c.referencia ? ' · ' + esc(c.referencia) : ''} · plantea ${c.parte === 'entidad' ? 'la Entidad' : 'el contratista'}</span></td>
+      <td class="ctr"><span class="vl-pill ${c.cls}">${c.estado}</span>${r ? `<span class="vl-pill ${r[1]}" title="Resultado para el contratista">${r[0]}</span>` : ''}<span class="lb-sub">${c.ultimo ? esc(ctvEtq(c.ultimo)) + ' · ' + f2(c.ultimo.fecha) : 'sin actuaciones'}</span></td>
+      <td>${monto(c.monto_sub, c.dias)}</td><td>${c.rec ? monto(c.rec.monto_sub, c.rec.dias) : '<span class="lb-sub">—</span>'}</td><td class="l">${prox}</td>
+      <td class="c">${adm ? `<button type="button" class="icon-btn" data-ctv-evnuevo="${c.id}" title="Agregar una actuación" aria-label="Agregar actuación">${ic.add}</button><button type="button" class="icon-btn" data-ctv-edit="${c.id}" title="Editar la controversia" aria-label="Editar">${ic.ed}</button><button type="button" class="icon-btn" data-ctv-del="${c.id}" title="Eliminar la controversia y su línea de tiempo" aria-label="Eliminar">${ic.del}</button>` : ''}</td></tr>
+      ${abierto ? `<tr class="ctv-sub"><td colspan="6" class="l">${c.notas ? `<p class="hint" style="margin:0 0 6px">${esc(c.notas)}</p>` : ''}${c.E.length ? `<div class="ctv-tl">${c.E.map(evItem).join('')}</div>` : '<p class="hint" style="margin:0">Todavía no hay actuaciones: registra el planteamiento, la solicitud a la JRD, su decisión…</p>'}</td></tr>` : ''}`;
+  }).join('');
+  const sueltos = CTV.S.length ? `<div class="ctv-tl ctv-solo">${CTV.S.map(evItem).join('')}</div>` : '<p class="hint" style="margin:0">Sin eventos sueltos. Aquí van las cartas, actas o notificaciones del contrato que no pertenecen a una controversia.</p>';
+  box.innerHTML = kpis
+    + `<div class="vl-card"><div class="lb-cab"><div><h3 style="margin:0 0 3px">Controversias</h3><p class="hint" style="margin:0">Cada controversia (N° 01, N° 02…) tiene su línea de tiempo: planteamiento → solicitud a la JRD → <b>Decisión N° 01 de la JRD</b> → conciliación o arbitraje → cierre. El estado sale de la actuación más avanzada; los montos son subtotal sin IGV.</p></div>
+      ${adm ? '<button type="button" class="btn-sec pri" data-ctv-nuevo title="Registrar una controversia">＋ Nueva controversia</button>' : ''}</div>
+      ${CTV.sinSql ? '<p class="plz-nota al">Falta correr <code>eventos_controversias.sql</code> en la base para registrar controversias y eventos.</p>' : ''}
+      <div class="vl-tw"><table class="vl-tb lb-tb plz-reg ctv-tb"><thead><tr><th class="l">Controversia</th><th class="ctr">Estado</th><th>En discusión S/ (sin IGV)</th><th>Reconocido S/ (sin IGV)</th><th class="l">Plazo</th><th></th></tr></thead>
+        <tbody>${filas || '<tr><td colspan="6" class="l">Todavía no hay controversias registradas.</td></tr>'}</tbody></table></div></div>`
+    + `<div class="vl-card"><div class="lb-cab"><div><h3 style="margin:0 0 3px">Eventos del contrato</h3><p class="hint" style="margin:0">Hechos y comunicaciones que no pertenecen a una controversia.</p></div>
+      ${adm ? '<button type="button" class="btn-sec" data-ctv-evnuevo="" title="Registrar un evento del contrato">＋ Nuevo evento</button>' : ''}</div>${sueltos}</div>`;
+}
+function ctvFormAbrir(id) {
+  const c = id ? CTV.ctv.find(x => x.id === id) : null; if (id && !c) return;
+  let m = document.getElementById('ctvForm');
+  if (!m) { m = document.createElement('form'); m.id = 'ctvForm'; m.className = 'pform la-form'; m.hidden = true; document.body.appendChild(m); }
+  const v = (k) => esc(c && c[k] != null ? c[k] : ''), q = (s) => m.querySelector(s), opt = (o, sel) => Object.entries(o).map(([k, t]) => `<option value="${k}"${sel === k ? ' selected' : ''}>${esc(t)}</option>`).join('');
+  m.innerHTML = `<h3 style="margin:0 0 4px;font-size:14px">${c ? ctvNum(c) : 'Nueva controversia'}</h3><p class="hint" style="margin:0 0 10px">Registra lo que está en discusión; el estado se calcula con las actuaciones que le vayas agregando.</p>
+    <div class="row3"><div class="field"><label for="mcNum">N°</label><input id="mcNum" type="number" min="1" max="99" value="${c ? c.numero : ''}" placeholder="automático"></div>
+      <div class="field"><label for="mcMat">Materia</label><select id="mcMat">${opt(CTV_MAT, c ? c.materia : 'ampliacion_plazo')}</select></div>
+      <div class="field"><label for="mcParte">La plantea</label><select id="mcParte">${opt({ contratista: 'El contratista', entidad: 'La Entidad' }, c ? c.parte : 'contratista')}</select></div></div>
+    <div class="field"><label for="mcTit">Título</label><input id="mcTit" type="text" maxlength="160" value="${v('titulo')}" placeholder="Ej. Improcedencia de la Ampliación de plazo N° 03"></div>
+    <div class="field"><label for="mcRef">Se refiere a</label><input id="mcRef" type="text" maxlength="120" list="mcRefL" value="${v('referencia')}" placeholder="Elige o escribe: Ampliación de plazo N° 03"><datalist id="mcRefL">${CTV.refs.map(r => `<option value="${esc(r)}"></option>`).join('')}</datalist></div>
+    <div class="row3"><div class="field"><label for="mcFecha">Fecha de planteamiento</label><input id="mcFecha" type="date" value="${v('fecha_planteamiento')}"></div>
+      <div class="field"><label for="mcMonto">En discusión S/ (sin IGV)</label><input id="mcMonto" type="number" min="0" step="0.01" inputmode="decimal" value="${v('monto_sub')}" placeholder="0.00"></div>
+      <div class="field"><label for="mcDias">Días de plazo</label><input id="mcDias" type="number" min="0" step="1" inputmode="numeric" value="${v('dias')}" placeholder="0"></div></div>
+    <div class="field"><label for="mcNotas">Notas</label><input id="mcNotas" type="text" maxlength="300" value="${v('notas')}"></div>
+    <div class="sug-acc"><button class="btn" type="submit">Guardar</button><button class="btn-sec" type="button" id="mcCancel">Cancelar</button></div>`;
+  const fondo = document.getElementById('lbFondo') || (() => { const x = document.createElement('div'); x.id = 'lbFondo'; x.hidden = true; document.body.appendChild(x); return x; })();
+  const cerrar = () => { m.hidden = true; fondo.hidden = true; document.documentElement.classList.remove('la-modal'); };
+  m.hidden = false; fondo.hidden = false; document.documentElement.classList.add('la-modal'); fondo.onclick = cerrar; q('#mcCancel').onclick = cerrar;
+  m.onsubmit = async (ev) => {
+    ev.preventDefault(); if (!q('#mcTit').value.trim()) { toast('Escribe el título de la controversia.', false, 'ctv'); return; }
+    const btn = q('button[type=submit]'); btn.disabled = true;
+    try {
+      await preRpc('controversia_guardar', { p_id: c ? c.id : null, p_obra: OBRA.id, p_numero: q('#mcNum').value ? +q('#mcNum').value : null, p_titulo: q('#mcTit').value, p_materia: q('#mcMat').value, p_parte: q('#mcParte').value,
+        p_fecha: q('#mcFecha').value || null, p_monto: q('#mcMonto').value !== '' ? +q('#mcMonto').value : null, p_dias: q('#mcDias').value !== '' ? +q('#mcDias').value : null, p_referencia: q('#mcRef').value || null, p_notas: q('#mcNotas').value || null });
+      cerrar(); toast('Controversia guardada.', true, 'ctv'); await ctvCargar(true);
+    } catch (er) { btn.disabled = false; toast(`No se pudo guardar: ${esc(er.message)}${/function|schema cache|404/i.test(er.message) ? ' · ¿falta correr eventos_controversias.sql?' : ''}`, false, 'ctv'); }
+  };
+}
+function ctvEventoAbrir(id, ctvId) {
+  const e = id ? CTV.ev.find(x => x.id === id) : null; if (id && !e) return;
+  let m = document.getElementById('evtForm');
+  if (!m) { m = document.createElement('form'); m.id = 'evtForm'; m.className = 'pform la-form'; m.hidden = true; document.body.appendChild(m); }
+  const v = (k) => esc(e && e[k] != null ? e[k] : ''), q = (s) => m.querySelector(s), c0 = e ? e.controversia_id : (ctvId || '');
+  const hoyIso = (() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; })();
+  const tipo0 = e ? e.tipo : (c0 ? 'carta' : 'carta');
+  m.innerHTML = `<h3 style="margin:0 0 4px;font-size:14px">${e ? esc(ctvEtq(e)) : 'Nueva actuación o evento'}</h3><p class="hint" style="margin:0 0 10px">Si pertenece a una controversia, elígela: entra en su línea de tiempo y cambia su estado. Las decisiones, solicitudes a la JRD, conciliaciones y laudos se numeran solos.</p>
+    <div class="field"><label for="meCtv">Controversia</label><select id="meCtv"><option value="">Ninguna · evento del contrato</option>${CTV.ctv.map(c => `<option value="${c.id}"${c.id === c0 ? ' selected' : ''}>${esc(ctvNum(c))} · ${esc(String(c.titulo).slice(0, 70))}</option>`).join('')}</select></div>
+    <div class="row3"><div class="field"><label for="meFecha">Fecha</label><input id="meFecha" type="date" value="${e ? v('fecha') : hoyIso}"></div>
+      <div class="field"><label for="meTipo">Tipo</label><select id="meTipo">${CTV_GRUPOS.map(([g, ks]) => `<optgroup label="${g}">${ks.map(k => `<option value="${k}"${tipo0 === k ? ' selected' : ''}>${esc(CTV_TIPO[k])}</option>`).join('')}</optgroup>`).join('')}</select></div>
+      <div class="field" id="meNumF"><label for="meNum">N°</label><input id="meNum" type="number" min="1" max="99" value="${v('numero')}" placeholder="automático"></div></div>
+    <div class="field"><label for="meDoc">Documento</label><input id="meDoc" type="text" maxlength="120" value="${v('documento')}" placeholder="Ej. Carta N° 045-2026-CPP · Decisión JRD N° 01"></div>
+    <div id="meResF"><div class="row3"><div class="field"><label for="meRes">Resultado para el contratista</label><select id="meRes">${[['', 'Sin resultado'], ['favorable', 'A favor'], ['parcial', 'Parcial'], ['desfavorable', 'En contra']].map(([k, t]) => `<option value="${k}"${(e && e.resultado || '') === k ? ' selected' : ''}>${t}</option>`).join('')}</select></div>
+      <div class="field"><label for="meMonto">Reconocido S/ (sin IGV)</label><input id="meMonto" type="number" min="0" step="0.01" inputmode="decimal" value="${v('monto_sub')}" placeholder="0.00"></div>
+      <div class="field"><label for="meDias">Días reconocidos</label><input id="meDias" type="number" min="0" step="1" inputmode="numeric" value="${v('dias')}" placeholder="0"></div></div></div>
+    <div class="row2"><div class="field"><label for="meLim">Plazo para responder o impugnar</label><input id="meLim" type="date" value="${v('fecha_limite')}"></div><div class="field"><label for="meDesc">Descripción</label><input id="meDesc" type="text" maxlength="300" value="${v('descripcion')}"></div></div>
+    <div class="sug-acc"><button class="btn" type="submit">Guardar</button><button class="btn-sec" type="button" id="meCancel">Cancelar</button></div>`;
+  const fondo = document.getElementById('lbFondo') || (() => { const x = document.createElement('div'); x.id = 'lbFondo'; x.hidden = true; document.body.appendChild(x); return x; })();
+  const cerrar = () => { m.hidden = true; fondo.hidden = true; document.documentElement.classList.remove('la-modal'); };
+  const ajustar = () => { const t = q('#meTipo').value; q('#meNumF').hidden = !CTV_NUM.includes(t); q('#meResF').hidden = !CTV_RES.includes(t); };
+  m.hidden = false; fondo.hidden = false; document.documentElement.classList.add('la-modal'); fondo.onclick = cerrar; q('#meCancel').onclick = cerrar;
+  m.onchange = (ev) => { if (ev.target.id === 'meTipo') ajustar(); }; ajustar();
+  m.onsubmit = async (ev) => {
+    ev.preventDefault(); if (!q('#meFecha').value) { toast('Indica la fecha del evento.', false, 'ctv'); return; }
+    const t = q('#meTipo').value, conRes = CTV_RES.includes(t), btn = q('button[type=submit]'); btn.disabled = true;
+    try {
+      await preRpc('contrato_evento_guardar', { p_id: e ? e.id : null, p_obra: OBRA.id, p_controversia: q('#meCtv').value || null, p_fecha: q('#meFecha').value, p_tipo: t,
+        p_numero: CTV_NUM.includes(t) && q('#meNum').value ? +q('#meNum').value : null, p_documento: q('#meDoc').value || null, p_resultado: conRes && q('#meRes').value ? q('#meRes').value : null,
+        p_monto: conRes && q('#meMonto').value !== '' ? +q('#meMonto').value : null, p_dias: conRes && q('#meDias').value !== '' ? +q('#meDias').value : null,
+        p_fecha_limite: q('#meLim').value || null, p_descripcion: q('#meDesc').value || null });
+      if (q('#meCtv').value && CTV.exp) CTV.exp.add(q('#meCtv').value);
+      cerrar(); toast('Evento guardado.', true, 'ctv'); await ctvCargar(true);
+    } catch (er) { btn.disabled = false; toast(`No se pudo guardar: ${esc(er.message)}${/function|schema cache|404/i.test(er.message) ? ' · ¿falta correr eventos_controversias.sql?' : ''}`, false, 'ctv'); }
+  };
+}
+document.addEventListener('click', async (e) => {
+  if (e.target.closest('[data-ctv-nuevo]')) { ctvFormAbrir(null); return; }
+  const tg = e.target.closest('[data-ctv-tg]'); if (tg) { const id = tg.dataset.ctvTg; if (CTV.exp.has(id)) CTV.exp.delete(id); else CTV.exp.add(id); ctvPintar(); return; }
+  const en = e.target.closest('[data-ctv-evnuevo]'); if (en) { ctvEventoAbrir(null, en.dataset.ctvEvnuevo || ''); return; }
+  const ee = e.target.closest('[data-ctv-evedit]'); if (ee) { ctvEventoAbrir(ee.dataset.ctvEvedit, null); return; }
+  const ed = e.target.closest('[data-ctv-edit]'); if (ed) { ctvFormAbrir(ed.dataset.ctvEdit); return; }
+  const ev = e.target.closest('[data-ctv-evdel]');
+  if (ev) {
+    const x = CTV.ev.find(r => r.id === ev.dataset.ctvEvdel); if (!x) return;
+    if (!(await confirmar(`Eliminar el evento «${ctvEtq(x)}» del ${plFmt(plD(x.fecha))}. El estado de su controversia se recalcula.`))) return;
+    try { await preRpc('contrato_evento_eliminar', { p_id: x.id }); toast('Evento eliminado.', true, 'ctv'); await ctvCargar(true); } catch (er) { toast(`No se pudo eliminar: ${esc(er.message)}`, false, 'ctv'); }
+    return;
+  }
+  const de = e.target.closest('[data-ctv-del]'); if (!de) return;
+  const c = CTV.ctv.find(r => r.id === de.dataset.ctvDel); if (!c) return;
+  if (!(await confirmar(`Eliminar «${ctvNum(c)}» y toda su línea de tiempo. No cambia ampliaciones, adicionales ni valorizaciones.`))) return;
+  try { await preRpc('controversia_eliminar', { p_id: c.id }); toast('Controversia eliminada.', true, 'ctv'); await ctvCargar(true); } catch (er) { toast(`No se pudo eliminar: ${esc(er.message)}`, false, 'ctv'); }
 });
 
 // ═══ ADICIONALES Y DEDUCTIVOS: lo que cambió en cada línea base (calculado de las partidas) + el registro legal numerado (tabla prestaciones) ═══
