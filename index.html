@@ -843,6 +843,12 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .row3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;} @media (max-width:560px){.row3{grid-template-columns:1fr;}}
 .pz-dt input[type=number]{width:60px;text-align:right;padding:4px 5px;} .vl-tb.pz-dt{min-width:0;} .vl-tb.pz-dt th,.vl-tb.pz-dt td{padding:5px 6px;white-space:normal;} .pz-dt td{vertical-align:middle;} .pz-dt .pz-on{width:16px;height:16px;}
 .adi-bar{height:6px;border-radius:99px;background:var(--line);margin-top:6px;overflow:hidden;} .adi-bar i{display:block;height:100%;border-radius:99px;}
+.vl-tb th.ctr,.vl-tb td.ctr{text-align:center;}
+.met-st{display:flex;justify-content:center;gap:3px;margin:5px 0 0;}
+#mfDD{position:fixed;z-index:100000;background:var(--card);border:1px solid var(--line2);border-radius:10px;box-shadow:0 14px 34px rgba(15,23,42,.28);overflow:auto;padding:4px;}
+#mfDD[hidden]{display:none;} .mf-o{padding:7px 10px;border-radius:7px;cursor:pointer;font-size:13px;line-height:1.3;color:var(--tx);} .mf-o small{display:block;font-size:11px;color:var(--mut);margin-top:2px;line-height:1.25;}
+.mf-o:hover,.mf-o.hl{background:var(--input);} .mf-o.on{box-shadow:inset 3px 0 0 var(--blue);} .mf-mas{padding:8px 10px;font-size:12px;color:var(--mut);}
+.mf-ruta{display:block;font-size:11px;color:var(--mut);margin-top:3px;line-height:1.25;} .mf-ruta:empty{display:none;} .met-st i{display:inline-block;width:14px;height:6px;border-radius:3px;background:var(--line2);} .met-st i.on{background:#10b981;}
 .plz-nota{font-size:11.5px;margin:8px 0 0;color:var(--mut);} .plz-nota.al{color:#b45309;font-weight:600;}
 .vl-pill{display:inline-block;font-size:10.5px;font-weight:800;padding:2px 9px;border-radius:999px;} .vl-pill.ok{background:#10b98122;color:var(--green);} .vl-pill.pr{background:#f59e0b26;color:var(--rg-am,#a85a08);}
 .vl-pbar{display:inline-block;vertical-align:middle;width:64px;height:7px;border-radius:4px;background:var(--line);overflow:hidden;margin-right:6px;} .vl-pbar i{display:block;height:100%;background:var(--blue);}
@@ -1908,9 +1914,14 @@ html.tb-compacta #laApp .tb-seg .seg-btn[data-lagrupos]{padding:0;width:34px;}
 /* pantalla Contrato y líneas base */
 .lb-cab{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:10px 16px;margin-bottom:10px;} .lb-cab>div{flex:1 1 320px;min-width:0;}
 .lb-tb td,.lb-tb th{white-space:normal;vertical-align:middle;} .lb-tb td{padding:4px 10px;} .lb-tb th{padding:6px 10px;} .lb-tb td.c{white-space:nowrap;} .lb-sub{font-size:11px;color:var(--mut);font-weight:500;line-height:1.3;}
-.lb-tb .lb-sub{display:inline;margin-left:6px;} .lb-tb td:nth-child(5){white-space:nowrap;} .lb-tb .icon-btn{width:28px;height:28px;border-radius:7px;} .lb-tb .icon-btn svg{width:15px;height:15px;} .lb-tb .vl-pill{margin-left:4px;}
+.lb-tb .lb-sub{display:inline;margin-left:6px;} .lb-tb td:nth-child(5){white-space:nowrap;} .vl-tb .icon-btn,.lb-tb .icon-btn,.oc-tb .icon-btn{width:34px;height:34px;padding:0;border-radius:8px;font-size:0;} .vl-tb .icon-btn svg,.lb-tb .icon-btn svg,.oc-tb .icon-btn svg{width:18px;height:18px;}
+.vl-tb .icon-btn:hover,.lb-tb .icon-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--input);}
+.vl-tb .icon-btn[aria-label^="Eliminar"]:hover,.vl-tb .icon-btn[aria-label^="Quitar"]:hover,.lb-tb .icon-btn[aria-label^="Eliminar"]:hover,.lb-tb .icon-btn[aria-label^="Quitar"]:hover{border-color:var(--red);color:var(--red);}
+td.c .icon-btn+.icon-btn{margin-left:6px;}
+.met-fila{display:grid;grid-template-columns:130px minmax(0,1fr) 150px 38px;gap:8px;align-items:start;margin-bottom:6px;} .met-fila select,.met-fila input{width:100%;min-width:0;} .mf-mu{display:flex;align-items:center;gap:6px;} .mf-u{font-size:11px;color:var(--mut);min-width:28px;} .met-fila .icon-btn{width:38px;height:38px;}
+@media (max-width:560px){.met-fila{grid-template-columns:1fr 38px;} .met-fila .mf-fr{grid-column:1;} .met-fila .mf-pt{grid-column:1 / span 2;} .met-fila .mf-mu{grid-column:1;}} .lb-tb .vl-pill{margin-left:4px;}
 .lb-cmp{display:inline-flex;align-items:center;gap:8px;flex:0 0 auto;} .lb-cmp select{max-width:260px;}
-#lbFicha:not([hidden]),#plzForm:not([hidden]),#lbObs:not([hidden]),#adiForm:not([hidden]),#adiLim:not([hidden]),#adiXls:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(620px,calc(100vw - 20px));max-height:calc(100vh - 24px);overflow-y:auto;margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
+#lbFicha:not([hidden]),#plzForm:not([hidden]),#lbObs:not([hidden]),#adiForm:not([hidden]),#adiLim:not([hidden]),#metForm:not([hidden]),#adiXls:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(620px,calc(100vw - 20px));max-height:calc(100vh - 24px);overflow-y:auto;margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
 /* el Gantt en Contrato: sin la barra de selección de plan */
 #plEspacio[data-donde="plan"] #plVerP{display:none;}
 #plFotoDlg:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(560px,calc(100vw - 20px));margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
@@ -2033,7 +2044,7 @@ document.documentElement.classList.add('dens-densa');   // tamaño único de las
         <div class="nav-gb">
           <button type="button" data-pane="lineasbase" title="Líneas base del contrato (LB0 a LB3): ficha, comparación y carga"><span class="ni">📜</span><span class="nt">Contrato y líneas base</span></button>
           <button type="button" data-pane="adicionales" title="Prestaciones adicionales y deductivos vinculados: lo que trajo cada línea base, su resolución y el límite"><span class="ni">➕</span><span class="nt">Adicionales y deductivos</span></button>
-          <button type="button" class="prox" disabled title="Próximamente · mayores y menores metrados"><span class="ni">📏</span><span class="nt">Mayores metrados</span><span class="nav-tag">pronto</span></button>
+          <button type="button" data-pane="metrados" title="Mayores metrados: se registran como un adicional (solicitado, autorizado, aprobado, valorizado, pagado); el menor metrado va en una tarjeta"><span class="ni">📏</span><span class="nt">Mayores metrados</span></button>
           <button type="button" data-pane="plazo" title="Plazo contractual: suspensiones, ampliaciones y adicionales de plazo, con su resolución y la línea base que los incorpora"><span class="ni">⏳</span><span class="nt">Ampliaciones de plazo</span></button>
           <button type="button" class="prox" disabled title="Próximamente · registro de eventos del contrato"><span class="ni">⚖️</span><span class="nt">Eventos y controversias</span><span class="nav-tag">pronto</span></button>
         </div>
@@ -2266,6 +2277,7 @@ document.documentElement.classList.add('dens-densa');   // tamaño único de las
     </section>
 
     <!-- ═══════════ PLAN MASTER (cronograma meta) ═══════════ -->
+    <section class="pane" data-pane="metrados"><div id="metPanel"></div></section>
     <section class="pane" data-pane="adicionales"><div id="adiPanel"></div></section>
     <section class="pane" data-pane="plazo"><div id="plzPanel"></div></section>
     <section class="pane" data-pane="lineasbase"><div id="lbPanel"></div>
@@ -2984,6 +2996,7 @@ document.querySelectorAll('#nav button[data-pane]').forEach(b => {
       ppc: ['PPC', 'Porcentaje de actividades completadas: trazabilidad semanal y causas de incumplimiento'],
       valorizaciones: ['Valorizaciones', 'Valor ganado: lo valorizado mes a mes (contrato, adicionales y mayores metrados)'],
       presupuesto: ['Presupuesto', 'Venta (contrato, solo lectura) y meta (copia del APU que se ajusta sin tocar el contrato)'],
+      metrados: ['Mayores metrados', 'Registro de mayores metrados con su estado y resolución · el menor metrado, en una tarjeta'],
       adicionales: ['Adicionales y deductivos', 'Prestaciones adicionales y deductivos vinculados: lo que trajo cada línea base, su resolución y cuánto va del límite'],
       plazo: ['Plazo y ampliaciones', 'Suspensiones, ampliaciones y adicionales de plazo: qué cambió, con qué resolución y cómo queda el fin de obra'],
       lineasbase: ['Contrato y líneas base', 'LB0 a LB3: inicio de contrato, suspensión, adicional y deductivo, ampliación · ficha, comparación y carga'],
@@ -3000,6 +3013,7 @@ document.querySelectorAll('#nav button[data-pane]').forEach(b => {
     if (b.dataset.pane === 'lineasbase') lbPanelCargar();
     if (b.dataset.pane === 'plazo') plzCargar();
     if (b.dataset.pane === 'adicionales') adiCargar();
+    if (b.dataset.pane === 'metrados') metCargar();
     if (b.dataset.pane === 'presupuesto') preCargar();
     if (b.dataset.pane === 'parte' && !$('#parteLA').hidden) plaCargar();
     $('#side').classList.remove('open'); $('#overlay').classList.remove('on');
@@ -3023,6 +3037,7 @@ document.querySelectorAll('#nav button[data-pane]').forEach(b => {
 })();
 // ── confirmaciones dentro de la página: la ventana del navegador (confirm) saca de la pantalla completa; esta no ──
 function confirmarInfo(m) {
+  if (/^Eliminar el registro de prestaci/i.test(m)) return { titulo: 'Eliminar registro', si: 'Eliminar', peligro: true };
   { const mLb = m.match(/^(Retirar|Aprobar|Reabrir) la l[ií]nea base/i); if (mLb) { const v = mLb[1][0].toUpperCase() + mLb[1].slice(1).toLowerCase(); return { titulo: v + ' línea base', si: v, peligro: v !== 'Aprobar' }; } }
   if (/(evento|registro) de plazo/i.test(m)) return { titulo: 'Eliminar registro de plazo', si: 'Eliminar', peligro: true };
   if (/plan master|v[ií]nculos|duraci[oó]n sugerida|l[ií]nea base/i.test(m)) { const v = (m.match(/^(Crear|Aprobar|Reabrir|Archivar|Eliminar|Quitar|Ajuste|Aplicar|Sincronizar)/) || [])[1] || 'Confirmar'; return { titulo: { Ajuste: 'Ajustar fechas', Aplicar: 'Aplicar duraciones', Quitar: 'Quitar tarea', Sincronizar: 'Sincronizar con la línea base' }[v] || v + ' plan master', si: { Ajuste: 'Ajustar', Aplicar: 'Aplicar' }[v] || v, peligro: ['Eliminar', 'Reabrir', 'Quitar'].includes(v) }; }
@@ -4273,6 +4288,7 @@ async function valDetAbrir(id) {
   await valDetCargar(id, 'completo');
 }
 async function valDetCargar(id, modo) {
+  if (modo === 'menor') modo = 'completo';   // «solo menores metrados» es un filtro de la valorización completa
   const c = valDetCache[id] || (valDetCache[id] = {});
   if (c[modo] !== undefined) return;
   c[modo] = null;   // "cargando"
@@ -4513,13 +4529,14 @@ const valDetTablaCab = `<thead>
 const valDetLeyenda = `<div class="legend2" style="margin-top:8px"><span><i style="background:${C_EJEC}"></i>Ejecutado acumulado</span><span><i style="background:${C_SALDO}"></i>Falta ejecutar</span><span><i style="background:${C_MENOR}"></i>Menor metrado (no se ejecutará)</span></div>`;
 function valDetHTML() {
   if (!valDetId) return '';
-  const c = valDetCache[valDetId] || {}, rows = c[valDetFiltro.modo];
+  const soloMenor = valDetFiltro.modo === 'menor', modoDatos = soloMenor ? 'completo' : valDetFiltro.modo;
+  const c = valDetCache[valDetId] || {}, rows = c[modoDatos];
   const v = VAL.vals.find(x => x.id === valDetId) || {};
   const MES = (m) => { const d = new Date(m); return `${MESES_ES[d.getUTCMonth()]}-${String(d.getUTCFullYear()).slice(2)}`; };
   const cerrar = `<button type="button" class="vld-x" data-valdet="${valDetId}" aria-label="Cerrar">✕</button>`;
   const controles = `<div class="vld-ctl">
     <label class="vld-lbl">Ver <select id="vldFrenteSel" class="vld-sel2"><option value="">Total obra (4 frentes)</option>${(RES_A ? RES_A.proyectos : []).slice().sort((a, b) => COMPONENTES.findIndex(c2 => c2.id === a.codigo) - COMPONENTES.findIndex(c2 => c2.id === b.codigo)).map(p => `<option value="${esc(p.id)}"${valDetFiltro.frente === p.id ? ' selected' : ''}>${esc(String(p.nombre).replace(/^Puente\s+/i, ''))}</option>`).join('')}</select></label>
-    <button type="button" class="seg-btn ${valDetFiltro.modo === 'completo' ? 'on' : ''}" data-valdmodo="completo">Toda la valorización</button><button type="button" class="seg-btn ${valDetFiltro.modo === 'mes' ? 'on' : ''}" data-valdmodo="mes">Solo lo ejecutado este mes</button>
+    <button type="button" class="seg-btn ${valDetFiltro.modo === 'completo' ? 'on' : ''}" data-valdmodo="completo">Toda la valorización</button><button type="button" class="seg-btn ${valDetFiltro.modo === 'mes' ? 'on' : ''}" data-valdmodo="mes">Solo lo ejecutado este mes</button><button type="button" class="seg-btn ${valDetFiltro.modo === 'menor' ? 'on' : ''}" data-valdmodo="menor" title="Solo las partidas con menor metrado (previsto que no se ejecutará)">Solo menores metrados</button>
     <button type="button" class="btn-imp" id="vldImprimir" title="Abre una hoja lista para imprimir o guardar como PDF">🖨 Imprimir / Guardar PDF</button>
   </div>`;
   const titulo = `<div class="vld-doctit"><h2>VALORIZACIÓN N° ${String(v.numero || 0).padStart(3, '0')} - ${ABREV_VAL[v.tipo] || ''} <span class="vl-pill ${v.estado === 'aprobada' ? 'ok' : 'pr'}">${v.estado === 'aprobada' ? '✔ Aprobada' : '◔ Propuesta'}</span></h2><div class="vld-docper">${esc(valDetPeriodoTxt(v))}</div></div>`;
@@ -4527,12 +4544,13 @@ function valDetHTML() {
   if (rows === 'error') return `<div class="vl-card vld-card">${cerrar}${titulo}${controles}<div class="rg-msg">No se pudo cargar. Falta correr <b>valorizacion_partida_detalle.sql</b> en la base.</div></div>`;
   const conProp = INCLUIR_PROP;
   const proyectos = RES_A ? RES_A.proyectos : [];
-  const list = valDetProcesarFilas(rows, conProp);
+  let list = valDetProcesarFilas(rows, conProp);
+  if (soloMenor) list = list.filter(r => (r.menor || 0) > 0);
   // subtotales de grupo/frente: siempre a partir de la valorización COMPLETA, aunque se esté listando «Solo este mes»
   let listAgg = null;
   if (c.completo && c.completo !== 'error') listAgg = valDetProcesarFilas(c.completo, conProp);
   else valDetCargar(valDetId, 'completo');   // aún no está: se pide aparte y al llegar se vuelve a pintar sola
-  const cuerpo = valDetCuerpoTabla(list, proyectos, valDetFiltro.frente, valDetFiltro.modo, listAgg);
+  const cuerpo = valDetCuerpoTabla(list, proyectos, valDetFiltro.frente, modoDatos, listAgg);
   const menorMonto = (listAgg || list).reduce((s, r) => s + (r.menor || 0) * (r.pu || 0), 0);
   const resumen = valDetResumenHTML(v, conProp, PRESU_CD_CACHE[v.tipo], menorMonto);
   // NOTA (2026-09-27): se probó un panel izquierdo/derecho arrastrable (como Look Ahead) para esta tabla, pero con
@@ -4543,7 +4561,7 @@ function valDetHTML() {
   // «Resumen de valorizaciones» (16 filas) sí se quedó con el panel arrastrable — a esa escala nunca hubo problema.
   const tablaDetalle = `<div class="vld-tw2"><table class="oc-tb vld-oc vld-navy">${valDetTablaCol}${valDetTablaCab}<tbody>${cuerpo}</tbody></table></div>`;
   return `<div class="vl-card vld-card">${cerrar}${titulo}
-    <p class="hint">Metrado y monto ejecutado (${conProp ? 'aprobado + propuesta' : 'solo aprobado'}), con la jerarquía y el orden del cronograma. ${valDetFiltro.modo === 'completo' ? 'Todas las partidas del contrato.' : 'Solo lo ejecutado este mes.'}</p>
+    <p class="hint">Metrado y monto ejecutado (${conProp ? 'aprobado + propuesta' : 'solo aprobado'}), con la jerarquía y el orden del cronograma. ${soloMenor ? 'Solo las partidas con menor metrado.' : valDetFiltro.modo === 'completo' ? 'Todas las partidas del contrato.' : 'Solo lo ejecutado este mes.'}</p>
     ${controles}
     ${tablaDetalle}
     ${resumen}
@@ -4593,13 +4611,14 @@ function valDetPaginar(ov) {
 async function valDetImprimir() {
   if (!valDetId) return;
   const v = VAL.vals.find(x => x.id === valDetId); if (!v) return;
-  const modo = valDetFiltro.modo, frenteId = valDetFiltro.frente;   // imprime lo mismo que se está viendo en pantalla (el filtro de frente y el modo)
+  const modoSel = valDetFiltro.modo, modo = modoSel === 'menor' ? 'completo' : modoSel, frenteId = valDetFiltro.frente;   // imprime lo mismo que se está viendo en pantalla (el filtro de frente y el modo)
   await Promise.all([valDetCargar(valDetId, modo), valDetCargar(valDetId, 'completo')]);   // «completo» también, para que los subtotales de grupo/frente salgan completos
   const c = valDetCache[valDetId] || {};
   if (c[modo] === 'error') { toast('No se pudo cargar la valorización.', false); return; }
   if (c[modo] == null) { toast('Espera a que termine de cargar…', false); return; }
   const conProp = INCLUIR_PROP, proyectos = RES_A ? RES_A.proyectos : [];
-  const list = valDetProcesarFilas(c[modo], conProp);
+  let list = valDetProcesarFilas(c[modo], conProp);
+  if (modoSel === 'menor') list = list.filter(r => (r.menor || 0) > 0);
   const listAgg = (c.completo && c.completo !== 'error') ? valDetProcesarFilas(c.completo, conProp) : null;
   const cuerpo = valDetCuerpoTabla(list, proyectos, frenteId, modo, listAgg);
   const menorMonto = (listAgg || list).reduce((s, r) => s + (r.menor || 0) * (r.pu || 0), 0);
@@ -4610,7 +4629,7 @@ async function valDetImprimir() {
   const datosObra = [['ENTIDAD:', ob.doc_entidad || ob.cliente], ['OBRA:', ob.doc_obra || obraNombre], ['CONTRATISTA:', ob.doc_contratista || ob.entidad], ['SUPERVISIÓN:', ob.doc_supervision]]
     .filter(x => x[1]).map(([k, v2]) => `<div class="vld-dato"><b>${esc(k)}</b><span>${esc(String(v2).toUpperCase())}</span></div>`).join('');
   const nomFrente = frenteId ? (proyectos.find(p => p.id === frenteId) || {}).nombre : '';
-  const alcanceTxt = [frenteId ? String(nomFrente || '').replace(/^Puente\s+/i, '') : 'Total obra', modo === 'mes' ? 'solo lo ejecutado este mes' : 'todas las partidas del contrato'].join(' · ');
+  const alcanceTxt = [frenteId ? String(nomFrente || '').replace(/^Puente\s+/i, '') : 'Total obra', modoSel === 'menor' ? 'solo menores metrados' : modo === 'mes' ? 'solo lo ejecutado este mes' : 'todas las partidas del contrato'].join(' · ');
   const encCod = valDocEncabezadoDer();
   const encLogo = valDocEncabezadoLogo();
   // el título va DENTRO del <thead> (como una fila más, con colspan) para que se repita en cada hoja impresa junto con la cabecera de columnas
@@ -8191,11 +8210,194 @@ function lbFichaAbrir(id) {
     } catch (er) { btn.disabled = false; toast(`No se pudo guardar: ${esc(er.message)}`, false, 'lb'); }
   };
 }
+// ═══ MAYORES METRADOS (Contrato › Mayores metrados) ═══
+// El mayor metrado se registra como un adicional: Mayor metrado N° 01, N° 02… con sus partidas, estado (solicitado → autorizado → aprobado resolutivo → valorizado → pagado) y resolución.
+// El MENOR metrado no se registra aquí: viene de la valorización (hoja 07) y solo se muestra como una tarjeta; su detalle por partida está en Valorizaciones › Ver valorización › «Solo menores metrados».
+// Todos los montos son SUBTOTAL sin IGV (costo directo + gastos generales + utilidad), igual que en Adicionales y en la Curva S.
+const MET = { nodos: [], reg: [], par: {}, menor: { cd: 0, sub: 0, n: 0, prev: 0 }, det: [], base: 0, cargado: false };
+const MET_EST = { solicitada: ['solicitado', 'pr'], autorizada: ['autorizado', 'pp'], aprobada: ['aprobado resolutivo', 'ok'], valorizada: ['valorizado', 'ok'], pagada: ['pagado', 'ok'], improcedente: ['improcedente', 'no'] };
+const MET_PASOS = ['solicitada', 'autorizada', 'aprobada', 'valorizada', 'pagada'];
+const metN = (v, d) => Number(v || 0).toLocaleString('es-PE', { minimumFractionDigits: d == null ? 2 : d, maximumFractionDigits: d == null ? 2 : d });
+async function metCargar(forzar) {
+  const box = $('#metPanel'); if (!box) return;
+  if (typeof OBRA === 'undefined' || !OBRA || !OBRA.id || typeof DATA === 'undefined' || !DATA || !DATA.versionId) { box.innerHTML = '<div class="rg-msg">Leyendo la obra…</div>'; setTimeout(() => { if (document.documentElement.dataset.pane === 'metrados') metCargar(); }, 1200); return; }
+  if (!MET.cargado || forzar) box.innerHTML = '<div class="rg-msg">Leyendo mayores metrados…</div>';
+  try {
+    const [nodos, ejec, aj, reg, par, grp] = await Promise.all([
+      getTodo(`/wbs_nodos?version_id=eq.${DATA.versionId}&es_hoja=eq.true&concepto=eq.contrato&select=id,proyecto_id,padre_id,codigo,codigo_esp,nombre,unidad,metrado,precio_unitario,gg_pct,utilidad_pct,orden&order=orden`),
+      getTodo(`/valorizacion_partidas?select=nodo_id,metrado,valorizaciones!inner(estado)&valorizaciones.estado=eq.aprobada&order=nodo_id,valorizacion_id`),
+      get(`/metrado_ajustes?select=nodo_id,tipo,metrado,estado&tipo=eq.menor&order=nodo_id`).catch(() => []),
+      get(`/prestaciones?obra_id=eq.${OBRA.id}&tipo=eq.mayor&select=*&order=numero`).catch(() => null),
+      get(`/prestacion_partidas?select=prestacion_id,nodo_id,metrado&order=prestacion_id,nodo_id`).catch(() => null),
+      getTodo(`/wbs_nodos?version_id=eq.${DATA.versionId}&es_hoja=eq.false&concepto=eq.contrato&select=id,padre_id,nivel,nombre&order=orden`).catch(() => [])]);
+    MET.sinSql = reg === null || par === null; MET.reg = reg || [];
+    const N = {}; nodos.forEach(n => { N[n.id] = { ...n, pu: Number(n.precio_unitario || 0), act: Number(n.metrado || 0), k: 1 + Number(n.gg_pct || 0) + Number(n.utilidad_pct || 0) }; });
+    const G = {}; (grp || []).forEach(g => { G[g.id] = g; });
+    Object.values(N).forEach(n => { const r = []; let g = G[n.padre_id], k = 0; while (g && k++ < 12) { if (Number(g.nivel) >= 2) r.unshift(g.nombre); g = G[g.padre_id]; } n.ruta = r.join(' › '); n.grupo = r.length ? r[r.length - 1] : ''; });
+    MET.nodos = Object.values(N); MET.N = N;
+    MET.base = MET.nodos.reduce((s, n) => s + n.act * n.pu * n.k, 0);
+    // menor metrado: una sola tarjeta (monto subtotal, % del presupuesto)
+    const m = { cd: 0, sub: 0, ids: new Set(), prev: new Set() };
+    aj.forEach(a => { const n = N[a.nodo_id]; if (!n) return; const v = Number(a.metrado) * n.pu; m.cd += v; m.sub += v * n.k; m.ids.add(a.nodo_id); if (a.estado !== 'oficial') m.prev.add(a.nodo_id); });
+    MET.menor = { cd: m.cd, sub: m.sub, n: m.ids.size, prev: m.prev.size };
+    // partidas de cada registro
+    MET.par = {}; (par || []).forEach(p => { (MET.par[p.prestacion_id] = MET.par[p.prestacion_id] || []).push({ nodo_id: p.nodo_id, metrado: Number(p.metrado) }); });
+    // detectado: ejecutado que pasa del metrado actualizado y todavía no está en un registro vigente
+    const ex = {}; ejec.forEach(r => { ex[r.nodo_id] = (ex[r.nodo_id] || 0) + Number(r.metrado || 0); });
+    const cubiertos = new Set(); MET.reg.filter(r => r.estado !== 'improcedente').forEach(r => (MET.par[r.id] || []).forEach(p => cubiertos.add(p.nodo_id)));
+    MET.det = MET.nodos.map(n => { const e = ex[n.id] || 0, tol = Math.max(0.005, n.act * 0.0005); return e - n.act > tol ? { ...n, ejec: e, exceso: e - n.act } : null; }).filter(x => x && !cubiertos.has(x.id));
+    MET.cargado = true; metPintar();
+  } catch (e) { box.innerHTML = msgCarga('Mayores metrados', e); }
+}
+function metMonto(r) { const P = MET.par[r.id] || []; let cd = 0, sub = 0, m = 0; P.forEach(p => { const n = MET.N[p.nodo_id]; if (!n) return; cd += p.metrado * n.pu; sub += p.metrado * n.pu * n.k; m += p.metrado; }); return { cd, sub, n: P.length, m }; }
+function metPintar() {
+  const box = $('#metPanel'), adm = !!AUTH.admin, f2 = (s) => s ? plFmt(plD(s)) : '—', nomP = (id) => { const p = (DATA.proyectos || []).find(x => x.id === id); return p ? String(p.nombre).replace('Puente ', '') : ''; };
+  const filas = MET.reg.map(r => ({ ...r, ...metMonto(r) })).sort((a, b) => b.numero - a.numero);
+  const suma = (est) => filas.filter(r => est.includes(r.estado)).reduce((s, r) => s + r.sub, 0), nEst = (est) => filas.filter(r => est.includes(r.estado)).length;
+  const mH = suma(['aprobada', 'valorizada', 'pagada']), tram = suma(['solicitada', 'autorizada']), val = suma(['valorizada']), pag = suma(['pagada']);
+  const pc = (v) => MET.base ? metN(v / MET.base * 100) + ' %' : '—';
+  const kpis = `<div class="vl-kp">
+    <div class="vl-k"><small>Mayor metrado aprobado</small><b>${mH ? '+ S/ ' + metN(mH) : 'Ninguno'}</b><em>${nEst(['aprobada', 'valorizada', 'pagada'])} registro${nEst(['aprobada', 'valorizada', 'pagada']) === 1 ? '' : 's'} · ${pc(mH)} del presupuesto · sin IGV</em></div>
+    <div class="vl-k"><small>En trámite</small><b>S/ ${metN(tram)}</b><em>${nEst(['solicitada', 'autorizada'])} solicitado${nEst(['solicitada', 'autorizada']) === 1 ? '' : 's'} o autorizado${nEst(['solicitada', 'autorizada']) === 1 ? '' : 's'}</em></div>
+    <div class="vl-k"><small>Valorizado · pagado</small><b>S/ ${metN(val + pag)}</b><em>valorizado S/ ${metN(val)} · pagado S/ ${metN(pag)}</em></div>
+    <div class="vl-k"><small>Menor metrado</small><b>S/ ${metN(MET.menor.sub)}</b><em>${MET.menor.n} partida${MET.menor.n === 1 ? '' : 's'} · ${pc(MET.menor.sub)} del presupuesto · no cambia el contrato
+      <button type="button" class="btn-sec" data-met-menor style="margin-top:6px;padding:3px 10px;font-size:11px" title="Abre la última valorización filtrada a las partidas con menor metrado">Ver en Valorizaciones ▸</button></em></div></div>`;
+  const pasos = (est) => { const i = MET_PASOS.indexOf(est); return est === 'improcedente' ? '' : `<span class="met-st" title="Solicitado → autorizado → aprobado resolutivo → valorizado → pagado">${MET_PASOS.map((p, k) => `<i class="${k <= i ? 'on' : ''}"></i>`).join('')}</span>`; };
+  const reg = filas.map(r => {
+    const [etq, cls] = MET_EST[r.estado] || [r.estado, 'pr'], P = (MET.par[r.id] || []).slice(0, 3).map(p => { const n = MET.N[p.nodo_id]; return n ? `${esc(nomP(n.proyecto_id))} · ${esc(n.codigo_esp || n.codigo)}${n.grupo ? ` (${esc(n.grupo.length > 30 ? n.grupo.slice(0, 29) + '…' : n.grupo)})` : ''} +${metN(p.metrado, 2)} ${esc(n.unidad || '')}` : ''; }).filter(Boolean).join(' · ');
+    return `<tr${r.estado === 'improcedente' ? ' style="opacity:.75"' : ''}><td class="l"><b style="color:#b45309">Mayor metrado N° ${String(r.numero).padStart(2, '0')}</b>${r.descripcion ? `<span class="lb-sub">${esc(r.descripcion)}</span>` : ''}</td>
+      <td class="ctr"><span class="vl-pill ${cls}">${etq}</span>${pasos(r.estado)}</td><td class="l">${esc(r.resolucion || '—')}${r.fecha_resolucion ? `<span class="lb-sub">${f2(r.fecha_resolucion)}</span>` : ''}</td>
+      <td class="l">${r.n} partida${r.n === 1 ? '' : 's'}<span class="lb-sub">${P}${r.n > 3 ? ' …' : ''}</span></td>
+      <td><b>+ ${metN(r.sub)}</b><span class="lb-sub">CD ${metN(r.cd)}</span></td>
+      <td class="c">${adm ? `<button type="button" class="icon-btn" data-met-edit="${r.id}" title="Editar" aria-label="Editar"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4Z"/></svg></button><button type="button" class="icon-btn" data-met-del="${r.id}" title="Eliminar" aria-label="Eliminar"><svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button>` : ''}</td></tr>`;
+  }).join('');
+  const det = MET.det.length ? `<div class="vl-card"><div class="lb-cab"><div><h3 style="margin:0 0 3px">Detectados sin registrar</h3><p class="hint" style="margin:0">Partidas cuyo ejecutado ya pasó del metrado actualizado. Regístralas como mayor metrado para seguir su autorización y resolución.</p></div>
+      ${adm ? '<button type="button" class="btn-sec pri" data-met-det title="Crea un mayor metrado con todas las partidas detectadas">Registrar las ' + MET.det.length + '</button>' : ''}</div>
+      <div class="vl-tw"><table class="vl-tb lb-tb"><thead><tr><th class="l">Frente</th><th class="l">Partida</th><th>Actualizado</th><th>Ejecutado</th><th>Exceso</th><th>Subtotal S/</th></tr></thead><tbody>${MET.det.slice(0, 40).map(n => `<tr><td class="l">${esc(nomP(n.proyecto_id))}</td><td class="l"><b>${esc(n.codigo_esp || n.codigo)}</b><span class="lb-sub">${esc(n.nombre)}</span></td><td>${metN(n.act, 2)}</td><td>${metN(n.ejec, 2)}</td><td><b>+ ${metN(n.exceso, 2)}</b> ${esc(n.unidad || '')}</td><td>${metN(n.exceso * n.pu * n.k)}</td></tr>`).join('')}</tbody></table></div></div>` : '';
+  box.innerHTML = kpis + det
+    + `<div class="vl-card"><div class="lb-cab"><div><h3 style="margin:0 0 3px">Registro de mayores metrados</h3><p class="hint" style="margin:0">Se registra como un adicional: Mayor metrado N° 01, N° 02… con sus partidas y su avance <b>solicitado → autorizado → aprobado resolutivo → valorizado → pagado</b>. Montos subtotal sin IGV (costo directo + gastos generales + utilidad). El menor metrado no se registra: sale de la valorización y está en la tarjeta de arriba.</p></div>
+      ${adm ? '<button type="button" class="btn-sec pri" data-met-nuevo title="Registrar un mayor metrado">＋ Nuevo registro</button>' : ''}</div>
+      ${MET.sinSql ? '<p class="plz-nota al">Falta correr <code>mayores_metrados.sql</code> en la base para registrar mayores metrados.</p>' : ''}
+      <div class="vl-tw"><table class="vl-tb lb-tb plz-reg"><thead><tr><th class="l">Registro</th><th class="ctr">Estado</th><th class="l">Resolución</th><th class="l">Partidas</th><th>Subtotal S/ (sin IGV)</th><th></th></tr></thead>
+        <tbody>${reg || '<tr><td colspan="6" class="l">Todavía no hay mayores metrados registrados' + (MET.det.length ? '' : ': ninguna partida pasó de su metrado') + '.</td></tr>'}</tbody></table></div></div>`;
+}
+function metFormAbrir(id, pre) {
+  const e = id ? MET.reg.find(x => x.id === id) : null; if (id && !e) return;
+  let m = document.getElementById('metForm');
+  if (!m) { m = document.createElement('form'); m.id = 'metForm'; m.className = 'pform la-form'; m.hidden = true; document.body.appendChild(m); }
+  const frentes = (DATA.proyectos || []).slice().sort((a, b) => (Number(a.orden) || 99) - (Number(b.orden) || 99)), nomP = (id2) => { const p = (DATA.proyectos || []).find(x => x.id === id2); return p ? String(p.nombre).replace('Puente ', '') : ''; };
+  const norm = (s) => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+  // las partidas se eligen DENTRO de un frente (el mismo código existe en cada puente) y se distinguen por su grupo / componente (ruta del WBS)
+  const porFrente = {};   // frente → [{id, cod, nom, ruta, uni, buscar}]
+  MET.nodos.forEach(n => { (porFrente[n.proyecto_id] = porFrente[n.proyecto_id] || []).push({ id: n.id, cod: n.codigo_esp || n.codigo, nom: String(n.nombre).slice(0, 90), ruta: n.ruta || '', uni: n.unidad || '', buscar: norm(`${n.codigo_esp || ''} ${n.codigo} ${n.nombre} ${n.ruta || ''}`) }); });
+  const txtDe = (nid) => { const n = MET.N[nid]; return n ? `${n.codigo_esp || n.codigo} · ${String(n.nombre).slice(0, 90)}` : ''; };
+  const v = (k) => esc(e && e[k] != null ? e[k] : ''), q = (s) => m.querySelector(s);
+  const filasIni = e ? (MET.par[e.id] || []) : (pre || []);
+  const estados = [['solicitada', 'Solicitado'], ['autorizada', 'Autorizado'], ['aprobada', 'Aprobado resolutivo'], ['valorizada', 'Valorizado'], ['pagada', 'Pagado'], ['improcedente', 'Improcedente']];
+  const fila = (p) => { const n = p && MET.N[p.nodo_id], fid = n ? n.proyecto_id : '';
+    return `<div class="met-fila" data-nid="${n ? n.id : ''}"><div class="mf-fr"><select class="mf-f" aria-label="Frente"><option value="">Frente…</option>${frentes.map(f => `<option value="${f.id}"${f.id === fid ? ' selected' : ''}>${esc(nomP(f.id))}</option>`).join('')}</select></div>
+      <div class="mf-pt"><input class="mf-p" type="text" autocomplete="off" placeholder="${fid ? 'Código o nombre de la partida…' : 'Elige primero el frente'}" ${fid ? '' : 'disabled'} value="${n ? esc(txtDe(n.id)) : ''}"><small class="mf-ruta">${n ? esc(n.ruta) : ''}</small></div>
+      <div class="mf-mu"><input class="mf-m" type="number" min="0" step="0.0001" inputmode="decimal" placeholder="mayor metrado" value="${p ? p.metrado : ''}"><span class="mf-u">${n ? esc(n.unidad || '') : ''}</span></div>
+      <button type="button" class="icon-btn mf-x" title="Quitar la partida" aria-label="Quitar la partida"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>`; };
+  m.innerHTML = `<h3 style="margin:0 0 4px;font-size:14px">${e ? 'Mayor metrado N° ' + String(e.numero).padStart(2, '0') : 'Nuevo mayor metrado'}</h3><p class="hint" style="margin:0 0 10px">Elige el frente, luego la partida de ese frente (debajo de cada una verás a qué grupo o componente pertenece) y cuánto metrado extra tiene. El monto sale solo: metrado × precio unitario × (1 + GG + utilidad), sin IGV.</p>
+    <div class="row3"><div class="field"><label for="mfNum">N°</label><input id="mfNum" type="number" min="1" max="99" value="${e ? e.numero : ''}" placeholder="automático"></div>
+      <div class="field"><label for="mfEst">Estado</label><select id="mfEst">${estados.map(([k, t]) => `<option value="${k}"${(e ? e.estado : 'solicitada') === k ? ' selected' : ''}>${t}</option>`).join('')}</select></div>
+      <div class="field"><label for="mfFSol">Fecha de solicitud</label><input id="mfFSol" type="date" value="${v('fecha_solicitud')}"></div></div>
+    <div class="field"><label for="mfDesc">Descripción</label><input id="mfDesc" type="text" maxlength="160" value="${v('descripcion')}" placeholder="Ej. Relleno estructural en estribos · Puente La Peña"></div>
+    <div class="field"><label>Partidas y mayor metrado</label><div id="mfFilas">${filasIni.map(fila).join('') || fila(null)}</div>
+      <div style="display:flex;gap:10px;align-items:center;margin-top:6px"><button type="button" class="btn-sec" id="mfAgregar">＋ Agregar partida</button><span class="hint" id="mfTot"></span></div></div>
+    <div class="row2"><div class="field"><label for="mfRes">Resolución</label><input id="mfRes" type="text" maxlength="80" value="${v('resolucion')}"></div><div class="field"><label for="mfFRes">Fecha de resolución</label><input id="mfFRes" type="date" value="${v('fecha_resolucion')}"></div></div>
+    <div class="field"><label for="mfNotas">Notas</label><input id="mfNotas" type="text" maxlength="200" value="${v('notas')}"></div>
+    <div class="sug-acc"><button class="btn" type="submit">Guardar</button><button class="btn-sec" type="button" id="mfCancel">Cancelar</button></div>`;
+  const fondo = document.getElementById('lbFondo') || (() => { const x = document.createElement('div'); x.id = 'lbFondo'; x.hidden = true; document.body.appendChild(x); return x; })();
+  // lista desplegable propia: cada partida con su grupo / componente en pequeño debajo
+  let dd = document.getElementById('mfDD'); if (!dd) { dd = document.createElement('div'); dd.id = 'mfDD'; dd.hidden = true; document.body.appendChild(dd); }
+  let act = null, sel = -1;
+  const cerrarDD = () => { dd.hidden = true; act = null; sel = -1; };
+  const cerrar = () => { cerrarDD(); m.hidden = true; fondo.hidden = true; document.documentElement.classList.remove('la-modal'); };
+  const nodoDe = (f) => f.dataset.nid || null;
+  const leer = () => [...m.querySelectorAll('.met-fila')].map(f => ({ nodo_id: nodoDe(f), metrado: parseFloat(f.querySelector('.mf-m').value) || 0, txt: f.querySelector('.mf-p').value.trim() }));
+  const total = () => {
+    m.querySelectorAll('.met-fila').forEach(f => { const id2 = nodoDe(f), n = id2 && MET.N[id2]; f.querySelector('.mf-u').textContent = n ? (n.unidad || '') : ''; });
+    const L = leer().filter(x => x.nodo_id && x.metrado > 0), sub = L.reduce((s, x) => { const n = MET.N[x.nodo_id]; return s + x.metrado * n.pu * n.k; }, 0);
+    q('#mfTot').textContent = L.length ? `${L.length} partida${L.length === 1 ? '' : 's'} · subtotal S/ ${metN(sub)} (sin IGV)` : '';
+  };
+  const elegir = (f, nid) => {
+    const n = MET.N[nid]; if (!n) return; f.dataset.nid = nid; f.querySelector('.mf-p').value = txtDe(nid); f.querySelector('.mf-ruta').textContent = n.ruta || '';
+    cerrarDD(); total(); f.querySelector('.mf-m').focus();
+  };
+  const abrirDD = (inp) => {
+    act = inp; const f = inp.closest('.met-fila'), fid = f.querySelector('.mf-f').value; if (!fid) { cerrarDD(); return; }
+    const igual = f.dataset.nid && norm(inp.value) === norm(txtDe(f.dataset.nid)), t = igual ? [] : norm(inp.value).split(/\s+/).filter(Boolean);
+    const L = (porFrente[fid] || []).filter(x => t.every(w => x.buscar.includes(w))), MAX = 60;
+    dd.innerHTML = L.length ? L.slice(0, MAX).map(x => `<div class="mf-o${x.id === f.dataset.nid ? ' on' : ''}" data-id="${x.id}"><b>${esc(x.cod)}</b> · ${esc(x.nom)}<small>${esc(x.ruta || 'Sin grupo')}${x.uni ? ' · ' + esc(x.uni) : ''}</small></div>`).join('') + (L.length > MAX ? `<div class="mf-mas">… y ${L.length - MAX} más · escribe para filtrar</div>` : '')
+      : '<div class="mf-mas">Ninguna partida de este frente coincide.</div>';
+    sel = -1; dd.hidden = false;
+    const r = inp.getBoundingClientRect(), W = Math.min(Math.max(r.width, 440), window.innerWidth - r.left - 12), abajo = window.innerHeight - r.bottom - 12, arriba = r.top - 12, sube = abajo < 200 && arriba > abajo;
+    dd.style.left = r.left + 'px'; dd.style.width = W + 'px'; dd.style.maxHeight = Math.max(140, Math.min(320, sube ? arriba : abajo)) + 'px';
+    if (sube) { dd.style.top = 'auto'; dd.style.bottom = (window.innerHeight - r.top + 4) + 'px'; } else { dd.style.bottom = 'auto'; dd.style.top = (r.bottom + 4) + 'px'; }
+    const on = dd.querySelector('.mf-o.on'); if (on) on.scrollIntoView({ block: 'nearest' });
+  };
+  dd.onmousedown = (ev) => { ev.preventDefault(); const o = ev.target.closest('.mf-o'); if (o && act) elegir(act.closest('.met-fila'), o.dataset.id); };
+  const mover = (d) => { const os = [...dd.querySelectorAll('.mf-o')]; if (!os.length) return; sel = (sel + d + os.length) % os.length; os.forEach((o, i) => o.classList.toggle('hl', i === sel)); os[sel].scrollIntoView({ block: 'nearest' }); };
+  m.hidden = false; fondo.hidden = false; document.documentElement.classList.add('la-modal'); fondo.onclick = cerrar; q('#mfCancel').onclick = cerrar;
+  m.onscroll = cerrarDD;
+  m.oninput = (ev) => {
+    const p = ev.target.closest('.mf-p');
+    if (p) { const f = p.closest('.met-fila'); f.dataset.nid = ''; f.querySelector('.mf-ruta').textContent = ''; abrirDD(p); }
+    total();
+  };
+  m.onfocusin = (ev) => { const p = ev.target.closest('.mf-p'); if (p && !p.disabled) abrirDD(p); };
+  m.onfocusout = (ev) => { if (ev.target.closest('.mf-p')) cerrarDD(); };
+  m.onkeydown = (ev) => {
+    if (dd.hidden || !act) { if (ev.key === 'Escape' && !m.hidden) { cerrar(); } return; }
+    if (ev.key === 'ArrowDown') { ev.preventDefault(); mover(1); } else if (ev.key === 'ArrowUp') { ev.preventDefault(); mover(-1); }
+    else if (ev.key === 'Enter') { const os = [...dd.querySelectorAll('.mf-o')], o = os[sel] || (os.length === 1 ? os[0] : null); if (o) { ev.preventDefault(); elegir(act.closest('.met-fila'), o.dataset.id); } }
+    else if (ev.key === 'Escape') { ev.preventDefault(); ev.stopPropagation(); cerrarDD(); }
+  };
+  m.onchange = (ev) => {   // cambiar el frente: se vacía la partida y se ofrece solo la lista de ese frente
+    const s = ev.target.closest('.mf-f'); if (!s) return; const f = s.closest('.met-fila'), p = f.querySelector('.mf-p');
+    f.dataset.nid = ''; f.querySelector('.mf-ruta').textContent = ''; p.value = ''; p.disabled = !s.value; p.placeholder = s.value ? 'Código o nombre de la partida…' : 'Elige primero el frente'; if (s.value) p.focus(); total();
+  };
+  total();
+  q('#mfAgregar').onclick = () => { q('#mfFilas').insertAdjacentHTML('beforeend', fila(null)); };
+  m.onclick = (ev) => { const x = ev.target.closest('.mf-x'); if (x) { const f = x.closest('.met-fila'); if (m.querySelectorAll('.met-fila').length > 1) f.remove(); else { f.dataset.nid = ''; f.querySelector('.mf-f').value = ''; f.querySelector('.mf-p').value = ''; f.querySelector('.mf-p').disabled = true; f.querySelector('.mf-ruta').textContent = ''; f.querySelector('.mf-m').value = ''; } cerrarDD(); total(); } };
+  m.onsubmit = async (ev) => {
+    ev.preventDefault(); const L = leer().filter(x => x.txt || x.metrado);
+    if (!L.length || L.some(x => !x.nodo_id)) { toast('Elige cada partida de la lista del frente (se escribe y se selecciona).', false, 'met'); return; }
+    if (L.some(x => !(x.metrado > 0))) { toast('Cada partida necesita su mayor metrado.', false, 'met'); return; }
+    const btn = q('button[type=submit]'); btn.disabled = true;
+    try {
+      await preRpc('mayor_metrado_guardar', { p_id: e ? e.id : null, p_obra: OBRA.id, p_numero: q('#mfNum').value ? +q('#mfNum').value : null, p_descripcion: q('#mfDesc').value || null, p_estado: q('#mfEst').value,
+        p_resolucion: q('#mfRes').value || null, p_fecha_resolucion: q('#mfFRes').value || null, p_fecha_solicitud: q('#mfFSol').value || null, p_notas: q('#mfNotas').value || null,
+        p_partidas: L.map(x => ({ nodo_id: x.nodo_id, metrado: x.metrado })) });
+      cerrar(); toast('Mayor metrado guardado.', true, 'met'); await metCargar(true);
+    } catch (er) { btn.disabled = false; toast(`No se pudo guardar: ${esc(er.message)}${/function|schema cache|404/i.test(er.message) ? ' · ¿falta correr mayores_metrados.sql?' : ''}`, false, 'met'); }
+  };
+}
+async function metVerMenor() {   // abre Valorizaciones con la última valorización de contrato filtrada a los menores metrados
+  document.querySelector('#nav button[data-pane="valorizaciones"]').click();
+  for (let i = 0; i < 60 && !(VAL && VAL.vals && VAL.vals.length); i++) await new Promise(r => setTimeout(r, 150));
+  const vs = (VAL.vals || []).filter(x => x.tipo === 'contrato').sort((a, b) => b.numero - a.numero), v = vs[0]; if (!v) return;
+  if (valDetId !== v.id) await valDetAbrir(v.id);
+  valDetFiltro.modo = 'menor'; valDetPintar(); valDetCargar(valDetId, 'completo');
+}
+document.addEventListener('click', async (e) => {
+  if (e.target.closest('[data-met-nuevo]')) { metFormAbrir(null, null); return; }
+  if (e.target.closest('[data-met-menor]')) { metVerMenor(); return; }
+  if (e.target.closest('[data-met-det]')) { metFormAbrir(null, MET.det.map(n => ({ nodo_id: n.id, metrado: Math.round(n.exceso * 10000) / 10000 }))); return; }
+  const ed = e.target.closest('[data-met-edit]'); if (ed) { metFormAbrir(ed.dataset.metEdit, null); return; }
+  const de = e.target.closest('[data-met-del]'); if (!de) return;
+  const r = MET.reg.find(x => x.id === de.dataset.metDel); if (!r) return;
+  if (!(await confirmar(`Eliminar el registro de prestación «Mayor metrado N° ${String(r.numero).padStart(2, '0')}». No cambia las valorizaciones.`))) return;
+  try { await preRpc('mayor_metrado_eliminar', { p_id: r.id }); toast('Mayor metrado eliminado.', true, 'met'); await metCargar(true); } catch (er) { toast(`No se pudo eliminar: ${esc(er.message)}`, false, 'met'); }
+});
+
 // ═══ ADICIONALES Y DEDUCTIVOS: lo que cambió en cada línea base (calculado de las partidas) + el registro legal numerado (tabla prestaciones) ═══
 // Los montos salen de las líneas base APROBADAS: adicional = partidas nuevas con concepto adicional; deductivo = partidas del contrato que bajan o salen.
 // El límite (% de adicionales netos sobre el monto del contrato) es un parámetro editable de la obra.
 const ADI = { lbs: [], pre: [], reg: [], cd0: 0, limite: 15, f: { gg: 0, ut: 0, igv: 0.18 }, plazo: [], cs: { contrato: 0, adicional: 0 }, val: { contrato: 0, adicional: 0 }, cargado: false, sinSql: false };
-const ADI_EST = { solicitada: ['solicitada', 'pr'], aprobada: ['aprobada', 'ok'], aprobada_parcial: ['aprobada parcial', 'pp'], improcedente: ['improcedente', 'no'] };
+const ADI_EST = { solicitada: ['solicitada', 'pr'], autorizada: ['autorizada', 'pp'], aprobada: ['aprobada', 'ok'], aprobada_parcial: ['aprobada parcial', 'pp'], valorizada: ['valorizada', 'ok'], pagada: ['pagada', 'ok'], improcedente: ['improcedente', 'no'] };
 const adiN = (v) => Number(v || 0).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const adiN0 = (n) => String(n).padStart(2, '0');
 const adiCuenta = (r) => r.estado === 'aprobada' || r.estado === 'aprobada_parcial';
@@ -8208,14 +8410,14 @@ async function adiCargar(forzar) {
     const [lbs, pre, reg, res, ob, cr, plz, csp, vej] = await Promise.all([
       get(`/linea_base_versiones?obra_id=eq.${OBRA.id}&select=id,numero,nombre,tipo_cambio,estado,cronograma_id,plazo_fin,resolucion,fecha_aprobacion&order=numero`).catch(() => get(`/linea_base_versiones?obra_id=eq.${OBRA.id}&select=id,numero,nombre,tipo_cambio,cronograma_id,plazo_fin,resolucion,fecha_aprobacion&order=numero`)),
       get(`/v_lb_prestaciones?obra_id=eq.${OBRA.id}&select=*&order=numero`).catch(() => null),
-      get(`/prestaciones?obra_id=eq.${OBRA.id}&select=*&order=tipo,numero`).catch(() => null),
+      get(`/prestaciones?obra_id=eq.${OBRA.id}&tipo=in.(adicional,deductivo)&select=*&order=tipo,numero`).catch(() => null),
       get(`/v_linea_base_resumen?obra_id=eq.${OBRA.id}&select=version_id,numero,costo_directo`).catch(() => []),
       get(`/obras?id=eq.${OBRA.id}&select=limite_adicionales_pct`).catch(() => []),
       vig ? get(`/cronograma_versiones?id=eq.${vig}&select=gg_pct,utilidad_pct,igv_pct`).catch(() => []) : Promise.resolve([]),
       get(`/plazo_eventos?obra_id=eq.${OBRA.id}&select=adicional,tipo,numero,estado,grupo,fecha_inicio,fecha_fin`).catch(() => []),
       vig ? getTodo(`/v_curva_s_programada?version_id=eq.${vig}&select=concepto,programado_parcial&order=periodo_orden,concepto,proyecto_id`).catch(() => []) : Promise.resolve([]),
       getTodo(`/v_ejecutado_mes?${FILTRO_PROY}&select=tipo,estado,monto_subtotal&order=proyecto_id,tipo,mes,estado`).catch(() => [])]);
-    ADI.lbs = lbs; ADI.pre = pre || []; ADI.reg = reg || []; ADI.sinSql = pre === null || reg === null;
+    ADI.lbs = lbs; ADI.pre = pre || []; ADI.reg = (reg || []).filter(r => r.tipo === 'adicional' || r.tipo === 'deductivo'); ADI.sinSql = pre === null || reg === null;
     const l0 = lbs.find(l => l.numero === 0) || lbs[0], r0 = l0 ? res.find(r => r.version_id === l0.id) : null;
     ADI.cd0 = r0 ? Number(r0.costo_directo) : 0;
     ADI.limite = ob[0] && ob[0].limite_adicionales_pct != null ? Number(ob[0].limite_adicionales_pct) : 15;
@@ -8253,15 +8455,16 @@ function adiPintar() {
   // importes de cada registro: costo directo, GG propios, utilidad, sub total, IGV y total (si faltan los GG de las partidas, se estima con el contrato y se avisa)
   const monto = (r) => { if (r.cd == null) return null; const real = r.completo && r.gg != null, gg = real ? r.gg : r.cd * ADI.f.gg, ut = real ? r.ut : r.cd * ADI.f.ut, sub = r.cd + gg + ut; return { cd: r.cd, gg, ut, sub, igv: sub * igv, total: sub * (1 + igv), real }; };
   const cuentan = filas.filter(r => adiCuenta(r) && r.cd != null), suma = (tp, k) => cuentan.filter(r => r.tipo === tp).reduce((s, r) => s + monto(r)[k], 0);
-  const adic = suma('adicional', 'cd'), dedu = suma('deductivo', 'cd'), neto = adic - dedu, pct = ADI.cd0 ? neto / ADI.cd0 * 100 : 0, uso = ADI.limite ? Math.min(100, Math.max(0, pct / ADI.limite * 100)) : 0;
+  const adic = suma('adicional', 'cd'), dedu = suma('deductivo', 'cd'), adSub = suma('adicional', 'sub'), deSub = suma('deductivo', 'sub'), base0 = ADI.cd0 * (1 + ADI.f.gg + ADI.f.ut);
+  const neto = adSub - deSub, pct = base0 ? neto / base0 * 100 : 0, uso = ADI.limite ? Math.min(100, Math.max(0, pct / ADI.limite * 100)) : 0;
   const nAd = cuentan.filter(r => r.tipo === 'adicional').reduce((s, r) => s + (r.partidas || 0), 0), nDe = cuentan.filter(r => r.tipo === 'deductivo').reduce((s, r) => s + (r.partidas || 0), 0);
-  const adSub = suma('adicional', 'sub'), adTot = suma('adicional', 'total'), deTot = suma('deductivo', 'total'), estimado = cuentan.some(r => !monto(r).real);
+  const estimado = cuentan.some(r => !monto(r).real);
   const lbOk = ADI.lbs.filter(aprob).map(l => porLB.get(l.numero)).filter(Boolean), mayo = lbOk.reduce((s, p) => s + Number(p.mayores_cd), 0);
   const lim = adm ? ` <button type="button" class="icon-btn" data-adi-limite title="Cambiar el límite de adicionales (% del monto del contrato)" aria-label="Cambiar el límite" style="width:22px;height:22px;vertical-align:middle"><svg viewBox="0 0 24 24" style="width:12px;height:12px"><path d="M4 20h4L19 9l-4-4L4 16v4Z"/></svg></button>` : '';
   const kpis = `<div class="vl-kp">
-    <div class="vl-k"><small>Costo directo del contrato</small><b>S/ ${adiN(ADI.cd0)}</b><em>LB0 · inicio de contrato</em></div>
-    <div class="vl-k"><small>Adicionales</small><b>+ S/ ${adiN(adic)}</b><em>${nAd} partida${nAd === 1 ? '' : 's'} · con sus GG propios, utilidad e IGV S/ ${adiN(adTot)}${estimado ? ' (estimado)' : ''}</em></div>
-    <div class="vl-k"><small>Deductivos vinculados</small><b>− S/ ${adiN(dedu)}</b><em>${nDe} partida${nDe === 1 ? '' : 's'} · con GG, utilidad e IGV S/ ${adiN(deTot)}</em></div>
+    <div class="vl-k"><small>Presupuesto del contrato (subtotal)</small><b>S/ ${adiN(base0)}</b><em>LB0 · inicio de contrato · sin IGV · costo directo S/ ${adiN(ADI.cd0)}</em></div>
+    <div class="vl-k"><small>Adicionales (subtotal)</small><b>+ S/ ${adiN(adSub)}</b><em>${nAd} partida${nAd === 1 ? '' : 's'} · costo directo S/ ${adiN(adic)}${estimado ? ' · GG estimados' : ' · con sus GG propios'}</em></div>
+    <div class="vl-k"><small>Deductivos vinculados (subtotal)</small><b>− S/ ${adiN(deSub)}</b><em>${nDe} partida${nDe === 1 ? '' : 's'} · costo directo S/ ${adiN(dedu)}</em></div>
     <div class="vl-k"><small>Adicionales netos</small><b>${adiN(pct)} %</b><em>S/ ${adiN(neto)} · límite ${adiN(ADI.limite)} %${lim}</em><div class="adi-bar" title="${adiN(uso)} % del límite"><i style="width:${uso.toFixed(1)}%;background:${uso >= 90 ? '#dc2626' : uso >= 60 ? '#f59e0b' : '#10b981'}"></i></div></div></div>`;
   const aviso = pct > ADI.limite ? `<p class="plz-nota al">⚠ Los adicionales netos (${adiN(pct)} %) superan el límite de ${adiN(ADI.limite)} %: revisa el trámite que corresponde.</p>` : (uso >= 80 ? `<p class="plz-nota al">⚠ Ya se usó el ${adiN(uso)} % del límite de adicionales.</p>` : '');
   // conciliación: del costo directo de las líneas base a lo que programa la Curva S y a lo valorizado
@@ -8279,12 +8482,13 @@ function adiPintar() {
       ${va.adicional === 0 && adic ? '<p class="plz-nota">Aún no hay valorizado aprobado de adicionales: la valorización del adicional empieza cuando se aprueba su resolución y se valoriza el avance de sus partidas.</p>' : ''}</div>`;
   // qué cambió en cada línea base
   const filasLB = ADI.lbs.filter(l => l.numero > 0).map(l => {
-    const p = porLB.get(l.numero), nada = !p || (!p.adicional_partidas && !p.deductivo_partidas && !p.mayores_partidas), neto2 = p ? Number(p.adicional_cd) + Number(p.deductivo_cd) + Number(p.mayores_cd) : 0;
+    const p = porLB.get(l.numero), nada = !p || (!p.adicional_partidas && !p.deductivo_partidas && !p.mayores_partidas), kcl = 1 + ADI.f.gg + ADI.f.ut;
+    const sAd = p ? Number(p.adicional_cd) + Number(p.adicional_gg || 0) + Number(p.adicional_ut || 0) : 0, sDe = p ? Number(p.deductivo_cd) + Number(p.deductivo_gg || 0) + Number(p.deductivo_ut || 0) : 0, sMa = p ? Number(p.mayores_cd) * kcl : 0, neto2 = sAd + sDe + sMa;
     const regs = filas.filter(r => r.lb_numero === l.numero);
     return `<tr><td class="l"><b>LB${l.numero}</b>${l.cronograma_id && l.cronograma_id === (RES_A.version || {}).id ? ' <span class="vl-pill ok">vigente</span>' : ''}${l.estado === 'observado' ? ' <span class="vl-pill no">observado</span>' : l.estado === 'presentado' ? ' <span class="vl-pill pr">en revisión</span>' : ''}<span class="lb-sub">${esc(l.tipo_cambio || l.nombre || '')}</span></td>
-      <td>${nada || !p.adicional_partidas ? '—' : `<b>+ ${adiN(p.adicional_cd)}</b><span class="lb-sub">${p.adicional_partidas} partidas</span>`}</td>
-      <td>${nada || !p.deductivo_partidas ? '—' : `<b>− ${adiN(-p.deductivo_cd)}</b><span class="lb-sub">${p.deductivo_partidas} partidas</span>`}</td>
-      <td>${nada || !p.mayores_partidas ? '—' : `<b>+ ${adiN(p.mayores_cd)}</b><span class="lb-sub">${p.mayores_partidas} partidas</span>`}</td>
+      <td>${nada || !p.adicional_partidas ? '—' : `<b>+ ${adiN(sAd)}</b><span class="lb-sub">${p.adicional_partidas} partidas · CD ${adiN(p.adicional_cd)}</span>`}</td>
+      <td>${nada || !p.deductivo_partidas ? '—' : `<b>− ${adiN(-sDe)}</b><span class="lb-sub">${p.deductivo_partidas} partidas · CD ${adiN(-p.deductivo_cd)}</span>`}</td>
+      <td>${nada || !p.mayores_partidas ? '—' : `<b>+ ${adiN(sMa)}</b><span class="lb-sub">${p.mayores_partidas} partidas · CD ${adiN(p.mayores_cd)}</span>`}</td>
       <td><b>${nada ? '—' : (neto2 >= 0 ? '+ ' : '− ') + adiN(Math.abs(neto2))}</b></td>
       <td class="l">${regs.map(r => `${r.tipo === 'adicional' ? 'Adicional' : 'Deductivo'} N° ${adiN0(r.numero)}`).join(', ')}</td></tr>`;
   }).join('');
@@ -8299,7 +8503,7 @@ function adiPintar() {
     return `<tr${r.estado === 'improcedente' ? ' style="opacity:.75"' : ''}><td class="l"><b style="color:${r.tipo === 'adicional' ? '#f26a1b' : '#0ea5a4'}">${r.tipo === 'adicional' ? 'Adicional' : 'Deductivo vinculado'} N° ${adiN0(r.numero)}</b>${r.suelta ? ' <span class="vl-pill pr">en trámite</span>' : ''}${sub ? `<span class="lb-sub">${sub}</span>` : ''}</td>
       <td><span class="vl-pill ${cls}">${etq}</span></td><td class="l">${esc(r.resolucion || '—')}${r.fecha_resolucion ? `<span class="lb-sub">${f2(r.fecha_resolucion)}</span>` : ''}</td>
       <td>${r.lb_numero == null ? '—' : 'LB' + r.lb_numero}</td>
-      <td>${mo ? `<b>${signo} ${adiN(mo.total)}</b><span class="lb-sub">CD ${adiN(mo.cd)} · GG ${adiN(mo.gg)}${pctGG != null ? ' (' + adiN(pctGG) + ' %)' : ''} · Util. ${adiN(mo.ut)} · IGV ${adiN(mo.igv)}${mo.real ? '' : ' · estimado'}</span>` : '—'}</td>
+      <td>${mo ? `<b>${signo} ${adiN(mo.sub)}</b><span class="lb-sub">CD ${adiN(mo.cd)} · GG ${adiN(mo.gg)}${pctGG != null ? ' (' + adiN(pctGG) + ' %)' : ''} · Util. ${adiN(mo.ut)}${mo.real ? '' : ' · estimado'}</span>` : '—'}</td>
       <td class="l">${dp ? `${dp.n} ampliación${dp.n === 1 ? '' : 'es'} de plazo · <b>+${dp.d} d</b>` : r.tipo === 'adicional' ? '<span class="lb-sub">sin ampliación ligada</span>' : ''}</td>
       <td class="c">${adm ? `<button type="button" class="icon-btn" data-adi-edit="${r.id || ''}" data-adi-tipo="${r.tipo}" data-adi-lb="${r.lb_numero == null ? '' : r.lb_numero}" data-adi-num="${r.numero}" title="Completar los datos legales (resolución, causal, estado…)" aria-label="Editar"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4Z"/></svg></button>${r.id ? `<button type="button" class="icon-btn" data-adi-del="${r.id}" title="Quitar los datos legales que completaste (el registro sigue saliendo de la línea base)" aria-label="Quitar"><svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button>` : ''}` : ''}</td></tr>`;
   }).join('');
@@ -8307,9 +8511,9 @@ function adiPintar() {
     + `<div class="vl-card"><div class="lb-cab"><div><h3 style="margin:0 0 3px">Registro de adicionales y deductivos</h3><p class="hint" style="margin:0">Sale solo de las líneas base: cada una que trae partidas adicionales o reduce partidas del contrato genera su «Adicional N° 01» / «Deductivo vinculado N° 01», con el estado y la resolución de la ficha de esa línea base y los gastos generales propios de sus partidas. Con el lápiz completas lo que ningún archivo trae (causal, solicitud) o corriges el N°. Si en una ampliación de plazo eliges el adicional, aquí aparece ligada.</p></div>
       ${adm ? '<button type="button" class="btn-sec pri" data-adi-nuevo title="Solo para un adicional en trámite que todavía no está en ninguna línea base">＋ En trámite</button>' : ''}</div>
       ${ADI.sinSql ? '<p class="plz-nota al">Falta correr <code>adicionales_deductivos.sql</code> y <code>adicionales_automatico.sql</code> en la base.</p>' : ''}
-      <div class="vl-tw"><table class="vl-tb lb-tb plz-reg"><thead><tr><th class="l">Registro</th><th>Estado</th><th class="l">Resolución</th><th>LB</th><th class="l">Presupuesto (con IGV)</th><th class="l">Plazo</th><th></th></tr></thead><tbody>${filasReg || '<tr><td colspan="7" class="l">Todavía no hay adicionales ni deductivos en las líneas base cargadas.</td></tr>'}</tbody></table></div></div>`
-    + `<div class="vl-card"><div class="lb-cab"><div><h3 style="margin:0 0 3px">Qué cambió en cada línea base</h3><p class="hint" style="margin:0">De dónde salen los registros, calculado de las partidas: <b>adicional</b> = partidas nuevas con concepto adicional; <b>deductivo</b> = partidas del contrato que bajan o salen; <b>mayores</b> = partidas del contrato que suben. Montos de costo directo (S/). Solo suman las líneas base aprobadas.</p></div></div>
-      <div class="vl-tw"><table class="vl-tb lb-tb"><thead><tr><th class="l">Línea base</th><th>Adicional S/</th><th>Deductivo S/</th><th>Mayores S/</th><th>Neto S/</th><th class="l">Registro generado</th></tr></thead><tbody>${filasLB || '<tr><td colspan="6" class="l">Todavía no hay una segunda línea base para comparar.</td></tr>'}</tbody></table></div></div>`;
+      <div class="vl-tw"><table class="vl-tb lb-tb plz-reg"><thead><tr><th class="l">Registro</th><th>Estado</th><th class="l">Resolución</th><th>LB</th><th class="l">Subtotal S/ (sin IGV)</th><th class="l">Plazo</th><th></th></tr></thead><tbody>${filasReg || '<tr><td colspan="7" class="l">Todavía no hay adicionales ni deductivos en las líneas base cargadas.</td></tr>'}</tbody></table></div></div>`
+    + `<div class="vl-card"><div class="lb-cab"><div><h3 style="margin:0 0 3px">Qué cambió en cada línea base</h3><p class="hint" style="margin:0">De dónde salen los registros, calculado de las partidas: <b>adicional</b> = partidas nuevas con concepto adicional; <b>deductivo</b> = partidas del contrato que bajan o salen; <b>mayores</b> = partidas del contrato que suben. Montos subtotal sin IGV (costo directo + gastos generales propios + utilidad). Solo suman las líneas base aprobadas.</p></div></div>
+      <div class="vl-tw"><table class="vl-tb lb-tb"><thead><tr><th class="l">Línea base</th><th>Adicional S/ (subtotal)</th><th>Deductivo S/ (subtotal)</th><th>Mayores S/ (subtotal)</th><th>Neto S/</th><th class="l">Registro generado</th></tr></thead><tbody>${filasLB || '<tr><td colspan="6" class="l">Todavía no hay una segunda línea base para comparar.</td></tr>'}</tbody></table></div></div>`;
 }
 function adiFormAbrir(id, pre) {
   const e = id ? ADI.reg.find(x => x.id === id) : null; if (id && !e) return;
