@@ -6,124 +6,139 @@
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <title>Visor BIM · Obra 04</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233b82f6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 18h20M4 18v-6M20 18v-6M2 12c4-8 16-8 20 0M8 18v-7M12 18V8M16 18v-7'/%3E%3C/svg%3E" />
-  <script type="module" crossorigin src="./assets/index-D-KmEuzr.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-DMSezTMg.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f26a1b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 18h20M4 18v-6M20 18v-6M2 12c4-8 16-8 20 0M8 18v-7M12 18V8M16 18v-7'/%3E%3C/svg%3E" />
+  <script type="module" crossorigin src="./assets/index-Dlmoz6i4.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-D9MxMwYc.css">
 </head>
 <body>
   <div id="app">
     <aside id="side">
-      <button class="grab" id="grab" aria-label="Subir o bajar el panel"><i></i></button>
+      <!-- barra superior: marca + frentes -->
       <header class="brand">
         <div class="logo"><svg viewBox="0 0 24 24"><path d="M2 18h20M4 18v-6M20 18v-6M2 12c4-8 16-8 20 0M8 18v-7M12 18V8M16 18v-7"/></svg></div>
-        <button type="button" class="brand-t" id="projBtn" title="Cambiar de puente / frente">
-          <h1 id="pName">Visor BIM</h1>
-          <p><i class="dot ok"></i><span id="pSub">Control de Avance Técnico &amp; Financiero</span></p>
-        </button>
-        <svg class="chev" id="projChev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
-        <span class="badge mono">BIM 4D/5D</span>
-        <div class="projmenu" id="projMenu" hidden></div>
+        <div class="brand-t">
+          <h1>Obra 04 <span>BIM</span></h1>
+          <p id="pSub">Avance del sistema</p>
+        </div>
+        <span id="pName" hidden></span>
+        <nav class="projmenu" id="projMenu" aria-label="Frente"></nav>
       </header>
 
-      <nav class="tabs" id="tabs">
-        <button data-tab="resumen" class="on">Resumen</button>
-        <button data-tab="tareas">Tareas</button>
-        <button data-tab="modelo">Modelo</button>
-      </nav>
-
-      <div class="scroll">
-        <!-- ═══ RESUMEN ═══ -->
-        <section data-pane="resumen" class="pane on">
-          <div class="kpis">
-            <div class="card kpi"><div class="k-h"><span>Presupuesto Total</span><svg class="ic g" viewBox="0 0 24 24"><path d="M12 2v20M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div class="k-v mono" id="kTotal">—</div><div class="k-s" id="kMode">—</div></div>
-            <div class="card kpi"><div class="k-h"><span>Valor Valorizado</span><svg class="ic b" viewBox="0 0 24 24"><path d="m22 7-8.5 8.5-5-5L2 17M16 7h6v6"/></svg></div><div class="k-v mono blue" id="kEv">—</div><div class="k-s" id="kEvS">—</div></div>
-            <div class="card kpi"><div class="k-h"><span>Avance Físico</span><svg class="ic y" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div><div class="k-v mono amber" id="kPhys">—</div><div class="bar"><i id="kPhysBar"></i><b id="kPlanTick"></b></div><div class="k-s" id="kPhysS">—</div></div>
-            <div class="card kpi"><div class="k-h"><span>Estado Cronograma</span><svg class="ic v" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><div class="k-v" id="kHealth"><i class="dot"></i>—</div><div class="k-s" id="kTasks">—</div></div>
+      <!-- tablero inferior: avance, tiempo y Curva S en un solo instrumento -->
+      <section class="dock" id="dock">
+        <button class="grab" id="grab" aria-label="Subir o bajar el panel"><i></i></button>
+        <div class="d-ring kpi" title="Avance físico real (arco naranja) contra el programado (marca blanca)">
+          <svg viewBox="0 0 100 100"><circle class="r-bg" cx="50" cy="50" r="42" pathLength="100"/><circle class="r-pl" id="ringPl" cx="50" cy="50" r="42" pathLength="100"/><circle class="r-re" id="ringRe" cx="50" cy="50" r="42" pathLength="100"/></svg>
+          <div class="r-c"><b id="kPhys">—</b><small>avance</small></div>
+        </div>
+        <div class="d-stats">
+          <div class="st"><span>Valor ganado</span><b class="mono acc" id="kEv">—</b><small id="kEvS">—</small></div>
+          <div class="st st2"><span>Costo directo</span><b class="mono" id="kTotal">—</b><small id="kTasks">—</small></div>
+          <div class="st st3"><span>Cronograma</span><b id="kHealth"><i class="dot"></i>—</b><small id="kPhysS">—</small></div>
+        </div>
+        <div class="d-play">
+          <div class="dp-1">
+            <button id="play" class="play" title="Reproducir / pausar (espacio)"><svg viewBox="0 0 24 24" id="playIc"><path d="M6 4l14 8-14 8z"/></svg></button>
+            <div class="dp-d"><b class="mono" id="simDate">—</b><small id="simCut" class="cutlbl">—</small></div>
           </div>
+          <div class="dp-2">
+            <div class="seg" id="modeSeg"><button data-v="real" class="on" title="Avance real valorizado">Real</button><button data-v="plan" title="Avance programado">Plan</button></div>
+            <div class="seg" id="speedSeg" title="Velocidad de la simulación"><button data-v="4">1×</button><button data-v="12" class="on">3×</button><button data-v="30">8×</button></div>
+          </div>
+        </div>
+        <div class="d-curve">
+          <div class="dc-h"><span><i class="l-real"></i>Real</span><span><i class="l-plan"></i>Programado</span><span id="simFlag" class="flag" hidden>Proyección</span><em class="mono"><span id="simMin">—</span> → <span id="simMax">—</span></em></div>
+          <div class="ch-w"><canvas id="sChart"></canvas><input type="range" id="slider" min="0" max="100" step="1" value="0" aria-label="Fecha de la simulación" /><div class="cutmark" id="cutMark" hidden></div></div>
+        </div>
+        <div hidden><span id="kMode"></span><i id="kPhysBar"></i><b id="kPlanTick"></b></div>
+      </section>
 
-          <div class="card sim">
-            <div class="sim-h"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span>Simulación de Cronograma 4D</span><span class="date mono" id="simDate">—</span></div>
-            <div class="sim-c">
-              <button id="play" class="play" title="Reproducir / pausar (espacio)"><svg viewBox="0 0 24 24" id="playIc"><path d="M6 4l14 8-14 8z"/></svg></button>
-              <div class="slider"><input type="range" id="slider" min="0" max="100" step="1" value="0" /><div class="cutmark" id="cutMark" title="Fecha de corte"></div></div>
+      <!-- panel lateral: grupos · elemento · modelo -->
+      <section class="drawer" id="drawer">
+        <nav class="tabs" id="tabs">
+          <button data-tab="tareas" class="on" title="Grupos de elementos y su avance"><svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg><span>Grupos</span></button>
+          <button data-tab="partidas" title="Partidas del presupuesto: toca una para ver solo sus elementos"><svg viewBox="0 0 24 24"><path d="M3 5h18M3 12h18M3 19h18M7 5v14"/></svg><span>Partidas</span></button>
+          <button data-tab="resumen" title="Elemento seleccionado y sus partidas"><svg viewBox="0 0 24 24"><path d="M21 8 12 3 3 8v8l9 5 9-5zM3 8l9 5 9-5M12 13v8"/></svg><span>Elemento</span></button>
+          <button data-tab="modelo" title="Opciones del modelo"><svg viewBox="0 0 24 24"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg><span>Modelo</span></button>
+        </nav>
+        <div class="scroll">
+          <section data-pane="tareas" class="pane on">
+            <div class="filters">
+              <input id="q" type="search" placeholder="Buscar grupo, partida o código…" />
+              <div class="chips" id="chips">
+                <button data-f="all" class="on">Todos</button><button data-f="prog" style="--c:#f59e0b">En proceso</button><button data-f="late" style="--c:#f43f5e">Atrasados</button><button data-f="done" style="--c:#14b8a6">Terminados</button><button data-f="pend" style="--c:#64748b">Pendientes</button>
+              </div>
             </div>
-            <div class="sim-r mono"><span id="simMin">—</span><span id="simCut" class="cutlbl">—</span><span id="simMax">—</span></div>
-            <div class="sim-o">
-              <div class="seg" id="modeSeg"><button data-v="real" class="on">Real</button><button data-v="plan">Programado</button></div>
-              <div class="seg" id="speedSeg"><button data-v="4">1×</button><button data-v="12" class="on">3×</button><button data-v="30">8×</button></div>
-              <span id="simFlag" class="flag" hidden>Proyección</span>
+            <div id="taskList" class="tlist"></div>
+          </section>
+
+          <section data-pane="partidas" class="pane">
+            <p class="muted" id="parVacio" hidden>Disponible cuando el modelo de este frente está enlazado con sus partidas en el panel.</p>
+            <div id="parBox">
+              <div class="filters">
+                <input id="qPar" type="search" placeholder="Buscar partida o código…" />
+                <div class="chips" id="parChips">
+                  <button data-f="all" class="on">Todas</button><button data-f="la" id="parLA" style="--c:#f26a1b">En Look Ahead</button><button id="parClear" class="clr" hidden>Mostrar todo</button>
+                </div>
+              </div>
+              <div id="parList" class="tlist"></div>
             </div>
-          </div>
+          </section>
 
-          <div class="card chart">
-            <div class="ch-h"><svg class="ic g" viewBox="0 0 24 24"><path d="M3 3v18h18M7 14l4-4 3 3 5-6"/></svg><span>Curva S de Costos (Acumulado S/.)</span></div>
-            <div class="ch-l"><i class="l-plan"></i>Programado (5D) <i class="l-real"></i>Ejecutado Real</div>
-            <div class="ch-w"><canvas id="sChart"></canvas></div>
-          </div>
-
-          <div class="card insp" id="insp">
-            <div class="i-h"><svg class="ic v" viewBox="0 0 24 24"><path d="M21 8 12 3 3 8v8l9 5 9-5zM3 8l9 5 9-5M12 13v8"/></svg><span>Inspección de Elemento BIM 3D</span><em id="iSel" class="mono">Seleccione un objeto</em></div>
-            <div id="iBody" class="i-b"><p class="muted">Haga clic sobre cualquier elemento del modelo para ver su información, tarea asociada, avance y costo.</p></div>
-          </div>
-        </section>
-
-        <!-- ═══ TAREAS ═══ -->
-        <section data-pane="tareas" class="pane">
-          <div class="filters">
-            <input id="q" type="search" placeholder="Buscar tarea, ID o ubicación…" />
-            <div class="chips" id="chips">
-              <button data-f="all" class="on">Todas</button><button data-f="prog">En proceso</button><button data-f="late">Atrasadas</button><button data-f="done">Terminadas</button><button data-f="pend">Pendientes</button>
+          <section data-pane="resumen" class="pane">
+            <div class="insp" id="insp">
+              <div class="i-h"><span>Elemento</span><em id="iSel" class="mono">ninguno</em></div>
+              <div id="iBody" class="i-b"><p class="muted">Toca cualquier elemento del modelo para ver sus datos, sus partidas del presupuesto y su avance.</p></div>
             </div>
-          </div>
-          <div id="taskList" class="tlist"></div>
-        </section>
+          </section>
 
-        <!-- ═══ MODELO ═══ -->
-        <section data-pane="modelo" class="pane">
-          <div class="card opt">
-            <h3>Elementos pendientes</h3>
-            <div class="seg wide" data-opt="pending"><button data-v="ghost" class="on">Fantasma</button><button data-v="hide">Ocultar</button><button data-v="solid">Sólido</button></div>
-            <h3>Color</h3>
-            <div class="seg wide" data-opt="colorMode"><button data-v="estado" class="on">Estado 5D</button><button data-v="original">Material original</button></div>
-            <label class="sw"><input type="checkbox" id="oSteel" /><i></i><span>Mostrar armadura y acopladores</span></label>
-            <label class="sw"><input type="checkbox" id="oLite" /><i></i><span>Modelo ligero <small class="muted">(para tabletas o equipos básicos: más estable, sin armadura)</small></span></label>
-            <label class="sw"><input type="checkbox" id="oGrid" checked /><i></i><span>Cuadrícula de terreno</span></label>
-            <label class="sw"><input type="checkbox" id="oWater" checked /><i></i><span>Cauce del río</span></label>
-            <h3>Opacidad del concreto <b class="mono" id="oOpV">100%</b></h3>
-            <input type="range" id="oOp" min="20" max="100" value="100" />
-            <h3>Nivel del terreno <b class="mono" id="oGrV">—</b></h3>
-            <input type="range" id="oGr" min="-20" max="40" step="0.5" value="15" />
-          </div>
-          <div class="card opt">
-            <h3>Datos</h3>
-            <div class="btns">
-              <button class="btn" id="bLoad"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>Cargar Excel</button>
-              <a class="btn" id="bTpl" href="data/Avance_Obra_Puente_Charanal.xlsx" download><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Descargar Excel</a>
-              <button class="btn" id="bShot"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>Captura PNG</button>
+          <section data-pane="modelo" class="pane">
+            <div class="card opt">
+              <h3>Pendientes</h3>
+              <div class="seg wide" data-opt="pending"><button data-v="ghost" class="on">Fantasma</button><button data-v="hide">Ocultar</button><button data-v="solid">Sólido</button></div>
+              <h3>Color</h3>
+              <div class="seg wide" data-opt="colorMode"><button data-v="estado" class="on">Avance</button><button data-v="lookahead" title="Qué se trabaja en cada semana del Look Ahead">Look Ahead</button><button data-v="original">Material</button></div>
+              <label class="sw"><input type="checkbox" id="oSteel" /><i></i><span>Mostrar armadura y acopladores</span></label>
+              <label class="sw"><input type="checkbox" id="oLite" /><i></i><span>Modelo ligero <small class="muted">(tabletas o equipos básicos: sin armadura)</small></span></label>
+              <label class="sw"><input type="checkbox" id="oGrid" checked /><i></i><span>Cuadrícula de terreno</span></label>
+              <label class="sw"><input type="checkbox" id="oWater" checked /><i></i><span>Cauce del río</span></label>
+              <h3>Opacidad del concreto <b class="mono" id="oOpV">100%</b></h3>
+              <input type="range" class="rg" id="oOp" min="20" max="100" value="100" />
+              <h3>Nivel del terreno <b class="mono" id="oGrV">—</b></h3>
+              <input type="range" class="rg" id="oGr" min="-20" max="40" step="0.5" value="15" />
             </div>
-            <input type="file" id="fileXlsx" accept=".xlsx,.xlsm" hidden />
-            <p class="muted small" id="dataInfo"></p>
-          </div>
-          <div class="card opt">
-            <h3>Aislamiento</h3>
-            <p class="muted small" id="isoInfo">Ninguna tarea aislada. Use el botón <b>Aislar</b> en la lista de tareas.</p>
-            <button class="btn" id="bIsoClear" hidden>Mostrar todo</button>
-          </div>
-        </section>
-      </div>
+            <div class="card opt">
+              <h3>Datos</h3>
+              <div class="btns">
+                <button class="btn" id="bLoad"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>Cargar Excel</button>
+                <a class="btn" id="bTpl" href="proyectos/charanal/avance.xlsx" download><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Descargar Excel</a>
+                <button class="btn" id="bShot"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>Captura</button>
+              </div>
+              <input type="file" id="fileXlsx" accept=".xlsx,.xlsm" hidden />
+              <p class="muted small" id="dataInfo"></p>
+              <p class="muted small" id="fps" style="margin-top:6px"></p>
+            </div>
+            <div class="card opt">
+              <h3>Aislamiento</h3>
+              <p class="muted small" id="isoInfo">Ningún grupo aislado. Usa el botón <b>Aislar</b> en la lista de grupos.</p>
+              <button class="btn" id="bIsoClear" hidden>Mostrar todo</button>
+            </div>
+          </section>
+        </div>
+      </section>
     </aside>
 
     <main id="view">
       <div id="gl"></div>
-      <div class="ov info"><svg class="ic b" viewBox="0 0 24 24"><path d="m12 2 10 5-10 5L2 7zM2 12l10 5 10-5M2 17l10 5 10-5"/></svg><div><b>Visor de Geometría Ligera (Fragments/Three.js)</b><small id="fps">Renderizado por GPU · Sin servidores</small></div></div>
       <div class="ov tools">
-        <button id="tSide" title="Mostrar / ocultar el panel"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></svg></button>
+        <button id="tSide" title="Mostrar / ocultar los paneles"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></svg></button>
         <button id="tHome" title="Vista isométrica"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/></svg></button>
         <button id="tView" title="Vistas: planta / elevación / longitudinal"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg></button>
-        <button id="tGhost" title="Alternar pendientes (fantasma / ocultar)"><svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
-        <button id="tGantt" title="Mostrar / ocultar Gantt"><svg viewBox="0 0 24 24"><path d="M3 6h9M7 12h11M5 18h8"/></svg></button>
+        <button id="tGhost" title="Pendientes: fantasma / ocultar"><svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
+        <button id="tLA" title="Look Ahead: colorear lo programado en cada semana"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14h3M13 14h3M8 17.5h3"/></svg></button>
+        <button id="tGantt" title="Cronograma de los grupos"><svg viewBox="0 0 24 24"><path d="M3 6h9M7 12h11M5 18h8"/></svg></button>
         <button id="tFull" title="Pantalla completa"><svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/></svg></button>
-        <button id="tTheme" title="Colores del visor y paneles"><svg viewBox="0 0 24 24"><path d="M12 22a10 10 0 1 1 10-10c0 2.8-2 3.5-4 3.5h-2a2 2 0 0 0-1.5 3.3c.6.8.5 3.2-2.5 3.2z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10.5" cy="6.5" r="1"/><circle cx="15.5" cy="7" r="1"/></svg></button>
+        <button id="tTheme" title="Colores"><svg viewBox="0 0 24 24"><path d="M12 22a10 10 0 1 1 10-10c0 2.8-2 3.5-4 3.5h-2a2 2 0 0 0-1.5 3.3c.6.8.5 3.2-2.5 3.2z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10.5" cy="6.5" r="1"/><circle cx="15.5" cy="7" r="1"/></svg></button>
       </div>
       <div class="ov thememenu" id="themeMenu" hidden>
         <h4>Tema</h4><div class="presets" id="presets"></div>
@@ -135,15 +150,15 @@
       <div class="ov viewmenu" id="viewMenu" hidden><button data-v="iso">Isométrica</button><button data-v="elev">Elevación</button><button data-v="top">Planta</button><button data-v="long">Longitudinal</button></div>
 
       <div class="ov gantt" id="gantt" hidden>
-        <div class="g-h"><b>Cronograma Gantt · programado vs real</b><span class="muted small" id="gSub"></span><button id="gClose" title="Cerrar">×</button></div>
+        <div class="g-h"><b>Cronograma · programado y real</b><span class="muted small" id="gSub"></span><button id="gClose" title="Cerrar">×</button></div>
         <div class="g-body" id="gBody"></div>
       </div>
 
-      <div class="ov legend"><span>Leyenda Estado:</span>
-        <i class="lg" style="--c:#64748b"></i>Pendiente <i class="lg" style="--c:#3b82f6"></i>En Proceso <i class="lg" style="--c:#10b981"></i>Terminado <i class="lg" style="--c:#f43f5e"></i>Atrasado
+      <div class="ov legend" id="legend" title="Color de cada elemento">
+        <span><i class="lg" style="--c:#64748b"></i>Pendiente</span><span><i class="lg" style="--c:#f59e0b"></i>En proceso</span><span><i class="lg" style="--c:#14b8a6"></i>Terminado</span><span><i class="lg" style="--c:#f43f5e"></i>Atrasado</span>
       </div>
       <div class="ov hint" id="hint">Arrastre: orbitar · Rueda: zoom · Clic derecho: desplazar · Clic: inspeccionar</div>
-      <div id="loader"><div class="ld-c"><div class="spin"></div><b id="ldT">Cargando modelo BIM…</b><div class="ld-bar"><i id="ldB"></i></div><small id="ldS">Preparando…</small></div></div>
+      <div id="loader"><div class="ld-c"><div class="spin"></div><b id="ldT">Cargando modelo…</b><div class="ld-bar"><i id="ldB"></i></div><small id="ldS">Preparando…</small></div></div>
       <div id="toast"></div>
     </main>
   </div>
