@@ -1944,6 +1944,59 @@ td.c .icon-btn+.icon-btn{margin-left:6px;}
 .gg-d{min-width:260px;} .gg-u{width:58px;text-align:center;} .gg-n{width:92px;text-align:right;} .gg-v{width:118px;text-align:right;font-weight:700;} .gg-cod{font-size:11px;color:var(--mut);white-space:nowrap;}
 .gg-cap td{background:var(--input);border-top:2px solid var(--line2);} .gg-sub td{font-size:11.5px;font-weight:700;color:var(--mut);} .gg-base .gg-in{color:var(--mut);} .gg-base td{opacity:.8;}
 .gg-nuevo{display:flex;gap:8px;margin:10px 0 4px;} .gg-nuevo input{flex:1;min-width:0;}
+/* ═══ Dashboard v4 (compacto y claro): misma jerarquía de Valor ganado, menos aire ═══ */
+.pane[data-pane="resumen"]{max-width:1480px;margin-inline:auto;}
+html:not(.cel) .topbar{margin-bottom:14px;}
+.pane[data-pane="resumen"] .kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:12px;}
+.kpis .card.kpi3{--ka:#141c5e;position:relative;overflow:hidden;display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:auto auto auto;column-gap:11px;align-items:center;align-content:center;min-width:0;min-height:88px;padding:10px 14px;text-align:left;border:1px solid var(--line);border-radius:14px;background:var(--card);box-shadow:0 1px 2px rgba(16,24,40,.04),0 8px 20px -16px rgba(16,24,40,.3);}
+.kpis .card.kpi3::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--ka);}
+.kpis .card.kc-red.kpi3,.kpis .card.kc-amber.kpi3{--ka:#f26a1b;} .kpis .card.kc-blue.kpi3{--ka:#4f5bd5;} .kpis .card.kc-red.kpi-ok,.kpis .card.kc-amber.kpi-ok{--ka:#16a34a;}
+.kpi3 .k3-h{display:contents;}
+.kpi3 .k3-ic{grid-column:1;grid-row:1 / span 3;display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:12px;background:color-mix(in srgb,var(--ka) 13%,transparent);color:var(--ka);}
+.kpi3 .k3-ic svg{width:19px;height:19px;}
+.kpi3 .label{grid-column:2;grid-row:1;font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--mut);line-height:1.2;white-space:normal;}
+.kpi3 .label .igv{display:block;margin:0;font-size:9px;font-weight:600;letter-spacing:.03em;text-transform:none;opacity:.75;}
+.kpi3 .value{grid-column:2;grid-row:2;margin:1px 0;max-width:100%;font-size:clamp(13px,1.4vw,21px);font-weight:800;letter-spacing:-.02em;line-height:1.15;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.kpi3 .sub2{grid-column:2;grid-row:3;margin:0;font-size:11px;line-height:1.3;color:var(--mut);white-space:normal;}
+.kpi3 .bar{grid-column:2;grid-row:3;align-self:center;width:100%;margin:2px 0 0;height:5px;border-radius:3px;background:var(--line);overflow:hidden;} .kpi3 .bar i{display:block;height:100%;border-radius:3px;background:var(--ka);}
+.kpis .card.kc-amber.kpi3 .bar{position:absolute;left:0;right:0;bottom:0;width:auto;height:4px;margin:0;border-radius:0;} .kpis .card.kc-amber.kpi3 .bar i{border-radius:0 2px 2px 0;}
+.kpis .card.kc-amber.kpi3 .value{color:var(--ka);}
+.kpis .card.kc-amber.kpi3 .sub2{font-size:10.5px;} .kpi3 .sem{margin:0;padding:0;background:none;} .kpi3 .sem i{width:9px;height:9px;}
+.pane[data-pane="resumen"] .chart-card{border-radius:16px;padding:14px 16px;border:1px solid var(--line);box-shadow:0 1px 2px rgba(16,24,40,.04),0 10px 24px -20px rgba(16,24,40,.35);}
+.pane[data-pane="resumen"] .chart-card h3{font-size:15px;font-weight:800;letter-spacing:-.01em;}
+.pane[data-pane="resumen"] .res-top{gap:12px;margin-bottom:12px;}
+/* Curva S: tarjeta clara como las demás; encabezado y chips compactos */
+.cv-cab{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px 14px;} .cv-ctl{display:flex;flex-wrap:wrap;align-items:center;gap:8px;}
+.res-curva #btnDatos{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 12px;border-radius:10px;border:1px solid var(--line2);background:var(--input);color:var(--tx2);font:inherit;font-size:12px;font-weight:700;cursor:pointer;} .res-curva #btnDatos:hover{border-color:var(--naranja);} .res-curva #btnDatos b{font-weight:800;color:var(--naranja);}
+.cv-mes{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 4px 0 11px;border-radius:10px;border:1px solid var(--line2);background:var(--input);} .cv-mes label{font-size:9.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);}
+.cv-mes select{appearance:none;-webkit-appearance:none;height:28px;border:0;border-radius:8px;padding:0 26px 0 6px;background:transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f26a1b' stroke-width='2.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 7px center/13px;color:var(--tx);font:inherit;font-size:13px;font-weight:800;cursor:pointer;} .cv-mes select:focus-visible{outline:2px solid var(--naranja);outline-offset:1px;}
+.cv-chips{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:8px;margin:8px 0 2px;}
+.res-curva .mes-chip{display:flex;flex-direction:column;align-items:flex-start;gap:0;margin:0;padding:4px 12px;border-radius:10px;border:1px solid var(--line);background:var(--input);text-align:left;min-width:0;flex:0 0 auto;}
+.res-curva .mes-chip .lbl{font-size:9px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--mut);white-space:nowrap;} .res-curva .mes-chip b{font-size:13.5px;font-weight:800;white-space:nowrap;}
+.res-curva .legend2{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 14px;margin-top:4px;font-size:11px;color:var(--tx2);} .res-curva .legend2 span{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;}
+.res-curva #curvaWrap{margin-top:0;}
+/* horas-hombre, materiales y cronograma: encabezado y píldoras iguales, más compactos */
+.hhr-top{align-items:center;margin-bottom:8px;} .hhr-card .hhr-ver{padding:4px 11px;border:1px solid var(--line2);border-radius:999px;background:var(--input);color:var(--naranja);font-weight:800;font-size:11px;} .hhr-card .hhr-ver:hover{border-color:var(--naranja);}
+.hhr-card h3,.gantt-card h3{font-size:15px;} .hhr-card .hint,.gantt-card .hint{font-size:11px;color:var(--mut);}
+.hhr-dona svg{width:96px;height:96px;flex:0 0 96px;} #hhrDona .hhr-dona{flex:1 1 auto;align-content:center;} .hhr-pp{gap:5px;margin-top:6px;} .hhr-pie{gap:8px;margin-top:6px;}
+.hhr-pie div{border:1px solid var(--line);border-radius:12px;padding:6px 10px;text-align:center;} .hhr-pie b{font-size:15px;}
+.mr-chips{margin:0 0 8px;} .mr-chips button{white-space:nowrap;height:34px;font-size:12px;font-weight:700;} .mr-chips button b{font-weight:800;}
+.mr-ley{margin-top:6px;}
+.pane[data-pane="resumen"] .gt-cab{margin-bottom:8px;} .pane[data-pane="resumen"] .gt-fila{flex:1 1 46px;min-height:46px;max-height:64px;}
+/* bloque «Avance por frente y por componente»: dos paneles iguales y tres tarjetas iguales */
+.pane[data-pane="resumen"] .rg-card{border-radius:16px;border:1px solid var(--line);box-shadow:0 1px 2px rgba(16,24,40,.04),0 10px 24px -20px rgba(16,24,40,.35);}
+.pane[data-pane="resumen"] .rg-band{padding:10px 18px;background:linear-gradient(135deg,#141c5e,#27338f);}
+.pane[data-pane="resumen"] .rg-band h3{font-size:14px;letter-spacing:-.005em;} .pane[data-pane="resumen"] .rg-band p{font-size:11px;color:rgba(255,255,255,.75);}
+.pane[data-pane="resumen"] .rg-body{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:12px 14px 10px;align-items:stretch;}
+.pane[data-pane="resumen"] .rg-body>.av-card,.pane[data-pane="resumen"] .rg-body>.rg-chart{display:flex;flex-direction:column;min-width:0;padding:10px 14px;border:1px solid var(--line);border-radius:14px;background:var(--card);box-shadow:none;}
+.pane[data-pane="resumen"] .rg-body .av-card h3{margin:0 0 2px;font-size:13.5px;} .pane[data-pane="resumen"] .rg-body .av-wrap{min-height:190px;}
+.pane[data-pane="resumen"] .rg-chart .rg-ct{font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);text-align:center;margin-bottom:6px;}
+.pane[data-pane="resumen"] .rg-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:2px 14px 14px;align-items:stretch;}
+.pane[data-pane="resumen"] .rg-cards>.rgc{min-width:0;margin:0;padding:10px 14px;border:1px solid var(--line);border-radius:14px;background:var(--card);box-shadow:none;}
+.pane[data-pane="resumen"] .rgc h4{margin:0 0 8px;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--tx);} .pane[data-pane="resumen"] .rgc h4 small{font-weight:600;letter-spacing:0;text-transform:none;color:var(--mut);}
+:root[data-theme="dark"] .kpis .card.kc-teal.kpi3{--ka:#8f98ee;} :root[data-theme="dark"] .kpis .card.kc-blue.kpi3{--ka:#7c88ff;}
+@media (max-width:1100px){.kpi3 .value{font-size:21px;} .pane[data-pane="resumen"] .kpis{grid-template-columns:repeat(2,minmax(0,1fr));} .pane[data-pane="resumen"] .rg-body,.pane[data-pane="resumen"] .rg-cards{grid-template-columns:minmax(0,1fr);}}
+@media (max-width:640px){.cv-chips{gap:5px;} .res-curva .mes-chip{padding:4px 8px;} .res-curva .mes-chip b{font-size:12.5px;} .res-curva .mes-chip .lbl{font-size:8.5px;letter-spacing:.02em;}}
 /* ═══ Valor ganado: diseño ═══ */
 .vg-wrap{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr);gap:16px;} .vg-wrap>*{min-width:0;}
 .vg-bar{display:flex;flex-wrap:wrap;justify-content:flex-start;align-items:flex-end;gap:14px 24px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px 18px 16px;box-shadow:0 1px 2px rgba(16,24,40,.04),0 10px 28px -20px rgba(16,24,40,.3);}
@@ -2224,48 +2277,36 @@ document.documentElement.classList.add('dens-densa');   // tamaño único de las
     <!-- ═══════════ RESUMEN ═══════════ -->
     <section class="pane on" data-pane="resumen">
       <div class="kpis">
-        <div class="card kc-teal">
-          <div class="k-body">
-            <div class="label">Presupuesto total <span class="igv">Sin IGV</span></div>
-            <div class="value mono" id="kPresu">—</div><div class="sub2" id="kPresuS"></div>
-          </div>
-          <div class="k-ic-big"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <div class="card kc-teal kpi3">
+          <div class="k3-h"><span class="k3-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span><div class="label">Presupuesto total <span class="igv">Sin IGV</span></div></div>
+          <div class="value mono" id="kPresu">—</div><div class="sub2" id="kPresuS"></div>
         </div>
-        <div class="card kc-blue">
-          <div class="k-body">
-            <div class="label">Programado a la fecha <span class="igv">Sin IGV</span></div>
-            <div class="value mono" id="kProg">—</div><div class="sub2" id="kProgS"></div>
-          </div>
-          <div class="k-ic-big"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+        <div class="card kc-blue kpi3">
+          <div class="k3-h"><span class="k3-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></span><div class="label">Programado a la fecha <span class="igv">Sin IGV</span></div></div>
+          <div class="value mono" id="kProg">—</div><div class="sub2" id="kProgS"></div>
         </div>
-        <div class="card kc-red">
-          <div class="k-body">
-            <div class="label">Valorizado (ejecutado real) <span class="igv">Sin IGV</span></div>
-            <div class="value mono" id="kValor">—</div><div class="sub2" id="kValorS"></div>
-          </div>
-          <div class="k-ic-big"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m22 7-8.5 8.5-5-5L2 17M16 7h6v6"/></svg></div>
+        <div class="card kc-red kpi3">
+          <div class="k3-h"><span class="k3-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="m22 7-8.5 8.5-5-5L2 17M16 7h6v6"/></svg></span><div class="label" title="Valorizado: ejecutado real">Valorizado real <span class="igv">Sin IGV</span></div></div>
+          <div class="value mono" id="kValor">—</div><div class="sub2" id="kValorS"></div>
         </div>
-        <div class="card kc-amber">
-          <div class="k-body">
-            <div class="label" title="SPI = valorizado ÷ programado a la fecha. 100 % = al día">SPI</div>
-            <div class="value" id="kPct">—</div><div class="bar"><i id="kBar"></i></div><div class="sub2" id="kEstadoS"></div>
-          </div>
-          <div class="k-ic-big"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+        <div class="card kc-amber kpi3">
+          <div class="k3-h"><span class="k3-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span><div class="label" title="SPI = valorizado ÷ programado a la fecha. 100 % = al día">SPI · Plazo</div></div>
+          <div class="value" id="kPct">—</div><div class="bar"><i id="kBar"></i></div><div class="sub2" id="kEstadoS"></div>
         </div>
       </div>
 
       <div class="res-top">
       <div class="chart-card res-curva" style="position:relative">
-        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;align-items:center;">
+        <div class="cv-cab">
           <div>
             <h3 style="margin:0" id="curvaTitulo">Curva S general (S/. acumulados)</h3>
             <p class="hint" id="curvaHint">Programado vs. ejecutado (acumulado mensual)</p>
           </div>
-          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;">
+          <div class="cv-ctl">
             <button type="button" id="btnDatos" class="seg-btn" aria-expanded="false" aria-controls="datosPop" title="Plazo y fuente de los montos">ⓘ Datos generales <b id="btnDatosTxt"></b></button>
-            <span style="display:flex;align-items:center;gap:6px;">
-              <label for="curvaMesSel" style="font-size:11.5px;color:var(--mut);">Ver mes:</label>
-              <select id="curvaMesSel" style="background:var(--input);border:1px solid var(--line2);color:var(--tx);border-radius:6px;padding:5px 8px;font-size:12px;"></select>
+            <span class="cv-mes">
+              <label for="curvaMesSel">Corte</label>
+              <select id="curvaMesSel"></select>
             </span>
           </div>
         </div>
@@ -2276,7 +2317,7 @@ document.documentElement.classList.add('dens-densa');   // tamaño único de las
           <h4 style="margin-top:12px">Fuente de los montos</h4>
           <p id="datosFuentes" class="dp-src"></p>
         </div>
-        <div id="curvaMesKpis" style="display:flex;flex-wrap:wrap;gap:10px;margin:10px 0 4px;"></div>
+        <div id="curvaMesKpis" class="cv-chips"></div>
         <div id="curvaWrap" style="position:relative;">
           <svg id="curvaSvg" viewBox="0 0 900 320"></svg>
         </div>
@@ -3273,6 +3314,7 @@ let curvaAngosto = null;    // true si la curva se dibujó en modo angosto (tabl
 
 function renderCurvaS() {
   const hoy = new Date();
+  const K = { grid: SVGC.grid, axis: SVGC.axis, axisLine: SVGC.axisLine, halo: SVGC.halo, plazo: SVGC.plazo, navy: NAVY_T(), navyArea: '#27338f', corte: '#6a7090', banda: '#64748b', bandaO: '0.14', bandaL: '#64748b' };
   const todas = (DATA.curvaMensual || []).filter(enAlcance);
 
   let filas;
@@ -3293,7 +3335,7 @@ function renderCurvaS() {
   if (!filas.length) {
     const msg = alcance === 'adicional' ? 'Este frente no tiene adicional' : 'Sin datos reales de Curva S todavía para esta selección';
     $('#curvaSvg').setAttribute('viewBox', '0 0 900 320');
-    $('#curvaSvg').innerHTML = `<text x="450" y="150" fill="${SVGC.axis}" font-size="13" text-anchor="middle">${msg}</text>`;
+    $('#curvaSvg').innerHTML = `<text x="450" y="150" fill="${K.axis}" font-size="13" text-anchor="middle">${msg}</text>`;
     $('#curvaMesSel').innerHTML = ''; $('#curvaMesKpis').innerHTML = ''; $('#plazoInfo').innerHTML = ''; $('#btnDatosTxt').textContent = '';
     $('#legendFinPlazo').style.display = 'none';
     // los KPI no deben quedarse con los valores de la selección anterior
@@ -3352,8 +3394,8 @@ function renderCurvaS() {
   let grid = '';
   for (let i=0;i<=4;i++) {
     const y = padT + (h-padT-padB)*(1-i/4);
-    grid += `<line x1="${padL}" y1="${y}" x2="${w-padR}" y2="${y}" stroke="${SVGC.grid}" stroke-width="1"/>
-      <text x="${padL-6}" y="${y+4}" fill="${SVGC.axis}" font-size="10" text-anchor="end">${yMax >= 1e6 ? (yMax*i/4/1e6).toFixed(yMax >= 1e7 ? 0 : 1) + ' M' : Math.round(yMax*i/4/1000) + ' k'}</text>`;
+    grid += `<line x1="${padL}" y1="${y}" x2="${w-padR}" y2="${y}" stroke="${K.grid}" stroke-width="1"/>
+      <text x="${padL-6}" y="${y+4}" fill="${K.axis}" font-size="10" text-anchor="end">${yMax >= 1e6 ? (yMax*i/4/1e6).toFixed(yMax >= 1e7 ? 0 : 1) + ' M' : Math.round(yMax*i/4/1000) + ' k'}</text>`;
   }
 
   // meses en el eje X (cada corte mensual)
@@ -3365,9 +3407,9 @@ function renderCurvaS() {
     if (i !== fechas.length-1 && (fechas.length-1) - i < paso) return;   // no pegar la penúltima con la última (la última siempre se muestra)
     const x = px(c.getTime());
     const alBorde = x > w - padR - 16;   // la última etiqueta se alinea al borde para no salirse del gráfico
-    ejeX += `<text x="${alBorde ? w - 2 : x}" y="${h-padB+22}" fill="${SVGC.axis}" font-size="10" text-anchor="${alBorde ? 'end' : 'middle'}">${MESES_ES[c.getUTCMonth()]}-${String(c.getUTCFullYear()).slice(2)}</text>`;
+    ejeX += `<text x="${alBorde ? w - 2 : x}" y="${h-padB+22}" fill="${K.axis}" font-size="10" text-anchor="${alBorde ? 'end' : 'middle'}">${MESES_ES[c.getUTCMonth()]}-${String(c.getUTCFullYear()).slice(2)}</text>`;
   });
-  ejeX += `<line x1="${padL}" y1="${h-padB}" x2="${w-padR}" y2="${h-padB}" stroke="${SVGC.axisLine}" stroke-width="1"/>`;
+  ejeX += `<line x1="${padL}" y1="${h-padB}" x2="${w-padR}" y2="${h-padB}" stroke="${K.axisLine}" stroke-width="1"/>`;
 
   const pts = arr => arr.map(p => ({ x: px(p.x), y: py(p.y) }));
   const ptsProg = pts(progSeries), ptsEjec = pts(ejecSeries);
@@ -3376,7 +3418,7 @@ function renderCurvaS() {
   const idxPri = periodos.findIndex(p => porPeriodo[p].ejecP > 0);
   let idxUlt = -1; periodos.forEach((p, i) => { if (porPeriodo[p].ejecP > 0) idxUlt = i; });
   const ptsEjecDib = idxUlt < 0 ? [] : ptsEjec.slice(Math.max(0, idxPri), idxUlt + 1);
-  CURVA_CTX = { periodos, porPeriodo, base, ptsProg, ptsEjec, w, h, padL, padR, padT, padB, informe: !!CURVA_DIM, hayEjec: ejecSeries.some(p => p.y > 0), idxPri: Math.max(0, idxPri), idxUlt };
+  CURVA_CTX = { K, periodos, porPeriodo, base, ptsProg, ptsEjec, w, h, padL, padR, padT, padB, informe: !!CURVA_DIM, hayEjec: ejecSeries.some(p => p.y > 0), idxPri: Math.max(0, idxPri), idxUlt };
   // trazo suavizado: spline cúbica monótona (Fritsch–Carlson). Pasa por cada punto y no se pasa de la curva real (no «rebota» como una spline común)
   const trazo = (points) => {
     const n = points.length; if (n < 3) return points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ');
@@ -3412,8 +3454,8 @@ function renderCurvaS() {
 
   const defs = `<defs>
     <linearGradient id="gradProg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#27338f" stop-opacity="0.24"/>
-      <stop offset="100%" stop-color="#27338f" stop-opacity="0.02"/>
+      <stop offset="0%" stop-color="${K.navyArea}" stop-opacity="0.24"/>
+      <stop offset="100%" stop-color="${K.navyArea}" stop-opacity="0.02"/>
     </linearGradient>
     <linearGradient id="gradEjec" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%" stop-color="#ff9a55" stop-opacity="0.45"/>
@@ -3437,11 +3479,11 @@ function renderCurvaS() {
     // para no salirse del gráfico
     const pegadoDerecha = (x1 + x2) / 2 > w - padR - 80;
     const rotulo = pegadoDerecha
-      ? `<text x="${(x2 - 3).toFixed(1)}" y="${padT+11}" fill="${SVGC.axis}" font-size="8.5" font-weight="700" text-anchor="end">${ETIQUETA_TIPO[ev.tipo]||'Evento'} (${dias}d)</text>`
-      : `<text x="${((x1+x2)/2).toFixed(1)}" y="${padT+11}" fill="${SVGC.axis}" font-size="8.5" font-weight="700" text-anchor="middle">${ETIQUETA_TIPO[ev.tipo]||'Evento'} (${dias}d)</text>`;
-    return `<rect x="${x1.toFixed(1)}" y="${padT}" width="${Math.max(2,x2-x1).toFixed(1)}" height="${baseline-padT}" fill="#64748b" opacity="0.14"/>
-      <line x1="${x1.toFixed(1)}" y1="${padT}" x2="${x1.toFixed(1)}" y2="${baseline}" stroke="#64748b" stroke-width="1" stroke-dasharray="2,2"/>
-      <line x1="${x2.toFixed(1)}" y1="${padT}" x2="${x2.toFixed(1)}" y2="${baseline}" stroke="#64748b" stroke-width="1" stroke-dasharray="2,2"/>
+      ? `<text x="${(x2 - 3).toFixed(1)}" y="${padT+11}" fill="${K.axis}" font-size="8.5" font-weight="700" text-anchor="end">${ETIQUETA_TIPO[ev.tipo]||'Evento'} (${dias}d)</text>`
+      : `<text x="${((x1+x2)/2).toFixed(1)}" y="${padT+11}" fill="${K.axis}" font-size="8.5" font-weight="700" text-anchor="middle">${ETIQUETA_TIPO[ev.tipo]||'Evento'} (${dias}d)</text>`;
+    return `<rect x="${x1.toFixed(1)}" y="${padT}" width="${Math.max(2,x2-x1).toFixed(1)}" height="${baseline-padT}" fill="${K.banda}" opacity="${K.bandaO}"/>
+      <line x1="${x1.toFixed(1)}" y1="${padT}" x2="${x1.toFixed(1)}" y2="${baseline}" stroke="${K.bandaL}" stroke-width="1" stroke-dasharray="2,2"/>
+      <line x1="${x2.toFixed(1)}" y1="${padT}" x2="${x2.toFixed(1)}" y2="${baseline}" stroke="${K.bandaL}" stroke-width="1" stroke-dasharray="2,2"/>
       ${rotulo}`;
   }).join('');
 
@@ -3452,11 +3494,11 @@ function renderCurvaS() {
     if (t < xMin || t > xMax) return '';
     const x = px(t);
     return `<line x1="${x.toFixed(1)}" y1="${padT}" x2="${x.toFixed(1)}" y2="${baseline}" stroke="${color}" stroke-width="1.4" ${dash ? `stroke-dasharray="${dash}"` : ''}/>
-      <text transform="translate(${(x-4).toFixed(1)},${baseline-6}) rotate(-90)" font-size="9" font-weight="700" fill="${color}" stroke="${SVGC.halo}" stroke-width="3" paint-order="stroke" text-anchor="start">${texto}</text>`;
+      <text transform="translate(${(x-4).toFixed(1)},${baseline-6}) rotate(-90)" font-size="9" font-weight="700" fill="${color}" stroke="${K.halo}" stroke-width="3" paint-order="stroke" text-anchor="start">${texto}</text>`;
   };
   const marcasPlazo = plazo
-    ? (plazo.inicio ? marcaPlazo(plazo.inicio, `Inicio de plazo ${dmy(plazo.inicio)}`, SVGC.plazo, '3,3') : '')
-      + marcaPlazo(plazo.finVigente, `Fin de plazo ${dmy(plazo.finVigente)}`, SVGC.plazo, '')
+    ? (plazo.inicio ? marcaPlazo(plazo.inicio, `Inicio de plazo ${dmy(plazo.inicio)}`, K.plazo, '3,3') : '')
+      + marcaPlazo(plazo.finVigente, `Fin de plazo ${dmy(plazo.finVigente)}`, K.plazo, '')
     : '';
   $('#legendFinPlazo').style.display = plazo ? '' : 'none';
   renderPlazoInfo(plazo, hoy);
@@ -3464,7 +3506,7 @@ function renderCurvaS() {
   $('#curvaSvg').setAttribute('viewBox', `0 0 ${w} ${h}`);
   $('#curvaSvg').innerHTML = defs + grid + bandasPlazo + areaFrom(ptsProg, 'gradProg') + areaFrom(ptsEjecDib, 'gradEjec')
     + ejeX
-    + lineFrom(ptsProg, NAVY_T())
+    + lineFrom(ptsProg, K.navy)
     + lineFrom(ptsEjecDib, '#f26a1b')
     + (ptsProy.length ? `<path d="${trazo(ptsProy)}" fill="none" stroke="#f26a1b" stroke-width="2.5" stroke-dasharray="6,5" stroke-linecap="round" opacity=".9"><title>Proyección (Forecast) ${proyFuente}</title></path>` : '')
     + (ptsProy.length ? (() => {   // globo del % proyectado: arriba de las líneas y centrado sobre la vertical del punto final (sin pisar ninguna línea)
@@ -3522,17 +3564,18 @@ function pintarCorte(periodo) {
   const i = c.periodos.indexOf(periodo); if (i < 0) { g.innerHTML = ''; return; }
   const x = c.ptsProg[i].x, yP = c.ptsProg[i].y, yE = c.ptsEjec[i].y, d = c.porPeriodo[periodo], base = c.base, baseline = c.h - c.padB;
   const dt = new Date(periodo), txt = `corte ${MESES_ES[dt.getUTCMonth()]}-${String(dt.getUTCFullYear()).slice(2)}`;
-  let s = `<line x1="${x}" y1="${c.padT}" x2="${x}" y2="${baseline}" stroke="#6a7090" stroke-width="1.5" stroke-dasharray="4,3"/>`;
+  const KK = c.K || { corte: '#6a7090', navy: '#141c5e' };
+  let s = `<line x1="${x}" y1="${c.padT}" x2="${x}" y2="${baseline}" stroke="${KK.corte}" stroke-width="1.5" stroke-dasharray="4,3"/>`;
   {
     // dos globos de dato sobre cada línea (programado y ejecutado, % del total) y el rótulo del corte al pie — igual que en el informe
     const alBorde = x > c.w - c.padR - 70;
-    s += `<text x="${alBorde ? x - 4 : x + 4}" y="${baseline - 6}" fill="#6a7090" font-size="10" font-weight="600" text-anchor="${alBorde ? 'end' : 'start'}">${txt}</text>`;
+    s += `<text x="${alBorde ? x - 4 : x + 4}" y="${baseline - 6}" fill="${KK.corte}" font-size="10" font-weight="600" text-anchor="${alBorde ? 'end' : 'start'}">${txt}</text>`;
     const izq = x - 60 >= c.padL, px0 = izq ? x - 60 : x + 8, progArriba = yP <= yE;
-    const etiqueta = (cy, ty, tx, color) => `<circle cx="${x}" cy="${cy}" r="4.2" fill="${color}" stroke="#fff" stroke-width="1.6"/>
+    const etiqueta = (cy, ty, tx, color, dot) => `<circle cx="${x}" cy="${cy}" r="4.2" fill="${dot || color}" stroke="#fff" stroke-width="1.6"/>
       <rect x="${px0}" y="${ty - 11}" width="52" height="17" rx="4" fill="#fff" stroke="${color}" stroke-width="1.2"/>
       <text x="${px0 + 26}" y="${ty + 1.5}" font-size="11.5" font-weight="800" fill="${color}" text-anchor="middle">${tx}</text>`;
     const hayE = i >= c.idxPri && i <= c.idxUlt;
-    if (base) s += etiqueta(yP, progArriba || !hayE ? yP - 16 : yP + 20, (d.progA / base * 100).toFixed(1) + '%', '#141c5e') + (hayE ? etiqueta(yE, progArriba ? yE + 20 : yE - 16, (d.ejecA / base * 100).toFixed(1) + '%', '#f26a1b') : '');
+    if (base) s += etiqueta(yP, progArriba || !hayE ? yP - 16 : yP + 20, (d.progA / base * 100).toFixed(1) + '%', '#141c5e', KK.navy) + (hayE ? etiqueta(yE, progArriba ? yE + 20 : yE - 16, (d.ejecA / base * 100).toFixed(1) + '%', '#f26a1b') : '');
   }
   g.innerHTML = s;
 }
@@ -3544,10 +3587,11 @@ function actualizarChipsMes(periodo, porPeriodo) {
   const fecha = new Date(periodo);
   const mesTxt = `${MESES_ES[fecha.getUTCMonth()]} ${fecha.getUTCFullYear()}`;
   const gap = d.progP - d.ejecP;
+  const mM = (v) => 'S/. ' + (Math.abs(v) / 1e6).toFixed(2) + ' M';
   $('#curvaMesKpis').innerHTML = `
-    <div class="mes-chip"><span class="lbl">Programado en ${mesTxt}</span><b style="color:${NAVY_T()}">${fmt(d.progP)}</b></div>
-    <div class="mes-chip"><span class="lbl">Ejecutado en ${mesTxt}</span><b style="color:#f26a1b">${fmt(d.ejecP)}</b></div>
-    <div class="mes-chip"><span class="lbl">Diferencia del mes</span><b style="color:${gap>0?'var(--amber)':'var(--green)'}">${gap>0?'-':'+'}${fmt(Math.abs(gap))}</b></div>`;
+    <div class="mes-chip" title="${fmt(d.progP)}"><span class="lbl">Programado ${mesTxt}</span><b style="color:${NAVY_T()}">${mM(d.progP)}</b></div>
+    <div class="mes-chip" title="${fmt(d.ejecP)}"><span class="lbl">Ejecutado ${mesTxt}</span><b style="color:#f26a1b">${mM(d.ejecP)}</b></div>
+    <div class="mes-chip" title="${gap>0?'-':'+'}${fmt(Math.abs(gap))}"><span class="lbl">Diferencia del mes</span><b style="color:${gap>0?'var(--amber)':'var(--green)'}">${gap>0?'-':'+'}${mM(gap)}</b></div>`;
 }
 $('#curvaMesSel').addEventListener('change', (e) => activarMes(e.target.value));
 
