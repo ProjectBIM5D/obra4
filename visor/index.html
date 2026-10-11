@@ -7,15 +7,16 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <title>Visor BIM · Obra 04</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f26a1b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 18h20M4 18v-6M20 18v-6M2 12c4-8 16-8 20 0M8 18v-7M12 18V8M16 18v-7'/%3E%3C/svg%3E" />
-  <script type="module" crossorigin src="./assets/index-Dlmoz6i4.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-D9MxMwYc.css">
+  <script type="module" crossorigin src="./assets/index-15scUvDE.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-BiLZGpLP.css">
 </head>
 <body>
   <div id="app">
     <aside id="side">
       <!-- barra superior: marca + frentes -->
       <header class="brand">
-        <div class="logo"><svg viewBox="0 0 24 24"><path d="M2 18h20M4 18v-6M20 18v-6M2 12c4-8 16-8 20 0M8 18v-7M12 18V8M16 18v-7"/></svg></div>
+        <a class="back" href="../" title="Volver al panel de control" onclick="this.href='../?v='+Date.now()"><svg viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></svg><span>Panel</span></a>
+        <div class="logo"><svg viewBox="0 0 24 24"><path d="M21 8 12 3 3 8v8l9 5 9-5zM3 8l9 5 9-5M12 13v8"/></svg></div>
         <div class="brand-t">
           <h1>Obra 04 <span>BIM</span></h1>
           <p id="pSub">Avance del sistema</p>
@@ -56,17 +57,17 @@
       <!-- panel lateral: grupos · elemento · modelo -->
       <section class="drawer" id="drawer">
         <nav class="tabs" id="tabs">
-          <button data-tab="tareas" class="on" title="Grupos de elementos y su avance"><svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg><span>Grupos</span></button>
+          <button data-tab="tareas" class="on" title="Estructura del modelo: componentes, grupos y elementos"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="6" rx="1.5"/><rect x="14" y="10" width="7" height="5" rx="1.5"/><rect x="14" y="17" width="7" height="5" rx="1.5"/><path d="M6.5 9v10.5H14M6.5 12.5H14"/></svg><span>Estructura</span></button>
           <button data-tab="partidas" title="Partidas del presupuesto: toca una para ver solo sus elementos"><svg viewBox="0 0 24 24"><path d="M3 5h18M3 12h18M3 19h18M7 5v14"/></svg><span>Partidas</span></button>
           <button data-tab="resumen" title="Elemento seleccionado y sus partidas"><svg viewBox="0 0 24 24"><path d="M21 8 12 3 3 8v8l9 5 9-5zM3 8l9 5 9-5M12 13v8"/></svg><span>Elemento</span></button>
-          <button data-tab="modelo" title="Opciones del modelo"><svg viewBox="0 0 24 24"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg><span>Modelo</span></button>
+          <button data-tab="modelo" title="Opciones del modelo"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/></svg><span>Modelo</span></button>
         </nav>
         <div class="scroll">
           <section data-pane="tareas" class="pane on">
             <div class="filters">
-              <input id="q" type="search" placeholder="Buscar grupo, partida o código…" />
+              <input id="q" type="search" placeholder="Buscar componente, partida o código…" />
               <div class="chips" id="chips">
-                <button data-f="all" class="on">Todos</button><button data-f="prog" style="--c:#f59e0b">En proceso</button><button data-f="late" style="--c:#f43f5e">Atrasados</button><button data-f="done" style="--c:#14b8a6">Terminados</button><button data-f="pend" style="--c:#64748b">Pendientes</button>
+                <button data-f="all" class="on">Todos</button><button data-f="prog" style="--c:#4f7fd1">En proceso</button><button data-f="late" style="--c:#d05252">Atrasados</button><button data-f="done" style="--c:#3fa372">Terminados</button><button data-f="pend" style="--c:#94a3b8">Pendientes</button>
               </div>
             </div>
             <div id="taskList" class="tlist"></div>
@@ -87,7 +88,8 @@
 
           <section data-pane="resumen" class="pane">
             <div class="insp" id="insp">
-              <div class="i-h"><span>Elemento</span><em id="iSel" class="mono">ninguno</em></div>
+              <div class="i-h"><span>Elemento</span><em id="iSel" class="mono">ninguno</em><button id="iClear" class="icb" title="Quitar la selección (Esc)" hidden><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button><button id="iCfg" class="icb" title="Elegir qué datos se muestran al tocar un elemento"><svg viewBox="0 0 24 24"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg></button></div>
+              <div id="iCfgBox" class="cfg" hidden></div>
               <div id="iBody" class="i-b"><p class="muted">Toca cualquier elemento del modelo para ver sus datos, sus partidas del presupuesto y su avance.</p></div>
             </div>
           </section>
@@ -101,7 +103,6 @@
               <label class="sw"><input type="checkbox" id="oSteel" /><i></i><span>Mostrar armadura y acopladores</span></label>
               <label class="sw"><input type="checkbox" id="oLite" /><i></i><span>Modelo ligero <small class="muted">(tabletas o equipos básicos: sin armadura)</small></span></label>
               <label class="sw"><input type="checkbox" id="oGrid" checked /><i></i><span>Cuadrícula de terreno</span></label>
-              <label class="sw"><input type="checkbox" id="oWater" checked /><i></i><span>Cauce del río</span></label>
               <h3>Opacidad del concreto <b class="mono" id="oOpV">100%</b></h3>
               <input type="range" class="rg" id="oOp" min="20" max="100" value="100" />
               <h3>Nivel del terreno <b class="mono" id="oGrV">—</b></h3>
@@ -130,9 +131,10 @@
 
     <main id="view">
       <div id="gl"></div>
+      <button class="ov dh" id="tSide2" title="Ocultar / mostrar el panel"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button>
       <div class="ov tools">
         <button id="tSide" title="Mostrar / ocultar los paneles"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></svg></button>
-        <button id="tHome" title="Vista isométrica"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/></svg></button>
+        <button id="tHome" title="Restablecer: vista inicial, sin selección ni aislamiento"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/></svg></button>
         <button id="tView" title="Vistas: planta / elevación / longitudinal"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg></button>
         <button id="tGhost" title="Pendientes: fantasma / ocultar"><svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
         <button id="tLA" title="Look Ahead: colorear lo programado en cada semana"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14h3M13 14h3M8 17.5h3"/></svg></button>
@@ -155,7 +157,7 @@
       </div>
 
       <div class="ov legend" id="legend" title="Color de cada elemento">
-        <span><i class="lg" style="--c:#64748b"></i>Pendiente</span><span><i class="lg" style="--c:#f59e0b"></i>En proceso</span><span><i class="lg" style="--c:#14b8a6"></i>Terminado</span><span><i class="lg" style="--c:#f43f5e"></i>Atrasado</span>
+        <span><i class="lg" style="--c:#94a3b8"></i>Pendiente</span><span><i class="lg" style="--c:#4f7fd1"></i>En proceso</span><span><i class="lg" style="--c:#3fa372"></i>Terminado</span><span><i class="lg" style="--c:#d05252"></i>Atrasado</span>
       </div>
       <div class="ov hint" id="hint">Arrastre: orbitar · Rueda: zoom · Clic derecho: desplazar · Clic: inspeccionar</div>
       <div id="loader"><div class="ld-c"><div class="spin"></div><b id="ldT">Cargando modelo…</b><div class="ld-bar"><i id="ldB"></i></div><small id="ldS">Preparando…</small></div></div>
