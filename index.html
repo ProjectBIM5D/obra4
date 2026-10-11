@@ -1934,6 +1934,21 @@ td.c .icon-btn+.icon-btn{margin-left:6px;}
 .ctv-rec,.ctv-lim{font-size:11px;color:var(--mut);font-weight:600;} .ctv-lim.cerca{color:#b45309;} .ctv-lim.venc{color:#b91c1c;font-weight:800;}
 .ctv-ac{display:flex;gap:6px;} .ctv-ac .icon-btn{width:34px;height:34px;padding:0;border-radius:8px;font-size:0;} .ctv-ac .icon-btn svg{width:18px;height:18px;} .ctv-ac .icon-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--input);} .ctv-ac .icon-btn[aria-label^="Eliminar"]:hover{border-color:var(--red);color:var(--red);}
 @media (max-width:560px){.ctv-it{grid-template-columns:1fr auto;} .ctv-f{grid-column:1 / span 2;} .ctv-sub td{padding-left:14px;}}
+.pt-tabla .dif{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;padding:0;margin-left:4px;vertical-align:middle;border:1px solid transparent;border-radius:7px;background:transparent;color:var(--mut);cursor:pointer;}
+.pt-tabla .dif svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round;} .pt-tabla .dif:hover{border-color:var(--blue);color:var(--blue);background:var(--input);} .pt-tabla tr:hover .dif{color:var(--tx2);}
+.pt-tabla td.rit.dif-go{cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px;}
+#difForm:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(680px,calc(100vw - 20px));max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
+.dif-act{margin:0 0 6px;font-size:12.5px;font-weight:800;color:var(--tx);letter-spacing:.2px;}
+.dif-kp{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:0 0 12px;} .dif-kp>div{background:var(--input);border:1px solid var(--line);border-radius:10px;padding:8px 10px;text-align:center;min-width:0;}
+.dif-kp small{display:block;font-size:10px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--mut);} .dif-kp b{display:block;font-size:17px;color:var(--tx);font-variant-numeric:tabular-nums;} .dif-kp em{display:block;font-style:normal;font-size:11px;color:var(--mut);}
+.dif-cant{display:flex;gap:6px;} .dif-cant input{flex:1;min-width:0;}
+.dif-imp{border:1px solid var(--line2);border-radius:12px;padding:10px 12px;margin:2px 0 12px;} .dif-imp ul{margin:8px 0 0;padding:0;list-style:none;display:grid;gap:7px;}
+.dif-imp li{position:relative;padding-left:18px;font-size:12.5px;line-height:1.45;color:var(--tx2);} .dif-imp li::before{content:"";position:absolute;left:2px;top:6px;width:8px;height:8px;border-radius:50%;background:var(--mut);}
+.dif-imp li.ok::before{background:#10b981;} .dif-imp li.mid::before{background:#f59e0b;} .dif-imp li.bad::before{background:#ef4444;} .dif-imp li.info{color:var(--mut);}
+.dif-niv{display:inline-block;font-size:10.5px;font-weight:800;padding:2px 10px;border-radius:999px;} .dif-niv.ok{background:#10b98122;color:var(--green);} .dif-niv.mid{background:#f59e0b26;color:var(--rg-am,#a85a08);} .dif-niv.bad{background:#ef444422;color:#b91c1c;}
+.dif-err{margin:0;color:#b91c1c;font-weight:700;font-size:12.5px;}
+.dif-hist{border-top:1px solid var(--line);padding-top:8px;margin:0 0 12px;font-size:12px;color:var(--tx2);} .dif-h{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:4px 0;} .dif-h .btn-sec{padding:3px 10px;font-size:11px;}
+@media (max-width:560px){.dif-kp{grid-template-columns:1fr 1fr;}}
 .lb-cmp{display:inline-flex;align-items:center;gap:8px;flex:0 0 auto;} .lb-cmp select{max-width:260px;}
 #lbFicha:not([hidden]),#plzForm:not([hidden]),#lbObs:not([hidden]),#adiForm:not([hidden]),#adiLim:not([hidden]),#metForm:not([hidden]),#ctvForm:not([hidden]),#evtForm:not([hidden]),#adiXls:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(620px,calc(100vw - 20px));max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
 /* el Gantt en Contrato: sin la barra de selección de plan */
@@ -6120,10 +6135,11 @@ function laIniciar() {
         const rows = await get(`/v_lookahead_detalle?lookahead_id=eq.${previo.id}&order=orden`), s = laSemana(sem);
         // pendientes: todo lo que quedó sin terminar. Lo que ya debió acabar y no se hizo se REPROGRAMA: empieza al inicio del bloque nuevo.
         // La meta del bloque nuevo es solo el SALDO (meta − ejecutado), así el monto programado no repite lo ya hecho.
-        const pend = rows.filter(r => Number(r.pct_avance) < 1 && Number(r.metrado_meta) - Number(r.acumulado) > 0.0001);
+        const dif = {}; try { (await get(`/lookahead_diferidos?lookahead_id=eq.${previo.id}&select=actividad_id,cantidad`)).forEach(d => { dif[d.actividad_id] = (dif[d.actividad_id] || 0) + Number(d.cantidad); }); } catch (e) { /* sin tabla de diferidos */ }
+        const pend = rows.filter(r => (Number(r.pct_avance) < 1 && Number(r.metrado_meta) - Number(r.acumulado) > 0.0001) || (dif[r.id] || 0) > 0.0001);
         reprog = pend.filter(r => r.fecha_fin < s.fecha_inicio).length;
         const nuevas = pend.map((r, i) => { const tarde = r.fecha_fin < s.fecha_inicio;
-          return { lookahead_id: nuevo.id, nodo_id: r.nodo_id, ...laColsSinPartida(r.tipo, r.nodo_id, r.grupo_id, r.proyecto_id), tarea_id: r.tarea_id, actividad: r.actividad_propia, orden: i + 1, detalle: r.detalle, critico: r.critico, fecha_inicio: tarde ? s.fecha_inicio : r.fecha_inicio, dias: Math.min(r.dias, 28), metrado_meta: Math.round((Number(r.metrado_meta) - Number(r.acumulado)) * 10000) / 10000, acumulado_previo: 0, responsable: r.responsable }; });
+          return { lookahead_id: nuevo.id, nodo_id: r.nodo_id, ...laColsSinPartida(r.tipo, r.nodo_id, r.grupo_id, r.proyecto_id), tarea_id: r.tarea_id, actividad: r.actividad_propia, orden: i + 1, detalle: r.detalle, critico: r.critico, fecha_inicio: tarde ? s.fecha_inicio : r.fecha_inicio, dias: Math.min(r.dias, 28), metrado_meta: Math.round((Math.max(0, Number(r.metrado_meta) - Number(r.acumulado)) + (dif[r.id] || 0)) * 10000) / 10000, acumulado_previo: 0, responsable: r.responsable }; });
         if (nuevas.length) { await laEnviar('POST', '/lookahead_actividades', nuevas); copiadas = nuevas.length; }
       }
       const delPlan = $('#laNPlan').checked && LA.plan && !LA.plan.sin;
@@ -6170,7 +6186,7 @@ laIniciarTip();
 // y se ve lo EJECUTADO (Real), que sale del parte diario (avance_diario). Una actividad cumple (SÍ) si el real de la
 // semana >= el plan; PAC = actividades que cumplen / actividades con plan. Todo se calcula en la base.
 // ============================================================================
-const PT = { look: null, sem: null, planes: [], det: [], acts: [], causas: [], comp: '', cargado: false };
+const PT = { look: null, sem: null, planes: [], det: [], acts: [], dif: [], causas: [], comp: '', cargado: false };
 const DIAS_PT = ['plan_l', 'plan_m', 'plan_x', 'plan_j', 'plan_v', 'plan_s', 'plan_d'];
 const REAL_PT = ['real_l', 'real_m', 'real_x', 'real_j', 'real_v', 'real_s', 'real_d'];
 const LET_PT = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
@@ -6207,11 +6223,12 @@ async function ptCargarLook() {
   if (!LA.plan) { try { await laSugCargar(); } catch (e) {} }   // el plan master da el rendimiento de cada partida para el indicador de ritmo
   const look = ptLookAct();
   if (!look) { PT.planes = []; PT.det = []; PT.acts = []; ptRender(); return; }
-  const [planes, det, acts] = await Promise.all([
+  const [planes, det, acts, dif] = await Promise.all([
     get(`/planes_semanales?lookahead_id=eq.${look.id}&select=id,semana,estado,comentarios&order=semana`),
     get(`/v_plan_semanal_detalle?lookahead_id=eq.${look.id}&order=semana,orden`),
-    get(`/v_lookahead_detalle?lookahead_id=eq.${look.id}&order=orden`)]);
-  PT.planes = planes; PT.det = det; PT.acts = acts;
+    get(`/v_lookahead_detalle?lookahead_id=eq.${look.id}&order=orden`),
+    get(`/lookahead_diferidos?lookahead_id=eq.${look.id}&select=*&order=creado_en`).catch(() => [])]);
+  PT.planes = planes; PT.det = det; PT.acts = acts; PT.dif = dif || [];
   if (PT.sem == null || PT.sem < look.semana || PT.sem > look.semana + look.semanas - 1) {
     const hoy = laHoy(), enBloque = [...Array(look.semanas).keys()].map(i => look.semana + i).find(n => { const s = laSemana(n); return s && s.fecha_inicio <= hoy && hoy <= s.fecha_fin; });
     PT.sem = enBloque != null ? enBloque : (planes.length ? planes[0].semana : look.semana);
@@ -6239,6 +6256,7 @@ function ptRender() {
   const tabla = $('#ptTabla');
   if (!look) { tabla.innerHTML = ''; $('#ptTablaDer').innerHTML = ''; $('#ptSemSel').innerHTML = ''; $('#ptPacChip').textContent = ''; $('#ptInfo').textContent = 'Primero crea un Look Ahead (pestaña Look Ahead).'; ['ptCrear', 'ptAgregar', 'ptCerrar'].forEach(i => { $('#' + i).disabled = true; }); return; }
 
+  ['ptCrear', 'ptAgregar', 'ptCerrar'].forEach(i => { $('#' + i).disabled = false; });   // se deshabilitan cuando no hay Look Ahead: al crear uno hay que volver a habilitarlos
   // semana: lista desplegable con su PAC (reemplaza a las pastillas)
   const meta0 = Number((PT.det[0] || {}).pac_meta || 0.9);
   $('#ptSemSel').innerHTML = [...Array(look.semanas).keys()].map(i => {
@@ -6291,7 +6309,7 @@ function ptRender() {
       const dis = !editable;
       return `<td class="${tipo === 'plan' ? 'pl' : 'rl'} ${k >= 5 ? 'fs' : ''} ${fuera ? 'fuera' : ''}"><input class="dia ${tipo}" type="number" min="0" step="0.01" ${dis ? 'disabled' : ''} value="${v ? v : ''}" data-fila="${f.fila_id}" data-tipo="${tipo}" data-k="${k}" data-act="${f.actividad_id}" data-fecha="${d}" title="${tipo === 'plan' ? 'Meta' : 'Ejecutado'} del ${LET_PT[k]} ${d.slice(8, 10)}/${d.slice(5, 7)}"></td>`;
     }).join('');
-    hIz += `<tr class="fila-izq act-row" data-fila="${f.fila_id}" data-r="${r}"><td class="act" style="--lvl:${nivel}" title="${esc(laNom(f) + (f.actividad_propia ? ' — partida: ' + laCaso(f.partida) : '') + ' · ' + f.nodo_codigo + (f.codigo_esp ? ' · ' + f.codigo_esp : ''))}"><span class="nom">${f.critico ? '<span class="dot" title="Crítica"></span>' : ''}${esc(String(laNom(f)).toUpperCase())}${f.concepto === 'adicional' ? '<span class="tag-adi">ADI</span>' : ''}${LA_TIPO[f.tipo] ? `<span class="tag-adi" title="Del plan master: sin metrado ni costo; el avance se mide en %">${LA_TIPO[f.tipo]}</span>` : ''}${editable ? ` <button class="quitar" title="Quitar del plan de la semana" data-quitar="${f.fila_id}">✕</button>` : ''}</span></td>`
+    hIz += `<tr class="fila-izq act-row" data-fila="${f.fila_id}" data-r="${r}"><td class="act" style="--lvl:${nivel}" title="${esc(laNom(f) + (f.actividad_propia ? ' — partida: ' + laCaso(f.partida) : '') + ' · ' + f.nodo_codigo + (f.codigo_esp ? ' · ' + f.codigo_esp : ''))}"><span class="nom">${f.critico ? '<span class="dot" title="Crítica"></span>' : ''}${esc(String(laNom(f)).toUpperCase())}${f.concepto === 'adicional' ? '<span class="tag-adi">ADI</span>' : ''}${LA_TIPO[f.tipo] ? `<span class="tag-adi" title="Del plan master: sin metrado ni costo; el avance se mide en %">${LA_TIPO[f.tipo]}</span>` : ''}${PT.dif.some(d => d.actividad_id === f.actividad_id) ? `<span class="tag-adi" title="Se difirieron ${num4(PT.dif.filter(d => d.actividad_id === f.actividad_id).reduce((s, d) => s + Number(d.cantidad), 0))} ${esc(f.unidad || '')} al siguiente Look Ahead">DIF</span>` : ''}${editable ? ` <button class="dif" title="Diferir parte de la meta al siguiente Look Ahead" aria-label="Diferir" data-diferir="${f.fila_id}">${DIF_IC}</button><button class="quitar" title="Quitar del plan de la semana" data-quitar="${f.fila_id}">✕</button>` : ''}</span></td>`
       + `<td class="c">${esc(f.unidad || '')}</td><td class="n" data-c="acum">${num2(f.acum_anterior)}</td>${ptBlqCelda(f)}${ptRitmoCelda(f)}</tr>`;
     hDe += `<tr class="fila-plan act-row" data-fila="${f.fila_id}" data-r="${r}"><td class="medida">Plan</td>${celdas('plan')}<td class="n" data-c="plan_total" style="font-weight:700">${num2(f.plan_total)}</td>`
       + `<td rowspan="2" class="n" data-c="spi">${f.spi == null ? '' : (f.spi * 100).toFixed(0) + '%'}</td>`
@@ -6331,7 +6349,7 @@ function ptRitmo(f) {   // ritmo que exige cumplir lo que falta con los días qu
   const req = falta / dias, k = req / rend, cls = k <= 1.05 ? 'ok' : k <= 1.3 ? 'mid' : 'bad';
   return { k, cls, tit: `Para cumplir lo que falta (${num4(falta)} ${f.unidad || ''}) en ${dias} día${dias === 1 ? '' : 's'} hay que producir ${num4(req)} ${f.unidad || ''}/día; el APU rinde ${num4(rend)} ${f.unidad || ''}/día (${k.toFixed(2)}×)${k > 1.05 ? ': hace falta más rendimiento o más recursos, o diferir parte de la meta' : ''}` };
 }
-const ptRitmoCelda = (f) => { const r = ptRitmo(f); return r ? `<td class="c rit ${r.cls}" data-c="rit" title="${esc(r.tit)}">${r.k.toFixed(2)}×</td>` : `<td class="c rit" data-c="rit"></td>`; };
+const ptRitmoCelda = (f) => { const r = ptRitmo(f), p = ptPlan(), ed = !!p && p.estado === 'borrador' && laEditable(ptLookAct()), go = r && r.cls !== 'ok' && ed; return r ? `<td class="c rit ${r.cls}${go ? ' dif-go' : ''}" data-c="rit"${go ? ` data-diferir="${f.fila_id}"` : ''} title="${esc(r.tit)}${go ? ' · clic para diferir parte de la meta' : ''}">${r.k.toFixed(2)}×</td>` : `<td class="c rit" data-c="rit"></td>`; };
 const ptBlqCelda = (f) => { const i = ptBlqInfo(f); return `<td class="n blq ${i.cls}" data-c="blq" title="${esc(i.tit)}">${i.txt}</td>`; };
 function ptKpis(filas) {
   const k = ptPacTexto(filas), meta = Number((PT.det[0] || {}).pac_meta || 0.9), cumple = k.pac != null && k.pac >= meta, chip = $('#ptPacChip');
@@ -6635,6 +6653,162 @@ function ptIniciar() {
   });
 }
 ptIniciar();
+
+// ═══ DIFERIR: bajar la meta del bloque de una actividad y pasar lo diferido al siguiente Look Ahead, mostrando el impacto antes de confirmar ═══
+// Recuperar dentro del mes es lo normal (Repartir). Diferir es la decisión consciente de no recuperarlo: baja metrado_meta, deja constancia (lookahead_diferidos) y
+// el siguiente Look Ahead lo recibe como saldo. El impacto se estima con el rendimiento del APU meta y la holgura / ruta crítica del plan master.
+const DIF = { holFor: null, hol: null };
+const DIF_IC = '<svg viewBox="0 0 24 24"><path d="M4 12h11M11 6l6 6-6 6M20 5v14"/></svg>';
+async function difHolguras() {   // holgura y ruta crítica de cada tarea del plan master (mismo cálculo del Gantt, sin tocar el plan)
+  const plan = LA.plan; if (!plan || plan.sin || !plan.id || !(plan.tareas || []).length) return null;
+  if (DIF.holFor === plan.id && DIF.hol) return DIF.hol;
+  let deps = []; try { deps = await getTodo(`/v_plan_dependencias?plan_id=eq.${plan.id}&select=tarea_id,predecesora_id,tipo,desfase_dias&order=tarea_id,predecesora_id`); } catch (e) { return null; }
+  const T = {};
+  plan.tareas.forEach(t => { const hito = !!t.hito || t.tipo === 'hito', activa = t.activa !== false, s = plD(t.inicio), e = (hito || !activa) ? s : plD(t.fin) + 1; T[t.id] = { id: t.id, s, e, d: e - s, hito, activa }; });
+  const ids = Object.keys(T), preds = {}, succs = {}, indeg = {};
+  deps.forEach(l => { if (!T[l.tarea_id] || !T[l.predecesora_id]) return; (preds[l.tarea_id] = preds[l.tarea_id] || []).push(l); (succs[l.predecesora_id] = succs[l.predecesora_id] || []).push(l); });
+  ids.forEach(i => { indeg[i] = (preds[i] || []).length; });
+  const cola = ids.filter(i => !indeg[i]), orden = [];
+  for (let k = 0; k < cola.length; k++) { const i = cola[k]; orden.push(i); (succs[i] || []).forEach(l => { if (--indeg[l.tarea_id] === 0) cola.push(l.tarea_id); }); }
+  if (orden.length < ids.length) return null;   // vínculos en ciclo: no se puede calcular
+  const finTodo = ids.reduce((m, i) => Math.max(m, T[i].e), 0), out = {};
+  orden.slice().reverse().forEach(i => {
+    const t = T[i]; let lf = finTodo;
+    (succs[i] || []).forEach(l => { const s = T[l.tarea_id], L = Number(l.desfase_dias) || 0, h = s.hito ? 1 : 0, c = l.tipo === 'FC' ? s.ls - L + h : l.tipo === 'CC' ? s.ls - L + t.d : l.tipo === 'FF' ? s.lf - L + h : s.lf - L + t.d; if (c < lf) lf = c; });
+    t.lf = lf; t.ls = lf - t.d; t.hol = t.lf - t.e; t.crit = t.activa && !t.hito && t.hol <= 0.001; out[i] = { hol: t.hol, crit: t.crit };
+  });
+  DIF.holFor = plan.id; DIF.hol = out; return out;
+}
+// ritmo, días y efecto en la tarea del plan master si se difieren D unidades de la actividad «a» desde la semana semIni
+function difCalc(a, D, semIni) {
+  const look = ptLookAct(), tar = ptTareaDe(a), lun0 = laDia(laSemana(look.semana).fecha_inicio), B = lun0 + look.semanas * 7 - 1;
+  const hoy = laDia(laHoy()), desde = Math.max(hoy, laDia(semIni)), finA = laDia(a.fecha_fin), vencida = finA < laDia(semIni);
+  const lab = (d1, d2) => { let n = 0; for (let d = d1; d <= d2; d++) if (((d - lun0) % 7 + 7) % 7 < 6) n++; return n; };   // días de trabajo L–S
+  const rend = tar ? Number(tar.rend_meta || tar.rend_venta || 0) : 0, meta = Number(a.metrado_meta), falta = Math.max(0, ptTotalAct(a) - Number(a.real_total || 0));
+  const Bx = vencida ? B : Math.max(B, finA);   // fin efectivo del bloque para esta actividad (si se salió del bloque, hasta su fin)
+  const dBlk = vencida ? lab(desde, laDia(semIni) + 5) : lab(Math.max(desde, laDia(a.fecha_inicio)), finA);
+  let tf = null, qAft = 0, dAft = 0;
+  if (tar) {
+    tf = laDia(tar.fin); const ti = laDia(tar.inicio), dT = Math.max(1, tf - ti + 1);
+    const her = LA.plan.tareas.filter(x => x.tipo === 'partida' && x.nodo_id === tar.nodo_id && x.activa !== false && !x.hito), sd = her.reduce((s, x) => s + Number(x.dias || 0), 0) || 1;
+    const share = Number(tar.metrado || 0) * Number(tar.dias || 0) / sd;
+    if (tf > Bx) { dAft = lab(Bx + 1, tf); qAft = share * (tf - Bx) / dT; }   // lo que el plan master deja para después del bloque
+  }
+  const r = { tar, rend, meta, falta, dBlk, tf, B, qAft, dAft, cap: rend * dBlk };
+  r.k0 = rend > 0 && dBlk > 0 ? falta / r.cap : null;
+  r.k1 = rend > 0 && dBlk > 0 ? Math.max(0, falta - D) / r.cap : null;
+  r.dEq = rend > 0 ? D / rend : null;
+  r.kA0 = rend > 0 && dAft > 0 ? qAft / (rend * dAft) : null;
+  r.kA1 = rend > 0 && dAft > 0 ? (qAft + D) / (rend * dAft) : null;
+  if (rend > 0 && tar) {   // días de trabajo que se corre el fin de la tarea por lo diferido (más allá de lo que ya venía corrido)
+    const s1 = dAft > 0 ? qAft + D - rend * dAft : D, s0 = dAft > 0 ? Math.max(0, qAft - rend * dAft) : 0;
+    r.extra = Math.max(0, Math.ceil(s1 / rend - 1e-9)) - Math.max(0, Math.ceil(s0 / rend - 1e-9));
+  } else r.extra = null;
+  return r;
+}
+function difImpacto(r, D, u, H) {
+  const items = [], kcls = (k) => k <= 1.05 ? 'ok' : k <= 1.3 ? 'mid' : 'bad', x = (k) => k.toFixed(2) + '×';
+  let nivel = 'ok';
+  const sube = (c) => { if (c === 'bad' || (c === 'mid' && nivel === 'ok')) nivel = c; };
+  if (r.k0 != null) { const c = kcls(r.k1); sube(c); items.push({ cls: c, t: `<b>En este bloque.</b> La meta baja de ${num4(r.meta)} a ${num4(r.meta - D)} ${u}. El ritmo exigido pasa de <b>${x(r.k0)}</b> a <b>${x(r.k1)}</b> el del APU${r.k1 > 1.05 ? ' (aun así no se llega con el rendimiento del APU: hacen falta recursos o diferir más)' : ''}.` }); }
+  else { sube('mid'); items.push({ cls: 'mid', t: `<b>En este bloque.</b> La meta baja de ${num4(r.meta)} a ${num4(r.meta - D)} ${u}. ${r.rend > 0 ? 'No quedan días de trabajo en el bloque para esta actividad.' : 'Sin rendimiento del APU no se puede medir el ritmo.'}` }); }
+  items.push({ cls: 'ok', t: `<b>Siguiente Look Ahead.</b> Recibe ${num4(D)} ${u}${r.dEq != null ? ` (≈ ${r.dEq.toFixed(1)} días de trabajo al ritmo del APU)` : ''} como saldo: no se pierde, queda registrado.` });
+  if (!r.tar) { sube('mid'); items.push({ cls: 'mid', t: '<b>Plan master.</b> La actividad no está ligada a una tarea del plan master: no se puede estimar el efecto en las fechas.' }); }
+  else {
+    const h = H && H[r.tar.id] ? H[r.tar.id] : null, hCal = r.extra ? Math.ceil(r.extra * 7 / 6) : 0;
+    let t = `<b>Plan master.</b> La tarea termina el ${laFmt(r.tar.fin)}. `;
+    if (r.dAft > 0) t += `Después del bloque quedan ${r.dAft} días de trabajo: el ritmo ${x(r.kA0)} pasa a <b>${x(r.kA1)}</b>${r.kA1 <= 1.05 ? ' (cabe)' : ' (no cabe)'}. `;
+    else t += 'No quedan días de trabajo de la tarea después del bloque: lo diferido queda fuera de sus fechas. ';
+    let c = 'ok';
+    if (r.extra == null) { c = 'mid'; t += 'Sin rendimiento del APU no se puede estimar cuánto corre el fin.'; }
+    else if (r.extra <= 0) t += '<b>No corre el fin de la tarea.</b>';
+    else if (!h) { c = 'mid'; t += `El fin de la tarea se corre ≈ <b>${r.extra} día${r.extra === 1 ? '' : 's'}</b> de trabajo (sin datos de holgura del plan master).`; }
+    else if (h.crit) { c = 'bad'; t += `El fin de la tarea se corre ≈ <b>${r.extra} día${r.extra === 1 ? '' : 's'}</b> y <b>es ruta crítica</b>: mueve el fin de la obra.`; }
+    else if (h.hol >= hCal) { c = 'mid'; t += `El fin de la tarea se corre ≈ <b>${r.extra} día${r.extra === 1 ? '' : 's'}</b>; la holgura (${Math.round(h.hol)} d) lo absorbe y quedan ${Math.max(0, Math.round(h.hol) - hCal)} d.`; }
+    else { c = 'bad'; t += `El fin de la tarea se corre ≈ <b>${r.extra} día${r.extra === 1 ? '' : 's'}</b> y supera su holgura (${Math.round(h.hol)} d) en ${hCal - Math.round(h.hol)} d: se mueven sus sucesoras y puede mover el fin del frente (revisa si es desplazamiento o ampliación).`; }
+    sube(c); items.push({ cls: c, t });
+  }
+  items.push({ cls: 'info', t: '<b>PAC.</b> Las semanas del bloque se miden contra la meta nueva; por eso queda el motivo y la fecha. El atraso no se esconde: pasa al siguiente bloque.' });
+  const resumen = items.slice(0, 3).map(i => i.t.replace(/<[^>]+>/g, '')).join(' ');
+  return { items, nivel, resumen };
+}
+async function difRepartirAct(a) {   // vuelve a repartir lo que falta de la actividad desde esta semana (igual que «Repartir»), con la meta ya cambiada
+  const look = ptLookAct(), semIni = ptSemFechas().fecha_inicio;
+  const sigs = []; for (let n = PT.sem; n < look.semana + look.semanas; n++) { const p = PT.planes.find(x => x.semana === n); if (p && p.estado === 'borrador') sigs.push(p); }
+  const prev = await get(`/avance_diario?actividad_id=eq.${a.id}&fecha=lt.${semIni}&select=cantidad`), hecho = prev.reduce((s, r) => s + Number(r.cantidad || 0), 0);
+  const mapa = ptMapaSaldo(a, semIni, hecho), soloEsta = Object.keys(mapa).every(k => +k < laDia(semIni) + 7);
+  for (const p of (soloEsta ? sigs.filter(x => x.semana === PT.sem) : sigs)) {
+    if (!PT.det.some(f => f.semana === p.semana && f.actividad_id === a.id)) continue;
+    const v = ptSemanaDe(mapa, laSemana(p.semana).fecha_inicio);
+    await ptEnviar('PATCH', `/plan_semanal_actividades?plan_id=eq.${p.id}&actividad_id=eq.${a.id}`, { plan_l: v[0], plan_m: v[1], plan_x: v[2], plan_j: v[3], plan_v: v[4], plan_s: v[5], plan_d: v[6] });
+  }
+}
+async function difAbrir(filaId) {
+  const f = PT.det.find(x => x.fila_id === filaId), a = f && PT.acts.find(x => x.id === f.actividad_id), look = ptLookAct(), plan = ptPlan();
+  if (!f || !a || !look || !plan || plan.estado !== 'borrador' || !laEditable(look)) return;
+  const semIni = ptSemFechas().fecha_inicio, u = f.unidad || '', nombre = String(laNom(f)).toUpperCase();
+  let m = document.getElementById('difForm');
+  if (!m) { m = document.createElement('form'); m.id = 'difForm'; m.className = 'pform la-form'; m.hidden = true; document.body.appendChild(m); }
+  const q = (s) => m.querySelector(s), H = await difHolguras(), r0 = difCalc(a, 0, semIni);
+  const def = r0.rend > 0 && r0.dBlk > 0 ? Math.max(0, Math.round((r0.falta - r0.cap) * 100) / 100) : 0;
+  const hist = PT.dif.filter(d => d.actividad_id === a.id).sort((x, y) => String(y.creado_en).localeCompare(String(x.creado_en)));
+  const total = hist.reduce((s, d) => s + Number(d.cantidad), 0);
+  const hDia = (s) => { const d = new Date(s); return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${String(d.getFullYear()).slice(2)}`; };
+  const kx = (k) => k == null ? '—' : k.toFixed(2) + '×';
+  m.innerHTML = `<h3 style="margin:0 0 2px;font-size:14px">Diferir meta del bloque</h3><p class="dif-act">${esc(nombre)}</p>
+    <p class="hint" style="margin:0 0 10px">Úsalo cuando no se va a recuperar este atraso dentro del mes y es una decisión consciente. Baja la meta del Look Ahead y lo diferido pasa al siguiente bloque. Si solo hace falta más producción, usa «Repartir».</p>
+    <div class="dif-kp"><div><small>Meta del bloque</small><b>${num4(r0.meta)}</b><em>${esc(u)}</em></div><div><small>Ejecutado</small><b>${num4(Number(a.acumulado_previo) + Number(a.real_total || 0))}</b><em>acum. + real</em></div>
+      <div><small>Falta</small><b>${num4(r0.falta)}</b><em>${esc(u)}</em></div><div><small>Ritmo exigido</small><b>${kx(r0.k0)}</b><em>${r0.rend > 0 ? 'APU ' + num4(r0.rend) + ' ' + esc(u) + '/día' : 'sin APU'}</em></div></div>
+    <div class="row2"><div class="field"><label for="difCant">Cantidad a diferir (${esc(u)})</label><div class="dif-cant"><input id="difCant" type="number" min="0" step="0.01" inputmode="decimal" value="${def > 0 ? def : ''}" placeholder="0"><button type="button" class="btn-sec" id="difDef" title="Lo que no cabe en los días que quedan al ritmo del APU"${def > 0 ? '' : ' disabled'}>Déficit</button><button type="button" class="btn-sec" id="difTodo" title="Todo lo que falta">Todo</button></div></div>
+      <div class="field"><label for="difCausa">Motivo</label><select id="difCausa"><option value="">Sin causa registrada</option>${PT.causas.map(c => `<option value="${esc(c.codigo)}">${esc(c.nombre)}</option>`).join('')}</select></div></div>
+    <div class="field"><label for="difNota">Comentario</label><input id="difNota" type="text" maxlength="200" placeholder="Ej. Se espera el material hasta el jueves; hay holgura"></div>
+    <div class="dif-imp" id="difImp"></div>
+    ${hist.length ? `<div class="dif-hist"><b>Ya diferido de esta actividad: ${num4(total)} ${esc(u)}</b>${hist.map((d, i) => `<div class="dif-h"><span>${hDia(d.creado_en)} · S${d.semana} · ${num4(d.cantidad)} ${esc(u)}${d.motivo ? ' · ' + esc(d.motivo) : ''}</span>${i === 0 ? `<button type="button" class="btn-sec" data-dif-undo="${d.id}" title="Devuelve la cantidad a la meta del bloque">Deshacer</button>` : ''}</div>`).join('')}</div>` : ''}
+    <div class="sug-acc"><button class="btn" type="submit" id="difOk">Diferir</button><button class="btn-sec" type="button" id="difCancel">Cancelar</button></div>`;
+  const fondo = document.getElementById('lbFondo') || (() => { const x = document.createElement('div'); x.id = 'lbFondo'; x.hidden = true; document.body.appendChild(x); return x; })();
+  const cerrar = () => { m.hidden = true; fondo.hidden = true; document.documentElement.classList.remove('la-modal'); };
+  let ult = null;
+  const pintar = () => {
+    const D = parseFloat(q('#difCant').value) || 0, ok = q('#difOk'), box = q('#difImp');
+    if (!(D > 0)) { box.innerHTML = '<p class="hint" style="margin:0">Escribe cuánto se difiere para ver el impacto.</p>'; ok.disabled = true; return; }
+    if (D > r0.falta + 0.0001) { box.innerHTML = `<p class="dif-err">No puede superar lo que falta (${num4(r0.falta)} ${esc(u)}).</p>`; ok.disabled = true; return; }
+    ult = difImpacto(difCalc(a, D, semIni), D, esc(u), H); ok.disabled = false;
+    box.innerHTML = `<div class="dif-niv ${ult.nivel}">${ult.nivel === 'ok' ? 'Impacto controlado' : ult.nivel === 'mid' ? 'Impacto a vigilar' : 'Impacto alto'}</div><ul>${ult.items.map(i => `<li class="${i.cls}">${i.t}</li>`).join('')}</ul>`;
+  };
+  m.hidden = false; fondo.hidden = false; document.documentElement.classList.add('la-modal'); fondo.onclick = cerrar; q('#difCancel').onclick = cerrar;
+  q('#difDef').onclick = () => { q('#difCant').value = def; pintar(); }; q('#difTodo').onclick = () => { q('#difCant').value = Math.round(r0.falta * 100) / 100; pintar(); };
+  m.oninput = (ev) => { if (ev.target.id === 'difCant') pintar(); }; pintar();
+  m.onclick = async (ev) => {
+    const un = ev.target.closest('[data-dif-undo]'); if (!un) return;
+    const d = PT.dif.find(x => x.id === un.dataset.difUndo); if (!d) return;
+    if (!(await confirmar(`¿Deshacer el diferido de ${num4(d.cantidad)} ${u}? La cantidad vuelve a la meta del bloque y se reparte de nuevo.`))) return;
+    try {
+      await ptEnviar('PATCH', `/lookahead_actividades?id=eq.${a.id}`, { metrado_meta: Math.round((Number(a.metrado_meta) + Number(d.cantidad)) * 10000) / 10000 });
+      await ptEnviar('DELETE', `/lookahead_diferidos?id=eq.${d.id}`);
+      a.metrado_meta = Math.round((Number(a.metrado_meta) + Number(d.cantidad)) * 10000) / 10000; await difRepartirAct(a);
+      cerrar(); await ptCargarLook(); if (LA.sel === PT.look) { try { await laCargarDetalle(); } catch (e) {} } ptMsg('Diferido deshecho: la cantidad volvió a la meta del bloque.', true);
+    } catch (err) { ptMsg(`No se pudo deshacer: ${ptErr(err)}`, false); }
+  };
+  m.onsubmit = async (ev) => {
+    ev.preventDefault(); const D = Math.round((parseFloat(q('#difCant').value) || 0) * 10000) / 10000; if (!(D > 0) || D > r0.falta + 0.0001) return;
+    const rr = difCalc(a, D, semIni), imp = difImpacto(rr, D, u, H), nueva = Math.round((Number(a.metrado_meta) - D) * 10000) / 10000, btn = q('#difOk'); btn.disabled = true;
+    let reg = null;
+    try {
+      [reg] = await ptEnviar('POST', '/lookahead_diferidos', { lookahead_id: look.id, actividad_id: a.id, semana: PT.sem, cantidad: D, meta_antes: Number(a.metrado_meta), meta_despues: nueva,
+        causa: q('#difCausa').value || null, motivo: q('#difNota').value.trim() || null, ritmo_antes: rr.k0 != null ? Math.round(rr.k0 * 1000) / 1000 : null, ritmo_despues: rr.k1 != null ? Math.round(rr.k1 * 1000) / 1000 : null,
+        dias_equiv: rr.dEq != null ? Math.round(rr.dEq * 100) / 100 : null, efecto: imp.resumen.slice(0, 600) });
+      try { await ptEnviar('PATCH', `/lookahead_actividades?id=eq.${a.id}`, { metrado_meta: nueva }); }
+      catch (e2) { await ptEnviar('DELETE', `/lookahead_diferidos?id=eq.${reg.id}`).catch(() => {}); throw e2; }
+      a.metrado_meta = nueva; await difRepartirAct(a);
+      cerrar(); await ptCargarLook(); if (LA.sel === PT.look) { try { await laCargarDetalle(); } catch (e) {} }
+      ptMsg(`Se difirieron ${num4(D)} ${esc(u)} al siguiente Look Ahead; la meta del bloque quedó en ${num4(nueva)}. El plan de la semana se repartió de nuevo.`, true);
+    } catch (err) { btn.disabled = false; ptMsg(`No se pudo diferir: ${ptErr(err)}${/lookahead_diferidos|404/i.test(err.message) ? ' · ¿falta correr lookahead_diferidos.sql?' : ''}`, false); }
+  };
+}
+(function () {
+  const fr = document.getElementById('ptFrame'); if (!fr) return;
+  fr.addEventListener('click', (e) => { const b = e.target.closest('[data-diferir]'); if (b) difAbrir(b.dataset.diferir); });
+})();
 
 // ============================================================================
 // PPC: PORCENTAJE DE ACTIVIDADES COMPLETADAS (trazabilidad semanal del PAC + causas)
