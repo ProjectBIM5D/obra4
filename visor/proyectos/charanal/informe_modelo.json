@@ -1,0 +1,107 @@
+{
+ "frente": "charanal",
+ "archivo": "modelo.frag",
+ "generado": "2026-10-11T14:15:00.599Z",
+ "elementos": 352,
+ "armadura": 26073,
+ "ocultos": 4,
+ "clases": {
+  "IFCMECHANICALFASTENER": 3740,
+  "IFCBEAM": 12,
+  "IFCREINFORCINGBAR": 22333,
+  "IFCFLOWSEGMENT": 32,
+  "IFCBUILDINGELEMENTPROXY": 218,
+  "IFCSLAB": 62,
+  "IFCPLATE": 28
+ },
+ "atributos": {
+  "Partida": {
+   "con": 352,
+   "valores": 4,
+   "propiedad": [
+    "partida"
+   ]
+  },
+  "Elemento": {
+   "con": 316,
+   "valores": 16,
+   "propiedad": [
+    "elemento"
+   ]
+  },
+  "Ubicación": {
+   "con": 352,
+   "valores": 5,
+   "propiedad": [
+    "ubicacion"
+   ]
+  },
+  "Código": {
+   "con": 224,
+   "valores": 54,
+   "propiedad": [
+    "codigo"
+   ]
+  },
+  "Familia": {
+   "con": 324,
+   "valores": 20,
+   "propiedad": [
+    "familia"
+   ]
+  },
+  "Tipo": {
+   "con": 352,
+   "valores": 25,
+   "propiedad": [
+    "tipo"
+   ]
+  },
+  "Nivel": {
+   "con": 352,
+   "valores": 6,
+   "propiedad": [
+    "nivel de referencia",
+    "nivel"
+   ]
+  },
+  "Material": {
+   "con": 80,
+   "valores": 5,
+   "propiedad": [
+    "material estructural",
+    "material"
+   ]
+  },
+  "Volumen": {
+   "con": 320,
+   "valores": 54,
+   "propiedad": [
+    "volumen"
+   ]
+  },
+  "Longitud": {
+   "con": 78,
+   "valores": 17,
+   "propiedad": [
+    "longitud del sistema",
+    "longitud"
+   ]
+  }
+ },
+ "grupos": 34,
+ "eje": {
+  "origin": [
+   -3.55,
+   0,
+   -17.95
+  ],
+  "ux": 0.64495,
+  "uz": 0.76423,
+  "length": 115.59
+ },
+ "suelo": 9.59,
+ "avisos": [
+  "36 elementos no traen «Elemento»."
+ ]
+}

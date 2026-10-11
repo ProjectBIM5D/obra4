@@ -1,32 +1,14 @@
 <!doctype html>
 <html lang="es">
 <head>
-<script>
-// El visor 3D solo se abre con la sesión iniciada en el panel (en la página publicada). Sin sesión válida, vuelve al panel.
-(function () {
-  if (['localhost', '127.0.0.1'].indexOf(location.hostname) >= 0) return;
-  document.documentElement.style.visibility = 'hidden';
-  var volver = function () { location.replace('../'); };
-  try {
-    var s = JSON.parse(localStorage.getItem('obra-auth-cloud') || sessionStorage.getItem('obra-auth-cloud') || 'null');
-    if (!s || !s.token || s.exp < Date.now()) return volver();
-    fetch('https://vtynfshkgkrempibnqjd.supabase.co/rest/v1/rpc/rol_actual', { method: 'POST',
-      headers: { apikey: 'sb_publishable_-g9cSWKmQc-EatM0IuSANQ_VHfZJmng', Authorization: 'Bearer ' + s.token, 'Content-Type': 'application/json' }, body: '{}' })
-      .then(function (r) { return r.ok ? r.json() : null; })
-      .then(function (rol) { if (rol) document.documentElement.style.visibility = ''; else volver(); })
-      .catch(volver);
-  } catch (e) { volver(); }
-})();
-</script>
-
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <title>Puente Charanal 5D · Visor BIM</title>
+  <title>Visor BIM · Obra 04</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233b82f6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 18h20M4 18v-6M20 18v-6M2 12c4-8 16-8 20 0M8 18v-7M12 18V8M16 18v-7'/%3E%3C/svg%3E" />
-  <script type="module" crossorigin src="./assets/index-DM-oAyiv.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-D93cJOjB.css">
+  <script type="module" crossorigin src="./assets/index-D-KmEuzr.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-DMSezTMg.css">
 </head>
 <body>
   <div id="app">
@@ -35,7 +17,7 @@
       <header class="brand">
         <div class="logo"><svg viewBox="0 0 24 24"><path d="M2 18h20M4 18v-6M20 18v-6M2 12c4-8 16-8 20 0M8 18v-7M12 18V8M16 18v-7"/></svg></div>
         <button type="button" class="brand-t" id="projBtn" title="Cambiar de puente / frente">
-          <h1 id="pName">Puente Charanal 5D</h1>
+          <h1 id="pName">Visor BIM</h1>
           <p><i class="dot ok"></i><span id="pSub">Control de Avance Técnico &amp; Financiero</span></p>
         </button>
         <svg class="chev" id="projChev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
@@ -103,7 +85,7 @@
             <div class="seg wide" data-opt="pending"><button data-v="ghost" class="on">Fantasma</button><button data-v="hide">Ocultar</button><button data-v="solid">Sólido</button></div>
             <h3>Color</h3>
             <div class="seg wide" data-opt="colorMode"><button data-v="estado" class="on">Estado 5D</button><button data-v="original">Material original</button></div>
-            <label class="sw"><input type="checkbox" id="oSteel" /><i></i><span>Mostrar armadura y acopladores <small class="muted">(26 073 elementos)</small></span></label>
+            <label class="sw"><input type="checkbox" id="oSteel" /><i></i><span>Mostrar armadura y acopladores</span></label>
             <label class="sw"><input type="checkbox" id="oLite" /><i></i><span>Modelo ligero <small class="muted">(para tabletas o equipos básicos: más estable, sin armadura)</small></span></label>
             <label class="sw"><input type="checkbox" id="oGrid" checked /><i></i><span>Cuadrícula de terreno</span></label>
             <label class="sw"><input type="checkbox" id="oWater" checked /><i></i><span>Cauce del río</span></label>
