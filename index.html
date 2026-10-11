@@ -1932,6 +1932,8 @@ td.c .icon-btn+.icon-btn{margin-left:6px;}
 .ctv-f{font-size:12px;color:var(--mut);font-variant-numeric:tabular-nums;padding-top:2px;}
 .ctv-d{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;min-width:0;} .ctv-d .lb-sub{flex-basis:100%;} .ctv-doc{font-size:12px;color:var(--mut);} .ctv-ch{flex-basis:100%;display:flex;flex-wrap:wrap;gap:4px 12px;} .ctv-ch:empty{display:none;}
 .ctv-rec,.ctv-lim{font-size:11px;color:var(--mut);font-weight:600;} .ctv-lim.cerca{color:#b45309;} .ctv-lim.venc{color:#b91c1c;font-weight:800;}
+.ctv-ap{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;border:1px solid var(--line2);border-radius:10px;padding:8px 12px;margin:0 0 10px;font-size:12.5px;background:var(--card);color:var(--tx2);} .ctv-ap.go{border-color:#f59e0b;background:#f59e0b14;} .ctv-ap.ok{border-color:#10b98166;} .ctv-ap-t{flex-basis:100%;color:var(--tx);} .ctv-ap .btn-sec{margin-left:auto;}
+.ctv-pend{display:inline-block;font-size:10.5px;font-weight:800;padding:2px 9px;border-radius:999px;background:#f59e0b26;color:var(--rg-am,#a85a08);margin-left:4px;}
 .ctv-ac{display:flex;gap:6px;} .ctv-ac .icon-btn{width:34px;height:34px;padding:0;border-radius:8px;font-size:0;} .ctv-ac .icon-btn svg{width:18px;height:18px;} .ctv-ac .icon-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--input);} .ctv-ac .icon-btn[aria-label^="Eliminar"]:hover{border-color:var(--red);color:var(--red);}
 @media (max-width:560px){.ctv-it{grid-template-columns:1fr auto;} .ctv-f{grid-column:1 / span 2;} .ctv-sub td{padding-left:14px;}}
 .pt-tabla .dif{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;padding:0;margin-left:4px;vertical-align:middle;border:1px solid transparent;border-radius:7px;background:transparent;color:var(--mut);cursor:pointer;}
@@ -8615,11 +8617,11 @@ async function ctvCargar(forzar) {
     const [ctv, ev, plz, pre, lbs, vals] = await Promise.all([
       get(`/controversias?obra_id=eq.${OBRA.id}&select=*&order=numero`).catch(() => null),
       get(`/contrato_eventos?obra_id=eq.${OBRA.id}&select=*&order=fecha,creado_en`).catch(() => null),
-      get(`/plazo_eventos?obra_id=eq.${OBRA.id}&select=tipo,numero,grupo&order=tipo,numero`).catch(() => []),
-      get(`/prestaciones?obra_id=eq.${OBRA.id}&select=tipo,numero&order=tipo,numero`).catch(() => []),
+      get(`/plazo_eventos?obra_id=eq.${OBRA.id}&select=id,tipo,numero,grupo,estado&order=tipo,numero`).catch(() => get(`/plazo_eventos?obra_id=eq.${OBRA.id}&select=id,tipo,numero,grupo&order=tipo,numero`).catch(() => [])),
+      get(`/prestaciones?obra_id=eq.${OBRA.id}&select=id,tipo,numero,estado&order=tipo,numero`).catch(() => []),
       get(`/linea_base_versiones?obra_id=eq.${OBRA.id}&select=numero&order=numero`).catch(() => []),
       get(`/valorizaciones?select=tipo,numero&order=tipo,numero`).catch(() => [])]);
-    CTV.sinSql = ctv === null || ev === null; CTV.ctv = ctv || []; CTV.ev = ev || [];
+    CTV.sinSql = ctv === null || ev === null; CTV.ctv = ctv || []; CTV.ev = ev || []; CTV.plz = plz || []; CTV.pre = pre || [];
     // registros a los que puede referirse una controversia (lista de ayuda del campo «Se refiere a»)
     const refs = [], vistos = new Set(), P = { ampliacion: 'Ampliación de plazo', suspension: 'Suspensión', adicional: 'Adicional de plazo', desplazamiento: 'Desplazamiento', otro: 'Registro de plazo' };
     (plz || []).forEach(p => { const k = p.grupo || `${p.tipo}-${p.numero}`; if (vistos.has(k)) return; vistos.add(k); refs.push(`${P[p.tipo] || 'Registro de plazo'} N° ${adiN0(p.numero)}`); });
@@ -8642,9 +8644,83 @@ function ctvCalcular() {
     const rec = E.filter(e => CTV_RES.includes(e.tipo) && (e.monto_sub != null || e.dias != null)).slice(-1)[0] || null;
     const pl = cerrada ? [] : E.filter(e => e.fecha_limite).map(e => ({ e, n: plD(e.fecha_limite) - hoy, atendido: E.some(x => orden(x, e) > 0 && (CTV_RANK[x.tipo] || 0) >= (CTV_RANK[e.tipo] || 0)) })).filter(p => !p.atendido);
     const prox = pl.filter(p => p.n >= 0).sort((a, b) => a.n - b.n)[0] || null, venc = pl.filter(p => p.n < 0).sort((a, b) => b.n - a.n)[0] || null;
-    return { ...c, E, rank, estado: est[1], cls: est[2], cerrada, res, rec, prox, venc, ultimo: E[E.length - 1] || null };
+    return { ...c, E, rank, estado: est[1], cls: est[2], cerrada, res, rec, prox, venc, ultimo: E[E.length - 1] || null, sug: ctvSugerencia(c, E) };
   });
   CTV.S = CTV.ev.filter(e => !e.controversia_id).sort((a, b) => orden(b, a));
+}
+// ── aplicar la decisión al registro al que se refiere la controversia (ampliación, adicional, deductivo o mayor metrado) ──
+// Solo SUGIERE y abre el formulario del registro con el estado y la resolución propuestos: tú completas lo que falta (p. ej. los días aprobados por frente) y guardas.
+const CTV_COINCIDE = { aprobada: ['aprobada', 'valorizada', 'pagada'], aprobada_parcial: ['aprobada_parcial'], improcedente: ['improcedente'] };
+function ctvParseRef(s) {
+  const t = String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  const m = t.match(/n\s*[°º.]\s*(\d+)/) || t.match(/(\d+)\s*$/); if (!m) return null; const numero = +m[1];
+  if (/ampliacion de plazo/.test(t)) return { clase: 'plazo', tipo: 'ampliacion', numero };
+  if (/suspension/.test(t)) return { clase: 'plazo', tipo: 'suspension', numero };
+  if (/adicional de plazo/.test(t)) return { clase: 'plazo', tipo: 'adicional', numero };
+  if (/desplazamiento/.test(t)) return { clase: 'plazo', tipo: 'desplazamiento', numero };
+  if (/deductivo/.test(t)) return { clase: 'prest', tipo: 'deductivo', numero };
+  if (/mayor(es)? metrado/.test(t)) return { clase: 'prest', tipo: 'mayor', numero };
+  if (/adicional/.test(t)) return { clase: 'prest', tipo: 'adicional', numero };
+  return null;
+}
+function ctvSugerencia(c, E) {
+  const ev = E.filter(e => e.resultado && CTV_RES.includes(e.tipo)).slice(-1)[0]; if (!ev) return null;
+  const ref = String(c.referencia || '').trim(), o = ctvParseRef(ref);
+  const base = { ev, ref, estado: ev.resultado === 'favorable' ? 'aprobada' : ev.resultado === 'parcial' ? 'aprobada_parcial' : 'improcedente' };
+  if (!ref) return { ...base, caso: 'sinref' };
+  if (!o) return { ...base, caso: 'noaplica' };
+  if (o.tipo === 'mayor' && base.estado === 'aprobada_parcial') base.estado = 'aprobada';   // el mayor metrado no tiene «aprobada parcial»: se ajustan sus metrados
+  if (o.clase === 'plazo') {
+    const r = CTV.plz.filter(x => x.tipo === o.tipo && Number(x.numero) === o.numero)[0];
+    if (!r) return { ...base, caso: 'noexiste', obj: o };
+    return { ...base, caso: (CTV_COINCIDE[base.estado] || []).includes(r.estado) ? 'coincide' : 'actualizar', obj: { ...o, key: r.grupo || r.id, actual: r.estado, existe: true } };
+  }
+  const r = CTV.pre.filter(x => x.tipo === o.tipo && Number(x.numero) === o.numero)[0];
+  if (!r) return { ...base, caso: o.tipo === 'mayor' ? 'noexiste' : 'actualizar', obj: { ...o, id: null, actual: null, existe: o.tipo !== 'mayor' } };   // adicional / deductivo: puede salir solo de la línea base
+  return { ...base, caso: (CTV_COINCIDE[base.estado] || []).includes(r.estado) ? 'coincide' : 'actualizar', obj: { ...o, id: r.id, actual: r.estado, existe: true } };
+}
+const CTV_ESTNOM = { solicitada: 'solicitada', autorizada: 'autorizada', aprobada: 'aprobada', aprobada_parcial: 'aprobada parcial', valorizada: 'valorizada', pagada: 'pagada', improcedente: 'improcedente' };
+function ctvAviso(c, adm) {
+  const s = c.sug; if (!s) return '';
+  const r = CTV_RESULT[s.ev.resultado], dec = `<b>${esc(ctvEtq(s.ev))}</b>: ${r[0]} para el contratista${s.ev.dias != null ? ` · ${s.ev.dias} día${s.ev.dias === 1 ? '' : 's'} reconocidos` : ''}${s.ev.monto_sub != null ? ` · S/ ${metN(s.ev.monto_sub)}` : ''}`;
+  const cuerpo = (cls, txt, btn) => `<div class="ctv-ap ${cls}"><span class="ctv-ap-t">${dec}</span><span>${txt}</span>${btn || ''}</div>`;
+  if (s.caso === 'sinref') return cuerpo('', 'Para aplicarla a un registro, completa «Se refiere a» en la controversia (ampliación, adicional, mayor metrado…).');
+  if (s.caso === 'noaplica') return cuerpo('', `«${esc(s.ref)}» no se actualiza desde aquí: ajusta ese registro en su pantalla.`);
+  if (s.caso === 'noexiste') return cuerpo('', `No encontré «${esc(s.ref)}» entre los registros: revisa el nombre en «Se refiere a».`);
+  if (s.caso === 'coincide') return cuerpo('ok', `✓ «${esc(s.ref)}» ya está <b>${CTV_ESTNOM[s.obj.actual] || esc(s.obj.actual)}</b>: coincide con la decisión.`);
+  const de = s.obj.actual ? `está <b>${CTV_ESTNOM[s.obj.actual] || esc(s.obj.actual)}</b>` : 'sale de las líneas base';
+  return cuerpo('go', `«${esc(s.ref)}» ${de}; según esta decisión corresponde <b>${CTV_ESTNOM[s.estado]}</b>.`,
+    adm ? `<button type="button" class="btn-sec pri" data-ctv-aplicar="${c.id}" title="Abre el registro con el estado y la resolución propuestos para que los revises y guardes">Actualizar el registro ▸</button>` : '');
+}
+async function ctvAplicar(id) {
+  const c = CTV.C.find(x => x.id === id), s = c && c.sug; if (!s || s.caso !== 'actualizar' || !s.obj || !s.obj.existe) return;
+  const e = s.ev, o = s.obj, doc = e.documento || ctvEtq(e), r = CTV_RESULT[e.resultado];
+  const nota = `${ctvNum(c)}: ${ctvEtq(e)}${e.documento && !ctvEtq(e).includes(e.documento) ? ' (' + e.documento + ')' : ''} del ${plFmt(plD(e.fecha))} · ${r[0]}${e.dias != null ? ' · ' + e.dias + ' días' : ''}${e.monto_sub != null ? ' · S/ ' + metN(e.monto_sub) : ''}`;
+  const fijar = (m, sel, v, soloVacio) => { const el = m.querySelector(sel); if (!el || v == null || v === '') return; if (soloVacio && el.value) return; el.value = v; el.dispatchEvent(new Event('input', { bubbles: true })); el.dispatchEvent(new Event('change', { bubbles: true })); };
+  const anotar = (m, sel) => { const el = m.querySelector(sel); if (!el) return; const nv = (el.value ? el.value + ' | ' : '') + nota; el.value = nv.slice(0, 200); };
+  let m = null;
+  try {
+    if (o.clase === 'plazo') {
+      await plzCargar(true); plzFormAbrir(o.key); m = document.getElementById('plzForm');
+      fijar(m, '#pzEst', s.estado); fijar(m, '#pzRes2', doc, true); fijar(m, '#pzFRes', e.fecha, true); anotar(m, '#pzNotas');
+      if (s.estado === 'aprobada_parcial') {
+        const on = [...m.querySelectorAll('#pzTbl tbody tr')].filter(tr => tr.querySelector('.pz-on').checked);
+        if (on.length === 1 && e.dias != null) { const ap = on[0].querySelector('.pz-apr'); ap.value = Math.min(+e.dias, +on[0].querySelector('.pz-sol').value || +e.dias); ap.dispatchEvent(new Event('input', { bubbles: true })); }
+        toast(`Completa los días aprobados por frente: la decisión reconoce ${e.dias != null ? e.dias + ' día' + (e.dias === 1 ? '' : 's') + ' en total' : 'una parte'}.`, true, 'ctv');
+      }
+    } else if (o.tipo === 'mayor') {
+      await metCargar(true); const x = MET.reg.find(k => k.id === o.id); if (!x) { toast('No se encontró el mayor metrado en Mayores metrados.', false, 'ctv'); return; }
+      metFormAbrir(o.id, null); m = document.getElementById('metForm');
+      fijar(m, '#mfEst', s.estado); fijar(m, '#mfRes', doc, true); fijar(m, '#mfFRes', e.fecha, true); anotar(m, '#mfNotas');
+    } else {
+      await adiCargar(true); const d = adiDerivar().find(k => k.tipo === o.tipo && k.numero === o.numero);
+      if (!d) { toast(`No encontré «${esc(c.referencia)}» en Adicionales y deductivos.`, false, 'ctv'); return; }
+      if (d.id) adiFormAbrir(d.id, null); else adiFormAbrir(null, { tipo: d.tipo, lb_numero: d.lb_numero, numero: d.numero, descripcion: d.descripcion, resolucion: d.resolucion, fecha_resolucion: d.fecha_resolucion });
+      m = document.getElementById('adiForm');
+      fijar(m, '#adEst', s.estado); fijar(m, '#adRes', doc, true); fijar(m, '#adFRes', e.fecha, true); anotar(m, '#adNotas');
+    }
+  } catch (er) { toast(`No se pudo abrir el registro: ${esc(er.message)}`, false, 'ctv'); return; }
+  if (m) { const obs = new MutationObserver(() => { if (m.hidden) { obs.disconnect(); ctvCargar(true); } }); obs.observe(m, { attributes: true, attributeFilter: ['hidden'] }); }
 }
 function ctvPintar() {
   const box = $('#ctvPanel'), adm = !!AUTH.admin, f2 = (s) => s ? plFmt(plD(s)) : '—', hoy = CTV.hoy;
@@ -8680,10 +8756,10 @@ function ctvPintar() {
       : c.prox ? `<b>${f2(c.prox.e.fecha_limite)}</b><span class="lb-sub">${c.prox.n === 0 ? 'vence hoy' : `en ${c.prox.n} día${c.prox.n === 1 ? '' : 's'}`} · ${esc(ctvEtq(c.prox.e))}</span>` : '<span class="lb-sub">—</span>';
     return `<tr class="ctv-row${abierto ? ' on' : ''}" data-ctv-row="${c.id}" tabindex="0" aria-expanded="${abierto}" title="${abierto ? 'Ocultar' : 'Ver'} la línea de tiempo"><td class="l"><span class="ctv-tg${abierto ? ' on' : ''}" aria-hidden="true">${ic.chev}</span><b class="ctv-n">${esc(ctvNum(c))}</b>
         <span class="lb-sub ctv-ti">${esc(c.titulo)}</span><span class="lb-sub">${esc(CTV_MAT[c.materia] || c.materia)}${c.referencia ? ' · ' + esc(c.referencia) : ''} · plantea ${c.parte === 'entidad' ? 'la Entidad' : 'el contratista'}</span></td>
-      <td class="ctr"><span class="vl-pill ${c.cls}">${c.estado}</span>${r ? `<span class="vl-pill ${r[1]}" title="Resultado para el contratista">${r[0]}</span>` : ''}<span class="lb-sub">${c.ultimo ? esc(ctvEtq(c.ultimo)) + ' · ' + f2(c.ultimo.fecha) : 'sin actuaciones'}</span></td>
+      <td class="ctr"><span class="vl-pill ${c.cls}">${c.estado}</span>${r ? `<span class="vl-pill ${r[1]}" title="Resultado para el contratista">${r[0]}</span>` : ''}${c.sug && c.sug.caso === 'actualizar' ? `<span class="ctv-pend" title="El registro «${esc(c.sug.ref)}» no coincide con la decisión: ábrela para actualizarlo">registro por actualizar</span>` : ''}<span class="lb-sub">${c.ultimo ? esc(ctvEtq(c.ultimo)) + ' · ' + f2(c.ultimo.fecha) : 'sin actuaciones'}</span></td>
       <td class="ctr">${monto(c.monto_sub, c.dias)}</td><td class="ctr">${c.rec ? monto(c.rec.monto_sub, c.rec.dias) : '<span class="lb-sub">—</span>'}</td><td class="ctr">${prox}</td>
       <td class="c">${adm ? `<button type="button" class="icon-btn" data-ctv-evnuevo="${c.id}" title="Agregar una actuación" aria-label="Agregar actuación">${ic.add}</button><button type="button" class="icon-btn" data-ctv-edit="${c.id}" title="Editar la controversia" aria-label="Editar">${ic.ed}</button><button type="button" class="icon-btn" data-ctv-del="${c.id}" title="Eliminar la controversia y su línea de tiempo" aria-label="Eliminar">${ic.del}</button>` : ''}</td></tr>
-      ${abierto ? `<tr class="ctv-sub"><td colspan="6" class="l">${c.notas ? `<p class="hint" style="margin:0 0 6px">${esc(c.notas)}</p>` : ''}${c.E.length ? `<div class="ctv-tl">${c.E.map(evItem).join('')}</div>` : '<p class="hint" style="margin:0">Todavía no hay actuaciones: registra el planteamiento, la solicitud a la JRD, su decisión…</p>'}</td></tr>` : ''}`;
+      ${abierto ? `<tr class="ctv-sub"><td colspan="6" class="l">${ctvAviso(c, adm)}${c.notas ? `<p class="hint" style="margin:0 0 6px">${esc(c.notas)}</p>` : ''}${c.E.length ? `<div class="ctv-tl">${c.E.map(evItem).join('')}</div>` : '<p class="hint" style="margin:0">Todavía no hay actuaciones: registra el planteamiento, la solicitud a la JRD, su decisión…</p>'}</td></tr>` : ''}`;
   }).join('');
   const sueltos = CTV.S.length ? `<div class="ctv-tl ctv-solo">${CTV.S.map(evItem).join('')}</div>` : '<p class="hint" style="margin:0">Sin eventos sueltos. Aquí van las cartas, actas o notificaciones del contrato que no pertenecen a una controversia.</p>';
   box.innerHTML = kpis
@@ -8764,7 +8840,8 @@ function ctvAlternar(id) { if (!CTV.exp) return; if (CTV.exp.has(id)) CTV.exp.de
 document.addEventListener('keydown', (e) => { const r = e.target.closest && e.target.closest('[data-ctv-row]'); if (r && e.target === r && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); ctvAlternar(r.dataset.ctvRow); } });
 document.addEventListener('click', async (e) => {
   if (e.target.closest('[data-ctv-nuevo]')) { ctvFormAbrir(null); return; }
-    const en = e.target.closest('[data-ctv-evnuevo]'); if (en) { ctvEventoAbrir(null, en.dataset.ctvEvnuevo || ''); return; }
+    const ap = e.target.closest('[data-ctv-aplicar]'); if (ap) { ctvAplicar(ap.dataset.ctvAplicar); return; }
+  const en = e.target.closest('[data-ctv-evnuevo]'); if (en) { ctvEventoAbrir(null, en.dataset.ctvEvnuevo || ''); return; }
   const ee = e.target.closest('[data-ctv-evedit]'); if (ee) { ctvEventoAbrir(ee.dataset.ctvEvedit, null); return; }
   const ed = e.target.closest('[data-ctv-edit]'); if (ed) { ctvFormAbrir(ed.dataset.ctvEdit); return; }
   const ev = e.target.closest('[data-ctv-evdel]');
