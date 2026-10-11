@@ -1944,6 +1944,61 @@ td.c .icon-btn+.icon-btn{margin-left:6px;}
 .gg-d{min-width:260px;} .gg-u{width:58px;text-align:center;} .gg-n{width:92px;text-align:right;} .gg-v{width:118px;text-align:right;font-weight:700;} .gg-cod{font-size:11px;color:var(--mut);white-space:nowrap;}
 .gg-cap td{background:var(--input);border-top:2px solid var(--line2);} .gg-sub td{font-size:11.5px;font-weight:700;color:var(--mut);} .gg-base .gg-in{color:var(--mut);} .gg-base td{opacity:.8;}
 .gg-nuevo{display:flex;gap:8px;margin:10px 0 4px;} .gg-nuevo input{flex:1;min-width:0;}
+/* ═══ Valor ganado: diseño ═══ */
+.vg-wrap{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr);gap:16px;} .vg-wrap>*{min-width:0;}
+.vg-bar{display:flex;flex-wrap:wrap;justify-content:flex-start;align-items:flex-end;gap:14px 24px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px 18px 16px;box-shadow:0 1px 2px rgba(16,24,40,.04),0 10px 28px -20px rgba(16,24,40,.3);}
+.vg-g{display:flex;flex-direction:column;align-items:flex-start;} .vg-gl{display:block;margin:0 0 7px;font-size:10px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--mut);}
+.vg-seg{display:inline-flex;gap:4px;padding:4px;background:var(--input);border:1px solid var(--line2);border-radius:14px;}
+.vg-seg button{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:84px;height:38px;padding:0 16px;border:0;border-radius:10px;background:transparent;color:var(--tx2);font:inherit;font-weight:800;font-size:13.5px;line-height:1.05;cursor:pointer;transition:background .15s,color .15s,box-shadow .15s;}
+.vg-seg button small{font-size:9.5px;font-weight:600;letter-spacing:.04em;opacity:.7;text-transform:uppercase;}
+.vg-seg button:hover{color:var(--tx);} .vg-seg button.on{background:linear-gradient(135deg,#27338f,#141c5e);color:#fff;box-shadow:0 8px 16px -8px rgba(20,28,94,.9);}
+:root[data-theme="dark"] .vg-seg button.on{background:linear-gradient(135deg,#5b66e0,#4350c9);}
+.vg-pills{display:inline-flex;flex-wrap:wrap;justify-content:flex-start;gap:6px;max-width:100%;}
+.vg-pills button{height:46px;padding:0 15px;border-radius:13px;border:1px solid var(--line2);background:var(--card);color:var(--tx2);font:inherit;font-weight:700;font-size:13px;cursor:pointer;transition:border-color .15s,background .15s,color .15s,transform .1s;}
+.vg-pills button:hover{border-color:var(--blue);color:var(--tx);} .vg-pills button.on{background:var(--input);border-color:var(--blue);color:var(--blue);box-shadow:inset 0 0 0 1px var(--blue);}
+.vg-sel{position:relative;width:min(250px,86vw);} .vg-sel select{appearance:none;-webkit-appearance:none;width:100%;height:46px;padding:0 42px 0 16px;border-radius:13px;border:1px solid var(--line2);background:var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 14px center/18px;color:var(--tx);font:inherit;font-weight:600;font-size:13px;text-overflow:ellipsis;cursor:pointer;} .vg-sel select:hover{border-color:var(--blue);} .vg-sel select:focus-visible{outline:2px solid var(--blue);outline-offset:2px;}
+.vg-cards{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;}
+.vgk{--a:#4f5bd5;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:2px;min-width:0;padding:14px 14px 12px;border:1px solid var(--line);border-radius:16px;background:var(--card);text-align:center;box-shadow:0 1px 2px rgba(16,24,40,.04),0 12px 26px -20px rgba(16,24,40,.38);}
+.vgk::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:var(--a);}
+.vgk.pv{--a:#4f5bd5;} .vgk.ev{--a:#f26a1b;} .vgk.ac{--a:#14b8a6;} .vgk.eac{--a:#7c3aed;} .vgk.ok{--a:#16a34a;} .vgk.mid{--a:#d97706;} .vgk.bad{--a:#dc2626;} .vgk.na{--a:#94a3b8;}
+.vgk header{display:flex;align-items:center;justify-content:center;gap:7px;min-height:32px;} .vgk-ic{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:9px;background:color-mix(in srgb,var(--a) 14%,transparent);color:var(--a);flex:none;}
+.vgk-ic svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round;}
+.vgk-l{font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--mut);line-height:1.15;text-align:left;}
+.vgk-v{margin:4px 0 2px;max-width:100%;overflow:hidden;text-overflow:ellipsis;font-size:21px;font-weight:800;letter-spacing:-.02em;color:var(--tx);font-variant-numeric:tabular-nums;line-height:1.15;white-space:nowrap;}
+.vgk.sp .vgk-v,.vgk.cp .vgk-v{font-size:30px;color:var(--a);} .vgk.mg .vgk-v{color:var(--a);}
+.vgk-ch{align-self:center;margin:2px 0 4px;padding:2px 10px;border-radius:999px;font-size:10.5px;font-weight:800;line-height:1.5;background:color-mix(in srgb,var(--a) 15%,transparent);color:var(--a);white-space:nowrap;}
+.vgk-s{font-size:11.5px;line-height:1.4;color:var(--mut);} .vgk-s b{color:var(--tx2);font-weight:700;}
+.vgk-bar{height:6px;margin-top:9px;border-radius:3px;background:var(--line);overflow:hidden;} .vgk-bar i{display:block;height:100%;border-radius:3px;background:var(--a);}
+.vg-hero{position:relative;overflow:hidden;border-radius:22px;padding:20px 22px 14px;color:#e8ecff;background:radial-gradient(900px 380px at 88% -12%,rgba(242,106,27,.2),transparent 62%),radial-gradient(800px 460px at -8% 112%,rgba(99,112,255,.36),transparent 58%),linear-gradient(160deg,#0a0f38 0%,#121a5c 52%,#1a2472 100%);box-shadow:0 26px 60px -26px rgba(10,15,56,.85),inset 0 1px 0 rgba(255,255,255,.08);}
+.vg-hero-h{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px 20px;margin-bottom:8px;}
+.vg-hero-t small{display:block;font-size:10.5px;font-weight:800;letter-spacing:.11em;text-transform:uppercase;color:rgba(255,255,255,.58);} .vg-hero-t h3{margin:3px 0 0;font-size:21px;font-weight:800;letter-spacing:-.01em;color:#fff;}
+.vg-legs{display:flex;flex-wrap:wrap;gap:8px;}
+.vg-lg{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.07);color:#fff;font:inherit;font-size:12.5px;cursor:pointer;transition:background .15s,opacity .15s;}
+.vg-lg:hover{background:rgba(255,255,255,.14);} .vg-lg i{width:10px;height:10px;border-radius:50%;background:var(--c);box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 28%,transparent);} .vg-lg b{font-weight:800;font-variant-numeric:tabular-nums;color:#fff;}
+.vg-lg:not(.on){opacity:.5;} .vg-lg:not(.on) i{background:transparent;box-shadow:inset 0 0 0 2px var(--c);} .vg-lg:not(.on) span{text-decoration:line-through;}
+.vg-plot{position:relative;display:flex;justify-content:center;cursor:crosshair;} .vg-svg{display:block;max-width:100%;overflow:visible;}
+.vgc-grid{stroke:rgba(255,255,255,.08);} .vgc-ty,.vgc-tx{fill:rgba(255,255,255,.56);font-size:10.5px;font-variant-numeric:tabular-nums;} .vgc-axis{stroke:rgba(255,255,255,.26);} .vgc-tick{stroke:rgba(255,255,255,.45);}
+.vgc-bac{stroke:rgba(255,255,255,.38);stroke-dasharray:1.5 6;stroke-linecap:round;stroke-width:1.6;} .vgc-tb{fill:rgba(255,255,255,.6);font-size:10px;font-weight:700;letter-spacing:.02em;}
+.vgc-cut{stroke:rgba(255,255,255,.55);stroke-dasharray:4 4;} .vgc-badge{fill:#fff;} .vgc-badget{fill:#141c5e;font-size:11px;font-weight:800;} .vgc-guia{stroke:rgba(255,255,255,.4);}
+.vg-tip{position:absolute;top:2px;z-index:3;min-width:158px;padding:9px 12px;border-radius:12px;background:rgba(255,255,255,.98);color:#141c5e;font-size:12px;box-shadow:0 14px 34px -10px rgba(0,0,0,.6);pointer-events:none;}
+.vg-tip strong{display:block;margin-bottom:5px;font-size:12.5px;} .vg-tip div{display:flex;align-items:center;gap:8px;padding:1.5px 0;} .vg-tip i{width:9px;height:9px;border-radius:50%;flex:none;} .vg-tip span{flex:1;color:#475569;} .vg-tip b{font-variant-numeric:tabular-nums;}
+.vg-tip .vg-tip-i{margin-top:5px;padding-top:5px;border-top:1px solid #e2e8f0;}
+.vg-hero-f{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 16px;margin-top:6px;font-size:12px;color:rgba(255,255,255,.7);} .vg-hero-f b{color:#fff;} .vg-hero-f b.ok{color:#4ade80;} .vg-hero-f b.mid{color:#fbbf24;} .vg-hero-f b.bad{color:#fb7185;}
+.vg-tcard{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px 16px 16px;box-shadow:0 1px 2px rgba(16,24,40,.04),0 10px 28px -20px rgba(16,24,40,.3);}
+.vg-tcard>header{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 14px;margin-bottom:10px;} .vg-tcard h3{margin:0;font-size:15px;font-weight:800;} .vg-tcard header span{font-size:11.5px;color:var(--mut);}
+.vg-twrap{max-height:352px;overflow:auto;border:1px solid var(--line);border-radius:13px;}
+.vg-t{width:100%;border-collapse:separate;border-spacing:0;font-size:12.5px;font-variant-numeric:tabular-nums;text-align:center;}
+.vg-t th,.vg-t td{padding:7px 10px;border-bottom:1px solid var(--line);white-space:nowrap;} .vg-t tbody tr:last-child>*{border-bottom:0;}
+.vg-t thead th{position:sticky;z-index:1;background:var(--input);color:var(--mut);font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;} .vg-t thead tr:first-child th{top:0;border-bottom:1px solid var(--line2);} .vg-t thead tr:nth-child(2) th{top:31px;}
+.vg-t thead tr:first-child th+th{border-left:1px solid var(--line2);}
+.vg-t tbody th{text-align:center;font-weight:800;color:var(--tx);} .vg-t tbody th em{display:inline-block;margin-left:6px;padding:0 7px;border-radius:999px;background:var(--blue);color:#fff;font-style:normal;font-size:9.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;vertical-align:middle;}
+.vg-t tbody tr{cursor:pointer;} .vg-t tbody tr:hover>*{background:var(--input);} .vg-t tbody tr.on>*{background:color-mix(in srgb,var(--blue) 11%,var(--card));font-weight:700;}
+.vg-t td:nth-child(4),.vg-t td:nth-child(7){border-right:1px solid var(--line);}
+.vg-pl{display:inline-block;min-width:48px;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:800;} .vg-pl.ok{background:#16a34a1f;color:#15803d;} .vg-pl.mid{background:#d977061f;color:#b45309;} .vg-pl.bad{background:#dc26261f;color:#b91c1c;} .vg-pl.na{color:var(--mut);font-weight:600;}
+.vg-how{max-width:780px;margin:0 auto;padding:2px 8px 10px;font-size:12.5px;line-height:1.55;color:var(--tx2);text-align:center;} .vg-how summary{display:inline-block;cursor:pointer;font-weight:700;color:var(--blue);} .vg-how p{margin:8px 0 0;text-align:left;} .vg-how b.bad{color:#dc2626;}
+@media (max-width:1180px){.vg-cards{grid-template-columns:repeat(3,minmax(0,1fr));}}
+@media (max-width:760px){.vg-bar{flex-direction:column;align-items:stretch;gap:14px;} .vg-g{align-items:flex-start;} .vg-g{width:100%;min-width:0;} .vg-seg{display:flex;width:100%;} .vg-seg button{flex:1;} .vg-sel{width:100%;}}
+@media (max-width:620px){.vg-cards{grid-template-columns:repeat(2,minmax(0,1fr));} .vg-hero{padding:16px 14px 12px;border-radius:18px;} .vg-pills button{height:42px;padding:0 13px;} .vg-seg button{min-width:78px;} .vgk-v{font-size:21px;} .vgk.sp .vgk-v,.vgk.cp .vgk-v{font-size:28px;}}
 .ctv-pend{display:inline-block;font-size:10.5px;font-weight:800;padding:2px 9px;border-radius:999px;background:#f59e0b26;color:var(--rg-am,#a85a08);margin-left:4px;}
 .ctv-ac{display:flex;gap:6px;} .ctv-ac .icon-btn{width:34px;height:34px;padding:0;border-radius:8px;font-size:0;} .ctv-ac .icon-btn svg{width:18px;height:18px;} .ctv-ac .icon-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--input);} .ctv-ac .icon-btn[aria-label^="Eliminar"]:hover{border-color:var(--red);color:var(--red);}
 @media (max-width:560px){.ctv-it{grid-template-columns:1fr auto;} .ctv-f{grid-column:1 / span 2;} .ctv-sub td{padding-left:14px;}}
@@ -2066,7 +2121,7 @@ document.documentElement.classList.add('dens-densa');   // tamaño único de las
         <button type="button" class="nav-gh" data-grupo="gestion" aria-expanded="true"><span class="ni">📊</span><span class="nt">Control de gestión</span><i class="nav-chev"></i></button>
         <div class="nav-gb">
           <button type="button" class="prox" disabled title="Próximamente · hoy se ve en el Dashboard"><span class="ni">📉</span><span class="nt">Curva S</span><span class="nav-tag">pronto</span></button>
-          <button type="button" class="prox" disabled title="Próximamente · PV, EV, AC, SPI y CPI"><span class="ni">🎯</span><span class="nt">Valor ganado</span><span class="nav-tag">pronto</span></button>
+          <button type="button" data-pane="valorganado" title="Curva S y valor ganado con dos bases: venta (ingreso) y meta (costo). PV, EV, AC, SPI y CPI"><span class="ni">🎯</span><span class="nt">Valor ganado</span></button>
           <button type="button" class="prox" disabled title="Próximamente · margen venta − costo real y proyección"><span class="ni">💹</span><span class="nt">Resultado operativo</span><span class="nav-tag">pronto</span></button>
           <button type="button" class="prox" disabled title="Próximamente · pronóstico de costo, plazo e ingreso"><span class="ni">🔭</span><span class="nt">Proyecciones</span><span class="nav-tag">pronto</span></button>
           <button type="button" class="prox" disabled title="Próximamente · tablero de indicadores"><span class="ni">📌</span><span class="nt">Indicadores KPI</span><span class="nav-tag">pronto</span></button>
@@ -2322,6 +2377,7 @@ document.documentElement.classList.add('dens-densa');   // tamaño único de las
     <section class="pane" data-pane="metrados"><div id="metPanel"></div></section>
     <section class="pane" data-pane="adicionales"><div id="adiPanel"></div></section>
     <section class="pane" data-pane="plazo"><div id="plzPanel"></div></section>
+    <section class="pane" data-pane="valorganado"><div id="vgPanel"></div></section>
     <section class="pane" data-pane="controversias"><div id="ctvPanel"></div></section>
     <section class="pane" data-pane="lineasbase"><div id="lbPanel"></div>
       <div id="lbGanttSlot" style="margin-top:14px"><div class="lb-cab"><div><h3 style="margin:0 0 3px">Cronograma de la línea base</h3><p class="hint" style="margin:0">Solo lectura, tal como está en el Project de esa línea base: fechas, ruta crítica y vínculos. Elige otra en «Línea base». El plan de ejecución se trabaja en Planificación › Plan maestro.</p></div></div><div id="lbGanttBox"></div></div></section>
@@ -3041,6 +3097,7 @@ document.querySelectorAll('#nav button[data-pane]').forEach(b => {
       presupuesto: ['Presupuesto', 'Venta (contrato, solo lectura) y meta (copia del APU que se ajusta sin tocar el contrato)'],
       metrados: ['Mayores metrados', 'Registro de mayores metrados con su estado y resolución · el menor metrado, en una tarjeta'],
       adicionales: ['Adicionales y deductivos', 'Prestaciones adicionales y deductivos vinculados: lo que trajo cada línea base, su resolución y cuánto va del límite'],
+      valorganado: ['Curva S y valor ganado', 'Planeado, ganado y costo real con dos bases: venta (ingreso) y meta (costo) · SPI y CPI'],
       controversias: ['Eventos y controversias', 'Controversias con su línea de tiempo (JRD, conciliación, arbitraje) y los eventos del contrato'],
       plazo: ['Plazo y ampliaciones', 'Suspensiones, ampliaciones y adicionales de plazo: qué cambió, con qué resolución y cómo queda el fin de obra'],
       lineasbase: ['Contrato y líneas base', 'LB0 a LB3: inicio de contrato, suspensión, adicional y deductivo, ampliación · ficha, comparación y carga'],
@@ -3059,6 +3116,7 @@ document.querySelectorAll('#nav button[data-pane]').forEach(b => {
     if (b.dataset.pane === 'adicionales') adiCargar();
     if (b.dataset.pane === 'metrados') metCargar();
     if (b.dataset.pane === 'controversias') ctvCargar();
+    if (b.dataset.pane === 'valorganado') vgCargar(true);
     if (b.dataset.pane === 'presupuesto') preCargar();
     if (b.dataset.pane === 'parte' && !$('#parteLA').hidden) plaCargar();
     $('#side').classList.remove('open'); $('#overlay').classList.remove('on');
@@ -9065,6 +9123,232 @@ document.addEventListener('click', async (e) => {
   const c = CTV.ctv.find(r => r.id === de.dataset.ctvDel); if (!c) return;
   if (!(await confirmar(`Eliminar «${ctvNum(c)}» y toda su línea de tiempo. No cambia ampliaciones, adicionales ni valorizaciones.`))) return;
   try { await preRpc('controversia_eliminar', { p_id: c.id }); toast('Controversia eliminada.', true, 'ctv'); await ctvCargar(true); } catch (er) { toast(`No se pudo eliminar: ${esc(er.message)}`, false, 'ctv'); }
+});
+
+// ═══ VALOR GANADO · CURVA S con dos bases: VENTA (ingreso) y META (costo) ═══
+// Todo en subtotal sin IGV. Base venta: planeado = cronograma valorizado vigente · ganado = lo valorizado (valorizaciones aprobadas).
+// Base meta:  planeado = metrado de la línea base meta congelada (versión guardada del plan master) × costo unitario del APU meta, repartido en el tiempo de cada tarea
+//             ganado   = metrado de la valorización aprobada × costo unitario del APU meta
+//             ambos × (1 + GG meta % + utilidad meta %), con GG meta % = gastos generales meta de la obra ÷ costo directo meta de la obra.
+// Costo real (AC): costo_real_mensual (hoy referencial/simulado). CPI = ganado meta ÷ costo real.
+const VG = { modo: 'meta', frente: 'todos', lineas: { pv: true, ev: true, ac: true }, mes: null, d: null, cargando: false, base: null, vers: [], verSel: null };
+const vgYm = (s) => String(s).slice(0, 7);
+const vgMesTxt = (ym) => { const [y, m] = ym.split('-'); return `${MESES_ES[+m - 1]}-${y.slice(2)}`; };
+const vgFmtM = (v) => { const a = Math.abs(v); return (v < 0 ? '−' : '') + (a >= 1e6 ? (a / 1e6).toFixed(2) + ' M' : a >= 1e3 ? (a / 1e3).toFixed(0) + ' k' : a.toFixed(0)); };
+const vgS = (v) => 'S/ ' + preN(v, 0);
+async function vgCargar(forzar) {
+  const box = $('#vgPanel'); if (!box) return;
+  if (typeof OBRA === 'undefined' || !OBRA || !OBRA.id || typeof DATA === 'undefined' || !DATA || !DATA.versionId || !RES_A || !(RES_A.proyectos || []).length) { box.innerHTML = '<div class="rg-msg">Leyendo la obra…</div>'; setTimeout(() => { if (document.documentElement.dataset.pane === 'valorganado') vgCargar(); }, 1200); return; }
+  if (VG.cargando) return;
+  if (!VG.d || forzar) box.innerHTML = '<div class="rg-msg">Calculando el valor ganado…</div>';
+  VG.cargando = true;
+  try {
+    const vig = (RES_A.version || {}).id;
+    const [nodos, pvV, evV, vp, ac, vers, ggp] = await Promise.all([
+      getTodo(`/wbs_nodos?version_id=eq.${DATA.versionId}&es_hoja=eq.true&select=id,proyecto_id,codigo,metrado,precio_unitario,concepto&order=orden`),
+      vig ? getTodo(`/v_curva_s_programada?version_id=eq.${vig}&select=proyecto_id,concepto,periodo_orden,fecha_inicio,programado_parcial&order=periodo_orden,concepto,proyecto_id`).catch(() => []) : Promise.resolve([]),
+      getTodo(`/v_ejecutado_mes?${FILTRO_PROY}&select=proyecto_id,tipo,estado,mes,monto_subtotal&order=proyecto_id,tipo,mes,estado`).catch(() => []),
+      getTodo(`/valorizacion_partidas?select=nodo_id,metrado,precio_unitario,valorizaciones!inner(mes,estado,tipo)&valorizaciones.estado=eq.aprobada&order=nodo_id,valorizacion_id`).catch(() => []),
+      get(`/v_costo_real_mes?obra_id=eq.${OBRA.id}&select=proyecto_id,mes,monto,todo_simulado&order=mes`).catch(() => null),
+      get(`/plan_versiones_guardadas?obra_id=eq.${OBRA.id}&select=id,numero,nombre,motivo,lb_numero,creado_en,inicio,fin,n_tareas,tareas&order=numero.desc`).catch(() => []),
+      ggCargar().then(() => true).catch(() => false)]);
+    await Promise.all(COMPONENTES.map(c => preDatos(c.id).catch(() => null)));   // costo unitario del APU meta por partida
+    VG.vers = vers || [];
+    if (!VG.verSel || !VG.vers.some(v => v.id === VG.verSel)) {
+      VG.verSel = (VG.vers.slice().sort((a, b) => (Number(b.lb_numero ?? -1) - Number(a.lb_numero ?? -1)) || (b.numero - a.numero))[0] || {}).id || null;
+    }
+    VG.raw = { nodos, pvV, evV, vp, ac, ggp };
+    vgCalcular(); VG.base = null; if (VG.modo === 'meta') await vgPlaneadoMeta();
+    VG.cargando = false; vgPintar();
+  } catch (e) { VG.cargando = false; box.innerHTML = msgCarga('Valor ganado', e); }
+}
+async function vgTareasBase() {   // tareas de la línea base meta elegida (versión guardada del plan master); sin versión guardada, el plan master actual
+  const v = VG.vers.find(x => x.id === VG.verSel);
+  if (v) return { nombre: `${v.nombre}${v.lb_numero != null ? ' · LB' + v.lb_numero : ''}`, fecha: v.creado_en, congelada: true, tareas: (v.tareas || []).map(t => ({ proyecto_id: t.proyecto_id, codigo: t.codigo, inicio: t.inicio, fin: t.fin, dias: Number(t.dias || 0), tipo: t.tipo, hito: !!t.hito, activa: t.activa !== false })) };
+  if (typeof laSugCargar === 'function') { try { await laSugCargar(); } catch (e) {} }
+  const pl = typeof LA !== 'undefined' ? LA.plan : null;
+  if (pl && !pl.sin) return { nombre: `${pl.nombre} (plan master actual, sin congelar)`, fecha: null, congelada: false, tareas: pl.tareas.map(t => ({ proyecto_id: t.proyecto_id, codigo: t.codigo, inicio: t.inicio, fin: t.fin, dias: Number(t.dias || 0), tipo: t.tipo, hito: !!t.hito, activa: t.activa !== false })) };
+  return { nombre: 'sin plan master', fecha: null, congelada: false, tareas: [] };
+}
+function vgCalcular() {
+  const R = VG.raw, ids = (DATA.proyectos || []).map(p => p.id);
+  const nodo = {}, porCod = {};
+  R.nodos.forEach(n => { nodo[n.id] = n; porCod[`${n.proyecto_id}|${n.codigo}`] = n; });
+  // costo unitario directo meta por partida: el del APU meta si existe, si no el de venta (igual que el presupuesto meta total)
+  const uMeta = {};
+  COMPONENTES.forEach(c => { const d = PRE.cache[c.id]; if (d && d.partidas) Object.keys(d.partidas).forEach(k => { const x = d.partidas[k]; if (x && x.pu_meta != null) uMeta[k] = Number(x.pu_meta); }); });
+  const u = (nid, pv) => uMeta[nid] != null ? uMeta[nid] : Number(pv || (nodo[nid] ? nodo[nid].precio_unitario : 0) || 0);
+  // factor de subtotal meta
+  let cdMeta = 0; R.nodos.filter(n => n.concepto === 'contrato').forEach(n => { cdMeta += Number(n.metrado || 0) * u(n.id, n.precio_unitario); });
+  const ggT = typeof ggTotal === 'function' ? ggTotal() : 0, util = (typeof GG !== 'undefined' && GG.cfg) ? Number(GG.cfg.utilidad_meta_pct || 0) : 0;
+  const ggPct = cdMeta > 0 ? ggT / cdMeta : 0, k = 1 + ggPct + util;
+  VG.fac = { cdMeta, ggT, ggPct, util, k, sinGG: !(ggT > 0) };
+  const S = {}; const bucket = (id) => S[id] || (S[id] = { pvV: {}, evV: {}, pvM: {}, evM: {}, ac: {}, acSim: false });
+  ids.forEach(id => bucket(id)); bucket('obra');
+  R.pvV.forEach(r => { if (!r.proyecto_id) return; const b = bucket(r.proyecto_id), m = vgYm(r.fecha_inicio); b.pvV[m] = (b.pvV[m] || 0) + Number(r.programado_parcial || 0); });
+  R.evV.filter(r => r.estado === 'aprobada').forEach(r => { const b = bucket(r.proyecto_id), m = vgYm(r.mes); b.evV[m] = (b.evV[m] || 0) + Number(r.monto_subtotal || 0); });
+  R.vp.forEach(r => { const v = r.valorizaciones; if (!v) return; const n = nodo[r.nodo_id], pid = n ? n.proyecto_id : null; if (!pid) return; const b = bucket(pid), m = vgYm(v.mes);
+    b.evM[m] = (b.evM[m] || 0) + Number(r.metrado || 0) * u(r.nodo_id, r.precio_unitario) * k; });
+  (R.ac || []).forEach(r => { const b = bucket(r.proyecto_id || 'obra'), m = vgYm(r.mes); b.ac[m] = (b.ac[m] || 0) + Number(r.monto || 0); if (r.todo_simulado) b.acSim = true; });
+  VG.S = S; VG.u = u; VG.nodo = nodo; VG.porCod = porCod; VG.uMeta = uMeta;
+}
+async function vgPlaneadoMeta() {   // reparte el costo directo meta de cada tarea de la línea base en los meses que cubre (días calendario) y aplica el factor
+  const b = await vgTareasBase(); VG.base = b;
+  const S = VG.S, k = VG.fac.k, her = {};
+  b.tareas.forEach(t => { if (t.tipo === 'partida' && !t.hito && t.activa && t.codigo) { const key = `${t.proyecto_id}|${t.codigo}`; (her[key] = her[key] || []).push(t); } });
+  Object.keys(S).forEach(id => { S[id].pvM = {}; });
+  let sinNodo = 0, total = 0;
+  Object.keys(her).forEach(key => {
+    const n = VG.porCod[key]; if (!n) { sinNodo++; return; }
+    const ts = her[key], sd = ts.reduce((s, t) => s + (t.dias || 1), 0) || 1, cd = Number(n.metrado || 0) * VG.u(n.id, n.precio_unitario);
+    ts.forEach(t => {
+      const share = cd * (t.dias || 1) / sd * k, a = plD(t.inicio), z = plD(t.fin), dT = Math.max(1, z - a + 1); total += share;
+      for (let d = a; d <= z; ) {   // por mes calendario
+        const f = new Date(d * 86400000), ym = `${f.getUTCFullYear()}-${String(f.getUTCMonth() + 1).padStart(2, '0')}`, finMes = Date.UTC(f.getUTCFullYear(), f.getUTCMonth() + 1, 0) / 86400000, hasta = Math.min(z, finMes), dd = hasta - d + 1;
+        const bk = S[n.proyecto_id] || (S[n.proyecto_id] = { pvV: {}, evV: {}, pvM: {}, evM: {}, ac: {}, acSim: false });
+        bk.pvM[ym] = (bk.pvM[ym] || 0) + share * dd / dT; d = hasta + 1;
+      }
+    });
+  });
+  VG.sinNodo = sinNodo; VG.totalPvM = total;
+}
+function vgSerie(campo) {   // suma de los frentes elegidos → { 'YYYY-MM': monto }
+  const ids = VG.frente === 'todos' ? Object.keys(VG.S) : [VG.frente], out = {};
+  ids.forEach(id => { const b = VG.S[id]; if (b) Object.entries(b[campo] || {}).forEach(([m, v]) => { out[m] = (out[m] || 0) + v; }); });
+  return out;
+}
+function vgMeses() {
+  const ks = new Set(); ['pvV', 'evV', 'pvM', 'evM', 'ac'].forEach(c => Object.keys(vgSerie(c)).forEach(m => ks.add(m)));
+  const a = [...ks].sort(); if (!a.length) return [];
+  const [y0, m0] = a[0].split('-').map(Number), [y1, m1] = a[a.length - 1].split('-').map(Number), out = [];
+  for (let y = y0, m = m0; y < y1 || (y === y1 && m <= m1); m++) { if (m > 12) { m = 1; y++; if (y > y1 || (y === y1 && m > m1)) break; } out.push(`${y}-${String(m).padStart(2, '0')}`); }
+  return out;
+}
+const vgM = (v) => { const a = Math.abs(v), s = v < 0 ? '−' : ''; return s + 'S/ ' + (a >= 1e6 ? (a / 1e6).toFixed(a >= 1e8 ? 1 : 2) + ' M' : a >= 1e3 ? (a / 1e3).toFixed(0) + ' k' : a.toFixed(0)); };
+const vgEst = (v, tipo) => v == null ? { c: 'na', t: 'Sin datos' }
+  : v >= 1 ? { c: 'ok', t: tipo === 'plazo' ? 'Al día o adelantado' : 'Bajo el costo meta' }
+  : v >= 0.9 ? { c: 'mid', t: tipo === 'plazo' ? 'Leve atraso' : 'Leve sobrecosto' }
+  : { c: 'bad', t: tipo === 'plazo' ? 'Atrasado' : 'Sobrecosto' };
+function vgSpline(P) {   // curva suave que no se pasa de los puntos (cúbica monótona)
+  const n = P.length; if (n < 3) return P.map((p, i) => `${i ? 'L' : 'M'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+  const dx = [], m = []; for (let i = 0; i < n - 1; i++) { dx[i] = P[i + 1].x - P[i].x || 1e-6; m[i] = (P[i + 1].y - P[i].y) / dx[i]; }
+  const t = [m[0]]; for (let i = 1; i < n - 1; i++) t[i] = m[i - 1] * m[i] <= 0 ? 0 : (m[i - 1] + m[i]) / 2; t[n - 1] = m[n - 2];
+  for (let i = 0; i < n - 1; i++) { if (m[i] === 0) { t[i] = 0; t[i + 1] = 0; continue; } const a = t[i] / m[i], b = t[i + 1] / m[i], s = a * a + b * b; if (s > 9) { const k = 3 / Math.sqrt(s); t[i] = k * a * m[i]; t[i + 1] = k * b * m[i]; } }
+  let d = `M${P[0].x.toFixed(1)},${P[0].y.toFixed(1)}`;
+  for (let i = 0; i < n - 1; i++) { const h = dx[i] / 3; d += ` C${(P[i].x + h).toFixed(1)},${(P[i].y + t[i] * h).toFixed(1)} ${(P[i + 1].x - h).toFixed(1)},${(P[i + 1].y - t[i + 1] * h).toFixed(1)} ${P[i + 1].x.toFixed(1)},${P[i + 1].y.toFixed(1)}`; }
+  return d;
+}
+const VG_IC = {
+  pv: '<svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16M7 15l4-4 3 3 5-6"/></svg>',
+  ev: '<svg viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>',
+  ac: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v8M9.5 10.2c0-1 1-1.7 2.5-1.7s2.5.7 2.5 1.7-1 1.5-2.5 1.8-2.5.7-2.5 1.8 1 1.7 2.5 1.7 2.5-.7 2.5-1.7"/></svg>',
+  spi: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2"/></svg>',
+  cpi: '<svg viewBox="0 0 24 24"><path d="M5 15a7 7 0 0 1 14 0M12 15l4-5"/></svg>',
+  eac: '<svg viewBox="0 0 24 24"><path d="M4 18c3-8 6-8 8-5s4 3 8-7"/><path d="M16 6h4v4"/></svg>',
+  mg: '<svg viewBox="0 0 24 24"><path d="M5 19 19 5M7.5 8.5a1.5 1.5 0 1 0 0-.01M16.5 17.5a1.5 1.5 0 1 0 0-.01"/></svg>'
+};
+function vgPintar() {
+  const box = $('#vgPanel'); if (!box || !VG.S) return;
+  const meta = VG.modo === 'meta', meses = vgMeses(), cPV = meta ? 'pvM' : 'pvV', cEV = meta ? 'evM' : 'evV';
+  const pv = vgSerie(cPV), ev = vgSerie(cEV), ac = vgSerie('ac');
+  const acum = (s) => { let t = 0; return meses.map(m => (t += s[m] || 0)); };
+  const PVa = acum(pv), EVa = acum(ev), ACa = acum(ac), n = meses.length;
+  const ultEV = meses.reduce((u, m, i) => (ev[m] > 0 ? i : u), -1), ultAC = meses.reduce((u, m, i) => (ac[m] > 0 ? i : u), -1);
+  if (!n) { box.innerHTML = '<div class="rg-msg">Sin datos para esta selección.</div>'; return; }
+  if (VG.mes == null || !meses.includes(VG.mes)) VG.mes = ultEV >= 0 ? meses[ultEV] : meses[n - 1];
+  const i0 = meses.indexOf(VG.mes), pva = PVa[i0] || 0, eva = EVa[i0] || 0, aca = ACa[i0] || 0, bac = PVa[n - 1] || 0;
+  const spi = pva > 0 ? eva / pva : null, cpi = aca > 0 ? eva / aca : null, sv = eva - pva, cv = eva - aca, eac = cpi ? bac / cpi : null;
+  const sim = !!(VG.raw.ac && VG.raw.ac.some(r => r.todo_simulado)), sinAC = !VG.raw.ac || !VG.raw.ac.length, f = VG.fac, base = VG.base || {};
+  const pc = (v) => bac > 0 ? Math.max(0, v / bac) : 0;
+  const sg = (v) => (v >= 0 ? '+' : '−') + vgM(Math.abs(v));
+  // ── barra de filtros ──
+  const frs = [['todos', 'Toda la obra']].concat(COMPONENTES.map(c => [(preProy(c.id) || {}).id, String(c.nombre).replace(/^Puente\s+/i, '')]));
+  const verSel = VG.vers.length ? `<div class="vg-g"><span class="vg-gl">Línea base meta</span><div class="vg-sel"><select id="vgVer" aria-label="Línea base meta" title="Versión guardada del plan master que se usa como línea base meta">${VG.vers.map(v => `<option value="${v.id}" ${v.id === VG.verSel ? 'selected' : ''}>${v.lb_numero != null ? 'LB' + v.lb_numero + ' · ' : ''}${String(v.creado_en).slice(0, 10)} · ${esc(v.nombre)}</option>`).join('')}</select></div></div>` : '';
+  const barra = `<div class="vg-bar">
+      <div class="vg-g"><span class="vg-gl">Base de análisis</span><div class="vg-seg" role="group" aria-label="Base de la curva">
+        <button type="button" class="${meta ? '' : 'on'}" data-vg-modo="venta" title="Ingreso: cronograma valorizado y valorizaciones a precio de venta">Venta<small>ingreso</small></button>
+        <button type="button" class="${meta ? 'on' : ''}" data-vg-modo="meta" title="Costo: línea base meta y valorizaciones al APU meta, con gastos generales meta">Meta<small>costo</small></button></div></div>
+      <div class="vg-g vg-g-fr"><span class="vg-gl">Frente</span><div class="vg-pills" role="group" aria-label="Frente">${frs.map(([id, t]) => `<button type="button" class="${VG.frente === id ? 'on' : ''}" data-vg-fr="${esc(id)}">${esc(t)}</button>`).join('')}</div></div>
+      ${meta ? verSel : ''}</div>`;
+  // ── tarjetas ──
+  const est = (v, tipo) => vgEst(v, tipo);
+  const k = (cls, ic, lab, val, sub, bar, chip) => `<article class="vgk ${cls}"><header><span class="vgk-ic">${VG_IC[ic]}</span><span class="vgk-l">${lab}</span></header><div class="vgk-v">${val}</div>${chip || ''}<div class="vgk-s">${sub}</div>${bar != null ? `<div class="vgk-bar" title="${(bar * 100).toFixed(1)} % del total planeado"><i style="width:${Math.min(100, bar * 100).toFixed(1)}%"></i></div>` : ''}</article>`;
+  const chipE = (e) => `<span class="vgk-ch ${e.c}">${e.t}</span>`;
+  const eS = est(spi, 'plazo'), eC = est(cpi, 'costo');
+  const tarjetas = [
+    k('pv', 'pv', 'Planeado (PV)', vgM(pva), `${vgS(pva)}<br><b>${(pc(pva) * 100).toFixed(1)} %</b> del total planeado`, pc(pva)),
+    k('ev', 'ev', meta ? 'Ganado (EV) · costo meta' : 'Ganado (EV) · venta', vgM(eva), `${vgS(eva)}<br><b>${(pc(eva) * 100).toFixed(1)} %</b> del total planeado`, pc(eva)),
+    k('ac', 'ac', 'Costo real (AC)', sinAC ? '—' : vgM(aca), sinAC ? 'sin datos de costo real' : `${vgS(aca)}${sim ? '<br><b>referencial</b> (simulado)' : ''}`, sinAC ? null : pc(aca)),
+    k('sp ' + eS.c, 'spi', 'SPI · Plazo', spi == null ? '—' : spi.toFixed(2), `Desviación <b>${sg(sv)}</b>`, null, chipE(eS)),
+    meta ? k('cp ' + eC.c, 'cpi', 'CPI · Costo', cpi == null ? '—' : cpi.toFixed(2), sinAC ? 'sin datos de costo real' : `Desviación <b>${sg(cv)}</b>`, null, chipE(eC))
+         : k('mg ' + (eva - aca >= 0 ? 'ok' : 'bad'), 'mg', 'Margen realizado', sinAC ? '—' : vgM(eva - aca), sinAC ? 'sin datos de costo real' : `<b>${eva > 0 ? ((eva - aca) / eva * 100).toFixed(1) : '0.0'} %</b> del ganado${sim ? '<br>referencial' : ''}`, null),
+    meta ? k('eac', 'eac', 'Proyección de costo (EAC)', eac ? vgM(eac) : '—', eac ? `Total planeado ${vgM(bac)}<br><b>${sg(bac - eac)}</b> contra el meta` : 'sin datos de costo real', null)
+         : k('eac', 'eac', 'Avance económico', (pc(eva) * 100).toFixed(1) + ' %', `${vgS(eva)}<br>de ${vgS(bac)}`, pc(eva))
+  ].join('');
+  // ── curva S (se dibuja al tamaño real del contenedor: sin escalas ni letras deformadas) ──
+  const cont = Math.max(300, Math.min(1120, box.clientWidth || 1000)), W = cont - 44, estrecho = W < 560, H = estrecho ? 250 : 300, padL = estrecho ? 46 : 58, padR = 22, padT = 36, padB = 34;
+  const ymax = Math.max(...PVa, ...EVa, ...ACa, 1) * 1.06, X = (i) => padL + (n > 1 ? i / (n - 1) : 0) * (W - padL - padR), Y = (v) => (H - padB) - v / ymax * (H - padB - padT);
+  const pts = (arr, hasta) => arr.slice(0, hasta + 1).map((v, i) => ({ x: X(i), y: Y(v) }));
+  const COL = { pv: '#9fb0ff', ev: '#ffa45e', ac: '#2dd4bf' };
+  let g = '';
+  for (let q = 0; q <= 4; q++) { const y = padT + (H - padT - padB) * (1 - q / 4); g += `<line x1="${padL}" y1="${y.toFixed(1)}" x2="${W - padR}" y2="${y.toFixed(1)}" class="vgc-grid"/><text x="${padL - 8}" y="${(y + 3.5).toFixed(1)}" class="vgc-ty" text-anchor="end">${vgFmtM(ymax * q / 4)}</text>`; }
+  const paso = n > 22 ? 3 : n > 13 || estrecho ? 2 : 1;
+  meses.forEach((m, i) => { if (i % paso === 0 || i === n - 1) { const anio = m.endsWith('-01') || i === 0; g += `<text x="${X(i).toFixed(1)}" y="${H - padB + 18}" class="vgc-tx" text-anchor="middle">${vgMesTxt(m)}</text>`; if (anio) g += `<line x1="${X(i).toFixed(1)}" y1="${H - padB}" x2="${X(i).toFixed(1)}" y2="${H - padB + 5}" class="vgc-tick"/>`; } });
+  g += `<line x1="${padL}" y1="${H - padB}" x2="${W - padR}" y2="${H - padB}" class="vgc-axis"/>`;
+  const yb = Y(bac); g += `<line x1="${padL}" y1="${yb.toFixed(1)}" x2="${W - padR}" y2="${yb.toFixed(1)}" class="vgc-bac"/><text x="${padL + 8}" y="${(yb - 7).toFixed(1)}" class="vgc-tb" text-anchor="start">Total planeado ${vgM(bac)}</text>`;
+  const defs = `<defs>${['pv', 'ev', 'ac'].map(s => `<linearGradient id="vgA${s}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${COL[s]}" stop-opacity="${s === 'ev' ? .42 : s === 'pv' ? .2 : .16}"/><stop offset="100%" stop-color="${COL[s]}" stop-opacity="0"/></linearGradient>`).join('')}</defs>`;
+  const area = (P, id) => P.length < 2 ? '' : `<path d="M${P[0].x.toFixed(1)},${H - padB} L${P[0].x.toFixed(1)},${P[0].y.toFixed(1)} ${vgSpline(P).replace(/^M[^C L]*/, '')} L${P[P.length - 1].x.toFixed(1)},${H - padB} Z" fill="url(#${id})"/>`;
+  const linea = (P, c, w2, dash) => P.length < 2 ? '' : `<path d="${vgSpline(P)}" fill="none" stroke="${c}" stroke-width="9" opacity=".13" stroke-linecap="round"/><path d="${vgSpline(P)}" fill="none" stroke="${c}" stroke-width="${w2}" stroke-linecap="round" ${dash ? `stroke-dasharray="${dash}"` : ''}/>`;
+  const Pp = pts(PVa, n - 1), Pe = ultEV >= 0 ? pts(EVa, ultEV) : [], Pa = ultAC >= 0 ? pts(ACa, ultAC) : [];
+  let lin = '';
+  if (VG.lineas.pv) lin += area(Pp, 'vgApv') + linea(Pp, COL.pv, 2.4);
+  if (VG.lineas.ac && Pa.length) lin += area(Pa, 'vgAac') + linea(Pa, COL.ac, 2.4, '6 5');
+  if (VG.lineas.ev && Pe.length) lin += area(Pe, 'vgAev') + linea(Pe, COL.ev, 3.4);
+  const xc = X(i0), dot = (v, c) => `<circle cx="${xc.toFixed(1)}" cy="${Y(v).toFixed(1)}" r="9" fill="${c}" opacity=".22"/><circle cx="${xc.toFixed(1)}" cy="${Y(v).toFixed(1)}" r="4.6" fill="${c}" stroke="#0b1038" stroke-width="2"/>`;
+  const badge = `<g transform="translate(${Math.min(Math.max(xc, padL + 44), W - padR - 44).toFixed(1)},${padT - 20})"><rect x="-44" y="-11" width="88" height="22" rx="11" class="vgc-badge"/><text x="0" y="4" class="vgc-badget" text-anchor="middle">Corte ${vgMesTxt(VG.mes)}</text></g>`;
+  let corte = `<line x1="${xc.toFixed(1)}" y1="${padT - 8}" x2="${xc.toFixed(1)}" y2="${H - padB}" class="vgc-cut"/>${badge}`;
+  if (VG.lineas.pv) corte += dot(pva, COL.pv); if (VG.lineas.ac && i0 <= ultAC) corte += dot(aca, COL.ac); if (VG.lineas.ev && i0 <= ultEV) corte += dot(eva, COL.ev);
+  const guia = `<line class="vgc-guia" x1="0" y1="${padT - 8}" x2="0" y2="${H - padB}" opacity="0"/>`;
+  const svg = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" class="vg-svg" role="img" aria-label="Curva S acumulada: planeado, ganado y costo real">${defs}${g}${lin}${corte}${guia}</svg>`;
+  const leg = (kk, tx, v, c, disp) => `<button type="button" class="vg-lg ${VG.lineas[kk] ? 'on' : ''}" style="--c:${c}" data-vg-lin="${kk}" aria-pressed="${VG.lineas[kk]}" title="Mostrar u ocultar"><i></i><span>${tx}</span><b>${disp ? vgM(v) : '—'}</b></button>`;
+  const hero = `<section class="vg-hero"><header class="vg-hero-h"><div class="vg-hero-t"><small>Curva S acumulada · base ${meta ? 'meta (costo)' : 'venta (ingreso)'}</small><h3>${frs.find(x => x[0] === VG.frente)[1]} · valor ganado</h3></div>
+      <div class="vg-legs">${leg('pv', 'Planeado', pva, COL.pv, true)}${leg('ev', 'Ganado', eva, COL.ev, i0 <= ultEV)}${leg('ac', sim ? 'Costo real*' : 'Costo real', aca, COL.ac, i0 <= ultAC && !sinAC)}</div></header>
+    <div class="vg-plot" id="vgPlot">${svg}<div class="vg-tip" hidden></div></div>
+    <footer class="vg-hero-f"><span>Corte <b>${vgMesTxt(VG.mes)}</b> · SPI <b class="${eS.c}">${spi == null ? '—' : spi.toFixed(2)}</b>${meta ? ` · CPI <b class="${eC.c}">${cpi == null ? '—' : cpi.toFixed(2)}</b>` : ''}</span><span class="vg-hero-n">${sim ? '* Costo real referencial (simulado) · ' : ''}Toca un mes para mover el corte</span></footer></section>`;
+  // ── detalle mensual ──
+  const pill = (v, tipo) => { if (v == null) return '<span class="vg-pl na">—</span>'; const e = vgEst(v, tipo); return `<span class="vg-pl ${e.c}">${v.toFixed(2)}</span>`; };
+  const filas = meses.map((m, i) => { const p = PVa[i], e = EVa[i], a = ACa[i], act = i === i0, conE = i <= ultEV, conA = i <= ultAC;
+    return `<tr class="${act ? 'on' : ''}" data-vg-mes="${m}"><th scope="row">${vgMesTxt(m)}${act ? '<em>corte</em>' : ''}</th><td>${preN(pv[m] || 0, 0)}</td><td>${ev[m] ? preN(ev[m], 0) : '—'}</td><td>${ac[m] ? preN(ac[m], 0) : '—'}</td>
+      <td>${preN(p, 0)}</td><td>${conE ? preN(e, 0) : '—'}</td><td>${conA ? preN(a, 0) : '—'}</td><td>${conE && p > 0 ? pill(e / p, 'plazo') : '<span class="vg-pl na">—</span>'}</td><td>${meta && conE && conA && a > 0 ? pill(e / a, 'costo') : '<span class="vg-pl na">—</span>'}</td></tr>`; }).join('');
+  const tabla = `<section class="vg-tcard"><header><h3>Detalle mensual</h3><span>Toca una fila para mover el corte · S/ sin IGV</span></header>
+    <div class="vg-twrap"><table class="vg-t"><thead><tr><th rowspan="2" scope="col">Mes</th><th colspan="3" scope="colgroup">Del mes</th><th colspan="3" scope="colgroup">Acumulado</th><th colspan="2" scope="colgroup">Índices</th></tr>
+      <tr><th>Planeado</th><th>Ganado</th><th>Costo real</th><th>Planeado</th><th>Ganado</th><th>Costo real</th><th>SPI</th><th>${meta ? 'CPI' : '—'}</th></tr></thead><tbody>${filas}</tbody></table></div></section>`;
+  const nota = meta
+    ? `<b>Planeado:</b> metrado de la línea base meta «${esc(base.nombre || '—')}»${base.congelada ? '' : ' <b class="bad">(sin congelar: guarda una versión en Plan maestro)</b>'} × costo unitario del APU meta × factor <b>${f.k.toFixed(4)}</b> (1 + gastos generales meta ${preP(f.ggPct)} + utilidad meta ${preP(f.util)}). <b>Ganado:</b> metrado de la valorización aprobada × el mismo costo unitario y factor. <b>Costo real:</b> costo_real_mensual. ${f.sinGG ? '<b class="bad">Aún no hay gastos generales meta cargados: el subtotal meta es solo costo directo.</b>' : ''}${VG.sinNodo ? ` ${VG.sinNodo} tareas de la línea base no se encontraron entre las partidas actuales.` : ''}`
+    : '<b>Planeado:</b> cronograma valorizado vigente (subtotal). <b>Ganado:</b> valorizaciones aprobadas (subtotal): el ingreso que reconoce la Entidad. <b>Margen:</b> ganado menos costo real.';
+  box.innerHTML = `<div class="vg-wrap">${barra}<div class="vg-cards">${tarjetas}</div>${hero}${tabla}<details class="vg-how"><summary>Cómo se calcula</summary><p>${nota}</p></details></div>`;
+  // ── interacción de la curva: guía + globo al pasar; clic fija el corte ──
+  const plot = box.querySelector('#vgPlot'), tip = plot.querySelector('.vg-tip'), guiaEl = plot.querySelector('.vgc-guia');
+  const idxDe = (ev2) => { const r = plot.getBoundingClientRect(); const x = (ev2.clientX - r.left) - padL, span = W - padL - padR; return Math.max(0, Math.min(n - 1, n > 1 ? Math.round(x / span * (n - 1)) : 0)); };
+  plot.onmousemove = (ev2) => {
+    const i = idxDe(ev2), x = X(i), m = meses[i], r = plot.getBoundingClientRect();
+    guiaEl.setAttribute('x1', x.toFixed(1)); guiaEl.setAttribute('x2', x.toFixed(1)); guiaEl.setAttribute('opacity', '1');
+    const row = (c, t, v) => `<div><i style="background:${c}"></i><span>${t}</span><b>${v}</b></div>`;
+    tip.innerHTML = `<strong>${vgMesTxt(m)}</strong>${row(COL.pv, 'Planeado', vgM(PVa[i]))}${i <= ultEV ? row(COL.ev, 'Ganado', vgM(EVa[i])) : ''}${i <= ultAC ? row(COL.ac, 'Costo real', vgM(ACa[i])) : ''}${i <= ultEV && PVa[i] > 0 ? `<div class="vg-tip-i"><span>SPI</span><b>${(EVa[i] / PVa[i]).toFixed(2)}</b>${meta && i <= ultAC && ACa[i] > 0 ? `<span>CPI</span><b>${(EVa[i] / ACa[i]).toFixed(2)}</b>` : ''}</div>` : ''}`;
+    tip.hidden = false; const tw = tip.offsetWidth, left = Math.min(Math.max(x - tw / 2, 4), r.width - tw - 4); tip.style.left = left + 'px';
+  };
+  plot.onmouseleave = () => { tip.hidden = true; guiaEl.setAttribute('opacity', '0'); };
+  plot.onclick = (ev2) => { VG.mes = meses[idxDe(ev2)]; vgPintar(); };
+}
+{ let t; window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(() => { if (VG.S && document.documentElement.dataset.pane === 'valorganado' && !VG.cargando) vgPintar(); }, 180); }); }
+document.addEventListener('click', async (e) => {
+  const m = e.target.closest('[data-vg-modo]'); if (m) { VG.modo = m.dataset.vgModo; if (VG.modo === 'meta' && !VG.base) { await vgPlaneadoMeta(); } vgPintar(); return; }
+  const fr = e.target.closest('[data-vg-fr]'); if (fr) { VG.frente = fr.dataset.vgFr; vgPintar(); return; }
+  const l = e.target.closest('[data-vg-lin]'); if (l) { VG.lineas[l.dataset.vgLin] = !VG.lineas[l.dataset.vgLin]; vgPintar(); return; }
+  const mes = e.target.closest('tr[data-vg-mes]'); if (mes && document.querySelector('#vgPanel') && document.querySelector('#vgPanel').contains(mes)) { VG.mes = mes.dataset.vgMes; vgPintar(); }
+});
+document.addEventListener('change', async (e) => {
+  if (e.target.id === 'vgVer') { VG.verSel = e.target.value; await vgPlaneadoMeta(); vgPintar(); }
 });
 
 // ═══ ADICIONALES Y DEDUCTIVOS: lo que cambió en cada línea base (calculado de las partidas) + el registro legal numerado (tabla prestaciones) ═══
