@@ -1933,6 +1933,17 @@ td.c .icon-btn+.icon-btn{margin-left:6px;}
 .ctv-d{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;min-width:0;} .ctv-d .lb-sub{flex-basis:100%;} .ctv-doc{font-size:12px;color:var(--mut);} .ctv-ch{flex-basis:100%;display:flex;flex-wrap:wrap;gap:4px 12px;} .ctv-ch:empty{display:none;}
 .ctv-rec,.ctv-lim{font-size:11px;color:var(--mut);font-weight:600;} .ctv-lim.cerca{color:#b45309;} .ctv-lim.venc{color:#b91c1c;font-weight:800;}
 .ctv-ap{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;border:1px solid var(--line2);border-radius:10px;padding:8px 12px;margin:0 0 10px;font-size:12.5px;background:var(--card);color:var(--tx2);} .ctv-ap.go{border-color:#f59e0b;background:#f59e0b14;} .ctv-ap.ok{border-color:#10b98166;} .ctv-ap-t{flex-basis:100%;color:var(--tx);} .ctv-ap .btn-sec{margin-left:auto;}
+.gg-row{cursor:pointer;} .gg-row:hover>td,.gg-row:focus-visible>td{background:var(--input);} .gg-row:focus-visible{outline:2px solid var(--blue);outline-offset:-2px;} .gg-row:hover .ctv-tg{color:var(--blue);}
+.gg-tb td,.gg-tb th{text-align:center;} .gg-tb td.l,.gg-tb th.l{text-align:left;} .gg-tot td{border-top:2px solid var(--line2);background:var(--input);}
+.gg-fac{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center;margin:10px 2px 0;font-size:12.5px;color:var(--tx2);} .gg-fac input{width:70px;padding:3px 6px;border:1px solid var(--line2);border-radius:7px;background:var(--input);color:var(--tx);font:inherit;text-align:right;}
+#ggForm:not([hidden]),#ggCarga:not([hidden]){max-width:none;position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(1100px,calc(100vw - 20px));max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
+#ggCarga:not([hidden]){width:min(720px,calc(100vw - 20px));}
+.gg-tt{text-align:right;min-width:150px;} .gg-tt small{display:block;font-size:10px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--mut);} .gg-tt b{font-size:18px;color:var(--tx);} .gg-tt em{display:block;font-style:normal;font-size:11px;color:var(--mut);}
+.gg-sc{max-height:calc(100dvh - 250px);overflow:auto;} .gg-ed td,.gg-ed th{padding:4px 6px;} .gg-ed th{position:sticky;top:0;z-index:1;background:var(--card);}
+.gg-in{width:100%;min-width:0;padding:5px 7px;border:1px solid transparent;border-radius:7px;background:transparent;color:var(--tx);font:inherit;font-size:12.5px;} .gg-in:hover{border-color:var(--line2);} .gg-in:focus{border-color:var(--blue);background:var(--input);outline:0;}
+.gg-d{min-width:260px;} .gg-u{width:58px;text-align:center;} .gg-n{width:92px;text-align:right;} .gg-v{width:118px;text-align:right;font-weight:700;} .gg-cod{font-size:11px;color:var(--mut);white-space:nowrap;}
+.gg-cap td{background:var(--input);border-top:2px solid var(--line2);} .gg-sub td{font-size:11.5px;font-weight:700;color:var(--mut);} .gg-base .gg-in{color:var(--mut);} .gg-base td{opacity:.8;}
+.gg-nuevo{display:flex;gap:8px;margin:10px 0 4px;} .gg-nuevo input{flex:1;min-width:0;}
 .ctv-pend{display:inline-block;font-size:10.5px;font-weight:800;padding:2px 9px;border-radius:999px;background:#f59e0b26;color:var(--rg-am,#a85a08);margin-left:4px;}
 .ctv-ac{display:flex;gap:6px;} .ctv-ac .icon-btn{width:34px;height:34px;padding:0;border-radius:8px;font-size:0;} .ctv-ac .icon-btn svg{width:18px;height:18px;} .ctv-ac .icon-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--input);} .ctv-ac .icon-btn[aria-label^="Eliminar"]:hover{border-color:var(--red);color:var(--red);}
 @media (max-width:560px){.ctv-it{grid-template-columns:1fr auto;} .ctv-f{grid-column:1 / span 2;} .ctv-sub td{padding-left:14px;}}
@@ -7323,6 +7334,203 @@ function preFrentesHTML(d) {
   }).join('');
   return `<div class="vl-card pre-frs"><h3>Presupuesto meta por frente</h3><div class="vl-tw"><table class="vl-tb"><thead><tr><th class="l">Frente</th><th>Meta</th><th>Venta S/</th><th>Meta S/</th><th>Margen S/</th><th>Margen %</th><th></th></tr></thead><tbody>${filas}</tbody></table></div></div>`;
 }
+// ═══ GASTOS GENERALES META: copia del desglose del expediente (Excel) que se edita libremente; el % sale del total de la obra ═══
+// grupo (fijo | variable) › capítulo › subcapítulo › concepto (cantidad × meses × tarifa = valor). Subtotal meta = costo directo meta × (1 + GG meta % + utilidad meta %).
+const GG = { cfg: null, items: [], cargado: false, sinSql: false, prev: null };
+const ggNorm = (s) => String(s == null ? '' : s).normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/\s+/g, ' ').trim().toLowerCase();
+const ggNum = (v) => { if (typeof v === 'number') return isFinite(v) ? v : null; if (v == null || v === '') return null; const n = parseFloat(String(v).replace(/[^0-9.\-]/g, '')); return isFinite(n) ? n : null; };
+const ggR2 = (v) => Math.round(Number(v || 0) * 100) / 100;
+const ggGrupoNom = { fijo: 'Gastos fijos', variable: 'Gastos variables' };
+// Reconoce la estructura de un desglose de gastos generales (hojas «fijos» y «variables» con título, descripción, unidad, cantidad, meses, tarifa y valor).
+// hojas = [{ nombre, filas: [[celda…]…] }]. Los totales del propio archivo se usan para comprobar que no se pierde ni se duplica nada.
+function ggDetectar(hojas) {
+  const out = { items: [], avisos: [], plazo: null, cd: null, totales: { fijo: null, variable: null }, hojas: [] };
+  const N = ggNorm;
+  hojas.forEach(h => {
+    const filas = h.filas || [], nom = N(h.nombre);
+    let grupo = /fijo/.test(nom) ? 'fijo' : /variable/.test(nom) ? 'variable' : null;
+    for (let i = 0; i < Math.min(6, filas.length) && !grupo; i++) { const t = N((filas[i] || []).join(' ')); if (/gastos generales fijos/.test(t)) grupo = 'fijo'; else if (/gastos generales variables/.test(t)) grupo = 'variable'; }
+    if (!grupo) return;
+    let hi = -1, col = {};
+    for (let i = 0; i < Math.min(30, filas.length); i++) {
+      const c = {}; (filas[i] || []).forEach((v, j) => {
+        const n = N(v); if (!n) return;
+        if (/^descripcion/.test(n)) c.desc = j; else if (/^(item|partida|codigo)$/.test(n)) c.item = j;
+        else if (/^(u|und|unid|unidad)\b/.test(n)) c.und = j; else if (/^cantidad/.test(n)) c.cant = j; else if (/^(meses|mes|duracion)/.test(n)) c.mes = j;
+        else if (/^(tarifa|precio|p\.?u)/.test(n)) c.tar = j; else if (/^(valor total|parcial|total|importe|monto)/.test(n)) c.val = j;
+      });
+      if (c.desc != null && c.val != null) { hi = i; col = c; break; }
+    }
+    if (hi < 0) { out.avisos.push(`Hoja «${h.nombre}»: no encontré la fila de títulos (descripción y valor).`); return; }
+    for (let i = 0; i < hi; i++) { const r = filas[i] || []; r.forEach((v, j) => { const n = N(v); if (/duracion de la obra/.test(n)) { const x = r.slice(j + 1).map(ggNum).find(y => y != null); if (x != null && out.plazo == null) out.plazo = x; } else if (/^costo directo/.test(n)) { const x = r.slice(j + 1).map(ggNum).find(y => y != null); if (x != null && out.cd == null) out.cd = x; } }); }
+    const caps = []; let cur = null, sub = '';
+    const nuevoCap = (cod, nombre) => { cur = { nom: (cod ? cod + ' ' : '') + nombre, items: [], total: null, marca: -1 }; caps.push(cur); sub = ''; };
+    for (let i = hi + 1; i < filas.length; i++) {
+      const r = filas[i] || [], a = r[col.item != null ? col.item : 0], b = r[col.desc];
+      const tA = a == null ? '' : String(a).trim(), tB = b == null ? '' : String(b).trim();
+      let cod = '', etq = '';
+      const m = /^(\d+(?:\s?\.\s?\d+)*\.?)\s*(.*)$/.exec(tA);
+      if (m) { cod = m[1].replace(/\s/g, ''); etq = (tB || m[2] || '').trim(); } else etq = (tB || tA).trim();
+      const val = ggNum(r[col.val]), cant = col.cant != null ? ggNum(r[col.cant]) : null, mes = col.mes != null ? ggNum(r[col.mes]) : null, tar = col.tar != null ? ggNum(r[col.tar]) : null;
+      const und = col.und != null && r[col.und] != null ? String(r[col.und]).trim() : '', n = N(etq);
+      if (!etq && val == null) continue;
+      if (!etq) { if (cur && cur.items.length && cur.marca < 0) cur.marca = cur.items.length; continue; }   // suma sin etiqueta: cierra un bloque base
+      if (/^(sub\s*-?\s*total|monto total|total)\b/.test(n)) {
+        if (/gastos generales/.test(n)) out.totales[grupo] = val;
+        else if (cur && !/^sub/.test(n)) { cur.total = val; if (/^total$/.test(n) && cur.marca < 0 && cur.items.length) cur.marca = cur.items.length; }
+        continue;
+      }
+      if (val == null && cant == null && tar == null) {   // título de capítulo o subcapítulo
+        if (/^[(*]/.test(etq)) continue;
+        if (!cod || /^\d+\.00\.00$/.test(cod) || /^\d+$/.test(cod)) nuevoCap(cod, etq); else sub = (cod ? cod + ' ' : '') + etq;
+        continue;
+      }
+      if (!cur) nuevoCap('', 'Sin capítulo');
+      const prod = cant != null && tar != null ? cant * (mes != null ? mes : 1) * tar : null, valor = val != null ? val : prod;
+      if (valor == null) continue;
+      cur.items.push({ grupo, capitulo: cur.nom, subcapitulo: sub, codigo: cod, descripcion: etq, unidad: und, cantidad: cant, meses: mes, tarifa: tar, valor: ggR2(valor), cuenta: true });
+    }
+    let n = 0;
+    caps.forEach(c => {
+      const suma = c.items.reduce((s, x) => s + x.valor, 0);
+      if (c.total != null && Math.abs(suma - c.total) > 0.5) {
+        if (c.marca > 0 && Math.abs(c.items.slice(c.marca).reduce((s, x) => s + x.valor, 0) - c.total) <= 0.5) c.items.slice(0, c.marca).forEach(x => { x.cuenta = false; });   // base de cálculo: solo se asigna una parte
+        else out.avisos.push(`«${c.nom}»: la suma de sus conceptos (${suma.toFixed(2)}) no coincide con el total del archivo (${Number(c.total).toFixed(2)}). Revísalo en el formulario.`);
+      }
+      n += c.items.length; out.items.push(...c.items);
+    });
+    out.hojas.push({ nombre: h.nombre, grupo, conceptos: n });
+  });
+  ['fijo', 'variable'].forEach(g => {
+    const s = out.items.filter(x => x.grupo === g && x.cuenta).reduce((t, x) => t + x.valor, 0);
+    if (out.totales[g] != null && Math.abs(s - out.totales[g]) > 1) out.avisos.push(`${ggGrupoNom[g]}: los conceptos suman ${s.toFixed(2)} y el archivo dice ${Number(out.totales[g]).toFixed(2)}.`);
+  });
+  return out;
+}
+async function ggCargar() {
+  if (typeof OBRA === 'undefined' || !OBRA || !OBRA.id) return;
+  const [cfg, items] = await Promise.all([get(`/gg_meta_config?obra_id=eq.${OBRA.id}&select=*`).catch(() => null), get(`/gg_meta_items?obra_id=eq.${OBRA.id}&select=*&order=orden`).catch(() => null)]);
+  GG.sinSql = cfg === null || items === null; GG.cfg = (cfg && cfg[0]) || null; GG.items = items || []; GG.cargado = true;
+}
+const ggTotal = (g) => GG.items.filter(x => (!g || x.grupo === g) && x.cuenta).reduce((s, x) => s + Number(x.valor || 0), 0);
+const ggExped = (g) => GG.items.filter(x => (!g || x.grupo === g) && x.cuenta && x.valor_expediente != null).reduce((s, x) => s + Number(x.valor_expediente || 0), 0);
+function ggCardHTML(cdMeta, adm) {
+  const util = GG.cfg ? Number(GG.cfg.utilidad_meta_pct || 0) : 0, tF = ggTotal('fijo'), tV = ggTotal('variable'), tot = tF + tV, pct = cdMeta > 0 ? tot / cdMeta : 0, factor = 1 + pct + util;
+  const f = (v) => preN(v, 2), pc = (v) => (v * 100).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' %';
+  const fila = (g) => { const nI = GG.items.filter(x => x.grupo === g).length, m = ggTotal(g), e = ggExped(g), d = m - e;
+    return `<tr class="gg-row" data-gg-grupo="${g}" tabindex="0" title="Abrir el detalle y editar los conceptos"><td class="l"><span class="ctv-tg" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span><b>${ggGrupoNom[g]}</b></td><td>${GG.items.length ? f(e) : '—'}</td><td><b>${GG.items.length ? f(m) : '—'}</b></td><td class="${Math.abs(d) < 0.005 ? '' : d > 0 ? 'pre-neg' : 'pre-pos'}">${GG.items.length ? (Math.abs(d) < 0.005 ? '—' : (d > 0 ? '+' : '') + f(d)) : '—'}</td><td>${cdMeta > 0 && GG.items.length ? pc(m / cdMeta) : '—'}</td><td>${nI}</td></tr>`; };
+  const vacio = !GG.items.length;
+  return `<div class="vl-card gg-card"><div class="lb-cab"><div><h3 style="margin:0 0 3px">Gastos generales meta</h3><p class="hint" style="margin:0">Copia del desglose del expediente que editas libremente: no se recalcula cuando cambia el contrato. Subtotal meta = costo directo meta × (1 + GG meta % + utilidad meta %). Un solo desglose para toda la obra.</p></div>
+      ${adm ? `<button type="button" class="btn-sec ${vacio ? 'pri' : ''}" data-gg-excel title="Lee el Excel del expediente (hojas de gastos fijos y variables) y lo deja como copia inicial editable">📥 ${vacio ? 'Cargar desde Excel' : 'Recargar desde Excel'}</button><input type="file" id="ggFile" accept=".xlsx" hidden>` : ''}</div>
+    ${GG.sinSql ? '<p class="plz-nota al">Falta correr <code>gg_meta.sql</code> en la base para guardar los gastos generales meta.</p>' : ''}
+    ${vacio ? '<p class="hint" style="margin:6px 0 0">Todavía no hay desglose cargado. Usa «Cargar desde Excel» con el archivo de gastos generales del expediente (por ejemplo GG_OB04.xlsx).</p>'
+      : `<div class="vl-tw"><table class="vl-tb gg-tb"><thead><tr><th class="l">Grupo</th><th>Expediente S/</th><th>Meta S/</th><th>Diferencia</th><th>% del costo directo meta</th><th>Conceptos</th></tr></thead><tbody>${fila('fijo')}${fila('variable')}
+        <tr class="gg-tot"><td class="l"><b>Total gastos generales</b></td><td>${f(ggExped())}</td><td><b>${f(tot)}</b></td><td>${Math.abs(tot - ggExped()) < 0.005 ? '—' : (tot - ggExped() > 0 ? '+' : '') + f(tot - ggExped())}</td><td><b>${cdMeta > 0 ? pc(pct) : '—'}</b></td><td>${GG.items.length}</td></tr></tbody></table></div>
+      <div class="gg-fac"><span>Costo directo meta <b>S/ ${f(cdMeta)}</b></span><span>× (1 + GG ${pc(pct)} + utilidad ${adm ? `<input type="number" id="ggUtil" min="0" max="100" step="0.01" value="${(util * 100).toFixed(2).replace(/\.?0+$/, '')}" aria-label="Utilidad meta %" title="Utilidad meta en %: 0 = el subtotal meta es costo">` : (util * 100).toFixed(2)} %)</span><span>= factor <b>${factor.toFixed(4)}</b></span><span>Subtotal meta <b>S/ ${f(cdMeta * factor)}</b></span></div>
+      ${GG.cfg && GG.cfg.archivo ? `<p class="hint" style="margin:6px 0 0">Copia inicial: ${esc(GG.cfg.archivo)}${GG.cfg.plazo_meses ? ' · ' + GG.cfg.plazo_meses + ' meses' : ''}</p>` : ''}`}</div>`;
+}
+function ggEditarAbrir(grupo, foco) {
+  let m = document.getElementById('ggForm');
+  if (!m) { m = document.createElement('form'); m.id = 'ggForm'; m.className = 'pform la-form'; m.hidden = true; document.body.appendChild(m); }
+  const adm = !!AUTH.admin, dis = adm ? '' : ' disabled';
+  const dibujar = () => {
+    const its = GG.items.filter(x => x.grupo === grupo), caps = [...new Set(its.map(x => x.capitulo))];
+    const f = (v) => preN(v, 2), val = (v) => v == null ? '' : v;
+    const filaHTML = (x) => `<tr data-id="${x.id}" class="${x.cuenta ? '' : 'gg-base'}"><td class="l gg-cod">${esc(x.codigo || '')}</td><td class="l"><input class="gg-in gg-d" data-k="descripcion" type="text" maxlength="160" value="${esc(x.descripcion)}"${dis}></td>
+        <td><input class="gg-in gg-u" data-k="unidad" type="text" maxlength="12" value="${esc(x.unidad || '')}"${dis}></td><td><input class="gg-in gg-n" data-k="cantidad" type="number" step="any" value="${val(x.cantidad)}"${dis}></td>
+        <td><input class="gg-in gg-n" data-k="meses" type="number" step="any" value="${val(x.meses)}"${dis}></td><td><input class="gg-in gg-n" data-k="tarifa" type="number" step="any" value="${val(x.tarifa)}"${dis}></td>
+        <td><input class="gg-in gg-v" data-k="valor" type="number" step="0.01" min="0" value="${val(x.valor)}"${dis}></td>
+        <td class="c"><input type="checkbox" data-k="cuenta" ${x.cuenta ? 'checked' : ''} title="Suma al total (desmárcalo si es solo la base de un cálculo)"${dis}></td>
+        <td class="c">${adm ? `<button type="button" class="icon-btn" data-gg-del="${x.id}" title="Eliminar el concepto" aria-label="Eliminar">${'<svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>'}</button>` : ''}</td></tr>`;
+    const bloque = (cap) => {
+      const del = its.filter(x => x.capitulo === cap), subs = [...new Set(del.map(x => x.subcapitulo))], st = del.filter(x => x.cuenta).reduce((s, x) => s + Number(x.valor || 0), 0);
+      return `<tr class="gg-cap"><td colspan="6" class="l"><b>${esc(cap || 'Sin capítulo')}</b></td><td><b>${f(st)}</b></td><td colspan="2" class="c">${adm ? `<button type="button" class="btn-sec" data-gg-add="${esc(cap)}" title="Agregar un concepto a este capítulo">＋ Concepto</button>` : ''}</td></tr>`
+        + subs.map(sb => (sb ? `<tr class="gg-sub"><td colspan="9" class="l">${esc(sb)}</td></tr>` : '') + del.filter(x => x.subcapitulo === sb).map(filaHTML).join('')).join('');
+    };
+    const tot = ggTotal(grupo), exp = ggExped(grupo);
+    m.innerHTML = `<div class="lb-cab"><div><h3 style="margin:0 0 3px;font-size:14px">${ggGrupoNom[grupo]} · meta</h3><p class="hint" style="margin:0">Edita cantidad, meses o tarifa y el valor se recalcula; también puedes escribir el valor directo. Lo que cambies aquí es el meta: el expediente queda como referencia.</p></div>
+      <div class="gg-tt"><small>Total meta</small><b>S/ ${f(tot)}</b><em>expediente S/ ${f(exp)}</em></div></div>
+      <div class="vl-tw gg-sc"><table class="vl-tb gg-ed"><thead><tr><th class="l">Cód.</th><th class="l">Descripción</th><th>Und</th><th>Cantidad</th><th>Meses</th><th>Tarifa S/</th><th>Valor S/</th><th title="Suma al total">Suma</th><th></th></tr></thead><tbody>${caps.map(bloque).join('') || '<tr><td colspan="9" class="l">Sin conceptos en este grupo.</td></tr>'}</tbody></table></div>
+      ${adm ? `<div class="gg-nuevo"><input id="ggNuevoCap" type="text" maxlength="80" placeholder="Nuevo capítulo (ej. 13.00.00 Capacitación)"><button type="button" class="btn-sec" data-gg-addcap>＋ Capítulo</button></div>` : ''}
+      <div class="sug-acc"><button class="btn" type="button" id="ggCerrar">Cerrar</button></div>`;
+  };
+  const fondo = document.getElementById('lbFondo') || (() => { const x = document.createElement('div'); x.id = 'lbFondo'; x.hidden = true; document.body.appendChild(x); return x; })();
+  const cerrar = () => { m.hidden = true; fondo.hidden = true; document.documentElement.classList.remove('la-modal'); if (typeof prePintar === 'function') try { prePintar(); } catch (e) {} };
+  const recargar = async () => { const y = (m.querySelector('.gg-sc') || {}).scrollTop || 0; await ggCargar(); dibujar(); const sc = m.querySelector('.gg-sc'); if (sc) sc.scrollTop = y; };
+  dibujar(); m.hidden = false; fondo.hidden = false; document.documentElement.classList.add('la-modal'); fondo.onclick = cerrar;
+  m.onclick = async (ev) => {
+    if (ev.target.closest('#ggCerrar')) { cerrar(); return; }
+    const del = ev.target.closest('[data-gg-del]');
+    if (del) { const x = GG.items.find(i => i.id === del.dataset.ggDel); if (!x || !(await confirmar(`Eliminar el concepto «${x.descripcion}» del meta. El expediente no cambia.`))) return;
+      try { await preRpc('gg_meta_item_eliminar', { p_id: x.id }); await recargar(); } catch (er) { toast(`No se pudo eliminar: ${esc(er.message)}`, false, 'gg'); } return; }
+    const add = ev.target.closest('[data-gg-add]');
+    if (add) { const cap = add.dataset.ggAdd; try { await preRpc('gg_meta_item_guardar', { p_id: null, p_obra: OBRA.id, p_grupo: grupo, p_capitulo: cap, p_subcapitulo: null, p_codigo: null, p_descripcion: 'Nuevo concepto', p_unidad: 'mes', p_cantidad: 1, p_meses: 1, p_tarifa: 0, p_valor: 0, p_cuenta: true, p_nota: null }); await recargar(); } catch (er) { toast(`No se pudo agregar: ${esc(er.message)}`, false, 'gg'); } return; }
+    if (ev.target.closest('[data-gg-addcap]')) {
+      const nom = (m.querySelector('#ggNuevoCap').value || '').trim(); if (!nom) { toast('Escribe el nombre del capítulo.', false, 'gg'); return; }
+      try { await preRpc('gg_meta_item_guardar', { p_id: null, p_obra: OBRA.id, p_grupo: grupo, p_capitulo: nom, p_subcapitulo: '', p_codigo: null, p_descripcion: 'Nuevo concepto', p_unidad: 'mes', p_cantidad: 1, p_meses: 1, p_tarifa: 0, p_valor: 0, p_cuenta: true, p_nota: null }); await recargar(); } catch (er) { toast(`No se pudo agregar: ${esc(er.message)}`, false, 'gg'); }
+    }
+  };
+  m.onchange = async (ev) => {
+    const el = ev.target.closest('[data-k]'); if (!el) return; const tr = el.closest('tr'), x = GG.items.find(i => i.id === tr.dataset.id); if (!x) return;
+    const k = el.dataset.k, g = (kk) => tr.querySelector(`[data-k="${kk}"]`);
+    if (k === 'cuenta') x.cuenta = el.checked;
+    else if (k === 'descripcion' || k === 'unidad') x[k] = el.value.trim();
+    else { x[k] = el.value === '' ? null : parseFloat(el.value);
+      if (k !== 'valor' && x.cantidad != null && x.tarifa != null) { x.valor = ggR2(x.cantidad * (x.meses != null ? x.meses : 1) * x.tarifa); g('valor').value = x.valor; } }
+    if (!x.descripcion) { toast('El concepto necesita descripción.', false, 'gg'); return; }
+    try {
+      await preRpc('gg_meta_item_guardar', { p_id: x.id, p_obra: OBRA.id, p_grupo: x.grupo, p_capitulo: x.capitulo, p_subcapitulo: x.subcapitulo, p_codigo: x.codigo, p_descripcion: x.descripcion, p_unidad: x.unidad,
+        p_cantidad: x.cantidad, p_meses: x.meses, p_tarifa: x.tarifa, p_valor: Number(x.valor || 0), p_cuenta: x.cuenta, p_nota: x.nota });
+      const y = (m.querySelector('.gg-sc') || {}).scrollTop || 0; dibujar(); const sc = m.querySelector('.gg-sc'); if (sc) sc.scrollTop = y;
+    } catch (er) { toast(`No se pudo guardar: ${esc(er.message)}`, false, 'gg'); await recargar(); }
+  };
+}
+async function ggExcelElegido(file) {
+  try {
+    const buf = await file.arrayBuffer(), wb = await xlsxLeer(buf, {});
+    const det = ggDetectar(wb.SheetNames.map(n => ({ nombre: n, filas: wb.filas(n, { defval: null }) })));
+    if (!det.items.length) { toast('No reconocí el desglose de gastos generales en ese archivo (busco hojas de gastos «fijos» y «variables» con descripción, cantidad, meses, tarifa y valor). Pásame el archivo y lo interpreto: la estructura queda libre para editar.', false, 'gg'); return; }
+    GG.prev = { det, archivo: file.name };
+    ggPrevisualizar();
+  } catch (er) { toast(`No se pudo leer el archivo: ${esc(er.message)}`, false, 'gg'); }
+}
+function ggPrevisualizar() {
+  const { det, archivo } = GG.prev;
+  let m = document.getElementById('ggCarga');
+  if (!m) { m = document.createElement('form'); m.id = 'ggCarga'; m.className = 'pform la-form'; m.hidden = true; document.body.appendChild(m); }
+  const s = (g) => det.items.filter(x => x.grupo === g && x.cuenta).reduce((t, x) => t + x.valor, 0), f = (v) => preN(v, 2);
+  const capsN = (g) => new Set(det.items.filter(x => x.grupo === g).map(x => x.capitulo)).size;
+  m.innerHTML = `<h3 style="margin:0 0 4px;font-size:14px">Cargar gastos generales desde ${esc(archivo)}</h3><p class="hint" style="margin:0 0 10px">Esto reemplaza el desglose meta actual por la copia del archivo. Después lo editas libremente.</p>
+    <div class="vl-tw"><table class="vl-tb"><thead><tr><th class="l">Grupo</th><th>Capítulos</th><th>Conceptos</th><th>Suma S/</th><th>Total del archivo S/</th></tr></thead><tbody>
+      ${['fijo', 'variable'].map(g => `<tr><td class="l"><b>${ggGrupoNom[g]}</b></td><td>${capsN(g)}</td><td>${det.items.filter(x => x.grupo === g).length}</td><td><b>${f(s(g))}</b></td><td>${det.totales[g] != null ? f(det.totales[g]) : '—'}</td></tr>`).join('')}
+      <tr><td class="l"><b>Total</b></td><td></td><td>${det.items.length}</td><td><b>${f(s('fijo') + s('variable'))}</b></td><td>${det.totales.fijo != null && det.totales.variable != null ? f(det.totales.fijo + det.totales.variable) : '—'}</td></tr></tbody></table></div>
+    <p class="hint" style="margin:8px 0 0">${det.plazo != null ? 'Plazo del archivo: ' + det.plazo + ' meses · ' : ''}${det.cd != null ? 'Costo directo del archivo: S/ ' + f(det.cd) : ''}</p>
+    ${det.avisos.length ? `<div class="plz-nota al" style="margin-top:8px"><b>Revisa:</b><ul style="margin:4px 0 0 18px;padding:0">${det.avisos.map(a => `<li>${esc(a)}</li>`).join('')}</ul></div>` : '<p class="hint" style="margin:6px 0 0">✓ Los totales por capítulo y por grupo coinciden con el archivo.</p>'}
+    <div class="sug-acc"><button class="btn" type="submit" id="ggCargarOk">Cargar como copia inicial</button><button class="btn-sec" type="button" id="ggCargarNo">Cancelar</button></div>`;
+  const fondo = document.getElementById('lbFondo') || (() => { const x = document.createElement('div'); x.id = 'lbFondo'; x.hidden = true; document.body.appendChild(x); return x; })();
+  const cerrar = () => { m.hidden = true; fondo.hidden = true; document.documentElement.classList.remove('la-modal'); };
+  m.hidden = false; fondo.hidden = false; document.documentElement.classList.add('la-modal'); fondo.onclick = cerrar; m.querySelector('#ggCargarNo').onclick = cerrar;
+  m.onsubmit = async (ev) => {
+    ev.preventDefault(); const btn = m.querySelector('#ggCargarOk'); btn.disabled = true;
+    try {
+      const n = await preRpc('gg_meta_cargar', { p_obra: OBRA.id, p_archivo: archivo, p_plazo: det.plazo, p_cd: det.cd, p_items: det.items.map(x => ({ grupo: x.grupo, capitulo: x.capitulo, subcapitulo: x.subcapitulo, codigo: x.codigo, descripcion: x.descripcion, unidad: x.unidad, cantidad: x.cantidad, meses: x.meses, tarifa: x.tarifa, valor: x.valor, cuenta: x.cuenta })) });
+      cerrar(); await ggCargar(); toast(`Gastos generales meta cargados: ${n} conceptos.`, true, 'gg'); if (typeof prePintar === 'function') prePintar();
+    } catch (er) { btn.disabled = false; toast(`No se pudo cargar: ${esc(er.message)}${/function|schema cache|404/i.test(er.message) ? ' · ¿falta correr gg_meta.sql?' : ''}`, false, 'gg'); }
+  };
+}
+document.addEventListener('click', (e) => {
+  if (e.target.closest('[data-gg-excel]')) { const i = document.getElementById('ggFile'); if (i) { i.value = ''; i.click(); } return; }
+  const r = e.target.closest('[data-gg-grupo]'); if (r) ggEditarAbrir(r.dataset.ggGrupo);
+});
+document.addEventListener('keydown', (e) => { const r = e.target.closest && e.target.closest('[data-gg-grupo]'); if (r && e.target === r && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); ggEditarAbrir(r.dataset.ggGrupo); } });
+document.addEventListener('change', async (e) => {
+  if (e.target.id === 'ggFile' && e.target.files && e.target.files[0]) { await ggExcelElegido(e.target.files[0]); return; }
+  if (e.target.id === 'ggUtil') {
+    const v = parseFloat(e.target.value); if (!(v >= 0 && v <= 100)) { toast('La utilidad meta va entre 0 y 100 %.', false, 'gg'); return; }
+    try { await preRpc('gg_meta_config_guardar', { p_obra: OBRA.id, p_utilidad: v / 100, p_plazo: GG.cfg ? GG.cfg.plazo_meses : null }); await ggCargar(); if (typeof prePintar === 'function') prePintar(); toast('Utilidad meta actualizada.', true, 'gg'); }
+    catch (er) { toast(`No se pudo guardar: ${esc(er.message)}`, false, 'gg'); }
+  }
+});
 async function preCargar() {
   const box = $('#preCuerpo'); if (!box) return;
   if (!RES_A || !(RES_A.proyectos || []).length) { box.innerHTML = '<div class="rg-msg">Cargando la obra…</div>'; return; }
@@ -7331,6 +7539,7 @@ async function preCargar() {
   if (!preVista()) box.innerHTML = '<div class="rg-msg">Consultando el presupuesto…</div>';
   try { if (PRE.frente === 'todos') await preDatosTodos(); else await preDatos(PRE.frente); }
   catch (e) { box.innerHTML = '<div class="rg-msg">Este módulo necesita <b>presupuesto_meta.sql</b> en la base. Pide al administrador que lo corra.<br><span class="mono" style="font-size:11px">' + esc(e.message) + '</span></div>'; return; }
+  try { await ggCargar(); } catch (e) { /* sin gastos generales meta todavía */ }
   prePintar();
 }
 function prePintar() {
@@ -7354,7 +7563,7 @@ function prePintar() {
       <button type="button" class="btn-sec" data-pre-crear="vacio" title="Parte sin APU: copias solo las partidas que quieras ajustar">📄 Crear vacío</button></div>`
       : '<p class="hint"><b>Solo el administrador puede crear el presupuesto meta.</b> Inicia sesión como administrador.</p>'}</div>`;
   } else {
-    cuerpo = (meta && m ? preEstadoHTML(m, adm) : '') + (meta && d.esTodos ? preFrentesHTML(d) : '') + `<div class="vl-card pre-card">
+    cuerpo = (meta && m ? preEstadoHTML(m, adm) : '') + (meta && d.esTodos ? preFrentesHTML(d) + ggCardHTML(t.m + (t.v - t.con), adm) : '') + `<div class="vl-card pre-card">
       <div class="pre-tool"><div><h3>${meta ? 'Venta contra meta' : 'Presupuesto de venta'} · ${d.esTodos ? 'Toda la obra' : esc(String(d.proy.nombre))}</h3>
         <p class="hint">${meta ? `Margen = venta − meta (positivo = ahorro). ${t.nm < t.np ? `${t.np - t.nm} partidas aún sin meta (—): en el total se cuentan a precio de venta. ` : ''}Toca una partida para ver y ${adm && m && m.estado === 'borrador' ? 'ajustar' : 'comparar'} su APU.` : 'Contrato principal a precios unitarios (costo directo). Es de solo lectura; toca una partida para ver su APU.'}</p></div>
         <div class="pre-tb-acc">${meta ? `<button type="button" class="icon-btn ${PRE.soloMod ? 'on' : ''}" data-pre-solomod title="Mostrar solo las partidas ajustadas" aria-label="Solo ajustadas"><svg viewBox="0 0 24 24"><path d="M3 5h18l-7 8v6l-4 2v-8L3 5Z"/></svg></button>` : ''}
