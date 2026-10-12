@@ -1999,12 +1999,12 @@ html:not(.cel) .topbar{margin-bottom:14px;}
 @media (max-width:640px){.cv-chips{gap:5px;} .res-curva .mes-chip{padding:4px 8px;} .res-curva .mes-chip b{font-size:12.5px;} .res-curva .mes-chip .lbl{font-size:8.5px;letter-spacing:.02em;}}
 /* ═══ Modelo y partidas ═══ */
 .vg-cards.bim-cards{grid-template-columns:repeat(4,minmax(0,1fr));}
-.bim-t td.l,.bim-t th.l,.bim-t tbody th.l{text-align:left;} .bim-t td.l{max-width:320px;overflow:hidden;text-overflow:ellipsis;} .bim-t .lb-sub{display:block;font-weight:400;white-space:normal;}
+.bim-t td.l,.bim-t th.l,.bim-t tbody th.l{text-align:left;} .bim-t td.l{max-width:280px;overflow:hidden;text-overflow:ellipsis;} .bim-t .lb-sub{display:block;font-weight:400;white-space:normal;}
 .bim-row{cursor:pointer;} .bim-row:focus-visible{outline:2px solid var(--blue);outline-offset:-2px;} .bim-row .ctv-tg{margin:0 6px 0 -2px;} .bim-row:hover .ctv-tg{color:var(--blue);}
 .bim-sub>td{background:var(--input);text-align:left;white-space:normal;padding:10px 14px;}
 .bim-chips{display:flex;flex-wrap:wrap;gap:6px;} .bim-chips span{display:inline-block;padding:3px 10px;border-radius:999px;border:1px solid var(--line2);background:var(--card);font-size:11.5px;color:var(--tx2);white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis;} .bim-chips b{color:var(--tx);font-weight:700;}
-.bim-avc{white-space:nowrap;} .bim-av{display:inline-block;width:64px;height:7px;border-radius:4px;background:var(--line);overflow:hidden;vertical-align:middle;margin-right:6px;} .bim-av i{display:block;height:100%;background:#f26a1b;border-radius:4px;} .bim-avc em{font-style:normal;font-size:11.5px;color:var(--tx2);}
-.bim-ac{white-space:nowrap;} .bim-ac .icon-btn{width:34px;height:34px;padding:0;border-radius:8px;font-size:0;margin-left:4px;} .bim-ac .icon-btn svg{width:18px;height:18px;} .bim-ac .icon-btn:hover{border-color:var(--blue);color:var(--blue);} .bim-ac .icon-btn[aria-label^="Eliminar"]:hover{border-color:var(--red);color:var(--red);}
+.bim-avc{white-space:nowrap;} .bim-av{display:inline-block;width:54px;height:6px;border-radius:4px;background:var(--line);overflow:hidden;vertical-align:middle;margin-right:6px;} .bim-av i{display:block;height:100%;background:#f26a1b;border-radius:4px;} .bim-avc em{font-style:normal;font-size:11px;color:var(--tx2);}
+.bim-ac{white-space:nowrap;} .bim-ac .icon-btn{width:28px;height:28px;padding:0;border-radius:7px;font-size:0;margin-left:3px;} .bim-ac .icon-btn svg{width:15px;height:15px;} .bim-ac .icon-btn:hover{border-color:var(--blue);color:var(--blue);} .bim-ac .icon-btn[aria-label^="Eliminar"]:hover{border-color:var(--red);color:var(--red);}
 .bim-off>td{opacity:.5;}
 #bimForm:not([hidden]),#bimCarga:not([hidden]){max-width:none;position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(720px,calc(100vw - 20px));max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
 @media (max-width:1180px){.vg-cards.bim-cards{grid-template-columns:repeat(2,minmax(0,1fr));}}
@@ -2015,39 +2015,50 @@ html:not(.cel) .topbar{margin-bottom:14px;}
 .bim-carga-btn{height:38px;display:inline-flex;align-items:center;gap:7px;white-space:nowrap;} .bim-carga-btn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
 #bimCarga .sug-acc{display:flex;flex-wrap:wrap;align-items:center;gap:8px;} #bimCarga .sug-acc>*{height:40px;flex:0 0 auto;width:auto;margin:0;display:inline-flex;align-items:center;justify-content:center;padding:0 16px;} #bimCarga .bim-carga-btn svg{flex:0 0 17px;}
 @media (max-width:640px){.bc-res{grid-template-columns:repeat(2,minmax(0,1fr));}}
-.a3-modos{display:grid;grid-template-columns:minmax(0,1.6fr) repeat(2,minmax(0,1fr));gap:10px;align-items:stretch;margin:0 0 12px;} .a3-modos p{margin:0;font-size:12.5px;color:var(--tx2);align-self:center;padding-right:8px;} .a3-modos a{display:flex;flex-direction:column;gap:2px;padding:11px 14px;border:1px solid var(--line2);border-radius:13px;background:var(--card);text-decoration:none;color:var(--tx);transition:border-color .15s,transform .12s;} .a3-modos a:hover{border-color:var(--blue);transform:translateY(-1px);} .a3-modos b{font-size:13px;} .a3-modos span{font-size:11.5px;color:var(--mut);}
+.a3-modos{display:grid;grid-template-columns:minmax(0,1.4fr) repeat(3,minmax(0,1fr));gap:10px;align-items:stretch;margin:0 0 12px;} .a3-modos p{margin:0;font-size:12.5px;color:var(--tx2);align-self:center;padding-right:8px;} .a3-modos a{display:flex;flex-direction:column;gap:2px;padding:11px 14px;border:1px solid var(--line2);border-radius:13px;background:var(--card);text-decoration:none;color:var(--tx);transition:border-color .15s,transform .12s;} .a3-modos a:hover{border-color:var(--blue);transform:translateY(-1px);} .a3-modos b{font-size:13px;} .a3-modos span{font-size:11.5px;color:var(--mut);}
 .a3-res{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 10px;} .a3-chip{font-size:11.5px;font-weight:700;padding:3px 11px;border-radius:999px;border:1px solid var(--line2);color:var(--tx2);background:var(--input);} .a3-chip.ok{color:#2f6b4f;border-color:rgba(63,163,114,.5);background:rgba(63,163,114,.12);} .a3-chip.mid{color:#8a6516;border-color:rgba(217,164,65,.55);background:rgba(217,164,65,.14);} .a3-chip.bad{color:#a63d3d;border-color:rgba(208,82,82,.5);background:rgba(208,82,82,.1);}
-@media (max-width:1100px){.a3-modos{grid-template-columns:repeat(2,minmax(0,1fr));} .a3-modos p{grid-column:1/-1;}}
+@media (max-width:1100px){.a3-modos{grid-template-columns:repeat(3,minmax(0,1fr));} .a3-modos p{grid-column:1/-1;}}
+/* Modelo y partidas y Avance 3D usan todo el ancho disponible, como las demás pantallas (el tope de 1120 px era de Valor ganado) */
+#bimPanel .vg-wrap,#a3Panel .vg-wrap{max-width:none;}
+.bim-cl{white-space:nowrap;} .bim-cl select{min-width:118px;height:24px;border-radius:7px;border:1px solid var(--line2);background:var(--card);color:var(--tx);font:inherit;font-size:11px;padding:0 5px;cursor:pointer;} .bim-cl select:focus{outline:none;border-color:var(--blue);}
 /* ═══ Valor ganado: diseño ═══ */
-.vg-wrap{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr);gap:16px;} .vg-wrap>*{min-width:0;}
-.vg-bar{display:flex;flex-wrap:wrap;justify-content:flex-start;align-items:flex-end;gap:14px 24px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px 18px 16px;box-shadow:0 1px 2px rgba(16,24,40,.04),0 10px 28px -20px rgba(16,24,40,.3);}
-.vg-g{display:flex;flex-direction:column;align-items:flex-start;} .vg-gl{display:block;margin:0 0 7px;font-size:10px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--mut);}
+.vg-wrap{max-width:none;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr);gap:16px;} .vg-wrap>*{min-width:0;}
+.vg-bar{display:flex;flex-wrap:wrap;justify-content:flex-start;align-items:flex-end;gap:10px 20px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px 16px 12px;box-shadow:0 1px 2px rgba(16,24,40,.04),0 10px 28px -20px rgba(16,24,40,.3);}
+.vg-g{display:flex;flex-direction:column;align-items:flex-start;} .vg-gl{display:block;margin:0 0 5px;font-size:9.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--mut);}
 .vg-seg{display:inline-flex;gap:4px;padding:4px;background:var(--input);border:1px solid var(--line2);border-radius:14px;}
-.vg-seg button{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:84px;height:38px;padding:0 16px;border:0;border-radius:10px;background:transparent;color:var(--tx2);font:inherit;font-weight:800;font-size:13.5px;line-height:1.05;cursor:pointer;transition:background .15s,color .15s,box-shadow .15s;}
-.vg-seg button small{font-size:9.5px;font-weight:600;letter-spacing:.04em;opacity:.7;text-transform:uppercase;}
+.vg-seg button{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:74px;height:32px;padding:0 13px;border:0;border-radius:9px;background:transparent;color:var(--tx2);font:inherit;font-weight:800;font-size:12.5px;line-height:1.05;cursor:pointer;transition:background .15s,color .15s,box-shadow .15s;}
+.vg-seg button small{font-size:8.5px;font-weight:600;letter-spacing:.04em;opacity:.7;text-transform:uppercase;}
 .vg-seg button:hover{color:var(--tx);} .vg-seg button.on{background:linear-gradient(135deg,#27338f,#141c5e);color:#fff;box-shadow:0 8px 16px -8px rgba(20,28,94,.9);}
 :root[data-theme="dark"] .vg-seg button.on{background:linear-gradient(135deg,#5b66e0,#4350c9);}
 .vg-pills{display:inline-flex;flex-wrap:wrap;justify-content:flex-start;gap:6px;max-width:100%;}
-.vg-pills button{height:46px;padding:0 15px;border-radius:13px;border:1px solid var(--line2);background:var(--card);color:var(--tx2);font:inherit;font-weight:700;font-size:13px;cursor:pointer;transition:border-color .15s,background .15s,color .15s,transform .1s;}
+.vg-pills button{height:38px;padding:0 13px;border-radius:11px;border:1px solid var(--line2);background:var(--card);color:var(--tx2);font:inherit;font-weight:700;font-size:12.5px;cursor:pointer;transition:border-color .15s,background .15s,color .15s,transform .1s;}
 .vg-pills button:hover{border-color:var(--blue);color:var(--tx);} .vg-pills button.on{background:var(--input);border-color:var(--blue);color:var(--blue);box-shadow:inset 0 0 0 1px var(--blue);}
-.vg-sel{position:relative;width:min(250px,86vw);} .vg-sel select{appearance:none;-webkit-appearance:none;width:100%;height:46px;padding:0 42px 0 16px;border-radius:13px;border:1px solid var(--line2);background:var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 14px center/18px;color:var(--tx);font:inherit;font-weight:600;font-size:13px;text-overflow:ellipsis;cursor:pointer;} .vg-sel select:hover{border-color:var(--blue);} .vg-sel select:focus-visible{outline:2px solid var(--blue);outline-offset:2px;}
-.vg-cards{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;}
-.vgk{--a:#4f5bd5;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:2px;min-width:0;padding:14px 14px 12px;border:1px solid var(--line);border-radius:16px;background:var(--card);text-align:center;box-shadow:0 1px 2px rgba(16,24,40,.04),0 12px 26px -20px rgba(16,24,40,.38);}
+.vg-sel{position:relative;width:min(250px,86vw);} .vg-sel select{appearance:none;-webkit-appearance:none;width:100%;height:38px;padding:0 38px 0 14px;border-radius:11px;border:1px solid var(--line2);background:var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 14px center/18px;color:var(--tx);font:inherit;font-weight:600;font-size:12.5px;text-overflow:ellipsis;cursor:pointer;} .vg-sel select:hover{border-color:var(--blue);} .vg-sel select:focus-visible{outline:2px solid var(--blue);outline-offset:2px;}
+.vg-cards{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;}
+.vgk{--a:#4f5bd5;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:2px;min-width:0;padding:10px 12px 10px;border:1px solid var(--line);border-radius:14px;background:var(--card);text-align:center;box-shadow:0 1px 2px rgba(16,24,40,.04),0 12px 26px -20px rgba(16,24,40,.38);}
 .vgk::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:var(--a);}
 .vgk.pv{--a:#4f5bd5;} .vgk.ev{--a:#f26a1b;} .vgk.ac{--a:#14b8a6;} .vgk.eac{--a:#7c3aed;} .vgk.ok{--a:#16a34a;} .vgk.mid{--a:#d97706;} .vgk.bad{--a:#dc2626;} .vgk.na{--a:#94a3b8;}
-.vgk header{display:flex;align-items:center;justify-content:center;gap:7px;min-height:32px;} .vgk-ic{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:9px;background:color-mix(in srgb,var(--a) 14%,transparent);color:var(--a);flex:none;}
+.vgk header{display:flex;align-items:center;justify-content:center;gap:6px;min-height:28px;} .vgk-ic{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:9px;background:color-mix(in srgb,var(--a) 14%,transparent);color:var(--a);flex:none;}
 .vgk-ic svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round;}
-.vgk-l{font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--mut);line-height:1.15;text-align:left;}
-.vgk-v{margin:4px 0 2px;max-width:100%;overflow:hidden;text-overflow:ellipsis;font-size:21px;font-weight:800;letter-spacing:-.02em;color:var(--tx);font-variant-numeric:tabular-nums;line-height:1.15;white-space:nowrap;}
-.vgk.sp .vgk-v,.vgk.cp .vgk-v{font-size:30px;color:var(--a);} .vgk.mg .vgk-v{color:var(--a);}
+.vgk-l{font-size:9.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--mut);line-height:1.15;text-align:left;}
+.vgk-v{margin:4px 0 2px;max-width:100%;overflow:hidden;text-overflow:ellipsis;font-size:clamp(13px,calc(((100vw - 380px) / 6 - 30px) / 9),18px);font-weight:800;letter-spacing:-.02em;color:var(--tx);font-variant-numeric:tabular-nums;line-height:1.15;white-space:nowrap;}
+.vg-cards.bim-cards .vgk-v{font-size:clamp(15px,calc(((100vw - 380px) / 4 - 30px) / 9),20px);}
+.vgk.sp .vgk-v,.vgk.cp .vgk-v{font-size:clamp(18px,1.6vw,24px);color:var(--a);} .vgk.mg .vgk-v{color:var(--a);}
 .vgk-ch{align-self:center;margin:2px 0 4px;padding:2px 10px;border-radius:999px;font-size:10.5px;font-weight:800;line-height:1.5;background:color-mix(in srgb,var(--a) 15%,transparent);color:var(--a);white-space:nowrap;}
-.vgk-s{font-size:11.5px;line-height:1.4;color:var(--mut);} .vgk-s b{color:var(--tx2);font-weight:700;}
-.vgk-bar{height:6px;margin-top:9px;border-radius:3px;background:var(--line);overflow:hidden;} .vgk-bar i{display:block;height:100%;border-radius:3px;background:var(--a);}
-.vg-hero{position:relative;overflow:hidden;border-radius:22px;padding:20px 22px 14px;color:#e8ecff;background:radial-gradient(900px 380px at 88% -12%,rgba(242,106,27,.2),transparent 62%),radial-gradient(800px 460px at -8% 112%,rgba(99,112,255,.36),transparent 58%),linear-gradient(160deg,#0a0f38 0%,#121a5c 52%,#1a2472 100%);box-shadow:0 26px 60px -26px rgba(10,15,56,.85),inset 0 1px 0 rgba(255,255,255,.08);}
+.vgk-s{font-size:10.5px;line-height:1.35;color:var(--mut);} .vgk-s b{color:var(--tx2);font-weight:700;}
+.vgk-bar{height:5px;margin-top:7px;border-radius:3px;background:var(--line);overflow:hidden;} .vgk-bar i{display:block;height:100%;border-radius:3px;background:var(--a);}
+.vg-hero{--h1:rgba(242,182,132,.14);--h2:rgba(79,196,190,.22);--h3:#10303a;--h4:#15414d;--h5:#1b5160;position:relative;overflow:hidden;border-radius:20px;padding:16px 20px 12px;color:#e8ecff;background:radial-gradient(900px 380px at 88% -12%,var(--h1),transparent 62%),radial-gradient(800px 460px at -8% 112%,var(--h2),transparent 58%),linear-gradient(160deg,var(--h3) 0%,var(--h4) 52%,var(--h5) 100%);box-shadow:0 22px 50px -28px rgba(8,25,32,.75),inset 0 1px 0 rgba(255,255,255,.08);}
+.vg-hero[data-fondo="pizarra"]{--h1:rgba(255,214,170,.12);--h2:rgba(120,160,255,.22);--h3:#1f2d46;--h4:#2a3d5e;--h5:#36507a;}
+.vg-hero[data-fondo="salvia"]{--h1:rgba(240,200,150,.12);--h2:rgba(120,210,170,.2);--h3:#1a332c;--h4:#234539;--h5:#2d5848;}
+.vg-hero[data-fondo="grafito"]{--h1:rgba(169,188,245,.12);--h2:rgba(120,130,160,.22);--h3:#1c2027;--h4:#262c36;--h5:#313947;}
+.vg-hero[data-fondo="marino"]{--h1:rgba(242,106,27,.18);--h2:rgba(99,112,255,.34);--h3:#0a0f38;--h4:#121a5c;--h5:#1a2472;}
+.vg-fondos{display:inline-flex;align-items:center;gap:7px;padding:0 6px;margin-left:auto;margin-right:6px;align-self:flex-start;} .vg-fondos button{width:15px;height:15px;padding:0;border-radius:50%;border:2px solid rgba(255,255,255,.3);background:var(--c);cursor:pointer;transition:transform .12s,border-color .12s;} .vg-fondos button:hover{transform:scale(1.15);} .vg-fondos button.on{border-color:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.22);}
+.vgc-tk rect{fill:rgba(255,255,255,.07);stroke:rgba(255,255,255,.2);} .vgc-tk text{font-variant-numeric:tabular-nums;} .vgc-tk-h{fill:rgba(255,255,255,.62);font-size:9.5px;font-weight:800;letter-spacing:.1em;} .vgc-tk-v{fill:#fff;font-size:15px;font-weight:800;} .vgc-tk-s{fill:rgba(255,255,255,.7);font-size:11px;font-weight:600;} .vgc-tk-l{fill:rgba(255,255,255,.72);font-size:11px;} .vgc-tk-b{fill:#fff;font-weight:800;}
+.vgc-tk .ok{fill:#7ee0ae;font-weight:800;} .vgc-tk .mid{fill:#f6d77a;font-weight:800;} .vgc-tk .bad{fill:#fca5b0;font-weight:800;}
 .vg-hero-h{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px 20px;margin-bottom:8px;}
-.vg-hero-t small{display:block;font-size:10.5px;font-weight:800;letter-spacing:.11em;text-transform:uppercase;color:rgba(255,255,255,.58);} .vg-hero-t h3{margin:3px 0 0;font-size:21px;font-weight:800;letter-spacing:-.01em;color:#fff;}
+.vg-hero-t small{display:block;font-size:10.5px;font-weight:800;letter-spacing:.11em;text-transform:uppercase;color:rgba(255,255,255,.58);} .vg-hero-t h3{margin:3px 0 0;font-size:18px;font-weight:800;letter-spacing:-.01em;color:#fff;}
 .vg-legs{display:flex;flex-wrap:wrap;gap:8px;}
-.vg-lg{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.07);color:#fff;font:inherit;font-size:12.5px;cursor:pointer;transition:background .15s,opacity .15s;}
+.vg-lg{display:inline-flex;align-items:center;gap:7px;height:30px;padding:0 12px;border-radius:999px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.07);color:#fff;font:inherit;font-size:12px;cursor:pointer;transition:background .15s,opacity .15s;}
 .vg-lg:hover{background:rgba(255,255,255,.14);} .vg-lg i{width:10px;height:10px;border-radius:50%;background:var(--c);box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 28%,transparent);} .vg-lg b{font-weight:800;font-variant-numeric:tabular-nums;color:#fff;}
 .vg-lg:not(.on){opacity:.5;} .vg-lg:not(.on) i{background:transparent;box-shadow:inset 0 0 0 2px var(--c);} .vg-lg:not(.on) span{text-decoration:line-through;}
 .vg-plot{position:relative;display:flex;justify-content:center;cursor:crosshair;} .vg-svg{display:block;max-width:100%;overflow:visible;}
@@ -2058,21 +2069,21 @@ html:not(.cel) .topbar{margin-bottom:14px;}
 .vg-tip strong{display:block;margin-bottom:5px;font-size:12.5px;} .vg-tip div{display:flex;align-items:center;gap:8px;padding:1.5px 0;} .vg-tip i{width:9px;height:9px;border-radius:50%;flex:none;} .vg-tip span{flex:1;color:#475569;} .vg-tip b{font-variant-numeric:tabular-nums;}
 .vg-tip .vg-tip-i{margin-top:5px;padding-top:5px;border-top:1px solid #e2e8f0;}
 .vg-hero-f{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 16px;margin-top:6px;font-size:12px;color:rgba(255,255,255,.7);} .vg-hero-f b{color:#fff;} .vg-hero-f b.ok{color:#4ade80;} .vg-hero-f b.mid{color:#fbbf24;} .vg-hero-f b.bad{color:#fb7185;}
-.vg-tcard{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px 16px 16px;box-shadow:0 1px 2px rgba(16,24,40,.04),0 10px 28px -20px rgba(16,24,40,.3);}
-.vg-tcard>header{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 14px;margin-bottom:10px;} .vg-tcard h3{margin:0;font-size:15px;font-weight:800;} .vg-tcard header span{font-size:11.5px;color:var(--mut);}
+.vg-tcard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px 14px;box-shadow:0 1px 2px rgba(16,24,40,.04),0 10px 28px -20px rgba(16,24,40,.3);}
+.vg-tcard>header{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 14px;margin-bottom:10px;} .vg-tcard h3{margin:0;font-size:14px;font-weight:800;} .vg-tcard header span{font-size:11px;color:var(--mut);}
 .vg-twrap{max-height:352px;overflow:auto;border:1px solid var(--line);border-radius:13px;}
-.vg-t{width:100%;border-collapse:separate;border-spacing:0;font-size:12.5px;font-variant-numeric:tabular-nums;text-align:center;}
-.vg-t th,.vg-t td{padding:7px 10px;border-bottom:1px solid var(--line);white-space:nowrap;} .vg-t tbody tr:last-child>*{border-bottom:0;}
-.vg-t thead th{position:sticky;z-index:1;background:var(--input);color:var(--mut);font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;} .vg-t thead tr:first-child th{top:0;border-bottom:1px solid var(--line2);} .vg-t thead tr:nth-child(2) th{top:31px;}
+.vg-t{width:100%;border-collapse:separate;border-spacing:0;font-size:11.5px;font-variant-numeric:tabular-nums;text-align:center;}
+.vg-t th,.vg-t td{padding:4px 8px;border-bottom:1px solid var(--line);white-space:nowrap;} .vg-t tbody tr:last-child>*{border-bottom:0;}
+.vg-t thead th{position:sticky;z-index:1;background:var(--input);color:var(--mut);font-size:9.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;} .vg-t thead tr:first-child th{top:0;border-bottom:1px solid var(--line2);} .vg-t thead tr:nth-child(2) th{top:24px;}
 .vg-t thead tr:first-child th+th{border-left:1px solid var(--line2);}
 .vg-t tbody th{text-align:center;font-weight:800;color:var(--tx);} .vg-t tbody th em{display:inline-block;margin-left:6px;padding:0 7px;border-radius:999px;background:var(--blue);color:#fff;font-style:normal;font-size:9.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;vertical-align:middle;}
 .vg-t tbody tr{cursor:pointer;} .vg-t tbody tr:hover>*{background:var(--input);} .vg-t tbody tr.on>*{background:color-mix(in srgb,var(--blue) 11%,var(--card));font-weight:700;}
 .vg-t td:nth-child(4),.vg-t td:nth-child(7){border-right:1px solid var(--line);}
-.vg-pl{display:inline-block;min-width:48px;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:800;} .vg-pl.ok{background:#16a34a1f;color:#15803d;} .vg-pl.mid{background:#d977061f;color:#b45309;} .vg-pl.bad{background:#dc26261f;color:#b91c1c;} .vg-pl.na{color:var(--mut);font-weight:600;}
+.vg-pl{display:inline-block;min-width:40px;padding:1px 8px;border-radius:999px;font-size:11px;font-weight:800;} .vg-pl.ok{background:#16a34a1f;color:#15803d;} .vg-pl.mid{background:#d977061f;color:#b45309;} .vg-pl.bad{background:#dc26261f;color:#b91c1c;} .vg-pl.na{color:var(--mut);font-weight:600;}
 .vg-how{max-width:780px;margin:0 auto;padding:2px 8px 10px;font-size:12.5px;line-height:1.55;color:var(--tx2);text-align:center;} .vg-how summary{display:inline-block;cursor:pointer;font-weight:700;color:var(--blue);} .vg-how p{margin:8px 0 0;text-align:left;} .vg-how b.bad{color:#dc2626;}
-@media (max-width:1180px){.vg-cards{grid-template-columns:repeat(3,minmax(0,1fr));}}
+@media (max-width:1180px){.vg-cards{grid-template-columns:repeat(3,minmax(0,1fr));} .vgk-v{font-size:clamp(14px,calc(((100vw - 360px) / 3 - 30px) / 9),19px);} .vg-cards.bim-cards .vgk-v{font-size:clamp(15px,calc(((100vw - 360px) / 2 - 30px) / 9),20px);}}
 @media (max-width:760px){.vg-bar{flex-direction:column;align-items:stretch;gap:14px;} .vg-g{align-items:flex-start;} .vg-g{width:100%;min-width:0;} .vg-seg{display:flex;width:100%;} .vg-seg button{flex:1;} .vg-sel{width:100%;}}
-@media (max-width:620px){.vg-cards{grid-template-columns:repeat(2,minmax(0,1fr));} .vg-hero{padding:16px 14px 12px;border-radius:18px;} .vg-pills button{height:42px;padding:0 13px;} .vg-seg button{min-width:78px;} .vgk-v{font-size:21px;} .vgk.sp .vgk-v,.vgk.cp .vgk-v{font-size:28px;}}
+@media (max-width:620px){.vg-cards{grid-template-columns:repeat(2,minmax(0,1fr));} .vg-hero{padding:16px 14px 12px;border-radius:18px;} .vg-pills button{height:42px;padding:0 13px;} .vg-seg button{min-width:78px;} .vgk-v,.vg-cards.bim-cards .vgk-v{font-size:16px;} .vgk.sp .vgk-v,.vgk.cp .vgk-v{font-size:22px;}}
 .ctv-pend{display:inline-block;font-size:10.5px;font-weight:800;padding:2px 9px;border-radius:999px;background:#f59e0b26;color:var(--rg-am,#a85a08);margin-left:4px;}
 .ctv-ac{display:flex;gap:6px;} .ctv-ac .icon-btn{width:34px;height:34px;padding:0;border-radius:8px;font-size:0;} .ctv-ac .icon-btn svg{width:18px;height:18px;} .ctv-ac .icon-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--input);} .ctv-ac .icon-btn[aria-label^="Eliminar"]:hover{border-color:var(--red);color:var(--red);}
 @media (max-width:560px){.ctv-it{grid-template-columns:1fr auto;} .ctv-f{grid-column:1 / span 2;} .ctv-sub td{padding-left:14px;}}
@@ -9203,6 +9214,9 @@ document.addEventListener('click', async (e) => {
 //             ambos × (1 + GG meta % + utilidad meta %), con GG meta % = gastos generales meta de la obra ÷ costo directo meta de la obra.
 // Costo real (AC): costo_real_mensual (hoy referencial/simulado). CPI = ganado meta ÷ costo real.
 const VG = { modo: 'meta', frente: 'todos', lineas: { pv: true, ev: true, ac: true }, mes: null, d: null, cargando: false, base: null, vers: [], verSel: null };
+const VG_FONDOS = [['petroleo', 'Petróleo', '#1b5160'], ['pizarra', 'Pizarra', '#36507a'], ['salvia', 'Salvia', '#2d5848'], ['grafito', 'Grafito', '#313947'], ['marino', 'Marino', '#1a2472']];
+try { VG.fondo = localStorage.getItem('vg-fondo'); } catch (e) { VG.fondo = null; }
+if (!VG_FONDOS.some(f => f[0] === VG.fondo)) VG.fondo = 'petroleo';
 const vgYm = (s) => String(s).slice(0, 7);
 const vgMesTxt = (ym) => { const [y, m] = ym.split('-'); return `${MESES_ES[+m - 1]}-${y.slice(2)}`; };
 const vgFmtM = (v) => { const a = Math.abs(v); return (v < 0 ? '−' : '') + (a >= 1e6 ? (a / 1e6).toFixed(2) + ' M' : a >= 1e3 ? (a / 1e3).toFixed(0) + ' k' : a.toFixed(0)); };
@@ -9329,6 +9343,11 @@ function vgPintar() {
   if (VG.mes == null || !meses.includes(VG.mes)) VG.mes = ultEV >= 0 ? meses[ultEV] : meses[n - 1];
   const i0 = meses.indexOf(VG.mes), pva = PVa[i0] || 0, eva = EVa[i0] || 0, aca = ACa[i0] || 0, bac = PVa[n - 1] || 0;
   const spi = pva > 0 ? eva / pva : null, cpi = aca > 0 ? eva / aca : null, sv = eva - pva, cv = eva - aca, eac = cpi ? bac / cpi : null;
+  // Earned Schedule: en qué mes del plan se habría alcanzado el valor ganado de hoy (interpolado), contra los meses transcurridos
+  const AT = i0 + 1; let ES = null;
+  if (eva > 0 && n > 0) { let kk = -1; for (let j = 0; j < n; j++) { if (PVa[j] <= eva) kk = j; else break; } const a0 = kk >= 0 ? PVa[kk] : 0, b0 = kk + 1 < n ? PVa[kk + 1] : null; ES = b0 != null && b0 > a0 ? (kk + 1) + (eva - a0) / (b0 - a0) : (kk + 1); }
+  const spiT = ES != null && AT > 0 ? ES / AT : null, svT = ES != null ? ES - AT : null, durProy = spiT ? n / spiT : null;
+  const mesMas = (m, d) => { const [yy, mm] = m.split('-').map(Number), tt = yy * 12 + (mm - 1) + d; return `${Math.floor(tt / 12)}-${String(tt % 12 + 1).padStart(2, '0')}`; };
   const sim = !!(VG.raw.ac && VG.raw.ac.some(r => r.todo_simulado)), sinAC = !VG.raw.ac || !VG.raw.ac.length, f = VG.fac, base = VG.base || {};
   const pc = (v) => bac > 0 ? Math.max(0, v / bac) : 0;
   const sg = (v) => (v >= 0 ? '+' : '−') + vgM(Math.abs(v));
@@ -9357,10 +9376,10 @@ function vgPintar() {
          : k('eac', 'eac', 'Avance económico', (pc(eva) * 100).toFixed(1) + ' %', `${vgS(eva)}<br>de ${vgS(bac)}`, pc(eva))
   ].join('');
   // ── curva S (se dibuja al tamaño real del contenedor: sin escalas ni letras deformadas) ──
-  const cont = Math.max(300, Math.min(1120, box.clientWidth || 1000)), W = cont - 44, estrecho = W < 560, H = estrecho ? 250 : 300, padL = estrecho ? 46 : 58, padR = 22, padT = 36, padB = 34;
+  const cont = Math.max(300, Math.min(1560, box.clientWidth || 1000)), W = cont - 44, estrecho = W < 560, H = estrecho ? 250 : W > 1150 ? 330 : 300, padL = estrecho ? 46 : 58, padR = 22, padT = 36, padB = 34;
   const ymax = Math.max(...PVa, ...EVa, ...ACa, 1) * 1.06, X = (i) => padL + (n > 1 ? i / (n - 1) : 0) * (W - padL - padR), Y = (v) => (H - padB) - v / ymax * (H - padB - padT);
   const pts = (arr, hasta) => arr.slice(0, hasta + 1).map((v, i) => ({ x: X(i), y: Y(v) }));
-  const COL = { pv: '#9fb0ff', ev: '#ffa45e', ac: '#2dd4bf' };
+  const COL = { pv: '#a9bcf5', ev: '#f2b684', ac: '#7ed6c4' };
   let g = '';
   for (let q = 0; q <= 4; q++) { const y = padT + (H - padT - padB) * (1 - q / 4); g += `<line x1="${padL}" y1="${y.toFixed(1)}" x2="${W - padR}" y2="${y.toFixed(1)}" class="vgc-grid"/><text x="${padL - 8}" y="${(y + 3.5).toFixed(1)}" class="vgc-ty" text-anchor="end">${vgFmtM(ymax * q / 4)}</text>`; }
   const paso = n > 22 ? 3 : n > 13 || estrecho ? 2 : 1;
@@ -9375,15 +9394,25 @@ function vgPintar() {
   if (VG.lineas.pv) lin += area(Pp, 'vgApv') + linea(Pp, COL.pv, 2.4);
   if (VG.lineas.ac && Pa.length) lin += area(Pa, 'vgAac') + linea(Pa, COL.ac, 2.4, '6 5');
   if (VG.lineas.ev && Pe.length) lin += area(Pe, 'vgAev') + linea(Pe, COL.ev, 3.4);
-  const xc = X(i0), dot = (v, c) => `<circle cx="${xc.toFixed(1)}" cy="${Y(v).toFixed(1)}" r="9" fill="${c}" opacity=".22"/><circle cx="${xc.toFixed(1)}" cy="${Y(v).toFixed(1)}" r="4.6" fill="${c}" stroke="#0b1038" stroke-width="2"/>`;
+  const xc = X(i0), dot = (v, c) => `<circle cx="${xc.toFixed(1)}" cy="${Y(v).toFixed(1)}" r="9" fill="${c}" opacity=".22"/><circle cx="${xc.toFixed(1)}" cy="${Y(v).toFixed(1)}" r="4.6" fill="${c}" style="stroke:var(--h3)" stroke-width="2"/>`;
   const badge = `<g transform="translate(${Math.min(Math.max(xc, padL + 44), W - padR - 44).toFixed(1)},${padT - 20})"><rect x="-44" y="-11" width="88" height="22" rx="11" class="vgc-badge"/><text x="0" y="4" class="vgc-badget" text-anchor="middle">Corte ${vgMesTxt(VG.mes)}</text></g>`;
   let corte = `<line x1="${xc.toFixed(1)}" y1="${padT - 8}" x2="${xc.toFixed(1)}" y2="${H - padB}" class="vgc-cut"/>${badge}`;
   if (VG.lineas.pv) corte += dot(pva, COL.pv); if (VG.lineas.ac && i0 <= ultAC) corte += dot(aca, COL.ac); if (VG.lineas.ev && i0 <= ultEV) corte += dot(eva, COL.ev);
   const guia = `<line class="vgc-guia" x1="0" y1="${padT - 8}" x2="0" y2="${H - padB}" opacity="0"/>`;
-  const svg = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" class="vg-svg" role="img" aria-label="Curva S acumulada: planeado, ganado y costo real">${defs}${g}${lin}${corte}${guia}</svg>`;
+  // ticket de Earned Schedule dentro de la curva (en el espacio libre de arriba a la izquierda)
+  let ticket = '';
+  if (ES != null && spiT != null && W >= 520) {
+    const eT = vgEst(spiT, 'plazo'), sg2 = (v) => (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(1), fin = durProy ? vgMesTxt(mesMas(meses[0], Math.max(0, Math.ceil(durProy - 1e-9) - 1))) : '—';
+    ticket = `<g class="vgc-tk" transform="translate(${padL + 10},${(yb + 16).toFixed(1)})"><title>Earned Schedule: el mes del plan en que se habría alcanzado el valor ganado de hoy (${ES.toFixed(2)}) frente a los meses transcurridos (${AT}). SV(t) es el adelanto o atraso en meses; SPI(t) = ES / AT; el término proyectado supone que se mantiene ese ritmo.</title>
+      <rect width="212" height="80" rx="12"/><text x="12" y="19" class="vgc-tk-h">EARNED SCHEDULE</text>
+      <text x="12" y="41" class="vgc-tk-v">ES ${ES.toFixed(1)} m<tspan class="vgc-tk-s" dx="9">AT ${AT} m</tspan></text>
+      <text x="12" y="59" class="vgc-tk-l">SV(t) <tspan class="${eT.c}">${sg2(svT)} m</tspan> · SPI(t) <tspan class="${eT.c}">${spiT.toFixed(2)}</tspan></text>
+      <text x="12" y="73" class="vgc-tk-l">Término proyectado <tspan class="vgc-tk-b">${fin}</tspan></text></g>`;
+  }
+  const svg = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" class="vg-svg" role="img" aria-label="Curva S acumulada: planeado, ganado y costo real">${defs}${g}${lin}${corte}${ticket}${guia}</svg>`;
   const leg = (kk, tx, v, c, disp) => `<button type="button" class="vg-lg ${VG.lineas[kk] ? 'on' : ''}" style="--c:${c}" data-vg-lin="${kk}" aria-pressed="${VG.lineas[kk]}" title="Mostrar u ocultar"><i></i><span>${tx}</span><b>${disp ? vgM(v) : '—'}</b></button>`;
-  const hero = `<section class="vg-hero"><header class="vg-hero-h"><div class="vg-hero-t"><small>Curva S acumulada · base ${meta ? 'meta (costo)' : 'venta (ingreso)'}</small><h3>${frs.find(x => x[0] === VG.frente)[1]} · valor ganado</h3></div>
-      <div class="vg-legs">${leg('pv', 'Planeado', pva, COL.pv, true)}${leg('ev', 'Ganado', eva, COL.ev, i0 <= ultEV)}${leg('ac', sim ? 'Costo real*' : 'Costo real', aca, COL.ac, i0 <= ultAC && !sinAC)}</div></header>
+  const hero = `<section class="vg-hero" data-fondo="${VG.fondo}"><header class="vg-hero-h"><div class="vg-hero-t"><small>Curva S acumulada · base ${meta ? 'meta (costo)' : 'venta (ingreso)'}</small><h3>${frs.find(x => x[0] === VG.frente)[1]} · valor ganado</h3></div>
+      <div class="vg-fondos" role="group" aria-label="Fondo del gráfico">${VG_FONDOS.map(([k, tx, c]) => `<button type="button" class="${VG.fondo === k ? 'on' : ''}" data-vg-fondo="${k}" style="--c:${c}" title="Fondo ${tx}" aria-label="Fondo ${tx}"></button>`).join('')}</div><div class="vg-legs">${leg('pv', 'Planeado', pva, COL.pv, true)}${leg('ev', 'Ganado', eva, COL.ev, i0 <= ultEV)}${leg('ac', sim ? 'Costo real*' : 'Costo real', aca, COL.ac, i0 <= ultAC && !sinAC)}</div></header>
     <div class="vg-plot" id="vgPlot">${svg}<div class="vg-tip" hidden></div></div>
     <footer class="vg-hero-f"><span>Corte <b>${vgMesTxt(VG.mes)}</b> · SPI <b class="${eS.c}">${spi == null ? '—' : spi.toFixed(2)}</b>${meta ? ` · CPI <b class="${eC.c}">${cpi == null ? '—' : cpi.toFixed(2)}</b>` : ''}</span><span class="vg-hero-n">${sim ? '* Costo real referencial (simulado) · ' : ''}Toca un mes para mover el corte</span></footer></section>`;
   // ── detalle mensual ──
@@ -9415,6 +9444,8 @@ function vgPintar() {
 document.addEventListener('click', async (e) => {
   const m = e.target.closest('[data-vg-modo]'); if (m) { VG.modo = m.dataset.vgModo; if (VG.modo === 'meta' && !VG.base) { await vgPlaneadoMeta(); } vgPintar(); return; }
   const fr = e.target.closest('[data-vg-fr]'); if (fr) { VG.frente = fr.dataset.vgFr; vgPintar(); return; }
+  const fo = e.target.closest('[data-vg-fondo]');
+  if (fo) { VG.fondo = fo.dataset.vgFondo; try { localStorage.setItem('vg-fondo', VG.fondo); } catch (x) {} const h = fo.closest('.vg-hero'); if (h) { h.dataset.fondo = VG.fondo; h.querySelectorAll('[data-vg-fondo]').forEach(b => b.classList.toggle('on', b === fo)); } return; }
   const l = e.target.closest('[data-vg-lin]'); if (l) { VG.lineas[l.dataset.vgLin] = !VG.lineas[l.dataset.vgLin]; vgPintar(); return; }
   const mes = e.target.closest('tr[data-vg-mes]'); if (mes && document.querySelector('#vgPanel') && document.querySelector('#vgPanel').contains(mes)) { VG.mes = mes.dataset.vgMes; vgPintar(); }
 });
@@ -9427,6 +9458,9 @@ document.addEventListener('change', async (e) => {
 // Una partida tiene muchos elementos y un elemento muchas partidas. La cantidad sale del modelo (volumen · longitud · unidad) o se reparte (acero, encofrado).
 const BIM = { frente: null, vista: 'partidas', el: [], reglas: [], vin: [], par: [], nodos: [], val: {}, abiertos: new Set(), q: '', cargado: false, sinSql: false };
 const BIM_MODO = { volumen: 'Volumen del modelo', longitud: 'Longitud del modelo', unidad: 'Unidades del modelo', reparto_volumen: 'Reparto por volumen', reparto_unidad: 'Reparto por unidad' };
+// clase de cada partida: trabajo físico (se ve en el modelo) o calidad (pruebas, ensayos, postensado: sin modelo físico, fuera del visor)
+const bimClaseAuto = (nombre) => (/prueba|ensayo|integridad|control de calidad|inspecci[oó]n|post[\s-]?tensad/i.test(String(nombre || '')) ? 'calidad' : 'trabajo');
+const bimClase = (p) => (BIM.clases && BIM.clases[p.codigo]) || bimClaseAuto(p.nombre);
 const bimN = (v, d) => Number(v || 0).toLocaleString('es-PE', { minimumFractionDigits: d == null ? 2 : d, maximumFractionDigits: d == null ? 2 : d });
 const bimProy = () => (DATA.proyectos || []).find(p => p.id === BIM.frente) || null;
 async function bimCargar(forzar) {
@@ -9443,13 +9477,15 @@ async function bimCargar(forzar) {
       BIM.frente = orden.find(id => BIM.conModelo.has(id)) || orden[0];
     }
     const f = BIM.frente;
-    const [el, reglas, vin, par, nodos, vp] = await Promise.all([
+    const [el, reglas, vin, par, nodos, vp, cl] = await Promise.all([
       getTodo(`/modelo_elementos?proyecto_id=eq.${f}&select=*&order=partida_modelo,elemento,ubicacion,codigo,local_id`).catch(() => []),
       get(`/modelo_reglas?proyecto_id=eq.${f}&select=*&order=orden,creado_en`).catch(() => []),
       getTodo(`/modelo_vinculos?select=elemento_id,nodo_id,regla_id,cantidad,modo,origen,modelo_elementos!inner(proyecto_id)&modelo_elementos.proyecto_id=eq.${f}&order=elemento_id,nodo_id`).catch(() => []),
       get(`/v_modelo_partida?proyecto_id=eq.${f}&select=*&order=codigo`).catch(() => []),
       getTodo(`/wbs_nodos?version_id=eq.${DATA.versionId}&proyecto_id=eq.${f}&es_hoja=eq.true&select=id,codigo,codigo_esp,nombre,unidad,metrado,precio_unitario,orden&order=orden`),
-      getTodo(`/valorizacion_partidas?select=nodo_id,metrado,valorizaciones!inner(estado)&valorizaciones.estado=eq.aprobada&order=nodo_id,valorizacion_id`).catch(() => [])]);
+      getTodo(`/valorizacion_partidas?select=nodo_id,metrado,valorizaciones!inner(estado)&valorizaciones.estado=eq.aprobada&order=nodo_id,valorizacion_id`).catch(() => []),
+      get(`/modelo_partida_clase?proyecto_id=eq.${f}&select=nodo_codigo,clase`).catch(() => [])]);
+    BIM.clases = {}; cl.forEach(c => { BIM.clases[c.nodo_codigo] = c.clase; });
     BIM.el = el; BIM.reglas = reglas; BIM.vin = vin; BIM.par = par; BIM.nodos = nodos;
     BIM.N = {}; nodos.forEach(n => { BIM.N[n.id] = n; });
     BIM.val = {}; vp.forEach(r => { if (BIM.N[r.nodo_id]) BIM.val[r.nodo_id] = (BIM.val[r.nodo_id] || 0) + Number(r.metrado || 0); });
@@ -9469,13 +9505,13 @@ function bimPintar() {
   const adm = !!AUTH.admin, proy = bimProy(), E = BIM.el, hay = E.length > 0;
   const frs = COMPONENTES.map(c => { const id = (preProy(c.id) || {}).id; return [id, String(c.nombre).replace(/^Puente\s+/i, ''), BIM.conModelo.has(id)]; });
   const barra = `<div class="vg-bar"><div class="vg-g vg-g-fr"><span class="vg-gl">Frente</span><div class="vg-pills" role="group" aria-label="Frente">${frs.map(([id, t, ok]) => `<button type="button" class="${BIM.frente === id ? 'on' : ''}" data-bim-fr="${esc(id)}" title="${ok ? 'Modelo cargado' : 'Este frente todavía no tiene modelo cargado'}">${esc(t)}${ok ? '' : ' <small style="font-weight:600;opacity:.7">sin modelo</small>'}</button>`).join('')}</div></div>
-    ${hay ? `<div class="vg-g"><span class="vg-gl">Ver</span><div class="vg-seg" role="group" aria-label="Vista">${[['partidas', 'Partidas'], ['elementos', 'Elementos'], ['reglas', 'Reglas']].map(([k, t]) => `<button type="button" class="${BIM.vista === k ? 'on' : ''}" data-bim-vista="${k}" style="height:38px">${t}</button>`).join('')}</div></div>
-    <div class="vg-g" style="flex:1 1 200px"><span class="vg-gl">Buscar</span><input id="bimQ" type="search" value="${esc(BIM.q)}" placeholder="Código, partida, elemento, tipo…" style="width:100%;height:46px;border-radius:13px;border:1px solid var(--line2);background:var(--card);padding:0 14px;font:inherit;font-size:13px"></div>` : ''}
+    ${hay ? `<div class="vg-g"><span class="vg-gl">Ver</span><div class="vg-seg" role="group" aria-label="Vista">${[['partidas', 'Partidas'], ['elementos', 'Elementos'], ['reglas', 'Reglas']].map(([k, t]) => `<button type="button" class="${BIM.vista === k ? 'on' : ''}" data-bim-vista="${k}" style="height:32px">${t}</button>`).join('')}</div></div>
+    <div class="vg-g" style="flex:1 1 200px"><span class="vg-gl">Buscar</span><input id="bimQ" type="search" value="${esc(BIM.q)}" placeholder="Código, partida, elemento, tipo…" style="width:100%;height:38px;border-radius:11px;border:1px solid var(--line2);background:var(--card);padding:0 12px;font:inherit;font-size:12.5px"></div>` : ''}
     ${adm ? `<div class="vg-g"><span class="vg-gl">Modelo</span><button type="button" class="btn-sec bim-carga-btn" data-bim-carga title="Cargar o actualizar el modelo de este frente: lee su inventario, detecta sus atributos y propone el enlace con las partidas"><svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M5 20h14"/></svg>${hay ? 'Actualizar' : 'Cargar'}</button></div>` : ''}</div>`;
   if (!hay) { box.innerHTML = `<div class="vg-wrap">${barra}<div class="vg-tcard"><h3 style="margin:0 0 6px">${esc(proy ? proy.nombre : '')}: todavía no hay modelo cargado</h3><p class="hint" style="margin:0">${BIM.sinSql ? 'Falta correr <code>modelo_bim.sql</code> en la base.' : adm ? 'Usa <b>Cargar</b>: se lee el inventario del modelo, se detectan sus atributos y se propone solo el enlace con las partidas de este frente. Es la misma lógica para cualquier modelo.' : 'Este frente todavía no tiene su modelo 3D cargado.'}</p></div></div>`; return; }
   const conV = new Set(BIM.vin.map(v => v.elemento_id)), enl = E.filter(e => conV.has(e.id)).length;
   const pref = new Set(BIM.par.map(p => p.codigo.split('.').slice(0, 2).join('.'))), delPuente = BIM.nodos.filter(n => pref.has(n.codigo.split('.').slice(0, 2).join('.')));
-  const medidas = BIM.par.filter(p => !p.es_reparto), okN = medidas.filter(p => bimDif(p).c === 'ok').length, malN = medidas.filter(p => bimDif(p).c === 'bad').length, rev = BIM.reglas.filter(r => r.activa && r.revisar).length;
+  const medidas = BIM.par.filter(p => !p.es_reparto && bimClase(p) !== 'calidad'), okN = medidas.filter(p => bimDif(p).c === 'ok').length, malN = medidas.filter(p => bimDif(p).c === 'bad').length, rev = BIM.reglas.filter(r => r.activa && r.revisar).length;
   const ic = (k) => VG_IC[k];
   const kp = `<div class="vg-cards bim-cards">
     <article class="vgk pv"><header><span class="vgk-ic">${ic('pv')}</span><span class="vgk-l">Elementos del modelo</span></header><div class="vgk-v">${E.length}</div><div class="vgk-s"><b>${enl}</b> enlazados · ${E.length - enl} sin partida</div><div class="vgk-bar"><i style="width:${(enl / E.length * 100).toFixed(1)}%"></i></div></article>
@@ -9491,10 +9527,10 @@ function bimPintar() {
     const filas = BIM.par.filter(p => pasa(p.codigo, p.codigo_esp || '', p.nombre, p.reglas || '')).map(p => {
       const ab = BIM.abiertos.has(p.nodo_id), d = bimDif(p);
       const det = ab ? `<tr class="bim-sub"><td colspan="9"><div class="bim-chips">${BIM.vin.filter(v => v.nodo_id === p.nodo_id).map(v => { const e = elPorId[v.elemento_id] || {}; return `<span title="${esc(e.nombre || '')}"><b>${esc(e.codigo || e.elemento || e.tipo || 'elemento')}</b> ${esc(e.elemento || '')} · ${esc((e.ubicacion || '').replace('Margen ', 'M. '))} · ${bimN(v.cantidad)} ${esc(p.unidad || '')}</span>`; }).join('')}</div></td></tr>` : '';
-      return `<tr class="bim-row${ab ? ' on' : ''}" data-bim-nodo="${p.nodo_id}" tabindex="0"><th scope="row" class="l"><span class="ctv-tg${ab ? ' on' : ''}" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>${esc(p.codigo_esp || p.codigo)}</th><td class="l" title="${esc(p.nombre)}">${esc(p.nombre)}${p.revisar ? ' <span class="vg-pl mid" title="Regla propuesta por confirmar">revisar</span>' : ''}</td><td>${esc(p.unidad || '')}</td><td>${bimN(p.metrado)}</td><td>${bimN(p.cantidad_modelo)}</td><td>${pill(d)}</td><td>${p.elementos}</td><td class="bim-avc">${barraAv(bimPct(p.nodo_id))}</td></tr>${det}`; }).join('');
+      return `<tr class="bim-row${ab ? ' on' : ''}" data-bim-nodo="${p.nodo_id}" tabindex="0"><th scope="row" class="l"><span class="ctv-tg${ab ? ' on' : ''}" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>${esc(p.codigo_esp || p.codigo)}</th><td class="l" title="${esc(p.nombre)}">${esc(p.nombre)}${p.revisar ? ' <span class="vg-pl mid" title="Regla propuesta por confirmar">revisar</span>' : ''}</td><td>${esc(p.unidad || '')}</td><td>${bimN(p.metrado)}</td><td>${bimN(p.cantidad_modelo)}</td><td>${pill(d)}</td><td>${p.elementos}</td><td class="bim-avc">${barraAv(bimPct(p.nodo_id))}</td><td class="bim-cl">${adm ? `<select data-bim-clase="${esc(p.codigo)}" aria-label="Clase de la partida" title="Trabajo físico: se ve en el visor y avanza de 0 a 100 %. Calidad: prueba, ensayo o postensado, sin modelo físico: queda fuera del árbol y del avance físico del visor."><option value=""${BIM.clases[p.codigo] ? '' : ' selected'}>Auto · ${bimClaseAuto(p.nombre) === 'calidad' ? 'calidad' : 'trabajo'}</option><option value="trabajo"${BIM.clases[p.codigo] === 'trabajo' ? ' selected' : ''}>Trabajo físico</option><option value="calidad"${BIM.clases[p.codigo] === 'calidad' ? ' selected' : ''}>Calidad</option></select>` : `<span class="vg-pl ${bimClase(p) === 'calidad' ? 'mid' : 'na'}">${bimClase(p) === 'calidad' ? 'calidad' : 'trabajo'}</span>`}</td></tr>${det}`; }).join('');
     const sin = delPuente.filter(n => !BIM.par.some(p => p.nodo_id === n.id));
     cuerpo = `<section class="vg-tcard"><header><h3>Partidas enlazadas con el modelo</h3><span>Toca una partida para ver sus elementos · presupuesto contra modelo</span></header>
-      <div class="vg-twrap" style="max-height:none"><table class="vg-t bim-t"><thead><tr><th>Código</th><th class="l">Partida</th><th>Und</th><th>Presupuesto</th><th>Modelo</th><th>Diferencia</th><th>Elementos</th><th>Avance valorizado</th></tr></thead><tbody>${filas || '<tr><td colspan="8">Ninguna partida coincide con la búsqueda.</td></tr>'}</tbody></table></div></section>
+      <div class="vg-twrap" style="max-height:none"><table class="vg-t bim-t"><thead><tr><th>Código</th><th class="l">Partida</th><th>Und</th><th>Presupuesto</th><th>Modelo</th><th>Diferencia</th><th>Elementos</th><th>Avance valorizado</th><th title="Qué tipo de partida es para el visor">En el visor</th></tr></thead><tbody>${filas || '<tr><td colspan="9">Ninguna partida coincide con la búsqueda.</td></tr>'}</tbody></table></div></section>
       <section class="vg-tcard"><header><h3>Partidas del puente sin elementos en el modelo</h3><span>${sin.length} partidas</span></header><div class="bim-chips">${sin.map(n => `<span title="${esc(n.nombre)}"><b>${esc(n.codigo_esp || n.codigo)}</b> ${esc(String(n.nombre).slice(0, 46))}</span>`).join('') || '<span>Todas están enlazadas.</span>'}</div></section>`;
   } else if (BIM.vista === 'elementos') {
     const porE = {}; BIM.vin.forEach(v => { (porE[v.elemento_id] = porE[v.elemento_id] || []).push(v); });
@@ -9576,10 +9612,17 @@ document.addEventListener('click', async (e) => {
   if (de) { const r = BIM.reglas.find(x => x.id === de.dataset.bimDel); if (!r || !(await confirmar(`Eliminar la regla «${r.nombre}». Sus elementos dejan de estar enlazados con esa partida.`))) return;
     try { await preRpc('modelo_regla_eliminar', { p_id: r.id }); await preRpc('modelo_vinculos_aplicar', { p_proyecto: BIM.frente }); toast('Regla eliminada.', true, 'bim'); await bimCargar(true); }
     catch (er) { toast(`No se pudo eliminar: ${esc(er.message)}`, false, 'bim'); } return; }
+  if (e.target.closest('[data-bim-clase]')) return;
   const fila = e.target.closest('[data-bim-nodo],[data-bim-grupo]');
   if (fila && document.getElementById('bimPanel') && document.getElementById('bimPanel').contains(fila)) { const k = fila.dataset.bimNodo || fila.dataset.bimGrupo; if (BIM.abiertos.has(k)) BIM.abiertos.delete(k); else BIM.abiertos.add(k); bimPintar(); }
 });
 document.addEventListener('input', (e) => { if (e.target.id === 'bimQ') { BIM.q = e.target.value; bimPintar(); } });
+document.addEventListener('change', async (e) => {
+  const s = e.target.closest && e.target.closest('[data-bim-clase]'); if (!s) return;
+  s.disabled = true;
+  try { await preRpc('modelo_partida_clase_guardar', { p_proyecto: BIM.frente, p_nodo_codigo: s.dataset.bimClase, p_clase: s.value || null }); toast('Clase guardada. El visor la usa al abrirse.', true, 'bim'); await bimCargar(true); }
+  catch (er) { s.disabled = false; toast(`No se pudo guardar: ${esc(er.message)}${/function|schema cache|404/i.test(er.message) ? ' · ¿falta correr nube_pendientes.sql?' : ''}`, false, 'bim'); }
+});
 
 // ═══ CARGA INTELIGENTE DEL MODELO: la misma lógica para cualquier frente o modelo nuevo ═══
 // 1) bimNormalizar: lee el inventario del modelo en cualquiera de sus formas (lo que publica el visor o un JSON propio) y detecta qué atributos trae.
@@ -9816,6 +9859,8 @@ async function bimCargaAbrir() {
 // No es otro visor: el modelo se ve en el Visor 3D (Valorizado · Campo · Comparar). Aquí se concilia, con montos y solo lo que requiere atención.
 const A3 = { frente: null, rango: 'mes', todo: false, q: '', cargado: false, sinSql: false, nodos: {}, par: [], dia: [], nd: [], val: {}, semanas: [], elTotal: 0, elMarcados: 0 };
 const A3_REG = () => ['admin', 'residente', 'supervisor'].includes(AUTH.rol);
+// pruebas y ensayos: hitos de aceptación (se cumplen o no), no trabajo físico con avance lineal: no entran al % físico
+const a3Hito = (p) => { const c = A3.clases && A3.clases[p.codigo]; return c ? c === 'calidad' : /prueba|ensayo|integridad|control de calidad|inspecci[oó]n|post[\s-]?tensad/i.test(String(p.nombre || '')); };
 const a3Rango = { sem: ['7 días', 7], mes: ['30 días', 30], todo: ['Todo', 99999] };
 async function a3Cargar(forzar) {
   const box = $('#a3Panel'); if (!box) return;
@@ -9829,7 +9874,7 @@ async function a3Cargar(forzar) {
     }
     A3.sinSql = false;
     const f = A3.frente;
-    const [nodos, par, dia, nd, vp, sem, els, marc] = await Promise.all([
+    const [nodos, par, dia, nd, vp, sem, els, marc, cl] = await Promise.all([
       getTodo(`/wbs_nodos?version_id=eq.${DATA.versionId}&proyecto_id=eq.${f}&es_hoja=eq.true&select=id,codigo,codigo_esp,nombre,unidad,metrado,precio_unitario,orden&order=orden`),
       get(`/v_modelo_partida?proyecto_id=eq.${f}&select=nodo_id,codigo,codigo_esp,nombre,unidad,metrado,precio_unitario,elementos&order=codigo`).catch(() => []),
       getTodo(`/v_modelo_avance_parte?proyecto_id=eq.${f}&select=*&order=fecha.desc,nodo_id`).catch(() => { A3.sinSql = true; return []; }),
@@ -9837,7 +9882,9 @@ async function a3Cargar(forzar) {
       getTodo(`/valorizacion_partidas?select=nodo_id,metrado,valorizaciones!inner(estado)&valorizaciones.estado=eq.aprobada&order=nodo_id,valorizacion_id`).catch(() => []),
       get(`/semanas_obra?obra_id=eq.${OBRA.id}&select=numero,fecha_inicio,fecha_fin&order=numero`).catch(() => []),
       getTodo(`/modelo_elementos?proyecto_id=eq.${f}&select=id&order=id`).catch(() => []),
-      getTodo(`/modelo_avance?select=elemento_id,modelo_elementos!inner(proyecto_id)&modelo_elementos.proyecto_id=eq.${f}&order=elemento_id,nodo_id,fecha`).catch(() => [])]);
+      getTodo(`/modelo_avance?select=elemento_id,modelo_elementos!inner(proyecto_id)&modelo_elementos.proyecto_id=eq.${f}&order=elemento_id,nodo_id,fecha`).catch(() => []),
+      get(`/modelo_partida_clase?proyecto_id=eq.${f}&select=nodo_codigo,clase`).catch(() => [])]);
+    A3.clases = {}; cl.forEach(c => { A3.clases[c.nodo_codigo] = c.clase; });
     A3.nodos = {}; nodos.forEach(n => { A3.nodos[n.id] = n; });
     A3.par = par; A3.dia = dia; A3.nd = nd; A3.semanas = sem; A3.elTotal = els.length; A3.elMarcados = new Set(marc.map(m => m.elemento_id)).size;
     A3.val = {}; vp.forEach(r => { if (A3.nodos[r.nodo_id]) A3.val[r.nodo_id] = (A3.val[r.nodo_id] || 0) + Number(r.metrado || 0); });
@@ -9862,21 +9909,21 @@ function a3Pintar() {
   const pct = (x, n) => { const m = Number(nodo(n).metrado || 0); return m > 0 ? Math.min(1, (x || 0) / m) : null; };
   // montos: lo hecho en campo que aún no se valoriza, y lo valorizado que todavía no tiene marcas en el modelo
   let wT = 0, wC = 0, wV = 0, porVal = 0, sinResp = 0;
-  A3.par.forEach(p => { const m = Number(p.metrado || 0), w = m * Number(p.precio_unitario || 0), c = Math.min(m, campo[p.nodo_id] || 0), v = Math.min(m, A3.val[p.nodo_id] || 0); wT += w; wC += (m > 0 ? c / m : 0) * w; wV += (m > 0 ? v / m : 0) * w; if (c > v) porVal += (c - v) * Number(p.precio_unitario || 0); else sinResp += (v - c) * Number(p.precio_unitario || 0); });
+  A3.par.forEach(p => { const m = Number(p.metrado || 0), w = m * Number(p.precio_unitario || 0), c = Math.min(m, campo[p.nodo_id] || 0), v = Math.min(m, A3.val[p.nodo_id] || 0); if (!a3Hito(p)) { wT += w; wC += (m > 0 ? c / m : 0) * w; wV += (m > 0 ? v / m : 0) * w; } if (c > v) porVal += (c - v) * Number(p.precio_unitario || 0); else sinResp += (v - c) * Number(p.precio_unitario || 0); });
   const todas = A3.dia.filter(r => r.fecha >= dIso && pasa(nodo(r.nodo_id).codigo, nodo(r.nodo_id).codigo_esp || '', nodo(r.nodo_id).nombre || ''));
   const cuenta = { ok: 0, mid: 0, bad: 0, sinAct: 0, sinMarcas: 0 }; todas.forEach(r => { const e = a3Estado(r); if (e[1] === 'na') cuenta[e[0] === 'sin actividad' ? 'sinAct' : 'sinMarcas']++; else cuenta[e[1]]++; });
   const ic = (k) => VG_IC[k], pt = (v) => (v * 100).toFixed(0) + ' %', mon = (v) => v >= 1e6 ? 'S/ ' + (v / 1e6).toFixed(2) + ' M' : 'S/ ' + Math.round(v).toLocaleString('es-PE');
   const visor = (modo) => `visor/?proyecto=${encodeURIComponent(proy.codigo || '')}&modo=${modo}&v=${Date.now()}`;
   const barra = `<div class="vg-bar"><div class="vg-g vg-g-fr"><span class="vg-gl">Frente</span><div class="vg-pills" role="group" aria-label="Frente">${frs.map(([id, t]) => `<button type="button" class="${A3.frente === id ? 'on' : ''}" data-a3-fr="${esc(id)}">${esc(t)}</button>`).join('')}</div></div>
-    <div class="vg-g"><span class="vg-gl">Periodo</span><div class="vg-seg" role="group" aria-label="Periodo">${Object.entries(a3Rango).map(([k, [t]]) => `<button type="button" class="${A3.rango === k ? 'on' : ''}" data-a3-rg="${k}" style="height:38px">${t}</button>`).join('')}</div></div>
-    <div class="vg-g"><span class="vg-gl">Detalle</span><div class="vg-seg" role="group" aria-label="Detalle">${[['0', 'Solo lo que requiere atención'], ['1', 'Todo']].map(([k, t]) => `<button type="button" class="${(A3.todo ? '1' : '0') === k ? 'on' : ''}" data-a3-td="${k}" style="height:38px">${t}</button>`).join('')}</div></div>
-    <div class="vg-g" style="flex:1 1 180px"><span class="vg-gl">Buscar</span><input id="a3Q" type="search" value="${esc(A3.q)}" placeholder="Código o partida…" style="width:100%;height:46px;border-radius:13px;border:1px solid var(--line2);background:var(--card);padding:0 14px;font:inherit;font-size:13px"></div></div>`;
+    <div class="vg-g"><span class="vg-gl">Periodo</span><div class="vg-seg" role="group" aria-label="Periodo">${Object.entries(a3Rango).map(([k, [t]]) => `<button type="button" class="${A3.rango === k ? 'on' : ''}" data-a3-rg="${k}" style="height:32px">${t}</button>`).join('')}</div></div>
+    <div class="vg-g"><span class="vg-gl">Detalle</span><div class="vg-seg" role="group" aria-label="Detalle">${[['0', 'Solo lo que requiere atención'], ['1', 'Todo']].map(([k, t]) => `<button type="button" class="${(A3.todo ? '1' : '0') === k ? 'on' : ''}" data-a3-td="${k}" style="height:32px">${t}</button>`).join('')}</div></div>
+    <div class="vg-g" style="flex:1 1 180px"><span class="vg-gl">Buscar</span><input id="a3Q" type="search" value="${esc(A3.q)}" placeholder="Código o partida…" style="width:100%;height:38px;border-radius:11px;border:1px solid var(--line2);background:var(--card);padding:0 12px;font:inherit;font-size:12.5px"></div></div>`;
   const enlaces = `<div class="a3-modos"><p>Un solo modelo en el <b>Visor 3D</b>. Esta pantalla es el control, no otro visor.</p>
-    <a href="${visor('estado')}"><b>Valorizado</b><span>lo oficial, por mes</span></a><a href="${visor('campo')}"><b>Campo</b><span>lo marcado en el modelo, por día</span></a></div>`;
+    <a href="${visor('estado')}"><b>Valorizado</b><span>lo oficial, por mes</span></a><a href="${visor('campo')}"><b>Campo</b><span>lo marcado en el modelo, por día</span></a><a href="${visor('pvr')}"><b>Plan vs Real</b><span>lo planeado contra lo ejecutado, por semana</span></a></div>`;
   if (A3.sinSql) { box.innerHTML = `<div class="vg-wrap">${barra}<div class="vg-tcard"><h3 style="margin:0 0 6px">Falta preparar la base</h3><p class="hint" style="margin:0">Corre <code>nube_pendientes.sql</code> (incluye <code>avance_elementos.sql</code>) en la base y vuelve a abrir esta pantalla.</p></div></div>`; return; }
   const kp = `<div class="vg-cards bim-cards">
     <article class="vgk pv"><header><span class="vgk-ic">${ic('pv')}</span><span class="vgk-l">Elementos con marca de campo</span></header><div class="vgk-v">${A3.elMarcados} de ${A3.elTotal}</div><div class="vgk-s">del modelo de este frente</div><div class="vgk-bar"><i style="width:${A3.elTotal ? (A3.elMarcados / A3.elTotal * 100).toFixed(1) : 0}%"></i></div></article>
-    <article class="vgk ev"><header><span class="vgk-ic">${ic('ev')}</span><span class="vgk-l">Campo y valorizado</span></header><div class="vgk-v">${wT ? pt(wC / wT) : '—'}</div><div class="vgk-s">campo · valorizado <b>${wT ? pt(wV / wT) : '—'}</b></div><div class="vgk-bar"><i style="width:${wT ? (wC / wT * 100).toFixed(1) : 0}%"></i></div></article>
+    <article class="vgk ev"><header><span class="vgk-ic">${ic('ev')}</span><span class="vgk-l">Campo y valorizado</span></header><div class="vgk-v">${wT ? pt(wC / wT) : '—'}</div><div class="vgk-s">campo · valorizado <b>${wT ? pt(wV / wT) : '—'}</b> · trabajo físico</div><div class="vgk-bar"><i style="width:${wT ? (wC / wT * 100).toFixed(1) : 0}%"></i></div></article>
     <article class="vgk ${porVal > 0 ? 'mid' : 'ok'}"><header><span class="vgk-ic">${ic('spi')}</span><span class="vgk-l">Por valorizar</span></header><div class="vgk-v">${mon(porVal)}</div><div class="vgk-s">hecho en campo, aún sin valorizar</div></article>
     <article class="vgk"><header><span class="vgk-ic">${ic('cpi')}</span><span class="vgk-l">Valorizado sin marcas</span></header><div class="vgk-v">${mon(sinResp)}</div><div class="vgk-s">valorizado que aún no se marcó en el modelo</div></article></div>`;
   // por día: por defecto solo lo que requiere atención (lo que concuerda queda contado, no listado)
@@ -9889,7 +9936,7 @@ function a3Pintar() {
   // acumulado: por defecto solo partidas con campo o parte
   const filasPar = A3.par.filter(p => (A3.todo || (campo[p.nodo_id] || 0) > 0 || (parte[p.nodo_id] || 0) > 0) && pasa(p.codigo, p.codigo_esp || '', p.nombre)).map(p => {
     const c = pct(campo[p.nodo_id], p.nodo_id), v = pct(A3.val[p.nodo_id], p.nodo_id), pa = pct(parte[p.nodo_id], p.nodo_id), barraA = (x) => x == null ? '<span class="vg-pl na">—</span>' : `<span class="bim-av"><i style="width:${(x * 100).toFixed(0)}%"></i></span><em>${(x * 100).toFixed(0)} %</em>`;
-    return `<tr><th scope="row" class="l">${esc(p.codigo_esp || p.codigo)}</th><td class="l" title="${esc(p.nombre)}">${esc(p.nombre)}</td><td>${esc(p.unidad || '')}</td><td>${bimN(p.metrado)}</td><td class="bim-avc">${barraA(c)}</td><td class="bim-avc">${barraA(pa)}</td><td class="bim-avc">${barraA(v)}</td></tr>`; }).join('');
+    return `<tr><th scope="row" class="l">${esc(p.codigo_esp || p.codigo)}</th><td class="l" title="${esc(p.nombre)}">${esc(p.nombre)}${a3Hito(p) ? ' <span class="vg-pl na" title="Hito de calidad: se cumple o no, no avanza de 0 a 100 %">hito</span>' : ''}</td><td>${esc(p.unidad || '')}</td><td>${bimN(p.metrado)}</td><td class="bim-avc">${barraA(c)}</td><td class="bim-avc">${barraA(pa)}</td><td class="bim-avc">${barraA(v)}</td></tr>`; }).join('');
   const sem = A3.semanas.map(s => { let m = 0, pr = 0, n = 0; A3.dia.forEach(r => { if (r.fecha >= s.fecha_inicio && r.fecha <= s.fecha_fin) { m += Number(r.cantidad_avance || 0) * pu(r.nodo_id); pr += Number(r.cantidad_parte || 0) * pu(r.nodo_id); n++; } }); return { s, m, pr, n }; }).filter(x => x.n).reverse().slice(0, 12);
   const filasSem = sem.map(({ s, m, pr }) => { const d = m - pr, e = pr === 0 && m > 0 ? ['por pasar al parte', 'mid'] : Math.abs(d) <= Math.max(1, 0.005 * m) ? ['concuerda', 'ok'] : ['difiere', 'bad']; return `<tr><th scope="row">${s.numero}</th><td class="mono">${s.fecha_inicio.slice(5).split('-').reverse().join('/')} – ${s.fecha_fin.slice(5).split('-').reverse().join('/')}</td><td>${fmt(pr)}</td><td>${fmt(m)}</td><td>${fmt(d)}</td><td><span class="vg-pl ${e[1]}">${e[0]}</span></td></tr>`; }).join('');
   const vacio = !A3.nd.length && !A3.dia.length;

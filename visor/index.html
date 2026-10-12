@@ -7,8 +7,8 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <title>Visor BIM · Obra 04</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f26a1b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 18h20M4 18v-6M20 18v-6M2 12c4-8 16-8 20 0M8 18v-7M12 18V8M16 18v-7'/%3E%3C/svg%3E" />
-  <script type="module" crossorigin src="./assets/index-BCsbovEh.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-S7mFQPPy.css">
+  <script type="module" crossorigin src="./assets/index-C9FpYcMt.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-E7ldG7XN.css">
 </head>
 <body>
   <div id="app">
@@ -95,6 +95,7 @@
               <div class="cp-cod"><input id="cpCod" type="text" list="cpCodL" placeholder="O escribe el código: ED-P3, ED-P8…" autocomplete="off" /><datalist id="cpCodL"></datalist><button class="btn" id="cpAdd" title="Agregar a la selección los elementos con esos códigos">Agregar</button></div>
               <div class="cp-a2"><button class="btn" id="cpGrupo" title="Agregar a la selección todos los elementos del grupo, la rama o la partida que estás viendo">＋ Todo el grupo</button><button class="btn" id="cpLimpiar">Limpiar</button></div>
               <label for="cpNodo">Partida ejecutada</label><select id="cpNodo"><option value="">Selecciona elementos en el modelo</option></select>
+              <div id="cpResBox" hidden><label for="cpResultado">Resultado de la prueba</label><select id="cpResultado"><option value="conforme">Conforme</option><option value="no_conforme">No conforme</option></select></div>
               <label for="cpFecha">Fecha</label><input type="date" id="cpFecha" />
               <div class="cp-a">
                 <button class="btn pri" id="cpMarcar" disabled>Marcar ejecutado</button>
@@ -187,13 +188,21 @@
       <div class="ov legend" id="legend">
         <div class="seg lg-seg" id="modeBar" role="group" aria-label="Qué se ve en el modelo">
           <button data-v="estado" class="on" title="Avance VALORIZADO: lo oficial, por mes y por partida">Valorizado</button>
-          <button data-v="campo" title="Avance de CAMPO: lo marcado en el modelo, elemento por elemento y por día">Campo</button>
-          <button data-v="lookahead" title="Qué se trabaja en cada semana del Look Ahead">Look Ahead</button>
+          <button data-v="pvr" title="PLAN VS REAL por semana: lo planeado (Look Ahead y plan semanal) contra lo ejecutado en campo">Plan vs Real</button>
         </div>
         <span class="lc" id="legChips"></span>
       </div>
+      <div class="ov pvr" id="pvrBar" hidden>
+        <button id="pvrPrev" class="icb" title="Semana anterior" aria-label="Semana anterior">‹</button>
+        <select id="pvrSem" aria-label="Semana"></select>
+        <button id="pvrNext" class="icb" title="Semana siguiente" aria-label="Semana siguiente">›</button>
+        <button id="pvrHoy" class="btn" title="Ir a la semana actual">Hoy</button>
+        <select id="pvrTipo" title="Qué partidas mirar" aria-label="Partidas"><option value="todo">Todas las partidas</option></select>
+        <span class="pvr-res" id="pvrRes"></span>
+      </div>
       <div class="ov hint" id="hint">Arrastre: orbitar · Rueda: zoom · Clic derecho: desplazar · Clic: inspeccionar</div>
       <div id="loader"><div class="ld-c"><div class="spin"></div><b id="ldT">Cargando modelo…</b><div class="ld-bar"><i id="ldB"></i></div><small id="ldS">Preparando…</small></div></div>
+      <div class="tip" id="tip" hidden></div>
       <div id="toast"></div>
     </main>
   </div>
