@@ -68,7 +68,7 @@ a{color:inherit;}
 .nav button{display:flex;align-items:center;gap:10px;text-align:left;white-space:nowrap;background:transparent;border:0;color:var(--tx2);
   padding:11px 12px;border-radius:8px;font-size:13.5px;cursor:pointer;font-family:inherit;}
 .nav button:hover{background:var(--ic-neutral-bg);color:var(--tx);}   /* claro y oscuro: fondo y texto con contraste */
-#visorLink:hover{background:var(--ic-neutral-bg);color:var(--tx) !important;}
+#visorLink:hover,#planosLink:hover{background:var(--ic-neutral-bg);color:var(--tx) !important;}
 .nav button.on{background:var(--blue);color:#fff;font-weight:600;}
 .nav button.on small{color:#dbe6ff;}
 .nav button.disabled{opacity:.4;cursor:default;}
@@ -1151,7 +1151,7 @@ html.dens-densa{--rh:26px;--rh0:31px;--rh1:26px;--rh2:24px;--rh3:22px;--fc:10.5p
 :root:not([data-theme="dark"]) .brand b{color:#fff;} :root:not([data-theme="dark"]) .brand p{color:#a5abe0;}
 :root:not([data-theme="dark"]) .nav button{color:#c6caee;} :root:not([data-theme="dark"]) .nav button:hover{background:rgba(255,255,255,.08);color:#fff;}
 :root:not([data-theme="dark"]) .nav button.on{background:rgba(255,255,255,.13);color:#fff;box-shadow:inset 3px 0 0 var(--naranja);}
-:root:not([data-theme="dark"]) #visorLink{color:#c6caee !important;} :root:not([data-theme="dark"]) #visorLink:hover{background:rgba(255,255,255,.08);color:#fff !important;}
+:root:not([data-theme="dark"]) #visorLink,:root:not([data-theme="dark"]) #planosLink{color:#c6caee !important;} :root:not([data-theme="dark"]) #visorLink:hover,:root:not([data-theme="dark"]) #planosLink:hover{background:rgba(255,255,255,.08);color:#fff !important;}
 :root:not([data-theme="dark"]) .side-foot{color:#a5abe0;border-top:1px solid rgba(255,255,255,.09);}
 :root:not([data-theme="dark"]) .side-tg{color:#c6caee;}
 .kpis{gap:14px;}
@@ -2069,6 +2069,16 @@ html:not(.cel) .topbar{margin-bottom:14px;}
 .vg-tip strong{display:block;margin-bottom:5px;font-size:12.5px;} .vg-tip div{display:flex;align-items:center;gap:8px;padding:1.5px 0;} .vg-tip i{width:9px;height:9px;border-radius:50%;flex:none;} .vg-tip span{flex:1;color:#475569;} .vg-tip b{font-variant-numeric:tabular-nums;}
 .vg-tip .vg-tip-i{margin-top:5px;padding-top:5px;border-top:1px solid #e2e8f0;}
 .vg-hero-f{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 16px;margin-top:6px;font-size:12px;color:rgba(255,255,255,.7);} .vg-hero-f b{color:#fff;} .vg-hero-f b.ok{color:#4ade80;} .vg-hero-f b.mid{color:#fbbf24;} .vg-hero-f b.bad{color:#fb7185;}
+.vg-hero[data-fondo="claro"]{--h3:#fff;color:#475569;background:#fff;border:1px solid #E2E8F0;box-shadow:0 1px 2px rgba(15,23,42,.04),0 14px 30px -24px rgba(15,23,42,.28);}
+.vg-hero[data-fondo="claro"] .vg-hero-t small{color:#64748B;} .vg-hero[data-fondo="claro"] .vg-hero-t h3{color:#0F172A;}
+.vg-hero[data-fondo="claro"] .vg-lg{border-color:#E2E8F0;background:#F8FAFC;color:#334155;} .vg-hero[data-fondo="claro"] .vg-lg:hover{background:#EEF2F7;} .vg-hero[data-fondo="claro"] .vg-lg b{color:#0F172A;}
+.vg-hero[data-fondo="claro"] .vgc-grid{stroke:#E2E8F0;} .vg-hero[data-fondo="claro"] .vgc-ty,.vg-hero[data-fondo="claro"] .vgc-tx{fill:#475569;} .vg-hero[data-fondo="claro"] .vgc-axis{stroke:#CBD5E1;} .vg-hero[data-fondo="claro"] .vgc-tick{stroke:#94A3B8;}
+.vg-hero[data-fondo="claro"] .vgc-bac{stroke:#94A3B8;} .vg-hero[data-fondo="claro"] .vgc-tb{fill:#64748B;} .vg-hero[data-fondo="claro"] .vgc-cut{stroke:#94A3B8;} .vg-hero[data-fondo="claro"] .vgc-guia{stroke:#94A3B8;}
+.vg-hero[data-fondo="claro"] .vgc-badge{fill:#1E293B;} .vg-hero[data-fondo="claro"] .vgc-badget{fill:#fff;}
+.vg-hero[data-fondo="claro"] .vg-hero-f{color:#475569;} .vg-hero[data-fondo="claro"] .vg-hero-f b{color:#0F172A;} .vg-hero[data-fondo="claro"] .vg-hero-f b.ok{color:#15803D;} .vg-hero[data-fondo="claro"] .vg-hero-f b.mid{color:#B45309;} .vg-hero[data-fondo="claro"] .vg-hero-f b.bad{color:#B91C1C;}
+.vg-hero[data-fondo="claro"] .vgc-tk rect{fill:#F8FAFC;stroke:#E2E8F0;} .vg-hero[data-fondo="claro"] .vgc-tk-h{fill:#64748B;} .vg-hero[data-fondo="claro"] .vgc-tk-v,.vg-hero[data-fondo="claro"] .vgc-tk-b{fill:#0F172A;} .vg-hero[data-fondo="claro"] .vgc-tk-s,.vg-hero[data-fondo="claro"] .vgc-tk-l,.vg-hero[data-fondo="claro"] .vgc-tk-r{fill:#475569;}
+.vg-hero[data-fondo="claro"] .vgc-tk .ok{fill:#15803D;} .vg-hero[data-fondo="claro"] .vgc-tk .mid{fill:#B45309;} .vg-hero[data-fondo="claro"] .vgc-tk .bad{fill:#B91C1C;}
+.vg-hero[data-fondo="claro"] .vg-fondos button{border-color:rgba(15,23,42,.22);} .vg-hero[data-fondo="claro"] .vg-fondos button.on{border-color:#0F172A;box-shadow:0 0 0 2px rgba(15,23,42,.12);}
 .vg-tcard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px 14px;box-shadow:0 1px 2px rgba(16,24,40,.04),0 10px 28px -20px rgba(16,24,40,.3);}
 .vg-tcard>header{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 14px;margin-bottom:10px;} .vg-tcard h3{margin:0;font-size:14px;font-weight:800;} .vg-tcard header span{font-size:11px;color:var(--mut);}
 .vg-twrap{max-height:352px;overflow:auto;border:1px solid var(--line);border-radius:13px;}
@@ -2218,6 +2228,7 @@ document.documentElement.classList.add('dens-densa');   // tamaño único de las
           <button data-pane="hh" title="Histograma de horas-hombre planificadas desde el APU de la oferta"><span class="ni">👷</span><span class="nt">Horas-hombre</span></button>
           <button data-pane="materiales" title="Metas totales y avance mensual por frente"><span class="ni">🧱</span><span class="nt">Materiales</span></button>
           <button type="button" class="prox" disabled title="Próximamente · horas-máquina y equipos en obra"><span class="ni">🚜</span><span class="nt">Equipos</span><span class="nav-tag">pronto</span></button>
+          <button type="button" class="prox" disabled title="Próximamente · mantenimiento preventivo y correctivo, órdenes de trabajo y alertas"><span class="ni">🛠️</span><span class="nt">Mantenimiento</span><span class="nav-tag">pronto</span></button>
           <button type="button" class="prox" disabled title="Próximamente · consumo real de insumos"><span class="ni">🛢️</span><span class="nt">Consumos</span><span class="nav-tag">pronto</span></button>
         </div>
       </div>
@@ -2235,6 +2246,7 @@ document.documentElement.classList.add('dens-densa');   // tamaño único de las
         <button type="button" class="nav-gh" data-grupo="bim" aria-expanded="true"><span class="ni">🏢</span><span class="nt">BIM / Modelo</span><i class="nav-chev"></i></button>
         <div class="nav-gb">
           <a href="visor/" id="visorLink" title="Modelo 3D enlazado con las partidas" onclick="this.href='visor/?v='+Date.now()"><span class="ni">🧊</span><span class="nt">Visor 3D</span></a>
+          <a href="planos/" id="planosLink" title="Planos PDF, DWG y DXF para campo: se guardan en el equipo, se abren sin señal, miden y llevan observaciones" onclick="this.href='planos/?v='+Date.now()"><span class="ni">📐</span><span class="nt">Planos PDF / DWG</span></a>
           <button type="button" data-pane="elementos" title="Elementos del modelo 3D enlazados con las partidas: reglas, control contra el presupuesto y avance por elemento"><span class="ni">🧩</span><span class="nt">Modelo y partidas</span></button>
           <button type="button" data-pane="avance3d" title="Avance de campo marcado en el modelo, frente al parte diario, el plan semanal y lo valorizado"><span class="ni">🎨</span><span class="nt">Avance 3D</span></button>
         </div>
@@ -9214,9 +9226,9 @@ document.addEventListener('click', async (e) => {
 //             ambos × (1 + GG meta % + utilidad meta %), con GG meta % = gastos generales meta de la obra ÷ costo directo meta de la obra.
 // Costo real (AC): costo_real_mensual (hoy referencial/simulado). CPI = ganado meta ÷ costo real.
 const VG = { modo: 'meta', frente: 'todos', lineas: { pv: true, ev: true, ac: true }, mes: null, d: null, cargando: false, base: null, vers: [], verSel: null };
-const VG_FONDOS = [['petroleo', 'Petróleo', '#1b5160'], ['pizarra', 'Pizarra', '#36507a'], ['salvia', 'Salvia', '#2d5848'], ['grafito', 'Grafito', '#313947'], ['marino', 'Marino', '#1a2472']];
+const VG_FONDOS = [['claro', 'Claro', '#f1f5f9'], ['petroleo', 'Petróleo', '#1b5160'], ['pizarra', 'Pizarra', '#36507a'], ['salvia', 'Salvia', '#2d5848'], ['grafito', 'Grafito', '#313947'], ['marino', 'Marino', '#1a2472']];
 try { VG.fondo = localStorage.getItem('vg-fondo'); } catch (e) { VG.fondo = null; }
-if (!VG_FONDOS.some(f => f[0] === VG.fondo)) VG.fondo = 'petroleo';
+if (!VG_FONDOS.some(f => f[0] === VG.fondo)) VG.fondo = 'claro';
 const vgYm = (s) => String(s).slice(0, 7);
 const vgMesTxt = (ym) => { const [y, m] = ym.split('-'); return `${MESES_ES[+m - 1]}-${y.slice(2)}`; };
 const vgFmtM = (v) => { const a = Math.abs(v); return (v < 0 ? '−' : '') + (a >= 1e6 ? (a / 1e6).toFixed(2) + ' M' : a >= 1e3 ? (a / 1e3).toFixed(0) + ' k' : a.toFixed(0)); };
@@ -9399,16 +9411,16 @@ function vgPintar() {
   const cont = Math.max(300, Math.min(1560, box.clientWidth || 1000)), W = cont - 44, estrecho = W < 560, H = estrecho ? 250 : W > 1150 ? 330 : 300, padL = estrecho ? 46 : 58, padR = 22, padT = 36, padB = 34;
   const ymax = Math.max(...PVa, ...EVa, ...ACa, 1) * 1.06, X = (i) => padL + (n > 1 ? i / (n - 1) : 0) * (W - padL - padR), Y = (v) => (H - padB) - v / ymax * (H - padB - padT);
   const pts = (arr, hasta) => arr.slice(0, hasta + 1).map((v, i) => ({ x: X(i), y: Y(v) }));
-  const COL = { pv: '#a9bcf5', ev: '#f2b684', ac: '#7ed6c4' };
+  const claro = VG.fondo === 'claro', COL = claro ? { pv: '#2563EB', ev: '#F59E0B', ac: (cpi != null && cpi < 1) ? '#DB2777' : '#10B981' } : { pv: '#a9bcf5', ev: '#f2b684', ac: '#7ed6c4' };   // claro: cobalto, ámbar y esmeralda (magenta si hay sobrecosto)
   let g = '';
   for (let q = 0; q <= 4; q++) { const y = padT + (H - padT - padB) * (1 - q / 4); g += `<line x1="${padL}" y1="${y.toFixed(1)}" x2="${W - padR}" y2="${y.toFixed(1)}" class="vgc-grid"/><text x="${padL - 8}" y="${(y + 3.5).toFixed(1)}" class="vgc-ty" text-anchor="end">${vgFmtM(ymax * q / 4)}</text>`; }
   const paso = n > 22 ? 3 : n > 13 || estrecho ? 2 : 1;
   meses.forEach((m, i) => { if (i % paso === 0 || i === n - 1) { const anio = m.endsWith('-01') || i === 0; g += `<text x="${X(i).toFixed(1)}" y="${H - padB + 18}" class="vgc-tx" text-anchor="middle">${vgMesTxt(m)}</text>`; if (anio) g += `<line x1="${X(i).toFixed(1)}" y1="${H - padB}" x2="${X(i).toFixed(1)}" y2="${H - padB + 5}" class="vgc-tick"/>`; } });
   g += `<line x1="${padL}" y1="${H - padB}" x2="${W - padR}" y2="${H - padB}" class="vgc-axis"/>`;
   const yb = Y(bac); g += `<line x1="${padL}" y1="${yb.toFixed(1)}" x2="${W - padR}" y2="${yb.toFixed(1)}" class="vgc-bac"/><text x="${padL + 8}" y="${(yb - 7).toFixed(1)}" class="vgc-tb" text-anchor="start">Total planeado ${vgM(bac)}</text>`;
-  const defs = `<defs>${['pv', 'ev', 'ac'].map(s => `<linearGradient id="vgA${s}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${COL[s]}" stop-opacity="${s === 'ev' ? .42 : s === 'pv' ? .2 : .16}"/><stop offset="100%" stop-color="${COL[s]}" stop-opacity="0"/></linearGradient>`).join('')}</defs>`;
+  const defs = `<defs>${['pv', 'ev', 'ac'].map(s => `<linearGradient id="vgA${s}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${COL[s]}" stop-opacity="${claro ? (s === 'ev' ? .11 : s === 'pv' ? .06 : .05) : (s === 'ev' ? .42 : s === 'pv' ? .2 : .16)}"/><stop offset="100%" stop-color="${COL[s]}" stop-opacity="0"/></linearGradient>`).join('')}</defs>`;
   const area = (P, id) => P.length < 2 ? '' : `<path d="M${P[0].x.toFixed(1)},${H - padB} L${P[0].x.toFixed(1)},${P[0].y.toFixed(1)} ${vgSpline(P).replace(/^M[^C L]*/, '')} L${P[P.length - 1].x.toFixed(1)},${H - padB} Z" fill="url(#${id})"/>`;
-  const linea = (P, c, w2, dash) => P.length < 2 ? '' : `<path d="${vgSpline(P)}" fill="none" stroke="${c}" stroke-width="9" opacity=".13" stroke-linecap="round"/><path d="${vgSpline(P)}" fill="none" stroke="${c}" stroke-width="${w2}" stroke-linecap="round" ${dash ? `stroke-dasharray="${dash}"` : ''}/>`;
+  const linea = (P, c, w2, dash) => P.length < 2 ? '' : `<path d="${vgSpline(P)}" fill="none" stroke="${c}" stroke-width="9" opacity="${claro ? '.07' : '.13'}" stroke-linecap="round"/><path d="${vgSpline(P)}" fill="none" stroke="${c}" stroke-width="${w2}" stroke-linecap="round" ${dash ? `stroke-dasharray="${dash}"` : ''}/>`;
   const Pp = pts(PVa, n - 1), Pe = ultEV >= 0 ? pts(EVa, ultEV) : [], Pa = ultAC >= 0 ? pts(ACa, ultAC) : [];
   let lin = '';
   if (VG.lineas.pv) lin += area(Pp, 'vgApv') + linea(Pp, COL.pv, 2.4);

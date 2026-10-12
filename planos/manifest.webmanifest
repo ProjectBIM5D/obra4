@@ -1,0 +1,12 @@
+﻿{
+  "name": "Planos · Obra 04",
+  "short_name": "Planos",
+  "description": "Visor de planos PDF / DWG / DXF para campo, con biblioteca sin conexión",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0b1424",
+  "theme_color": "#0b1424",
+  "icons": [{ "src": "icono.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}
