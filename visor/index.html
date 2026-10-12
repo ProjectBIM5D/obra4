@@ -7,8 +7,8 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <title>Visor BIM · Obra 04</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f26a1b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 18h20M4 18v-6M20 18v-6M2 12c4-8 16-8 20 0M8 18v-7M12 18V8M16 18v-7'/%3E%3C/svg%3E" />
-  <script type="module" crossorigin src="./assets/index-C9FpYcMt.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-E7ldG7XN.css">
+  <script type="module" crossorigin src="./assets/index-DGIDuq_Z.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-BJJHo9Pu.css">
 </head>
 <body>
   <div id="app">
@@ -168,6 +168,7 @@
         <button id="tGhost" title="Pendientes: fantasma / ocultar"><svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
         <button id="tLA" title="Look Ahead: colorear lo programado en cada semana"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14h3M13 14h3M8 17.5h3"/></svg></button>
         <button id="tGantt" title="Cronograma de los grupos"><svg viewBox="0 0 24 24"><path d="M3 6h9M7 12h11M5 18h8"/></svg></button>
+        <button id="tRec" title="Recorrido 3D: de un acceso al otro"><svg viewBox="0 0 24 24"><circle cx="6" cy="19" r="2"/><circle cx="18" cy="5" r="2"/><path d="M8 19h6a3.5 3.5 0 0 0 0-7H10a3.5 3.5 0 0 1 0-7h6"/></svg></button>
         <button id="tFull" title="Pantalla completa"><svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/></svg></button>
         <button id="tTheme" title="Colores"><svg viewBox="0 0 24 24"><path d="M12 22a10 10 0 1 1 10-10c0 2.8-2 3.5-4 3.5h-2a2 2 0 0 0-1.5 3.3c.6.8.5 3.2-2.5 3.2z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10.5" cy="6.5" r="1"/><circle cx="15.5" cy="7" r="1"/></svg></button>
       </div>
@@ -177,6 +178,27 @@
         <label class="pick"><span>Fondo del visor</span><input type="color" id="cView" /></label>
         <label class="pick"><span>Paneles</span><input type="color" id="cPanel" /></label>
         <button class="btn" id="cReset" style="width:100%;justify-content:center">Restablecer</button>
+      </div>
+      <div class="ov recpanel" id="recPanel" hidden>
+        <div class="rp-h"><b>Recorrido</b><span class="muted small" id="recSub"></span><button id="recX" title="Cerrar">×</button></div>
+        <div class="rp-play">
+          <button class="rp-b" id="recPlay" title="Reproducir / pausar"><svg viewBox="0 0 24 24" id="recPlayIc"><path d="M6 4l14 8-14 8z"/></svg></button>
+          <input type="range" id="recK" min="0" max="1000" value="0" aria-label="Avance del recorrido" />
+          <span class="mono small" id="recT">0:00 / 0:00</span>
+        </div>
+        <div class="rp-l">Cámara</div>
+        <div class="seg wide" id="recCam"><button data-v="frente" class="on" title="A la altura de los ojos, mirando hacia donde se va">De frente</button><button data-v="lateral" title="Al costado, acompañando el avance">Lateral</button><button data-v="dron" title="Desde atrás y arriba">Dron</button><button data-v="orbita" title="Dando la vuelta al puente">Órbita</button></div>
+        <div class="rp-l">Ruta</div>
+        <div class="seg wide" id="recRuta"><button data-v="eje" class="on" title="De un acceso al otro por el eje del puente">Eje del puente</button><button data-v="propia" title="Los puntos que marques con la vista">Mía <span id="recN"></span></button></div>
+        <div class="rp-pr" id="recPropia" hidden>
+          <button class="btn" id="recAdd" title="Agrega la vista actual como punto de la ruta">＋ Punto aquí</button>
+          <button class="btn" id="recUndo">Quitar último</button><button class="btn" id="recClr">Borrar</button>
+          <p class="small muted">Mueve la vista, toca «Punto aquí» en cada lugar (mínimo 2) y reproduce.</p>
+        </div>
+        <label class="rp-r"><span>Velocidad <b id="recVelV">20 km/h</b></span><input type="range" id="recVel" min="5" max="80" step="5" value="20" /></label>
+        <label class="rp-r"><span>Altura de la cámara <b id="recAltV">1.8 m</b></span><input type="range" id="recAlt" min="1" max="40" step="0.5" value="1.8" /></label>
+        <label class="rp-c"><input type="checkbox" id="recDia" /><span>Avanzar el cronograma durante el recorrido</span></label>
+        <div class="rp-f"><button class="btn" id="recVideo" title="Graba el recorrido completo como video"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6" fill="currentColor"/></svg><span id="recVideoT">Grabar video</span></button></div>
       </div>
       <div class="ov viewmenu" id="viewMenu" hidden><button data-v="iso">Isométrica</button><button data-v="elev">Elevación</button><button data-v="top">Planta</button><button data-v="long">Longitudinal</button></div>
 
