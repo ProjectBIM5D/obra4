@@ -2053,8 +2053,8 @@ html:not(.cel) .topbar{margin-bottom:14px;}
 .vg-hero[data-fondo="grafito"]{--h1:rgba(169,188,245,.12);--h2:rgba(120,130,160,.22);--h3:#1c2027;--h4:#262c36;--h5:#313947;}
 .vg-hero[data-fondo="marino"]{--h1:rgba(242,106,27,.18);--h2:rgba(99,112,255,.34);--h3:#0a0f38;--h4:#121a5c;--h5:#1a2472;}
 .vg-fondos{display:inline-flex;align-items:center;gap:7px;padding:0 6px;margin-left:auto;margin-right:6px;align-self:flex-start;} .vg-fondos button{width:15px;height:15px;padding:0;border-radius:50%;border:2px solid rgba(255,255,255,.3);background:var(--c);cursor:pointer;transition:transform .12s,border-color .12s;} .vg-fondos button:hover{transform:scale(1.15);} .vg-fondos button.on{border-color:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.22);}
-.vgc-tk rect{fill:rgba(255,255,255,.07);stroke:rgba(255,255,255,.2);} .vgc-tk text{font-variant-numeric:tabular-nums;} .vgc-tk-h{fill:rgba(255,255,255,.62);font-size:9.5px;font-weight:800;letter-spacing:.1em;} .vgc-tk-v{fill:#fff;font-size:15px;font-weight:800;} .vgc-tk-s{fill:rgba(255,255,255,.7);font-size:11px;font-weight:600;} .vgc-tk-l{fill:rgba(255,255,255,.72);font-size:11px;} .vgc-tk-b{fill:#fff;font-weight:800;}
-.vgc-tk .ok{fill:#7ee0ae;font-weight:800;} .vgc-tk .mid{fill:#f6d77a;font-weight:800;} .vgc-tk .bad{fill:#fca5b0;font-weight:800;}
+.vgc-tk rect{fill:rgba(255,255,255,.07);stroke:rgba(255,255,255,.2);} .vgc-tk text{font-variant-numeric:tabular-nums;} .vgc-tk-h{fill:rgba(255,255,255,.6);font-size:9.5px;font-weight:800;letter-spacing:.12em;} .vgc-tk-v{fill:#fff;font-size:17px;font-weight:800;letter-spacing:-.01em;} .vgc-tk-s{fill:rgba(255,255,255,.7);font-size:11px;font-weight:600;} .vgc-tk-l{fill:rgba(255,255,255,.72);font-size:11px;} .vgc-tk-b{fill:#fff;font-weight:800;}
+.vgc-tk-r{font-size:10px;font-weight:800;letter-spacing:.04em;fill:rgba(255,255,255,.7);} .vgc-tk .ok{fill:#7ee0ae;font-weight:800;} .vgc-tk .mid{fill:#f6d77a;font-weight:800;} .vgc-tk .bad{fill:#fca5b0;font-weight:800;}
 .vg-hero-h{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px 20px;margin-bottom:8px;}
 .vg-hero-t small{display:block;font-size:10.5px;font-weight:800;letter-spacing:.11em;text-transform:uppercase;color:rgba(255,255,255,.58);} .vg-hero-t h3{margin:3px 0 0;font-size:18px;font-weight:800;letter-spacing:-.01em;color:#fff;}
 .vg-legs{display:flex;flex-wrap:wrap;gap:8px;}
@@ -9344,10 +9344,30 @@ function vgPintar() {
   const i0 = meses.indexOf(VG.mes), pva = PVa[i0] || 0, eva = EVa[i0] || 0, aca = ACa[i0] || 0, bac = PVa[n - 1] || 0;
   const spi = pva > 0 ? eva / pva : null, cpi = aca > 0 ? eva / aca : null, sv = eva - pva, cv = eva - aca, eac = cpi ? bac / cpi : null;
   // Earned Schedule: en qué mes del plan se habría alcanzado el valor ganado de hoy (interpolado), contra los meses transcurridos
-  const AT = i0 + 1; let ES = null;
-  if (eva > 0 && n > 0) { let kk = -1; for (let j = 0; j < n; j++) { if (PVa[j] <= eva) kk = j; else break; } const a0 = kk >= 0 ? PVa[kk] : 0, b0 = kk + 1 < n ? PVa[kk + 1] : null; ES = b0 != null && b0 > a0 ? (kk + 1) + (eva - a0) / (b0 - a0) : (kk + 1); }
+  const esDe = (ev) => { if (!(ev > 0) || n < 1) return null; let kk = -1; for (let j = 0; j < n; j++) { if (PVa[j] <= ev) kk = j; else break; } const a0 = kk >= 0 ? PVa[kk] : 0, b0 = kk + 1 < n ? PVa[kk + 1] : null; return b0 != null && b0 > a0 ? (kk + 1) + (ev - a0) / (b0 - a0) : (kk + 1); };
+  const AT = i0 + 1, ES = esDe(eva);
   const spiT = ES != null && AT > 0 ? ES / AT : null, svT = ES != null ? ES - AT : null, durProy = spiT ? n / spiT : null;
+  const tspiT = ES != null && n - AT > 0.05 ? (n - ES) / (n - AT) : null;   // ritmo necesario para cumplir el plazo (1 = el planeado)
   const mesMas = (m, d) => { const [yy, mm] = m.split('-').map(Number), tt = yy * 12 + (mm - 1) + d; return `${Math.floor(tt / 12)}-${String(tt % 12 + 1).padStart(2, '0')}`; };
+  // pronóstico con fecha: AT + (PD − ES) / factor de desempeño, llevado a días reales del plazo vigente
+  let finProy = null, finPlan = null, difDias = null, rango = null, escen = [];
+  if (spiT) {
+    let filasPl = DATA.plazos || [];
+    if (VG.frente !== 'todos') { const cc = COMPONENTES.find(c => (preProy(c.id) || {}).id === VG.frente); filasPl = cc ? filasPl.filter(p => p.codigo === cc.id) : []; }
+    if (filasPl.length) {
+      const d0 = Date.parse(filasPl.map(p => p.fecha_inicio).sort()[0]), d1 = Date.parse(filasPl.map(p => p.fecha_fin_vigente).sort().pop());
+      if (isFinite(d0) && isFinite(d1) && d1 >= d0) {
+        const D = Math.round((d1 - d0) / 864e5) + 1, aFecha = (pf) => new Date(d0 + (D * (AT + (n - ES) / Math.max(pf, 0.25)) / n - 1) * 864e5);
+        const v3 = Math.min(3, i0), es3 = i0 - v3 >= 0 ? esDe(EVa[i0 - v3]) : null, pf3 = v3 >= 1 && es3 != null ? (ES - es3) / v3 : null;
+        escen = [['Optimista · el resto según plan', 1], ['Probable · SPI(t) acumulado ' + spiT.toFixed(2), spiT]];
+        if (pf3 != null && pf3 > 0) escen.push([`Tendencia · últimos ${v3} meses (${pf3.toFixed(2)})`, pf3]);
+        escen = escen.map(([nom, pf]) => ({ nom, f: aFecha(pf) }));
+        finProy = escen[1].f; finPlan = new Date(d1); difDias = Math.round((finProy - finPlan) / 864e5);
+        const ts = escen.map(e => +e.f); rango = [new Date(Math.min(...ts)), new Date(Math.max(...ts))];
+      }
+    }
+  }
+  const fechaL = (d) => `${d.getUTCDate()} ${MESES_ES[d.getUTCMonth()].toLowerCase()} ${d.getUTCFullYear()}`, fechaC = (d) => `${d.getUTCDate()} ${MESES_ES[d.getUTCMonth()].toLowerCase()}`;
   const sim = !!(VG.raw.ac && VG.raw.ac.some(r => r.todo_simulado)), sinAC = !VG.raw.ac || !VG.raw.ac.length, f = VG.fac, base = VG.base || {};
   const pc = (v) => bac > 0 ? Math.max(0, v / bac) : 0;
   const sg = (v) => (v >= 0 ? '+' : '−') + vgM(Math.abs(v));
@@ -9399,15 +9419,20 @@ function vgPintar() {
   let corte = `<line x1="${xc.toFixed(1)}" y1="${padT - 8}" x2="${xc.toFixed(1)}" y2="${H - padB}" class="vgc-cut"/>${badge}`;
   if (VG.lineas.pv) corte += dot(pva, COL.pv); if (VG.lineas.ac && i0 <= ultAC) corte += dot(aca, COL.ac); if (VG.lineas.ev && i0 <= ultEV) corte += dot(eva, COL.ev);
   const guia = `<line class="vgc-guia" x1="0" y1="${padT - 8}" x2="0" y2="${H - padB}" opacity="0"/>`;
-  // ticket de Earned Schedule dentro de la curva (en el espacio libre de arriba a la izquierda)
+  // ticket de Earned Schedule: la fecha probable, el rango y el ritmo que se necesita; el detalle va en el globo
   let ticket = '';
   if (ES != null && spiT != null && W >= 520) {
-    const eT = vgEst(spiT, 'plazo'), sg2 = (v) => (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(1), fin = durProy ? vgMesTxt(mesMas(meses[0], Math.max(0, Math.ceil(durProy - 1e-9) - 1))) : '—';
-    ticket = `<g class="vgc-tk" transform="translate(${padL + 10},${(yb + 16).toFixed(1)})"><title>Earned Schedule: el mes del plan en que se habría alcanzado el valor ganado de hoy (${ES.toFixed(2)}) frente a los meses transcurridos (${AT}). SV(t) es el adelanto o atraso en meses; SPI(t) = ES / AT; el término proyectado supone que se mantiene ese ritmo.</title>
-      <rect width="212" height="80" rx="12"/><text x="12" y="19" class="vgc-tk-h">EARNED SCHEDULE</text>
-      <text x="12" y="41" class="vgc-tk-v">ES ${ES.toFixed(1)} m<tspan class="vgc-tk-s" dx="9">AT ${AT} m</tspan></text>
-      <text x="12" y="59" class="vgc-tk-l">SV(t) <tspan class="${eT.c}">${sg2(svT)} m</tspan> · SPI(t) <tspan class="${eT.c}">${spiT.toFixed(2)}</tspan></text>
-      <text x="12" y="73" class="vgc-tk-l">Término proyectado <tspan class="vgc-tk-b">${fin}</tspan></text></g>`;
+    const eT = vgEst(spiT, 'plazo'), sg2 = (v) => (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(1);
+    const cT = tspiT == null ? 'na' : tspiT > 1.2 ? 'bad' : tspiT > 1.05 ? 'mid' : 'ok';
+    const fechaTxt = finProy ? fechaL(finProy) : vgMesTxt(mesMas(meses[0], Math.max(0, Math.ceil(durProy - 1e-9) - 1)));
+    const l3 = !rango ? `SPI(t) ${spiT.toFixed(2)}` : `Entre ${fechaC(rango[0])} y ${fechaC(rango[1])}${difDias != null ? ` · ${difDias > 0 ? '+' : difDias < 0 ? '−' : ''}${Math.abs(difDias)} d` : ''}`;
+    const tip = [`Earned Schedule: el valor ganado de hoy equivale al mes ${ES.toFixed(1)} del plan; han pasado ${AT} meses (SV(t) ${sg2(svT)} meses).`]
+      .concat(escen.map(e => `${e.nom}: ${fechaL(e.f)}`), finPlan ? [`Plazo vigente: ${fechaL(finPlan)}`] : [], tspiT != null ? [`TSPI(t) ${tspiT.toFixed(2)}: ritmo necesario desde hoy para cumplir el plazo (1.00 = el ritmo planeado).`] : []).join('\n');
+    ticket = `<g class="vgc-tk" transform="translate(${padL + 12},${(yb + 18).toFixed(1)})"><title>${tip}</title>
+      <rect width="222" height="76" rx="13"/>
+      <text x="15" y="23" class="vgc-tk-h">TÉRMINO PROYECTADO</text>${tspiT != null ? `<text x="207" y="46" class="vgc-tk-r ${cT}" text-anchor="end">TSPI(t) ${tspiT.toFixed(2)}</text>` : ''}
+      <text x="15" y="47" class="vgc-tk-v">${fechaTxt}</text>
+      <text x="15" y="65" class="vgc-tk-l"><tspan class="${eT.c}">${l3}</tspan></text></g>`;
   }
   const svg = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" class="vg-svg" role="img" aria-label="Curva S acumulada: planeado, ganado y costo real">${defs}${g}${lin}${corte}${ticket}${guia}</svg>`;
   const leg = (kk, tx, v, c, disp) => `<button type="button" class="vg-lg ${VG.lineas[kk] ? 'on' : ''}" style="--c:${c}" data-vg-lin="${kk}" aria-pressed="${VG.lineas[kk]}" title="Mostrar u ocultar"><i></i><span>${tx}</span><b>${disp ? vgM(v) : '—'}</b></button>`;
