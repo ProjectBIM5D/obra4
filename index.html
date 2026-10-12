@@ -68,7 +68,7 @@ a{color:inherit;}
 .nav button{display:flex;align-items:center;gap:10px;text-align:left;white-space:nowrap;background:transparent;border:0;color:var(--tx2);
   padding:11px 12px;border-radius:8px;font-size:13.5px;cursor:pointer;font-family:inherit;}
 .nav button:hover{background:var(--ic-neutral-bg);color:var(--tx);}   /* claro y oscuro: fondo y texto con contraste */
-#visorLink:hover,#planosLink:hover{background:var(--ic-neutral-bg);color:var(--tx) !important;}
+#visorLink:hover{background:var(--ic-neutral-bg);color:var(--tx) !important;}
 .nav button.on{background:var(--blue);color:#fff;font-weight:600;}
 .nav button.on small{color:#dbe6ff;}
 .nav button.disabled{opacity:.4;cursor:default;}
@@ -1151,7 +1151,7 @@ html.dens-densa{--rh:26px;--rh0:31px;--rh1:26px;--rh2:24px;--rh3:22px;--fc:10.5p
 :root:not([data-theme="dark"]) .brand b{color:#fff;} :root:not([data-theme="dark"]) .brand p{color:#a5abe0;}
 :root:not([data-theme="dark"]) .nav button{color:#c6caee;} :root:not([data-theme="dark"]) .nav button:hover{background:rgba(255,255,255,.08);color:#fff;}
 :root:not([data-theme="dark"]) .nav button.on{background:rgba(255,255,255,.13);color:#fff;box-shadow:inset 3px 0 0 var(--naranja);}
-:root:not([data-theme="dark"]) #visorLink,:root:not([data-theme="dark"]) #planosLink{color:#c6caee !important;} :root:not([data-theme="dark"]) #visorLink:hover,:root:not([data-theme="dark"]) #planosLink:hover{background:rgba(255,255,255,.08);color:#fff !important;}
+:root:not([data-theme="dark"]) #visorLink{color:#c6caee !important;} :root:not([data-theme="dark"]) #visorLink:hover{background:rgba(255,255,255,.08);color:#fff !important;}
 :root:not([data-theme="dark"]) .side-foot{color:#a5abe0;border-top:1px solid rgba(255,255,255,.09);}
 :root:not([data-theme="dark"]) .side-tg{color:#c6caee;}
 .kpis{gap:14px;}
@@ -2246,7 +2246,6 @@ document.documentElement.classList.add('dens-densa');   // tamaño único de las
         <button type="button" class="nav-gh" data-grupo="bim" aria-expanded="true"><span class="ni">🏢</span><span class="nt">BIM / Modelo</span><i class="nav-chev"></i></button>
         <div class="nav-gb">
           <a href="visor/" id="visorLink" title="Modelo 3D enlazado con las partidas" onclick="this.href='visor/?v='+Date.now()"><span class="ni">🧊</span><span class="nt">Visor 3D</span></a>
-          <a href="planos/" id="planosLink" title="Planos PDF, DWG y DXF para campo: se guardan en el equipo, se abren sin señal, miden y llevan observaciones" onclick="this.href='planos/?v='+Date.now()"><span class="ni">📐</span><span class="nt">Planos PDF / DWG</span></a>
           <button type="button" data-pane="elementos" title="Elementos del modelo 3D enlazados con las partidas: reglas, control contra el presupuesto y avance por elemento"><span class="ni">🧩</span><span class="nt">Modelo y partidas</span></button>
           <button type="button" data-pane="avance3d" title="Avance de campo marcado en el modelo, frente al parte diario, el plan semanal y lo valorizado"><span class="ni">🎨</span><span class="nt">Avance 3D</span></button>
         </div>
