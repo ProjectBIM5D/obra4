@@ -2015,6 +2015,9 @@ html:not(.cel) .topbar{margin-bottom:14px;}
 .bim-carga-btn{height:38px;display:inline-flex;align-items:center;gap:7px;white-space:nowrap;} .bim-carga-btn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
 #bimCarga .sug-acc{display:flex;flex-wrap:wrap;align-items:center;gap:8px;} #bimCarga .sug-acc>*{height:40px;flex:0 0 auto;width:auto;margin:0;display:inline-flex;align-items:center;justify-content:center;padding:0 16px;} #bimCarga .bim-carga-btn svg{flex:0 0 17px;}
 @media (max-width:640px){.bc-res{grid-template-columns:repeat(2,minmax(0,1fr));}}
+.a3-modos{display:grid;grid-template-columns:minmax(0,1.6fr) repeat(2,minmax(0,1fr));gap:10px;align-items:stretch;margin:0 0 12px;} .a3-modos p{margin:0;font-size:12.5px;color:var(--tx2);align-self:center;padding-right:8px;} .a3-modos a{display:flex;flex-direction:column;gap:2px;padding:11px 14px;border:1px solid var(--line2);border-radius:13px;background:var(--card);text-decoration:none;color:var(--tx);transition:border-color .15s,transform .12s;} .a3-modos a:hover{border-color:var(--blue);transform:translateY(-1px);} .a3-modos b{font-size:13px;} .a3-modos span{font-size:11.5px;color:var(--mut);}
+.a3-res{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 10px;} .a3-chip{font-size:11.5px;font-weight:700;padding:3px 11px;border-radius:999px;border:1px solid var(--line2);color:var(--tx2);background:var(--input);} .a3-chip.ok{color:#2f6b4f;border-color:rgba(63,163,114,.5);background:rgba(63,163,114,.12);} .a3-chip.mid{color:#8a6516;border-color:rgba(217,164,65,.55);background:rgba(217,164,65,.14);} .a3-chip.bad{color:#a63d3d;border-color:rgba(208,82,82,.5);background:rgba(208,82,82,.1);}
+@media (max-width:1100px){.a3-modos{grid-template-columns:repeat(2,minmax(0,1fr));} .a3-modos p{grid-column:1/-1;}}
 /* ═══ Valor ganado: diseño ═══ */
 .vg-wrap{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr);gap:16px;} .vg-wrap>*{min-width:0;}
 .vg-bar{display:flex;flex-wrap:wrap;justify-content:flex-start;align-items:flex-end;gap:14px 24px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px 18px 16px;box-shadow:0 1px 2px rgba(16,24,40,.04),0 10px 28px -20px rgba(16,24,40,.3);}
@@ -2222,7 +2225,7 @@ document.documentElement.classList.add('dens-densa');   // tamaño único de las
         <div class="nav-gb">
           <a href="visor/" id="visorLink" title="Modelo 3D enlazado con las partidas" onclick="this.href='visor/?v='+Date.now()"><span class="ni">🧊</span><span class="nt">Visor 3D</span></a>
           <button type="button" data-pane="elementos" title="Elementos del modelo 3D enlazados con las partidas: reglas, control contra el presupuesto y avance por elemento"><span class="ni">🧩</span><span class="nt">Modelo y partidas</span></button>
-          <button type="button" class="prox" disabled title="Próximamente · avance coloreado sobre el modelo"><span class="ni">🎨</span><span class="nt">Avance 3D</span><span class="nav-tag">pronto</span></button>
+          <button type="button" data-pane="avance3d" title="Avance de campo marcado en el modelo, frente al parte diario, el plan semanal y lo valorizado"><span class="ni">🎨</span><span class="nt">Avance 3D</span></button>
         </div>
       </div>
       <div class="nav-g" data-g="admin" id="navAdm" hidden>
@@ -2438,6 +2441,7 @@ document.documentElement.classList.add('dens-densa');   // tamaño único de las
     <section class="pane" data-pane="plazo"><div id="plzPanel"></div></section>
     <section class="pane" data-pane="valorganado"><div id="vgPanel"></div></section>
     <section class="pane" data-pane="elementos"><div id="bimPanel"></div></section>
+    <section class="pane" data-pane="avance3d"><div id="a3Panel"></div></section>
     <section class="pane" data-pane="controversias"><div id="ctvPanel"></div></section>
     <section class="pane" data-pane="lineasbase"><div id="lbPanel"></div>
       <div id="lbGanttSlot" style="margin-top:14px"><div class="lb-cab"><div><h3 style="margin:0 0 3px">Cronograma de la línea base</h3><p class="hint" style="margin:0">Solo lectura, tal como está en el Project de esa línea base: fechas, ruta crítica y vínculos. Elige otra en «Línea base». El plan de ejecución se trabaja en Planificación › Plan maestro.</p></div></div><div id="lbGanttBox"></div></div></section>
@@ -3157,6 +3161,7 @@ document.querySelectorAll('#nav button[data-pane]').forEach(b => {
       presupuesto: ['Presupuesto', 'Venta (contrato, solo lectura) y meta (copia del APU que se ajusta sin tocar el contrato)'],
       metrados: ['Mayores metrados', 'Registro de mayores metrados con su estado y resolución · el menor metrado, en una tarjeta'],
       adicionales: ['Adicionales y deductivos', 'Prestaciones adicionales y deductivos vinculados: lo que trajo cada línea base, su resolución y cuánto va del límite'],
+      avance3d: ['Avance 3D', 'Avance de campo marcado en el modelo · concordancia con el parte diario, el plan semanal y lo valorizado'],
       elementos: ['Modelo y partidas', 'Elementos del modelo 3D enlazados con las partidas del presupuesto · reglas, control cruzado y avance por elemento'],
       valorganado: ['Curva S y valor ganado', 'Planeado, ganado y costo real con dos bases: venta (ingreso) y meta (costo) · SPI y CPI'],
       controversias: ['Eventos y controversias', 'Controversias con su línea de tiempo (JRD, conciliación, arbitraje) y los eventos del contrato'],
@@ -3179,6 +3184,7 @@ document.querySelectorAll('#nav button[data-pane]').forEach(b => {
     if (b.dataset.pane === 'controversias') ctvCargar();
     if (b.dataset.pane === 'valorganado') vgCargar(true);
     if (b.dataset.pane === 'elementos') bimCargar(true);
+    if (b.dataset.pane === 'avance3d') a3Cargar(true);
     if (b.dataset.pane === 'presupuesto') preCargar();
     if (b.dataset.pane === 'parte' && !$('#parteLA').hidden) plaCargar();
     $('#side').classList.remove('open'); $('#overlay').classList.remove('on');
@@ -9805,6 +9811,112 @@ async function bimCargaAbrir() {
     await usar(json, tareas, 'visor · ' + arch);
   } catch (er) { if (!m.hidden && !BIM_CARGA.inv) pintar('No se pudo leer el modelo: ' + esc(er.message)); }
 }
+
+// ═══ AVANCE 3D: control entre lo VALORIZADO (oficial, mensual), lo marcado en CAMPO sobre el modelo (diario) y el PARTE DIARIO ═══
+// No es otro visor: el modelo se ve en el Visor 3D (Valorizado · Campo · Comparar). Aquí se concilia, con montos y solo lo que requiere atención.
+const A3 = { frente: null, rango: 'mes', todo: false, q: '', cargado: false, sinSql: false, nodos: {}, par: [], dia: [], nd: [], val: {}, semanas: [], elTotal: 0, elMarcados: 0 };
+const A3_REG = () => ['admin', 'residente', 'supervisor'].includes(AUTH.rol);
+const a3Rango = { sem: ['7 días', 7], mes: ['30 días', 30], todo: ['Todo', 99999] };
+async function a3Cargar(forzar) {
+  const box = $('#a3Panel'); if (!box) return;
+  if (typeof OBRA === 'undefined' || !OBRA || !OBRA.id || typeof DATA === 'undefined' || !DATA || !DATA.versionId || !(DATA.proyectos || []).length) { box.innerHTML = '<div class="rg-msg">Leyendo la obra…</div>'; setTimeout(() => { if (document.documentElement.dataset.pane === 'avance3d') a3Cargar(); }, 1200); return; }
+  if (!A3.cargado || forzar) box.innerHTML = '<div class="rg-msg">Leyendo el avance de campo…</div>';
+  try {
+    if (!A3.frente || !(DATA.proyectos || []).some(p => p.id === A3.frente)) {
+      const c = await get('/modelo_elementos?select=proyecto_id&limit=1').catch(() => null);
+      const orden = COMPONENTES.map(x => (preProy(x.id) || {}).id).filter(Boolean);
+      A3.frente = orden[0]; if (c && c[0]) A3.frente = c[0].proyecto_id;
+    }
+    A3.sinSql = false;
+    const f = A3.frente;
+    const [nodos, par, dia, nd, vp, sem, els, marc] = await Promise.all([
+      getTodo(`/wbs_nodos?version_id=eq.${DATA.versionId}&proyecto_id=eq.${f}&es_hoja=eq.true&select=id,codigo,codigo_esp,nombre,unidad,metrado,precio_unitario,orden&order=orden`),
+      get(`/v_modelo_partida?proyecto_id=eq.${f}&select=nodo_id,codigo,codigo_esp,nombre,unidad,metrado,precio_unitario,elementos&order=codigo`).catch(() => []),
+      getTodo(`/v_modelo_avance_parte?proyecto_id=eq.${f}&select=*&order=fecha.desc,nodo_id`).catch(() => { A3.sinSql = true; return []; }),
+      getTodo(`/v_modelo_avance_nodo_dia?proyecto_id=eq.${f}&select=nodo_id,fecha,elementos,fraccion,cantidad&order=fecha,nodo_id`).catch(() => []),
+      getTodo(`/valorizacion_partidas?select=nodo_id,metrado,valorizaciones!inner(estado)&valorizaciones.estado=eq.aprobada&order=nodo_id,valorizacion_id`).catch(() => []),
+      get(`/semanas_obra?obra_id=eq.${OBRA.id}&select=numero,fecha_inicio,fecha_fin&order=numero`).catch(() => []),
+      getTodo(`/modelo_elementos?proyecto_id=eq.${f}&select=id&order=id`).catch(() => []),
+      getTodo(`/modelo_avance?select=elemento_id,modelo_elementos!inner(proyecto_id)&modelo_elementos.proyecto_id=eq.${f}&order=elemento_id,nodo_id,fecha`).catch(() => [])]);
+    A3.nodos = {}; nodos.forEach(n => { A3.nodos[n.id] = n; });
+    A3.par = par; A3.dia = dia; A3.nd = nd; A3.semanas = sem; A3.elTotal = els.length; A3.elMarcados = new Set(marc.map(m => m.elemento_id)).size;
+    A3.val = {}; vp.forEach(r => { if (A3.nodos[r.nodo_id]) A3.val[r.nodo_id] = (A3.val[r.nodo_id] || 0) + Number(r.metrado || 0); });
+    A3.cargado = true; a3Pintar();
+  } catch (e) { box.innerHTML = msgCarga('Avance 3D', e); }
+}
+function a3Estado(r) {
+  const a = r.cantidad_avance == null ? null : Number(r.cantidad_avance), p = r.cantidad_parte == null ? null : Number(r.cantidad_parte);
+  if (a != null && p == null) return r.actividad_id ? ['por pasar al parte', 'mid'] : ['sin actividad', 'na'];
+  if (a == null) return ['parte sin marcas', 'na'];
+  return Math.abs(a - p) <= Math.max(0.01, 0.005 * a) ? ['concuerda', 'ok'] : ['difiere', 'bad'];
+}
+function a3Pintar() {
+  const box = $('#a3Panel'); if (!box) return;
+  const proy = (DATA.proyectos || []).find(p => p.id === A3.frente) || {}, reg = A3_REG();
+  const frs = COMPONENTES.map(c => { const id = (preProy(c.id) || {}).id; return [id, String(c.nombre).replace(/^Puente\s+/i, '')]; });
+  const nodo = (id) => A3.nodos[id] || {}, pu = (id) => Number(nodo(id).precio_unitario || 0);
+  const hoy = new Date(); hoy.setHours(0, 0, 0, 0); const desde = new Date(hoy.getTime() - (a3Rango[A3.rango][1] - 1) * 864e5), dIso = new Date(desde.getTime() - desde.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+  const q = ggNorm(A3.q), pasa = (...t) => !q || q.split(' ').every(w => ggNorm(t.join(' ')).includes(w));
+  const campo = {}, parte = {}; A3.nd.forEach(r => { campo[r.nodo_id] = (campo[r.nodo_id] || 0) + Number(r.cantidad || 0); });
+  A3.dia.forEach(r => { if (r.cantidad_parte != null) parte[r.nodo_id] = (parte[r.nodo_id] || 0) + Number(r.cantidad_parte); });
+  const pct = (x, n) => { const m = Number(nodo(n).metrado || 0); return m > 0 ? Math.min(1, (x || 0) / m) : null; };
+  // montos: lo hecho en campo que aún no se valoriza, y lo valorizado que todavía no tiene marcas en el modelo
+  let wT = 0, wC = 0, wV = 0, porVal = 0, sinResp = 0;
+  A3.par.forEach(p => { const m = Number(p.metrado || 0), w = m * Number(p.precio_unitario || 0), c = Math.min(m, campo[p.nodo_id] || 0), v = Math.min(m, A3.val[p.nodo_id] || 0); wT += w; wC += (m > 0 ? c / m : 0) * w; wV += (m > 0 ? v / m : 0) * w; if (c > v) porVal += (c - v) * Number(p.precio_unitario || 0); else sinResp += (v - c) * Number(p.precio_unitario || 0); });
+  const todas = A3.dia.filter(r => r.fecha >= dIso && pasa(nodo(r.nodo_id).codigo, nodo(r.nodo_id).codigo_esp || '', nodo(r.nodo_id).nombre || ''));
+  const cuenta = { ok: 0, mid: 0, bad: 0, sinAct: 0, sinMarcas: 0 }; todas.forEach(r => { const e = a3Estado(r); if (e[1] === 'na') cuenta[e[0] === 'sin actividad' ? 'sinAct' : 'sinMarcas']++; else cuenta[e[1]]++; });
+  const ic = (k) => VG_IC[k], pt = (v) => (v * 100).toFixed(0) + ' %', mon = (v) => v >= 1e6 ? 'S/ ' + (v / 1e6).toFixed(2) + ' M' : 'S/ ' + Math.round(v).toLocaleString('es-PE');
+  const visor = (modo) => `visor/?proyecto=${encodeURIComponent(proy.codigo || '')}&modo=${modo}&v=${Date.now()}`;
+  const barra = `<div class="vg-bar"><div class="vg-g vg-g-fr"><span class="vg-gl">Frente</span><div class="vg-pills" role="group" aria-label="Frente">${frs.map(([id, t]) => `<button type="button" class="${A3.frente === id ? 'on' : ''}" data-a3-fr="${esc(id)}">${esc(t)}</button>`).join('')}</div></div>
+    <div class="vg-g"><span class="vg-gl">Periodo</span><div class="vg-seg" role="group" aria-label="Periodo">${Object.entries(a3Rango).map(([k, [t]]) => `<button type="button" class="${A3.rango === k ? 'on' : ''}" data-a3-rg="${k}" style="height:38px">${t}</button>`).join('')}</div></div>
+    <div class="vg-g"><span class="vg-gl">Detalle</span><div class="vg-seg" role="group" aria-label="Detalle">${[['0', 'Solo lo que requiere atención'], ['1', 'Todo']].map(([k, t]) => `<button type="button" class="${(A3.todo ? '1' : '0') === k ? 'on' : ''}" data-a3-td="${k}" style="height:38px">${t}</button>`).join('')}</div></div>
+    <div class="vg-g" style="flex:1 1 180px"><span class="vg-gl">Buscar</span><input id="a3Q" type="search" value="${esc(A3.q)}" placeholder="Código o partida…" style="width:100%;height:46px;border-radius:13px;border:1px solid var(--line2);background:var(--card);padding:0 14px;font:inherit;font-size:13px"></div></div>`;
+  const enlaces = `<div class="a3-modos"><p>Un solo modelo en el <b>Visor 3D</b>. Esta pantalla es el control, no otro visor.</p>
+    <a href="${visor('estado')}"><b>Valorizado</b><span>lo oficial, por mes</span></a><a href="${visor('campo')}"><b>Campo</b><span>lo marcado en el modelo, por día</span></a></div>`;
+  if (A3.sinSql) { box.innerHTML = `<div class="vg-wrap">${barra}<div class="vg-tcard"><h3 style="margin:0 0 6px">Falta preparar la base</h3><p class="hint" style="margin:0">Corre <code>nube_pendientes.sql</code> (incluye <code>avance_elementos.sql</code>) en la base y vuelve a abrir esta pantalla.</p></div></div>`; return; }
+  const kp = `<div class="vg-cards bim-cards">
+    <article class="vgk pv"><header><span class="vgk-ic">${ic('pv')}</span><span class="vgk-l">Elementos con marca de campo</span></header><div class="vgk-v">${A3.elMarcados} de ${A3.elTotal}</div><div class="vgk-s">del modelo de este frente</div><div class="vgk-bar"><i style="width:${A3.elTotal ? (A3.elMarcados / A3.elTotal * 100).toFixed(1) : 0}%"></i></div></article>
+    <article class="vgk ev"><header><span class="vgk-ic">${ic('ev')}</span><span class="vgk-l">Campo y valorizado</span></header><div class="vgk-v">${wT ? pt(wC / wT) : '—'}</div><div class="vgk-s">campo · valorizado <b>${wT ? pt(wV / wT) : '—'}</b></div><div class="vgk-bar"><i style="width:${wT ? (wC / wT * 100).toFixed(1) : 0}%"></i></div></article>
+    <article class="vgk ${porVal > 0 ? 'mid' : 'ok'}"><header><span class="vgk-ic">${ic('spi')}</span><span class="vgk-l">Por valorizar</span></header><div class="vgk-v">${mon(porVal)}</div><div class="vgk-s">hecho en campo, aún sin valorizar</div></article>
+    <article class="vgk"><header><span class="vgk-ic">${ic('cpi')}</span><span class="vgk-l">Valorizado sin marcas</span></header><div class="vgk-v">${mon(sinResp)}</div><div class="vgk-s">valorizado que aún no se marcó en el modelo</div></article></div>`;
+  // por día: por defecto solo lo que requiere atención (lo que concuerda queda contado, no listado)
+  const lista = todas.filter(r => A3.todo || ['mid', 'bad'].includes(a3Estado(r)[1])), TOPE = 40, mostrar = lista.slice(0, TOPE);
+  const filasDia = mostrar.map(r => {
+    const n = nodo(r.nodo_id), e = a3Estado(r), a = r.cantidad_avance == null ? null : Number(r.cantidad_avance), p = r.cantidad_parte == null ? null : Number(r.cantidad_parte);
+    const ap = reg && r.actividad_id && a != null && (e[1] === 'mid' || e[1] === 'bad');
+    return `<tr><td class="mono">${r.fecha.split('-').reverse().join('/')}</td><th scope="row" class="l">${esc(n.codigo_esp || n.codigo || '')}</th><td class="l" title="${esc(n.nombre || '')}">${esc(n.nombre || '')}</td><td>${esc(n.unidad || '')}</td><td>${p == null ? '—' : bimN(p)}</td><td>${a == null ? '—' : bimN(a)}</td><td>${a != null && p != null ? bimN(a - p) : '—'}</td><td><span class="vg-pl ${e[1]}">${e[0]}</span></td><td class="bim-ac">${ap ? `<button type="button" class="icon-btn" data-a3-ap="${r.actividad_id}|${r.fecha}|${a}" title="Pasar al parte diario la cantidad del modelo" aria-label="Aplicar al parte"><svg viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></button>` : ''}</td></tr>`; }).join('');
+  const resumenDia = `<span class="a3-chip ok">${cuenta.ok} concuerdan</span><span class="a3-chip mid">${cuenta.mid} por pasar al parte</span><span class="a3-chip bad">${cuenta.bad} difieren</span><span class="a3-chip" title="Marcado en el modelo, pero ese día no hay actividad de esa partida en el Look Ahead: no hay dónde pasarlo al parte">${cuenta.sinAct} sin actividad programada</span><span class="a3-chip" title="El parte diario tiene cantidad pero todavía no hay marcas en el modelo">${cuenta.sinMarcas} partes sin marcas</span>`;
+  // acumulado: por defecto solo partidas con campo o parte
+  const filasPar = A3.par.filter(p => (A3.todo || (campo[p.nodo_id] || 0) > 0 || (parte[p.nodo_id] || 0) > 0) && pasa(p.codigo, p.codigo_esp || '', p.nombre)).map(p => {
+    const c = pct(campo[p.nodo_id], p.nodo_id), v = pct(A3.val[p.nodo_id], p.nodo_id), pa = pct(parte[p.nodo_id], p.nodo_id), barraA = (x) => x == null ? '<span class="vg-pl na">—</span>' : `<span class="bim-av"><i style="width:${(x * 100).toFixed(0)}%"></i></span><em>${(x * 100).toFixed(0)} %</em>`;
+    return `<tr><th scope="row" class="l">${esc(p.codigo_esp || p.codigo)}</th><td class="l" title="${esc(p.nombre)}">${esc(p.nombre)}</td><td>${esc(p.unidad || '')}</td><td>${bimN(p.metrado)}</td><td class="bim-avc">${barraA(c)}</td><td class="bim-avc">${barraA(pa)}</td><td class="bim-avc">${barraA(v)}</td></tr>`; }).join('');
+  const sem = A3.semanas.map(s => { let m = 0, pr = 0, n = 0; A3.dia.forEach(r => { if (r.fecha >= s.fecha_inicio && r.fecha <= s.fecha_fin) { m += Number(r.cantidad_avance || 0) * pu(r.nodo_id); pr += Number(r.cantidad_parte || 0) * pu(r.nodo_id); n++; } }); return { s, m, pr, n }; }).filter(x => x.n).reverse().slice(0, 12);
+  const filasSem = sem.map(({ s, m, pr }) => { const d = m - pr, e = pr === 0 && m > 0 ? ['por pasar al parte', 'mid'] : Math.abs(d) <= Math.max(1, 0.005 * m) ? ['concuerda', 'ok'] : ['difiere', 'bad']; return `<tr><th scope="row">${s.numero}</th><td class="mono">${s.fecha_inicio.slice(5).split('-').reverse().join('/')} – ${s.fecha_fin.slice(5).split('-').reverse().join('/')}</td><td>${fmt(pr)}</td><td>${fmt(m)}</td><td>${fmt(d)}</td><td><span class="vg-pl ${e[1]}">${e[0]}</span></td></tr>`; }).join('');
+  const vacio = !A3.nd.length && !A3.dia.length;
+  box.innerHTML = `<div class="vg-wrap">${barra}${enlaces}${kp}
+    ${vacio ? `<section class="vg-tcard"><h3 style="margin:0 0 6px">Todavía no hay avance de campo en ${esc(String(proy.nombre || '').replace(/^Puente\s+/i, ''))}</h3><p class="hint" style="margin:0">En el Visor 3D, pestaña <b>Campo</b>: selecciona elementos (tocándolos o escribiendo su código), elige la partida y la fecha, y marca «ejecutado». El parte diario se llena solo cuando ese día aún no tiene valor; si ya tiene otro, aparece aquí para que lo revises.</p></section>` : `
+    <section class="vg-tcard"><header><h3>Qué requiere atención</h3><span>Marcas de campo contra el parte diario · ${a3Rango[A3.rango][0]}</span></header>
+      <div class="a3-res">${resumenDia}</div>
+      <div class="vg-twrap" style="max-height:none"><table class="vg-t bim-t"><thead><tr><th>Fecha</th><th>Código</th><th class="l">Partida</th><th>Und</th><th>Parte</th><th>Modelo</th><th>Dif.</th><th>Estado</th><th></th></tr></thead><tbody>${filasDia || `<tr><td colspan="9">${todas.length ? 'Nada por pasar ni por revisar en este periodo.' : 'Sin movimientos en este periodo.'}</td></tr>`}</tbody></table></div>
+      ${lista.length > TOPE ? `<p class="hint" style="margin:8px 12px 12px">Se muestran los ${TOPE} más recientes de ${lista.length}. Acota el periodo o busca una partida.</p>` : ''}</section>
+    <section class="vg-tcard"><header><h3>Acumulado por partida</h3><span>${A3.todo ? 'Todas las partidas enlazadas' : 'Solo partidas con campo o parte diario'} · sobre el metrado del presupuesto</span></header>
+      <div class="vg-twrap" style="max-height:none"><table class="vg-t bim-t"><thead><tr><th>Código</th><th class="l">Partida</th><th>Und</th><th>Metrado</th><th>Campo</th><th>Parte</th><th>Valorizado</th></tr></thead><tbody>${filasPar || '<tr><td colspan="7">Ninguna partida coincide.</td></tr>'}</tbody></table></div></section>
+    <section class="vg-tcard"><header><h3>Por semana</h3><span>En soles (costo directo) para sumar partidas distintas</span></header>
+      <div class="vg-twrap" style="max-height:none"><table class="vg-t bim-t"><thead><tr><th>Semana</th><th>Fechas</th><th>Parte diario</th><th>Modelo</th><th>Diferencia</th><th>Estado</th></tr></thead><tbody>${filasSem || '<tr><td colspan="6">Sin semanas con avance.</td></tr>'}</tbody></table></div></section>`}
+    <details class="vg-how"><summary>Qué muestra esta pantalla</summary><p><b>Valorizado</b> es lo oficial: las valorizaciones aprobadas, por mes y por partida. <b>Campo</b> es lo que se marca en el modelo, elemento por elemento y por día. El <b>parte diario</b> es lo que registra el residente por actividad. Aquí se comparan los tres: lo hecho en campo que aún falta valorizar, lo valorizado que todavía no tiene marcas en el modelo, y los días en que el parte y el modelo no dicen lo mismo. Cada elemento se marca por partida y fecha; la cantidad de la partida es su metrado por el porcentaje de elementos ejecutados (100 % de los elementos es 100 % del metrado). No pisa un parte que ya tiene otro valor ni toca semanas cerradas.</p></details></div>`;
+  const foco = document.activeElement && document.activeElement.id === 'a3Q', pos = foco ? document.activeElement.selectionStart : 0;
+  if (foco) { const i = document.getElementById('a3Q'); if (i) { i.focus(); try { i.setSelectionRange(pos, pos); } catch (e) {} } }
+}
+document.addEventListener('click', async (e) => {
+  const fr = e.target.closest('[data-a3-fr]'); if (fr) { A3.frente = fr.dataset.a3Fr; a3Cargar(true); return; }
+  const rg = e.target.closest('[data-a3-rg]'); if (rg) { A3.rango = rg.dataset.a3Rg; a3Pintar(); return; }
+  const td = e.target.closest('[data-a3-td]'); if (td) { A3.todo = td.dataset.a3Td === '1'; a3Pintar(); return; }
+  const ap = e.target.closest('[data-a3-ap]');
+  if (ap) { const [act, fecha, cant] = ap.dataset.a3Ap.split('|'); ap.disabled = true;
+    try { await ptEnviar('POST', '/avance_diario?on_conflict=actividad_id,fecha', { actividad_id: act, fecha, cantidad: Number(cant) }, true); toast('Parte diario actualizado con lo marcado en el modelo.', true, 'a3'); await a3Cargar(true); }
+    catch (er) { ap.disabled = false; toast(`No se pudo aplicar al parte: ${esc(ptErr(er))}`, false, 'a3'); } }
+});
+document.addEventListener('input', (e) => { if (e.target.id === 'a3Q') { A3.q = e.target.value; a3Pintar(); } });
 
 // ═══ ADICIONALES Y DEDUCTIVOS: lo que cambió en cada línea base (calculado de las partidas) + el registro legal numerado (tabla prestaciones) ═══
 // Los montos salen de las líneas base APROBADAS: adicional = partidas nuevas con concepto adicional; deductivo = partidas del contrato que bajan o salen.

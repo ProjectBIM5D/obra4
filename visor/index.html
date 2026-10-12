@@ -7,8 +7,8 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <title>Visor BIM · Obra 04</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f26a1b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 18h20M4 18v-6M20 18v-6M2 12c4-8 16-8 20 0M8 18v-7M12 18V8M16 18v-7'/%3E%3C/svg%3E" />
-  <script type="module" crossorigin src="./assets/index-15scUvDE.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-BiLZGpLP.css">
+  <script type="module" crossorigin src="./assets/index-BCsbovEh.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-S7mFQPPy.css">
 </head>
 <body>
   <div id="app">
@@ -28,14 +28,15 @@
       <!-- tablero inferior: avance, tiempo y Curva S en un solo instrumento -->
       <section class="dock" id="dock">
         <button class="grab" id="grab" aria-label="Subir o bajar el panel"><i></i></button>
-        <div class="d-ring kpi" title="Avance físico real (arco naranja) contra el programado (marca blanca)">
+        <div class="d-ring kpi" title="Avance VALORIZADO (arco) contra el programado (marca)">
           <svg viewBox="0 0 100 100"><circle class="r-bg" cx="50" cy="50" r="42" pathLength="100"/><circle class="r-pl" id="ringPl" cx="50" cy="50" r="42" pathLength="100"/><circle class="r-re" id="ringRe" cx="50" cy="50" r="42" pathLength="100"/></svg>
-          <div class="r-c"><b id="kPhys">—</b><small>avance</small></div>
+          <div class="r-c"><b id="kPhys">—</b><small>valorizado</small></div>
         </div>
         <div class="d-stats">
-          <div class="st"><span>Valor ganado</span><b class="mono acc" id="kEv">—</b><small id="kEvS">—</small></div>
-          <div class="st st2"><span>Costo directo</span><b class="mono" id="kTotal">—</b><small id="kTasks">—</small></div>
-          <div class="st st3"><span>Cronograma</span><b id="kHealth"><i class="dot"></i>—</b><small id="kPhysS">—</small></div>
+          <div class="st st-v" title="Valor ganado según lo valorizado (oficial, por mes)"><span>Valorizado</span><b class="mono acc" id="kEv">—</b><small id="kEvS">—</small></div>
+          <div class="st st-c" title="Avance marcado en el modelo, elemento por elemento"><span>Campo</span><b class="mono" id="kCampo">—</b><small id="kCampoS">—</small></div>
+          <div class="st st-d"><span>Costo directo</span><b class="mono" id="kTotal">—</b><small id="kTasks">—</small></div>
+          <div class="st st-k"><span>Cronograma</span><b id="kHealth"><i class="dot"></i>—</b><small id="kPhysS">—</small></div>
         </div>
         <div class="d-play">
           <div class="dp-1">
@@ -57,13 +58,13 @@
       <!-- panel lateral: grupos · elemento · modelo -->
       <section class="drawer" id="drawer">
         <nav class="tabs" id="tabs">
-          <button data-tab="tareas" class="on" title="Estructura del modelo: componentes, grupos y elementos"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="6" rx="1.5"/><rect x="14" y="10" width="7" height="5" rx="1.5"/><rect x="14" y="17" width="7" height="5" rx="1.5"/><path d="M6.5 9v10.5H14M6.5 12.5H14"/></svg><span>Estructura</span></button>
-          <button data-tab="partidas" title="Partidas del presupuesto: toca una para ver solo sus elementos"><svg viewBox="0 0 24 24"><path d="M3 5h18M3 12h18M3 19h18M7 5v14"/></svg><span>Partidas</span></button>
+          <button data-tab="partidas" class="on" title="Partidas del presupuesto con sus elementos: toca una partida para ver solo lo suyo"><svg viewBox="0 0 24 24"><path d="M3 5h18M3 12h18M3 19h18M7 5v14"/></svg><span>Partidas</span></button>
+          <button data-tab="campo" title="Avance de campo: marcar en el modelo lo que se ejecutó y concordarlo con el parte diario"><svg viewBox="0 0 24 24"><path d="M9 11l3 3 8-8M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h9"/></svg><span>Campo</span></button>
           <button data-tab="resumen" title="Elemento seleccionado y sus partidas"><svg viewBox="0 0 24 24"><path d="M21 8 12 3 3 8v8l9 5 9-5zM3 8l9 5 9-5M12 13v8"/></svg><span>Elemento</span></button>
           <button data-tab="modelo" title="Opciones del modelo"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/></svg><span>Modelo</span></button>
         </nav>
         <div class="scroll">
-          <section data-pane="tareas" class="pane on">
+          <section data-pane="tareas" class="pane">
             <div class="filters">
               <input id="q" type="search" placeholder="Buscar componente, partida o código…" />
               <div class="chips" id="chips">
@@ -73,16 +74,43 @@
             <div id="taskList" class="tlist"></div>
           </section>
 
-          <section data-pane="partidas" class="pane">
+          <section data-pane="partidas" class="pane on">
             <p class="muted" id="parVacio" hidden>Disponible cuando el modelo de este frente está enlazado con sus partidas en el panel.</p>
             <div id="parBox">
               <div class="filters">
-                <input id="qPar" type="search" placeholder="Buscar partida o código…" />
+                <input id="qPar" type="search" placeholder="Buscar partida, título o código de elemento…" />
                 <div class="chips" id="parChips">
-                  <button data-f="all" class="on">Todas</button><button data-f="la" id="parLA" style="--c:#f26a1b">En Look Ahead</button><button id="parClear" class="clr" hidden>Mostrar todo</button>
+                  <button data-f="all" class="on">Todas</button><button data-f="prog" style="--c:#4f7fd1">En proceso</button><button data-f="late" style="--c:#d05252">Atrasadas</button><button data-f="done" style="--c:#3fa372">Terminadas</button><button data-f="pend" style="--c:#94a3b8">Pendientes</button><button data-f="la" id="parLA" style="--c:#d4875a">En Look Ahead</button><button id="parClear" class="clr" hidden>Mostrar todo</button>
                 </div>
               </div>
               <div id="parList" class="tlist"></div>
+            </div>
+          </section>
+
+          <section data-pane="campo" class="pane">
+            <div class="card cp">
+              <p class="small muted" id="cpPermiso" hidden>Solo puedes mirar: para marcar avance entra al panel con un usuario administrador, residente o supervisor y vuelve a abrir el visor desde ahí.</p>
+              <h3>Elementos seleccionados</h3>
+              <p id="cpSel" class="cp-sel">Toca elementos en el modelo para seleccionarlos.</p>
+              <div class="cp-cod"><input id="cpCod" type="text" list="cpCodL" placeholder="O escribe el código: ED-P3, ED-P8…" autocomplete="off" /><datalist id="cpCodL"></datalist><button class="btn" id="cpAdd" title="Agregar a la selección los elementos con esos códigos">Agregar</button></div>
+              <div class="cp-a2"><button class="btn" id="cpGrupo" title="Agregar a la selección todos los elementos del grupo, la rama o la partida que estás viendo">＋ Todo el grupo</button><button class="btn" id="cpLimpiar">Limpiar</button></div>
+              <label for="cpNodo">Partida ejecutada</label><select id="cpNodo"><option value="">Selecciona elementos en el modelo</option></select>
+              <label for="cpFecha">Fecha</label><input type="date" id="cpFecha" />
+              <div class="cp-a">
+                <button class="btn pri" id="cpMarcar" disabled>Marcar ejecutado</button>
+                <button class="btn" id="cpParcial" disabled title="Marcar solo una parte (por ejemplo 50 %)">Parcial…</button>
+                <button class="btn" id="cpQuitar" disabled title="Quitar la marca de esa partida en esa fecha">Quitar marca</button>
+              </div>
+              <p class="small" id="cpMsg"></p>
+            </div>
+            <div class="card cp">
+              <h3>Ver en el modelo</h3>
+              <select id="cpTipo"><option value="todo">Todas las partidas</option></select>
+              <p class="small muted" id="cpRes" style="margin-top:8px"></p>
+            </div>
+            <div class="card cp">
+              <h3>Concordancia del día <span class="muted" id="cpDiaF"></span></h3>
+              <div id="cpDia"><p class="small muted">Elige una fecha.</p></div>
             </div>
           </section>
 
@@ -99,7 +127,7 @@
               <h3>Pendientes</h3>
               <div class="seg wide" data-opt="pending"><button data-v="ghost" class="on">Fantasma</button><button data-v="hide">Ocultar</button><button data-v="solid">Sólido</button></div>
               <h3>Color</h3>
-              <div class="seg wide" data-opt="colorMode"><button data-v="estado" class="on">Avance</button><button data-v="lookahead" title="Qué se trabaja en cada semana del Look Ahead">Look Ahead</button><button data-v="original">Material</button></div>
+              <div class="seg wide" data-opt="colorMode"><button data-v="estado" class="on" title="Avance valorizado, oficial">Valorizado</button><button data-v="original">Material original</button></div>
               <label class="sw"><input type="checkbox" id="oSteel" /><i></i><span>Mostrar armadura y acopladores</span></label>
               <label class="sw"><input type="checkbox" id="oLite" /><i></i><span>Modelo ligero <small class="muted">(tabletas o equipos básicos: sin armadura)</small></span></label>
               <label class="sw"><input type="checkbox" id="oGrid" checked /><i></i><span>Cuadrícula de terreno</span></label>
@@ -121,7 +149,7 @@
             </div>
             <div class="card opt">
               <h3>Aislamiento</h3>
-              <p class="muted small" id="isoInfo">Ningún grupo aislado. Usa el botón <b>Aislar</b> en la lista de grupos.</p>
+              <p class="muted small" id="isoInfo">Nada aislado. Usa <b>Aislar</b> en Partidas.</p>
               <button class="btn" id="bIsoClear" hidden>Mostrar todo</button>
             </div>
           </section>
@@ -156,8 +184,13 @@
         <div class="g-body" id="gBody"></div>
       </div>
 
-      <div class="ov legend" id="legend" title="Color de cada elemento">
-        <span><i class="lg" style="--c:#94a3b8"></i>Pendiente</span><span><i class="lg" style="--c:#4f7fd1"></i>En proceso</span><span><i class="lg" style="--c:#3fa372"></i>Terminado</span><span><i class="lg" style="--c:#d05252"></i>Atrasado</span>
+      <div class="ov legend" id="legend">
+        <div class="seg lg-seg" id="modeBar" role="group" aria-label="Qué se ve en el modelo">
+          <button data-v="estado" class="on" title="Avance VALORIZADO: lo oficial, por mes y por partida">Valorizado</button>
+          <button data-v="campo" title="Avance de CAMPO: lo marcado en el modelo, elemento por elemento y por día">Campo</button>
+          <button data-v="lookahead" title="Qué se trabaja en cada semana del Look Ahead">Look Ahead</button>
+        </div>
+        <span class="lc" id="legChips"></span>
       </div>
       <div class="ov hint" id="hint">Arrastre: orbitar · Rueda: zoom · Clic derecho: desplazar · Clic: inspeccionar</div>
       <div id="loader"><div class="ld-c"><div class="spin"></div><b id="ldT">Cargando modelo…</b><div class="ld-bar"><i id="ldB"></i></div><small id="ldS">Preparando…</small></div></div>
