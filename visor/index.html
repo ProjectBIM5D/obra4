@@ -7,8 +7,8 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <title>Visor BIM · Obra 04</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f26a1b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 18h20M4 18v-6M20 18v-6M2 12c4-8 16-8 20 0M8 18v-7M12 18V8M16 18v-7'/%3E%3C/svg%3E" />
-  <script type="module" crossorigin src="./assets/index-DGIDuq_Z.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-BJJHo9Pu.css">
+  <script type="module" crossorigin src="./assets/index-BRdpwtfL.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-C7XUTYXM.css">
 </head>
 <body>
   <div id="app">
@@ -24,6 +24,17 @@
         <span id="pName" hidden></span>
         <nav class="projmenu" id="projMenu" aria-label="Frente"></nav>
       </header>
+
+      <!-- barra de estado (escritorio ancho) -->
+      <footer class="foot" id="foot">
+        <span>AVANCE GLOBAL<b id="ftPhys">—</b><span class="fb"><i id="ftBar"></i></span></span>
+        <span>VALOR GANADO<b id="ftEv">—</b></span>
+        <span>ALERTAS<b id="ftAl">—</b></span>
+        <span>CAMPO<b id="ftCampo">—</b></span>
+        <span>PRUEBAS<b id="ftPru">—</b></span>
+        <span>CORTE<b id="ftCorte">—</b></span>
+        <span class="r">Obra 04 · Visor BIM</span>
+      </footer>
 
       <!-- tablero inferior: avance, tiempo y Curva S en un solo instrumento -->
       <section class="dock" id="dock">
@@ -51,6 +62,18 @@
         <div class="d-curve">
           <div class="dc-h"><span><i class="l-real"></i>Real</span><span><i class="l-plan"></i>Programado</span><span id="simFlag" class="flag" hidden>Proyección</span><em class="mono"><span id="simMin">—</span> → <span id="simMax">—</span></em></div>
           <div class="ch-w"><canvas id="sChart"></canvas><input type="range" id="slider" min="0" max="100" step="1" value="0" aria-label="Fecha de la simulación" /><div class="cutmark" id="cutMark" hidden></div></div>
+        </div>
+        <!-- línea de tiempo (escritorio ancho): semana, fases del presupuesto con su avance, corte y término proyectado -->
+        <div class="d-tl" id="tl">
+          <div class="tl-h"><span class="tl-lbl">Línea de tiempo 4D / 5D</span><b class="mono" id="tlWeek">Semana — / —</b><span class="muted small" id="tlDate"></span><em class="mono" id="tlEnd"></em></div>
+          <div class="tl-w" id="tlW">
+            <div class="tl-lanes" id="tlLanes"></div>
+            <div class="tl-ticks" id="tlTicks"></div>
+            <div class="tl-mk tl-cut" id="tlCut" title="Corte de la información"></div>
+            <div class="tl-mk tl-proy" id="tlProy" hidden></div>
+            <div class="tl-head" id="tlHead"></div>
+            <input type="range" id="tlSlider" min="0" max="100" step="1" value="0" aria-label="Fecha de la simulación" />
+          </div>
         </div>
         <div hidden><span id="kMode"></span><i id="kPhysBar"></i><b id="kPlanTick"></b></div>
       </section>
@@ -206,6 +229,27 @@
         <div class="g-h"><b>Cronograma · programado y real</b><span class="muted small" id="gSub"></span><button id="gClose" title="Cerrar">×</button></div>
         <div class="g-body" id="gBody"></div>
       </div>
+
+      <!-- resumen a la derecha: indicadores, análisis de desviación y curva S (se oculta) -->
+      <aside class="ov rp" id="rp" aria-label="Resumen">
+        <div class="rp-top"><b>Resumen</b><button id="rpHide" title="Ocultar el resumen"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button></div>
+        <div class="rs-card rp-kpis">
+          <div class="rk"><span>Valorizado</span><b class="mono" id="rkPhys">—</b><small id="rkPlan">—</small></div>
+          <div class="rk"><span>SPI</span><b class="mono" id="rkSpi">—</b><small id="rkHealth">—</small></div>
+          <div class="rk"><span>Valor ganado</span><b class="mono" id="rkEv">—</b><small id="rkEvS">—</small></div>
+          <div class="rk"><span>Campo</span><b class="mono" id="rkCampo">—</b><small id="rkCampoS">—</small></div>
+        </div>
+        <div class="rs-card rp-an" id="rpAn">
+          <h4><svg viewBox="0 0 24 24"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17.2v.1"/></svg>Análisis de desviación</h4>
+          <div class="an-res" id="anRes"></div>
+          <div id="anLista" class="an-l"></div>
+        </div>
+        <div class="rs-card rp-cv">
+          <h4>Curva S <span class="muted small" id="cvSub"></span></h4>
+          <div class="ch-w2"><canvas id="sChart2"></canvas><input type="range" id="slider2" min="0" max="100" step="1" value="0" aria-label="Fecha de la simulación" /></div>
+        </div>
+      </aside>
+      <button class="ov rp-open" id="rpOpen" title="Mostrar el resumen"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg><span>Resumen</span></button>
 
       <div class="ov legend" id="legend">
         <div class="seg lg-seg" id="modeBar" role="group" aria-label="Qué se ve en el modelo">
