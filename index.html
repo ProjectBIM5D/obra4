@@ -2008,7 +2008,12 @@ html:not(.cel) .topbar{margin-bottom:14px;}
 .bim-avc{white-space:nowrap;} .bim-av{display:inline-block;width:54px;height:6px;border-radius:4px;background:var(--line);overflow:hidden;vertical-align:middle;margin-right:6px;} .bim-av i{display:block;height:100%;background:#f26a1b;border-radius:4px;} .bim-avc em{font-style:normal;font-size:11px;color:var(--tx2);}
 .bim-ac{white-space:nowrap;} .bim-ac .icon-btn{width:28px;height:28px;padding:0;border-radius:7px;font-size:0;margin-left:3px;} .bim-ac .icon-btn svg{width:15px;height:15px;} .bim-ac .icon-btn:hover{border-color:var(--blue);color:var(--blue);} .bim-ac .icon-btn[aria-label^="Eliminar"]:hover{border-color:var(--red);color:var(--red);}
 .bim-off>td{opacity:.5;}
-#bimForm:not([hidden]),#bimCarga:not([hidden]),#bimRep:not([hidden]){max-width:none;position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(720px,calc(100vw - 20px));max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
+#bimAcero:not([hidden]){width:min(1280px,calc(100vw - 20px)) !important}
+.ac-t{border-collapse:collapse;font-size:12px;width:100%}.ac-t th,.ac-t td{padding:5px 6px;border-bottom:1px solid var(--line2);text-align:right;vertical-align:middle}.ac-t th.l,.ac-t td.l{text-align:left}.ac-t thead th{font-size:11px;vertical-align:bottom;position:sticky;top:0;background:var(--card);z-index:1}.ac-t .ac-sub{display:block;font-weight:500;opacity:.7;font-size:10.5px;max-width:130px;margin-left:auto;white-space:normal}
+.ac-t td:nth-child(2) .ac-sub{max-width:none;white-space:nowrap}
+.as-in{width:96px;height:28px;text-align:right;border:1px solid var(--line2);border-radius:8px;background:var(--card);color:inherit;font:inherit;font-size:12px;padding:0 6px}.as-t .as-sub>td{background:rgba(148,163,184,.08)}.as-t select{height:30px;border-radius:8px;border:1px solid var(--line2);background:var(--card);color:inherit;font:inherit;font-size:12px;max-width:280px}.as-t td.l .btn,.as-t td.l .btn-sec{height:30px;padding:0 10px;font-size:12px}
+.ac-c{display:flex;gap:4px;align-items:center;justify-content:flex-end}.ac-c input[type=text]{width:78px;height:28px;text-align:right;border:1px solid var(--line2);border-radius:8px;background:var(--card);color:inherit;font:inherit;font-size:12px;padding:0 6px}.ac-c input[type=text].fx{font-weight:700;border-color:#f97316}.ac-c input[type=text].off{opacity:.35}
+#bimForm:not([hidden]),#bimCarga:not([hidden]),#bimRep:not([hidden]),#bimAcero:not([hidden]){max-width:none;position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(720px,calc(100vw - 20px));max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
 @media (max-width:1180px){.vg-cards.bim-cards{grid-template-columns:repeat(2,minmax(0,1fr));}}
 #bimCarga:not([hidden]){width:min(980px,calc(100vw - 20px));}
 .bc-res{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:0 0 10px;} .bc-res>div{border:1px solid var(--line2);border-radius:12px;padding:9px 12px;background:var(--input);min-width:0;} .bc-res b{display:block;font-size:17px;line-height:1.2;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;} .bc-res span{display:block;font-size:11px;color:var(--tx2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -9495,7 +9500,7 @@ document.addEventListener('change', async (e) => {
 // El .frag no se modifica: los atributos que ya trae (partida, elemento, ubicación, tipo, volumen) se enlazan con las partidas por reglas.
 // Una partida tiene muchos elementos y un elemento muchas partidas. La cantidad sale del modelo (volumen · longitud · unidad) o se reparte (acero, encofrado).
 const BIM = { frente: null, vista: 'partidas', el: [], reglas: [], vin: [], par: [], nodos: [], val: {}, abiertos: new Set(), q: '', cargado: false, sinSql: false };
-const BIM_MODO = { volumen: 'Volumen del modelo', longitud: 'Longitud del modelo', unidad: 'Unidades del modelo', reparto_volumen: 'Reparto por volumen', reparto_unidad: 'Reparto por unidad', peso_a615: 'Peso real de armadura A615', peso_a706: 'Peso real de armadura A706' };
+const BIM_MODO = { volumen: 'Volumen del modelo', longitud: 'Longitud del modelo', unidad: 'Unidades del modelo', reparto_volumen: 'Reparto por volumen', reparto_unidad: 'Reparto por unidad', peso_a615: 'Peso real de armadura A615', peso_a706: 'Peso real de armadura A706', peso_acero: 'Acero asignado a mano' };
 // clase de cada partida: trabajo físico (se ve en el modelo) o calidad (pruebas, ensayos, postensado: sin modelo físico, fuera del visor)
 const bimClaseAuto = (nombre) => (/prueba|ensayo|integridad|control de calidad|inspecci[oó]n|post[\s-]?tensad/i.test(String(nombre || '')) ? 'calidad' : 'trabajo');
 const bimClase = (p) => (BIM.clases && BIM.clases[p.codigo]) || bimClaseAuto(p.nombre);
@@ -9524,7 +9529,7 @@ async function bimCargar(forzar) {
       getTodo(`/valorizacion_partidas?select=nodo_id,metrado,valorizaciones!inner(estado)&valorizaciones.estado=eq.aprobada&order=nodo_id,valorizacion_id`).catch(() => []),
       get(`/modelo_partida_clase?proyecto_id=eq.${f}&select=nodo_codigo,clase`).catch(() => [])]);
     BIM.clases = {}; cl.forEach(c => { BIM.clases[c.nodo_codigo] = c.clase; });
-    BIM.el = el; BIM.reglas = reglas; BIM.vin = vin; BIM.par = par; BIM.nodos = nodos;
+    BIM.el = el; BIM.reglas = reglas; BIM.vin = vin; BIM.par = par; BIM.nodos = nodos; BIM.asg = {}; BIM.tipos = null;
     BIM.N = {}; nodos.forEach(n => { BIM.N[n.id] = n; });
     BIM.val = {}; vp.forEach(r => { if (BIM.N[r.nodo_id]) BIM.val[r.nodo_id] = (BIM.val[r.nodo_id] || 0) + Number(r.metrado || 0); });
     BIM.cargado = true; bimPintar();
@@ -9543,9 +9548,9 @@ function bimPintar() {
   const adm = !!AUTH.admin, proy = bimProy(), E = BIM.el, hay = E.length > 0;
   const frs = COMPONENTES.map(c => { const id = (preProy(c.id) || {}).id; return [id, String(c.nombre).replace(/^Puente\s+/i, ''), BIM.conModelo.has(id)]; });
   const barra = `<div class="vg-bar"><div class="vg-g vg-g-fr"><span class="vg-gl">Frente</span><div class="vg-pills" role="group" aria-label="Frente">${frs.map(([id, t, ok]) => `<button type="button" class="${BIM.frente === id ? 'on' : ''}" data-bim-fr="${esc(id)}" title="${ok ? 'Modelo cargado' : 'Este frente todavía no tiene modelo cargado'}">${esc(t)}${ok ? '' : ' <small style="font-weight:600;opacity:.7">sin modelo</small>'}</button>`).join('')}</div></div>
-    ${hay ? `<div class="vg-g"><span class="vg-gl">Ver</span><div class="vg-seg" role="group" aria-label="Vista">${[['partidas', 'Partidas'], ['elementos', 'Elementos'], ['reglas', 'Reglas']].map(([k, t]) => `<button type="button" class="${BIM.vista === k ? 'on' : ''}" data-bim-vista="${k}" style="height:32px">${t}</button>`).join('')}</div></div>
+    ${hay ? `<div class="vg-g"><span class="vg-gl">Ver</span><div class="vg-seg" role="group" aria-label="Vista">${[['partidas', 'Partidas'], ['elementos', 'Elementos'], ['reglas', 'Asignación']].map(([k, t]) => `<button type="button" class="${BIM.vista === k ? 'on' : ''}" data-bim-vista="${k}" style="height:32px">${t}</button>`).join('')}</div></div>
     <div class="vg-g" style="flex:1 1 200px"><span class="vg-gl">Buscar</span><input id="bimQ" type="search" value="${esc(BIM.q)}" placeholder="Código, partida, elemento, tipo…" style="width:100%;height:38px;border-radius:11px;border:1px solid var(--line2);background:var(--card);padding:0 12px;font:inherit;font-size:12.5px"></div>` : ''}
-    ${adm ? `<div class="vg-g"><span class="vg-gl">Modelo</span><button type="button" class="btn-sec bim-carga-btn" data-bim-carga title="Cargar o actualizar el modelo de este frente: lee su inventario, detecta sus atributos y propone el enlace con las partidas"><svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M5 20h14"/></svg>${hay ? 'Actualizar' : 'Cargar'}</button></div>` : ''}</div>`;
+    ${adm ? `<div class="vg-g"><span class="vg-gl">Modelo</span><button type="button" class="btn-sec bim-carga-btn" data-bim-carga title="Cargar o actualizar el modelo de este frente: lee su inventario, detecta sus atributos y propone el enlace con las partidas"><svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M5 20h14"/></svg>${hay ? 'Actualizar' : 'Cargar'}</button>${hay ? bimAceroBoton() : ''}</div>` : ''}</div>`;
   if (!hay) { box.innerHTML = `<div class="vg-wrap">${barra}<div class="vg-tcard"><h3 style="margin:0 0 6px">${esc(proy ? proy.nombre : '')}: todavía no hay modelo cargado</h3><p class="hint" style="margin:0">${BIM.sinSql ? 'Falta correr <code>modelo_bim.sql</code> en la base.' : adm ? 'Usa <b>Cargar</b>: se lee el inventario del modelo, se detectan sus atributos y se propone solo el enlace con las partidas de este frente. Es la misma lógica para cualquier modelo.' : 'Este frente todavía no tiene su modelo 3D cargado.'}</p></div></div>`; return; }
   const conV = new Set(BIM.vin.map(v => v.elemento_id)), enl = E.filter(e => conV.has(e.id)).length;
   const pref = new Set(BIM.par.map(p => p.codigo.split('.').slice(0, 2).join('.'))), delPuente = BIM.nodos.filter(n => pref.has(n.codigo.split('.').slice(0, 2).join('.')));
@@ -9585,8 +9590,8 @@ function bimPintar() {
     const filas = BIM.reglas.filter(r => pasa(r.nombre, r.nodo_codigo, (porCod[r.nodo_codigo] || {}).nombre || '', bimFiltroTxt(r.filtro || {}))).map(r => { const n = porCod[r.nodo_codigo] || {};
       return `<tr class="${r.activa ? '' : 'bim-off'}"><td>${r.orden}</td><td class="l"><b>${esc(r.nombre)}</b>${r.revisar ? ' <span class="vg-pl mid">revisar</span>' : ''}<span class="lb-sub">${esc(bimFiltroTxt(r.filtro || {}))}</span>${r.nota ? `<span class="lb-sub">${esc(r.nota)}</span>` : ''}</td><td class="l" title="${esc(n.nombre || '')}"><b>${esc(n.codigo_esp || r.nodo_codigo)}</b><span class="lb-sub">${esc(String(n.nombre || 'no está en el cronograma vigente').slice(0, 44))}</span></td><td>${BIM_MODO[r.modo] || r.modo}${Number(r.factor) !== 1 ? ' × ' + Number(r.factor) : ''}</td><td>${nPorR[r.id] || 0}</td>
         <td class="bim-ac">${adm ? `${r.revisar ? `<button type="button" class="icon-btn" data-bim-ok="${r.id}" title="Confirmar la regla (quitar «revisar»)" aria-label="Confirmar"><svg viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></button>` : ''}<button type="button" class="icon-btn" data-bim-edit="${r.id}" title="Editar" aria-label="Editar"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4Z"/></svg></button><button type="button" class="icon-btn" data-bim-del="${r.id}" title="Eliminar" aria-label="Eliminar"><svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button>` : ''}</td></tr>`; }).join('');
-    cuerpo = `<section class="vg-tcard"><header><h3>Reglas de enlace</h3><span>Un filtro sobre los atributos del modelo → una partida y cómo se obtiene su cantidad${adm ? ' · <button type="button" class="btn-sec pri" data-bim-nueva style="margin-left:8px">＋ Nueva regla</button>' : ''}</span></header>
-      <div class="vg-twrap" style="max-height:none"><table class="vg-t bim-t"><thead><tr><th>Orden</th><th class="l">Regla</th><th class="l">Partida</th><th>Cantidad</th><th>Elementos</th><th></th></tr></thead><tbody>${filas || '<tr><td colspan="6">Sin reglas.</td></tr>'}</tbody></table></div></section>`;
+    cuerpo = bimAsgHtml(adm, pasa) + `<details class="vg-how" style="margin-top:14px"><summary>Reglas avanzadas (filtros sobre los atributos del modelo)</summary><section class="vg-tcard"><header><h3>Reglas de enlace</h3><span>Un filtro sobre los atributos del modelo → una partida y cómo se obtiene su cantidad${adm ? ' · <button type="button" class="btn-sec pri" data-bim-nueva style="margin-left:8px">＋ Nueva regla</button>' : ''}</span></header>
+      <div class="vg-twrap" style="max-height:none"><table class="vg-t bim-t"><thead><tr><th>Orden</th><th class="l">Regla</th><th class="l">Partida</th><th>Cantidad</th><th>Elementos</th><th></th></tr></thead><tbody>${filas || '<tr><td colspan="6">Sin reglas.</td></tr>'}</tbody></table></div></section></details>`;
   }
   const sinP = E.filter(e => !conV.has(e.id));
   const pie = sinP.length ? `<section class="vg-tcard"><header><h3>Elementos sin partida</h3><span>${sinP.length} elementos</span></header><div class="bim-chips">${sinP.slice(0, 40).map(e => `<span title="${esc(e.nombre || '')}"><b>${esc(e.codigo || e.elemento || '—')}</b> ${esc(e.partida_modelo || '')} · ${esc(e.tipo || e.familia || '')} · ${esc(e.ubicacion || '')}</span>`).join('')}</div></section>` : '';
@@ -9602,9 +9607,211 @@ function bimRepCelda(p, adm) {
   const R = bimReglasDe(p.codigo);
   if (!R.length) return '<span class="vg-pl na" title="El modelo mide esta partida: no se reparte">lo mide el modelo</span>';
   const els = [...new Set(R.flatMap(r => { const e = (r.filtro || {}).el; return Array.isArray(e) ? e : e ? [e] : []; }))];
-  const txt = (R.some(r => /^peso/.test(String(r.modo))) ? '[peso real ' + (R.some(r => r.modo === 'peso_a706') ? 'A706' : 'A615') + '] ' : '') + (els.length ? els.join(', ') : 'todos los de su grupo');
-  const lapiz = adm && R.length === 1 ? ` <button type="button" class="icon-btn" data-bim-rep="${esc(p.codigo)}" title="Elegir entre qué elementos se reparte el metrado" aria-label="Editar el reparto"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4Z"/></svg></button>` : '';
-  return `<span class="bim-rep-t" title="${esc(txt)}">${esc(txt)}</span>${lapiz}${R.length > 1 ? ' <span class="lb-sub">varias reglas: edítalas en «Reglas»</span>' : ''}`;
+  const txt = (R.some(r => r.modo === 'peso_acero') ? '[asignado a mano] ' : R.some(r => /^peso/.test(String(r.modo))) ? '[peso real ' + (R.some(r => r.modo === 'peso_a706') ? 'A706' : 'A615') + '] ' : '') + (els.length ? els.join(', ') : 'todos los de su grupo');
+  const lapiz = adm && (R.length === 1 || R.some(r => r.modo === 'peso_acero')) ? ` <button type="button" class="icon-btn" data-bim-rep="${esc(p.codigo)}" title="Elegir entre qué elementos se reparte el metrado" aria-label="Editar el reparto"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4Z"/></svg></button>` : '';
+  return `<span class="bim-rep-t" title="${esc(txt)}">${esc(txt)}</span>${lapiz}${R.length > 1 && !R.some(r => r.modo === 'peso_acero') ? ' <span class="lb-sub">varias reglas: edítalas en «Reglas»</span>' : ''}`;
+}
+// ── Asignación manual: cada partida con los tipos de elemento que la componen y su cantidad ───────
+// Arranca con lo que el modelo ya da (las reglas automáticas) y cada cantidad se puede editar. El presupuesto (expediente) es el metrado
+// contractual; el modelo aporta la proporción y sirve de control: la diferencia queda a la vista y «Cuadrar» iguala la partida al presupuesto.
+const bimUnd = (u) => String(u || '').toLowerCase().replace(/³/g, '3').replace(/²/g, '2').replace(/[.\s]/g, '');
+function bimAsgBase(und) {
+  const u = bimUnd(und);
+  if (u === 'm3') return { b: 'vol', modo: 'volumen', et: 'm³' };
+  if (u === 'kg') return { b: 'acero', modo: 'peso_acero', et: 'kg de acero' };
+  if (u === 'm' || u === 'ml') return { b: 'lon', modo: 'longitud', et: 'm' };
+  if (/^(u|un|und|unid|unidad|pza|pieza)$/.test(u)) return { b: 'n', modo: 'unidad', et: 'und' };
+  return { b: 'vol', modo: 'reparto_volumen', et: 'm³ (reparto)' };
+}
+const bimAsgMed = (t, b) => b === 'acero' ? t.W : b === 'lon' ? t.lon : b === 'n' ? t.n : t.vol;
+function bimAsgTipos() {
+  if (BIM.tipos) return BIM.tipos;
+  const T = {}, porEl = {};
+  BIM.el.forEach(e => {
+    const f = {}; if (e.partida_modelo) f.par = e.partida_modelo;
+    if (e.elemento) f.el = e.elemento; else if (e.familia) f.fam_like = bimLike(e.familia);
+    if (e.clase_ifc) f.clase = e.clase_ifc;
+    if (!f.el && !f.fam_like && !f.clase) return;
+    const k = JSON.stringify(f), o = T[k] = T[k] || { k, f, label: e.elemento || e.familia || e.clase_ifc, par: e.partida_modelo || '', clase: e.clase_ifc || '', n: 0, vol: 0, lon: 0, W: 0 };
+    o.n++; o.vol += Number(e.volumen || 0); o.lon += Number(e.longitud || 0); o.W += Number(e.acero_a615 || 0) + Number(e.acero_a706 || 0); porEl[e.id] = k;
+  });
+  return (BIM.tipos = { T, porEl });
+}
+function bimAsgGet(codigo) {
+  if (BIM.asg[codigo]) return BIM.asg[codigo];
+  const n = BIM.nodos.find(x => x.codigo === codigo), { porEl } = bimAsgTipos(), Q = {};
+  BIM.vin.forEach(v => { if (!n || v.nodo_id !== n.id || v.origen !== 'regla') return; const k = porEl[v.elemento_id]; if (k) Q[k] = (Q[k] || 0) + Number(v.cantidad || 0); });
+  return (BIM.asg[codigo] = { E: Object.entries(Q).map(([k, qty]) => ({ k, qty })).sort((a, b) => b.qty - a.qty), dirty: false });
+}
+function bimAsgHtml(adm, pasa) {
+  const { T } = bimAsgTipos(), tiposL = Object.values(T).sort((a, b) => (b.vol - a.vol) || (b.W - a.W));
+  const nDirty = Object.values(BIM.asg).filter(a => a.dirty).length;
+  const opciones = (A) => tiposL.filter(t => !A.E.some(e => e.k === t.k)).map(t => `<option value="${esc(t.k)}">${esc(t.label)} · ${esc(t.par)}${t.clase ? ' · ' + esc(t.clase) : ''} · ${t.n} elem.</option>`).join('');
+  const inp = (attr, v, cls) => adm ? `<input type="text" inputmode="decimal" class="as-in${cls || ''}" ${attr} value="${esc(v)}">` : esc(v);
+  let filas = '', nCon = 0;
+  const cand = BIM.nodos.filter(n => bimClase(n) !== 'calidad' && pasa(n.codigo, n.codigo_esp || '', n.nombre)), sinEl = cand.filter(n => !bimAsgGet(n.codigo).E.length).length;
+  cand.filter(n => BIM.asgTodas || BIM.asg[n.codigo].E.length || BIM.abiertos.has('as|' + n.codigo)).forEach(n => {
+    const A = bimAsgGet(n.codigo), base = bimAsgBase(n.unidad), q = A.E.reduce((s, e) => s + e.qty, 0), met = Number(n.metrado || 0), ab = BIM.abiertos.has('as|' + n.codigo);
+    const d = A.E.length && met > 0 ? bimDif({ es_reparto: false, metrado: met, cantidad_modelo: q }) : null; if (A.E.length) nCon++;
+    filas += `<tr class="bim-row${ab ? ' on' : ''}" data-as-tg="${esc(n.codigo)}" tabindex="0"><th scope="row" class="l"><span class="ctv-tg${ab ? ' on' : ''}" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>${esc(n.codigo_esp || n.codigo)}</th><td class="l" title="${esc(n.nombre)}">${esc(n.nombre)}${A.dirty ? ' <span class="vg-pl mid">sin guardar</span>' : ''}</td><td>${esc(n.unidad || '')}</td><td>${bimN(met)}</td><td></td><td>${A.E.length ? bimN(q) : '—'}</td><td>${d ? `<span class="vg-pl ${d.c}">${d.t}</span>` : A.E.length ? '—' : '<span class="vg-pl na">sin elementos</span>'}</td></tr>`;
+    if (!ab) return;
+    A.E.forEach((e, i) => { const t = T[e.k]; if (!t) return;
+      const med = bimAsgMed(t, base.b), den = base.modo.startsWith('reparto') || !(med > 0) ? met : med, pct = den > 0 ? e.qty / den * 100 : 0;
+      filas += `<tr class="as-sub"><td></td><td class="l">${esc(t.label)}<span class="lb-sub">${esc(t.par)}${t.clase ? ' · ' + esc(t.clase) : ''} · ${t.n} elementos</span></td><td></td><td title="Lo que el modelo mide de este tipo">${med > 0 ? bimN(med) + ' ' + esc(base.et) : '—'}</td><td>${inp(`data-as-p="${esc(n.codigo)}|${i}"`, bimN(pct, 1))} %</td><td>${inp(`data-as-q="${esc(n.codigo)}|${i}"`, bimN(e.qty))}</td><td>${adm ? `<button type="button" class="icon-btn" data-as-del="${esc(n.codigo)}|${i}" title="Quitar este tipo de la partida" aria-label="Quitar"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>` : ''}</td></tr>`; });
+    filas += `<tr class="as-sub"><td></td><td class="l" colspan="6">${adm ? `<select data-as-add="${esc(n.codigo)}" aria-label="Agregar un tipo de elemento"><option value="">＋ Agregar un tipo de elemento…</option>${opciones(A)}</select> <button type="button" class="btn-sec" data-as-fit="${esc(n.codigo)}" title="Escala las cantidades para que la partida sume exactamente el presupuesto">Cuadrar al presupuesto</button> <button type="button" class="btn-sec" data-as-reset="${esc(n.codigo)}" title="Descartar lo editado y volver a lo que da el modelo">Restablecer</button> <button type="button" class="btn${A.dirty ? '' : '-sec'}" data-as-save="${esc(n.codigo)}"${A.dirty ? '' : ' disabled'}>Guardar partida</button>` : ''}<span class="lb-sub">Presupuesto ${bimN(met)} ${esc(n.unidad || '')} · asignado ${bimN(q)}${met > 0 ? ' (' + (q >= met ? '+' : '−') + (Math.abs(q - met) / met * 100).toFixed(1) + ' %)' : ''}</span></td></tr>`;
+  });
+  return `<section class="vg-tcard"><header><h3>Asignación del modelo a las partidas</h3><span>Toca una partida: cada tipo de elemento trae su cantidad del modelo y la puedes editar (cantidad o %) · el presupuesto es el contractual, la diferencia queda a la vista${adm && nDirty ? ` · <button type="button" class="btn pri" data-as-save="*" style="margin-left:8px">Guardar ${nDirty} partida${nDirty === 1 ? '' : 's'}</button>` : ''}</span></header>
+    <label class="adm-check" style="margin:0 0 8px"><input type="checkbox" data-as-todas${BIM.asgTodas ? ' checked' : ''}> Mostrar también las ${sinEl} partidas sin elementos del modelo (para asignarles tipos a mano)</label>
+    <div class="vg-twrap" style="max-height:none"><table class="vg-t bim-t as-t"><thead><tr><th>Código</th><th class="l">Partida · tipo de elemento</th><th>Und</th><th title="De la partida: metrado del presupuesto. De cada tipo: lo que mide el modelo">Presupuesto / modelo</th><th title="Parte del tipo (o del metrado, si el modelo no mide la partida) que va a esta partida">% del tipo</th><th>Cantidad</th><th>Diferencia</th></tr></thead><tbody>${filas || '<tr><td colspan="7">Ninguna partida coincide con la búsqueda.</td></tr>'}</tbody></table></div></section>`;
+}
+async function bimAsgGuardar(codigos) {
+  const { T } = bimAsgTipos();
+  try {
+    for (const code of codigos) {
+      const A = BIM.asg[code], n = BIM.nodos.find(x => x.codigo === code); if (!A || !A.dirty || !n) continue;
+      const base = bimAsgBase(n.unidad), met = Number(n.metrado || 0);
+      for (const r of BIM.reglas.filter(x => x.nodo_codigo === code)) await preRpc('modelo_regla_eliminar', { p_id: r.id });
+      let orden = 1000 + (Number(n.orden) || 0) * 10;
+      for (const e of A.E) {
+        const t = T[e.k]; if (!t) continue;
+        const med = bimAsgMed(t, base.b); let modo = base.modo, fac;
+        if (modo.startsWith('reparto') || !(med > 0)) { modo = t.vol > 0 ? 'reparto_volumen' : 'reparto_unidad'; fac = met > 0 ? e.qty / met : 0; }
+        else fac = modo === 'unidad' ? e.qty / t.n : e.qty / med;
+        orden += 1;
+        await preRpc('modelo_regla_guardar', { p_id: null, p_proyecto: BIM.frente, p_nombre: ((n.codigo_esp || code) + ' · ' + t.label).slice(0, 120), p_filtro: t.f, p_nodo_codigo: code, p_modo: modo, p_factor: Math.round(fac * 1e6) / 1e6, p_orden: orden, p_activa: true, p_revisar: false, p_nota: 'Asignación manual' });
+      }
+    }
+    await preRpc('modelo_vinculos_aplicar', { p_proyecto: BIM.frente });
+    toast('Asignación guardada y vínculos recalculados.', true, 'bim'); await bimCargar(true);
+  } catch (er) { toast(`No se pudo guardar: ${esc(er.message)}${/no válido|constraint|check/i.test(er.message) ? ' · ¿falta correr nube_pendientes.sql?' : ''}`, false, 'bim'); }
+}
+const bimNum = (s) => { s = String(s || '').replace(/[\s%]/g, ''); if (!s) return null; if (/,/.test(s) && !/\./.test(s)) s = s.replace(/,/g, '.'); else s = s.replace(/,/g, ''); const v = Number(s); return isFinite(v) && v >= 0 ? v : NaN; };
+document.addEventListener('click', async (e) => {
+  const panel = document.getElementById('bimPanel'); if (!panel || !panel.contains(e.target)) return;
+  const sv = e.target.closest('[data-as-save]');
+  if (sv) { const c = sv.dataset.asSave; sv.disabled = true; await bimAsgGuardar(c === '*' ? Object.entries(BIM.asg).filter(([, a]) => a.dirty).map(([k]) => k) : [c]); return; }
+  const rs = e.target.closest('[data-as-reset]'); if (rs) { delete BIM.asg[rs.dataset.asReset]; bimPintar(); return; }
+  const ft = e.target.closest('[data-as-fit]');
+  if (ft) { const code = ft.dataset.asFit, A = bimAsgGet(code), n = BIM.nodos.find(x => x.codigo === code), { T } = bimAsgTipos(), base = bimAsgBase(n.unidad), met = Number(n.metrado || 0);
+    const s = A.E.reduce((a, x) => a + x.qty, 0), w = A.E.reduce((a, x) => a + (bimAsgMed(T[x.k] || {}, base.b) || 0), 0);
+    if (met > 0 && A.E.length) { if (s > 0) A.E.forEach(x => { x.qty = x.qty * met / s; }); else if (w > 0) A.E.forEach(x => { x.qty = met * (bimAsgMed(T[x.k] || {}, base.b) || 0) / w; }); else A.E.forEach(x => { x.qty = met / A.E.length; }); A.dirty = true; bimPintar(); }
+    return; }
+  const dl = e.target.closest('[data-as-del]'); if (dl) { const [c, i] = dl.dataset.asDel.split('|'), A = bimAsgGet(c); A.E.splice(Number(i), 1); A.dirty = true; bimPintar(); return; }
+  if (e.target.closest('input,select,button,textarea')) return;
+  const tg = e.target.closest('[data-as-tg]'); if (tg) { const k = 'as|' + tg.dataset.asTg; if (BIM.abiertos.has(k)) BIM.abiertos.delete(k); else BIM.abiertos.add(k); bimPintar(); }
+});
+document.addEventListener('change', (e) => {
+  const panel = document.getElementById('bimPanel'); if (!panel || !panel.contains(e.target)) return;
+  const td = e.target.closest('[data-as-todas]'); if (td) { BIM.asgTodas = td.checked; bimPintar(); return; }
+  const q = e.target.closest('[data-as-q]'), p = e.target.closest('[data-as-p]'), ad = e.target.closest('[data-as-add]');
+  if (q || p) { const [c, i] = (q || p).dataset[q ? 'asQ' : 'asP'].split('|'), A = bimAsgGet(c), en = A.E[Number(i)], v = bimNum((q || p).value); if (!en || v === null || isNaN(v)) { bimPintar(); return; }
+    if (q) en.qty = v; else { const n = BIM.nodos.find(x => x.codigo === c), { T } = bimAsgTipos(), base = bimAsgBase(n.unidad), med = bimAsgMed(T[en.k] || {}, base.b), den = base.modo.startsWith('reparto') || !(med > 0) ? Number(n.metrado || 0) : med; en.qty = den * v / 100; }
+    A.dirty = true; bimPintar(); return; }
+  if (ad && ad.value) { const c = ad.dataset.asAdd, A = bimAsgGet(c), n = BIM.nodos.find(x => x.codigo === c), { T } = bimAsgTipos(), t = T[ad.value]; if (!t) return;
+    const base = bimAsgBase(n.unidad), med = bimAsgMed(t, base.b), met = Number(n.metrado || 0);
+    let qty = med; if (base.modo.startsWith('reparto') || !(med > 0)) { const sv = A.E.reduce((s, x) => s + ((T[x.k] || {}).vol || 0), 0) + t.vol; qty = sv > 0 ? met * t.vol / sv : met / (A.E.length + 1); }
+    A.E.push({ k: t.k, qty }); A.dirty = true; BIM.abiertos.add('as|' + c); bimPintar(); }
+});
+// ── Distribución manual del acero ───────────────────────────────────────────────────────────────
+// El grado que trae el modelo no siempre coincide con el presupuesto y «bajo agua / en seco» es un criterio proporcional que el modelo no dice.
+// Aquí se elige, para cada partida de acero, qué tipos de elemento participan y cuántos kg le tocan a cada uno. Cada elemento recibe su parte
+// según su peso real de armadura. Sin cantidad escrita, el metrado de la partida se reparte entre los que participan según el acero del modelo.
+const bimAceroPartidas = () => BIM.nodos.filter(n => /acero/i.test(n.nombre || '') && String(n.unidad || '').toLowerCase().replace(/[.\s]/g, '') === 'kg' && Number(n.metrado) > 0);
+function bimAceroTipos() {
+  const T = {};
+  BIM.el.forEach(e => { const w = Number(e.acero_a615 || 0) + Number(e.acero_a706 || 0); if (!(w > 0) || !e.elemento) return;
+    const k = (e.partida_modelo || '') + '|' + e.elemento, o = T[k] = T[k] || { k, par: e.partida_modelo || '', el: e.elemento, n: 0, a615: 0, a706: 0, W: 0 };
+    o.n++; o.a615 += Number(e.acero_a615 || 0); o.a706 += Number(e.acero_a706 || 0); o.W += w; });
+  return Object.values(T).sort((a, b) => b.W - a.W);
+}
+function bimAceroBoton() {
+  if (!BIM.el.some(e => Number(e.acero_a615) > 0 || Number(e.acero_a706) > 0)) return '';
+  const P = bimAceroPartidas(), pc = {}; BIM.par.forEach(p => { pc[p.codigo] = p; });
+  const mal = P.filter(n => { const p = pc[n.codigo]; if (!p) return true; const d = bimDif(p); return d.c === 'bad' || d.c === 'mid'; }).length;
+  return ` <button type="button" class="btn-sec bim-carga-btn" data-bim-acero title="Distribuir el acero: qué tipos de elemento corresponden a cada partida (A615 / A706, bajo agua / en seco) y cuántos kg${mal ? ' · ' + mal + ' partidas de acero no cuadran' : ''}"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16M9 4v16M15 4v16"/></svg>Acero${mal ? ` <b style="background:#ef4444;color:#fff;border-radius:9px;padding:0 6px;font-size:11px;margin-left:4px">${mal}</b>` : ''}</button>`;
+}
+function bimAceroAbrir() {
+  const tipos = bimAceroTipos(), parts = bimAceroPartidas().map(n => ({ codigo: n.codigo, ce: n.codigo_esp || n.codigo, nombre: n.nombre || '', metrado: Number(n.metrado) }));
+  if (!tipos.length || !parts.length) { toast('Este frente no tiene acero por elemento en el modelo (actualiza el modelo) o no tiene partidas de acero en kg.', false, 'bim'); return; }
+  const en = (v, x) => Array.isArray(v) ? v.includes(x) : v === x, casa = (f, t) => (!f.par || en(f.par, t.par)) && (!f.el || en(f.el, t.el));
+  const on = new Set(), fix = new Map();
+  parts.forEach((p, j) => {
+    const R = BIM.reglas.filter(r => r.activa && r.nodo_codigo === p.codigo), man = R.filter(r => r.modo === 'peso_acero');
+    if (man.length) { man.forEach(r => tipos.forEach((t, i) => { if (casa(r.filtro || {}, t)) { on.add(i + '|' + j); if (/fijo/.test(String(r.nota || ''))) fix.set(i + '|' + j, Number(r.factor) * t.W); } })); return; }
+    const g = /A\s?706/i.test(p.nombre) ? 'a706' : /A\s?615/i.test(p.nombre) ? 'a615' : null;
+    R.forEach(r => tipos.forEach((t, i) => { if (casa(r.filtro || {}, t) && (!g || t[g] > 0.05 * t.W)) on.add(i + '|' + j); }));
+  });
+  let m = document.getElementById('bimAcero');
+  if (!m) { m = document.createElement('form'); m.id = 'bimAcero'; m.className = 'pform la-form'; m.hidden = true; document.body.appendChild(m); }
+  const corto = (s) => String(s || '').replace(/ACERO DE REFUERZO\s*fy\s*=\s*4,?200\s*kg\/cm2/i, '').replace(/\(ASTM\s*(A\d+)\)/i, '$1').replace(/\s+/g, ' ').trim();
+  const W = tipos.reduce((s, t) => s + t.W, 0), A615 = tipos.reduce((s, t) => s + t.a615, 0), A706 = tipos.reduce((s, t) => s + t.a706, 0), PR = parts.reduce((s, p) => s + p.metrado, 0);
+  m.innerHTML = `<h3 style="margin:0 0 4px;font-size:14px">Distribuir el acero entre las partidas</h3>
+    <p class="hint" style="margin:0 0 6px">Marca qué tipos de elemento corresponden a cada partida. El metrado de la partida se reparte entre los marcados según el acero real que trae el modelo; si escribes una cantidad en una celda queda fija y el resto se reparte lo que falta. Vaciar la celda vuelve al reparto proporcional.</p>
+    <p class="hint" id="acRes" style="margin:0 0 8px"><b>El modelo trae ${bimN(W, 0)} kg</b> de acero (A615 ${bimN(A615, 0)} · A706 ${bimN(A706, 0)}) · <b>el presupuesto, ${bimN(PR, 0)} kg</b> (${PR > 0 ? (W >= PR ? '+' : '−') + (Math.abs(W - PR) / PR * 100).toFixed(1) + ' %' : '—'})</p>
+    <div class="vg-twrap" style="max-height:min(62vh,560px);overflow:auto"><table class="ac-t"><thead><tr><th class="l">Tipo de elemento</th><th title="Acero que trae el modelo para este tipo, con el grado que declara">Modelo kg</th>${parts.map(p => `<th title="${esc(p.nombre)}">${esc(p.ce)}<span class="ac-sub">${esc(corto(p.nombre))}</span><span class="ac-sub">${bimN(p.metrado, 0)} kg</span></th>`).join('')}<th>Asignado</th><th>Contra el modelo</th></tr></thead>
+    <tbody>${tipos.map((t, i) => `<tr><th scope="row" class="l">${esc(t.el)}<span class="ac-sub" style="margin:0;max-width:none">${esc(t.par)} · ${t.n} elem.</span></th><td title="Grado que declara el modelo">${bimN(t.W, 0)}<span class="ac-sub">A615 ${bimN(t.a615, 0)} · A706 ${bimN(t.a706, 0)}</span></td>${parts.map((p, j) => `<td><label class="ac-c"><input type="checkbox" data-ac-on="${i}|${j}" aria-label="${esc(t.el)} en ${esc(p.ce)}"><input type="text" inputmode="decimal" data-ac-kg="${i}|${j}" aria-label="kg de ${esc(t.el)} en ${esc(p.ce)}"></label></td>`).join('')}<td data-ac-fila="${i}">—</td><td data-ac-fpill="${i}">—</td></tr>`).join('')}</tbody>
+    <tfoot><tr><th class="l">Asignado a la partida</th><td></td>${parts.map((p, j) => `<td data-ac-col="${j}">—</td>`).join('')}<td data-ac-tot>—</td><td></td></tr>
+    <tr><th class="l">Contra el presupuesto</th><td></td>${parts.map((p, j) => `<td data-ac-cpill="${j}">—</td>`).join('')}<td></td><td></td></tr></tfoot></table></div>
+    <p class="hint" id="acAv" style="margin:8px 0 10px"></p>
+    <div class="sug-acc"><button class="btn" type="submit">Guardar y aplicar</button><button class="btn-sec" type="button" id="acCancel">Cancelar</button></div>`;
+  const fondo = document.getElementById('lbFondo') || (() => { const x = document.createElement('div'); x.id = 'lbFondo'; x.hidden = true; document.body.appendChild(x); return x; })();
+  const cerrar = () => { m.hidden = true; fondo.hidden = true; document.documentElement.classList.remove('la-modal'); };
+  const calc = () => {
+    const kg = new Map();
+    parts.forEach((p, j) => { let fijo = 0, wl = 0; const P = tipos.map((t, i) => i).filter(i => on.has(i + '|' + j));
+      P.forEach(i => { const f = fix.get(i + '|' + j); if (f != null) fijo += f; else wl += tipos[i].W; });
+      const resto = Math.max(0, p.metrado - fijo);
+      P.forEach(i => { const f = fix.get(i + '|' + j); kg.set(i + '|' + j, f != null ? f : (wl > 0 ? resto * tipos[i].W / wl : 0)); }); });
+    return kg;
+  };
+  const pill = (d) => { const a = Math.abs(d); const c = a <= 0.02 ? 'ok' : a <= 0.1 ? 'mid' : 'bad'; return `<span class="vg-pl ${c}">${d >= 0 ? '+' : '−'}${(a * 100).toFixed(1)} %</span>`; };
+  const refrescar = () => {
+    const kg = calc(), foco = document.activeElement;
+    m.querySelectorAll('[data-ac-on]').forEach(c => { c.checked = on.has(c.dataset.acOn); });
+    m.querySelectorAll('[data-ac-kg]').forEach(inp => { const k = inp.dataset.acKg, v = kg.get(k); inp.classList.toggle('fx', fix.has(k)); inp.classList.toggle('off', !on.has(k));
+      if (inp !== foco) inp.value = on.has(k) ? bimN(v, 0) : ''; });
+    let tot = 0, sinTipo = 0;
+    tipos.forEach((t, i) => { const s = parts.reduce((a, p, j) => a + (kg.get(i + '|' + j) || 0), 0); tot += s;
+      m.querySelector(`[data-ac-fila="${i}"]`).textContent = s ? bimN(s, 0) : '—';
+      m.querySelector(`[data-ac-fpill="${i}"]`).innerHTML = s ? pill((s - t.W) / t.W) : '<span class="vg-pl bad" title="El modelo trae acero en este tipo y no se asignó a ninguna partida">sin partida</span>'; if (!s) sinTipo += t.W; });
+    let malCol = 0;
+    parts.forEach((p, j) => { const s = tipos.reduce((a, t, i) => a + (kg.get(i + '|' + j) || 0), 0), hay = tipos.some((t, i) => on.has(i + '|' + j));
+      m.querySelector(`[data-ac-col="${j}"]`).textContent = s ? bimN(s, 0) : '—';
+      const d = p.metrado > 0 ? (s - p.metrado) / p.metrado : 0; if (!hay || Math.abs(d) > 0.02) malCol++;
+      m.querySelector(`[data-ac-cpill="${j}"]`).innerHTML = hay ? pill(d) : '<span class="vg-pl bad" title="Ningún tipo de elemento marcado">sin elementos</span>'; });
+    m.querySelector('[data-ac-tot]').textContent = bimN(tot, 0);
+    const alertas = [];
+    if (sinTipo > 0) alertas.push(`${bimN(sinTipo, 0)} kg de acero del modelo no están en ninguna partida`);
+    const desc = tipos.filter((t, i) => { const s = parts.reduce((a, p, j) => a + (kg.get(i + '|' + j) || 0), 0); return s && Math.abs(s - t.W) / t.W > 0.1; });
+    if (desc.length) alertas.push(`${desc.length} tipos con acero asignado distinto al del modelo en más de 10 % (${desc.slice(0, 4).map(t => t.el).join(', ')}${desc.length > 4 ? '…' : ''})`);
+    if (malCol) alertas.push(`${malCol} partidas sin elementos o con cantidad distinta a la del presupuesto`);
+    const av = m.querySelector('#acAv'); av.innerHTML = alertas.length ? '⚠ ' + alertas.join(' · ') : '✔ Todo cuadra: el acero del modelo queda repartido y cada partida suma su metrado.'; av.style.color = alertas.length ? '#b45309' : '';
+  };
+  const num = (s) => { s = String(s || '').replace(/\s/g, ''); if (!s) return null; if (/,/.test(s) && !/\./.test(s)) s = s.replace(/,/g, '.'); else s = s.replace(/,/g, ''); const v = Number(s); return isFinite(v) && v >= 0 ? v : NaN; };
+  m.onchange = (ev) => {
+    const c = ev.target.closest('[data-ac-on]'), n = ev.target.closest('[data-ac-kg]');
+    if (c) { const k = c.dataset.acOn; if (c.checked) on.add(k); else { on.delete(k); fix.delete(k); } }
+    else if (n) { const k = n.dataset.acKg, v = num(n.value); if (v === null) fix.delete(k); else if (!isNaN(v)) { fix.set(k, v); on.add(k); } }
+    refrescar();
+  };
+  m.querySelectorAll('[data-ac-kg]').forEach(inp => { inp.addEventListener('blur', refrescar); });
+  m.hidden = false; fondo.hidden = false; document.documentElement.classList.add('la-modal'); fondo.onclick = cerrar; m.querySelector('#acCancel').onclick = cerrar;
+  refrescar();
+  m.onsubmit = async (ev) => {
+    ev.preventDefault(); const kg = calc(), btn = m.querySelector('button[type=submit]'); btn.disabled = true;
+    try {
+      for (const p of parts) for (const r of BIM.reglas.filter(x => x.nodo_codigo === p.codigo)) await preRpc('modelo_regla_eliminar', { p_id: r.id });
+      let orden = 9000;
+      for (const [j, p] of parts.entries()) for (const [i, t] of tipos.entries()) {
+        const k = i + '|' + j; if (!on.has(k)) continue;
+        const fac = Math.round((kg.get(k) || 0) / t.W * 1e6) / 1e6; if (!(fac > 0)) continue;
+        orden += 10;
+        await preRpc('modelo_regla_guardar', { p_id: null, p_proyecto: BIM.frente, p_nombre: (p.ce + ' · ' + t.el).slice(0, 120), p_filtro: Object.assign(t.par ? { par: t.par } : {}, { el: t.el }), p_nodo_codigo: p.codigo, p_modo: 'peso_acero', p_factor: fac, p_orden: orden, p_activa: true, p_revisar: false, p_nota: fix.has(k) ? 'Acero manual · fijo' : 'Acero manual · proporcional al peso del modelo' });
+      }
+      await preRpc('modelo_vinculos_aplicar', { p_proyecto: BIM.frente });
+      cerrar(); toast('Distribución del acero guardada y vínculos recalculados.', true, 'bim'); await bimCargar(true);
+    } catch (er) { btn.disabled = false; toast(`No se pudo guardar: ${esc(er.message)}${/no válido|constraint|check/i.test(er.message) ? ' · ¿falta correr modelo_acero_manual.sql (o nube_pendientes.sql)?' : ''}`, false, 'bim'); }
+  };
 }
 function bimRepartoAbrir(codigo) {
   const R = bimReglasDe(codigo); if (R.length !== 1) return;
@@ -9718,6 +9925,7 @@ document.addEventListener('click', async (e) => {
   const fr = e.target.closest('[data-bim-fr]'); if (fr) { BIM.frente = fr.dataset.bimFr; BIM.abiertos = new Set(); bimCargar(true); return; }
   const vs = e.target.closest('[data-bim-vista]'); if (vs) { BIM.vista = vs.dataset.bimVista; BIM.abiertos = new Set(); bimPintar(); return; }
   if (e.target.closest('[data-bim-carga]')) { bimCargaAbrir(); return; }
+  if (e.target.closest('[data-bim-acero]')) { bimAceroAbrir(); return; }
   if (e.target.closest('[data-bim-nueva]')) { bimReglaAbrir(null); return; }
   const ed = e.target.closest('[data-bim-edit]'); if (ed) { bimReglaAbrir(ed.dataset.bimEdit); return; }
   const ok = e.target.closest('[data-bim-ok]');
@@ -9729,7 +9937,7 @@ document.addEventListener('click', async (e) => {
     try { await preRpc('modelo_regla_eliminar', { p_id: r.id }); await preRpc('modelo_vinculos_aplicar', { p_proyecto: BIM.frente }); toast('Regla eliminada.', true, 'bim'); await bimCargar(true); }
     catch (er) { toast(`No se pudo eliminar: ${esc(er.message)}`, false, 'bim'); } return; }
   if (e.target.closest('[data-bim-clase]')) return;
-  const rp = e.target.closest('[data-bim-rep]'); if (rp) { bimRepartoAbrir(rp.dataset.bimRep); return; }
+  const rp = e.target.closest('[data-bim-rep]'); if (rp) { if (bimReglasDe(rp.dataset.bimRep).some(r => r.modo === 'peso_acero')) bimAceroAbrir(); else bimRepartoAbrir(rp.dataset.bimRep); return; }
   const fila = e.target.closest('[data-bim-nodo],[data-bim-grupo]');
   if (fila && document.getElementById('bimPanel') && document.getElementById('bimPanel').contains(fila)) { const k = fila.dataset.bimNodo || fila.dataset.bimGrupo; if (BIM.abiertos.has(k)) BIM.abiertos.delete(k); else BIM.abiertos.add(k); bimPintar(); }
 });
@@ -9885,7 +10093,9 @@ function bimProponer(E, nodos, nombreFrente) {
     const nm = String(x.p.n.nombre || ''), a6 = /A\s?706/i.test(nm), a1 = /A\s?615/i.test(nm);
     if (!/acero/i.test(nm) || a6 === a1 || x.p.u !== 'kg') return;
     x.modo = a6 ? 'peso_a706' : 'peso_a615'; x.gs.forEach(o => { o.fac = 1; }); x.revisar = true;
-    x.nota = 'Acero ' + (a6 ? 'A706' : 'A615') + ': la cantidad de cada elemento es el peso real de su armadura de ese grado en el modelo (no se reparte el presupuesto).';
+    const cp = a6 ? 'acero_a706' : 'acero_a615', qg = x.gs.reduce((s, o) => s + o.g.L.reduce((a, e) => a + Number(e[cp] || 0), 0), 0), mp = Number(x.p.m);
+    x.nota = 'Acero ' + (a6 ? 'A706' : 'A615') + ': la cantidad de cada elemento es el peso real de su armadura de ese grado en el modelo (no se reparte el presupuesto).'
+      + (qg < mp * 0.8 || qg > mp * 1.2 ? ` El modelo trae ${d2(qg)} kg de este grado contra ${d2(mp)} del presupuesto: no cuadra, asígnala a mano en «Distribuir acero».` : '');
   });
   // accesorios: mismo elemento que uno ya enlazado pero de otra clase (ej. tubos dentro del pilote) → se pintan con él y no suman cantidad
   const enProp = new Set(props.flatMap(x => x.gs.map(o => o.g)));
@@ -9911,9 +10121,9 @@ function bimSimular(E, nodos, reglas) {   // lo mismo que hará modelo_vinculos_
     const vs = L.reduce((s, e) => s + Number(e.volumen || 0), 0), m = Number(n.metrado || 0);
     const o = par[n.id] = par[n.id] || { n, q: 0, el: 0, modo: r.modo, revisar: false, reparto: false, notas: [] };
     o.revisar = o.revisar || !!r.revisar; o.reparto = o.reparto || r.modo.startsWith('reparto'); if (r.nota && !o.notas.includes(r.nota)) o.notas.push(r.nota);
-    const gr = r.modo === 'peso_a615' ? 'acero_a615' : r.modo === 'peso_a706' ? 'acero_a706' : null;
-    L.forEach(e => { const k = (e.guid || e.id) + '|' + n.id; if (gr && !(Number(e[gr]) > 0)) return; if (ya.has(k)) return; ya.add(k); enl.add(e.guid || e.id); o.el++;
-      o.q += gr ? Number(e[gr]) * r.factor : r.modo === 'volumen' ? Number(e.volumen || 0) * r.factor : r.modo === 'longitud' ? Number(e.longitud || 0) * r.factor : r.modo === 'unidad' ? Number(r.factor)
+    const pw = (e) => r.modo === 'peso_a615' ? Number(e.acero_a615 || 0) : r.modo === 'peso_a706' ? Number(e.acero_a706 || 0) : r.modo === 'peso_acero' ? Number(e.acero_a615 || 0) + Number(e.acero_a706 || 0) : null, gr = /^peso/.test(r.modo);
+    L.forEach(e => { const k = (e.guid || e.id) + '|' + n.id; if (gr && !(pw(e) > 0)) return; if (ya.has(k)) return; ya.add(k); enl.add(e.guid || e.id); o.el++;
+      o.q += gr ? pw(e) * r.factor : r.modo === 'volumen' ? Number(e.volumen || 0) * r.factor : r.modo === 'longitud' ? Number(e.longitud || 0) * r.factor : r.modo === 'unidad' ? Number(r.factor)
         : r.modo === 'reparto_volumen' ? (vs > 0 ? m * r.factor * Number(e.volumen || 0) / vs : m * r.factor / L.length) : m * r.factor / L.length; }); });
   return { partidas: Object.values(par).sort((a, b) => (a.n.orden || 0) - (b.n.orden || 0)), enlazados: enl.size };
 }
@@ -9944,7 +10154,7 @@ async function bimCargaAbrir() {
         ${C.otro ? `<p class="bc-av">Este archivo es el mismo modelo que ya está cargado en <b>${esc(C.otro)}</b>. Cárgalo aquí solo si de verdad es el modelo de ${esc(corto)}.</p>` : ''}
         ${inv.sinGuid ? `<p class="hint" style="margin:0 0 8px">${inv.sinGuid} elementos del archivo no traen identificador (GUID) y no se cargan.</p>` : ''}
         ${R.length ? `<div class="vg-twrap bc-tabla"><table class="vg-t bim-t"><thead><tr><th>Código</th><th class="l">Partida propuesta</th><th>Und</th><th>Presupuesto</th><th>Modelo</th><th>Diferencia</th><th>Elementos</th></tr></thead><tbody>${filas}</tbody></table></div>` : '<p class="hint" style="margin:0 0 10px">No se encontró ninguna partida de este frente que corresponda a los elementos del modelo. Se carga el inventario y las reglas se crean a mano.</p>'}
-        ${hayR ? `<label class="adm-check" style="margin:10px 0 0"><input type="checkbox" id="bcReemp"> Reemplazar las ${BIM.reglas.length} reglas actuales por esta propuesta (${R.length} reglas). Sin marcar, se conservan tus reglas y solo se actualiza el inventario.</label>` : `<p class="hint" style="margin:10px 0 0">Se crearán ${R.length} reglas. Las marcadas «revisar» son las que el modelo no permite decidir solo: después se confirman o corrigen en la vista Reglas.</p>`}
+        ${hayR ? `<label class="adm-check" style="margin:10px 0 0"><input type="checkbox" id="bcReemp"> Reemplazar las ${BIM.reglas.length} reglas actuales por esta propuesta (${R.length} reglas); borra también tu distribución manual del acero. Sin marcar, se conservan tus reglas y solo se actualiza el inventario.</label>` : `<p class="hint" style="margin:10px 0 0">Se crearán ${R.length} reglas. Las marcadas «revisar» son las que el modelo no permite decidir solo: después se confirman o corrigen en la vista Reglas.</p>`}
         <div class="sug-acc" style="margin-top:12px"><button class="btn" type="submit">Cargar y enlazar</button>${elegir}<button class="btn-sec" type="button" id="bcCancel">Cancelar</button></div>`;
     }
     m.querySelector('#bcCancel').onclick = cerrar;
