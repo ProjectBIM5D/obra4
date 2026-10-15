@@ -1,17 +1,17 @@
 {
  "frente": "charanal",
  "archivo": "modelo.frag",
- "generado": "2026-10-14T21:06:39.280Z",
- "elementos": 352,
+ "generado": "2026-10-15T21:52:33.469Z",
+ "elementos": 354,
  "armadura": 26073,
- "ocultos": 4,
+ "ocultos": 2,
  "clases": {
   "IFCMECHANICALFASTENER": 3740,
   "IFCBEAM": 12,
   "IFCREINFORCINGBAR": 22333,
   "IFCFLOWSEGMENT": 32,
   "IFCBUILDINGELEMENTPROXY": 218,
-  "IFCSLAB": 62,
+  "IFCSLAB": 64,
   "IFCPLATE": 28
  },
  "atributos": {
@@ -44,21 +44,21 @@
    ]
   },
   "Familia": {
-   "con": 324,
-   "valores": 20,
+   "con": 326,
+   "valores": 22,
    "propiedad": [
     "familia"
    ]
   },
   "Tipo": {
-   "con": 352,
-   "valores": 25,
+   "con": 354,
+   "valores": 26,
    "propiedad": [
     "tipo"
    ]
   },
   "Nivel": {
-   "con": 352,
+   "con": 354,
    "valores": 6,
    "propiedad": [
     "nivel de referencia",
@@ -74,8 +74,8 @@
    ]
   },
   "Volumen": {
-   "con": 320,
-   "valores": 54,
+   "con": 322,
+   "valores": 56,
    "propiedad": [
     "volumen"
    ]
@@ -89,19 +89,19 @@
    ]
   }
  },
- "grupos": 34,
+ "grupos": 36,
  "eje": {
   "origin": [
    -3.55,
    0,
    -17.95
   ],
-  "ux": 0.64495,
-  "uz": 0.76423,
+  "ux": 0.64493,
+  "uz": 0.76425,
   "length": 115.59
  },
  "suelo": 9.59,
  "avisos": [
-  "36 elementos no traen «Elemento»."
+  "38 elementos no traen «Elemento»."
  ]
 }
