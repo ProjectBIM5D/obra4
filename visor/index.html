@@ -7,8 +7,8 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <title>Visor BIM · Obra 04</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f26a1b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 18h20M4 18v-6M20 18v-6M2 12c4-8 16-8 20 0M8 18v-7M12 18V8M16 18v-7'/%3E%3C/svg%3E" />
-  <script type="module" crossorigin src="./assets/index-D48L8MvM.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-BBMGk6EL.css">
+  <script type="module" crossorigin src="./assets/index-CMnSZUmo.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-BxKDW18K.css">
 </head>
 <body>
   <div id="app">
@@ -143,6 +143,14 @@
               <label for="cpNodo">Partida ejecutada</label><select id="cpNodo"><option value="">Selecciona elementos en el modelo</option></select>
               <div id="cpResBox" hidden><label for="cpResultado">Resultado de la prueba</label><select id="cpResultado"><option value="conforme">Conforme</option><option value="no_conforme">No conforme</option></select></div>
               <label for="cpFecha">Fecha</label><input type="date" id="cpFecha" />
+              <label for="cpTramo">Qué parte se ejecutó</label>
+              <select id="cpTramo"><option value="todo">El elemento completo</option><option value="tramo">Un tramo: hasta una altura o entre dos distancias</option></select>
+              <div id="cpTramoBox" hidden>
+                <div class="cp-hh"><div><label for="cpH0">Desde (m)</label><input type="number" id="cpH0" min="0" step="0.01" value="0" inputmode="decimal" /></div><div><label for="cpH1">Hasta (m)</label><input type="number" id="cpH1" min="0" step="0.01" inputmode="decimal" placeholder="3.20" /></div></div>
+                <label for="cpDir">Dirección</label>
+                <select id="cpDir"><option value="auto">Automática (por la forma del elemento)</option><option value="v">Vertical: de la base hacia arriba</option><option value="l">A lo largo del eje (tramos del tablero)</option></select>
+                <p class="small muted" id="cpTramoPrev" style="margin-top:8px"></p>
+              </div>
               <div class="cp-a">
                 <button class="btn pri" id="cpMarcar" disabled>Marcar ejecutado</button>
                 <button class="btn" id="cpParcial" disabled title="Marcar solo una parte (por ejemplo 50 %)">Parcial…</button>

@@ -2009,11 +2009,12 @@ html:not(.cel) .topbar{margin-bottom:14px;}
 .bim-ac{white-space:nowrap;} .bim-ac .icon-btn{width:28px;height:28px;padding:0;border-radius:7px;font-size:0;margin-left:3px;} .bim-ac .icon-btn svg{width:15px;height:15px;} .bim-ac .icon-btn:hover{border-color:var(--blue);color:var(--blue);} .bim-ac .icon-btn[aria-label^="Eliminar"]:hover{border-color:var(--red);color:var(--red);}
 .bim-off>td{opacity:.5;}
 #bimAcero:not([hidden]){width:min(1280px,calc(100vw - 20px)) !important}
+#a3Cierre:not([hidden]){width:min(980px,calc(100vw - 20px)) !important}
 .ac-t{border-collapse:collapse;font-size:12px;width:100%}.ac-t th,.ac-t td{padding:5px 6px;border-bottom:1px solid var(--line2);text-align:right;vertical-align:middle}.ac-t th.l,.ac-t td.l{text-align:left}.ac-t thead th{font-size:11px;vertical-align:bottom;position:sticky;top:0;background:var(--card);z-index:1}.ac-t .ac-sub{display:block;font-weight:500;opacity:.7;font-size:10.5px;max-width:130px;margin-left:auto;white-space:normal}
 .ac-t td:nth-child(2) .ac-sub{max-width:none;white-space:nowrap}
 .as-in{width:96px;height:28px;text-align:right;border:1px solid var(--line2);border-radius:8px;background:var(--card);color:inherit;font:inherit;font-size:12px;padding:0 6px}.as-t .as-sub>td{background:rgba(148,163,184,.08)}.as-t select{height:30px;border-radius:8px;border:1px solid var(--line2);background:var(--card);color:inherit;font:inherit;font-size:12px;max-width:280px}.as-t td.l .btn,.as-t td.l .btn-sec{height:30px;padding:0 10px;font-size:12px}
 .ac-c{display:flex;gap:4px;align-items:center;justify-content:flex-end}.ac-c input[type=text]{width:78px;height:28px;text-align:right;border:1px solid var(--line2);border-radius:8px;background:var(--card);color:inherit;font:inherit;font-size:12px;padding:0 6px}.ac-c input[type=text].fx{font-weight:700;border-color:#f97316}.ac-c input[type=text].off{opacity:.35}
-#bimForm:not([hidden]),#bimCarga:not([hidden]),#bimRep:not([hidden]),#bimAcero:not([hidden]){max-width:none;position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(720px,calc(100vw - 20px));max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
+#bimForm:not([hidden]),#bimCarga:not([hidden]),#bimRep:not([hidden]),#bimAcero:not([hidden]),#a3Cierre:not([hidden]){max-width:none;position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(720px,calc(100vw - 20px));max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
 @media (max-width:1180px){.vg-cards.bim-cards{grid-template-columns:repeat(2,minmax(0,1fr));}}
 #bimCarga:not([hidden]){width:min(980px,calc(100vw - 20px));}
 .bc-res{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:0 0 10px;} .bc-res>div{border:1px solid var(--line2);border-radius:12px;padding:9px 12px;background:var(--input);min-width:0;} .bc-res b{display:block;font-size:17px;line-height:1.2;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;} .bc-res span{display:block;font-size:11px;color:var(--tx2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -10221,7 +10222,7 @@ async function a3Cargar(forzar) {
     }
     A3.sinSql = false;
     const f = A3.frente;
-    const [nodos, par, dia, nd, vp, sem, els, marc, cl] = await Promise.all([
+    const [nodos, par, dia, nd, vp, sem, els, marc, cl, vzs, cie, pend] = await Promise.all([
       getTodo(`/wbs_nodos?version_id=eq.${DATA.versionId}&proyecto_id=eq.${f}&es_hoja=eq.true&select=id,codigo,codigo_esp,nombre,unidad,metrado,precio_unitario,orden&order=orden`),
       get(`/v_modelo_partida?proyecto_id=eq.${f}&select=nodo_id,codigo,codigo_esp,nombre,unidad,metrado,precio_unitario,elementos&order=codigo`).catch(() => []),
       getTodo(`/v_modelo_avance_parte?proyecto_id=eq.${f}&select=*&order=fecha.desc,nodo_id`).catch(() => { A3.sinSql = true; return []; }),
@@ -10230,7 +10231,11 @@ async function a3Cargar(forzar) {
       get(`/semanas_obra?obra_id=eq.${OBRA.id}&select=numero,fecha_inicio,fecha_fin&order=numero`).catch(() => []),
       getTodo(`/modelo_elementos?proyecto_id=eq.${f}&select=id&order=id`).catch(() => []),
       getTodo(`/modelo_avance?select=elemento_id,modelo_elementos!inner(proyecto_id)&modelo_elementos.proyecto_id=eq.${f}&order=elemento_id,nodo_id,fecha`).catch(() => []),
-      get(`/modelo_partida_clase?proyecto_id=eq.${f}&select=nodo_codigo,clase`).catch(() => [])]);
+      get(`/modelo_partida_clase?proyecto_id=eq.${f}&select=nodo_codigo,clase`).catch(() => []),
+      get(`/valorizaciones?obra_id=eq.${OBRA.id}&tipo=eq.contrato&estado=eq.aprobada&select=id,numero,mes,fecha_fin&order=numero`).catch(() => []),
+      getTodo(`/v_avance_cierre?proyecto_id=eq.${f}&select=*&order=numero,codigo`).catch(() => null),
+      get(`/v_avance_registro?proyecto_id=eq.${f}&estado=eq.pendiente&estimado=eq.false&select=id,fecha,nodo_id`).catch(() => [])]);
+    A3.vz = vzs; A3.cierre = cie || []; A3.sinCierre = cie === null; A3.pend = pend || [];
     A3.clases = {}; cl.forEach(c => { A3.clases[c.nodo_codigo] = c.clase; });
     A3.nodos = {}; nodos.forEach(n => { A3.nodos[n.id] = n; });
     A3.par = par; A3.dia = dia; A3.nd = nd; A3.semanas = sem; A3.elTotal = els.length; A3.elMarcados = new Set(marc.map(m => m.elemento_id)).size;
@@ -10243,6 +10248,80 @@ function a3Estado(r) {
   if (a != null && p == null) return r.actividad_id ? ['por pasar al parte', 'mid'] : ['sin actividad', 'na'];
   if (a == null) return ['parte sin marcas', 'na'];
   return Math.abs(a - p) <= Math.max(0.01, 0.005 * a) ? ['concuerda', 'ok'] : ['difiere', 'bad'];
+}
+// ── Cierre de mes: lo registrado en campo (por elemento) contra lo valorizado de cada partida ──
+const A3_MES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'set', 'oct', 'nov', 'dic'];
+const a3Mes = (z) => { const [y, m] = String(z.mes).split('-'); return `${A3_MES[Number(m) - 1]}-${y}`; };
+const a3FechaC = (f) => String(f || '').split('-').reverse().join('/');
+function a3CierreEstado(r) {
+  if (!r.con_modelo) return ['sin elementos', 'na', 0];
+  const v = Number(r.valorizado), g = Number(r.registrado), d = g - v, tol = 0.01 + 0.001 * Math.abs(v);
+  if (Math.abs(d) <= tol) return ['cuadra', 'ok', d];
+  return d < 0 ? ['falta', 'mid', d] : ['excede', 'bad', d];
+}
+function a3CierreHtml(reg, pasa) {
+  if (A3.sinCierre) return `<section class="vg-tcard"><header><h3>Cierre de mes</h3><span>Avance de campo contra lo valorizado</span></header><p class="hint" style="margin:0 14px 12px">Falta preparar la base: corre <code>nube_pendientes.sql</code> (incluye <code>avance_cierre.sql</code>) y vuelve a abrir esta pantalla.</p></section>`;
+  const vz = A3.vz || []; if (!vz.length) return '';
+  const cz = vz.find(z => z.id === A3.cz) ? A3.cz : vz[vz.length - 1].id; A3.cz = cz;
+  const z = vz.find(x => x.id === cz), todas = A3.cierre.filter(r => r.valorizacion_id === cz), conM = todas.filter(r => r.con_modelo);
+  const est = conM.map(r => [r, a3CierreEstado(r)]), nOk = est.filter(x => x[1][1] === 'ok').length, nFalta = est.filter(x => x[1][0] === 'falta').length, nEx = est.filter(x => x[1][0] === 'excede').length;
+  const lista = (A3.cierreTodas ? todas : conM).filter(r => pasa(r.codigo, r.codigo_esp || '', r.nombre));
+  const filas = lista.map(r => { const e = a3CierreEstado(r), dif = Number(r.registrado) - Number(r.valorizado);
+    return `<tr><th scope="row" class="l">${esc(r.codigo_esp || r.codigo)}</th><td class="l" title="${esc(r.nombre)}">${esc(r.nombre)}</td><td>${esc(r.unidad || '')}</td><td>${bimN(r.valorizado)}</td><td>${r.con_modelo ? bimN(r.registrado) : '—'}</td><td>${r.con_modelo ? bimN(r.pendiente) : '—'}</td><td>${r.con_modelo ? bimN(dif) : '—'}</td><td><span class="vg-pl ${e[1]}">${e[0]}</span></td><td class="bim-ac">${reg && r.con_modelo ? `<button type="button" class="btn-sec" data-a3-esc="${esc(r.valorizacion_id)}|${esc(r.nodo_id)}" style="height:30px;padding:0 10px;font-size:12px">Escoger</button>` : ''}</td></tr>`; }).join('');
+  const pendReal = (A3.pend || []).length, pendFechas = [...new Set((A3.pend || []).map(p => p.fecha))].sort().map(a3FechaC);
+  const aviso = pendReal ? `<p class="bc-av" style="margin:0 14px 10px">Hay <b>${pendReal}</b> marcas de campo reales aún pendientes (${esc(pendFechas.slice(0, 4).join(', '))}${pendFechas.length > 4 ? '…' : ''}). Ocupan la capacidad de sus elementos: si son pruebas, descártalas antes de estimar el histórico.${reg ? ` <button type="button" class="btn-sec" data-a3-desc="1" style="height:28px;padding:0 10px;font-size:12px">Descartar las ${pendReal} pendientes</button>` : ''}</p>` : '';
+  return `<section class="vg-tcard" id="a3CierreSec"><header><h3>Cierre de mes</h3><span>Lo registrado en el modelo contra lo valorizado de cada partida · valorización aprobada, mes cerrado el último día</span></header>
+    <div class="a3-res" style="align-items:center">
+      <select id="a3Vz" aria-label="Valorización" style="height:34px;border-radius:9px;border:1px solid var(--line2);background:var(--card);color:inherit;font:inherit;font-size:12.5px;padding:0 10px">${vz.slice().reverse().map(x => `<option value="${esc(x.id)}"${x.id === cz ? ' selected' : ''}>Valorización ${x.numero} · ${a3Mes(x)}</option>`).join('')}</select>
+      <span class="a3-chip ok">${nOk} cuadran</span><span class="a3-chip mid">${nFalta} faltan</span><span class="a3-chip bad">${nEx} exceden</span><span class="a3-chip">${todas.length - conM.length} sin elementos en el modelo</span>
+      ${reg ? `<span style="margin-left:auto;display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="btn-sec" data-a3-est="mes" title="Reparte lo valorizado que no tiene marcas entre los elementos de la partida (queda como estimado y se puede editar)">Estimar lo que falta</button><button type="button" class="btn-sec" data-a3-est="todo" title="Hace lo mismo para todos los meses aprobados, del más antiguo al más reciente">Estimar todo el histórico</button><button type="button" class="btn-sec" data-a3-reabrir="1" title="Borra lo estimado de este mes y devuelve lo real a pendiente">Reabrir el mes</button></span>` : ''}</div>
+    ${aviso}
+    <div class="vg-twrap" style="max-height:none"><table class="vg-t bim-t"><thead><tr><th>Código</th><th class="l">Partida</th><th>Und</th><th title="Metrado de la partida en esa valorización">Valorizado</th><th title="Suma de las marcas aprobadas en este cierre">Registrado</th><th title="Marcas pendientes con fecha hasta el corte de este mes">Pendiente</th><th>Diferencia</th><th>Estado</th><th></th></tr></thead><tbody>${filas || '<tr><td colspan="9">Esta valorización no tiene partidas con elementos en el modelo de este frente.</td></tr>'}</tbody></table></div>
+    <label class="adm-check" style="margin:8px 14px 12px"><input type="checkbox" data-a3-todas${A3.cierreTodas ? ' checked' : ''}> Mostrar también las partidas sin elementos en el modelo</label></section>`;
+}
+async function a3Rpc(nombre, args) { return preRpc(nombre, args); }
+async function a3EscogerAbrir(vzId, nodoId) {
+  const z = (A3.vz || []).find(x => x.id === vzId), r0 = A3.cierre.find(x => x.valorizacion_id === vzId && x.nodo_id === nodoId); if (!z || !r0) return;
+  const fin = z.fecha_fin || r0.fecha_fin;
+  let L; try { L = await get(`/v_avance_registro?nodo_id=eq.${nodoId}&or=(valorizacion_id.eq.${vzId},and(estado.eq.pendiente,fecha.lte.${fin}))&select=*&order=fecha,codigo`); }
+  catch (e) { toast(`No se pudieron leer las marcas: ${esc(ptErr(e))}`, false, 'a3'); return; }
+  let m = document.getElementById('a3Cierre');
+  if (!m) { m = document.createElement('form'); m.id = 'a3Cierre'; m.className = 'pform la-form'; m.hidden = true; document.body.appendChild(m); }
+  const val = Number(r0.valorizado), sel = new Set(L.filter(x => x.valorizacion_id === vzId).map(x => x.id));
+  if (!sel.size) { let acc = 0; for (const x of L) { if (acc >= val - 0.0005) break; sel.add(x.id); acc += Number(x.cantidad); } }
+  let forzar = null;
+  m.innerHTML = `<h3 style="margin:0 0 4px;font-size:14px">Escoger lo que entra en la valorización ${z.numero} · ${a3Mes(z)}</h3>
+    <p class="hint" style="margin:0 0 8px"><b>${esc(r0.codigo_esp || r0.codigo)}</b> · ${esc(r0.nombre)} · valorizado <b>${bimN(val)} ${esc(r0.unidad || '')}</b></p>
+    <div class="vg-twrap" style="max-height:min(52vh,420px);overflow:auto"><table class="vg-t bim-t"><thead><tr><th></th><th>Fecha</th><th class="l">Elemento</th><th>Fracción</th><th>Cantidad</th><th>Origen</th></tr></thead>
+    <tbody>${L.map(x => `<tr><td><input type="checkbox" data-c-r="${esc(x.id)}" aria-label="Incluir"></td><td class="mono">${a3FechaC(x.fecha)}</td><td class="l">${esc(x.codigo || x.elemento || x.nombre || '—')}<span class="lb-sub">${esc(x.elemento || '')} · ${esc(String(x.ubicacion || '').replace('Margen ', 'M. '))}</span></td><td>${(Number(x.fraccion) * 100).toFixed(1)} %${x.fraccion_original != null ? ` <span class="vg-pl mid" title="Valor original ${(Number(x.fraccion_original) * 100).toFixed(1)} %">ajustada</span>` : ''}</td><td>${bimN(x.cantidad)}</td><td>${x.estimado ? '<span class="vg-pl na">estimado</span>' : 'campo'}${x.valorizacion_id === vzId ? '' : ' <span class="vg-pl mid">pendiente</span>'}</td></tr>`).join('') || '<tr><td colspan="6">No hay marcas de esta partida hasta el corte del mes. Usa «Estimar lo que falta» o registra el avance en el visor.</td></tr>'}</tbody></table></div>
+    <p class="hint" id="a3CRes" style="margin:8px 0 6px"></p>
+    <label class="adm-check" style="margin:0 0 10px"><input type="checkbox" id="a3CForz"> Forzar la igualdad ajustando el registro </label>
+    <select id="a3CForzR" style="height:32px;border-radius:9px;border:1px solid var(--line2);background:var(--card);color:inherit;font:inherit;font-size:12.5px;max-width:100%" disabled></select>
+    <div class="sug-acc" style="margin-top:12px"><button class="btn" type="submit">Guardar cierre de la partida</button><button class="btn-sec" type="button" id="a3CCancel">Cancelar</button></div>`;
+  const fondo = document.getElementById('lbFondo') || (() => { const x = document.createElement('div'); x.id = 'lbFondo'; x.hidden = true; document.body.appendChild(x); return x; })();
+  const cerrar = () => { m.hidden = true; fondo.hidden = true; document.documentElement.classList.remove('la-modal'); };
+  const porId = new Map(L.map(x => [x.id, x]));
+  const refrescar = () => {
+    const S = L.filter(x => sel.has(x.id)), tot = S.reduce((s, x) => s + Number(x.cantidad), 0), d = tot - val;
+    m.querySelectorAll('[data-c-r]').forEach(c => { c.checked = sel.has(c.dataset.cR); });
+    const o = m.querySelector('#a3CForzR'), prev = o.value;
+    o.innerHTML = S.map(x => `<option value="${esc(x.id)}">${a3FechaC(x.fecha)} · ${esc(x.codigo || x.elemento || '—')} · ${bimN(x.cantidad)}</option>`).join('');
+    if (S.some(x => x.id === prev)) o.value = prev; else if (S.length) o.value = S.slice().sort((a, b) => String(b.fecha).localeCompare(String(a.fecha)))[0].id;
+    o.disabled = !m.querySelector('#a3CForz').checked || !S.length;
+    const ok = Math.abs(d) <= 0.01 + 0.001 * Math.abs(val);
+    m.querySelector('#a3CRes').innerHTML = `Escogido <b>${bimN(tot)}</b> contra valorizado <b>${bimN(val)}</b> · diferencia <b style="color:${ok ? '#2f6b4f' : '#a63d3d'}">${d >= 0 ? '+' : '−'}${bimN(Math.abs(d))}</b>${ok ? ' · cuadra' : ' · puedes escoger otros registros o forzar el último'}`;
+  };
+  m.onchange = (ev) => { const c = ev.target.closest('[data-c-r]'); if (c) { if (c.checked) sel.add(c.dataset.cR); else sel.delete(c.dataset.cR); } refrescar(); };
+  m.hidden = false; fondo.hidden = false; document.documentElement.classList.add('la-modal'); fondo.onclick = cerrar; m.querySelector('#a3CCancel').onclick = cerrar;
+  refrescar();
+  m.onsubmit = async (ev) => {
+    ev.preventDefault(); const btn = m.querySelector('button[type=submit]'); btn.disabled = true;
+    const f = m.querySelector('#a3CForz').checked && !m.querySelector('#a3CForzR').disabled ? m.querySelector('#a3CForzR').value : null;
+    try {
+      const r = await a3Rpc('avance_cierre_aplicar', { p_valorizacion: vzId, p_nodo: nodoId, p_registros: [...sel], p_forzar: f });
+      cerrar(); toast(`Cierre guardado: registrado ${bimN(r.registrado)} de ${bimN(r.valorizado)}${Math.abs(r.diferencia) > 0.01 ? ' (diferencia ' + bimN(r.diferencia) + ')' : ' · cuadra'}.`, true, 'a3'); await a3Cargar(true);
+    } catch (er) { btn.disabled = false; toast(`No se pudo guardar: ${esc(ptErr(er))}`, false, 'a3'); }
+  };
 }
 function a3Pintar() {
   const box = $('#a3Panel'); if (!box) return;
@@ -10287,7 +10366,7 @@ function a3Pintar() {
   const sem = A3.semanas.map(s => { let m = 0, pr = 0, n = 0; A3.dia.forEach(r => { if (r.fecha >= s.fecha_inicio && r.fecha <= s.fecha_fin) { m += Number(r.cantidad_avance || 0) * pu(r.nodo_id); pr += Number(r.cantidad_parte || 0) * pu(r.nodo_id); n++; } }); return { s, m, pr, n }; }).filter(x => x.n).reverse().slice(0, 12);
   const filasSem = sem.map(({ s, m, pr }) => { const d = m - pr, e = pr === 0 && m > 0 ? ['por pasar al parte', 'mid'] : Math.abs(d) <= Math.max(1, 0.005 * m) ? ['concuerda', 'ok'] : ['difiere', 'bad']; return `<tr><th scope="row">${s.numero}</th><td class="mono">${s.fecha_inicio.slice(5).split('-').reverse().join('/')} – ${s.fecha_fin.slice(5).split('-').reverse().join('/')}</td><td>${fmt(pr)}</td><td>${fmt(m)}</td><td>${fmt(d)}</td><td><span class="vg-pl ${e[1]}">${e[0]}</span></td></tr>`; }).join('');
   const vacio = !A3.nd.length && !A3.dia.length;
-  box.innerHTML = `<div class="vg-wrap">${barra}${enlaces}${kp}
+  box.innerHTML = `<div class="vg-wrap">${barra}${enlaces}${kp}${a3CierreHtml(reg, pasa)}
     ${vacio ? `<section class="vg-tcard"><h3 style="margin:0 0 6px">Todavía no hay avance de campo en ${esc(String(proy.nombre || '').replace(/^Puente\s+/i, ''))}</h3><p class="hint" style="margin:0">En el Visor 3D, pestaña <b>Campo</b>: selecciona elementos (tocándolos o escribiendo su código), elige la partida y la fecha, y marca «ejecutado». El parte diario se llena solo cuando ese día aún no tiene valor; si ya tiene otro, aparece aquí para que lo revises.</p></section>` : `
     <section class="vg-tcard"><header><h3>Qué requiere atención</h3><span>Marcas de campo contra el parte diario · ${a3Rango[A3.rango][0]}</span></header>
       <div class="a3-res">${resumenDia}</div>
@@ -10305,12 +10384,36 @@ document.addEventListener('click', async (e) => {
   const fr = e.target.closest('[data-a3-fr]'); if (fr) { A3.frente = fr.dataset.a3Fr; a3Cargar(true); return; }
   const rg = e.target.closest('[data-a3-rg]'); if (rg) { A3.rango = rg.dataset.a3Rg; a3Pintar(); return; }
   const td = e.target.closest('[data-a3-td]'); if (td) { A3.todo = td.dataset.a3Td === '1'; a3Pintar(); return; }
+  const es = e.target.closest('[data-a3-esc]'); if (es) { const [v, n] = es.dataset.a3Esc.split('|'); a3EscogerAbrir(v, n); return; }
+  const et = e.target.closest('[data-a3-est]');
+  if (et) {
+    const todo = et.dataset.a3Est === 'todo';
+    if (todo && !(await confirmar('Se estimarán todos los meses aprobados de este frente, del más antiguo al más reciente. Lo estimado queda marcado y se puede editar o reabrir. ¿Continuar?'))) return;
+    et.disabled = true;
+    try { const r = todo ? await a3Rpc('avance_cierre_estimar_todo', { p_proyecto: A3.frente }) : await a3Rpc('avance_cierre_estimar', { p_valorizacion: A3.cz, p_proyecto: A3.frente });
+      toast(`Estimado: ${r.registros} registros${r.sin_ubicar ? ` · ${r.sin_ubicar} partidas con metrado sin ubicar (los elementos ya están al 100 %)` : ''}.`, true, 'a3'); await a3Cargar(true); }
+    catch (er) { et.disabled = false; toast(`No se pudo estimar: ${esc(ptErr(er))}`, false, 'a3'); }
+    return; }
+  const rb = e.target.closest('[data-a3-reabrir]');
+  if (rb) { if (!(await confirmar('Se borra lo estimado de este mes y lo registrado en campo vuelve a pendiente. ¿Reabrir el mes?'))) return; rb.disabled = true;
+    try { await a3Rpc('avance_cierre_reabrir', { p_valorizacion: A3.cz, p_proyecto: A3.frente }); toast('Mes reabierto.', true, 'a3'); await a3Cargar(true); }
+    catch (er) { rb.disabled = false; toast(`No se pudo reabrir: ${esc(ptErr(er))}`, false, 'a3'); }
+    return; }
+  const ds = e.target.closest('[data-a3-desc]');
+  if (ds) { if (!(await confirmar(`Se descartan las ${(A3.pend || []).length} marcas de campo pendientes de este frente (no toca lo aprobado ni lo estimado). ¿Descartarlas?`))) return; ds.disabled = true;
+    try { const n = await a3Rpc('avance_cierre_descartar_pendientes', { p_proyecto: A3.frente, p_fecha: null }); toast(`${n} marcas descartadas.`, true, 'a3'); await a3Cargar(true); }
+    catch (er) { ds.disabled = false; toast(`No se pudo descartar: ${esc(ptErr(er))}`, false, 'a3'); }
+    return; }
   const ap = e.target.closest('[data-a3-ap]');
   if (ap) { const [act, fecha, cant] = ap.dataset.a3Ap.split('|'); ap.disabled = true;
     try { await ptEnviar('POST', '/avance_diario?on_conflict=actividad_id,fecha', { actividad_id: act, fecha, cantidad: Number(cant) }, true); toast('Parte diario actualizado con lo marcado en el modelo.', true, 'a3'); await a3Cargar(true); }
     catch (er) { ap.disabled = false; toast(`No se pudo aplicar al parte: ${esc(ptErr(er))}`, false, 'a3'); } }
 });
 document.addEventListener('input', (e) => { if (e.target.id === 'a3Q') { A3.q = e.target.value; a3Pintar(); } });
+document.addEventListener('change', (e) => {
+  if (e.target.id === 'a3Vz') { A3.cz = e.target.value; a3Pintar(); return; }
+  if (e.target.matches && e.target.matches('[data-a3-todas]')) { A3.cierreTodas = e.target.checked; a3Pintar(); }
+});
 
 // ═══ ADICIONALES Y DEDUCTIVOS: lo que cambió en cada línea base (calculado de las partidas) + el registro legal numerado (tabla prestaciones) ═══
 // Los montos salen de las líneas base APROBADAS: adicional = partidas nuevas con concepto adicional; deductivo = partidas del contrato que bajan o salen.
