@@ -10146,7 +10146,7 @@ async function bimCargaAbrir() {
   const fondo = document.getElementById('lbFondo') || (() => { const x = document.createElement('div'); x.id = 'lbFondo'; x.hidden = true; document.body.appendChild(x); return x; })();
   const cerrar = () => { m.hidden = true; fondo.hidden = true; document.documentElement.classList.remove('la-modal'); };
   const corto = String(proy.nombre).replace(/^Puente\s+/i, '');
-  Object.assign(BIM_CARGA, { inv: null, prop: null, sim: null, origen: '', otro: null });
+  Object.assign(BIM_CARGA, { inv: null, prop: null, sim: null, origen: '', otro: null, contactos: null });
   const pintar = (msg) => {
     const C = BIM_CARGA, inv = C.inv, cab = `<h3 style="margin:0 0 4px;font-size:14px">Cargar el modelo de ${esc(corto)}</h3><p class="hint" style="margin:0 0 10px">Se lee el inventario del modelo, se detectan sus atributos y se propone el enlace con las partidas de este frente. Nada se guarda hasta que aceptes.</p>`;
     const elegir = `<label class="btn-sec bim-carga-btn" style="cursor:pointer" title="Inventario del modelo en formato JSON (el que genera el visor: element_info…json)"><svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M5 20h14"/></svg>Elegir archivo<input type="file" id="bcFile" accept=".json,application/json" hidden></label>`;
@@ -10188,6 +10188,7 @@ async function bimCargaAbrir() {
     const chk = m.querySelector('#bcReemp'), reemp = !BIM.reglas.length || (chk && chk.checked), btn = m.querySelector('button[type=submit]'); btn.disabled = true; btn.textContent = 'Cargando…';
     try {
       await preRpc('modelo_elementos_cargar', { p_proyecto: proy.id, p_modelo: C.origen, p_items: C.inv.items });
+      if (Array.isArray(C.contactos) && C.contactos.length) { try { await preRpc('modelo_contactos_cargar', { p_proyecto: proy.id, p_items: C.contactos.map(([ga, gb, area]) => ({ ga, gb, area })) }); } catch (e) { /* falta correr avance_contactos.sql: solo se pierde el descuento de contactos */ } }
       if (!reemp && !C.sinColumnas && C.inv.items.some(e => Number(e.acero_a615) > 0 || Number(e.acero_a706) > 0)) {
         for (const r of BIM.reglas.filter(x => x.activa && /^reparto/.test(String(x.modo)))) {
           const nd = C.nodos.find(x => x.codigo === r.nodo_codigo); if (!nd || !nd.es_hoja) continue;
@@ -10208,6 +10209,7 @@ async function bimCargaAbrir() {
     for (const [a, b] of [['element_info_ligero.json', 'element_map_ligero.json'], ['element_info.json', 'element_map.json']]) { try { json = await leer(a); arch = a; tareas = await leer(b).catch(() => null); break; } catch (e) {} }
     if (m.hidden || BIM_CARGA.inv) return;
     if (!json) { pintar('Este frente todavía no tiene un modelo publicado en el visor. Elige el archivo del inventario del modelo.'); return; }
+    BIM_CARGA.contactos = await leer('element_contactos.json').catch(() => null);
     await usar(json, tareas, 'visor · ' + arch);
   } catch (er) { if (!m.hidden && !BIM_CARGA.inv) pintar('No se pudo leer el modelo: ' + esc(er.message)); }
 }
@@ -10274,7 +10276,7 @@ function a3EnCursoHtml(reg, pasa) {
   const monto = grupos.reduce((s, g) => s + g.cant * Number(g.n.precio_unitario || 0), 0);
   const [y, m] = mes.split('-'), etiqueta = `${A3_MES[Number(m) - 1]}-${y}`;
   const LT = (A3.lotes || []).filter(l => String(l.fecha).slice(0, 7) === mes);
-  const lotesHtml = LT.length ? `<div class="a3-lotes"><h4>Vaciados del mes <span>${LT.length}</span></h4><div class="vg-twrap" style="max-height:none"><table class="vg-t bim-t"><thead><tr><th class="l">Vaciado</th><th>Fecha</th><th>Elementos</th><th title="Suma de las caras casi verticales de sus elementos, calculada de la geometría: es una estimación del encofrado de ese vaciado">Cara de encofrado m²</th><th>Estado</th><th></th></tr></thead><tbody>${LT.map(l => `<tr><th scope="row" class="l">${esc(l.nombre)}</th><td class="mono">${a3FechaC(l.fecha)}</td><td>${l.elementos}</td><td>${bimN(l.area_cara, 1)}</td><td><span class="vg-pl ${l.aprobadas ? 'ok' : 'mid'}">${l.aprobadas ? 'aprobado' : 'pendiente'}</span></td><td class="bim-ac">${reg && !l.aprobadas ? `<button type="button" class="icon-btn" data-a3-lq="${esc(l.id)}" title="Quitar este vaciado y sus marcas" aria-label="Quitar el vaciado"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>` : ''}</td></tr>`).join('')}</tbody></table></div></div>` : '';
+  const lotesHtml = LT.length ? `<div class="a3-lotes"><h4>Vaciados del mes <span>${LT.length}</span></h4><div class="vg-twrap" style="max-height:none"><table class="vg-t bim-t"><thead><tr><th class="l">Vaciado</th><th>Fecha</th><th>Elementos</th><th title="Cara de encofrado estimada del vaciado: suma de las caras casi verticales de sus elementos menos las caras que quedan en contacto entre ellos (dentro del mismo concreto)">Cara de encofrado m²</th><th>Estado</th><th></th></tr></thead><tbody>${LT.map(l => `<tr><th scope="row" class="l">${esc(l.nombre)}</th><td class="mono">${a3FechaC(l.fecha)}</td><td>${l.elementos}</td><td title="Bruta ${bimN(l.area_bruta, 1)} − contactos ${bimN(l.contactos, 1)}">${bimN(l.area_cara, 1)}${Number(l.contactos) > 0 ? `<span class="lb-sub">bruta ${bimN(l.area_bruta, 1)} − ${bimN(l.contactos, 1)}</span>` : ''}</td><td><span class="vg-pl ${l.aprobadas ? 'ok' : 'mid'}">${l.aprobadas ? 'aprobado' : 'pendiente'}</span></td><td class="bim-ac">${reg && !l.aprobadas ? `<button type="button" class="icon-btn" data-a3-lq="${esc(l.id)}" title="Quitar este vaciado y sus marcas" aria-label="Quitar el vaciado"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>` : ''}</td></tr>`).join('')}</tbody></table></div></div>` : '';
   const filas = grupos.map(g => {
     const ab = (A3.abPend || (A3.abPend = new Set())).has(g.n.id), f = g.regs.map(r => r.fecha).sort(), met = Number(g.n.metrado || 0);
     const cab = `<tr class="bim-row${ab ? ' on' : ''}" data-a3-ab="${esc(g.n.id)}" tabindex="0"><th scope="row" class="l"><span class="ctv-tg${ab ? ' on' : ''}" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>${esc(g.n.codigo_esp || g.n.codigo)}</th><td class="l" title="${esc(g.n.nombre)}">${esc(g.n.nombre)}</td><td>${esc(g.n.unidad || '')}</td><td>${bimN(g.cant)}</td><td>${met > 0 ? (g.cant / met * 100).toFixed(1) + ' %' : '—'}</td><td>${g.regs.length}</td><td class="mono">${a3FechaC(f[0])}${f[0] !== f[f.length - 1] ? ' – ' + a3FechaC(f[f.length - 1]) : ''}</td><td>S/ ${Math.round(g.cant * Number(g.n.precio_unitario || 0)).toLocaleString('es-PE')}</td></tr>`;
