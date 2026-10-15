@@ -7,8 +7,8 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <title>Visor BIM · Obra 04</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f26a1b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 18h20M4 18v-6M20 18v-6M2 12c4-8 16-8 20 0M8 18v-7M12 18V8M16 18v-7'/%3E%3C/svg%3E" />
-  <script type="module" crossorigin src="./assets/index-CNpnelEC.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-BEIUwMvj.css">
+  <script type="module" crossorigin src="./assets/index-aTuEBk7u.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-NzFVUEby.css">
 </head>
 <body>
   <div id="app">
@@ -27,8 +27,9 @@
 
       <!-- barra de estado (escritorio ancho) -->
       <footer class="foot" id="foot">
-        <span>AVANCE GLOBAL<b id="ftPhys">—</b><span class="fb"><i id="ftBar"></i></span></span>
-        <span>VALOR GANADO<b id="ftEv">—</b></span>
+        <span>SEMANA<b id="ftSem">—</b></span>
+        <span>TÉRMINO PROYECTADO<b id="ftTer">—</b></span>
+        <span hidden>AVANCE GLOBAL<b id="ftPhys">—</b><span class="fb"><i id="ftBar"></i></span> VALOR GANADO<b id="ftEv">—</b></span>
         <span>ALERTAS<b id="ftAl">—</b></span>
         <span>CAMPO<b id="ftCampo">—</b></span>
         <span>PRUEBAS<b id="ftPru">—</b></span>
@@ -62,6 +63,21 @@
         <div class="d-curve">
           <div class="dc-h"><span><i class="l-real"></i>Real</span><span><i class="l-plan"></i>Programado</span><span id="simFlag" class="flag" hidden>Proyección</span><em class="mono"><span id="simMin">—</span> → <span id="simMax">—</span></em></div>
           <div class="ch-w"><canvas id="sChart"></canvas><input type="range" id="slider" min="0" max="100" step="1" value="0" aria-label="Fecha de la simulación" /><div class="cutmark" id="cutMark" hidden></div></div>
+        </div>
+        <!-- período (escritorio): mensual / acumulado y mes anterior / siguiente -->
+        <div class="d-per" id="dPer">
+          <div class="seg" id="dPerSeg"><button data-per="mes" title="Solo lo que avanzó en el mes">Mensual</button><button data-per="acum" class="on" title="Todo lo ejecutado hasta el fin del mes">Acumulado</button></div>
+          <div class="dp-step"><button id="dPrev" aria-label="Mes anterior" title="Mes anterior">‹</button><b id="dMes">—</b><button id="dNext" aria-label="Mes siguiente" title="Mes siguiente">›</button></div>
+        </div>
+        <!-- avance al período (escritorio): anillo y tres cifras -->
+        <div class="d-kpi" id="dKpi">
+          <svg class="dk-ring" viewBox="0 0 40 40" aria-hidden="true"><circle class="bg" cx="20" cy="20" r="16" pathLength="100"/><circle class="fg" id="dkFg" cx="20" cy="20" r="16" pathLength="100"/></svg>
+          <div class="dk-v"><small id="dkT">Avance acumulado</small><b id="dkV" class="mono">—</b></div>
+          <ul class="dk-m">
+            <li><i style="--c: var(--dk-green)"></i><span id="dkEl">Ejecutado</span><b id="dkE" class="mono">—</b></li>
+            <li><i style="--c: var(--dk-blue)"></i><span>Programado</span><b id="dkP" class="mono">—</b></li>
+            <li><i style="--c: var(--dk-orange)"></i><span id="dkRl">Retraso</span><b id="dkR" class="mono">—</b></li>
+          </ul>
         </div>
         <!-- línea de tiempo (escritorio ancho): semana, fases del presupuesto con su avance, corte y término proyectado -->
         <div class="d-tl" id="tl">
