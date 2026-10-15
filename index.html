@@ -10234,7 +10234,7 @@ async function a3Cargar(forzar) {
       get(`/modelo_partida_clase?proyecto_id=eq.${f}&select=nodo_codigo,clase`).catch(() => []),
       get(`/valorizaciones?obra_id=eq.${OBRA.id}&tipo=eq.contrato&estado=eq.aprobada&select=id,numero,mes,fecha_fin&order=numero`).catch(() => []),
       getTodo(`/v_avance_cierre?proyecto_id=eq.${f}&select=*&order=numero,codigo`).catch(() => null),
-      get(`/v_avance_registro?proyecto_id=eq.${f}&estado=eq.pendiente&estimado=eq.false&select=id,fecha,nodo_id`).catch(() => [])]);
+      getTodo(`/v_avance_registro?proyecto_id=eq.${f}&estado=eq.pendiente&estimado=eq.false&select=*&order=fecha.desc,codigo`).catch(() => [])]);
     A3.vz = vzs; A3.cierre = cie || []; A3.sinCierre = cie === null; A3.pend = pend || [];
     A3.clases = {}; cl.forEach(c => { A3.clases[c.nodo_codigo] = c.clase; });
     A3.nodos = {}; nodos.forEach(n => { A3.nodos[n.id] = n; });
@@ -10253,6 +10253,31 @@ function a3Estado(r) {
 const A3_MES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'set', 'oct', 'nov', 'dic'];
 const a3Mes = (z) => { const [y, m] = String(z.mes).split('-'); return `${A3_MES[Number(m) - 1]}-${y}`; };
 const a3FechaC = (f) => String(f || '').split('-').reverse().join('/');
+// ── Avance registrado y todavía sin valorizar (el mes en curso): lo que se marcó en el visor, por partida y con su detalle ──
+function a3EnCursoHtml(reg, pasa) {
+  const P = (A3.pend || []).filter(r => A3.nodos[r.nodo_id]); if (!P.length) return '';
+  const meses = [...new Set(P.map(r => String(r.fecha).slice(0, 7)))].sort().reverse();
+  const mes = meses.includes(A3.mesPend) ? A3.mesPend : meses[0]; A3.mesPend = mes;
+  const L = P.filter(r => String(r.fecha).slice(0, 7) === mes && pasa(A3.nodos[r.nodo_id].codigo, A3.nodos[r.nodo_id].codigo_esp || '', A3.nodos[r.nodo_id].nombre || ''));
+  const por = new Map(); L.forEach(r => { const o = por.get(r.nodo_id) || { n: A3.nodos[r.nodo_id], cant: 0, regs: [] }; o.cant += Number(r.cantidad || 0); o.regs.push(r); por.set(r.nodo_id, o); });
+  const grupos = [...por.values()].sort((a, b) => String(a.n.codigo).localeCompare(String(b.n.codigo), 'es', { numeric: true }));
+  const monto = grupos.reduce((s, g) => s + g.cant * Number(g.n.precio_unitario || 0), 0);
+  const [y, m] = mes.split('-'), etiqueta = `${A3_MES[Number(m) - 1]}-${y}`;
+  const filas = grupos.map(g => {
+    const ab = (A3.abPend || (A3.abPend = new Set())).has(g.n.id), f = g.regs.map(r => r.fecha).sort(), met = Number(g.n.metrado || 0);
+    const cab = `<tr class="bim-row${ab ? ' on' : ''}" data-a3-ab="${esc(g.n.id)}" tabindex="0"><th scope="row" class="l"><span class="ctv-tg${ab ? ' on' : ''}" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>${esc(g.n.codigo_esp || g.n.codigo)}</th><td class="l" title="${esc(g.n.nombre)}">${esc(g.n.nombre)}</td><td>${esc(g.n.unidad || '')}</td><td>${bimN(g.cant)}</td><td>${met > 0 ? (g.cant / met * 100).toFixed(1) + ' %' : '—'}</td><td>${g.regs.length}</td><td class="mono">${a3FechaC(f[0])}${f[0] !== f[f.length - 1] ? ' – ' + a3FechaC(f[f.length - 1]) : ''}</td><td>S/ ${Math.round(g.cant * Number(g.n.precio_unitario || 0)).toLocaleString('es-PE')}</td></tr>`;
+    if (!ab) return cab;
+    const det = g.regs.slice().sort((a, b) => String(a.fecha).localeCompare(String(b.fecha))).map(r => {
+      const tr = r.tramo_hasta != null ? `${Number(r.tramo_desde || 0).toFixed(2)} a ${Number(r.tramo_hasta).toFixed(2)} m ${r.tramo_eje === 'l' ? '(a lo largo)' : '(altura)'}` : (Number(r.fraccion) >= 0.9999 ? 'completo' : 'parcial');
+      return `<tr class="as-sub"><td></td><td class="l">${esc(r.codigo || r.elemento || r.nombre || '—')}<span class="lb-sub">${esc(r.elemento || '')} · ${esc(String(r.ubicacion || '').replace('Margen ', 'M. '))}</span></td><td class="mono">${a3FechaC(r.fecha)}</td><td>${bimN(r.cantidad)}</td><td>${(Number(r.fraccion) * 100).toFixed(1)} %</td><td colspan="2">${esc(tr)}<span class="lb-sub">${esc(r.marcado_por || '')}</span></td><td>${reg ? `<button type="button" class="icon-btn" data-a3-q="${esc(r.elemento_id)}|${esc(r.nodo_id)}|${esc(r.fecha)}" title="Quitar este registro" aria-label="Quitar"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>` : ''}</td></tr>`; }).join('');
+    return cab + det;
+  }).join('');
+  return `<section class="vg-tcard"><header><h3>Avance registrado sin valorizar</h3><span>Lo marcado en el visor, todavía pendiente de entrar a una valorización · toca una partida para ver los elementos</span></header>
+    <div class="a3-res" style="align-items:center">
+      <select id="a3Mes" aria-label="Mes" style="height:34px;border-radius:9px;border:1px solid var(--line2);background:var(--card);color:inherit;font:inherit;font-size:12.5px;padding:0 10px">${meses.map(x => { const [yy, mm] = x.split('-'); return `<option value="${x}"${x === mes ? ' selected' : ''}>${A3_MES[Number(mm) - 1]}-${yy}</option>`; }).join('')}</select>
+      <span class="a3-chip ok">${grupos.length} partida${grupos.length === 1 ? '' : 's'}</span><span class="a3-chip">${L.length} registro${L.length === 1 ? '' : 's'}</span><span class="a3-chip mid" title="Costo directo al precio del presupuesto">≈ S/ ${Math.round(monto).toLocaleString('es-PE')}</span></div>
+    <div class="vg-twrap" style="max-height:none"><table class="vg-t bim-t as-t"><thead><tr><th>Código</th><th class="l">Partida · elemento</th><th>Fecha / Und</th><th>Cantidad</th><th>% del metrado</th><th>Registros</th><th>Fechas</th><th>Monto</th></tr></thead><tbody>${filas || `<tr><td colspan="8">No hay avance registrado en ${etiqueta}.</td></tr>`}</tbody></table></div></section>`;
+}
 function a3CierreEstado(r) {
   if (!r.con_modelo) return ['sin elementos', 'na', 0];
   const v = Number(r.valorizado), g = Number(r.registrado), d = g - v, tol = 0.01 + 0.001 * Math.abs(v);
@@ -10366,7 +10391,7 @@ function a3Pintar() {
   const sem = A3.semanas.map(s => { let m = 0, pr = 0, n = 0; A3.dia.forEach(r => { if (r.fecha >= s.fecha_inicio && r.fecha <= s.fecha_fin) { m += Number(r.cantidad_avance || 0) * pu(r.nodo_id); pr += Number(r.cantidad_parte || 0) * pu(r.nodo_id); n++; } }); return { s, m, pr, n }; }).filter(x => x.n).reverse().slice(0, 12);
   const filasSem = sem.map(({ s, m, pr }) => { const d = m - pr, e = pr === 0 && m > 0 ? ['por pasar al parte', 'mid'] : Math.abs(d) <= Math.max(1, 0.005 * m) ? ['concuerda', 'ok'] : ['difiere', 'bad']; return `<tr><th scope="row">${s.numero}</th><td class="mono">${s.fecha_inicio.slice(5).split('-').reverse().join('/')} – ${s.fecha_fin.slice(5).split('-').reverse().join('/')}</td><td>${fmt(pr)}</td><td>${fmt(m)}</td><td>${fmt(d)}</td><td><span class="vg-pl ${e[1]}">${e[0]}</span></td></tr>`; }).join('');
   const vacio = !A3.nd.length && !A3.dia.length;
-  box.innerHTML = `<div class="vg-wrap">${barra}${enlaces}${kp}${a3CierreHtml(reg, pasa)}
+  box.innerHTML = `<div class="vg-wrap">${barra}${enlaces}${kp}${a3EnCursoHtml(reg, pasa)}${a3CierreHtml(reg, pasa)}
     ${vacio ? `<section class="vg-tcard"><h3 style="margin:0 0 6px">Todavía no hay avance de campo en ${esc(String(proy.nombre || '').replace(/^Puente\s+/i, ''))}</h3><p class="hint" style="margin:0">En el Visor 3D, pestaña <b>Campo</b>: selecciona elementos (tocándolos o escribiendo su código), elige la partida y la fecha, y marca «ejecutado». El parte diario se llena solo cuando ese día aún no tiene valor; si ya tiene otro, aparece aquí para que lo revises.</p></section>` : `
     <section class="vg-tcard"><header><h3>Qué requiere atención</h3><span>Marcas de campo contra el parte diario · ${a3Rango[A3.rango][0]}</span></header>
       <div class="a3-res">${resumenDia}</div>
@@ -10384,6 +10409,13 @@ document.addEventListener('click', async (e) => {
   const fr = e.target.closest('[data-a3-fr]'); if (fr) { A3.frente = fr.dataset.a3Fr; a3Cargar(true); return; }
   const rg = e.target.closest('[data-a3-rg]'); if (rg) { A3.rango = rg.dataset.a3Rg; a3Pintar(); return; }
   const td = e.target.closest('[data-a3-td]'); if (td) { A3.todo = td.dataset.a3Td === '1'; a3Pintar(); return; }
+  const ab = e.target.closest('[data-a3-ab]');
+  if (ab && !e.target.closest('button')) { const s = A3.abPend || (A3.abPend = new Set()), k = ab.dataset.a3Ab; if (s.has(k)) s.delete(k); else s.add(k); a3Pintar(); return; }
+  const qb = e.target.closest('[data-a3-q]');
+  if (qb) { const [el, nd, fe] = qb.dataset.a3Q.split('|'); if (!(await confirmar('Se quita este registro de avance (no toca nada aprobado). ¿Quitarlo?'))) return; qb.disabled = true;
+    try { await a3Rpc('modelo_avance_quitar', { p_elementos: [el], p_nodos: [nd], p_fecha: fe }); toast('Registro quitado.', true, 'a3'); await a3Cargar(true); }
+    catch (er) { qb.disabled = false; toast(`No se pudo quitar: ${esc(ptErr(er))}`, false, 'a3'); }
+    return; }
   const es = e.target.closest('[data-a3-esc]'); if (es) { const [v, n] = es.dataset.a3Esc.split('|'); a3EscogerAbrir(v, n); return; }
   const et = e.target.closest('[data-a3-est]');
   if (et) {
@@ -10412,6 +10444,7 @@ document.addEventListener('click', async (e) => {
 document.addEventListener('input', (e) => { if (e.target.id === 'a3Q') { A3.q = e.target.value; a3Pintar(); } });
 document.addEventListener('change', (e) => {
   if (e.target.id === 'a3Vz') { A3.cz = e.target.value; a3Pintar(); return; }
+  if (e.target.id === 'a3Mes') { A3.mesPend = e.target.value; a3Pintar(); return; }
   if (e.target.matches && e.target.matches('[data-a3-todas]')) { A3.cierreTodas = e.target.checked; a3Pintar(); }
 });
 
