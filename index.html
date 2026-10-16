@@ -2,6 +2,12 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
+<meta name="build" content="20261015201526">
+<script>/* auto-actualizar: compara el sello de esta copia con el del servidor y recarga una sola vez */
+(function(){try{if(!/^https?:/.test(location.protocol))return;var me=document.querySelector('meta[name=build]').content;if(me==='0')return;
+fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'}).then(function(r){return r.text()}).then(function(h){
+var m=h.match(/<meta name="build" content="([^"]+)"/);if(m&&m[1]!==me){var n=+sessionStorage.getItem('panel_upd')||0;if(n<2){sessionStorage.setItem('panel_upd',n+1);location.replace(location.pathname+location.search+(location.search?'&':'?')+'_='+Date.now());}}
+else sessionStorage.removeItem('panel_upd');}).catch(function(){});}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
 <!-- si se añade a la pantalla de inicio (tablet/celular) se abre sin la barra del navegador -->
 <meta name="mobile-web-app-capable" content="yes">

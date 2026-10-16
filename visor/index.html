@@ -5,10 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta http-equiv="Cache-Control" content="no-cache" />
+  <script>/* auto-actualizar: si el servidor tiene una versión más nueva, recarga una sola vez */
+  (function(){try{var s=document.querySelector('script[type=module][src*="index-"]');if(!s||!/^https?:/.test(location.protocol))return;
+  var me=s.getAttribute('src');fetch('./?_='+Date.now(),{cache:'no-store'}).then(function(r){return r.text()}).then(function(h){
+  var m=h.match(/assets\/index-[^"']+\.js/);if(m&&me.indexOf(m[0])<0){var k='visor_upd',n=+sessionStorage.getItem(k)||0;if(n<2){sessionStorage.setItem(k,n+1);location.replace(location.pathname+location.search+(location.search?'&':'?')+'_='+Date.now());}}
+  else sessionStorage.removeItem('visor_upd');}).catch(function(){});}catch(e){}})();</script>
   <title>Visor BIM · Obra 04</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f26a1b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 18h20M4 18v-6M20 18v-6M2 12c4-8 16-8 20 0M8 18v-7M12 18V8M16 18v-7'/%3E%3C/svg%3E" />
-  <script type="module" crossorigin src="./assets/index-DZbizNQM.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-B46LDn6Q.css">
+  <script type="module" crossorigin src="./assets/index-BtYhdt8f.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-BARM2sw6.css">
 </head>
 <body>
   <div id="app">
