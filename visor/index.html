@@ -40,7 +40,7 @@
         <span>CAMPO<b id="ftCampo">—</b></span>
         <span>PRUEBAS<b id="ftPru">—</b></span>
         <span>CORTE<b id="ftCorte">—</b></span>
-        <span class="r">Obra 04 · Visor BIM</span>
+        <span class="r" id="visorVer">Obra 04 · Visor BIM</span>
       </footer>
 
       <!-- tablero inferior: avance, tiempo y Curva S en un solo instrumento -->
@@ -356,5 +356,7 @@
       <div id="toast"></div>
     </main>
   </div>
+<script>/* visor-ver: muestra la versión cargada (para saber si la tableta tiene la copia nueva) */
+(function(){try{var s=document.querySelector('script[type=module][src*="index-"]'),m=s&&s.getAttribute('src').match(/index-([^.]+)\.js/),e=document.getElementById('visorVer');if(m&&e)e.textContent='Obra 04 · Visor BIM · v.'+m[1].slice(0,6);}catch(x){}})();</script>
 </body>
 </html>

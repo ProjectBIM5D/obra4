@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="build" content="20261015201526">
+<meta name="build" content="20261015202440">
 <script>/* auto-actualizar: compara el sello de esta copia con el del servidor y recarga una sola vez */
 (function(){try{if(!/^https?:/.test(location.protocol))return;var me=document.querySelector('meta[name=build]').content;if(me==='0')return;
 fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'}).then(function(r){return r.text()}).then(function(h){
@@ -2165,6 +2165,7 @@ document.documentElement.classList.add('dens-densa');   // tamaño único de las
   if (d.classList.contains('cel') || innerWidth <= 760) return;
   if (sd === 'mini' || (!sd && (d.classList.contains('tab') || innerWidth < 1100))) d.classList.add('side-mini');
 } catch(e) {} })();
+document.addEventListener('DOMContentLoaded', function(){ try { var m = document.querySelector('meta[name=build]'), e = document.getElementById('buildTxt'); if (m && e && m.content !== '0') e.textContent = ' · ' + m.content.slice(2, 12); } catch(x) {} });
 </script>
 </head>
 <body>
@@ -2286,7 +2287,7 @@ document.documentElement.classList.add('dens-densa');   // tamaño único de las
         <button class="src-btn" data-src="local" title="Base de datos de esta PC">Local</button>
         <button class="src-btn" data-src="cloud" title="Supabase (nube)">Nube</button>
       </div>
-      <div class="foot-txt">v1 · datos reales de obra<span id="apiUrl" class="mono" style="display:none"></span></div>
+      <div class="foot-txt">v1 · datos reales de obra<span id="buildTxt" class="mono"></span><span id="apiUrl" class="mono" style="display:none"></span></div>
     </div>
   </aside>
   <div id="overlay"></div>

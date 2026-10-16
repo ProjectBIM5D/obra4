@@ -1,0 +1,18 @@
+﻿<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta http-equiv="Cache-Control" content="no-cache">
+<title>Limpiar copia guardada</title>
+<style>body{font:16px system-ui;margin:0;padding:24px;background:#0f1b33;color:#e8eefc}a{color:#7fb0ff}pre{background:#0a1326;padding:12px;border-radius:8px;white-space:pre-wrap}</style></head>
+<body><h2>Limpiando la copia guardada…</h2><pre id="o">Iniciando</pre>
+<p id="go" hidden><a id="a1" href="./">Abrir el panel</a> · <a id="a2" href="./visor/?proyecto=charanal">Abrir el visor</a></p>
+<script>
+(async function(){
+  var o=document.getElementById('o'), L=function(t){o.textContent+='\n'+t};
+  try{ if(navigator.serviceWorker){ var rs=await navigator.serviceWorker.getRegistrations(); for(var r of rs){ await r.unregister(); } L('Service workers quitados: '+rs.length); } else L('Sin service workers'); }catch(e){L('SW: '+e.message)}
+  try{ if(window.caches){ var ks=await caches.keys(); for(var k of ks){ await caches.delete(k); } L('Cachés borradas: '+ks.length); } }catch(e){L('Caché: '+e.message)}
+  try{ var keep=['obra-auth-cloud'], n=0; for(var i=localStorage.length-1;i>=0;i--){ var k=localStorage.key(i); if(keep.indexOf(k)<0){ localStorage.removeItem(k); n++; } } sessionStorage.clear(); L('Preferencias locales borradas: '+n+' (se conserva el inicio de sesión)'); }catch(e){L('Almacén: '+e.message)}
+  try{ if(indexedDB.databases){ var ds=await indexedDB.databases(); for(var d of ds){ indexedDB.deleteDatabase(d.name); } L('Bases locales borradas: '+ds.length); } }catch(e){L('IDB: '+e.message)}
+  var t=Date.now(); document.getElementById('a1').href='./?_='+t; document.getElementById('a2').href='./visor/?proyecto=charanal&_='+t;
+  document.getElementById('go').hidden=false; L('\nListo. Toca uno de los enlaces de abajo.');
+  document.querySelector('h2').textContent='Copia guardada eliminada';
+})();
+</script></body></html>
