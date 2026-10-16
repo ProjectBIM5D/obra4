@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="build" content="20261015202440">
+<meta name="build" content="20261016113150">
 <script>/* auto-actualizar: compara el sello de esta copia con el del servidor y recarga una sola vez */
 (function(){try{if(!/^https?:/.test(location.protocol))return;var me=document.querySelector('meta[name=build]').content;if(me==='0')return;
 fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'}).then(function(r){return r.text()}).then(function(h){
@@ -260,6 +260,11 @@ a{color:inherit;}
 .opt-row{display:flex;align-items:center;gap:6px;margin-bottom:8px;}
 .opt-row > span{flex:1;font-weight:600;}
 .opt-row .seg-btn,.opt-row .src-btn{padding:5px 9px;}
+.ft-row{display:flex;align-items:center;gap:6px;margin-bottom:8px;}
+.ft-ic{flex:none;width:36px;height:30px;border-radius:6px;border:1px solid var(--line2);background:var(--input);color:var(--tx2);cursor:pointer;font-size:14px;line-height:1;padding:0;}
+.ft-ic:hover,.ft-adm:hover{border-color:var(--blue);color:var(--tx);}
+.ft-adm{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;height:30px;padding:0 8px;font-weight:600;}
+.side-foot .foot-txt{display:flex;flex-wrap:wrap;align-items:center;gap:2px 8px;font-size:10.5px;margin-top:0;}
 .foot-txt{margin-top:2px;opacity:.85;}
 
 #main{flex:1;min-width:0;padding:22px 26px 40px;max-width:1600px;margin:0 auto;}
@@ -1108,7 +1113,8 @@ html.cel .side-tg{display:none;}
 @media (max-width:760px){ .side-tg{display:none;} }
 @media (min-width:761px){
   html.side-mini:not(.cel){--side-w:64px;}
-  html.side-mini:not(.cel) .brand,html.side-mini:not(.cel) .side-foot{display:none;}
+  html.side-mini:not(.cel) .brand{display:none;}
+  html.side-mini:not(.cel) .side-foot{padding:8px 6px 10px;} html.side-mini:not(.cel) .ft-row{flex-direction:column;margin:0;} html.side-mini:not(.cel) .ft-ic,html.side-mini:not(.cel) .ft-adm{width:100%;} html.side-mini:not(.cel) .ft-t,html.side-mini:not(.cel) .foot-txt{display:none;}
   html.side-mini:not(.cel) .nav{padding:12px 8px;}
   html.side-mini:not(.cel) .nav button,html.side-mini:not(.cel) .nav a{justify-content:center;padding:12px 0;}
   html.side-mini:not(.cel) .nav .nt{display:none;}
@@ -2111,6 +2117,17 @@ html:not(.cel) .topbar{margin-bottom:14px;}
 @media (max-width:620px){.vg-cards{grid-template-columns:repeat(2,minmax(0,1fr));} .vg-hero{padding:16px 14px 12px;border-radius:18px;} .vg-pills button{height:42px;padding:0 13px;} .vg-seg button{min-width:78px;} .vgk-v,.vg-cards.bim-cards .vgk-v{font-size:16px;} .vgk.sp .vgk-v,.vgk.cp .vgk-v{font-size:22px;}}
 .ctv-pend{display:inline-block;font-size:10.5px;font-weight:800;padding:2px 9px;border-radius:999px;background:#f59e0b26;color:var(--rg-am,#a85a08);margin-left:4px;}
 .ctv-ac{display:flex;gap:6px;} .ctv-ac .icon-btn{width:34px;height:34px;padding:0;border-radius:8px;font-size:0;} .ctv-ac .icon-btn svg{width:18px;height:18px;} .ctv-ac .icon-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--input);} .ctv-ac .icon-btn[aria-label^="Eliminar"]:hover{border-color:var(--red);color:var(--red);}
+/* usuarios y roles */
+.usr-n{display:flex;align-items:center;gap:10px;min-width:0;} .usr-n>div{min-width:0;} .usr-n b{display:block;font-size:13px;} .usr-n small{display:block;color:var(--mut);font-size:11.5px;word-break:break-all;}
+.usr-av{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#e8eefc;color:#1d4ed8;font-size:12px;font-weight:800;} :root[data-theme="dark"] .usr-av{background:#1c2a52;color:#9db8ff;}
+.usr-tu{display:inline-block;font-size:10px;font-weight:800;padding:1px 7px;border-radius:999px;background:#10b98122;color:var(--green);vertical-align:1px;}
+.usr-tb td{vertical-align:middle;} .usr-tb td.ctr .lb-sub{display:block;margin-top:3px;} .usr-off td:not(:last-child){opacity:.55;}
+select.usr-rol{font:inherit;font-size:12px;padding:5px 8px;border:1px solid var(--line2);border-radius:8px;background:var(--input);color:var(--tx);max-width:150px;}
+.usr-sw{position:relative;width:38px;height:22px;border-radius:999px;border:0;background:var(--line2);cursor:pointer;padding:0;transition:background .15s;} .usr-sw::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.3);transition:left .15s;} .usr-sw.on{background:var(--green,#10b981);} .usr-sw.on::after{left:19px;}
+@media (max-width:900px){.usr-tb th:nth-child(4),.usr-tb td:nth-child(4){display:none;}}
+.usr-pasos{margin:4px 0 0 18px;padding:0;font-size:12.5px;color:var(--tx2);line-height:1.65;}
+.usr-roles{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;} .usr-rolc{display:flex;flex-direction:column;gap:3px;border:1px solid var(--line2);border-radius:10px;padding:9px 12px;background:var(--card);} .usr-rolc b{font-size:12.5px;} .usr-rolc span{font-size:11.5px;color:var(--tx2);} .usr-rolc i{font-style:normal;font-size:11px;color:var(--mut);font-weight:700;margin-top:2px;}
+
 @media (max-width:560px){.ctv-it{grid-template-columns:1fr auto;} .ctv-f{grid-column:1 / span 2;} .ctv-sub td{padding-left:14px;}}
 .pt-tabla .dif{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;padding:0;margin-left:4px;vertical-align:middle;border:1px solid transparent;border-radius:7px;background:transparent;color:var(--mut);cursor:pointer;}
 .pt-tabla .dif svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round;} .pt-tabla .dif:hover{border-color:var(--blue);color:var(--blue);background:var(--input);} .pt-tabla tr:hover .dif{color:var(--tx2);}
@@ -2128,7 +2145,7 @@ html:not(.cel) .topbar{margin-bottom:14px;}
 .dif-hist{border-top:1px solid var(--line);padding-top:8px;margin:0 0 12px;font-size:12px;color:var(--tx2);} .dif-h{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:4px 0;} .dif-h .btn-sec{padding:3px 10px;font-size:11px;}
 @media (max-width:560px){.dif-kp{grid-template-columns:1fr 1fr;}}
 .lb-cmp{display:inline-flex;align-items:center;gap:8px;flex:0 0 auto;} .lb-cmp select{max-width:260px;}
-#lbFicha:not([hidden]),#plzForm:not([hidden]),#lbObs:not([hidden]),#adiForm:not([hidden]),#adiLim:not([hidden]),#metForm:not([hidden]),#ctvForm:not([hidden]),#evtForm:not([hidden]),#adiXls:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(620px,calc(100vw - 20px));max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
+#lbFicha:not([hidden]),#plzForm:not([hidden]),#lbObs:not([hidden]),#adiForm:not([hidden]),#adiLim:not([hidden]),#metForm:not([hidden]),#ctvForm:not([hidden]),#evtForm:not([hidden]),#usrForm:not([hidden]),#adiXls:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(620px,calc(100vw - 20px));max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
 /* el Gantt en Contrato: sin la barra de selección de plan */
 #plEspacio[data-donde="plan"] #plVerP{display:none;}
 #plFotoDlg:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(560px,calc(100vw - 20px));margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
@@ -2269,7 +2286,7 @@ document.addEventListener('DOMContentLoaded', function(){ try { var m = document
       <div class="nav-g" data-g="admin" id="navAdm" hidden>
         <button type="button" class="nav-gh" data-grupo="admin" aria-expanded="true"><span class="ni">⚙️</span><span class="nt">Administración</span><i class="nav-chev"></i></button>
         <div class="nav-gb">
-          <button type="button" class="prox" disabled title="Próximamente · altas, roles y accesos"><span class="ni">👥</span><span class="nt">Usuarios y roles</span><span class="nav-tag">pronto</span></button>
+          <button type="button" data-pane="usuarios" title="Quién puede entrar al panel y con qué rol: altas, cambios de rol y bajas"><span class="ni">👥</span><span class="nt">Usuarios y roles</span></button>
           <button type="button" class="prox" disabled title="Próximamente · datos de la obra, frentes y logo"><span class="ni">🏗️</span><span class="nt">Obra y componentes</span><span class="nav-tag">pronto</span></button>
           <button type="button" class="prox" disabled title="Próximamente · cronograma, APU y valorizaciones"><span class="ni">📥</span><span class="nt">Cargas de datos</span><span class="nav-tag">pronto</span></button>
         </div>
@@ -2277,17 +2294,11 @@ document.addEventListener('DOMContentLoaded', function(){ try { var m = document
     </nav>
     <button type="button" class="side-tg" id="sideToggle" title="Mostrar u ocultar el texto del menú" aria-label="Mostrar u ocultar el texto del menú"></button>
     <div class="side-foot">
-      <div class="opt-row"><span>Tema</span>
-        <button class="seg-btn" data-tema="claro" title="Tema claro">☀ Claro</button>
-        <button class="seg-btn" data-tema="oscuro" title="Tema oscuro">🌙 Oscuro</button>
+      <div class="ft-row">
+        <button type="button" class="ft-ic" id="btnTema" data-tema="oscuro" title="Cambiar a tema oscuro" aria-label="Cambiar el tema">🌙</button>
+        <button type="button" class="seg-btn ft-adm" id="btnAdmin" title="Iniciar sesión como administrador"><span class="ft-i">🔑</span><span class="ft-t">Entrar</span></button>
       </div>
-      <div class="opt-row"><span id="admEstado">Administrador</span><button class="seg-btn" id="btnAdmin" type="button" title="Iniciar sesión como administrador">🔑 Entrar</button></div>
-      <!-- solo aparece al abrir el panel desde esta PC (localhost); en la página publicada siempre se usa la nube -->
-      <div class="opt-row" id="fuenteBox" style="display:none"><span>Datos</span>
-        <button class="src-btn" data-src="local" title="Base de datos de esta PC">Local</button>
-        <button class="src-btn" data-src="cloud" title="Supabase (nube)">Nube</button>
-      </div>
-      <div class="foot-txt">v1 · datos reales de obra<span id="buildTxt" class="mono"></span><span id="apiUrl" class="mono" style="display:none"></span></div>
+      <div class="foot-txt"><span id="admEstado">Administrador</span><span class="mono">v1<span id="buildTxt"></span></span><span id="apiUrl" class="mono" style="display:none"></span></div>
     </div>
   </aside>
   <div id="overlay"></div>
@@ -2477,6 +2488,7 @@ document.addEventListener('DOMContentLoaded', function(){ try { var m = document
     <section class="pane" data-pane="metrados"><div id="metPanel"></div></section>
     <section class="pane" data-pane="adicionales"><div id="adiPanel"></div></section>
     <section class="pane" data-pane="plazo"><div id="plzPanel"></div></section>
+    <section class="pane" data-pane="usuarios"><div id="usrPanel"></div></section>
     <section class="pane" data-pane="valorganado"><div id="vgPanel"></div></section>
     <section class="pane" data-pane="elementos"><div id="bimPanel"></div></section>
     <section class="pane" data-pane="avance3d"><div id="a3Panel"></div></section>
@@ -2845,7 +2857,8 @@ authAplicar();
 // ── tema claro/oscuro (ya aplicado desde <head>; acá solo el botón y su estado) ──
 let tema = localStorage.getItem('obra-tema') || 'claro';
 document.querySelectorAll('[data-tema]').forEach(b => {
-  b.classList.toggle('on', b.dataset.tema === tema);
+  b.dataset.tema = tema === 'oscuro' ? 'claro' : 'oscuro';   // el botón ofrece el tema contrario
+  b.textContent = tema === 'oscuro' ? '☀' : '🌙'; b.title = tema === 'oscuro' ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro';
   b.addEventListener('click', () => {
     try { const on = document.querySelector('#nav button.on'); sessionStorage.setItem('obra-volver', JSON.stringify({ pane: on ? on.dataset.pane : 'resumen', y: window.scrollY })); } catch (e) {}
     localStorage.setItem('obra-tema', b.dataset.tema); location.reload();
@@ -3086,10 +3099,11 @@ if (esCelular || esTablet) {
 // ── modo administrador: ventana de acceso y estado ──
 function authUI() {
   { const ga = document.getElementById('navAdm'); if (ga) ga.hidden = !AUTH.admin; }   // el grupo Administración solo lo ve el administrador
-  $('#btnAdmin').textContent = AUTH.token ? '🔓 Salir' : '🔑 Entrar';
+  $('#btnAdmin').innerHTML = AUTH.token ? '<span class="ft-i">🔓</span><span class="ft-t">Salir</span>' : '<span class="ft-i">🔑</span><span class="ft-t">Entrar</span>';
   $('#btnAdmin').title = AUTH.token ? `Sesión: ${AUTH.email} · ${AUTH.rol ? ROLES[AUTH.rol] || AUTH.rol : 'sin usuario registrado'}` : 'Iniciar sesión';
-  $('#admEstado').innerHTML = AUTH.token ? (AUTH.admin ? '<b style="color:var(--amber)">🛡 Administrador</b>' : (AUTH.rol ? `<b>👤 ${esc(ROLES[AUTH.rol] || AUTH.rol)}</b>` : 'Sesión sin usuario')) : 'Administrador';
+  $('#admEstado').innerHTML = AUTH.token ? (AUTH.admin ? '<b style="color:var(--amber)">🛡 Admin</b>' : (AUTH.rol ? `<b>👤 ${esc(ROLES[AUTH.rol] || AUTH.rol)}</b>` : 'Sesión sin usuario')) : 'Administrador';
   try { if (LA.cargado) laRender(); if (PT.look) ptRender(); if (!$('#parteLA').hidden) plaCargar(); } catch (e) {}
+  try { if (document.documentElement.dataset.pane === 'usuarios') usrCargar(true); } catch (e) {}
 }
 async function authEntrar(email, pass) {
   let d;
@@ -3206,6 +3220,7 @@ document.querySelectorAll('#nav button[data-pane]').forEach(b => {
       plazo: ['Plazo y ampliaciones', 'Suspensiones, ampliaciones y adicionales de plazo: qué cambió, con qué resolución y cómo queda el fin de obra'],
       lineasbase: ['Contrato y líneas base', 'LB0 a LB3: inicio de contrato, suspensión, adicional y deductivo, ampliación · ficha, comparación y carga'],
       plan: ['Plan master', 'Cronograma meta: tu plan de ejecución con vínculos, ruta crítica y duraciones sugeridas por el APU meta'],
+      usuarios: ['Usuarios y roles', 'Quién puede entrar al panel y con qué rol · solo el administrador ve y cambia esta pantalla'],
       hh: ['Horas-hombre', 'Histograma planificado desde el APU de la oferta: metrado × cuantía, repartido en el plazo del cronograma'] };
     if (titles[b.dataset.pane]) { $('#pageTitle').textContent = titles[b.dataset.pane][0]; $('#pageSub').textContent = titles[b.dataset.pane][1]; }
     if (esCelular) celPantalla(PANES_ANCHOS.includes(b.dataset.pane));
@@ -3217,6 +3232,7 @@ document.querySelectorAll('#nav button[data-pane]').forEach(b => {
     if (b.dataset.pane === 'plan') { PL.ver = 'meta'; PL.reset = true; plMontar('plan'); plCargar(); }
     if (b.dataset.pane === 'lineasbase') lbPanelCargar();
     if (b.dataset.pane === 'plazo') plzCargar();
+    if (b.dataset.pane === 'usuarios') usrCargar();
     if (b.dataset.pane === 'adicionales') adiCargar();
     if (b.dataset.pane === 'metrados') metCargar();
     if (b.dataset.pane === 'controversias') ctvCargar();
@@ -3318,8 +3334,8 @@ document.querySelectorAll('.src-btn').forEach(b => {
   b.classList.toggle('on', b.dataset.src === fuente);
   b.addEventListener('click', () => { localStorage.setItem('obra-fuente', b.dataset.src); location.reload(); });
 });
-if (esLocal) {                      // selector de fuente y URL de la API: solo para quien desarrolla en esta PC
-  $('#fuenteBox').style.display = '';
+{ const m = location.search.match(/[?&]fuente=(local|cloud)/); if (m && esLocal && m[1] !== fuente) { localStorage.setItem('obra-fuente', m[1]); location.replace(location.pathname); } }   // cambiar de fuente: abrir con ?fuente=cloud o ?fuente=local
+if (esLocal) {                      // URL de la API: solo para quien desarrolla en esta PC
   $('#apiUrl').textContent = ' · ' + API; $('#apiUrl').style.display = '';
 }
 
@@ -8966,6 +8982,123 @@ document.addEventListener('click', async (e) => {
   if (!(await confirmar(`Eliminar el registro de prestación «Mayor metrado N° ${String(r.numero).padStart(2, '0')}». No cambia las valorizaciones.`))) return;
   try { await preRpc('mayor_metrado_eliminar', { p_id: r.id }); toast('Mayor metrado eliminado.', true, 'met'); await metCargar(true); } catch (er) { toast(`No se pudo eliminar: ${esc(er.message)}`, false, 'met'); }
 });
+
+// ═══ USUARIOS Y ROLES (solo administrador): quién puede entrar al panel y con qué rol ═══
+// La contraseña NO pasa por aquí: la crea cada persona (o tú) en Supabase › Authentication. Este panel solo registra el correo y su rol.
+const USR = { u: [], cargado: false, q: '', rol: 'todos', sinTabla: false };
+const USR_DESC = { admin: 'Corrige lo cerrado, reabre periodos y administra usuarios', residente: 'Responsable de la obra: registra y aprueba el avance', supervisor: 'Revisa y observa lo que registra el residente',
+  cliente: 'La Entidad: consulta el avance y los resultados', solo_lectura: 'Consulta sin cambiar nada' };
+const usrIni = (n) => String(n || '?').trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase();
+const usrAdmins = () => USR.u.filter(x => x.rol === 'admin' && x.activo);
+const usrYo = (u) => !!AUTH.email && String(u.email).toLowerCase() === String(AUTH.email).toLowerCase();
+async function usrFetch(metodo, ruta, cuerpo, reintento) {
+  const r = await fetch(`${API}${ruta}`, { method: metodo, headers: { ...headers, 'Content-Type': 'application/json', Prefer: 'return=representation' }, body: cuerpo ? JSON.stringify(cuerpo) : undefined });
+  if (r.status === 401 && fuente === 'cloud' && AUTH.refresh && !reintento) { await authRenovar(true); return usrFetch(metodo, ruta, cuerpo, true); }
+  if (!r.ok) {
+    const d = await r.json().catch(() => ({})), m = String(d.message || `HTTP ${r.status}`);
+    throw new Error(d.code === '23505' ? 'Ese correo ya está registrado.' : d.code === '23503' ? 'Esa persona tiene registros a su nombre: mejor desactívala en lugar de eliminarla.' : r.status === 403 || d.code === '42501' ? 'Solo el administrador puede cambiar usuarios.' : m);
+  }
+  const t = await r.text(); return t ? JSON.parse(t) : null;
+}
+async function usrCargar(forzar) {
+  const box = $('#usrPanel'); if (!box) return;
+  if (!AUTH.admin) { box.innerHTML = '<div class="rg-msg">Esta pantalla es solo para administradores. Inicia sesión con <b>🔑 Entrar</b> usando una cuenta con rol Administrador.</div>'; return; }
+  if (!USR.cargado || forzar) box.innerHTML = '<div class="rg-msg">Leyendo usuarios…</div>';
+  try {
+    USR.u = await get('/usuarios?select=id,nombre,email,rol,activo,creado_en&order=nombre'); USR.sinTabla = false; USR.cargado = true; usrPintar();
+  } catch (e) { box.innerHTML = msgCarga('Usuarios y roles', e); }
+}
+function usrPintar() {
+  const box = $('#usrPanel'); if (!box) return;
+  const L = USR.u, act = L.filter(x => x.activo), adm = usrAdmins(), q = USR.q.trim().toLowerCase();
+  const ver = L.filter(x => (USR.rol === 'todos' || x.rol === USR.rol) && (!q || `${x.nombre} ${x.email}`.toLowerCase().includes(q)));
+  const ic = { ed: '<svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4Z"/></svg>', del: '<svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>' };
+  const cuenta = (r) => L.filter(x => x.rol === r).length;
+  const filas = ver.map(u => `<tr class="${u.activo ? '' : 'usr-off'}"><td class="l"><div class="usr-n"><span class="usr-av">${esc(usrIni(u.nombre))}</span><div><b>${esc(u.nombre)}${usrYo(u) ? ' <span class="usr-tu">tú</span>' : ''}</b><small>${esc(u.email)}</small></div></div></td>
+      <td class="ctr"><select class="usr-rol" data-usr-rol="${u.id}" aria-label="Rol de ${esc(u.nombre)}">${Object.entries(ROLES).map(([k, t]) => `<option value="${k}"${u.rol === k ? ' selected' : ''}>${esc(t)}</option>`).join('')}</select></td>
+      <td class="ctr"><button type="button" class="usr-sw${u.activo ? ' on' : ''}" data-usr-act="${u.id}" role="switch" aria-checked="${u.activo}" title="${u.activo ? 'Activo: puede entrar. Clic para desactivar' : 'Inactivo: no puede entrar. Clic para activar'}"></button><span class="lb-sub">${u.activo ? 'activo' : 'inactivo'}</span></td>
+      <td class="ctr"><span class="lb-sub" style="margin:0">${u.creado_en ? String(u.creado_en).slice(0, 10).split('-').reverse().join('/') : '—'}</span></td>
+      <td class="c"><div class="ctv-ac"><button type="button" class="icon-btn" data-usr-edit="${u.id}" title="Editar" aria-label="Editar">${ic.ed}</button><button type="button" class="icon-btn" data-usr-del="${u.id}" title="Eliminar" aria-label="Eliminar">${ic.del}</button></div></td></tr>`).join('');
+  const chips = [['todos', 'Todos', L.length], ...Object.entries(ROLES).map(([k, t]) => [k, t, cuenta(k)])].map(([k, t, n]) => `<button type="button" class="${USR.rol === k ? 'on' : ''}" data-usr-fil="${k}">${esc(t)}<i>${n}</i></button>`).join('');
+  box.innerHTML = `<div class="vl-kp">
+      <div class="vl-k"><small>Usuarios</small><b>${L.length}</b><em>${act.length} activo${act.length === 1 ? '' : 's'} · ${L.length - act.length} inactivo${L.length - act.length === 1 ? '' : 's'}</em></div>
+      <div class="vl-k" style="--kc:#f59e0b"><small>Administradores</small><b>${adm.length}</b><em>${adm.length <= 1 ? 'solo uno: si lo pierdes, nadie podría administrar' : 'pueden cambiar todo y administrar usuarios'}</em></div>
+      <div class="vl-k" style="--kc:#64748b"><small>Acceso suspendido</small><b>${L.length - act.length}</b><em>inactivos: no pueden entrar, pero conservan su historial</em></div></div>
+    <div class="vl-card"><div class="lb-cab"><div><h3 style="margin:0 0 3px">Personas con acceso</h3><p class="hint" style="margin:0">Quien no esté aquí, o esté inactivo, no puede entrar al panel aunque tenga cuenta en Supabase. El rol se cambia en la misma fila.</p></div>
+      <button type="button" class="btn-sec pri" data-usr-nuevo title="Registrar a una persona">＋ Nuevo usuario</button></div>
+      <div class="plz-bar"><div class="plz-seg">${chips}</div><input type="search" id="usrQ" placeholder="Buscar nombre o correo" value="${esc(USR.q)}" aria-label="Buscar usuario"></div>
+      <div class="vl-tw"><table class="vl-tb lb-tb usr-tb"><thead><tr><th class="l">Persona</th><th class="ctr">Rol</th><th class="ctr">Acceso</th><th class="ctr">Registrado</th><th></th></tr></thead>
+        <tbody>${filas || '<tr><td colspan="5" class="l">Ningún usuario coincide con el filtro.</td></tr>'}</tbody></table></div></div>
+    <div class="vl-card"><h3 style="margin:0 0 6px">Cómo dar acceso a una persona</h3>
+      <ol class="usr-pasos"><li>Regístrala aquí con <b>＋ Nuevo usuario</b>: nombre, correo y rol.</li>
+        <li>${fuente === 'cloud' ? 'En Supabase › <b>Authentication › Users › Add user</b> crea su acceso con ese mismo correo. La contraseña la elige y la guarda quien la crea en Supabase; este panel nunca la ve.' : 'En esta PC solo se usa el administrador de pruebas <b>admin@local</b>; el acceso con correo y contraseña es de la nube.'}</li>
+        <li>La persona entra al panel con su correo y contraseña. Si su correo no figura aquí (o está inactivo), el panel no la deja pasar.</li></ol></div>
+    <div class="vl-card"><h3 style="margin:0 0 4px">Roles</h3><p class="hint" style="margin:0 0 8px">Hoy la base distingue solo al <b>Administrador</b> (puede corregir y reabrir lo cerrado); los demás roles quedan registrados y consultan. Cuando se definan sus permisos, se activarán aquí sin volver a cargar a nadie.</p>
+      <div class="usr-roles">${Object.entries(ROLES).map(([k, t]) => `<div class="usr-rolc"><b>${esc(t)}</b><span>${esc(USR_DESC[k])}</span><i>${cuenta(k)} persona${cuenta(k) === 1 ? '' : 's'}</i></div>`).join('')}</div></div>`;
+}
+function usrFormAbrir(id) {
+  const u = id ? USR.u.find(x => x.id === id) : null; if (id && !u) return;
+  let m = document.getElementById('usrForm');
+  if (!m) { m = document.createElement('form'); m.id = 'usrForm'; m.className = 'pform la-form'; m.hidden = true; document.body.appendChild(m); }
+  const q = (s) => m.querySelector(s), v = (k) => esc(u && u[k] != null ? u[k] : '');
+  m.innerHTML = `<h3 style="margin:0 0 4px;font-size:14px">${u ? 'Editar usuario' : 'Nuevo usuario'}</h3><p class="hint" style="margin:0 0 10px">${u ? 'El correo no se cambia aquí: es el que la persona usa para entrar.' : 'Escribe el mismo correo con el que la persona tendrá su acceso en Supabase.'}</p>
+    <div class="field"><label for="muNom">Nombre</label><input id="muNom" type="text" maxlength="120" value="${v('nombre')}" placeholder="Nombre y apellido" autocomplete="off"></div>
+    <div class="field"><label for="muMail">Correo</label><input id="muMail" type="email" maxlength="160" value="${v('email')}" placeholder="persona@empresa.com" autocomplete="off"${u ? ' readonly' : ''}></div>
+    <div class="row3"><div class="field"><label for="muRol">Rol</label><select id="muRol">${Object.entries(ROLES).map(([k, t]) => `<option value="${k}"${(u ? u.rol : 'solo_lectura') === k ? ' selected' : ''}>${esc(t)}</option>`).join('')}</select><span class="hint" id="muRolD" style="margin-top:4px;display:block"></span></div>
+      <div class="field"><label for="muAct">Acceso</label><select id="muAct"><option value="1"${!u || u.activo ? ' selected' : ''}>Activo</option><option value="0"${u && !u.activo ? ' selected' : ''}>Inactivo</option></select></div></div>
+    <div class="sug-acc"><button class="btn" type="submit">Guardar</button><button class="btn-sec" type="button" id="muCancel">Cancelar</button></div>`;
+  const desc = () => { q('#muRolD').textContent = USR_DESC[q('#muRol').value] || ''; }; q('#muRol').onchange = desc; desc();
+  const fondo = document.getElementById('lbFondo') || (() => { const x = document.createElement('div'); x.id = 'lbFondo'; x.hidden = true; document.body.appendChild(x); return x; })();
+  const cerrar = () => { m.hidden = true; fondo.hidden = true; document.documentElement.classList.remove('la-modal'); };
+  m.hidden = false; fondo.hidden = false; document.documentElement.classList.add('la-modal'); fondo.onclick = cerrar; q('#muCancel').onclick = cerrar; setTimeout(() => q(u ? '#muNom' : '#muMail').focus(), 30);
+  m.onsubmit = async (ev) => {
+    ev.preventDefault();
+    const nombre = q('#muNom').value.trim(), email = q('#muMail').value.trim().toLowerCase(), rol = q('#muRol').value, activo = q('#muAct').value === '1';
+    if (!nombre) { toast('Escribe el nombre.', false, 'usr'); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && !/^[^\s@]+@local$/.test(email)) { toast('Escribe un correo válido.', false, 'usr'); return; }
+    const btn = q('button[type=submit]'); btn.disabled = true;
+    try {
+      if (u) await usrCambiar(u.id, { nombre, rol, activo }); else await usrFetch('POST', '/usuarios', { nombre, email, rol, activo });
+      cerrar(); toast(u ? 'Usuario actualizado.' : 'Usuario registrado. Falta crear su acceso en Supabase si aún no lo tiene.', true, 'usr'); await usrCargar(true);
+    } catch (er) { btn.disabled = false; toast(`No se pudo guardar: ${esc(er.message)}`, false, 'usr'); }
+  };
+}
+// cambia un usuario cuidando que la obra nunca se quede sin administrador ni que alguien se quite su propio acceso
+async function usrCambiar(id, cambios) {
+  const u = USR.u.find(x => x.id === id); if (!u) return;
+  const nuevo = { ...u, ...cambios };
+  if (u.rol === 'admin' && u.activo && !(nuevo.rol === 'admin' && nuevo.activo)) {
+    if (usrAdmins().length <= 1) throw new Error('Debe quedar al menos un administrador activo.');
+    if (usrYo(u)) throw new Error('No puedes quitarte tu propio acceso de administrador: pídeselo a otro administrador.');
+  }
+  await usrFetch('PATCH', `/usuarios?id=eq.${id}`, cambios);
+}
+(function () {
+  const box = $('#usrPanel'); if (!box) return;
+  box.addEventListener('click', async (e) => {
+    const t = e.target.closest('[data-usr-nuevo],[data-usr-edit],[data-usr-del],[data-usr-act],[data-usr-fil]'); if (!t) return;
+    if (t.dataset.usrNuevo !== undefined) return usrFormAbrir(null);
+    if (t.dataset.usrEdit) return usrFormAbrir(t.dataset.usrEdit);
+    if (t.dataset.usrFil) { USR.rol = t.dataset.usrFil; return usrPintar(); }
+    const u = USR.u.find(x => x.id === (t.dataset.usrAct || t.dataset.usrDel)); if (!u) return;
+    try {
+      if (t.dataset.usrAct) { await usrCambiar(u.id, { activo: !u.activo }); toast(`${u.nombre}: acceso ${u.activo ? 'desactivado' : 'activado'}.`, true, 'usr'); await usrCargar(true); }
+      else {
+        if (usrYo(u)) { toast('No puedes eliminarte a ti mismo.', false, 'usr'); return; }
+        if (u.rol === 'admin' && u.activo && usrAdmins().length <= 1) { toast('Debe quedar al menos un administrador activo.', false, 'usr'); return; }
+        if (!(await confirmar(`¿Eliminar a ${u.nombre} (${u.email})? Dejará de poder entrar. Si solo quieres suspender su acceso, desactívala.`))) return;
+        await usrFetch('DELETE', `/usuarios?id=eq.${u.id}`); toast('Usuario eliminado.', true, 'usr'); await usrCargar(true);
+      }
+    } catch (er) { toast(`No se pudo: ${esc(er.message)}`, false, 'usr'); await usrCargar(true); }
+  });
+  box.addEventListener('change', async (e) => {
+    const s = e.target.closest('[data-usr-rol]'); if (!s) return;
+    const u = USR.u.find(x => x.id === s.dataset.usrRol); if (!u || u.rol === s.value) return;
+    try { await usrCambiar(u.id, { rol: s.value }); toast(`${u.nombre}: ahora es ${esc(ROLES[s.value])}.`, true, 'usr'); } catch (er) { toast(`No se pudo: ${esc(er.message)}`, false, 'usr'); }
+    await usrCargar(true);
+  });
+  box.addEventListener('input', (e) => { if (e.target.id !== 'usrQ') return; USR.q = e.target.value; const pos = e.target.selectionStart; usrPintar(); const n = $('#usrQ'); if (n) { n.focus(); try { n.setSelectionRange(pos, pos); } catch (x) {} } });
+})();
 
 // ═══ EVENTOS Y CONTROVERSIAS: controversias numeradas con su línea de tiempo (planteamiento → JRD → decisión → arbitraje → cierre) y eventos sueltos del contrato ═══
 // El estado de cada controversia NO se digita: sale de su actuación más avanzada. Los montos son subtotal sin IGV.
