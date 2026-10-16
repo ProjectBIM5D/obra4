@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="build" content="20261016115151">
+<meta name="build" content="20261016120105">
 <script>/* auto-actualizar: compara el sello de esta copia con el del servidor y recarga una sola vez */
 (function(){try{if(!/^https?:/.test(location.protocol))return;var me=document.querySelector('meta[name=build]').content;if(me==='0')return;
 fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'}).then(function(r){return r.text()}).then(function(h){
@@ -9123,7 +9123,7 @@ const OBR = { o: null, f: [], todas: [], cargado: false, logo: undefined };
 const OBR_TIPOS = { puente: 'Puente', tramo_carretera: 'Tramo de carretera', edificacion: 'Edificación', otro: 'Otro' };
 const obrSlug = (s) => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 38);
 function obrAbrirObra(id) { obraElegir(id); try { sessionStorage.setItem('obra-volver', JSON.stringify({ pane: 'obra', y: 0 })); } catch (e) {} location.reload(); }
-const OBR_CAMPOS = 'id,codigo,nombre,codigo_corto,cliente,entidad,moneda,fecha_inicio,fecha_fin,pac_meta,limite_adicionales_pct,logo_b64,doc_entidad,doc_obra,doc_contratista,doc_supervision';
+const OBR_CAMPOS = 'id,codigo,nombre,codigo_corto,cliente,entidad,moneda,fecha_inicio,fecha_fin,pac_meta,limite_adicionales_pct,logo_b64,doc_entidad,doc_obra,doc_contratista,doc_supervision,tipo_obra,numero_contrato,modalidad,sistema_contratacion,ubicacion,valor_referencial,monto_contrato_original,fecha_firma_contrato,fecha_entrega_terreno,residente,supervisor';
 async function obrCargar(forzar) {
   const box = $('#obrPanel'); if (!box) return;
   if (!AUTH.admin) { box.innerHTML = '<div class="rg-msg">Esta pantalla es solo para administradores. Inicia sesión con <b>🔑 Entrar</b> usando una cuenta con rol Administrador.</div>'; return; }
@@ -9131,7 +9131,7 @@ async function obrCargar(forzar) {
   if (!OBR.cargado || forzar) box.innerHTML = '<div class="rg-msg">Leyendo los datos de la obra…</div>';
   try {
     const [o, f, todas] = await Promise.all([get(`/obras?id=eq.${OBRA.id}&select=${OBR_CAMPOS}`), get(`/proyectos?obra_id=eq.${OBRA.id}&select=id,codigo,nombre,tipo,km,orden,fecha_inicio,fecha_fin,activo&order=orden`),
-      get('/obras?select=id,codigo,nombre,cliente,entidad,activo,creado_en,proyectos(id)&order=creado_en').catch(() => [])]);
+      get('/obras?select=id,codigo,nombre,cliente,entidad,activo,creado_en,tipo_obra,monto_contrato_original,proyectos(id)&order=creado_en').catch(() => get('/obras?select=id,codigo,nombre,cliente,entidad,activo,creado_en,proyectos(id)&order=creado_en').catch(() => []))]);
     OBR.o = o[0] || null; OBR.f = f; OBR.todas = todas; OBR.logo = undefined; OBR.cargado = true; obrPintar();
   } catch (e) { box.innerHTML = msgCarga('Obra y componentes', e); }
 }
@@ -9142,19 +9142,37 @@ function obrPintar() {
   const v = (k) => esc(o[k] ?? ''), pacPct = o.pac_meta != null ? Math.round(Number(o.pac_meta) * 1000) / 10 : 90;
   const logo = OBR.logo !== undefined ? OBR.logo : o.logo_b64;
   const filasObras = OBR.todas.map(x => { const ab = x.id === o.id;
-    return `<tr class="${x.activo ? '' : 'usr-off'}"><td class="l"><b>${esc(x.nombre)}</b>${ab ? ' <span class="usr-tu">abierta</span>' : ''}<span class="lb-sub">${esc(x.codigo)} · ${esc([x.cliente, x.entidad].filter(Boolean).join(' · '))}</span></td><td class="ctr">${(x.proyectos || []).length}</td>
+    return `<tr class="${x.activo ? '' : 'usr-off'}"><td class="l"><b>${esc(x.nombre)}</b>${ab ? ' <span class="usr-tu">abierta</span>' : ''}<span class="lb-sub">${esc([x.codigo, x.tipo_obra, x.monto_contrato_original ? 'S/ ' + Number(x.monto_contrato_original).toLocaleString('es-PE', { maximumFractionDigits: 0 }) : '', x.cliente].filter(Boolean).join(' · '))}</span></td><td class="ctr">${(x.proyectos || []).length}</td>
       <td class="ctr"><span class="vl-pill ${x.activo ? 'ok' : 'ar'}">${x.activo ? 'activa' : 'archivada'}</span></td>
       <td class="c">${ab ? '' : (x.activo ? `<button type="button" class="btn-sec" data-obr-abrir="${x.id}">Abrir</button> ` : '')}${ab ? '' : `<button type="button" class="btn-sec" data-obr-est="${x.id}" data-a="${x.activo ? 0 : 1}">${x.activo ? 'Archivar' : 'Reactivar'}</button>`}</td></tr>`; }).join('');
   box.innerHTML = `<div class="vl-card"><div class="lb-cab"><div><h3 style="margin:0 0 3px">Obras</h3><p class="hint" style="margin:0">El panel muestra una obra a la vez; cada obra tiene sus propios frentes, presupuesto, cronograma y valorizaciones. Abre otra con «Abrir»; una archivada deja de aparecer y se puede reactivar.</p></div>
       <button type="button" class="btn-sec pri" data-obr-nueva title="Crear una obra nueva con sus frentes">＋ Nueva obra</button></div>
       <div class="vl-tw"><table class="vl-tb lb-tb obr-tb"><thead><tr><th class="l">Obra</th><th class="ctr">Frentes</th><th class="ctr">Estado</th><th></th></tr></thead><tbody>${filasObras || '<tr><td colspan="4" class="l">Sin obras.</td></tr>'}</tbody></table></div></div>
     <form class="vl-card" id="obrForm" autocomplete="off">
-      <div class="lb-cab"><div><h3 style="margin:0 0 3px">Datos de la obra abierta</h3><p class="hint" style="margin:0">Lo que se ve en el título del panel y en los informes y valorizaciones impresas.</p></div></div>
+      <div class="lb-cab"><div><h3 style="margin:0 0 3px">Datos de la obra abierta</h3><p class="hint" style="margin:0">Lo que se ve en el título del panel y en los informes y valorizaciones impresas. Las fechas de inicio y fin y la moneda se ven al final: se manejan en Contrato y líneas base.</p></div></div>
+      <h4 class="obr-h">Identificación</h4>
       <div class="obr-g">
         <div class="field obr-w"><label for="obNom">Nombre de la obra</label><input id="obNom" name="nombre" type="text" maxlength="240" value="${v('nombre')}"></div>
         <div class="field"><label for="obCod">Código corto</label><input id="obCod" name="codigo_corto" type="text" maxlength="30" value="${v('codigo_corto')}" placeholder="Ej. OBRA 4"></div>
+        <div class="field"><label for="obTipo">Tipo de obra</label><input id="obTipo" name="tipo_obra" type="text" list="obTipoL" maxlength="80" value="${v('tipo_obra')}" placeholder="Elige o escribe"><datalist id="obTipoL">${['Puentes', 'Carretera', 'Edificación', 'Saneamiento', 'Hidráulica', 'Otro'].map(x => `<option value="${x}"></option>`).join('')}</datalist></div>
+        <div class="field obr-w"><label for="obUbi">Ubicación</label><input id="obUbi" name="ubicacion" type="text" maxlength="240" value="${v('ubicacion')}" placeholder="Ruta, tramo, distrito, provincia, departamento"></div></div>
+      <h4 class="obr-h">Contrato</h4>
+      <div class="obr-g">
+        <div class="field"><label for="obNC">N° de contrato</label><input id="obNC" name="numero_contrato" type="text" maxlength="80" value="${v('numero_contrato')}" placeholder="Ej. 222025-MTC/20.2"></div>
+        <div class="field"><label for="obMod">Modalidad</label><input id="obMod" name="modalidad" type="text" list="obModL" maxlength="80" value="${v('modalidad')}" placeholder="Elige o escribe"><datalist id="obModL">${['Licitación Pública', 'Concurso Oferta', 'Adjudicación Simplificada', 'Contratación Directa', 'Licitación Directa Obra'].map(x => `<option value="${x}"></option>`).join('')}</datalist></div>
+        <div class="field"><label for="obSis">Sistema de contratación</label><input id="obSis" name="sistema_contratacion" type="text" list="obSisL" maxlength="80" value="${v('sistema_contratacion')}" placeholder="Elige o escribe"><datalist id="obSisL">${['Precios unitarios', 'Suma alzada', 'Esquema mixto'].map(x => `<option value="${x}"></option>`).join('')}</datalist></div>
+        <div class="field"><label for="obRef">Valor referencial (S/ sin IGV)</label><input id="obRef" name="valor_referencial" type="number" min="0" step="0.01" inputmode="decimal" value="${v('valor_referencial')}"></div>
+        <div class="field"><label for="obOfe">Presupuesto ofertado (S/ sin IGV)</label><input id="obOfe" name="monto_contrato_original" type="number" min="0" step="0.01" inputmode="decimal" value="${v('monto_contrato_original')}"><span class="hint">Monto del contrato original; los informes lo usan como base.${o.valor_referencial && o.monto_contrato_original ? ` Es ${(Number(o.monto_contrato_original) / Number(o.valor_referencial) * 100).toLocaleString('es-PE', { maximumFractionDigits: 1 })} % del valor referencial.` : ''}</span></div>
+        <div class="field"><label for="obFir">Firma del contrato</label><input id="obFir" name="fecha_firma_contrato" type="date" value="${v('fecha_firma_contrato')}"></div>
+        <div class="field"><label for="obTer">Entrega de terreno</label><input id="obTer" name="fecha_entrega_terreno" type="date" value="${v('fecha_entrega_terreno')}"></div></div>
+      <h4 class="obr-h">Partes</h4>
+      <div class="obr-g">
         <div class="field"><label for="obCli">Entidad contratante (cliente)</label><input id="obCli" name="cliente" type="text" maxlength="160" value="${v('cliente')}"></div>
         <div class="field"><label for="obEnt">Contratista (consorcio)</label><input id="obEnt" name="entidad" type="text" maxlength="160" value="${v('entidad')}"></div>
+        <div class="field"><label for="obRes">Residente de obra</label><input id="obRes" name="residente" type="text" maxlength="160" value="${v('residente')}"></div>
+        <div class="field"><label for="obSup">Supervisión</label><input id="obSup" name="supervisor" type="text" maxlength="160" value="${v('supervisor')}"></div></div>
+      <h4 class="obr-h">Indicadores</h4>
+      <div class="obr-g">
         <div class="field"><label for="obPac">Meta de PAC (%)</label><input id="obPac" name="pac" type="number" min="1" max="100" step="0.5" inputmode="decimal" value="${pacPct}"><span class="hint">El PPC/PAC de la semana se compara con esta meta.</span></div>
         <div class="field"><label for="obLim">Límite de adicionales (% del contrato)</label><input id="obLim" name="limite_adicionales_pct" type="number" min="0" max="100" step="0.5" inputmode="decimal" value="${v('limite_adicionales_pct')}" placeholder="15"><span class="hint">Alerta en Adicionales y deductivos.</span></div></div>
       <h4 class="obr-h">Como aparece en los documentos <span class="hint">(si lo dejas vacío se usa el dato de arriba)</span></h4>
@@ -9208,6 +9226,8 @@ function obrNuevaObraAbrir() {
   m.innerHTML = `<h3 style="margin:0 0 4px;font-size:14px">Nueva obra</h3><p class="hint" style="margin:0 0 10px">Se crea vacía, con sus frentes. El presupuesto, el cronograma y las valorizaciones se cargan después. El código no se puede cambiar luego.</p>
     <div class="field"><label for="noNom">Nombre de la obra</label><input id="noNom" type="text" maxlength="240" placeholder="Ej. Mejoramiento de la carretera …"></div>
     <div class="row3"><div class="field"><label for="noCod">Código</label><input id="noCod" type="text" maxlength="39" placeholder="obra05"></div><div class="field"><label for="noCor">Código corto</label><input id="noCor" type="text" maxlength="30" placeholder="OBRA 5"></div></div>
+    <div class="row3"><div class="field"><label for="noTipo">Tipo de obra</label><input id="noTipo" type="text" list="obTipoL" maxlength="80" placeholder="Puentes, Carretera…"></div><div class="field"><label for="noNC">N° de contrato</label><input id="noNC" type="text" maxlength="80"></div></div>
+    <div class="row3"><div class="field"><label for="noOfe">Presupuesto ofertado (S/ sin IGV)</label><input id="noOfe" type="number" min="0" step="0.01" inputmode="decimal"></div><div class="field"><label for="noUbi">Ubicación</label><input id="noUbi" type="text" maxlength="240" placeholder="Ruta, tramo, departamento"></div></div>
     <div class="row3"><div class="field"><label for="noCli">Entidad contratante</label><input id="noCli" type="text" maxlength="160"></div><div class="field"><label for="noEnt">Contratista</label><input id="noEnt" type="text" maxlength="160"></div></div>
     <div class="row3"><div class="field"><label for="noIni">Inicio contractual</label><input id="noIni" type="date"></div><div class="field"><label for="noFin">Fin contractual</label><input id="noFin" type="date"></div></div>
     <div class="field"><label>Frentes</label><div id="noFr">${obrFilaFrente(0)}</div><button type="button" class="btn-sec" id="noMas" style="margin-top:6px">＋ Agregar frente</button></div>
@@ -9220,7 +9240,7 @@ function obrNuevaObraAbrir() {
   m.onsubmit = async (ev) => {
     ev.preventDefault();
     const frentes = [...m.querySelectorAll('.obr-fr')].map(r => ({ nombre: r.querySelector('[data-f=nombre]').value.trim(), codigo: r.querySelector('[data-f=codigo]').value.trim(), tipo: r.querySelector('[data-f=tipo]').value, km: r.querySelector('[data-f=km]').value.trim() })).filter(f => f.nombre || f.codigo);
-    const p = { nombre: q('#noNom').value.trim(), codigo: q('#noCod').value.trim(), codigo_corto: q('#noCor').value.trim(), cliente: q('#noCli').value.trim(), entidad: q('#noEnt').value.trim(), fecha_inicio: q('#noIni').value, fecha_fin: q('#noFin').value, frentes };
+    const p = { nombre: q('#noNom').value.trim(), codigo: q('#noCod').value.trim(), codigo_corto: q('#noCor').value.trim(), cliente: q('#noCli').value.trim(), entidad: q('#noEnt').value.trim(), tipo_obra: q('#noTipo').value.trim(), numero_contrato: q('#noNC').value.trim(), ubicacion: q('#noUbi').value.trim(), monto_contrato_original: q('#noOfe').value, fecha_inicio: q('#noIni').value, fecha_fin: q('#noFin').value, frentes };
     if (!p.nombre || !p.codigo) { toast('Escribe el nombre y el código de la obra.', false, 'obr'); return; }
     if (!p.fecha_inicio || !p.fecha_fin) { toast('Indica el inicio y el fin contractual.', false, 'obr'); return; }
     if (!frentes.length) { toast('Agrega al menos un frente.', false, 'obr'); return; }
@@ -9287,7 +9307,8 @@ function obrNuevoFrenteAbrir() {
   box.addEventListener('submit', async (e) => {
     if (e.target.id !== 'obrForm') return; e.preventDefault();
     const o = OBR.o, fd = new FormData(e.target), p = {};
-    ['nombre', 'codigo_corto', 'cliente', 'entidad', 'doc_entidad', 'doc_obra', 'doc_contratista', 'doc_supervision'].forEach(k => { const val = String(fd.get(k) ?? '').trim(); if (val !== String(o[k] ?? '')) p[k] = val; });
+    ['nombre', 'codigo_corto', 'cliente', 'entidad', 'doc_entidad', 'doc_obra', 'doc_contratista', 'doc_supervision', 'tipo_obra', 'numero_contrato', 'modalidad', 'sistema_contratacion', 'ubicacion', 'residente', 'supervisor', 'fecha_firma_contrato', 'fecha_entrega_terreno'].forEach(k => { const val = String(fd.get(k) ?? '').trim(); if (val !== String(o[k] ?? '')) p[k] = val; });
+    for (const k of ['monto_contrato_original', 'valor_referencial']) { const val = String(fd.get(k) ?? '').trim(); if (val !== '' && !(Number(val) >= 0)) { toast('Los montos deben ser números positivos.', false, 'obr'); return; } if ((val === '' ? null : Number(val)) !== (o[k] == null ? null : Number(o[k]))) p[k] = val; }
     const pac = Number(fd.get('pac')); if (!(pac >= 1 && pac <= 100)) { toast('La meta de PAC debe estar entre 1 y 100.', false, 'obr'); return; }
     if (Math.abs(pac / 100 - Number(o.pac_meta ?? 0.9)) > 1e-9) p.pac_meta = (pac / 100).toFixed(3);
     const lim = String(fd.get('limite_adicionales_pct') ?? '').trim(); if (lim !== String(o.limite_adicionales_pct ?? '')) { if (lim !== '' && !(Number(lim) >= 0 && Number(lim) <= 100)) { toast('El límite de adicionales debe estar entre 0 y 100.', false, 'obr'); return; } p.limite_adicionales_pct = lim; }
