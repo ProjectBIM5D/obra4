@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="build" content="20261016113150">
+<meta name="build" content="20261016115151">
 <script>/* auto-actualizar: compara el sello de esta copia con el del servidor y recarga una sola vez */
 (function(){try{if(!/^https?:/.test(location.protocol))return;var me=document.querySelector('meta[name=build]').content;if(me==='0')return;
 fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'}).then(function(r){return r.text()}).then(function(h){
@@ -2128,6 +2128,14 @@ select.usr-rol{font:inherit;font-size:12px;padding:5px 8px;border:1px solid var(
 .usr-pasos{margin:4px 0 0 18px;padding:0;font-size:12.5px;color:var(--tx2);line-height:1.65;}
 .usr-roles{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;} .usr-rolc{display:flex;flex-direction:column;gap:3px;border:1px solid var(--line2);border-radius:10px;padding:9px 12px;background:var(--card);} .usr-rolc b{font-size:12.5px;} .usr-rolc span{font-size:11.5px;color:var(--tx2);} .usr-rolc i{font-style:normal;font-size:11px;color:var(--mut);font-weight:700;margin-top:2px;}
 
+/* obra y componentes */
+.obr-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:4px 16px;} .obr-g .obr-w{grid-column:1/-1;} .obr-g .field{margin-bottom:8px;} .obr-g .hint{display:block;margin-top:3px;}
+.obr-fr{display:grid;grid-template-columns:minmax(150px,2fr) minmax(90px,1fr) minmax(110px,1fr) minmax(80px,.8fr) auto;gap:6px;margin-bottom:6px;align-items:center;} @media (max-width:640px){.obr-fr{grid-template-columns:1fr 1fr;}}
+.obr-h{margin:12px 0 6px;font-size:12.5px;} .obr-h .hint{font-weight:400;}
+.obr-logo{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-bottom:10px;} .obr-lg{width:150px;height:90px;border:1px dashed var(--line2);border-radius:10px;background:var(--input);display:grid;place-items:center;overflow:hidden;} .obr-lg img{max-width:100%;max-height:100%;object-fit:contain;} .obr-lg span{font-size:11.5px;color:var(--mut);}
+.obr-ro{display:flex;flex-wrap:wrap;align-items:flex-start;gap:8px 22px;border:1px solid var(--line);border-radius:10px;background:var(--input);padding:10px 14px;margin:6px 0 12px;} .obr-ro span{display:flex;flex-direction:column;} .obr-ro small{font-size:10.5px;color:var(--mut);font-weight:700;text-transform:uppercase;letter-spacing:.05em;} .obr-ro b{font-size:13px;} .obr-ro em{flex:1 1 100%;font-style:normal;margin:0;}
+.obr-tb td{vertical-align:middle;} .obr-in{font:inherit;font-size:12.5px;padding:6px 9px;border:1px solid var(--line2);border-radius:8px;background:var(--input);color:var(--tx);width:100%;min-width:90px;} .obr-in.obr-n{width:64px;min-width:0;text-align:center;} .obr-in.obr-km{max-width:150px;}
+
 @media (max-width:560px){.ctv-it{grid-template-columns:1fr auto;} .ctv-f{grid-column:1 / span 2;} .ctv-sub td{padding-left:14px;}}
 .pt-tabla .dif{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;padding:0;margin-left:4px;vertical-align:middle;border:1px solid transparent;border-radius:7px;background:transparent;color:var(--mut);cursor:pointer;}
 .pt-tabla .dif svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round;} .pt-tabla .dif:hover{border-color:var(--blue);color:var(--blue);background:var(--input);} .pt-tabla tr:hover .dif{color:var(--tx2);}
@@ -2145,7 +2153,7 @@ select.usr-rol{font:inherit;font-size:12px;padding:5px 8px;border:1px solid var(
 .dif-hist{border-top:1px solid var(--line);padding-top:8px;margin:0 0 12px;font-size:12px;color:var(--tx2);} .dif-h{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:4px 0;} .dif-h .btn-sec{padding:3px 10px;font-size:11px;}
 @media (max-width:560px){.dif-kp{grid-template-columns:1fr 1fr;}}
 .lb-cmp{display:inline-flex;align-items:center;gap:8px;flex:0 0 auto;} .lb-cmp select{max-width:260px;}
-#lbFicha:not([hidden]),#plzForm:not([hidden]),#lbObs:not([hidden]),#adiForm:not([hidden]),#adiLim:not([hidden]),#metForm:not([hidden]),#ctvForm:not([hidden]),#evtForm:not([hidden]),#usrForm:not([hidden]),#adiXls:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(620px,calc(100vw - 20px));max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
+#lbFicha:not([hidden]),#plzForm:not([hidden]),#lbObs:not([hidden]),#adiForm:not([hidden]),#adiLim:not([hidden]),#metForm:not([hidden]),#ctvForm:not([hidden]),#evtForm:not([hidden]),#usrForm:not([hidden]),#obrNuevoForm:not([hidden]),#adiXls:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(620px,calc(100vw - 20px));max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
 /* el Gantt en Contrato: sin la barra de selección de plan */
 #plEspacio[data-donde="plan"] #plVerP{display:none;}
 #plFotoDlg:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(560px,calc(100vw - 20px));margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
@@ -2287,7 +2295,7 @@ document.addEventListener('DOMContentLoaded', function(){ try { var m = document
         <button type="button" class="nav-gh" data-grupo="admin" aria-expanded="true"><span class="ni">⚙️</span><span class="nt">Administración</span><i class="nav-chev"></i></button>
         <div class="nav-gb">
           <button type="button" data-pane="usuarios" title="Quién puede entrar al panel y con qué rol: altas, cambios de rol y bajas"><span class="ni">👥</span><span class="nt">Usuarios y roles</span></button>
-          <button type="button" class="prox" disabled title="Próximamente · datos de la obra, frentes y logo"><span class="ni">🏗️</span><span class="nt">Obra y componentes</span><span class="nav-tag">pronto</span></button>
+          <button type="button" data-pane="obra" title="Datos de la obra, meta de PAC, límite de adicionales, logo y nombres de los frentes"><span class="ni">🏗️</span><span class="nt">Obra y componentes</span></button>
           <button type="button" class="prox" disabled title="Próximamente · cronograma, APU y valorizaciones"><span class="ni">📥</span><span class="nt">Cargas de datos</span><span class="nav-tag">pronto</span></button>
         </div>
       </div>
@@ -2489,6 +2497,7 @@ document.addEventListener('DOMContentLoaded', function(){ try { var m = document
     <section class="pane" data-pane="adicionales"><div id="adiPanel"></div></section>
     <section class="pane" data-pane="plazo"><div id="plzPanel"></div></section>
     <section class="pane" data-pane="usuarios"><div id="usrPanel"></div></section>
+    <section class="pane" data-pane="obra"><div id="obrPanel"></div></section>
     <section class="pane" data-pane="valorganado"><div id="vgPanel"></div></section>
     <section class="pane" data-pane="elementos"><div id="bimPanel"></div></section>
     <section class="pane" data-pane="avance3d"><div id="a3Panel"></div></section>
@@ -3103,7 +3112,7 @@ function authUI() {
   $('#btnAdmin').title = AUTH.token ? `Sesión: ${AUTH.email} · ${AUTH.rol ? ROLES[AUTH.rol] || AUTH.rol : 'sin usuario registrado'}` : 'Iniciar sesión';
   $('#admEstado').innerHTML = AUTH.token ? (AUTH.admin ? '<b style="color:var(--amber)">🛡 Admin</b>' : (AUTH.rol ? `<b>👤 ${esc(ROLES[AUTH.rol] || AUTH.rol)}</b>` : 'Sesión sin usuario')) : 'Administrador';
   try { if (LA.cargado) laRender(); if (PT.look) ptRender(); if (!$('#parteLA').hidden) plaCargar(); } catch (e) {}
-  try { if (document.documentElement.dataset.pane === 'usuarios') usrCargar(true); } catch (e) {}
+  try { if (document.documentElement.dataset.pane === 'usuarios') usrCargar(true); if (document.documentElement.dataset.pane === 'obra') obrCargar(true); } catch (e) {}
 }
 async function authEntrar(email, pass) {
   let d;
@@ -3221,6 +3230,7 @@ document.querySelectorAll('#nav button[data-pane]').forEach(b => {
       lineasbase: ['Contrato y líneas base', 'LB0 a LB3: inicio de contrato, suspensión, adicional y deductivo, ampliación · ficha, comparación y carga'],
       plan: ['Plan master', 'Cronograma meta: tu plan de ejecución con vínculos, ruta crítica y duraciones sugeridas por el APU meta'],
       usuarios: ['Usuarios y roles', 'Quién puede entrar al panel y con qué rol · solo el administrador ve y cambia esta pantalla'],
+      obra: ['Obra y componentes', 'Datos de la obra, meta de PAC, límite de adicionales, logo y nombres de los frentes · solo el administrador'],
       hh: ['Horas-hombre', 'Histograma planificado desde el APU de la oferta: metrado × cuantía, repartido en el plazo del cronograma'] };
     if (titles[b.dataset.pane]) { $('#pageTitle').textContent = titles[b.dataset.pane][0]; $('#pageSub').textContent = titles[b.dataset.pane][1]; }
     if (esCelular) celPantalla(PANES_ANCHOS.includes(b.dataset.pane));
@@ -3233,6 +3243,7 @@ document.querySelectorAll('#nav button[data-pane]').forEach(b => {
     if (b.dataset.pane === 'lineasbase') lbPanelCargar();
     if (b.dataset.pane === 'plazo') plzCargar();
     if (b.dataset.pane === 'usuarios') usrCargar();
+    if (b.dataset.pane === 'obra') obrCargar();
     if (b.dataset.pane === 'adicionales') adiCargar();
     if (b.dataset.pane === 'metrados') metCargar();
     if (b.dataset.pane === 'controversias') ctvCargar();
@@ -4343,8 +4354,8 @@ async function valCargar() {
   const box = $('#vlCuerpo'); if (!box) return;
   try {
     const [vals, ejec] = await Promise.all([
-      get('/valorizaciones?select=id,tipo,numero,estado,mes,fecha_inicio,fecha_fin,aprobado_por,aprobado_en,archivo_origen,monto_oficial,gg_pct&order=tipo,numero'),
-      getTodo('/v_ejecutado_mes?select=proyecto_id,tipo,estado,mes,numero,monto_cd,monto_subtotal&order=proyecto_id,tipo,mes,estado')]);
+      get(`/valorizaciones?obra_id=eq.${OBRA.id}&select=id,tipo,numero,estado,mes,fecha_inicio,fecha_fin,aprobado_por,aprobado_en,archivo_origen,monto_oficial,gg_pct&order=tipo,numero`),
+      getTodo(`/v_ejecutado_mes?${FILTRO_PROY}&select=proyecto_id,tipo,estado,mes,numero,monto_cd,monto_subtotal&order=proyecto_id,tipo,mes,estado`)]);
     VAL.vals = vals; VAL.ejec = ejec; VAL.ok = true;
     try { VAL.progOf = RES_A && RES_A.version ? await get(`/programado_oficial?version_id=eq.${RES_A.version.id}&select=periodo_orden,concepto,monto`) : []; } catch (e) { VAL.progOf = []; }   // sin la tabla oficial se usa el cálculo
   } catch (e) {
@@ -4530,7 +4541,7 @@ async function valDetCargar(id, modo) {
       const [menorMap, hojas, hist] = await Promise.all([
         valDetMenorMap(),
         getTodo(`/wbs_nodos?version_id=eq.${version.id}&concepto=eq.${concepto}&es_hoja=eq.true&select=id,proyecto_id,codigo,codigo_esp,nombre,unidad,metrado,precio_unitario,orden&order=orden`),
-        getTodo(`/v_valorizacion_partida_detalle?tipo=eq.${v.tipo}&numero=lte.${v.numero}&select=nodo_id,numero,metrado,monto_cd,monto_subtotal,metrado_acum_aprobado,metrado_acum_propuestas,cd_acum_aprobado,cd_acum_propuestas,monto_acum_aprobado,monto_acum_propuestas&order=nodo_id,numero`),
+        getTodo(`/v_valorizacion_partida_detalle?${FILTRO_PROY}&tipo=eq.${v.tipo}&numero=lte.${v.numero}&select=nodo_id,numero,metrado,monto_cd,monto_subtotal,metrado_acum_aprobado,metrado_acum_propuestas,cd_acum_aprobado,cd_acum_propuestas,monto_acum_aprobado,monto_acum_propuestas&order=nodo_id,numero`),
       ]);
       const ultimo = {}; hist.forEach(r => { const u = ultimo[r.nodo_id]; if (!u || r.numero > u.numero) ultimo[r.nodo_id] = r; });   // el estado más reciente de cada partida, a la fecha de esta valorización
       c.completo = hojas.map(n => {
@@ -5132,7 +5143,7 @@ async function valActualizarProcesar(file) {
     const leido = await valImpLeerExcel(file);
     const { meses, oficiales, porMes, wbsRows } = leido;
 
-    const abiertas = await getTodo(`/valorizaciones?tipo=eq.contrato&estado=eq.propuesta&select=id,numero,mes`);
+    const abiertas = await getTodo(`/valorizaciones?obra_id=eq.${OBRA.id}&tipo=eq.contrato&estado=eq.propuesta&select=id,numero,mes`);
     const abiertaPorMes = {}; abiertas.forEach(v => { abiertaPorMes[String(v.mes).slice(0, 7)] = v; });
     const mesesAbiertos = meses.filter(([, m]) => abiertaPorMes[m]);
 
@@ -5181,7 +5192,7 @@ async function valNuevaProcesar(file) {
     const leido = await valImpLeerExcel(file);
     const { meses, oficiales, porMes, wbsRows } = leido;
 
-    const existentes = await getTodo(`/valorizaciones?tipo=eq.contrato&select=numero`);
+    const existentes = await getTodo(`/valorizaciones?obra_id=eq.${OBRA.id}&tipo=eq.contrato&select=numero`);
     const numsExistentes = new Set(existentes.map(v => v.numero));
     const nuevas = meses.map(([, m], idx) => [idx + 1, m]).filter(([num]) => !numsExistentes.has(num));
     if (!nuevas.length) { toast('No hay ninguna valorización nueva: todos los meses del Excel ya existen en el panel.', false); return; }
@@ -5226,8 +5237,10 @@ async function valNuevaProcesar(file) {
 // (2) los datos de la Curva S se pintan apenas llegan, sin esperar a los de Materiales (que son más pesados);
 // (3) con la sesión guardada, la última carga se pinta al instante mientras llegan los datos frescos.
 const CACHE_RES = 'obra-cache-resumen';
+const obraSelId = () => { try { return localStorage.getItem('obra-activa-' + fuente) || null; } catch (e) { return null; } };   // obra elegida en Administración › Obra y componentes (vacío = la primera activa)
+function obraElegir(id) { try { if (id) localStorage.setItem('obra-activa-' + fuente, id); else localStorage.removeItem('obra-activa-' + fuente); localStorage.removeItem(CACHE_RES); } catch (e) {} }
 function cacheResLeer() {
-  try { if (fuente !== 'cloud' || !AUTH.recordar) return null; const c = JSON.parse(localStorage.getItem(CACHE_RES) || 'null'); return c && c.email === AUTH.email && c.raw ? c : null; } catch (e) { return null; }
+  try { if (fuente !== 'cloud' || !AUTH.recordar) return null; const c = JSON.parse(localStorage.getItem(CACHE_RES) || 'null'); const sel = obraSelId(); return c && c.email === AUTH.email && c.raw && (!sel || (c.raw.obra && c.raw.obra.id === sel)) ? c : null; } catch (e) { return null; }
 }
 function cacheResGuardar(raw) { try { if (fuente === 'cloud' && AUTH.recordar) localStorage.setItem(CACHE_RES, JSON.stringify({ email: AUTH.email, t: Date.now(), raw })); } catch (e) {} }   // si no cabe, simplemente no se guarda
 // ── Valor ganado: el ejecutado de la Curva S sale de las VALORIZACIONES (v_ejecutado_mes). Solo las APROBADAS son lo oficial; las
@@ -5281,6 +5294,9 @@ function aplicarResumen(A, B) {   // A = obra, componentes, Curva S y avance · 
   valBoxActualizar();
   renderAll();
   fillMatForms();
+  if (!A.partidas.length) setTimeout(() => {   // obra recién creada, sin presupuesto: los recuadros que esperan datos no deben quedar en «Cargando…»
+    [['hhrDona', 'Esta obra todavía no tiene horas-hombre: se calculan al cargar su presupuesto (APU) y cronograma.'], ['matResumen', 'Esta obra todavía no tiene materiales: se calculan al cargar su presupuesto.']].forEach(([id, t]) => { const e = document.getElementById(id); if (e && /^Cargando/.test(e.textContent.trim())) e.innerHTML = `<div class="rg-msg">${t}</div>`; });
+  }, 2500);
 }
 async function bootResumen() {
   proyAsegurar();   // la proyección de la Curva S se pide a la vez que lo demás; si falta la tabla, simplemente no se dibuja
@@ -5293,11 +5309,12 @@ async function bootResumen() {
     // 1) obra activa + sus componentes + cronograma vigente, en una sola consulta (si esta base aún no tiene el cronograma, se piden por separado)
     let obra, proyectos, version;
     try {
-      const o = (await get('/obras?activo=eq.true&order=creado_en.asc&limit=1&select=*,proyectos(id,codigo,nombre,tipo,orden),cronograma_versiones(id,codigo,nombre,vigente)'))[0];
+      const SELO = 'select=*,proyectos(id,codigo,nombre,tipo,orden),cronograma_versiones(id,codigo,nombre,vigente)', sel0 = obraSelId();
+      const o = (sel0 ? (await get(`/obras?id=eq.${sel0}&activo=eq.true&limit=1&${SELO}`).catch(() => []))[0] : null) || (await get(`/obras?activo=eq.true&order=creado_en.asc&limit=1&${SELO}`))[0];
       if (!o) throw new Error('No hay ninguna obra registrada en la base de datos (tabla "obras").');
       obra = o; proyectos = o.proyectos || []; version = (o.cronograma_versiones || []).find(v => v.vigente) || null;
     } catch (e1) {
-      const obras = await get('/obras?activo=eq.true&order=creado_en.asc&limit=1'); obra = obras[0] || null;
+      const sel1 = obraSelId(); let obras = sel1 ? await get(`/obras?id=eq.${sel1}&activo=eq.true&limit=1`).catch(() => []) : []; if (!obras.length) obras = await get('/obras?activo=eq.true&order=creado_en.asc&limit=1'); obra = obras[0] || null;
       if (!obra) throw new Error('No hay ninguna obra registrada en la base de datos (tabla "obras").');
       proyectos = await get(`/proyectos?obra_id=eq.${obra.id}&select=id,codigo,nombre,tipo,orden`).catch(() => get(`/proyectos?obra_id=eq.${obra.id}&select=id,codigo,nombre,tipo`));
       version = (await opcional(get(`/cronograma_versiones?obra_id=eq.${obra.id}&vigente=eq.true&select=id,codigo,nombre`)))[0] || null;
@@ -9100,6 +9117,192 @@ async function usrCambiar(id, cambios) {
   box.addEventListener('input', (e) => { if (e.target.id !== 'usrQ') return; USR.q = e.target.value; const pos = e.target.selectionStart; usrPintar(); const n = $('#usrQ'); if (n) { n.focus(); try { n.setSelectionRange(pos, pos); } catch (x) {} } });
 })();
 
+// ═══ OBRA Y COMPONENTES (solo administrador): datos de la obra y nombres de sus frentes ═══
+// Las fechas contractuales, la moneda y los montos no se editan aquí: salen de «Contrato y líneas base» y «Plazo y ampliaciones».
+const OBR = { o: null, f: [], todas: [], cargado: false, logo: undefined };
+const OBR_TIPOS = { puente: 'Puente', tramo_carretera: 'Tramo de carretera', edificacion: 'Edificación', otro: 'Otro' };
+const obrSlug = (s) => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 38);
+function obrAbrirObra(id) { obraElegir(id); try { sessionStorage.setItem('obra-volver', JSON.stringify({ pane: 'obra', y: 0 })); } catch (e) {} location.reload(); }
+const OBR_CAMPOS = 'id,codigo,nombre,codigo_corto,cliente,entidad,moneda,fecha_inicio,fecha_fin,pac_meta,limite_adicionales_pct,logo_b64,doc_entidad,doc_obra,doc_contratista,doc_supervision';
+async function obrCargar(forzar) {
+  const box = $('#obrPanel'); if (!box) return;
+  if (!AUTH.admin) { box.innerHTML = '<div class="rg-msg">Esta pantalla es solo para administradores. Inicia sesión con <b>🔑 Entrar</b> usando una cuenta con rol Administrador.</div>'; return; }
+  if (typeof OBRA === 'undefined' || !OBRA || !OBRA.id) { box.innerHTML = '<div class="rg-msg">Leyendo la obra…</div>'; setTimeout(() => { if (document.documentElement.dataset.pane === 'obra') obrCargar(); }, 1200); return; }
+  if (!OBR.cargado || forzar) box.innerHTML = '<div class="rg-msg">Leyendo los datos de la obra…</div>';
+  try {
+    const [o, f, todas] = await Promise.all([get(`/obras?id=eq.${OBRA.id}&select=${OBR_CAMPOS}`), get(`/proyectos?obra_id=eq.${OBRA.id}&select=id,codigo,nombre,tipo,km,orden,fecha_inicio,fecha_fin,activo&order=orden`),
+      get('/obras?select=id,codigo,nombre,cliente,entidad,activo,creado_en,proyectos(id)&order=creado_en').catch(() => [])]);
+    OBR.o = o[0] || null; OBR.f = f; OBR.todas = todas; OBR.logo = undefined; OBR.cargado = true; obrPintar();
+  } catch (e) { box.innerHTML = msgCarga('Obra y componentes', e); }
+}
+const obrF = (d) => d ? String(d).slice(0, 10).split('-').reverse().join('/') : '—';
+function obrPintar() {
+  const box = $('#obrPanel'), o = OBR.o; if (!box) return;
+  if (!o) { box.innerHTML = '<div class="rg-msg">No se encontró la obra.</div>'; return; }
+  const v = (k) => esc(o[k] ?? ''), pacPct = o.pac_meta != null ? Math.round(Number(o.pac_meta) * 1000) / 10 : 90;
+  const logo = OBR.logo !== undefined ? OBR.logo : o.logo_b64;
+  const filasObras = OBR.todas.map(x => { const ab = x.id === o.id;
+    return `<tr class="${x.activo ? '' : 'usr-off'}"><td class="l"><b>${esc(x.nombre)}</b>${ab ? ' <span class="usr-tu">abierta</span>' : ''}<span class="lb-sub">${esc(x.codigo)} · ${esc([x.cliente, x.entidad].filter(Boolean).join(' · '))}</span></td><td class="ctr">${(x.proyectos || []).length}</td>
+      <td class="ctr"><span class="vl-pill ${x.activo ? 'ok' : 'ar'}">${x.activo ? 'activa' : 'archivada'}</span></td>
+      <td class="c">${ab ? '' : (x.activo ? `<button type="button" class="btn-sec" data-obr-abrir="${x.id}">Abrir</button> ` : '')}${ab ? '' : `<button type="button" class="btn-sec" data-obr-est="${x.id}" data-a="${x.activo ? 0 : 1}">${x.activo ? 'Archivar' : 'Reactivar'}</button>`}</td></tr>`; }).join('');
+  box.innerHTML = `<div class="vl-card"><div class="lb-cab"><div><h3 style="margin:0 0 3px">Obras</h3><p class="hint" style="margin:0">El panel muestra una obra a la vez; cada obra tiene sus propios frentes, presupuesto, cronograma y valorizaciones. Abre otra con «Abrir»; una archivada deja de aparecer y se puede reactivar.</p></div>
+      <button type="button" class="btn-sec pri" data-obr-nueva title="Crear una obra nueva con sus frentes">＋ Nueva obra</button></div>
+      <div class="vl-tw"><table class="vl-tb lb-tb obr-tb"><thead><tr><th class="l">Obra</th><th class="ctr">Frentes</th><th class="ctr">Estado</th><th></th></tr></thead><tbody>${filasObras || '<tr><td colspan="4" class="l">Sin obras.</td></tr>'}</tbody></table></div></div>
+    <form class="vl-card" id="obrForm" autocomplete="off">
+      <div class="lb-cab"><div><h3 style="margin:0 0 3px">Datos de la obra abierta</h3><p class="hint" style="margin:0">Lo que se ve en el título del panel y en los informes y valorizaciones impresas.</p></div></div>
+      <div class="obr-g">
+        <div class="field obr-w"><label for="obNom">Nombre de la obra</label><input id="obNom" name="nombre" type="text" maxlength="240" value="${v('nombre')}"></div>
+        <div class="field"><label for="obCod">Código corto</label><input id="obCod" name="codigo_corto" type="text" maxlength="30" value="${v('codigo_corto')}" placeholder="Ej. OBRA 4"></div>
+        <div class="field"><label for="obCli">Entidad contratante (cliente)</label><input id="obCli" name="cliente" type="text" maxlength="160" value="${v('cliente')}"></div>
+        <div class="field"><label for="obEnt">Contratista (consorcio)</label><input id="obEnt" name="entidad" type="text" maxlength="160" value="${v('entidad')}"></div>
+        <div class="field"><label for="obPac">Meta de PAC (%)</label><input id="obPac" name="pac" type="number" min="1" max="100" step="0.5" inputmode="decimal" value="${pacPct}"><span class="hint">El PPC/PAC de la semana se compara con esta meta.</span></div>
+        <div class="field"><label for="obLim">Límite de adicionales (% del contrato)</label><input id="obLim" name="limite_adicionales_pct" type="number" min="0" max="100" step="0.5" inputmode="decimal" value="${v('limite_adicionales_pct')}" placeholder="15"><span class="hint">Alerta en Adicionales y deductivos.</span></div></div>
+      <h4 class="obr-h">Como aparece en los documentos <span class="hint">(si lo dejas vacío se usa el dato de arriba)</span></h4>
+      <div class="obr-g">
+        <div class="field"><label for="obDE">Entidad</label><input id="obDE" name="doc_entidad" type="text" maxlength="200" value="${v('doc_entidad')}"></div>
+        <div class="field obr-w"><label for="obDO">Obra</label><input id="obDO" name="doc_obra" type="text" maxlength="300" value="${v('doc_obra')}"></div>
+        <div class="field"><label for="obDC">Contratista</label><input id="obDC" name="doc_contratista" type="text" maxlength="200" value="${v('doc_contratista')}"></div>
+        <div class="field"><label for="obDS">Supervisión</label><input id="obDS" name="doc_supervision" type="text" maxlength="200" value="${v('doc_supervision')}"></div></div>
+      <h4 class="obr-h">Logo</h4>
+      <div class="obr-logo"><div class="obr-lg">${logo ? `<img src="${esc(logo)}" alt="Logo de la obra">` : '<span>sin logo</span>'}</div>
+        <div><input type="file" id="obLogoF" accept="image/png,image/jpeg,image/webp" hidden><button type="button" class="btn-sec" id="obLogoB">Elegir imagen…</button> <button type="button" class="btn-sec" id="obLogoQ"${logo ? '' : ' disabled'}>Quitar</button>
+          <p class="hint" style="margin:6px 0 0">PNG, JPG o WebP. Se reduce solo a 360 px de lado mayor. Aparece en el menú, informes y valorizaciones. Se guarda con «Guardar cambios».</p></div></div>
+      <div class="obr-ro"><span><small>Moneda</small><b>${esc(o.moneda || 'PEN')}</b></span><span><small>Inicio contractual</small><b>${obrF(o.fecha_inicio)}</b></span><span><small>Fin contractual</small><b>${obrF(o.fecha_fin)}</b></span>
+        <em class="hint">Las fechas contractuales y los montos se manejan en «Contrato y líneas base» y «Plazo y ampliaciones», para que la Curva S y los plazos no cambien por error.</em></div>
+      <div class="sug-acc"><button class="btn" type="submit" id="obGuardar">Guardar cambios</button><button class="btn-sec" type="button" id="obDeshacer">Descartar</button></div></form>
+    <div class="vl-card"><div class="lb-cab"><div><h3 style="margin:0 0 3px">Frentes de la obra</h3><p class="hint" style="margin:0">Cambia el nombre, el kilómetro o el orden en que se muestran; se guarda al salir de cada casilla. Un frente nuevo nace vacío: su modelo 3D, presupuesto y cronograma se cargan después.</p></div>
+        <button type="button" class="btn-sec" data-obr-frente title="Agregar un frente a esta obra">＋ Nuevo frente</button></div>
+      <div class="vl-tw"><table class="vl-tb lb-tb obr-tb"><thead><tr><th class="ctr">Orden</th><th class="l">Nombre</th><th class="l">Km</th><th class="ctr">Tipo</th><th class="ctr">Código</th><th class="ctr">Fechas</th></tr></thead>
+        <tbody>${OBR.f.map(f => `<tr data-obr-fr="${f.id}"><td class="ctr"><input type="number" min="1" max="99" step="1" class="obr-in obr-n" data-k="orden" value="${f.orden ?? ''}" aria-label="Orden de ${esc(f.nombre)}"></td>
+          <td class="l"><input type="text" class="obr-in" data-k="nombre" maxlength="120" value="${esc(f.nombre)}" aria-label="Nombre del frente"></td>
+          <td class="l"><input type="text" class="obr-in obr-km" data-k="km" maxlength="40" value="${esc(f.km ?? '')}" placeholder="km 00+000" aria-label="Kilómetro de ${esc(f.nombre)}"></td>
+          <td class="ctr"><span class="lb-sub" style="margin:0">${esc(f.tipo || '')}</span></td><td class="ctr"><code>${esc(f.codigo)}</code></td>
+          <td class="ctr"><span class="lb-sub" style="margin:0">${obrF(f.fecha_inicio)} – ${obrF(f.fecha_fin)}</span></td></tr>`).join('') || '<tr><td colspan="6" class="l">Sin frentes.</td></tr>'}</tbody></table></div></div>`;
+}
+// reduce la imagen elegida para que el logo pese pocos KB
+function obrLogoLeer(file) {
+  return new Promise((ok, mal) => {
+    const rd = new FileReader(); rd.onerror = () => mal(new Error('No se pudo leer la imagen.'));
+    rd.onload = () => { const im = new Image(); im.onerror = () => mal(new Error('Esa imagen no se puede abrir.'));
+      im.onload = () => { const k = Math.min(1, 360 / Math.max(im.width, im.height)), c = document.createElement('canvas'); c.width = Math.max(1, Math.round(im.width * k)); c.height = Math.max(1, Math.round(im.height * k));
+        c.getContext('2d').drawImage(im, 0, 0, c.width, c.height); ok(file.type === 'image/jpeg' ? c.toDataURL('image/jpeg', 0.88) : c.toDataURL('image/png')); };
+      im.src = rd.result; };
+    rd.readAsDataURL(file);
+  });
+}
+
+// formularios de obra nueva y de frente nuevo
+function obrFormFrente(tit, o, pie) {
+  let m = document.getElementById('obrNuevoForm');
+  if (!m) { m = document.createElement('form'); m.id = 'obrNuevoForm'; m.className = 'pform la-form'; m.hidden = true; document.body.appendChild(m); }
+  const fondo = document.getElementById('lbFondo') || (() => { const x = document.createElement('div'); x.id = 'lbFondo'; x.hidden = true; document.body.appendChild(x); return x; })();
+  const cerrar = () => { m.hidden = true; fondo.hidden = true; document.documentElement.classList.remove('la-modal'); };
+  return { m, fondo, cerrar, abrir() { m.hidden = false; fondo.hidden = false; document.documentElement.classList.add('la-modal'); fondo.onclick = cerrar; } };
+}
+const obrFilaFrente = (n, f) => `<div class="obr-fr" data-i="${n}"><input type="text" class="obr-in" data-f="nombre" maxlength="120" placeholder="Nombre del frente (Ej. Puente Chulucanas)" value="${esc((f && f.nombre) || '')}" aria-label="Nombre del frente">
+  <input type="text" class="obr-in" data-f="codigo" maxlength="39" placeholder="código" value="${esc((f && f.codigo) || '')}" aria-label="Código del frente">
+  <select class="obr-in" data-f="tipo" aria-label="Tipo">${Object.entries(OBR_TIPOS).map(([k, t]) => `<option value="${k}">${t}</option>`).join('')}</select>
+  <input type="text" class="obr-in" data-f="km" maxlength="40" placeholder="km (opcional)" aria-label="Kilómetro"><button type="button" class="icon-btn" data-obr-quitar title="Quitar este frente" aria-label="Quitar">✕</button></div>`;
+function obrNuevaObraAbrir() {
+  const F = obrFormFrente(), { m } = F, q = (s) => m.querySelector(s);
+  m.innerHTML = `<h3 style="margin:0 0 4px;font-size:14px">Nueva obra</h3><p class="hint" style="margin:0 0 10px">Se crea vacía, con sus frentes. El presupuesto, el cronograma y las valorizaciones se cargan después. El código no se puede cambiar luego.</p>
+    <div class="field"><label for="noNom">Nombre de la obra</label><input id="noNom" type="text" maxlength="240" placeholder="Ej. Mejoramiento de la carretera …"></div>
+    <div class="row3"><div class="field"><label for="noCod">Código</label><input id="noCod" type="text" maxlength="39" placeholder="obra05"></div><div class="field"><label for="noCor">Código corto</label><input id="noCor" type="text" maxlength="30" placeholder="OBRA 5"></div></div>
+    <div class="row3"><div class="field"><label for="noCli">Entidad contratante</label><input id="noCli" type="text" maxlength="160"></div><div class="field"><label for="noEnt">Contratista</label><input id="noEnt" type="text" maxlength="160"></div></div>
+    <div class="row3"><div class="field"><label for="noIni">Inicio contractual</label><input id="noIni" type="date"></div><div class="field"><label for="noFin">Fin contractual</label><input id="noFin" type="date"></div></div>
+    <div class="field"><label>Frentes</label><div id="noFr">${obrFilaFrente(0)}</div><button type="button" class="btn-sec" id="noMas" style="margin-top:6px">＋ Agregar frente</button></div>
+    <div class="sug-acc"><button class="btn" type="submit">Crear obra</button><button class="btn-sec" type="button" id="noCancel">Cancelar</button></div>`;
+  let codTocado = false; q('#noCod').addEventListener('input', () => { codTocado = true; });
+  q('#noNom').addEventListener('input', () => { if (!codTocado) q('#noCod').value = obrSlug(q('#noNom').value).slice(0, 20); });
+  m.addEventListener('input', (e) => { const fr = e.target.closest('.obr-fr'); if (!fr) return; if (e.target.dataset.f === 'codigo') fr.dataset.t = '1'; if (e.target.dataset.f === 'nombre' && !fr.dataset.t) fr.querySelector('[data-f=codigo]').value = obrSlug(e.target.value); });
+  m.onclick = (e) => { if (e.target.closest('#noMas')) q('#noFr').insertAdjacentHTML('beforeend', obrFilaFrente(q('#noFr').children.length)); const x = e.target.closest('[data-obr-quitar]'); if (x && q('#noFr').children.length > 1) x.closest('.obr-fr').remove(); };
+  F.abrir(); q('#noCancel').onclick = F.cerrar; setTimeout(() => q('#noNom').focus(), 30);
+  m.onsubmit = async (ev) => {
+    ev.preventDefault();
+    const frentes = [...m.querySelectorAll('.obr-fr')].map(r => ({ nombre: r.querySelector('[data-f=nombre]').value.trim(), codigo: r.querySelector('[data-f=codigo]').value.trim(), tipo: r.querySelector('[data-f=tipo]').value, km: r.querySelector('[data-f=km]').value.trim() })).filter(f => f.nombre || f.codigo);
+    const p = { nombre: q('#noNom').value.trim(), codigo: q('#noCod').value.trim(), codigo_corto: q('#noCor').value.trim(), cliente: q('#noCli').value.trim(), entidad: q('#noEnt').value.trim(), fecha_inicio: q('#noIni').value, fecha_fin: q('#noFin').value, frentes };
+    if (!p.nombre || !p.codigo) { toast('Escribe el nombre y el código de la obra.', false, 'obr'); return; }
+    if (!p.fecha_inicio || !p.fecha_fin) { toast('Indica el inicio y el fin contractual.', false, 'obr'); return; }
+    if (!frentes.length) { toast('Agrega al menos un frente.', false, 'obr'); return; }
+    if (frentes.some(f => !f.nombre || !f.codigo)) { toast('Cada frente necesita nombre y código.', false, 'obr'); return; }
+    const btn = m.querySelector('button[type=submit]'); btn.disabled = true;
+    try {
+      const id = await preRpc('obra_crear', { p });
+      F.cerrar(); toast('Obra creada.', true, 'obr');
+      if (await confirmar(`Obra «${p.nombre}» creada con ${frentes.length} frente${frentes.length === 1 ? '' : 's'}. ¿Abrirla ahora? Estará vacía hasta cargar su presupuesto y cronograma.`)) obrAbrirObra(id); else await obrCargar(true);
+    } catch (er) { btn.disabled = false; toast(`No se pudo crear: ${esc(er.message)}${/function|schema cache|404/i.test(er.message) ? ' · ¿falta correr obra_admin.sql?' : ''}`, false, 'obr'); }
+  };
+}
+function obrNuevoFrenteAbrir() {
+  const F = obrFormFrente(), { m } = F, q = (s) => m.querySelector(s), o = OBR.o;
+  m.innerHTML = `<h3 style="margin:0 0 4px;font-size:14px">Nuevo frente en esta obra</h3><p class="hint" style="margin:0 0 10px">Nace vacío: su modelo 3D, presupuesto y cronograma se cargan después.</p>
+    <div class="field"><label for="nfNom">Nombre</label><input id="nfNom" type="text" maxlength="120" placeholder="Ej. Puente Chulucanas"></div>
+    <div class="row3"><div class="field"><label for="nfCod">Código</label><input id="nfCod" type="text" maxlength="39" placeholder="chulucanas"></div><div class="field"><label for="nfTipo">Tipo</label><select id="nfTipo">${Object.entries(OBR_TIPOS).map(([k, t]) => `<option value="${k}">${t}</option>`).join('')}</select></div><div class="field"><label for="nfKm">Km</label><input id="nfKm" type="text" maxlength="40"></div></div>
+    <div class="row3"><div class="field"><label for="nfIni">Inicio</label><input id="nfIni" type="date" value="${esc(o.fecha_inicio || '')}"></div><div class="field"><label for="nfFin">Fin</label><input id="nfFin" type="date" value="${esc(o.fecha_fin || '')}"></div></div>
+    <div class="sug-acc"><button class="btn" type="submit">Agregar frente</button><button class="btn-sec" type="button" id="nfCancel">Cancelar</button></div>`;
+  let tocado = false; q('#nfCod').addEventListener('input', () => { tocado = true; }); q('#nfNom').addEventListener('input', () => { if (!tocado) q('#nfCod').value = obrSlug(q('#nfNom').value); });
+  F.abrir(); q('#nfCancel').onclick = F.cerrar; setTimeout(() => q('#nfNom').focus(), 30);
+  m.onclick = null;
+  m.onsubmit = async (ev) => {
+    ev.preventDefault();
+    const p = { nombre: q('#nfNom').value.trim(), codigo: q('#nfCod').value.trim(), tipo: q('#nfTipo').value, km: q('#nfKm').value.trim(), fecha_inicio: q('#nfIni').value, fecha_fin: q('#nfFin').value };
+    if (!p.nombre || !p.codigo) { toast('Escribe el nombre y el código del frente.', false, 'obr'); return; }
+    const btn = m.querySelector('button[type=submit]'); btn.disabled = true;
+    try { await preRpc('proyecto_crear', { p_obra: o.id, p }); F.cerrar(); obraElegir(o.id); try { sessionStorage.setItem('obra-volver', JSON.stringify({ pane: 'obra', y: 0 })); } catch (x) {} toast('Frente agregado. Recargando…', true, 'obr'); setTimeout(() => location.reload(), 700); }
+    catch (er) { btn.disabled = false; toast(`No se pudo agregar: ${esc(er.message)}${/function|schema cache|404/i.test(er.message) ? ' · ¿falta correr obra_admin.sql?' : ''}`, false, 'obr'); }
+  };
+}
+(function () {
+  const box = $('#obrPanel'); if (!box) return;
+  box.addEventListener('click', async (e) => {
+    const ab = e.target.closest('[data-obr-abrir]'), es = e.target.closest('[data-obr-est]');
+    if (e.target.closest('[data-obr-nueva]')) return obrNuevaObraAbrir();
+    if (e.target.closest('[data-obr-frente]')) return obrNuevoFrenteAbrir();
+    if (ab) return obrAbrirObra(ab.dataset.obrAbrir);
+    if (es) {
+      const x = OBR.todas.find(z => z.id === es.dataset.obrEst), act = es.dataset.a === '1'; if (!x) return;
+      if (!act && !(await confirmar(`¿Archivar la obra «${x.nombre}»? Deja de aparecer en el panel; sus datos se conservan y puedes reactivarla.`))) return;
+      try { await preRpc('obra_estado', { p_id: x.id, p_activo: act }); toast(act ? 'Obra reactivada.' : 'Obra archivada.', true, 'obr'); await obrCargar(true); } catch (er) { toast(`No se pudo: ${esc(er.message)}`, false, 'obr'); }
+      return;
+    }
+    if (e.target.closest('#obLogoB')) $('#obLogoF').click();
+    else if (e.target.closest('#obLogoQ')) { OBR.logo = ''; const g = box.querySelector('.obr-lg'); g.innerHTML = '<span>sin logo</span>'; $('#obLogoQ').disabled = true; }
+    else if (e.target.closest('#obDeshacer')) obrPintar();
+  });
+  box.addEventListener('change', async (e) => {
+    if (e.target.id === 'obLogoF') {
+      const f = e.target.files[0]; if (!f) return;
+      try { OBR.logo = await obrLogoLeer(f); box.querySelector('.obr-lg').innerHTML = `<img src="${esc(OBR.logo)}" alt="Logo de la obra">`; $('#obLogoQ').disabled = false; }
+      catch (er) { toast(esc(er.message), false, 'obr'); }
+      return;
+    }
+    const inp = e.target.closest('.obr-in'); if (!inp) return;
+    const tr = inp.closest('tr'), f = OBR.f.find(x => x.id === tr.dataset.obrFr); if (!f) return;
+    const k = inp.dataset.k, val = inp.value.trim();
+    if (k === 'nombre' && !val) { inp.value = f.nombre; toast('El nombre del frente no puede quedar vacío.', false, 'obr'); return; }
+    if (String(f[k] ?? '') === val) return;
+    try { await preRpc('proyecto_guardar', { p_id: f.id, p: { [k]: val } }); f[k] = k === 'orden' ? (val === '' ? null : +val) : val; toast('Frente guardado. Recarga el panel para ver el cambio en todo el sitio.', true, 'obr'); try { localStorage.removeItem('obra-cache-resumen'); } catch (x) {} }
+    catch (er) { inp.value = f[k] ?? ''; toast(`No se pudo guardar: ${esc(er.message)}${/function|schema cache|404/i.test(er.message) ? ' · ¿falta correr obra_admin.sql?' : ''}`, false, 'obr'); }
+  });
+  box.addEventListener('submit', async (e) => {
+    if (e.target.id !== 'obrForm') return; e.preventDefault();
+    const o = OBR.o, fd = new FormData(e.target), p = {};
+    ['nombre', 'codigo_corto', 'cliente', 'entidad', 'doc_entidad', 'doc_obra', 'doc_contratista', 'doc_supervision'].forEach(k => { const val = String(fd.get(k) ?? '').trim(); if (val !== String(o[k] ?? '')) p[k] = val; });
+    const pac = Number(fd.get('pac')); if (!(pac >= 1 && pac <= 100)) { toast('La meta de PAC debe estar entre 1 y 100.', false, 'obr'); return; }
+    if (Math.abs(pac / 100 - Number(o.pac_meta ?? 0.9)) > 1e-9) p.pac_meta = (pac / 100).toFixed(3);
+    const lim = String(fd.get('limite_adicionales_pct') ?? '').trim(); if (lim !== String(o.limite_adicionales_pct ?? '')) { if (lim !== '' && !(Number(lim) >= 0 && Number(lim) <= 100)) { toast('El límite de adicionales debe estar entre 0 y 100.', false, 'obr'); return; } p.limite_adicionales_pct = lim; }
+    if (OBR.logo !== undefined) p.logo_b64 = OBR.logo;
+    if (!p.nombre && 'nombre' in p) { toast('El nombre de la obra no puede quedar vacío.', false, 'obr'); return; }
+    if (!Object.keys(p).length) { toast('No hay cambios que guardar.', true, 'obr'); return; }
+    const btn = $('#obGuardar'); btn.disabled = true;
+    try {
+      await preRpc('obra_guardar', { p_id: o.id, p });
+      try { localStorage.removeItem('obra-cache-resumen'); sessionStorage.setItem('obra-volver', JSON.stringify({ pane: 'obra', y: 0 })); } catch (x) {}
+      toast('Obra guardada. Recargando para aplicar los cambios…', true, 'obr'); setTimeout(() => location.reload(), 900);
+    } catch (er) { btn.disabled = false; toast(`No se pudo guardar: ${esc(er.message)}${/function|schema cache|404/i.test(er.message) ? ' · ¿falta correr obra_admin.sql?' : ''}`, false, 'obr'); }
+  });
+})();
+
 // ═══ EVENTOS Y CONTROVERSIAS: controversias numeradas con su línea de tiempo (planteamiento → JRD → decisión → arbitraje → cierre) y eventos sueltos del contrato ═══
 // El estado de cada controversia NO se digita: sale de su actuación más avanzada. Los montos son subtotal sin IGV.
 const CTV = { ctv: [], ev: [], refs: [], C: [], S: [], exp: null, cargado: false, sinSql: false };
@@ -9129,7 +9332,7 @@ async function ctvCargar(forzar) {
       get(`/plazo_eventos?obra_id=eq.${OBRA.id}&select=id,tipo,numero,grupo,estado&order=tipo,numero`).catch(() => get(`/plazo_eventos?obra_id=eq.${OBRA.id}&select=id,tipo,numero,grupo&order=tipo,numero`).catch(() => [])),
       get(`/prestaciones?obra_id=eq.${OBRA.id}&select=id,tipo,numero,estado&order=tipo,numero`).catch(() => []),
       get(`/linea_base_versiones?obra_id=eq.${OBRA.id}&select=numero&order=numero`).catch(() => []),
-      get(`/valorizaciones?select=tipo,numero&order=tipo,numero`).catch(() => [])]);
+      get(`/valorizaciones?obra_id=eq.${OBRA.id}&select=tipo,numero&order=tipo,numero`).catch(() => [])]);
     CTV.sinSql = ctv === null || ev === null; CTV.ctv = ctv || []; CTV.ev = ev || []; CTV.plz = plz || []; CTV.pre = pre || [];
     // registros a los que puede referirse una controversia (lista de ayuda del campo «Se refiere a»)
     const refs = [], vistos = new Set(), P = { ampliacion: 'Ampliación de plazo', suspension: 'Suspensión', adicional: 'Adicional de plazo', desplazamiento: 'Desplazamiento', otro: 'Registro de plazo' };
