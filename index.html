@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="build" content="20261023135619">
+<meta name="build" content="20261023151327">
 <script>/* auto-actualizar: compara el sello de esta copia con el del servidor y recarga una sola vez */
 (function(){try{if(!/^https?:/.test(location.protocol))return;var me=document.querySelector('meta[name=build]').content;if(me==='0')return;
 fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'}).then(function(r){return r.text()}).then(function(h){
@@ -2192,18 +2192,21 @@ select.usr-rol{font:inherit;font-size:12px;padding:5px 8px;border:1px solid var(
 .res-mapa{grid-template-columns:minmax(0,1.9fr) minmax(0,1fr);} @media (max-width:1200px){.res-mapa{grid-template-columns:minmax(0,1fr);}}
 .mapa-cab{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:8px 16px;margin-bottom:10px;}
 .mapa-leg{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:11px;color:var(--mut);} .mapa-leg i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:-1px;}
-.mapa-box{position:relative;height:430px;border-radius:12px;overflow:hidden;background:var(--input);border:1px solid var(--line);} .mapa-box .rg-msg{border:0;height:100%;display:grid;place-items:center;}
-@media (max-width:700px){.mapa-box{height:400px;} .mp-ph{height:76px;}}
+.mapa-card{display:flex;flex-direction:column;} .mp-chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px;} .mp-ch{display:inline-flex;align-items:center;gap:7px;font:inherit;font-size:12px;background:var(--input);border:1px solid var(--line);border-radius:999px;padding:4px 11px 4px 9px;cursor:pointer;color:var(--tx);} .mp-ch:hover{border-color:#3b7be8;} .mp-ch.sin{opacity:.6;} .mp-ch b{font-weight:700;} .mp-ch em{font-style:normal;color:var(--mut);font-variant-numeric:tabular-nums;} .mp-ch .mp-pt{width:9px;height:9px;border-radius:50%;}
+.mapa-box{position:relative;flex:1 1 auto;min-height:340px;border-radius:12px;overflow:hidden;background:var(--input);border:1px solid var(--line);} .mapa-box .rg-msg{border:0;height:100%;display:grid;place-items:center;}
+@media (max-width:700px){.mapa-box{min-height:380px;} .mp-ph{height:76px;}}
+.mapa-box .maplibregl-popup{z-index:5;} .mp-capas{display:flex;background:#fff;border-radius:10px;box-shadow:0 1px 5px rgba(0,0,0,.3);overflow:hidden;} .mp-capas button{border:0;background:transparent;font:inherit;font-size:12px;font-weight:600;color:#33415a;padding:6px 11px;cursor:pointer;} .mp-capas button+button{border-left:1px solid #e3e8f0;} .mp-capas button.on{background:#3b7be8;color:#fff;}
 .mp-pin{position:relative;border:0;background:none;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;font:inherit;}
 .mp-pin i{display:block;width:16px;height:16px;border-radius:50%;background:var(--c);border:3px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.35);} .mp-pin::before{content:"";position:absolute;top:-9px;width:34px;height:34px;border-radius:50%;background:var(--c);opacity:.22;}
 .mp-pin span{margin-top:3px;font-size:11.5px;font-weight:700;color:#16222c;background:rgba(255,255,255,.92);padding:1px 7px;border-radius:999px;box-shadow:0 1px 3px rgba(0,0,0,.2);white-space:nowrap;}
 .mp-popup .maplibregl-popup-content{padding:0;border-radius:14px;overflow:hidden;box-shadow:0 10px 30px rgba(15,30,60,.28);} .mp-popup .maplibregl-popup-close-button{font-size:18px;color:#fff;z-index:2;right:2px;top:0;text-shadow:0 1px 3px rgba(0,0,0,.6);}
-.mp-pop{width:260px;font-size:12px;color:#16222c;line-height:1.4;font-family:inherit;} .mp-ph{position:relative;height:116px;background:#dfe7f0;display:grid;place-items:center;} .mp-ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.mp-pop{width:260px;font-size:12px;color:#16222c;line-height:1.4;font-family:inherit;} .mp-pop.h{display:grid;grid-template-columns:108px minmax(0,1fr);} .mp-pop.h .mp-ph{height:auto;min-height:100%;} .mp-pop.h .mp-geo{display:none;} .mp-pop.h .mp-b{padding:7px 10px 9px;} .mp-pop.h .mp-fd{left:5px;right:5px;bottom:5px;font-size:10px;text-align:center;padding:2px 4px;}
+.mp-ph{position:relative;height:88px;background:#dfe7f0;display:grid;place-items:center;} .mp-ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
 .mp-sf{display:flex;flex-direction:column;align-items:center;gap:6px;color:#6b7794;text-align:center;padding:0 14px;} .mp-sf svg{width:34px;height:34px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;} .mp-ld{color:#6b7794;}
 .mp-fd{position:absolute;left:8px;bottom:8px;background:rgba(14,38,51,.82);color:#fff;border-radius:6px;padding:2px 8px;font-size:11px;}
-.mp-b{padding:10px 12px 12px;} .mp-t{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;} .mp-t b{font-size:14px;font-weight:700;}
+.mp-b{padding:8px 12px 10px;} .mp-t{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;} .mp-t b{font-size:14px;font-weight:700;}
 .mp-est{border-radius:999px;padding:2px 9px;font-size:11px;font-weight:700;white-space:nowrap;} .mp-est.e-v{background:#e0f3e9;color:#1b7a4d;} .mp-est.e-a{background:#fbf0d3;color:#7a5a00;} .mp-est.e-r{background:#fbe3e0;color:#8f2a22;} .mp-est.e-n{background:#e9edf3;color:#5d6d79;}
-.mp-b table{width:100%;min-width:0 !important;max-width:100%;table-layout:fixed;border-collapse:collapse;font-variant-numeric:tabular-nums;} .mp-b td{white-space:normal !important;overflow:hidden;} .mp-b td:first-child{width:36%;} .mp-b td{padding:3px 0;border-bottom:1px solid #edf1f5;} .mp-b td:first-child{color:#6b7794;} .mp-b td:last-child{text-align:right;font-weight:600;} .mp-b small{font-weight:400;color:#6b7794;} .mp-nd{color:#aab4c4;font-weight:400;}
+.mp-b table{width:100%;min-width:0 !important;max-width:100%;table-layout:fixed;border-collapse:collapse;font-variant-numeric:tabular-nums;} .mp-b td{white-space:normal !important;overflow:hidden;} .mp-b td:first-child{width:36%;} .mp-b td{padding:2px 0;border-bottom:1px solid #edf1f5;} .mp-b td:first-child{color:#6b7794;} .mp-b td:last-child{text-align:right;font-weight:600;} .mp-b small{font-weight:400;color:#6b7794;} .mp-nd{color:#aab4c4;font-weight:400;}
 .mp-ac{display:flex;gap:6px;margin-top:10px;} .mp-ac a,.mp-ac button{flex:1;text-align:center;border:1px solid #cfd9e3;border-radius:8px;padding:6px 0;font:inherit;font-size:12px;font-weight:600;color:#16222c;background:#fff;cursor:pointer;text-decoration:none;} .mp-ac button{background:#16222c;color:#fff;border-color:#16222c;}
 .mp-lista{display:flex;flex-direction:column;gap:8px;} .mp-fila{display:grid;grid-template-columns:auto minmax(0,1fr) auto;grid-template-rows:auto auto;column-gap:10px;row-gap:6px;align-items:center;text-align:left;font:inherit;background:var(--input);border:1px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;color:var(--tx);} .mp-fila:hover{border-color:#3b7be8;}
 .mp-fila.sin{opacity:.7;} .mp-pt{width:10px;height:10px;border-radius:50%;} .mp-fn b{display:block;font-size:13px;font-weight:700;} .mp-fn small{display:block;font-size:11px;color:var(--mut);} .mp-fp{text-align:right;} .mp-fp b{display:block;font-size:15px;font-weight:800;font-variant-numeric:tabular-nums;} .mp-fp small{font-size:10.5px;color:var(--mut);}
@@ -2217,7 +2220,7 @@ select.usr-rol{font:inherit;font-size:12px;padding:5px 8px;border:1px solid var(
 .fm-f{margin-top:12px;border-top:1px solid var(--line);padding-top:10px;} .fm-f>b{font-size:12.5px;} .fm-fg{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px;} .fm-fg input,.fm-fg select{font:inherit;font-size:12.5px;padding:7px 10px;border:1px solid var(--line2);border-radius:8px;background:var(--input);color:var(--tx);min-width:0;} .fm-fg input[type=text]{flex:1 1 150px;}
 .fm-file{position:relative;display:inline-flex;align-items:center;border:1px dashed var(--line2);border-radius:8px;padding:7px 12px;font-size:12.5px;cursor:pointer;color:var(--tx2);background:var(--input);} .fm-file input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;}
 .ub-map{height:min(52vh,420px);border-radius:12px;overflow:hidden;border:1px solid var(--line);}
-.obr-geo{min-width:110px;max-width:130px;}
+.obr-geo{min-width:112px;max-width:136px;} .obr-zn{font:inherit;font-size:12.5px;padding:6px 6px;border:1px solid var(--line2);border-radius:8px;background:var(--input);color:var(--tx);width:70px;} .obr-ll{display:block;margin-top:3px;font-size:10px;color:var(--mut);white-space:nowrap;}
 </style>
 <script>
 document.documentElement.dataset.pane = 'resumen';
@@ -2461,25 +2464,22 @@ document.addEventListener('DOMContentLoaded', function(){ try { var m = document
         </div>
         <div class="legend2"><span><i style="background:var(--navy)"></i>Programado</span><span><i style="background:var(--ok)"></i>Ejecutado real</span><span id="legendProy" style="display:none"><i style="background:repeating-linear-gradient(90deg,var(--ok) 0 5px,transparent 5px 8px);width:16px;height:3px;border-radius:0;align-self:center"></i><b id="legendProyTxt" style="font-weight:inherit">Proyección (Forecast)</b></span><span><i style="background:#6a7090"></i>Fecha de corte</span><span id="legendPlazo" style="display:none"><i style="background:#64748b;opacity:.35"></i>Suspensión de plazo</span><span id="legendFinPlazo" style="display:none"><i style="background:#7c3aed"></i>Inicio y fin de plazo</span></div>
       </div>
-      <div class="chart-card hhr-card" id="matResumen"><div class="rg-msg">Cargando materiales…</div></div>
-      </div>
-
-      <div class="res-top res-mapa">
       <div class="chart-card mapa-card" id="mapaCard">
         <div class="mapa-cab"><div><h3 style="margin:0">Mapa de la obra</h3><p class="hint" id="mapaHint" style="margin:3px 0 0">Toca un puente para ver su resumen</p></div>
           <div class="mapa-leg"><span><i style="background:#2fa66a"></i>En plazo</span><span><i style="background:#e0a526"></i>Atención</span><span><i style="background:#d4453d"></i>Atrasado</span><span><i style="background:#9aa5b8"></i>Sin datos</span></div></div>
+        <div class="mp-chips" id="mapaLista"></div>
         <div class="mapa-box" id="mapaBox"><div class="rg-msg">Cargando el mapa…</div></div>
       </div>
-      <div class="chart-card" id="mapaLista"><div class="rg-msg">Cargando frentes…</div></div>
       </div>
 
-      <div class="res-full">
+      <div class="res-top">
       <div class="chart-card gantt-card" id="ganttCard">
         <div class="gt-cab">
           <div><h3 style="margin:0">Cronograma por puente</h3><p class="hint" id="ganttHint" style="margin:3px 0 0">Barra = plazo programado · verde = avance real · rayado = atraso vs. programado</p></div>
         </div>
         <div id="ganttBody"><div class="rg-msg">Cargando el cronograma…</div></div>
       </div>
+      <div class="chart-card hhr-card" id="matResumen"><div class="rg-msg">Cargando materiales…</div></div>
       </div>
 
       <div class="mat-modal" id="matDetalle" hidden role="dialog" aria-label="Análisis de materiales por elemento"><div class="mat-modal-in"><button type="button" class="mat-modal-x" id="matCerrar" aria-label="Cerrar">✕</button>
@@ -9210,9 +9210,10 @@ function mapaEstilo() {
   return {
     version: 8, name: 'obra',
     glyphs: 'https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf',
-    sources: { omt: { type: 'vector', url: 'https://tiles.openfreemap.org/planet', attribution: '<a href="https://openfreemap.org" target="_blank" rel="noopener">OpenFreeMap</a> © <a href="https://www.openmaptiles.org/" target="_blank" rel="noopener">OpenMapTiles</a> · datos de <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>' } },
+    sources: { sat: { type: 'raster', tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'], tileSize: 256, maxzoom: 19, attribution: 'Imágenes © Esri, Maxar, Earthstar Geographics y la comunidad GIS' }, omt: { type: 'vector', url: 'https://tiles.openfreemap.org/planet', attribution: '<a href="https://openfreemap.org" target="_blank" rel="noopener">OpenFreeMap</a> © <a href="https://www.openmaptiles.org/" target="_blank" rel="noopener">OpenMapTiles</a> · datos de <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>' } },
     layers: [
       { id: 'fondo', type: 'background', paint: { 'background-color': C.bg } },
+      { id: 'sat', type: 'raster', source: 'sat', layout: { visibility: 'none' } },
       { id: 'veg', type: 'fill', source: 'omt', 'source-layer': 'landcover', filter: ['in', 'class', 'wood', 'grass', 'farmland'], paint: { 'fill-color': C.wood, 'fill-opacity': 0.65 } },
       { id: 'parque', type: 'fill', source: 'omt', 'source-layer': 'park', paint: { 'fill-color': C.park } },
       { id: 'agua', type: 'fill', source: 'omt', 'source-layer': 'water', paint: { 'fill-color': C.agua } },
@@ -9229,6 +9230,65 @@ function mapaEstilo() {
       { id: 'lugar', type: 'symbol', source: 'omt', 'source-layer': 'place', filter: ['in', 'class', 'city', 'town', 'village'], layout: { 'text-field': nombre, 'text-font': fuente, 'text-size': ['match', ['get', 'class'], 'city', 14, 'town', 12.5, 11.5], 'text-max-width': 8 }, paint: { 'text-color': C.txt, 'text-halo-color': C.halo, 'text-halo-width': 1.6 } },
     ],
   };
+}
+// ── coordenadas UTM (WGS84 / SIRGAS: Piura está en la zona 17 Sur) ↔ latitud y longitud (serie de Krüger, error de milímetros) ──
+const UTM = (() => {
+  const a = 6378137, f = 1 / 298.257223563, k0 = 0.9996, n = f / (2 - f), n2 = n * n, n3 = n2 * n, rad = Math.PI / 180;
+  const A = a / (1 + n) * (1 + n2 / 4 + n2 * n2 / 64);
+  const al = [n / 2 - 2 * n2 / 3 + 5 * n3 / 16, 13 * n2 / 48 - 3 * n3 / 5, 61 * n3 / 240];
+  const be = [n / 2 - 2 * n2 / 3 + 37 * n3 / 96, n2 / 48 + n3 / 15, 17 * n3 / 480];
+  const de = [2 * n - 2 * n2 / 3 - 2 * n3, 7 * n2 / 3 - 8 * n3 / 5, 56 * n3 / 15];
+  const meridiano = (z) => (z * 6 - 183) * rad;
+  return {
+    zonaDe: (lng) => Math.floor((lng + 180) / 6) + 1,
+    aUtm(lat, lng, zona) {   // devuelve { e, n, zona, sur }
+      const z = zona || UTM.zonaDe(lng), phi = lat * rad, lam = lng * rad - meridiano(z), sur = lat < 0, s = Math.sin(phi), q = 2 * Math.sqrt(n) / (1 + n);
+      const t = Math.sinh(Math.atanh(s) - q * Math.atanh(q * s)), xi0 = Math.atan2(t, Math.cos(lam)), eta0 = Math.atanh(Math.sin(lam) / Math.sqrt(1 + t * t));
+      let xi = xi0, eta = eta0; for (let j = 1; j <= 3; j++) { xi += al[j - 1] * Math.sin(2 * j * xi0) * Math.cosh(2 * j * eta0); eta += al[j - 1] * Math.cos(2 * j * xi0) * Math.sinh(2 * j * eta0); }
+      return { e: 500000 + k0 * A * eta, n: (sur ? 10000000 : 0) + k0 * A * xi, zona: z, sur };
+    },
+    aGeo(e, nn, zona, sur) {   // devuelve { lat, lng } o null si el punto no corresponde a esa zona
+      if (!(e > 100000 && e < 900000) || !(nn >= 0 && nn <= 10000000)) return null;
+      const xi0 = (nn - (sur ? 10000000 : 0)) / (k0 * A), eta0 = (e - 500000) / (k0 * A);
+      let xi = xi0, eta = eta0; for (let j = 1; j <= 3; j++) { xi -= be[j - 1] * Math.sin(2 * j * xi0) * Math.cosh(2 * j * eta0); eta -= be[j - 1] * Math.cos(2 * j * xi0) * Math.sinh(2 * j * eta0); }
+      const chi = Math.asin(Math.sin(xi) / Math.cosh(eta)); let phi = chi; for (let j = 1; j <= 3; j++) phi += de[j - 1] * Math.sin(2 * j * chi);
+      const lam = meridiano(zona) + Math.atan2(Math.sinh(eta), Math.cos(xi));
+      const lat = phi / rad, lng = lam / rad; return (isFinite(lat) && isFinite(lng) && Math.abs(lat) <= 90) ? { lat, lng } : null;
+    },
+  };
+})();
+const utmEtq = (zona, sur) => `${zona}${sur ? 'S' : 'N'}`;
+const utmDeZona = (s) => { const m = String(s || '').match(/^(\d{1,2})([NS])$/i); return m ? { zona: +m[1], sur: m[2].toUpperCase() === 'S' } : { zona: 17, sur: true }; };
+const utmNum = (v) => Number(v).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const utmDe = (lat, lng) => { if (lat == null || lat === '' || lng == null || lng === '') return null; const u = UTM.aUtm(+lat, +lng); return { ...u, etq: utmEtq(u.zona, u.sur) }; };
+const MAPA_VEC = ['veg', 'parque', 'agua', 'rio', 'lim', 'via-menor-b', 'via-menor', 'via-sec-b', 'via-sec', 'via-mayor-b', 'via-mayor'], MAPA_ROT = ['via-ref', 'agua-n', 'lugar'];
+const mapaCapaGuardada = () => { try { const v = localStorage.getItem('obra-mapa-capa'); return ['mapa', 'sat', 'hib'].includes(v) ? v : 'mapa'; } catch (e) { return 'mapa'; } };
+function mapaCapa(map, modo) {
+  const hecho = () => {
+    if (!map._orig) { map._orig = {}; MAPA_ROT.forEach(id => { map._orig[id] = [map.getPaintProperty(id, 'text-color'), map.getPaintProperty(id, 'text-halo-color')]; }); }
+    const sat = modo !== 'mapa', vis = (id, v) => { try { map.setLayoutProperty(id, 'visibility', v ? 'visible' : 'none'); } catch (e) {} };
+    vis('sat', sat);
+    MAPA_VEC.forEach(id => vis(id, modo === 'mapa'));
+    if (modo === 'hib') { vis('via-mayor', true); try { map.setPaintProperty('via-mayor', 'line-width', ['interpolate', ['exponential', 1.5], ['zoom'], 6, 1, 14, 4]); map.setPaintProperty('via-mayor', 'line-opacity', 0.9); } catch (e) {} }
+    else { try { map.setPaintProperty('via-mayor', 'line-width', ['interpolate', ['exponential', 1.5], ['zoom'], 6, 1.6, 14, 9.5]); map.setPaintProperty('via-mayor', 'line-opacity', 1); } catch (e) {} }
+    MAPA_ROT.forEach(id => { vis(id, modo !== 'sat'); try { map.setPaintProperty(id, 'text-color', modo === 'hib' ? '#ffffff' : map._orig[id][0]); map.setPaintProperty(id, 'text-halo-color', modo === 'hib' ? 'rgba(10,20,30,.85)' : map._orig[id][1]); } catch (e) {} });
+    map._capa = modo; if (map._capaBtns) map._capaBtns.forEach(b => b.classList.toggle('on', b.dataset.capa === modo));
+  };
+  const intento = () => { let listo = false; try { listo = !!map.getLayer('sat'); } catch (e) {} if (listo) hecho(); else map.once('styledata', intento); };   // «load» puede tardar (espera todos los mosaicos): basta con que el estilo ya exista
+  intento();
+}
+function mapaControlCapas(map) {
+  const ctl = {
+    onAdd() {
+      const d = document.createElement('div'); d.className = 'maplibregl-ctrl mp-capas';
+      d.innerHTML = '<button type="button" data-capa="mapa">Mapa</button><button type="button" data-capa="sat">Satélite</button><button type="button" data-capa="hib">Híbrido</button>';
+      map._capaBtns = [...d.querySelectorAll('button')];
+      d.addEventListener('click', (e) => { const b = e.target.closest('[data-capa]'); if (!b) return; try { localStorage.setItem('obra-mapa-capa', b.dataset.capa); } catch (x) {} mapaCapa(map, b.dataset.capa); });
+      this.d = d; return d;
+    },
+    onRemove() { if (this.d && this.d.parentNode) this.d.parentNode.removeChild(this.d); },
+  };
+  map.addControl(ctl, 'top-right'); mapaCapa(map, mapaCapaGuardada());
 }
 const mapaCoord = (lat, lng) => `${Math.abs(lat).toFixed(5)}° ${lat < 0 ? 'S' : 'N'} · ${Math.abs(lng).toFixed(5)}° ${lng < 0 ? 'O' : 'E'}`;
 // avance y presupuesto de cada frente al mes elegido (la misma cuenta de «Avance por frente»)
@@ -9273,11 +9333,9 @@ async function mapaRender(periodo) {
   const M = mapaMetricas(MAPA.periodo), conGeo = MAPA.F.filter(f => f.lat != null && f.lng != null);
   MAPA.M = M; MAPA.conGeo = conGeo;
   // lista de frentes (también es el respaldo si no hay conexión al mapa)
-  $('#mapaLista').innerHTML = `<h3 style="margin:0 0 2px">Frentes</h3><p class="hint" style="margin:0 0 10px">${conGeo.length} de ${MAPA.F.length} con ubicación</p><div class="mp-lista">` + MAPA.F.map(f => {
+  $('#mapaLista').innerHTML = MAPA.F.map(f => {
     const m = M[f.codigo], e = mapaEstado(m), geo = f.lat != null && f.lng != null;
-    return `<button type="button" class="mp-fila${geo ? '' : ' sin'}" data-mp-ir="${f.id}"><span class="mp-pt" style="background:${MAPA_COL[e.k]}"></span><span class="mp-fn"><b>${esc(f.nombre)}</b><small>${geo ? (f.km ? esc(f.km) : mapaCoord(+f.lat, +f.lng)) : 'Sin ubicación registrada'}</small></span>
-      <span class="mp-fp"><b>${m ? (m.pe * 100).toFixed(0) + '%' : '—'}</b><small>prog. ${m ? (m.pp * 100).toFixed(0) + '%' : '—'}</small></span>
-      <span class="mp-bar"><i style="width:${m ? Math.min(100, m.pp * 100) : 0}%;background:#d5e0f2"></i><i style="width:${m ? Math.min(100, m.pe * 100) : 0}%;background:${MAPA_COL[e.k]}"></i></span></button>`; }).join('') + '</div>';
+    return `<button type="button" class="mp-ch${geo ? '' : ' sin'}" data-mp-ir="${f.id}" title="${geo ? 'Ver ' + esc(f.nombre) + ' en el mapa' : 'Sin ubicación registrada'}"><span class="mp-pt" style="background:${MAPA_COL[e.k]}"></span><b>${esc(String(f.nombre).replace(/^Puente\s+/i, ''))}</b><em>${m ? (m.pe * 100).toFixed(0) + '%' : '—'}</em></button>`; }).join('');
   $('#mapaHint').textContent = MAPA.sinSql ? 'Falta correr frente_mapa.sql en la base para registrar la ubicación.' : conGeo.length ? 'Toca un puente para ver su resumen' : (AUTH.admin ? 'Registra las coordenadas en Administración › Obra y componentes.' : 'Aún no hay coordenadas registradas.');
   try { await mapaCargarLib(); } catch (e) { box.innerHTML = `<div class="rg-msg">${esc(e.message)} La lista de frentes sigue disponible.</div>`; return; }
   if (orden !== MAPA.orden) return;
@@ -9286,6 +9344,7 @@ async function mapaRender(periodo) {
     const c = conGeo.length ? [conGeo.reduce((s, f) => s + +f.lng, 0) / conGeo.length, conGeo.reduce((s, f) => s + +f.lat, 0) / conGeo.length] : [-80.2, -5.1];
     MAPA.map = new maplibregl.Map({ container: box, style: mapaEstilo(), center: c, zoom: conGeo.length ? 9 : 7.5, attributionControl: { compact: true }, cooperativeGestures: window.matchMedia('(pointer:coarse)').matches });
     MAPA.map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-left');
+    mapaControlCapas(MAPA.map);
     MAPA.map.on('error', () => {});
   }
   mapaPines();
@@ -9307,19 +9366,19 @@ function mapaPines() {
 async function mapaGlobo(fid, refrescar) {
   const f = MAPA.F.find(x => x.id === fid); if (!f || !MAPA.map) return;
   const m = MAPA.M[f.codigo], e = mapaEstado(m), foto = mapaFotoDe(f.id), geo = f.lat != null && f.lng != null;
-  const fila = (k, v) => `<tr><td>${k}</td><td>${v == null || v === '' ? '<span class="mp-nd">—</span>' : v}</td></tr>`;
+  const W0 = MAPA.map.getContainer().clientWidth, ancho = W0 >= 560;   // mapa ancho: globo vertical a un lado del pin; angosto: globo horizontal encima del pin
+  const fila = (k, v, cl) => `<tr${cl ? ` class="${cl}"` : ''}><td>${k}</td><td>${v == null || v === '' ? '<span class="mp-nd">—</span>' : v}</td></tr>`;
   const fechaF = (d) => String(d).slice(0, 10).split('-').reverse().join('/');
-  const html = `<div class="mp-pop"><div class="mp-ph" id="mpFoto">${foto ? '<span class="mp-ld">Cargando foto…</span>' : '<div class="mp-sf"><svg viewBox="0 0 24 24"><path d="M3 15h18M5 15v4M19 15v4M4 15c2-6 14-6 16 0M8 15V9M12 15V7M16 15V9"/></svg><span>Sin foto' + (AUTH.admin ? ' · súbela en Obra y componentes' : '') + '</span></div>'}
+  const html = `<div class="mp-pop${ancho ? '' : ' h'}" style="${ancho ? '' : 'width:' + Math.min(W0 - 24, 400) + 'px'}"><div class="mp-ph" id="mpFoto">${foto ? '<span class="mp-ld">Cargando foto…</span>' : '<div class="mp-sf"><svg viewBox="0 0 24 24"><path d="M3 15h18M5 15v4M19 15v4M4 15c2-6 14-6 16 0M8 15V9M12 15V7M16 15V9"/></svg><span>Sin foto' + (AUTH.admin ? ' · súbela en Obra y componentes' : '') + '</span></div>'}
       ${foto ? `<span class="mp-fd">${foto.tipo === 'avance' ? 'Reporte' : 'Foto referencial'} · ${fechaF(foto.fecha)}</span>` : ''}</div>
     <div class="mp-b"><div class="mp-t"><b>${esc(f.nombre)}</b><span class="mp-est e-${e.k}">${esc(e.txt)}</span></div>
-      <table>${fila('Avance', m ? `${(m.pe * 100).toFixed(1)}% <small>de ${(m.pp * 100).toFixed(1)}% prog.</small>` : null)}${fila('Progresiva', f.km ? esc(f.km) : null)}${fila('Coordenadas', geo ? mapaCoord(+f.lat, +f.lng) : null)}${fila('Longitud', f.largo_m != null ? `${metN(f.largo_m, 1)} m` : null)}${fila('Presupuesto', m ? `S/ ${metN(m.base / 1e6, 2)} M` : null)}</table>
+      <table>${fila('Avance', m ? `${(m.pe * 100).toFixed(1)}% <small>de ${(m.pp * 100).toFixed(1)}% prog.</small>` : null)}${fila('Progresiva', f.km ? esc(f.km) : null)}${fila('UTM ' + (geo ? utmDe(f.lat, f.lng).etq : ''), geo ? (u => `E ${metN(u.e, 0)}<br>N ${metN(u.n, 0)}`)(utmDe(f.lat, f.lng)) : null)}${fila('Geográficas', geo ? `<small>${mapaCoord(+f.lat, +f.lng)}</small>` : null, 'mp-geo')}${fila('Longitud', f.largo_m != null ? `${metN(f.largo_m, 1)} m` : null)}${fila('Presupuesto', m ? `S/ ${metN(m.base / 1e6, 2)} M` : null)}</table>
       <div class="mp-ac"><a href="visor/?proyecto=${encodeURIComponent(f.codigo)}" onclick="this.href='visor/?proyecto=${encodeURIComponent(f.codigo)}&v='+Date.now()">Ver en 3D</a><button type="button" data-mp-fotos="${f.id}">Fotos</button></div></div></div>`;
   if (MAPA.popup) { MAPA.popup._fid = null; MAPA.popup.remove(); }
-  const ancho = MAPA.map.getContainer().clientWidth >= 520;   // en pantalla ancha el globo sale a un lado del pin; en angosta, debajo
-  MAPA.popup = new maplibregl.Popup({ anchor: ancho ? 'left' : 'top', offset: ancho ? { left: [22, 0] } : { top: [0, 18] }, maxWidth: '270px', className: 'mp-popup', closeButton: true, focusAfterOpen: false }).setLngLat([+f.lng, +f.lat]).setHTML(html).addTo(MAPA.map);
+  MAPA.popup = new maplibregl.Popup({ anchor: ancho ? 'left' : 'bottom', offset: ancho ? { left: [22, 0] } : { bottom: [0, -18] }, maxWidth: ancho ? '270px' : '410px', className: 'mp-popup', closeButton: true, focusAfterOpen: false }).setLngLat([+f.lng, +f.lat]).setHTML(html).addTo(MAPA.map);
   MAPA.popup._fid = fid;
   MAPA.popup.on('close', () => { if (MAPA.popup && MAPA.popup._fid === fid) MAPA.popup._fid = null; });
-  if (!refrescar) { try { const W = MAPA.map.getContainer().clientWidth, H = MAPA.map.getContainer().clientHeight; MAPA.map.flyTo({ center: [+f.lng, +f.lat], zoom: Math.max(MAPA.map.getZoom(), 10.5), offset: ancho ? [-W * 0.2, 0] : [0, -H * 0.3], duration: 650 }); } catch (x) {} }
+  if (!refrescar) { try { const W = MAPA.map.getContainer().clientWidth, H = MAPA.map.getContainer().clientHeight; MAPA.map.flyTo({ center: [+f.lng, +f.lat], zoom: Math.max(MAPA.map.getZoom(), 10.5), offset: ancho ? [-W * 0.2, 0] : [0, H * 0.24], duration: 650 }); } catch (x) {} }
   if (foto) mapaImg(foto.id).then(src => { const h = document.getElementById('mpFoto'); if (!h) return; const ld = h.querySelector('.mp-ld'); if (src && ld) ld.outerHTML = `<img src="${esc(src)}" alt="Foto de ${esc(f.nombre)}">`; else if (ld) ld.textContent = 'Foto no disponible'; }).catch(() => {});
 }
 // ── fotos del frente: galería para todos; subir y eliminar solo el administrador ──
@@ -9394,23 +9453,27 @@ async function mapaUbicarAbrir(pid) {
   let pos = tiene ? [+f.lng, +f.lat] : null;
   m.innerHTML = `<div class="fm-in"><div class="fm-h"><b>Ubicar · ${esc(f.nombre)}</b><button type="button" class="fm-x" id="ubX" aria-label="Cerrar">✕</button></div>
     <p class="hint" style="margin:0 0 8px">Toca el mapa donde está el puente. Puedes ajustar los números a mano.</p><div class="ub-map" id="ubMapa"></div>
-    <div class="fm-fg" style="margin-top:10px"><input type="number" step="0.000001" id="ubLat" placeholder="Latitud" value="${tiene ? esc(f.lat) : ''}" aria-label="Latitud"><input type="number" step="0.000001" id="ubLng" placeholder="Longitud" value="${tiene ? esc(f.lng) : ''}" aria-label="Longitud"><button class="btn" type="button" id="ubOk">Guardar ubicación</button><button class="btn-sec" type="button" id="ubNo">Cancelar</button></div></div>`;
+    <div class="fm-fg" style="margin-top:10px"><input type="number" step="0.01" id="ubE" placeholder="Este UTM" aria-label="Este UTM"><input type="number" step="0.01" id="ubN" placeholder="Norte UTM" aria-label="Norte UTM"><select id="ubZ" aria-label="Zona UTM">${['17S', '18S', '19S', '17N', '18N', '19N'].map(z => `<option value="${z}"${z === ((tiene && utmDe(f.lat, f.lng).etq) || OBR.zonaUlt || '17S') ? ' selected' : ''}>${z}</option>`).join('')}</select></div>
+    <div class="fm-fg" style="margin-top:8px"><input type="number" step="0.000001" id="ubLat" placeholder="Latitud" value="${tiene ? esc(f.lat) : ''}" aria-label="Latitud"><input type="number" step="0.000001" id="ubLng" placeholder="Longitud" value="${tiene ? esc(f.lng) : ''}" aria-label="Longitud"><button class="btn" type="button" id="ubOk">Guardar ubicación</button><button class="btn-sec" type="button" id="ubNo">Cancelar</button></div></div>`;
   m.querySelector('#ubX').onclick = m.querySelector('#ubNo').onclick = cerrar;
   const otros = (OBR.f || []).filter(x => x.id !== pid && x.lat != null && x.lat !== '' && x.lng != null && x.lng !== '');
   const centro = pos || (otros.length ? [+otros[0].lng, +otros[0].lat] : [-80.2, -5.1]);
   mp = new maplibregl.Map({ container: m.querySelector('#ubMapa'), style: mapaEstilo(), center: centro, zoom: pos ? 13 : (otros.length ? 11 : 8), attributionControl: { compact: true } });
   mp.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-left');
+  mapaControlCapas(mp);
   let pin = null;
-  const poner = (ll, mover) => { pos = ll; m.querySelector('#ubLat').value = ll[1].toFixed(6); m.querySelector('#ubLng').value = ll[0].toFixed(6); if (!pin) { const el = document.createElement('div'); el.className = 'mp-pin'; el.style.setProperty('--c', '#3b7be8'); el.innerHTML = '<i></i>'; pin = new maplibregl.Marker({ element: el, draggable: true }).setLngLat(ll).addTo(mp); pin.on('dragend', () => { const q = pin.getLngLat(); poner([q.lng, q.lat], false); }); } else pin.setLngLat(ll); if (mover) mp.easeTo({ center: ll, duration: 300 }); };
+  const poner = (ll, mover) => { pos = ll; m.querySelector('#ubLat').value = ll[1].toFixed(6); m.querySelector('#ubLng').value = ll[0].toFixed(6); { const zs = utmDeZona(m.querySelector('#ubZ').value), u = UTM.aUtm(ll[1], ll[0], zs.zona); m.querySelector('#ubE').value = (Math.round(u.e * 100) / 100).toString(); m.querySelector('#ubN').value = (Math.round(u.n * 100) / 100).toString(); } if (!pin) { const el = document.createElement('div'); el.className = 'mp-pin'; el.style.setProperty('--c', '#3b7be8'); el.innerHTML = '<i></i>'; pin = new maplibregl.Marker({ element: el, draggable: true }).setLngLat(ll).addTo(mp); pin.on('dragend', () => { const q = pin.getLngLat(); poner([q.lng, q.lat], false); }); } else pin.setLngLat(ll); if (mover) mp.easeTo({ center: ll, duration: 300 }); };
   otros.forEach(x => { const el = document.createElement('div'); el.className = 'mp-pin'; el.style.setProperty('--c', '#9aa5b8'); el.innerHTML = `<i></i><span>${esc(String(x.nombre).replace(/^Puente\s+/i, ''))}</span>`; new maplibregl.Marker({ element: el }).setLngLat([+x.lng, +x.lat]).addTo(mp); });
   if (pos) poner(pos, false);
   mp.on('click', (e) => poner([e.lngLat.lng, e.lngLat.lat], false));
   const manual = () => { const la = parseFloat(m.querySelector('#ubLat').value), lo = parseFloat(m.querySelector('#ubLng').value); if (isFinite(la) && isFinite(lo)) poner([lo, la], true); };
   m.querySelector('#ubLat').onchange = m.querySelector('#ubLng').onchange = manual;
+  const manualUtm = () => { const e = parseFloat(m.querySelector('#ubE').value), nn = parseFloat(m.querySelector('#ubN').value); if (!isFinite(e) || !isFinite(nn)) return; const z = utmDeZona(m.querySelector('#ubZ').value), g = UTM.aGeo(e, nn, z.zona, z.sur); if (!g) { toast('El Este y el Norte no corresponden a esa zona.', false, 'obr'); return; } poner([g.lng, g.lat], true); };
+  m.querySelector('#ubE').onchange = m.querySelector('#ubN').onchange = m.querySelector('#ubZ').onchange = manualUtm;
   m.querySelector('#ubOk').onclick = async () => {
     const la = parseFloat(m.querySelector('#ubLat').value), lo = parseFloat(m.querySelector('#ubLng').value);
     if (!isFinite(la) || !isFinite(lo)) { toast('Indica la latitud y la longitud, o toca el mapa.', false, 'obr'); return; }
-    try { await preRpc('proyecto_guardar', { p_id: pid, p: { lat: la.toFixed(6), lng: lo.toFixed(6) } }); f.lat = la.toFixed(6); f.lng = lo.toFixed(6); toast('Ubicación guardada.', true, 'obr'); cerrar(); MAPA.ajustado = false; MAPA.cargado = false; if (typeof obrPintar === 'function' && document.documentElement.dataset.pane === 'obra') obrPintar(); mapaRender().catch(() => {}); }
+    try { await preRpc('proyecto_guardar', { p_id: pid, p: { lat: la.toFixed(6), lng: lo.toFixed(6) } }); f.lat = la.toFixed(6); f.lng = lo.toFixed(6); OBR.zonaUlt = m.querySelector('#ubZ').value; toast('Ubicación guardada.', true, 'obr'); cerrar(); MAPA.ajustado = false; MAPA.cargado = false; if (typeof obrPintar === 'function' && document.documentElement.dataset.pane === 'obra') obrPintar(); mapaRender().catch(() => {}); }
     catch (er) { toast(`No se pudo guardar: ${esc(er.message)}${/function|schema cache|404|lat/i.test(er.message) ? ' · ¿falta correr obra_admin.sql?' : ''}`, false, 'obr'); }
   };
   setTimeout(() => { try { mp && mp.resize(); } catch (e) {} }, 80);
@@ -9495,17 +9558,18 @@ function obrPintar() {
       <div class="obr-ro"><span><small>Moneda</small><b>${esc(o.moneda || 'PEN')}</b></span><span><small>Inicio contractual</small><b>${obrF(o.fecha_inicio)}</b></span><span><small>Fin contractual</small><b>${obrF(o.fecha_fin)}</b></span>
         <em class="hint">Las fechas contractuales y los montos se manejan en «Contrato y líneas base» y «Plazo y ampliaciones», para que la Curva S y los plazos no cambien por error.</em></div>
       <div class="sug-acc"><button class="btn" type="submit" id="obGuardar">Guardar cambios</button><button class="btn-sec" type="button" id="obDeshacer">Descartar</button></div></form>
-    <div class="vl-card"><div class="lb-cab"><div><h3 style="margin:0 0 3px">Frentes de la obra</h3><p class="hint" style="margin:0">Cambia el nombre, el kilómetro o el orden en que se muestran; se guarda al salir de cada casilla. Un frente nuevo nace vacío: su modelo 3D, presupuesto y cronograma se cargan después.</p></div>
+    <div class="vl-card"><div class="lb-cab"><div><h3 style="margin:0 0 3px">Frentes de la obra</h3><p class="hint" style="margin:0">Cambia el nombre, el kilómetro o el orden en que se muestran; se guarda al salir de cada casilla. Un frente nuevo nace vacío: su modelo 3D, presupuesto y cronograma se cargan después. Las coordenadas se escriben en <b>UTM (WGS84 / SIRGAS)</b>; Piura está en la zona 17S. Si tu plano está en PSAD-56, la posición saldría corrida unos 200 m.</p></div>
         <button type="button" class="btn-sec" data-obr-frente title="Agregar un frente a esta obra">＋ Nuevo frente</button></div>
-      <div class="vl-tw"><table class="vl-tb lb-tb obr-tb"><thead><tr><th class="ctr">Orden</th><th class="l">Nombre</th><th class="l">Progresiva</th><th class="l">Latitud</th><th class="l">Longitud</th><th class="l">Largo (m)</th><th class="ctr">Tipo</th><th class="ctr">Código</th><th class="ctr">Mapa y fotos</th></tr></thead>
+      <div class="vl-tw"><table class="vl-tb lb-tb obr-tb"><thead><tr><th class="ctr">Orden</th><th class="l">Nombre</th><th class="l">Progresiva</th><th class="l">Este (m)</th><th class="l">Norte (m)</th><th class="l">Zona</th><th class="l">Largo (m)</th><th class="ctr">Tipo</th><th class="ctr">Código</th><th class="ctr">Mapa y fotos</th></tr></thead>
         <tbody>${OBR.f.map(f => `<tr data-obr-fr="${f.id}"><td class="ctr"><input type="number" min="1" max="99" step="1" class="obr-in obr-n" data-k="orden" value="${f.orden ?? ''}" aria-label="Orden de ${esc(f.nombre)}"></td>
           <td class="l"><input type="text" class="obr-in" data-k="nombre" maxlength="120" value="${esc(f.nombre)}" aria-label="Nombre del frente"></td>
           <td class="l"><input type="text" class="obr-in obr-km" data-k="km" maxlength="40" value="${esc(f.km ?? '')}" placeholder="km 00+000" aria-label="Progresiva de ${esc(f.nombre)}"></td>
-          <td class="l"><input type="number" step="0.000001" min="-90" max="90" inputmode="decimal" class="obr-in obr-geo" data-k="lat" value="${esc(f.lat ?? '')}" placeholder="-5.100000" aria-label="Latitud de ${esc(f.nombre)}"></td>
-          <td class="l"><input type="number" step="0.000001" min="-180" max="180" inputmode="decimal" class="obr-in obr-geo" data-k="lng" value="${esc(f.lng ?? '')}" placeholder="-80.150000" aria-label="Longitud de ${esc(f.nombre)}"></td>
+          ${(() => { const u = utmDe(f.lat, f.lng), zs = u ? u.etq : (OBR.zonaUlt || '17S'); return `<td class="l"><input type="number" step="0.01" min="100000" max="900000" inputmode="decimal" class="obr-in obr-geo" data-k="utm_e" value="${u ? (Math.round(u.e * 100) / 100) : ''}" placeholder="594251.00" aria-label="Este UTM de ${esc(f.nombre)}"></td>
+          <td class="l"><input type="number" step="0.01" min="0" max="10000000" inputmode="decimal" class="obr-in obr-geo" data-k="utm_n" value="${u ? (Math.round(u.n * 100) / 100) : ''}" placeholder="9436102.00" aria-label="Norte UTM de ${esc(f.nombre)}"></td>
+          <td class="l"><select class="obr-in obr-zn" data-k="utm_z" aria-label="Zona UTM de ${esc(f.nombre)}">${['17S', '18S', '19S', '17N', '18N', '19N'].map(z => `<option value="${z}"${z === zs ? ' selected' : ''}>${z}</option>`).join('')}</select><small class="obr-ll">${u ? mapaCoord(+f.lat, +f.lng) : ''}</small></td>`; })()}
           <td class="l"><input type="number" step="0.1" min="0" inputmode="decimal" class="obr-in obr-n" style="width:78px" data-k="largo_m" value="${esc(f.largo_m ?? '')}" placeholder="0.0" aria-label="Largo de ${esc(f.nombre)}"></td>
           <td class="ctr"><span class="lb-sub" style="margin:0">${esc(f.tipo || '')}</span></td><td class="ctr"><code>${esc(f.codigo)}</code></td>
-          <td class="ctr"><div class="ctv-ac" style="justify-content:center"><button type="button" class="icon-btn" data-mapa-ubicar="${f.id}" title="Ubicar en el mapa" aria-label="Ubicar en el mapa"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg></button><button type="button" class="icon-btn" data-mapa-fotos="${f.id}" title="Fotos del frente" aria-label="Fotos del frente"><svg viewBox="0 0 24 24"><path d="M4 8h3l1.5-2h7L17 8h3v11H4Z"/><circle cx="12" cy="13" r="3.5"/></svg></button></div></td></tr>`).join('') || '<tr><td colspan="9" class="l">Sin frentes.</td></tr>'}</tbody></table></div></div>`;
+          <td class="ctr"><div class="ctv-ac" style="justify-content:center"><button type="button" class="icon-btn" data-mapa-ubicar="${f.id}" title="Ubicar en el mapa" aria-label="Ubicar en el mapa"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg></button><button type="button" class="icon-btn" data-mapa-fotos="${f.id}" title="Fotos del frente" aria-label="Fotos del frente"><svg viewBox="0 0 24 24"><path d="M4 8h3l1.5-2h7L17 8h3v11H4Z"/><circle cx="12" cy="13" r="3.5"/></svg></button></div></td></tr>`).join('') || '<tr><td colspan="10" class="l">Sin frentes.</td></tr>'}</tbody></table></div></div>`;
 }
 // reduce la imagen elegida para que el logo pese pocos KB
 function obrLogoLeer(file) {
@@ -9582,6 +9646,22 @@ function obrNuevoFrenteAbrir() {
     catch (er) { btn.disabled = false; toast(`No se pudo agregar: ${esc(er.message)}${/function|schema cache|404/i.test(er.message) ? ' · ¿falta correr obra_admin.sql?' : ''}`, false, 'obr'); }
   };
 }
+async function obrUtmGuardar(tr, f) {
+  const E = tr.querySelector('[data-k=utm_e]').value.trim(), N = tr.querySelector('[data-k=utm_n]').value.trim(), Z = tr.querySelector('[data-k=utm_z]').value, ll = tr.querySelector('.obr-ll');
+  try {
+    if (E === '' && N === '') {
+      if (f.lat == null || f.lat === '') return;
+      await preRpc('proyecto_guardar', { p_id: f.id, p: { lat: '', lng: '' } }); f.lat = f.lng = null; if (ll) ll.textContent = ''; toast('Ubicación borrada.', true, 'obr');
+    } else if (E === '' || N === '') return;   // falta una de las dos: espera
+    else {
+      const { zona, sur } = utmDeZona(Z), g = UTM.aGeo(+E, +N, zona, sur);
+      if (!g) { toast(`El Este y el Norte no corresponden a la zona ${Z}. Revisa los números.`, false, 'obr'); return; }
+      await preRpc('proyecto_guardar', { p_id: f.id, p: { lat: g.lat.toFixed(6), lng: g.lng.toFixed(6) } }); f.lat = g.lat.toFixed(6); f.lng = g.lng.toFixed(6); OBR.zonaUlt = Z;
+      if (ll) ll.textContent = mapaCoord(g.lat, g.lng); toast('Ubicación guardada.', true, 'obr');
+    }
+    MAPA.cargado = false; MAPA.ajustado = false;
+  } catch (er) { toast(`No se pudo guardar: ${esc(er.message)}${/function|schema cache|404|lat/i.test(er.message) ? ' · ¿falta correr obra_admin.sql?' : ''}`, false, 'obr'); }
+}
 (function () {
   const box = $('#obrPanel'); if (!box) return;
   box.addEventListener('click', async (e) => {
@@ -9612,6 +9692,7 @@ function obrNuevoFrenteAbrir() {
     const inp = e.target.closest('.obr-in'); if (!inp) return;
     const tr = inp.closest('tr'), f = OBR.f.find(x => x.id === tr.dataset.obrFr); if (!f) return;
     const k = inp.dataset.k, val = inp.value.trim();
+    if (k.startsWith('utm_')) return obrUtmGuardar(tr, f);
     if (k === 'nombre' && !val) { inp.value = f.nombre; toast('El nombre del frente no puede quedar vacío.', false, 'obr'); return; }
     if (String(f[k] ?? '') === val) return;
     try { await preRpc('proyecto_guardar', { p_id: f.id, p: { [k]: val } }); f[k] = k === 'orden' ? (val === '' ? null : +val) : val; toast('Frente guardado. Recarga el panel para ver el cambio en todo el sitio.', true, 'obr'); try { localStorage.removeItem('obra-cache-resumen'); } catch (x) {} }
