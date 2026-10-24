@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="build" content="20261023151327">
+<meta name="build" content="20261023192800">
 <script>/* auto-actualizar: compara el sello de esta copia con el del servidor y recarga una sola vez */
 (function(){try{if(!/^https?:/.test(location.protocol))return;var me=document.querySelector('meta[name=build]').content;if(me==='0')return;
 fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'}).then(function(r){return r.text()}).then(function(h){
@@ -2221,6 +2221,65 @@ select.usr-rol{font:inherit;font-size:12px;padding:5px 8px;border:1px solid var(
 .fm-file{position:relative;display:inline-flex;align-items:center;border:1px dashed var(--line2);border-radius:8px;padding:7px 12px;font-size:12.5px;cursor:pointer;color:var(--tx2);background:var(--input);} .fm-file input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;}
 .ub-map{height:min(52vh,420px);border-radius:12px;overflow:hidden;border:1px solid var(--line);}
 .obr-geo{min-width:112px;max-width:136px;} .obr-zn{font:inherit;font-size:12.5px;padding:6px 6px;border:1px solid var(--line2);border-radius:8px;background:var(--input);color:var(--tx);width:70px;} .obr-ll{display:block;margin-top:3px;font-size:10px;color:var(--mut);white-space:nowrap;}
+
+/* SPI con medidor; Curva S más compacta; mapa sin fichas de avance */
+.kpis .card.kpi-gauge{grid-template-columns:minmax(0,1fr) auto;column-gap:6px;padding-right:10px;}
+.kpi-gauge .k3-ic{display:none;} .kpi-gauge .label,.kpi-gauge .value,.kpi-gauge .sub2{grid-column:1;}
+.kpi-gauge .value{color:var(--ka) !important;} .kpi-gauge .value small{font-size:11px;font-weight:700;color:var(--mut);margin-left:8px;letter-spacing:0;}
+.kpis .card.kpi-gauge{padding-top:8px;padding-bottom:8px;}
+.k3-gauge{grid-column:2;grid-row:1 / span 3;width:136px;height:80px;align-self:center;position:relative;overflow:hidden;} .k3-gauge>div{position:absolute;inset:0;} #kgOv,#kgSvg{pointer-events:none;} #kgSvg svg{display:block;width:100%;height:100%;}
+.k3-mini{display:none;grid-column:3;grid-row:1 / span 3;width:78px;height:40px;align-self:center;} .k3-mini svg{display:block;width:100%;height:100%;}
+.pane[data-pane="resumen"] .kpis{container-type:inline-size;container-name:kpis;}
+
+.kpis .card.kpi-gauge .bar{display:none !important;position:absolute;grid-column:auto;grid-row:auto;align-self:auto;left:14px !important;right:14px !important;bottom:11px !important;width:auto;height:5px;margin:0;border-radius:3px;overflow:visible;background:linear-gradient(90deg,#d4453d 0 33.3%,#e5a22b 33.3% 46.7%,#7ccf9f 46.7% 63%,#1f8a57 63%);opacity:1;} .kpis .card.kpi-gauge .bar i{position:absolute;top:-3.5px;width:12px;height:12px;margin-left:-6px;border-radius:50%;background:var(--card,#fff);border:3px solid var(--tx,#16222c);box-shadow:0 1px 3px rgba(0,0,0,.3);display:block;}
+@media (max-width:1100px){.k3-gauge{width:120px;height:72px;}}
+@media (max-width:560px){.k3-gauge,.k3-mini{display:none !important;} .kpis .card.kpi-gauge{grid-template-columns:minmax(0,1fr);padding-bottom:10px;} .kpi-gauge .label,.kpi-gauge .value,.kpi-gauge .sub2{grid-column:1;} .kpi-gauge .sub2{white-space:normal;} .kpi-gauge .k3-pts{display:block;margin-top:2px;}}
+.k3-est{display:inline-block;font-size:10.5px;font-weight:800;color:var(--c);background:color-mix(in srgb,var(--c) 14%,transparent);border-radius:999px;padding:2px 9px;} .k3-pts{font-size:10.5px;font-weight:600;color:var(--mut);white-space:nowrap;}
+.kpis .card.kpi-gauge::before{background:transparent;}
+.res-curva #btnDatos{width:32px;height:32px;padding:0;justify-content:center;border-radius:10px;} .res-curva #btnDatos svg{width:17px;height:17px;}
+.cv-mes{height:32px;padding:0 2px 0 10px;gap:4px;} .cv-mes svg{width:15px;height:15px;color:var(--mut);flex:none;} .cv-mes select{height:26px;padding-left:4px;font-size:12.5px;}
+.cv-cab{gap:6px 10px;align-items:flex-start;} .cv-ctl{gap:6px;flex-wrap:nowrap;}
+.mp-chips{display:none !important;}
+
+/* fila de KPI con 5 tarjetas (los montos en millones ya no necesitan tanto ancho) */
+@media (min-width:1520px){.pane[data-pane="resumen"] .kpis{grid-template-columns:repeat(5,minmax(0,1fr));}}
+@media (min-width:1101px) and (max-width:1519px){.pane[data-pane="resumen"] .kpis{grid-template-columns:repeat(3,minmax(0,1fr));} .pane[data-pane="resumen"] .kpis > .kpi-gauge{grid-column:span 2;}}
+.kpi-av{grid-template-columns:auto minmax(0,1fr) !important;column-gap:11px !important;} .k3-donut{grid-column:1;grid-row:1 / span 3;width:64px;height:64px;} .kpi-av .label,.kpi-av .value,.kpi-av .sub2{grid-column:2;}
+.kpi-av .value{color:var(--tx);} .kpi-av .value small{font-size:11px;font-weight:700;color:var(--mut);margin-left:6px;letter-spacing:0;} .kpi-av .sub2{font-size:10.5px;} .kpi-av .sub2 b{color:var(--tx2);} .kpi-av .sub2 .neg{color:#d4453d;font-weight:700;} .kpi-av .sub2 .pos{color:#1f8a57;font-weight:700;}
+.k3-mini{width:58px;}
+@container kpis (min-width:1400px){.kpis .card.kpi3:not(.kpi-gauge):not(.kpi-av){grid-template-columns:auto minmax(0,1fr) auto;} .k3-mini{display:block;}}
+@container kpis (max-width:1700px){.k3-gauge{width:118px;height:70px;} .kpi-gauge .k3-pts{display:block;margin-top:2px;}}
+@media (max-width:1100px){.pane[data-pane="resumen"] .kpis{grid-template-columns:repeat(2,minmax(0,1fr));} .pane[data-pane="resumen"] .kpis > .kpi-gauge{grid-column:1 / -1;}}
+@media (max-width:560px){.k3-donut{width:50px;height:50px;} .kpi-av{column-gap:8px !important;} .kpi-av .sub2{white-space:normal;}}
+
+/* tipografía de las tarjetas KPI: cifras tabulares, pesos más ligeros, menos saturación */
+.kpi3 .label{font-weight:700;letter-spacing:.05em;color:var(--mut);} .kpi3 .value{font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums lining-nums;} .kpi3 .sub2{font-weight:500;}
+.kpis .card.kc-amber.kpi3{--ka:#d98a2b;} .kpis .card.kc-red.kpi-ok,.kpis .card.kc-amber.kpi-ok{--ka:#2f9d6d;}
+.kpi-av{--ka:#2f9d6d;} .kpi-av .value{color:var(--tx);} .kpi-av .sub2 .neg{color:#d9534f;font-weight:600;} .kpi-av .sub2 .pos{color:#2f9d6d;font-weight:600;}
+.k3-est{font-weight:700;letter-spacing:.01em;}
+.kpis .card.kpi3{padding-left:16px;padding-right:14px;}
+
+/* Avance general: el % va dentro del anillo; a la derecha solo el programado y la brecha */
+.k3-donut{width:72px;height:72px;}
+.kpi-av .value{font-size:16px;font-weight:700;} .kpi-av .value small{display:block;font-size:10px;font-weight:600;letter-spacing:.03em;color:var(--mut);margin:0 0 1px;}
+.kpi-av .k3-chip{display:inline-block;margin-top:5px;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700;}
+.kpi-av .k3-chip.neg{background:#fdecea;color:#c9423d;} .kpi-av .k3-chip.pos{background:#e5f5ec;color:#1f8a57;}
+@media (max-width:560px){.k3-donut{width:60px;height:60px;}}
+
+/* Avance general v3: anillo doble, cifra centrada, programado discreto */
+.k3-donut{position:relative;width:76px;height:76px;}
+.k3-dn{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:var(--tx);letter-spacing:-.02em;font-variant-numeric:tabular-nums;pointer-events:none;padding-top:1px;}
+.k3-dn small{font-size:11px;font-weight:800;margin-left:1px;margin-top:1px;color:var(--tx2,var(--tx));letter-spacing:0;}
+.kpi-av .value{font-size:12.5px;font-weight:700;color:var(--tx2,var(--tx));} .kpi-av .value small{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:600;letter-spacing:.03em;color:var(--mut);margin:0 0 1px;}
+.kpi-av .value small i{width:7px;height:7px;border-radius:50%;background:#7aa5ee;display:inline-block;}
+@media (max-width:560px){.k3-donut{width:62px;height:62px;} .k3-dn{font-size:13px;} .k3-dn small{font-size:9.5px;}}
+
+/* cada tarjeta con su color: presupuesto violeta, programado azul; valorizado, avance y SPI siguen el semáforo del plazo */
+.kpis .card.kc-teal.kpi3{--ka:#7561d6;} .kpis .card.kc-blue.kpi3{--ka:#3b7be8;}
+.kpi3 .k3-ic{transition:background .25s,color .25s;}
+
+/* franja superior fina con el color de cada tarjeta (identifica el indicador de un vistazo) */
+.pane[data-pane="resumen"] .kpis .card.kpi3{box-shadow:inset 0 3px 0 color-mix(in srgb,var(--ka) 78%,#fff),var(--shadow,0 1px 2px rgba(16,24,40,.05));}
 </style>
 <script>
 document.documentElement.dataset.pane = 'resumen';
@@ -2419,20 +2478,25 @@ document.addEventListener('DOMContentLoaded', function(){ try { var m = document
     <section class="pane on" data-pane="resumen">
       <div class="kpis">
         <div class="card kc-teal kpi3">
-          <div class="k3-h"><span class="k3-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span><div class="label">Presupuesto total <span class="igv">Sin IGV</span></div></div>
-          <div class="value mono" id="kPresu">—</div><div class="sub2" id="kPresuS"></div>
+          <div class="k3-h"><span class="k3-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7V5.5A1.5 1.5 0 0 0 17.5 4H5a2 2 0 0 0 0 4h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6"/><path d="M16.5 14h.01"/></svg></span><div class="label">Presupuesto total <span class="igv">Sin IGV</span></div></div>
+          <div class="value mono" id="kPresu">—</div><div class="sub2" id="kPresuS"></div><div class="k3-mini" id="kMiniPresu" aria-hidden="true"></div>
         </div>
         <div class="card kc-blue kpi3">
           <div class="k3-h"><span class="k3-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></span><div class="label">Programado a la fecha <span class="igv">Sin IGV</span></div></div>
-          <div class="value mono" id="kProg">—</div><div class="sub2" id="kProgS"></div>
+          <div class="value mono" id="kProg">—</div><div class="sub2" id="kProgS"></div><div class="k3-mini" id="kMiniProg" aria-hidden="true"></div>
         </div>
         <div class="card kc-red kpi3">
-          <div class="k3-h"><span class="k3-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="m22 7-8.5 8.5-5-5L2 17M16 7h6v6"/></svg></span><div class="label" title="Valorizado: ejecutado real">Valorizado real <span class="igv">Sin IGV</span></div></div>
-          <div class="value mono" id="kValor">—</div><div class="sub2" id="kValorS"></div>
+          <div class="k3-h"><span class="k3-ic" id="kValorIc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="m22 7-8.5 8.5-5-5L2 17M16 7h6v6"/></svg></span><div class="label" title="Valorizado: ejecutado real">Valorizado real <span class="igv">Sin IGV</span></div></div>
+          <div class="value mono" id="kValor">—</div><div class="sub2" id="kValorS"></div><div class="k3-mini" id="kMiniValor" aria-hidden="true"></div>
         </div>
-        <div class="card kc-amber kpi3">
+        <div class="card kpi3 kpi-av" style="--ka:#2fa66a">
+          <div class="k3-donut" id="kDonut" aria-hidden="true"></div>
+          <div class="label" title="Valorizado ÷ presupuesto total: cuánto de la obra está hecho">Avance general</div>
+          <div class="value" id="kAvG">—</div><div class="sub2" id="kAvGS"></div>
+        </div>
+        <div class="card kc-amber kpi3 kpi-gauge">
           <div class="k3-h"><span class="k3-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span><div class="label" title="SPI = valorizado ÷ programado a la fecha. 100 % = al día">SPI · Plazo</div></div>
-          <div class="value" id="kPct">—</div><div class="bar"><i id="kBar"></i></div><div class="sub2" id="kEstadoS"></div>
+          <div class="value" id="kPct">—</div><div class="bar"><i id="kBar"></i></div><div class="sub2" id="kEstadoS"></div><div class="k3-gauge" id="kGauge" aria-hidden="true"><div id="kgEc"></div><div id="kgOv"></div><div id="kgSvg"></div></div>
         </div>
       </div>
 
@@ -2444,10 +2508,10 @@ document.addEventListener('DOMContentLoaded', function(){ try { var m = document
             <p class="hint" id="curvaHint">Programado vs. ejecutado (acumulado mensual)</p>
           </div>
           <div class="cv-ctl">
-            <button type="button" id="btnDatos" class="seg-btn" aria-expanded="false" aria-controls="datosPop" title="Plazo y fuente de los montos">ⓘ Datos generales <b id="btnDatosTxt"></b></button>
-            <span class="cv-mes">
-              <label for="curvaMesSel">Corte</label>
-              <select id="curvaMesSel"></select>
+            <button type="button" id="btnDatos" class="seg-btn" aria-expanded="false" aria-controls="datosPop" aria-label="Datos generales: plazo y fuente de los montos" title="Datos generales: plazo y fuente de los montos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><b id="btnDatosTxt" hidden></b></button>
+            <span class="cv-mes" title="Mes de corte de la Curva S">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>
+              <select id="curvaMesSel" aria-label="Mes de corte"></select>
             </span>
           </div>
         </div>
@@ -3081,6 +3145,7 @@ function renderPlazoInfo(p, hoy) {
     + chip('Faltan', estado, faltan >= 0 ? 'var(--green)' : 'var(--red)');
   // dato clave siempre a la vista, en el propio botón: cuántos días faltan para el fin de plazo vigente
   $('#btnDatosTxt').textContent = faltan >= 0 ? `· faltan ${faltan} d` : `· vencido hace ${-faltan} d`;
+  { const bd = $('#btnDatos'); if (bd) bd.title = `Datos generales: plazo y fuente de los montos ${$('#btnDatosTxt').textContent}`; }
 }
 
 // globo "Datos generales": se abre al tocar el botón; se cierra al tocar fuera o con Esc
@@ -3502,7 +3567,7 @@ function renderCurvaS() {
     // los KPI no deben quedarse con los valores de la selección anterior
     ['#kPresu', '#kProg', '#kValor', '#kPct'].forEach(s => { $(s).textContent = '—'; });
     ['#kPresuS', '#kProgS', '#kValorS', '#kEstadoS', '#kpiMes'].forEach(s => { $(s).textContent = ''; });
-    $('#kBar').style.width = '0';
+    try { kpiGauge(null, 'neu'); } catch (e) {}
     renderAvancePuente(null);
     return;
   }
@@ -4369,24 +4434,151 @@ function renderKpisYTabla(partidas, avanceRows, progRows, periodo) {
     km.textContent = fechaCorte ? `${MESES_ES[fechaCorte.getUTCMonth()]} ${fechaCorte.getUTCFullYear()}` : '';
     km.title = fechaCorte ? `Corte de la Curva S real${esProp ? ' · incluye una valorización en PROPUESTA, sin conciliar' : ''}` : '';
     km.classList.toggle('prop', esProp); km.style.display = fechaCorte ? '' : 'none'; }
-  $('#kPresu').textContent = fmt(presu);
+  const fmtM = (v) => 'S/. ' + (Number(v || 0) / 1e6).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' M';
+  [['#kPresu', presu], ['#kProg', prog], ['#kValor', valor]].forEach(([s, v]) => { const e = $(s); e.textContent = fmtM(v); e.dataset.full = fmt(v); e.title = fmt(v); });
   $('#kPresuS').textContent = `${porComponente.length} frente${porComponente.length===1?'':'s'} con datos`;
-  $('#kProg').textContent = fmt(prog);
   $('#kProgS').textContent = `${(pctProg*100).toFixed(1)}% del total`;
-  $('#kValor').textContent = fmt(valor);
   $('#kValorS').textContent = `${(pct*100).toFixed(1)}% del total`;
   const spi = prog > 0 ? valor / prog : null;   // SPI: cuánto de lo programado a la fecha ya se ejecutó (100 % = al día)
-  $('#kPct').textContent = spi === null ? '—' : (spi * 100).toFixed(1) + '%';
-  $('#kPct').title = spi === null ? '' : `SPI = valorizado ÷ programado a la fecha = ${spi.toFixed(2)}`;
-  $('#kBar').style.width = spi === null ? '0' : Math.min(100, spi * 100) + '%';
+  $('#kPct').innerHTML = spi === null ? '—' : `${(spi * 100).toFixed(1)}%`;
+  $('#kPct').title = spi === null ? '' : `SPI = valorizado ÷ programado a la fecha = ${spi.toFixed(2)} (${(spi * 100).toFixed(1)} %). 100 % = al día`;
+  { const kb = $('#kBar'); if (kb) kb.style.width = ''; }
   const eAv = estadoAv(prog, valor), gapK = (pctProg - pct) * 100;
   const txtK = `${eAv.txt} · ${gapK > 0 ? '−' : '+'}${Math.abs(gapK).toFixed(1)} pts`;
   ESTADO_KPI = { k: eAv.k, txt: txtK };
-  $('#kEstadoS').innerHTML = semaforoHTML(eAv.k) + esc(txtK);
-  document.querySelectorAll('.kpis .card.kc-red, .kpis .card.kc-amber').forEach(c => c.classList.toggle('kpi-ok', eAv.k === 'ok' || eAv.k === 'mid'));   // en meta (en plazo o adelantado) → verde; atrasado o crítico → naranja
+  { const col = kpiGauge(spi, eAv.k); $('#kEstadoS').innerHTML = `<span class="k3-est" style="--c:${col}">${esc(eAv.txt)}</span>`; }
+  { const col = kpiGauge(spi, eAv.k), sube = eAv.k === 'ok' || eAv.k === 'mid';
+    window.KPI_COL = col;
+    document.querySelectorAll('.kpis .card.kc-red.kpi3, .kpis .card.kpi-av, .kpis .card.kpi-gauge').forEach(c => c.style.setProperty('--ka', col));
+    const ic = document.getElementById('kValorIc');
+    if (ic) { ic.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">${sube ? '<path d="m22 7-8.5 8.5-5-5L2 17M16 7h6v6"/>' : '<path d="m22 17-8.5-8.5-5 5L2 7M16 17h6v-6"/>'}</svg>`; ic.title = sube ? `Valorizado ${Math.abs(gapK).toFixed(1)} pts ${gapK > 0 ? 'por debajo' : 'por encima'} del programado: al día` : `Valorizado ${Math.abs(gapK).toFixed(1)} pts por debajo del programado`; }
+    try { kpiMinis(porComponente, periodo); } catch (e) {}
+    try { kpiAvance({ presu, valor, prog, col }); } catch (e) { console.error(e); } }   // en meta (en plazo o adelantado) → verde; atrasado o crítico → naranja
 
 }
 
+// medidor semicircular del SPI, estilo «tablero de control»: escala 80 % – 120 % con la meta (100 %) marcada arriba; arco en zonas y aguja.
+// Zonas = los cortes de estadoAv (rojo <0.90 · ámbar 0.90–0.98 · verde ≥0.98). Se dibuja con ECharts (se baja una vez de internet);
+// si no hay conexión, queda el mismo medidor hecho a mano en SVG.
+const KG = { A0: 0.80, A1: 1.20, zonas: [[0.90, '#e58a84'], [0.98, '#efbf62'], [1.08, '#a6d9bd'], [1.20, '#5fb78a']], inst: null, lib: null, spi: null };
+// mini gráficos de las tarjetas (no ocupan ancho extra: se ocultan en pantallas angostas)
+function kpiSpark(vals, col, tit) {
+  const W = 78, H = 40, n = vals.length; if (n < 2) return '';
+  const mx = Math.max(...vals, 1), mn = Math.min(...vals, 0), sx = (i) => 3 + i * (W - 8) / (n - 1), sy = (v) => H - 5 - (v - mn) / (mx - mn || 1) * (H - 12);
+  const d = vals.map((v, i) => `${i ? 'L' : 'M'}${sx(i).toFixed(1)} ${sy(v).toFixed(1)}`).join(' '), id = 'sp' + Math.random().toString(36).slice(2, 7);
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" height="100%" role="img" aria-label="${tit}"><title>${tit}</title><defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${col}" stop-opacity=".30"/><stop offset="1" stop-color="${col}" stop-opacity="0"/></linearGradient></defs>
+    <path d="${d} L${sx(n - 1).toFixed(1)} ${H - 3} L${sx(0).toFixed(1)} ${H - 3} Z" fill="url(#${id})"/><path d="${d}" fill="none" stroke="${col}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="${sx(n - 1).toFixed(1)}" cy="${sy(vals[n - 1]).toFixed(1)}" r="3" fill="#fff" stroke="${col}" stroke-width="2"/></svg>`;
+}
+function kpiMinis(porComp, periodo) {
+  const P = curvaPorPeriodoActual || {}, per = Object.keys(P).sort().filter(k => !periodo || k <= periodo);
+  const ser = (k) => per.map(x => (P[x] && P[x][k]) || 0);
+  const set = (id, html) => { const e = document.getElementById(id); if (e) e.innerHTML = html; };
+  set('kMiniProg', kpiSpark(ser('progA'), '#3b7be8', 'Programado acumulado mes a mes'));
+  set('kMiniValor', kpiSpark(ser('ejecA'), window.KPI_COL || '#2fa66a', 'Valorizado acumulado mes a mes'));
+  const bases = (porComp || []).map(f => ({ n: f.nombre || f.id || '', v: f.base })), mx = Math.max(...bases.map(b => b.v), 1);
+  set('kMiniPresu', bases.length ? `<svg viewBox="0 0 78 40" width="100%" height="100%" role="img" aria-label="Presupuesto por frente"><title>Presupuesto por frente</title>${bases.map((b, i) => { const bw = Math.min(14, 60 / bases.length), gap = (74 - bw * bases.length) / Math.max(1, bases.length - 1), x = 2 + i * (bw + gap), h = Math.max(4, b.v / mx * 32); return `<rect x="${x.toFixed(1)}" y="${(36 - h).toFixed(1)}" width="${bw}" height="${h.toFixed(1)}" rx="3" fill="#3b7be8" opacity="${(0.45 + 0.55 * b.v / mx).toFixed(2)}"><title>${esc(String(b.n).replace(/^Puente\s+/i, ''))}: ${fmt(b.v)}</title></rect>`; }).join('')}</svg>` : '');
+}
+// marcas rotuladas de la escala (meta 100 % arriba; extremos 80 % y 120 %), con la misma geometría del arco
+function kpiGaugeMarcas(w, h, cx, cy, R, grosor) {
+  const f = 'font-family="inherit" fill="var(--mut,#6b7794)"';
+  return `<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;overflow:visible">
+    <line x1="${cx}" y1="${cy - R - 2}" x2="${cx}" y2="${cy - R - 7}" stroke="var(--mut,#6b7794)" stroke-width="1.6" stroke-linecap="round"/>
+    <text x="${cx}" y="${cy - R - 10}" text-anchor="middle" font-size="9" font-weight="700" ${f}>100%</text>
+  </svg>`;
+}
+function kpiGaugeSvg(spi, col) {
+  const { A0, A1 } = KG, w = 136, h = 80, cx = w / 2, cy = Math.round(h * 0.86), R = 50, g = 10, ang = (v) => 180 - 180 * Math.max(0, Math.min(1, (v - A0) / (A1 - A0)));
+  const pt = (a, rr) => [cx + rr * Math.cos(a * Math.PI / 180), cy - rr * Math.sin(a * Math.PI / 180)];
+  const rm = R - g / 2, arco = (v0, v1) => { const [x0, y0] = pt(ang(v0) - 0.6, rm), [x1, y1] = pt(ang(v1) + 0.6, rm); return `M${x0.toFixed(2)} ${y0.toFixed(2)} A${rm} ${rm} 0 0 1 ${x1.toFixed(2)} ${y1.toFixed(2)}`; };
+  let ini = A0; const zonas = KG.zonas.map(([fin, c]) => { const d = `<path d="${arco(ini, fin)}" fill="none" stroke="${c}" stroke-width="${g}"/>`; ini = fin; return d; }).join('');
+  let aguja = '';
+  if (spi != null && isFinite(spi)) { const [nx, ny] = pt(ang(Math.max(A0, Math.min(A1, spi))), R * 0.72); aguja = `<line x1="${cx}" y1="${cy}" x2="${nx.toFixed(2)}" y2="${ny.toFixed(2)}" stroke="var(--tx,#16222c)" stroke-width="3.2" stroke-linecap="round"/>`; }
+  return `<svg viewBox="0 0 ${w} ${h}" width="100%" height="100%" role="img" aria-label="Medidor del SPI"><title>SPI ${spi != null ? spi.toFixed(2) : '—'} (${spi != null ? (spi * 100).toFixed(1) : '—'} %) · 100 % = al día</title>${zonas}${aguja}<circle cx="${cx}" cy="${cy}" r="5.5" fill="var(--tx,#16222c)"/></svg>${kpiGaugeMarcas(w, h, cx, cy, R, g)}`;
+}
+function kpiGaugeEc(spi) {
+  const el = document.getElementById('kgEc'); if (!el || !window.echarts) return false;
+  const w = el.clientWidth, h = el.clientHeight; if (!w || !h) return false;
+  const css = getComputedStyle(document.documentElement), tx = css.getPropertyValue('--tx').trim() || '#16222c';
+  const { A0, A1 } = KG, f = (v) => (v - A0) / (A1 - A0), R = Math.floor(Math.min(w / 2 - 16, h * 0.64)), grosor = Math.max(8, Math.round(R * 0.2)), cx = w / 2, cy = Math.round(h * 0.86);
+  if (!KG.inst || KG.inst.getDom() !== el) {
+    if (KG.inst) KG.inst.dispose(); KG.inst = echarts.init(el, null, { renderer: 'svg' });
+    if (window.ResizeObserver && !KG.ro) { KG.ro = new ResizeObserver(() => { try { if (KG.inst && el.clientWidth) { KG.inst.resize(); kpiGaugeEc(KG.spi); } } catch (e) {} }); KG.ro.observe(el); }
+  }
+  KG.inst.setOption({
+    animationDuration: 700, animationEasing: 'cubicOut',
+    series: [{
+      type: 'gauge', startAngle: 180, endAngle: 0, min: A0, max: A1, center: [cx, cy], radius: R, splitNumber: 5,
+      axisLine: { roundCap: false, lineStyle: { width: grosor, color: KG.zonas.map(([v, c]) => [f(v), c]) } },
+      progress: { show: false },
+      pointer: { show: spi != null, length: '72%', width: Math.max(4, Math.round(R * 0.08)), offsetCenter: [0, 0], itemStyle: { color: tx } },
+      anchor: { show: true, size: Math.max(7, Math.round(R * 0.13)), showAbove: true, itemStyle: { color: tx, borderColor: '#fff', borderWidth: 2 } },
+      axisTick: { show: false }, splitLine: { show: false }, axisLabel: { show: false },
+      title: { show: false }, detail: { show: false },
+      data: [{ value: spi == null ? A0 : Math.max(A0, Math.min(A1, spi)) }],
+    }],
+  }, true);
+  const ov = document.getElementById('kgOv'); if (ov) ov.innerHTML = kpiGaugeMarcas(w, h, cx, cy, R, grosor);
+  return true;
+}
+function kpiGauge(spi, k) {
+  const col = ({ mal: '#d9534f', am: '#d9972b', mid: '#2f9d6d', ok: '#2f9d6d' })[k] || '#9aa5b8';
+  KG.spi = spi;
+  const svg = document.getElementById('kgSvg'), ec = document.getElementById('kgEc'); if (!svg || !ec) return col;
+  svg.innerHTML = kpiGaugeSvg(spi, col); { const ov = document.getElementById('kgOv'); if (ov) ov.innerHTML = ''; }
+  const usar = () => { try { if (kpiGaugeEc(KG.spi)) { svg.style.display = 'none'; ec.style.display = ''; } else { setTimeout(() => { try { if (kpiGaugeEc(KG.spi)) svg.style.display = 'none'; } catch (e) {} }, 250); } } catch (e) { svg.style.display = ''; ec.style.display = 'none'; } };
+  if (window.echarts) usar();
+  else if (!KG.lib) { KG.lib = new Promise((ok, mal) => { const s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js'; s.onload = ok; s.onerror = () => { KG.lib = null; mal(new Error('sin conexión')); }; document.head.appendChild(s); }); KG.lib.then(usar).catch(() => {}); }
+  else KG.lib.then(usar).catch(() => {});
+  // marcador sobre la barra de escala del pie de la tarjeta
+  return col;
+}
+// ── tarjeta «Avance general» (dato real): valorizado ÷ presupuesto, con la marca del programado ──
+function kpiDonut(pct, prog, col) {
+  col = col || '#4fb386';
+  const R1 = 29.2, R2 = 23.2, C1 = 2 * Math.PI * R1, C2 = 2 * Math.PI * R2, v = Math.max(0, Math.min(1, pct)), pv = Math.max(0, Math.min(1, prog));
+  return `<svg viewBox="0 0 64 64" width="100%" height="100%" role="img" aria-label="Avance general ${(pct * 100).toFixed(1)} %"><title>Avance general ${(pct * 100).toFixed(1)} % · programado ${(prog * 100).toFixed(1)} %</title>
+    <circle cx="32" cy="32" r="${R1}" fill="none" stroke="#e3ecfb" stroke-width="3.4"/>
+    <circle cx="32" cy="32" r="${R1}" fill="none" stroke="#8fb3ee" stroke-width="3.4" stroke-linecap="round" stroke-dasharray="${(C1 * pv).toFixed(2)} ${C1.toFixed(2)}" transform="rotate(-90 32 32)"/>
+    <circle cx="32" cy="32" r="${R2}" fill="none" stroke="var(--line2,#d3dcee)" stroke-width="5.2" opacity=".5"/>
+    <circle cx="32" cy="32" r="${R2}" fill="none" stroke="${col}" stroke-width="5.2" stroke-linecap="round" stroke-dasharray="${(C2 * v).toFixed(2)} ${C2.toFixed(2)}" transform="rotate(-90 32 32)"/>
+    <text x="32" y="35.6" text-anchor="middle" font-size="12.5" font-weight="800" fill="var(--tx,#14203f)" font-family="inherit">${(pct * 100).toFixed(1)}<tspan font-size="8.5" font-weight="800" dx="0.5">%</tspan></text>
+  </svg>`;
+}
+// anillo doble con ECharts: exterior fino = programado, interior grueso = ejecutado; la cifra es HTML para que quede centrada
+function kpiDonutEc(pct, prog, col) {
+  col = col || '#4fb386';
+  const el = document.getElementById('kDonut'); if (!el || !window.echarts) return false;
+  const w = el.clientWidth; if (!w) return false;
+  const v = Math.max(0, Math.min(100, pct * 100)), pv = Math.max(0, Math.min(100, prog * 100)), g1 = Math.max(3, Math.round(w * 0.045)), g2 = Math.max(5, Math.round(w * 0.075));
+  if (!el._ec) { el.innerHTML = ''; el._ec = echarts.init(el, null, { renderer: 'svg' }); }
+  const base = { type: 'gauge', startAngle: 90, endAngle: -270, min: 0, max: 100, center: ['50%', '50%'], axisTick: { show: false }, splitLine: { show: false }, axisLabel: { show: false }, title: { show: false }, detail: { show: false }, pointer: { show: false }, anchor: { show: false } };
+  el._ec.setOption({
+    animationDuration: 800, animationEasing: 'cubicOut',
+    series: [
+      Object.assign({}, base, { radius: '98%', axisLine: { roundCap: true, lineStyle: { width: g1, color: [[1, '#e3ecfb']] } },
+        progress: { show: true, roundCap: true, width: g1, itemStyle: { color: '#8fb3ee' } }, data: [{ value: pv }] }),
+      Object.assign({}, base, { radius: '85%', axisLine: { roundCap: true, lineStyle: { width: g2, color: [[1, 'rgba(160,175,205,.22)']] } },
+        progress: { show: true, roundCap: true, width: g2, itemStyle: { color: col } }, data: [{ value: v }] }),
+    ],
+  }, true);
+  let n = el.querySelector('.k3-dn'); if (!n) { n = document.createElement('div'); n.className = 'k3-dn'; el.appendChild(n); }
+  n.innerHTML = `${v.toFixed(1)}<small>%</small>`;
+  return true;
+}
+function kpiDonutMontar(pct, prog, col) {
+  const el = document.getElementById('kDonut'); if (!el) return;
+  const usar = () => { try { if (kpiDonutEc(pct, prog, col)) return; } catch (e) { console.error(e); } };
+  if (window.echarts) usar();
+  else if (KG.lib) KG.lib.then(usar).catch(() => {});
+  else { KG.lib = new Promise((ok, mal) => { const s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js'; s.onload = ok; s.onerror = () => { KG.lib = null; mal(new Error('sin conexión')); }; document.head.appendChild(s); }); KG.lib.then(usar).catch(() => {}); }
+}
+function kpiAvance(c) {
+  const set = (id, h) => { const e = document.getElementById(id); if (e) e.innerHTML = h; };
+  const pct = c.presu ? c.valor / c.presu : 0, prog = c.presu ? c.prog / c.presu : 0, gap = (prog - pct) * 100;
+  { const d = document.getElementById('kDonut'); if (d) { if (d._ec) { d._ec.dispose(); d._ec = null; } d.innerHTML = kpiDonut(pct, prog, c.col); } } kpiDonutMontar(pct, prog, c.col); set('kAvG', `<small><i></i>Programado</small>${(prog * 100).toFixed(1)}%`);
+  set('kAvGS', `<span class="k3-chip ${gap > 0 ? 'neg' : 'pos'}">${gap > 0 ? '−' : '+'}${Math.abs(gap).toFixed(1)} pts</span>`);
+}
 function renderAll() {
   renderBridgeSel();
   renderCurvaS(); // ella llama a activarMes(): avance por componente, materiales y KPIs quedan ligados al mismo mes
@@ -12173,7 +12365,7 @@ function infHTML() {
   return `<div class="inf-hoja">
     <div class="inf-head">${logoHead}<div class="inf-tit"><small>Informe de avance de obra</small><h1>${esc(tx('#obraNombre'))}</h1><p>${esc(tx('#obraSub'))}</p></div>
       <div class="inf-meta">Corte: <b>${esc(corte)}</b><br>Alcance: <b>${esc(ALCANCE_TXT[alcance])}</b> · Vista: <b>${esc(sel)}</b><br>Emitido: ${esc(fecha)}</div></div>
-    <div class="inf-kpis">${k('#0f766e', 'Presupuesto total (sin IGV)', tx('#kPresu'), tx('#kPresuS'))}${k('#4f5bd5', 'Programado a la fecha', tx('#kProg'), tx('#kProgS'))}${k('#dc2626', 'Valorizado (ejecutado real)', tx('#kValor'), tx('#kValorS'))}${k(COL_EST[ESTADO_KPI.k] || '#b45309', 'SPI', tx('#kPct'), semaforoHTML(ESTADO_KPI.k) + esc(ESTADO_KPI.txt), pct, true)}</div>
+    <div class="inf-kpis">${k('#0f766e', 'Presupuesto total (sin IGV)', $('#kPresu').dataset.full || tx('#kPresu'), tx('#kPresuS'))}${k('#4f5bd5', 'Programado a la fecha', $('#kProg').dataset.full || tx('#kProg'), tx('#kProgS'))}${k('#dc2626', 'Valorizado (ejecutado real)', $('#kValor').dataset.full || tx('#kValor'), tx('#kValorS'))}${k(COL_EST[ESTADO_KPI.k] || '#b45309', 'SPI', tx('#kPct'), semaforoHTML(ESTADO_KPI.k) + esc(ESTADO_KPI.txt), pct, true)}</div>
     <div class="inf-fila2">
       <div class="inf-card"><div class="inf-ctit"><div><h3>${esc(curvaTit)}</h3><p>${esc(curvaHint)}</p></div><div class="inf-chips">${curvaChips}</div></div><div class="svgw">${curvaSvg}</div><div class="legend2">${lgC}</div></div>
       ${infPresupActualizado()}
