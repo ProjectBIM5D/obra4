@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="build" content="20261023223219">
+<meta name="build" content="20261023225307">
 <script>/* auto-actualizar: compara el sello de esta copia con el del servidor y recarga una sola vez */
 (function(){try{if(!/^https?:/.test(location.protocol))return;var me=document.querySelector('meta[name=build]').content;if(me==='0')return;
 fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'}).then(function(r){return r.text()}).then(function(h){
@@ -2247,7 +2247,7 @@ select.usr-rol{font:inherit;font-size:12px;padding:5px 8px;border:1px solid var(
 .kpi-av{grid-template-columns:auto minmax(0,1fr) !important;column-gap:11px !important;} .k3-donut{grid-column:1;grid-row:1 / span 3;width:64px;height:64px;} .kpi-av .label,.kpi-av .value,.kpi-av .sub2{grid-column:2;}
 .kpi-av .value{color:var(--tx);} .kpi-av .value small{font-size:11px;font-weight:700;color:var(--mut);margin-left:6px;letter-spacing:0;} .kpi-av .sub2{font-size:10.5px;} .kpi-av .sub2 b{color:var(--tx2);} .kpi-av .sub2 .neg{color:#d4453d;font-weight:700;} .kpi-av .sub2 .pos{color:#1f8a57;font-weight:700;}
 .k3-mini{width:58px;}
-@container kpis (min-width:1400px){.kpis .card.kpi3:not(.kpi-gauge):not(.kpi-av){grid-template-columns:auto minmax(0,1fr) auto;} .k3-mini{display:block;}}
+@container kpis (min-width:2050px){.kpis .card.kpi3:not(.kpi-gauge):not(.kpi-av){grid-template-columns:auto minmax(0,1fr) auto;} .k3-mini{display:block;}}
 @container kpis (max-width:1700px){.k3-gauge{width:118px;height:70px;} .kpi-gauge .k3-pts{display:block;margin-top:2px;}}
 @media (max-width:1100px){.pane[data-pane="resumen"] .kpis{grid-template-columns:repeat(2,minmax(0,1fr));} .pane[data-pane="resumen"] .kpis > .kpi-gauge{grid-column:1 / -1;}}
 @media (max-width:560px){.k3-donut{width:50px;height:50px;} .kpi-av{column-gap:8px !important;} .kpi-av .sub2{white-space:normal;}}
@@ -2303,6 +2303,11 @@ select.usr-rol{font:inherit;font-size:12px;padding:5px 8px;border:1px solid var(
 .mp-b td:first-child{width:34%;} .mp-pop.h{grid-template-columns:86px minmax(0,1fr);} .mp-ac a,.mp-ac button{font-size:9.5px;padding:3px 0;}
 .mp-b small{font-size:9px;}
 .ft-ic[hidden]{display:none;}
+
+/* globo: el avance manda; progresiva, UTM y longitud son datos de apoyo (más pequeños y finos) */
+.mp-b tr:first-child td:last-child{font-size:12px;font-weight:700;} .mp-b tr:first-child td:last-child small{font-size:9px;}
+.mp-b tr:not(:first-child) td{font-size:8.5px;line-height:1.25;} .mp-b tr:not(:first-child) td:first-child{color:#97a2b5;font-weight:400;}
+.mp-b tr:not(:first-child) td:last-child{font-weight:400;color:#56657d;letter-spacing:.01em;}
 </style>
 <script>
 document.documentElement.dataset.pane = 'resumen';
