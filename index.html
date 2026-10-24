@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="build" content="20261023210938">
+<meta name="build" content="20261023213934">
 <script>/* auto-actualizar: compara el sello de esta copia con el del servidor y recarga una sola vez */
 (function(){try{if(!/^https?:/.test(location.protocol))return;var me=document.querySelector('meta[name=build]').content;if(me==='0')return;
 fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'}).then(function(r){return r.text()}).then(function(h){
@@ -2296,6 +2296,12 @@ select.usr-rol{font:inherit;font-size:12px;padding:5px 8px;border:1px solid var(
 /* botón «ver todo» y atribución mínima dentro del mapa */
 .mp-todo{background:#fff;border-radius:8px;box-shadow:0 1px 5px rgba(0,0,0,.3);overflow:hidden;} .mp-todo button{display:grid;place-items:center;width:26px;height:26px;border:0;background:transparent;color:#33415a;cursor:pointer;padding:0;} .mp-todo button:hover{background:#eef3fc;color:#3b7be8;} .mp-todo svg{width:14px;height:14px;}
 .mapa-box .maplibregl-ctrl-attrib{font-size:8.5px;line-height:1.2;padding:1px 5px;background:rgba(255,255,255,.62);color:#445;border-radius:6px 0 0 0;} .mapa-box .maplibregl-ctrl-attrib a{color:inherit;}
+#mapaHint:empty{display:none;}
+
+/* globo aún más compacto: letra 9.5 px y UTM en dos filas para acortar el ancho */
+.mp-pop{font-size:9.5px;line-height:1.28;} .mp-t b{font-size:11px;} .mp-est{font-size:9px;padding:1px 6px;}
+.mp-b td:first-child{width:34%;} .mp-pop.h{grid-template-columns:86px minmax(0,1fr);} .mp-ac a,.mp-ac button{font-size:9.5px;padding:3px 0;}
+.mp-b small{font-size:9px;}
 </style>
 <script>
 document.documentElement.dataset.pane = 'resumen';
@@ -2545,7 +2551,7 @@ document.addEventListener('DOMContentLoaded', function(){ try { var m = document
         <div class="legend2"><span><i style="background:var(--navy)"></i>Programado</span><span><i style="background:var(--ok)"></i>Ejecutado real</span><span id="legendProy" style="display:none"><i style="background:repeating-linear-gradient(90deg,var(--ok) 0 5px,transparent 5px 8px);width:16px;height:3px;border-radius:0;align-self:center"></i><b id="legendProyTxt" style="font-weight:inherit">Proyección (Forecast)</b></span><span><i style="background:#6a7090"></i>Fecha de corte</span><span id="legendPlazo" style="display:none"><i style="background:#64748b;opacity:.35"></i>Suspensión de plazo</span><span id="legendFinPlazo" style="display:none"><i style="background:#7c3aed"></i>Inicio y fin de plazo</span></div>
       </div>
       <div class="chart-card mapa-card" id="mapaCard">
-        <div class="mapa-cab"><div><h3 style="margin:0">Mapa de la obra</h3><p class="hint" id="mapaHint" style="margin:3px 0 0">Toca un puente para ver su resumen</p></div>
+        <div class="mapa-cab"><div><h3 style="margin:0">Mapa de la obra</h3><p class="hint" id="mapaHint" style="margin:3px 0 0"></p></div>
           <div class="mapa-leg"><span><i style="background:#2fa66a"></i>En plazo</span><span><i style="background:#e0a526"></i>Atención</span><span><i style="background:#d4453d"></i>Atrasado</span><span><i style="background:#9aa5b8"></i>Sin datos</span></div></div>
         <div class="mp-chips" id="mapaLista"></div>
         <div class="mapa-box" id="mapaBox"><div class="rg-msg">Cargando el mapa…</div></div>
@@ -9470,19 +9476,20 @@ const utmDeZona = (s) => { const m = String(s || '').match(/^(\d{1,2})([NS])$/i)
 const utmNum = (v) => Number(v).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const utmDe = (lat, lng) => { if (lat == null || lat === '' || lng == null || lng === '') return null; const u = UTM.aUtm(+lat, +lng); return { ...u, etq: utmEtq(u.zona, u.sur) }; };
 const MAPA_VEC = ['veg', 'parque', 'agua', 'rio', 'lim', 'via-menor-b', 'via-menor', 'via-sec-b', 'via-sec', 'via-mayor-b', 'via-mayor'], MAPA_ROT = ['via-ref', 'agua-n', 'lugar'];
-const mapaCapaGuardada = () => { try { const v = localStorage.getItem('obra-mapa-capa'); return ['mapa', 'sat', 'hib'].includes(v) ? v : 'mapa'; } catch (e) { return 'mapa'; } };
+const mapaCapaGuardada = () => { try { const v = localStorage.getItem('obra-mapa-capa'); return ['mapa', 'hib'].includes(v) ? v : 'mapa'; } catch (e) { return 'mapa'; } };
 function mapaCapa(map, modo) {
+  if (modo !== 'hib') modo = 'mapa';   // solo dos capas: «Mapa» (vectorial, sin nombres de pueblos) e «Híbrido» (satélite + vía principal + nombres)
   const hecho = () => {
-    if (!map._orig) { map._orig = {}; MAPA_ROT.forEach(id => { map._orig[id] = [map.getPaintProperty(id, 'text-color'), map.getPaintProperty(id, 'text-halo-color')]; }); }
-    const sat = modo !== 'mapa', vis = (id, v) => { try { map.setLayoutProperty(id, 'visibility', v ? 'visible' : 'none'); } catch (e) {} };
-    vis('sat', sat);
-    MAPA_VEC.forEach(id => vis(id, modo === 'mapa'));
-    if (modo === 'hib') { vis('via-mayor', true); try { map.setPaintProperty('via-mayor', 'line-width', ['interpolate', ['exponential', 1.5], ['zoom'], 6, 1, 14, 4]); map.setPaintProperty('via-mayor', 'line-opacity', 0.9); } catch (e) {} }
-    else { try { map.setPaintProperty('via-mayor', 'line-width', ['interpolate', ['exponential', 1.5], ['zoom'], 6, 1.6, 14, 9.5]); map.setPaintProperty('via-mayor', 'line-opacity', 1); } catch (e) {} }
-    MAPA_ROT.forEach(id => { vis(id, modo !== 'sat'); try { map.setPaintProperty(id, 'text-color', modo === 'hib' ? '#ffffff' : map._orig[id][0]); map.setPaintProperty(id, 'text-halo-color', modo === 'hib' ? 'rgba(10,20,30,.85)' : map._orig[id][1]); } catch (e) {} });
+    if (!map._orig) { map._orig = {}; MAPA_ROT.forEach(id => { map._orig[id] = [map.getPaintProperty(id, 'text-color'), map.getPaintProperty(id, 'text-halo-color')]; }); map._orig['via-mayor'] = map.getPaintProperty('via-mayor', 'line-width'); }
+    const hib = modo === 'hib', vis = (id, v) => { try { map.setLayoutProperty(id, 'visibility', v ? 'visible' : 'none'); } catch (e) {} };
+    vis('sat', hib);
+    MAPA_VEC.forEach(id => vis(id, !hib));
+    if (hib) { vis('via-mayor', true); try { map.setPaintProperty('via-mayor', 'line-width', ['interpolate', ['exponential', 1.5], ['zoom'], 6, 1, 14, 4.2]); map.setPaintProperty('via-mayor', 'line-opacity', 0.92); } catch (e) {} }
+    else { try { map.setPaintProperty('via-mayor', 'line-width', map._orig['via-mayor']); map.setPaintProperty('via-mayor', 'line-opacity', 1); } catch (e) {} }
+    MAPA_ROT.forEach(id => { vis(id, id === 'lugar' ? hib : true); try { map.setPaintProperty(id, 'text-color', hib ? '#ffffff' : map._orig[id][0]); map.setPaintProperty(id, 'text-halo-color', hib ? 'rgba(10,20,30,.85)' : map._orig[id][1]); } catch (e) {} });
     map._capa = modo; if (map._capaBtns) map._capaBtns.forEach(b => b.classList.toggle('on', b.dataset.capa === modo));
   };
-  const intento = () => { let listo = false; try { listo = !!map.getLayer('sat'); } catch (e) {} if (listo) hecho(); else map.once('styledata', intento); };   // «load» puede tardar (espera todos los mosaicos): basta con que el estilo ya exista
+  const intento = () => { let listo = false; try { listo = !!map.getLayer('sat'); } catch (e) {} if (listo) hecho(); else map.once('styledata', intento); };
   intento();
 }
 // vuelve a encuadrar todos los puentes (cierra el globo): sirve cuando se acercó y se perdió la vista general
@@ -9506,7 +9513,7 @@ function mapaControlCapas(map) {
   const ctl = {
     onAdd() {
       const d = document.createElement('div'); d.className = 'maplibregl-ctrl mp-capas';
-      d.innerHTML = '<button type="button" data-capa="mapa">Mapa</button><button type="button" data-capa="sat">Satélite</button><button type="button" data-capa="hib">Híbrido</button>';
+      d.innerHTML = '<button type="button" data-capa="mapa">Mapa</button><button type="button" data-capa="hib">Híbrido</button>';
       map._capaBtns = [...d.querySelectorAll('button')];
       d.addEventListener('click', (e) => { const b = e.target.closest('[data-capa]'); if (!b) return; try { localStorage.setItem('obra-mapa-capa', b.dataset.capa); } catch (x) {} mapaCapa(map, b.dataset.capa); });
       this.d = d; return d;
@@ -9561,7 +9568,7 @@ async function mapaRender(periodo) {
   $('#mapaLista').innerHTML = MAPA.F.map(f => {
     const m = M[f.codigo], e = mapaEstado(m), geo = f.lat != null && f.lng != null;
     return `<button type="button" class="mp-ch${geo ? '' : ' sin'}" data-mp-ir="${f.id}" title="${geo ? 'Ver ' + esc(f.nombre) + ' en el mapa' : 'Sin ubicación registrada'}"><span class="mp-pt" style="background:${MAPA_COL[e.k]}"></span><b>${esc(String(f.nombre).replace(/^Puente\s+/i, ''))}</b><em>${m ? (m.pe * 100).toFixed(0) + '%' : '—'}</em></button>`; }).join('');
-  $('#mapaHint').textContent = MAPA.sinSql ? 'Falta correr frente_mapa.sql en la base para registrar la ubicación.' : conGeo.length ? 'Toca un puente para ver su resumen' : (AUTH.admin ? 'Registra las coordenadas en Administración › Obra y componentes.' : 'Aún no hay coordenadas registradas.');
+  $('#mapaHint').textContent = MAPA.sinSql ? 'Falta correr frente_mapa.sql en la base para registrar la ubicación.' : conGeo.length ? '' : (AUTH.admin ? 'Registra las coordenadas en Administración › Obra y componentes.' : 'Aún no hay coordenadas registradas.');
   try { await mapaCargarLib(); } catch (e) { box.innerHTML = `<div class="rg-msg">${esc(e.message)} La lista de frentes sigue disponible.</div>`; return; }
   if (orden !== MAPA.orden) return;
   if (!MAPA.map) {
@@ -9603,13 +9610,13 @@ async function mapaGlobo(fid, refrescar) {
   const W0 = MAPA.map.getContainer().clientWidth, ancho = W0 >= 560;   // mapa ancho: globo vertical a un lado del pin; angosto: globo horizontal encima del pin
   const fila = (k, v, cl) => `<tr${cl ? ` class="${cl}"` : ''}><td>${k}</td><td>${v == null || v === '' ? '<span class="mp-nd">—</span>' : v}</td></tr>`;
   const fechaF = (d) => String(d).slice(0, 10).split('-').reverse().join('/');
-  const html = `<div class="mp-pop${ancho ? '' : ' h'}" style="${ancho ? '' : 'width:' + Math.min(W0 - 24, 400) + 'px'}"><div class="mp-ph" id="mpFoto">${foto ? '<span class="mp-ld">Cargando foto…</span>' : '<div class="mp-sf"><svg viewBox="0 0 24 24"><path d="M3 15h18M5 15v4M19 15v4M4 15c2-6 14-6 16 0M8 15V9M12 15V7M16 15V9"/></svg><span>Sin foto' + (AUTH.admin ? ' · súbela en Obra y componentes' : '') + '</span></div>'}
+  const html = `<div class="mp-pop${ancho ? '' : ' h'}" style="${ancho ? '' : 'width:' + Math.min(W0 - 24, 300) + 'px'}"><div class="mp-ph" id="mpFoto">${foto ? '<span class="mp-ld">Cargando foto…</span>' : '<div class="mp-sf"><svg viewBox="0 0 24 24"><path d="M3 15h18M5 15v4M19 15v4M4 15c2-6 14-6 16 0M8 15V9M12 15V7M16 15V9"/></svg><span>Sin foto' + (AUTH.admin ? ' · súbela en Obra y componentes' : '') + '</span></div>'}
       ${foto ? `<span class="mp-fd">${foto.tipo === 'avance' ? 'Reporte' : 'Foto referencial'} · ${fechaF(foto.fecha)}</span>` : ''}</div>
     <div class="mp-b"><div class="mp-t"><b>${esc(f.nombre)}</b><span class="mp-est e-${e.k}">${esc(e.txt)}</span></div>
-      <table>${fila('Avance', m ? `${(m.pe * 100).toFixed(1)}% <small>de ${(m.pp * 100).toFixed(1)}% prog.</small>` : null)}${fila('Progresiva', f.km ? esc(f.km) : null)}${fila('UTM ' + (geo ? utmDe(f.lat, f.lng).etq : ''), geo ? (u => `E ${metN(u.e, 0)} · N ${metN(u.n, 0)}`)(utmDe(f.lat, f.lng)) : null)}${fila('Geográficas', geo ? `<small>${mapaCoord(+f.lat, +f.lng)}</small>` : null, 'mp-geo')}${fila('Longitud', f.largo_m != null ? `${metN(f.largo_m, 1)} m` : null)}</table>
+      <table>${fila('Avance', m ? `${(m.pe * 100).toFixed(1)}% <small>de ${(m.pp * 100).toFixed(1)}% prog.</small>` : null)}${fila('Progresiva', f.km ? esc(f.km) : null)}${fila('UTM ' + (geo ? utmDe(f.lat, f.lng).etq : ''), geo ? (u => `E ${metN(u.e, 0)}<br>N ${metN(u.n, 0)}`)(utmDe(f.lat, f.lng)) : null)}${fila('Geográficas', geo ? `<small>${mapaCoord(+f.lat, +f.lng)}</small>` : null, 'mp-geo')}${fila('Longitud', f.largo_m != null ? `${metN(f.largo_m, 1)} m` : null)}</table>
       <div class="mp-ac"><a href="visor/?proyecto=${encodeURIComponent(f.codigo)}" onclick="this.href='visor/?proyecto=${encodeURIComponent(f.codigo)}&v='+Date.now()">Ver en 3D</a><button type="button" data-mp-fotos="${f.id}">Fotos</button></div></div></div>`;
   if (MAPA.popup) { MAPA.popup._fid = null; MAPA.popup.remove(); }
-  MAPA.popup = new maplibregl.Popup({ anchor: ancho ? 'left' : 'bottom', offset: ancho ? { left: [22, 0] } : { bottom: [0, -18] }, maxWidth: ancho ? '270px' : '410px', className: 'mp-popup', closeButton: true, focusAfterOpen: false }).setLngLat([+f.lng, +f.lat]).setHTML(html).addTo(MAPA.map);
+  MAPA.popup = new maplibregl.Popup({ anchor: ancho ? 'left' : 'bottom', offset: ancho ? { left: [22, 0] } : { bottom: [0, -18] }, maxWidth: ancho ? '250px' : '310px', className: 'mp-popup', closeButton: true, focusAfterOpen: false }).setLngLat([+f.lng, +f.lat]).setHTML(html).addTo(MAPA.map);
   MAPA.popup._fid = fid;
   MAPA.popup.on('close', () => { if (MAPA.popup && MAPA.popup._fid === fid) MAPA.popup._fid = null; });
   if (!refrescar) { try { const W = MAPA.map.getContainer().clientWidth, H = MAPA.map.getContainer().clientHeight; MAPA.map.flyTo({ center: [+f.lng, +f.lat], zoom: Math.max(MAPA.map.getZoom(), 10.5), offset: ancho ? [-W * 0.2, 0] : [0, H * 0.24], duration: 650 }); } catch (x) {} }
