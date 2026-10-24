@@ -1,13 +1,17 @@
 {
+  "id": "./",
   "name": "Obra 04 · Panel de Control",
   "short_name": "Obra 04",
   "description": "Control de obra: avance, Curva S, materiales, Look Ahead, Plan semanal y PPC",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "any",
   "background_color": "#f4f6fb",
   "theme_color": "#2f6fed",
   "lang": "es",
+  "categories": ["business", "productivity"],
   "icons": [
     { "src": "icono-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
     { "src": "icono-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },

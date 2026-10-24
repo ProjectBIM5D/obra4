@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="build" content="20261023213934">
+<meta name="build" content="20261023223219">
 <script>/* auto-actualizar: compara el sello de esta copia con el del servidor y recarga una sola vez */
 (function(){try{if(!/^https?:/.test(location.protocol))return;var me=document.querySelector('meta[name=build]').content;if(me==='0')return;
 fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'}).then(function(r){return r.text()}).then(function(h){
@@ -2302,6 +2302,7 @@ select.usr-rol{font:inherit;font-size:12px;padding:5px 8px;border:1px solid var(
 .mp-pop{font-size:9.5px;line-height:1.28;} .mp-t b{font-size:11px;} .mp-est{font-size:9px;padding:1px 6px;}
 .mp-b td:first-child{width:34%;} .mp-pop.h{grid-template-columns:86px minmax(0,1fr);} .mp-ac a,.mp-ac button{font-size:9.5px;padding:3px 0;}
 .mp-b small{font-size:9px;}
+.ft-ic[hidden]{display:none;}
 </style>
 <script>
 document.documentElement.dataset.pane = 'resumen';
@@ -2448,6 +2449,7 @@ document.addEventListener('DOMContentLoaded', function(){ try { var m = document
     <div class="side-foot">
       <div class="ft-row">
         <button type="button" class="ft-ic" id="btnTema" data-tema="oscuro" title="Cambiar a tema oscuro" aria-label="Cambiar el tema">🌙</button>
+        <button type="button" class="ft-ic" id="btnInstalar" hidden title="Instalar como aplicación (pantalla completa, sin barras del navegador)" aria-label="Instalar la aplicación"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 20h14"/></svg></button>
         <button type="button" class="seg-btn ft-adm" id="btnAdmin" title="Iniciar sesión como administrador"><span class="ft-i">🔑</span><span class="ft-t">Entrar</span></button>
       </div>
       <div class="foot-txt"><span id="admEstado">Administrador</span><span class="mono">v1<span id="buildTxt"></span></span><span id="apiUrl" class="mono" style="display:none"></span></div>
@@ -3205,6 +3207,25 @@ const ICONO_SALIR = '<svg viewBox="0 0 24 24"><path d="M8 3v3a2 2 0 0 1-2 2H3M21
     if (p && p.catch) p.catch(() => {});
   });
   ['fullscreenchange', 'webkitfullscreenchange'].forEach(ev => document.addEventListener(ev, pintar));
+}
+
+// ── app instalada (PWA): instalar, trabajar a pantalla completa y guardar la última copia para abrir sin señal ──
+{
+  const instalada = matchMedia('(display-mode: standalone)').matches || matchMedia('(display-mode: fullscreen)').matches || navigator.standalone === true;
+  // en celular/tablet instalados, el primer toque entra en pantalla completa (sin barra de estado ni de navegación); se sale con el botón ⛶
+  if (instalada && matchMedia('(pointer:coarse)').matches && (document.fullscreenEnabled || document.webkitFullscreenEnabled)) {
+    document.addEventListener('pointerup', () => {
+      const el = document.documentElement, pedir = el.requestFullscreen || el.webkitRequestFullscreen;
+      if (pedir && !(document.fullscreenElement || document.webkitFullscreenElement)) { try { const pr = pedir.call(el, { navigationUI: 'hide' }); if (pr && pr.catch) pr.catch(() => {}); } catch (e) {} }
+    }, { once: true, capture: true });
+  }
+  const bi = $('#btnInstalar'); let evt = null;
+  window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); evt = e; if (bi && !instalada) bi.hidden = false; });
+  window.addEventListener('appinstalled', () => { evt = null; if (bi) bi.hidden = true; });
+  if (bi) bi.addEventListener('click', async () => { if (!evt) return; evt.prompt(); try { await evt.userChoice; } catch (e) {} evt = null; bi.hidden = true; });
+  if ('serviceWorker' in navigator && location.protocol === 'https:') {
+    navigator.serviceWorker.register('sw.js').then((reg) => { document.addEventListener('visibilitychange', () => { if (!document.hidden) reg.update().catch(() => {}); }); }).catch(() => {});
+  }
 }
 
 // ── celular: Look Ahead / Plan semanal / PPC piden pantalla completa y horizontal; al salir vuelve a vertical ──
