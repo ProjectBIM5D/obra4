@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="build" content="20261024225402">
+<meta name="build" content="20261024233529">
 <script>/* auto-actualizar: compara el sello de esta copia con el del servidor y recarga una sola vez */
 (function(){try{if(!/^https?:/.test(location.protocol))return;var me=document.querySelector('meta[name=build]').content;if(me==='0')return;
 fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'}).then(function(r){return r.text()}).then(function(h){
@@ -2312,6 +2312,33 @@ select.usr-rol{font:inherit;font-size:12px;padding:5px 8px;border:1px solid var(
 /* globo del mapa sin foto: una sola columna angosta (las fotos se ven con el botón «Fotos») */
 .mp-pop,.mp-pop.h{display:block;width:auto;} .mp-popup .maplibregl-popup-close-button{color:#6b7794;text-shadow:none;top:3px;right:4px;}
 .mp-pop .mp-t{padding-right:14px;}
+
+/* Detalle mensual en formato matriz: filas bajas, títulos centrados con color por grupo, barras de datos y mapa de calor en SPI/CPI */
+.vg-t{font-size:11px;} .vg-t th,.vg-t td{padding:0 8px;height:24px;line-height:1.2;}
+.vg-t thead th{text-align:center;letter-spacing:.06em;font-size:9.5px;} .vg-t thead tr:first-child th{height:26px;border-bottom:2px solid var(--g,var(--line2));}
+.vg-t thead tr:first-child th:nth-child(2){--g:#8b97ad;} .vg-t thead tr:first-child th:nth-child(3){--g:#3b7be8;} .vg-t thead tr:first-child th:nth-child(4){--g:#8b5cf6;}
+.vg-t thead tr:nth-child(2) th{top:26px;height:24px;} .vg-t thead tr:first-child th:first-child{vertical-align:middle;}
+.vg-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--c);margin-right:5px;vertical-align:1px;}
+.vg-t tbody th{text-align:left;padding-left:12px;font-size:11px;white-space:nowrap;}
+.vg-t td.vg-bd{background:none;} .vg-t td.vg-bd span{position:relative;font-weight:600;color:var(--tx);}
+.vg-t td.vg-na{color:var(--mut);} .vg-t td.vg-hx{padding:0;} .vg-t td.vg-hx span{display:block;line-height:24px;font-weight:800;}
+.vg-t td.vg-hx.ok{background:color-mix(in srgb,#16a34a calc(10% + 26% * var(--h,0)),transparent);color:#146c3a;} .vg-t td.vg-hx.mid{background:color-mix(in srgb,#d97706 calc(10% + 26% * var(--h,0)),transparent);color:#9a5207;} .vg-t td.vg-hx.bad{background:color-mix(in srgb,#dc2626 calc(10% + 28% * var(--h,0)),transparent);color:#a32121;}
+.vg-t tbody tr.on>*{background-color:color-mix(in srgb,var(--blue) 9%,var(--card));} .vg-t tbody tr.on>th{box-shadow:inset 3px 0 0 var(--blue);}
+.vg-t tbody tr.on td.vg-hx.ok,.vg-t tbody tr.on td.vg-hx.mid,.vg-t tbody tr.on td.vg-hx.bad{background-color:transparent;}
+.vg-t tbody tr:hover>th,.vg-t tbody tr:hover>td:not(.vg-hx):not(.vg-bd){background:var(--input);}
+.vg-t tbody th em{padding:0 6px;font-size:8.5px;margin-left:6px;}
+.vg-twrap{max-height:340px;}
+
+/* Detalle mensual: montos en peso normal, meses centrados */
+.vg-t tbody th{text-align:center;padding-left:8px;font-weight:600;} .vg-t td.vg-bd span{font-weight:400;} .vg-t tbody tr.on>td{font-weight:400;} .vg-t tbody tr.on>td.vg-hx span{font-weight:800;}
+/* encabezado por bloques: del mes (gris azulado), acumulado (azul), índices (violeta); fila de grupo en tono medio y fila de columnas en tono claro */
+.vg-t thead th{border-bottom:1px solid rgba(15,30,70,.10);border-left:1px solid rgba(255,255,255,.55);}
+.vg-t thead tr:first-child th{height:26px;color:#fff;font-size:10px;letter-spacing:.1em;border-bottom:0;}
+.vg-t thead tr:first-child th:first-child{background:#56637e;border-left:0;} .vg-t thead tr:first-child th:nth-child(2){background:#6b7a96;} .vg-t thead tr:first-child th:nth-child(3){background:#4f86e0;} .vg-t thead tr:first-child th:nth-child(4){background:#8a70dc;}
+.vg-t thead tr:nth-child(2) th{font-size:9.5px;font-weight:700;}
+.vg-t thead tr:nth-child(2) th:nth-child(-n+3){background:#e9edf4;color:#3b4a66;} .vg-t thead tr:nth-child(2) th:nth-child(n+4):nth-child(-n+6){background:#e1ebfb;color:#2a5399;} .vg-t thead tr:nth-child(2) th:nth-child(n+7){background:#ebe6fb;color:#5a3fb0;}
+.vg-t .vg-dot{box-shadow:none;}
+.vg-t tbody td:nth-child(n+5):nth-child(-n+7){background:color-mix(in srgb,#3b7be8 4%,transparent);}
 </style>
 <script>
 document.documentElement.dataset.pane = 'resumen';
@@ -10487,13 +10514,18 @@ function vgPintar() {
     <div class="vg-plot" id="vgPlot">${svg}<div class="vg-tip" hidden></div></div>
     <footer class="vg-hero-f"><span>Corte <b>${vgMesTxt(VG.mes)}</b> · SPI <b class="${eS.c}">${spi == null ? '—' : spi.toFixed(2)}</b>${meta ? ` · CPI <b class="${eC.c}">${cpi == null ? '—' : cpi.toFixed(2)}</b>` : ''}</span><span class="vg-hero-n">${sim ? '* Costo real referencial (simulado) · ' : ''}Toca un mes para mover el corte</span></footer></section>`;
   // ── detalle mensual ──
-  const pill = (v, tipo) => { if (v == null) return '<span class="vg-pl na">—</span>'; const e = vgEst(v, tipo); return `<span class="vg-pl ${e.c}">${v.toFixed(2)}</span>`; };
+  // matriz: barras de datos dentro de las celdas (largo = peso frente al máximo de la columna) y mapa de calor en SPI / CPI
+  const maxMes = Math.max(1, ...meses.map(m => Math.max(pv[m] || 0, ev[m] || 0, ac[m] || 0)));
+  const maxAcu = Math.max(1, ...PVa, ...EVa.slice(0, ultEV + 1), ...ACa.slice(0, ultAC + 1));
+  const celda = (v, mx, c, ver) => ver && v ? `<td class="vg-bd" style="--c:${c};--w:${Math.max(2, Math.min(100, v / mx * 100)).toFixed(1)}%"><span>${preN(v, 0)}</span></td>` : '<td class="vg-na">—</td>';
+  const calor = (v, tipo) => { if (v == null || !isFinite(v)) return '<td class="vg-hx vg-na">—</td>'; const e = vgEst(v, tipo); return `<td class="vg-hx ${e.c}" style="--h:${Math.min(1, Math.abs(v - 1) / 0.12).toFixed(2)}"><span>${v.toFixed(2)}</span></td>`; };
   const filas = meses.map((m, i) => { const p = PVa[i], e = EVa[i], a = ACa[i], act = i === i0, conE = i <= ultEV, conA = i <= ultAC;
-    return `<tr class="${act ? 'on' : ''}" data-vg-mes="${m}"><th scope="row">${vgMesTxt(m)}${act ? '<em>corte</em>' : ''}</th><td>${preN(pv[m] || 0, 0)}</td><td>${ev[m] ? preN(ev[m], 0) : '—'}</td><td>${ac[m] ? preN(ac[m], 0) : '—'}</td>
-      <td>${preN(p, 0)}</td><td>${conE ? preN(e, 0) : '—'}</td><td>${conA ? preN(a, 0) : '—'}</td><td>${conE && p > 0 ? pill(e / p, 'plazo') : '<span class="vg-pl na">—</span>'}</td><td>${meta && conE && conA && a > 0 ? pill(e / a, 'costo') : '<span class="vg-pl na">—</span>'}</td></tr>`; }).join('');
+    return `<tr class="${act ? 'on' : ''}" data-vg-mes="${m}"><th scope="row">${vgMesTxt(m)}${act ? '<em>corte</em>' : ''}</th>${celda(pv[m] || 0, maxMes, COL.pv, true)}${celda(ev[m] || 0, maxMes, COL.ev, true)}${celda(ac[m] || 0, maxMes, COL.ac, true)}
+      ${celda(p, maxAcu, COL.pv, true)}${celda(e, maxAcu, COL.ev, conE)}${celda(a, maxAcu, COL.ac, conA)}${calor(conE && p > 0 ? e / p : null, 'plazo')}${meta ? calor(conE && conA && a > 0 ? e / a : null, 'costo') : '<td class="vg-hx vg-na">—</td>'}</tr>`; }).join('');
+  const puntoSerie = (c) => `<i class="vg-dot" style="--c:${c}"></i>`;
   const tabla = `<section class="vg-tcard"><header><h3>Detalle mensual</h3><span>Toca una fila para mover el corte · S/ sin IGV</span></header>
     <div class="vg-twrap"><table class="vg-t"><thead><tr><th rowspan="2" scope="col">Mes</th><th colspan="3" scope="colgroup">Del mes</th><th colspan="3" scope="colgroup">Acumulado</th><th colspan="2" scope="colgroup">Índices</th></tr>
-      <tr><th>Planeado</th><th>Ganado</th><th>Costo real</th><th>Planeado</th><th>Ganado</th><th>Costo real</th><th>SPI</th><th>${meta ? 'CPI' : '—'}</th></tr></thead><tbody>${filas}</tbody></table></div></section>`;
+      <tr><th>${puntoSerie(COL.pv)}Planeado</th><th>${puntoSerie(COL.ev)}Ganado</th><th>${puntoSerie(COL.ac)}Costo real</th><th>${puntoSerie(COL.pv)}Planeado</th><th>${puntoSerie(COL.ev)}Ganado</th><th>${puntoSerie(COL.ac)}Costo real</th><th title="Ganado ÷ planeado">SPI</th><th title="Ganado ÷ costo real">${meta ? 'CPI' : '—'}</th></tr></thead><tbody>${filas}</tbody></table></div></section>`;
   const nota = meta
     ? `<b>Planeado:</b> metrado de la línea base meta «${esc(base.nombre || '—')}»${base.congelada ? '' : ' <b class="bad">(sin congelar: guarda una versión en Plan maestro)</b>'} × costo unitario del APU meta × factor <b>${f.k.toFixed(4)}</b> (1 + gastos generales meta ${preP(f.ggPct)} + utilidad meta ${preP(f.util)}). <b>Ganado:</b> metrado de la valorización aprobada × el mismo costo unitario y factor. <b>Costo real:</b> costo_real_mensual. ${f.sinGG ? '<b class="bad">Aún no hay gastos generales meta cargados: el subtotal meta es solo costo directo.</b>' : ''}${VG.sinNodo ? ` ${VG.sinNodo} tareas de la línea base no se encontraron entre las partidas actuales.` : ''}`
     : '<b>Planeado:</b> cronograma valorizado vigente (subtotal). <b>Ganado:</b> valorizaciones aprobadas (subtotal): el ingreso que reconoce la Entidad. <b>Margen:</b> ganado menos costo real.';
