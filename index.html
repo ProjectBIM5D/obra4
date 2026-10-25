@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="build" content="20261023225307">
+<meta name="build" content="20261024225402">
 <script>/* auto-actualizar: compara el sello de esta copia con el del servidor y recarga una sola vez */
 (function(){try{if(!/^https?:/.test(location.protocol))return;var me=document.querySelector('meta[name=build]').content;if(me==='0')return;
 fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'}).then(function(r){return r.text()}).then(function(h){
@@ -2308,6 +2308,10 @@ select.usr-rol{font:inherit;font-size:12px;padding:5px 8px;border:1px solid var(
 .mp-b tr:first-child td:last-child{font-size:12px;font-weight:700;} .mp-b tr:first-child td:last-child small{font-size:9px;}
 .mp-b tr:not(:first-child) td{font-size:8.5px;line-height:1.25;} .mp-b tr:not(:first-child) td:first-child{color:#97a2b5;font-weight:400;}
 .mp-b tr:not(:first-child) td:last-child{font-weight:400;color:#56657d;letter-spacing:.01em;}
+
+/* globo del mapa sin foto: una sola columna angosta (las fotos se ven con el botón «Fotos») */
+.mp-pop,.mp-pop.h{display:block;width:auto;} .mp-popup .maplibregl-popup-close-button{color:#6b7794;text-shadow:none;top:3px;right:4px;}
+.mp-pop .mp-t{padding-right:14px;}
 </style>
 <script>
 document.documentElement.dataset.pane = 'resumen';
@@ -9636,17 +9640,14 @@ async function mapaGlobo(fid, refrescar) {
   const W0 = MAPA.map.getContainer().clientWidth, ancho = W0 >= 560;   // mapa ancho: globo vertical a un lado del pin; angosto: globo horizontal encima del pin
   const fila = (k, v, cl) => `<tr${cl ? ` class="${cl}"` : ''}><td>${k}</td><td>${v == null || v === '' ? '<span class="mp-nd">—</span>' : v}</td></tr>`;
   const fechaF = (d) => String(d).slice(0, 10).split('-').reverse().join('/');
-  const html = `<div class="mp-pop${ancho ? '' : ' h'}" style="${ancho ? '' : 'width:' + Math.min(W0 - 24, 300) + 'px'}"><div class="mp-ph" id="mpFoto">${foto ? '<span class="mp-ld">Cargando foto…</span>' : '<div class="mp-sf"><svg viewBox="0 0 24 24"><path d="M3 15h18M5 15v4M19 15v4M4 15c2-6 14-6 16 0M8 15V9M12 15V7M16 15V9"/></svg><span>Sin foto' + (AUTH.admin ? ' · súbela en Obra y componentes' : '') + '</span></div>'}
-      ${foto ? `<span class="mp-fd">${foto.tipo === 'avance' ? 'Reporte' : 'Foto referencial'} · ${fechaF(foto.fecha)}</span>` : ''}</div>
-    <div class="mp-b"><div class="mp-t"><b>${esc(f.nombre)}</b><span class="mp-est e-${e.k}">${esc(e.txt)}</span></div>
+  const html = `<div class="mp-pop${ancho ? '' : ' h'}" style="${ancho ? '' : 'width:' + Math.min(W0 - 24, 236) + 'px'}"><div class="mp-b"><div class="mp-t"><b>${esc(f.nombre)}</b><span class="mp-est e-${e.k}">${esc(e.txt)}</span></div>
       <table>${fila('Avance', m ? `${(m.pe * 100).toFixed(1)}% <small>de ${(m.pp * 100).toFixed(1)}% prog.</small>` : null)}${fila('Progresiva', f.km ? esc(f.km) : null)}${fila('UTM ' + (geo ? utmDe(f.lat, f.lng).etq : ''), geo ? (u => `E ${metN(u.e, 0)}<br>N ${metN(u.n, 0)}`)(utmDe(f.lat, f.lng)) : null)}${fila('Geográficas', geo ? `<small>${mapaCoord(+f.lat, +f.lng)}</small>` : null, 'mp-geo')}${fila('Longitud', f.largo_m != null ? `${metN(f.largo_m, 1)} m` : null)}</table>
       <div class="mp-ac"><a href="visor/?proyecto=${encodeURIComponent(f.codigo)}" onclick="this.href='visor/?proyecto=${encodeURIComponent(f.codigo)}&v='+Date.now()">Ver en 3D</a><button type="button" data-mp-fotos="${f.id}">Fotos</button></div></div></div>`;
   if (MAPA.popup) { MAPA.popup._fid = null; MAPA.popup.remove(); }
-  MAPA.popup = new maplibregl.Popup({ anchor: ancho ? 'left' : 'bottom', offset: ancho ? { left: [22, 0] } : { bottom: [0, -18] }, maxWidth: ancho ? '250px' : '310px', className: 'mp-popup', closeButton: true, focusAfterOpen: false }).setLngLat([+f.lng, +f.lat]).setHTML(html).addTo(MAPA.map);
+  MAPA.popup = new maplibregl.Popup({ anchor: ancho ? 'left' : 'bottom', offset: ancho ? { left: [22, 0] } : { bottom: [0, -18] }, maxWidth: ancho ? '236px' : '250px', className: 'mp-popup', closeButton: true, focusAfterOpen: false }).setLngLat([+f.lng, +f.lat]).setHTML(html).addTo(MAPA.map);
   MAPA.popup._fid = fid;
   MAPA.popup.on('close', () => { if (MAPA.popup && MAPA.popup._fid === fid) MAPA.popup._fid = null; });
   if (!refrescar) { try { const W = MAPA.map.getContainer().clientWidth, H = MAPA.map.getContainer().clientHeight; MAPA.map.flyTo({ center: [+f.lng, +f.lat], zoom: Math.max(MAPA.map.getZoom(), 10.5), offset: ancho ? [-W * 0.2, 0] : [0, H * 0.24], duration: 650 }); } catch (x) {} }
-  if (foto) mapaImg(foto.id).then(src => { const h = document.getElementById('mpFoto'); if (!h) return; const ld = h.querySelector('.mp-ld'); if (src && ld) ld.outerHTML = `<img src="${esc(src)}" alt="Foto de ${esc(f.nombre)}">`; else if (ld) ld.textContent = 'Foto no disponible'; }).catch(() => {});
 }
 // ── fotos del frente: galería para todos; subir y eliminar solo el administrador ──
 function mapaFotoReducir(file) {
