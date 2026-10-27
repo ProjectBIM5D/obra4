@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="build" content="20261024233529">
+<meta name="build" content="20261027103558">
 <script>/* auto-actualizar: compara el sello de esta copia con el del servidor y recarga una sola vez */
 (function(){try{if(!/^https?:/.test(location.protocol))return;var me=document.querySelector('meta[name=build]').content;if(me==='0')return;
 fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'}).then(function(r){return r.text()}).then(function(h){
@@ -2339,6 +2339,34 @@ select.usr-rol{font:inherit;font-size:12px;padding:5px 8px;border:1px solid var(
 .vg-t thead tr:nth-child(2) th:nth-child(-n+3){background:#e9edf4;color:#3b4a66;} .vg-t thead tr:nth-child(2) th:nth-child(n+4):nth-child(-n+6){background:#e1ebfb;color:#2a5399;} .vg-t thead tr:nth-child(2) th:nth-child(n+7){background:#ebe6fb;color:#5a3fb0;}
 .vg-t .vg-dot{box-shadow:none;}
 .vg-t tbody td:nth-child(n+5):nth-child(-n+7){background:color-mix(in srgb,#3b7be8 4%,transparent);}
+
+/* Valorizaciones: tarjetas y tablas compactas, encabezados por bloque en tonos medios, gráficos ECharts */
+.pane[data-pane="valorizaciones"] .vl-kp{gap:10px;margin-bottom:10px;}
+.pane[data-pane="valorizaciones"] .vl-k{padding:8px 12px;border-left-width:3px;} .pane[data-pane="valorizaciones"] .vl-k small{font-size:9.5px;letter-spacing:.06em;}
+.pane[data-pane="valorizaciones"] .vl-k b{font-size:16px;margin:1px 0;white-space:nowrap;font-weight:700;} .pane[data-pane="valorizaciones"] .vl-k em{font-size:10.5px;} .pane[data-pane="valorizaciones"] .vl-k .bar{height:4px;margin-top:3px;}
+.pane[data-pane="valorizaciones"] .vl-card{padding:10px 14px 12px;margin-bottom:10px;} .pane[data-pane="valorizaciones"] .vl-card h3{font-size:13px;} .pane[data-pane="valorizaciones"] .vl-card p.hint{font-size:11px;margin-bottom:4px;}
+.vl-ec{width:100%;} .vl-ec .rg-msg{height:100%;display:grid;place-items:center;}
+.pane[data-pane="valorizaciones"] .vl-tb{font-family:inherit;font-size:11px;} .pane[data-pane="valorizaciones"] .vl-tb th,.pane[data-pane="valorizaciones"] .vl-tb td{padding:3px 8px;line-height:1.25;}
+.pane[data-pane="valorizaciones"] .vl-tb thead th{background:#56637e;font-size:9.5px;letter-spacing:.07em;font-weight:700;padding:5px 8px;}
+.pane[data-pane="valorizaciones"] .vl-tb button{padding:1px 8px;font-size:10.5px;} .pane[data-pane="valorizaciones"] .vl-pill{font-size:10px;padding:1px 8px;} .pane[data-pane="valorizaciones"] .vl-pbar{height:5px;width:52px;}
+.pane[data-pane="valorizaciones"] .oc-curva{font-family:inherit;font-size:11px;} .pane[data-pane="valorizaciones"] .oc-curva th,.pane[data-pane="valorizaciones"] .oc-curva td{padding:2px 8px;border-color:var(--line);}
+.pane[data-pane="valorizaciones"] .oc-curva thead th{font-size:9.5px;letter-spacing:.06em;font-weight:700;color:#fff;border-color:rgba(255,255,255,.4);padding:4px 8px;}
+.pane[data-pane="valorizaciones"] .oc-curva .h0{background:#56637e;color:#fff;} .pane[data-pane="valorizaciones"] .oc-curva .h1{background:#4f86e0;color:#fff;} .pane[data-pane="valorizaciones"] .oc-curva .h1.e{background:#3aa57b;color:#fff;}
+.pane[data-pane="valorizaciones"] .oc-curva .h2{background:#e1ebfb;color:#2a5399;} .pane[data-pane="valorizaciones"] .oc-curva .h2.e{background:#ddf2e8;color:#1f7a55;}
+.pane[data-pane="valorizaciones"] .oc-curva tr.tot td{background:#eef1f6;color:var(--tx);font-size:11px;} .pane[data-pane="valorizaciones"] .oc-curva tr.susp td{background:#e9eef6;}
+.pane[data-pane="valorizaciones"] .vl-tb tr.tot td{background:#eef1f6;}
+
+/* Valorizaciones v2: cifras más pequeñas y finas, etiquetas en peso medio */
+.pane[data-pane="valorizaciones"] .oc-curva{font-size:10px;letter-spacing:.005em;} .pane[data-pane="valorizaciones"] .oc-curva td{color:var(--tx2);font-weight:400;padding:2px 8px;}
+.pane[data-pane="valorizaciones"] .oc-curva td.l,.pane[data-pane="valorizaciones"] .oc-curva td.c{color:var(--tx);font-weight:500;}
+.pane[data-pane="valorizaciones"] .oc-curva td.c{color:var(--mut);font-weight:400;} .pane[data-pane="valorizaciones"] .oc-curva tr.ini td{font-weight:500;}
+.pane[data-pane="valorizaciones"] .oc-curva tr.tot td{font-size:10.5px;font-weight:600;color:var(--tx);} .pane[data-pane="valorizaciones"] .oc-curva tr.susp td{font-weight:500;}
+.pane[data-pane="valorizaciones"] .oc-curva thead th{font-size:9px;}
+.pane[data-pane="valorizaciones"] .vl-tb{font-size:10.5px;} .pane[data-pane="valorizaciones"] .vl-tb td{color:var(--tx2);font-weight:400;} .pane[data-pane="valorizaciones"] .vl-tb td b{font-weight:600;color:var(--tx);}
+.pane[data-pane="valorizaciones"] .vl-tb tr.tot td{font-weight:600;color:var(--tx);}
+
+/* el detalle de valorización no se anima al entrar: la animación se reiniciaba al cambiar «Cargando…» por la tabla y se veía como parpadeo */
+.vld-card{animation:none !important;}
 </style>
 <script>
 document.documentElement.dataset.pane = 'resumen';
@@ -4716,6 +4744,7 @@ function valCurvaOficial() {
     if ((r.concepto || 'contrato') === 'adicional') o.ad += Number(r.programado_parcial) || 0; else o.ct += Number(r.programado_parcial) || 0;
   });
   const r2 = (x) => Math.round((x + 1e-9) * 100) / 100;
+  VL_CURVA = [];
   const lista = Object.values(per).sort((a, b) => a.orden - b.orden);
   // cada periodo se redondea a centavos por separado (como los valores del control oficial) y el acumulado suma esos valores
   const of = {}; (VAL.progOf || []).forEach(r => { of[r.periodo_orden + '|' + r.concepto] = Number(r.monto); });
@@ -4737,6 +4766,7 @@ function valCurvaOficial() {
     n++; const m = mesDe(o.fin), tP = o.tP; aP = r2(aP + tP); sCtP += o.ct2; sAdP += o.ad2;
     const e = ej[m], hayE = !!e && (+new Date(m) <= ultimoEj), tE = e ? e.ct + e.ad : 0; if (hayE) { aE = r2(aE + tE); sCtE += e.ct; sAdE += e.ad; }
     const etq = o.tipo === 'mes' ? nomMes(o.fin) : String(o.etq || nomMes(o.fin));
+    VL_CURVA.push({ etq, p: aP / totProg * 100, e: hayE ? aE / baseE * 100 : null });
     filas += `<tr class="${propMes.has(m) ? 'prop' : ''}"><td class="c">${String(n).padStart(2, '0')}</td><td class="l">${esc(etq)}${propMes.has(m) ? ' <span class="vl-pill pr">propuesta</span>' : ''}</td>
       <td>${N2(o.ct2)}</td><td>${o.ad2 ? N2(o.ad2) : ''}</td><td>${N2(tP)}</td><td>${N2(aP)}</td><td>${PC(tP / totProg)}</td><td>${PC(aP / totProg)}</td>
       <td class="sep">${hayE ? N2(e.ct) : ''}</td><td>${hayE && e.ad ? N2(e.ad) : ''}</td><td>${hayE ? N2(tE) : ''}</td><td>${hayE ? N2(aE) : ''}</td><td>${hayE ? PC(tE / baseE) : ''}</td><td>${hayE ? PC(aE / baseE) : ''}</td></tr>`;
@@ -4751,6 +4781,32 @@ function valCurvaOficial() {
     </thead><tbody>${filas}</tbody></table></div><p class="hint" style="margin:8px 0 0"><i>${susp ? `NOTA. Periodo de suspensión del ${dm(susp.ini)} al ${dm(susp.fin)}. ` : ''}Los porcentajes son sobre el programado total (S/. ${N2(totProg)}).</i></p></div>`;
 }
 document.addEventListener('click', (e) => { const b = e.target.closest('[data-vtipo]'); if (b && !b.disabled) { VAL.tipo = b.dataset.vtipo; valPintar(); } });
+let VL_DATOS = null, VL_CURVA = [], VL_EC = [], VL_ANIM = false;
+// ECharts de Valorizaciones: se crean tras pintar la pantalla; se redimensionan solos y se destruyen al repintar
+function vlGraficos() {
+  VL_EC.forEach(c => { try { if (c._ro) c._ro.disconnect(); c.dispose(); } catch (e) {} }); VL_EC = [];
+  const dibujar = () => {
+    const css = getComputedStyle(document.documentElement), tx = css.getPropertyValue('--tx').trim() || '#14203f', mut = css.getPropertyValue('--mut').trim() || '#6b7a99', ln = css.getPropertyValue('--line').trim() || '#e3e9f4', card = css.getPropertyValue('--card').trim() || '#fff';
+    const mk = (id, opt) => { const el = document.getElementById(id); if (!el) return; el.innerHTML = ''; const c = echarts.init(el, null, { renderer: 'svg' }); c.setOption(opt, true); VL_EC.push(c); if (window.ResizeObserver) { const ro = new ResizeObserver(() => { try { if (el.clientWidth) c.resize(); } catch (e) {} }); ro.observe(el); c._ro = ro; } return c; };
+    const anim = !VL_ANIM; VL_ANIM = true;
+    const base = { textStyle: { fontFamily: 'inherit' }, animation: anim, animationDuration: 500, tooltip: { trigger: 'axis', confine: true, backgroundColor: card, borderColor: ln, textStyle: { color: tx, fontSize: 12, fontFamily: 'inherit' } } };
+    const axX = (data, rot) => ({ type: 'category', data, axisTick: { show: false }, axisLine: { lineStyle: { color: ln } }, axisLabel: { color: mut, fontSize: 10, interval: 0, rotate: rot || 0, lineHeight: 13 } });
+    if (VL_DATOS && document.getElementById('vlEcMes')) {
+      const { filas, presu, MES, N2 } = VL_DATOS, pct = (f) => (f.pct == null ? null : f.pct * 100);
+      mk('vlEcMes', Object.assign({}, base, {
+        grid: { left: 46, right: presu ? 44 : 14, top: 26, bottom: 34 },
+        tooltip: Object.assign({}, base.tooltip, { formatter: (ps) => { const f = filas[ps[0].dataIndex]; return `<b>Valorización N° ${f.v.numero} · ${MES(f.v.mes)}</b>${f.v.estado !== 'aprobada' ? ' <span style="color:#b45309">(propuesta)</span>' : ''}<br>Monto del mes: <b>S/. ${N2(f.mes)}</b>${f.pct != null ? `<br>Acumulado: <b>${(f.pct * 100).toFixed(1)} %</b> del presupuesto` : ''}`; } }),
+        xAxis: axX(filas.map(f => `${MES(f.v.mes)}\nN° ${f.v.numero}`)),
+        yAxis: [{ type: 'value', axisLabel: { color: mut, fontSize: 10, formatter: (v) => (v / 1e6).toFixed(1) + ' M' }, splitLine: { lineStyle: { color: ln } } }].concat(presu ? [{ type: 'value', min: 0, max: 100, axisLabel: { color: '#dc2626', fontSize: 10, formatter: '{value}%' }, splitLine: { show: false } }] : []),
+        series: [{ type: 'bar', barMaxWidth: 34, data: filas.map(f => ({ value: f.mes, itemStyle: f.v.estado !== 'aprobada' ? { color: '#f59e0b', decal: { symbol: 'rect', rotation: Math.PI / 4, dashArrayX: [1, 0], dashArrayY: [2, 3], color: 'rgba(255,255,255,.7)' } } : { color: '#5b6fe0' } })), itemStyle: { borderRadius: [4, 4, 0, 0] }, label: { show: true, position: 'top', color: mut, fontSize: 10, fontWeight: 600, formatter: (q) => (q.value / 1e6).toFixed(1) } }]
+          .concat(presu ? [{ type: 'line', yAxisIndex: 1, data: filas.map(pct), symbolSize: 6, itemStyle: { color: '#dc2626', borderColor: '#fff', borderWidth: 1.5 }, lineStyle: { width: 2.2, color: '#dc2626' } }] : []),
+      }));
+    }
+  };
+  if (window.echarts) { dibujar(); return; }
+  if (!KG.lib) { KG.lib = new Promise((ok, mal) => { const s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js'; s.onload = ok; s.onerror = () => { KG.lib = null; mal(new Error('sin conexión')); }; document.head.appendChild(s); }); }
+  KG.lib.then(dibujar).catch(() => { document.querySelectorAll('.vl-ec').forEach(e => { e.innerHTML = '<div class="rg-msg" style="border:0">No se pudo cargar el gráfico (sin conexión).</div>'; }); });
+}
 function valPintar() {
   const box = $('#vlCuerpo'); if (!box || !VAL.ok) return;
   const tipos = new Set(VAL.vals.map(v => v.tipo));
@@ -4772,25 +4828,16 @@ function valPintar() {
   });
   const props = filas.filter(f => f.v.estado !== 'aprobada'), pMonto = props.reduce((s, f) => s + f.mes, 0), ult = filas[filas.length - 1];
   $('#vlNota').textContent = presu ? `Montos sin IGV · presupuesto ${TIPO_VAL[VAL.tipo].toLowerCase()}: S/. ${N0(presu)}` : 'Montos sin IGV';
-  const kp = (color, lab, val, sub, barra) => `<div class="vl-k" style="--kc:${color}"><small>${lab}</small><b>${val}</b>${barra != null ? `<div class="bar"><i style="width:${Math.min(100, barra * 100).toFixed(1)}%"></i></div>` : ''}<em>${sub}</em></div>`;
+  const M = (n) => 'S/. ' + (Number(n || 0) / 1e6).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' M';
+  const kp = (color, lab, val, sub, barra, full) => `<div class="vl-k" style="--kc:${color}"${full ? ` title="${full}"` : ''}><small>${lab}</small><b>${val}</b>${barra != null ? `<div class="bar"><i style="width:${Math.min(100, barra * 100).toFixed(1)}%"></i></div>` : ''}<em>${sub}</em></div>`;
   const kpis = `<div class="vl-kp">
-    ${kp('#0f766e', 'Presupuesto (subtotal)', presu ? 'S/. ' + N0(presu) : '—', TIPO_VAL[VAL.tipo])}
-    ${kp('#4f5bd5', 'Valorizado aprobado', 'S/. ' + N0(acumApr), presu ? (acumApr / presu * 100).toFixed(1) + ' % del presupuesto · oficial' : 'oficial', presu ? acumApr / presu : null)}
-    ${kp('#d97706', 'En propuesta (sin conciliar)', 'S/. ' + N0(pMonto), props.length ? 'Valorización ' + props.map(f => f.v.numero).join(', ') : 'ninguna pendiente')}
-    ${kp('#7c3aed', 'Saldo por valorizar', presu ? 'S/. ' + N0(Math.max(0, presu - acum)) : '—', presu ? (Math.max(0, 1 - acum / presu) * 100).toFixed(1) + ' % · incluye propuestas' : '')}</div>`;
-  // gráfico: valorización de cada mes (barras) y % acumulado (línea)
-  const W = 900, H = 250, pl = 46, pr = 44, pt = 20, pb = 34, n = filas.length, paso = (W - pl - pr) / n, bw = Math.min(46, paso * .6);
-  const ymax = Math.max(1, ...filas.map(f => f.mes)) * 1.12, yb = (v) => H - pb - v / ymax * (H - pt - pb), yp = (p) => H - pb - Math.min(1, p) * (H - pt - pb);
-  let g = `<defs><pattern id="vlRay" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="#f59e0b"/><line x1="0" y1="0" x2="0" y2="6" stroke="#fff" stroke-width="2.5"/></pattern></defs>`;
-  [0, .25, .5, .75, 1].forEach(f => { const y = H - pb - f * (H - pt - pb); g += `<line x1="${pl}" y1="${y}" x2="${W - pr}" y2="${y}" stroke="${SVGC.grid}"/><text x="${pl - 6}" y="${y + 3}" font-size="9.5" fill="${SVGC.axis}" text-anchor="end">${(ymax * f / 1e6).toFixed(1)} M</text>${presu ? `<text x="${W - pr + 6}" y="${y + 3}" font-size="9.5" fill="#dc2626">${Math.round(f * 100)}%</text>` : ''}`; });
-  filas.forEach((f, i) => {
-    const cx = pl + paso * i + paso / 2, prop = f.v.estado !== 'aprobada', y = yb(f.mes);
-    g += `<rect x="${cx - bw / 2}" y="${y}" width="${bw}" height="${H - pb - y}" rx="3" fill="${prop ? 'url(#vlRay)' : '#4f5bd5'}" opacity="${prop ? 1 : .88}"><title>Valorización ${f.v.numero} · ${MES(f.v.mes)} · S/. ${N2(f.mes)}${prop ? ' (propuesta)' : ''}</title></rect>
-      <text x="${cx}" y="${y - 4}" font-size="9.5" font-weight="700" fill="${SVGC.axis}" text-anchor="middle">${(f.mes / 1e6).toFixed(1)}</text>
-      <text x="${cx}" y="${H - pb + 14}" font-size="9.5" fill="${SVGC.axis}" text-anchor="middle">${MES(f.v.mes)}</text><text x="${cx}" y="${H - pb + 25}" font-size="8.5" fill="${SVGC.axis}" text-anchor="middle" opacity=".7">N° ${f.v.numero}</text>`;
-  });
-  if (presu) { g += `<path d="${filas.map((f, i) => `${i ? 'L' : 'M'} ${pl + paso * i + paso / 2} ${yp(f.pct)}`).join(' ')}" fill="none" stroke="#dc2626" stroke-width="2.2"/>` + filas.map((f, i) => `<circle cx="${pl + paso * i + paso / 2}" cy="${yp(f.pct)}" r="3.2" fill="#dc2626" stroke="#fff" stroke-width="1.2"/>`).join(''); }
-  const grafico = `<div class="vl-card"><h3>Valorización de cada mes y avance acumulado</h3><p class="hint">Barras: monto del mes (millones de S/.) · línea roja: % acumulado del presupuesto · barras rayadas: valorización en propuesta</p><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Valorizaciones por mes">${g}</svg></div>`;
+    ${kp('#0f766e', 'Presupuesto (subtotal)', presu ? M(presu) : '—', TIPO_VAL[VAL.tipo], null, presu ? 'S/. ' + N0(presu) : '')}
+    ${kp('#4f5bd5', 'Valorizado aprobado', M(acumApr), presu ? (acumApr / presu * 100).toFixed(1) + ' % del presupuesto · oficial' : 'oficial', presu ? acumApr / presu : null, 'S/. ' + N0(acumApr))}
+    ${kp('#d97706', 'En propuesta (sin conciliar)', M(pMonto), props.length ? 'Valorización ' + props.map(f => f.v.numero).join(', ') : 'ninguna pendiente', null, 'S/. ' + N0(pMonto))}
+    ${kp('#7c3aed', 'Saldo por valorizar', presu ? M(Math.max(0, presu - acum)) : '—', presu ? (Math.max(0, 1 - acum / presu) * 100).toFixed(1) + ' % · incluye propuestas' : '', null, presu ? 'S/. ' + N0(Math.max(0, presu - acum)) : '')}</div>`;
+  // gráfico (ECharts): valorización de cada mes (barras) y % acumulado (línea); las propuestas van rayadas
+  const grafico = `<div class="vl-card"><h3>Valorización de cada mes y avance acumulado</h3><p class="hint">Barras: monto del mes (millones de S/.) · línea roja: % acumulado del presupuesto · barras rayadas: valorización en propuesta</p><div class="vl-ec" id="vlEcMes" style="height:240px"></div></div>`;
+  VL_DATOS = { filas, presu, MES, N2 };
   // tabla resumen (una fila por valorización, una columna por frente)
   const admin = !!AUTH.admin;
   const cabIzq = `<thead><tr><th>N°</th><th>Periodo</th></tr></thead>`;
@@ -4820,6 +4867,7 @@ function valPintar() {
   const btnImportar = admin && hayPropuesta ? `<button type="button" class="btn-imp" id="vlImportar" title="Lee el Excel de la valorización: actualiza el metrado de las valorizaciones abiertas (Propuesta) cuyo mes calce, el monto oficial de esas mismas, y los menores metrados de todas las partidas. No crea valorizaciones nuevas.">📥 Actualizar valorizaciones</button>` : '';
   const btnNueva = admin ? `<button type="button" class="btn-imp" id="vlNueva" style="background:var(--green,#0e8f4f);border-color:var(--green,#0e8f4f)" title="Lee el Excel y crea la(s) valorización(es) del contrato que todavía no existen en el panel (quedan en Propuesta)">🆕 Nueva valorización</button>` : '';
   box.innerHTML = kpis + grafico + valCurvaOficial() + `<div class="vl-card"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px"><h3>Resumen de valorizaciones — ${esc(TIPO_VAL[VAL.tipo])}</h3><div style="display:flex;gap:8px;flex-wrap:wrap">${btnNueva}${btnImportar}</div></div><p class="hint">Valorización mensual sin IGV, por frente. Lo aprobado es lo oficial; la propuesta se actualiza cuando el residente la aprueba${admin ? '' : ' (solo el administrador aprueba)'}.</p>${tablaResumen}</div><div id="vlDetalle">${valDetHTML()}</div>`;
+  vlGraficos();
   const btnImp = $('#vlImportar'); if (btnImp) btnImp.addEventListener('click', valImportarIniciar);
   const btnNva = $('#vlNueva'); if (btnNva) btnNva.addEventListener('click', valNuevaIniciar);
   panelesFijos({ fr: '#vlResFrame', iz: '#vlResIzq', de: '#vlResDer', sp: '#vlResSplit', clave: 'obra-vlres-izq', izqDefault: 170, min: 90, minDer: 260 });
@@ -4858,12 +4906,21 @@ async function valDetMenorMap() {
   catch (e) { WBS_MENOR = {}; WBS_DEDUCTIVO = {}; }
   return WBS_MENOR;
 }
+// marca en las dos mitades del resumen cuál valorización tiene el detalle abierto, sin repintar toda la pantalla (eso hacía parpadear gráficos y tablas)
+function valDetMarcar() {
+  const izq = document.querySelectorAll('#vlResIzq tbody tr:not(.tot)'), der = document.querySelectorAll('#vlResDer tbody tr:not(.tot)');
+  izq.forEach((tr, i) => {
+    const b = tr.querySelector('[data-valdet]'), on = !!b && b.dataset.valdet === valDetId;
+    tr.classList.toggle('sel', on); if (der[i]) der[i].classList.toggle('sel', on);
+    if (b) { b.textContent = on ? 'Cerrar ▾' : 'Ver ▸'; b.title = on ? 'Ocultar el detalle de esta valorización' : 'Ver el detalle de esta valorización'; }
+  });
+}
 async function valDetAbrir(id) {
-  if (valDetId === id) { valDetId = null; valPintar(); return; }
+  if (valDetId === id) { valDetId = null; valDetMarcar(); valDetPintar(); return; }
   valDetId = id; valDetFiltro = { frente: '', modo: 'completo' };   // se abre con la valorización completa (no resumida), lista para revisar o imprimir
-  valPintar();
-  $('#vlDetalle').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  valDetMarcar(); valDetPintar();
   await valDetCargar(id, 'completo');
+  if (valDetId === id) { const det = $('#vlDetalle'); if (det) det.scrollIntoView({ behavior: 'auto', block: 'start' }); }   // se baja al detalle una sola vez, cuando la tabla ya está pintada
 }
 async function valDetCargar(id, modo) {
   if (modo === 'menor') modo = 'completo';   // «solo menores metrados» es un filtro de la valorización completa
@@ -7074,7 +7131,9 @@ function panelesFijos(c) {
     if (filasIz[idx]) filasIz[idx].classList.add('hov'); if (filasDe[idx]) filasDe[idx].classList.add('hov');
   });
   fr.addEventListener('mouseleave', () => fr.querySelectorAll('tr.hov').forEach(x => x.classList.remove('hov')));
-  if (window.ResizeObserver) new ResizeObserver(sync).observe(fr);
+  // se vuelve a ajustar solo si cambia el ANCHO del marco: el propio ajuste cambia su alto (filas fraccionarias con campos o botones, como administrador)
+  // y observar también el alto creaba un bucle infinito que repintaba la tabla sin parar (parpadeo)
+  if (window.ResizeObserver) { let wPrev = Math.round(fr.getBoundingClientRect().width); new ResizeObserver(() => { const w = Math.round(fr.getBoundingClientRect().width); if (w === wPrev) return; wPrev = w; sync(); }).observe(fr); }
   sync();
   return { sync };
 }
