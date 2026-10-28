@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="build" content="20261027130903">
+<meta name="build" content="20261027194004">
 <script>/* auto-actualizar: compara el sello de esta copia con el del servidor y recarga una sola vez */
 (function(){try{if(!/^https?:/.test(location.protocol))return;var me=document.querySelector('meta[name=build]').content;if(me==='0')return;
 fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'}).then(function(r){return r.text()}).then(function(h){
@@ -20,7 +20,7 @@ else sessionStorage.removeItem('panel_upd');}).catch(function(){});}catch(e){}})
 <title>Obra 04 · Panel de Control</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
 <style>
 :root{
   --bg:#f4f6fb; --panel:#ffffff; --card:#ffffff; --line:#e4e9f4; --line2:#d5deef;
@@ -782,12 +782,23 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .inf-firmas{display:flex;gap:26px;} .inf-firmas span{display:block;width:150px;padding-top:3px;border-top:1px solid var(--mut);text-align:center;font-size:10px;}
 /* Hoja A3 «Curva S»: encabezado como la valorización, curva y cuadro comparativo (colores de la pantalla, aplicados aquí porque el visor cuelga de <body>) */
 .vl-imp{display:inline-flex;align-items:center;justify-content:center;padding:5px 8px;}
+/* Presupuesto de adicionales: selector, tabla y hoja A3 (se repite cabecera y 29 mm libres abajo en cada hoja impresa) */
+.pap-chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px;}
+.pap-card{padding:12px 14px;} .pap-cab{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:8px;} .pap-cab h3{margin:0 0 2px;font-size:14px;} .pap-cab .hint{margin:0;font-size:11px;}
+.pap-imp{display:inline-flex;align-items:center;justify-content:center;padding:5px 8px;flex:none;}
+table.vl-tb.pap-res{font-size:11px;} table.vl-tb.pap-res th,table.vl-tb.pap-res td{padding:4px 8px;} table.vl-tb.pap-res thead th{background:#56637e;color:#fff;font-size:9.5px;letter-spacing:.07em;font-weight:700;padding:5px 8px;}
+table.vl-tb.pap-res td{font-variant-numeric:tabular-nums;} table.vl-tb.pap-res tr.pap-g1 td{background:#e9eef6;font-weight:700;color:#24345f;} table.vl-tb.pap-res tr.pap-g2 td{font-size:10.5px;color:var(--tx2);font-weight:600;background:#f6f8fc;} table.vl-tb.pap-res tr.pap-g1 td:first-child,table.vl-tb.pap-res tr.pap-g2 td:first-child{text-align:left;}
+.pap-rf{margin-bottom:12px;} .pap-card .vl-tw{margin-top:8px;} .pap-son{margin:8px 0 0;font-size:11px;font-weight:600;color:var(--tx2);letter-spacing:.02em;}
+:root[data-theme="dark"] .pap-res tr.pap-g1 td{background:#1b2740;color:#e7ecf7;} :root[data-theme="dark"] .pap-res tr.pap-g2 td{background:#15203a;}
+.pap-res td.l .lb-sub{display:block;font-size:10px;font-weight:400;color:var(--mut);}
+.pap-res tr.pap-t td{font-weight:600;border-top:1px solid var(--line);} .pap-res td.pap-r{text-align:right;font-size:10px;letter-spacing:.06em;color:var(--tx2);} .pap-res tr.pap-sub td{background:var(--input);font-weight:700;} .pap-res tr.pap-fin td{font-weight:800;border-top:2px solid var(--blue);color:var(--blue-tx,#1d4ed8);}
+
 .vcs-hoja .vld-pag{display:flex;flex-direction:column;}
 .vcs-hoja .vld-pag{padding-top:9mm;}
 .vcs-enc{flex:none;background:#f4f7fc;border:1px solid #d5deef;border-radius:6px;padding:3mm 5mm 3.5mm;} .vcs-enc .vld-doctit-fila{margin-bottom:6px;} .vcs-enc .vld-datos{margin-top:5px;padding-top:5px;border-top:1px solid #d5deef;}
 .vcs-box{flex:none;margin-top:4.5mm;border:1px solid #cbd5e1;border-radius:6px;overflow:hidden;background:#fff;}
 .vcs-cap{padding:3px 10px;background:#eef3fc;border-bottom:1px solid #d5deef;color:#2f6fd6;font-family:'Inter','Segoe UI',system-ui,sans-serif;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;}
-.vcs-graf{width:100%;height:335px;} .vcs-graf svg{display:block;}
+.vcs-graf{width:100%;height:380px;} .vcs-graf svg{display:block;}
 .vcs-hoja .oc-curva td.l{white-space:nowrap;} .vcs-hoja .oc-curva .vl-pill{font-size:8px;padding:0 6px;} .vcs-tabla .oc-curva{min-width:0;width:100%;font-size:10.5px;font-family:'Arial Narrow',Arial,sans-serif;}
 .vcs-hoja .oc-curva th,.vcs-hoja .oc-curva td{padding:1.5px 6px;line-height:1.25;border-color:#e3e8ef;}
 .vcs-hoja .oc-curva thead th{font-size:9px;letter-spacing:.05em;font-weight:700;color:#fff;border-color:rgba(255,255,255,.4);padding:3px 6px;}
@@ -798,6 +809,28 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .vcs-corte{display:none;} .vcs-hoja .vcs-corte{display:inline-block;margin-left:6px;padding:0 6px;border-radius:3px;background:#d9972b;color:#fff;font-size:8.5px;font-weight:700;letter-spacing:.08em;vertical-align:1px;}
 .vcs-hoja .oc-curva tr.corte td{background:#fde9bd;color:#1c2b3d;font-weight:700;border-top:1.5px solid #d9972b;border-bottom:1.5px solid #d9972b;}
 .vcs-nota{flex:none;margin:4px 0 0;font-size:9.5px;font-style:italic;color:#64748b;}
+.pap-hoja{padding:0 12mm !important;font-family:'IBM Plex Sans','Inter','Segoe UI',Arial,sans-serif !important;color:#1f2937;} .vld-hoja.pap-hoja{width:210mm;} @media print{.vld-hoja.pap-hoja{width:210mm !important;}}
+/* Hoja A4 vertical del presupuesto. Escala tipográfica (px): título 17 · subtítulo 9.5 · cuerpo 10 · encabezados de columna 8.5 · etiquetas de totales 9 · total final 15.
+   Jerarquía: los títulos y los totales SIEMPRE más grandes y firmes que el cuerpo; color solo en navy y grises, filetes finos, una banda tenue en el total final. */
+.pap-hoja .vld-doctit{white-space:normal;min-width:0;} .pap-hoja .vld-doctit h2{font-size:17px;font-weight:700;letter-spacing:.03em;color:#14213d;margin:0 0 4px;line-height:1.2;}
+.pap-hoja .vld-docper{font-size:9.5px;font-weight:500;letter-spacing:.08em;color:#5b6b82;white-space:normal;overflow-wrap:anywhere;line-height:1.4;}
+.pap-hoja .vld-datos{font-size:9px;color:#334155;line-height:1.5;} .pap-hoja .vld-dato b{flex:0 0 84px;font-size:8px;font-weight:600;color:#5b6b82;letter-spacing:.06em;white-space:nowrap;line-height:1.7;} .pap-hoja .vld-dato span{font-weight:500;}
+.pap-hoja .vld-doclogo{max-height:13mm;max-width:40mm;} .pap-hoja .vld-doccod{font-size:8px;min-width:22mm;color:#7b8aa0;} .pap-hoja .vld-doccod b{color:#14213d;font-size:9px;font-weight:700;}
+.pap-tb{width:100%;border-collapse:collapse;table-layout:fixed;font-size:10px;line-height:1.35;color:#1f2937;font-variant-numeric:tabular-nums;}
+.pap-tb th,.pap-tb td{padding:4px 6px;border:0;border-bottom:1px solid #e6eaf1;text-align:right;vertical-align:top;white-space:normal;} .pap-tb td.l,.pap-tb th.l{text-align:left;overflow-wrap:anywhere;} .pap-tb td{font-weight:400;} .pap-tb td.l small{display:block;font-size:8px;color:#5b6b82;letter-spacing:.02em;margin-top:1px;}
+.pap-tb td.pap-c{font-weight:600;color:#14213d;letter-spacing:.01em;}
+.pap-tb thead tr.pap-tit th{background:transparent;border:0;padding:12mm 0 12px;text-align:left;font-weight:400;} .pap-tb thead tr.pap-tit .vld-doctit-fila{margin-bottom:10px;}
+.pap-tb thead tr.pap-tit th > div{width:186mm;max-width:186mm;overflow-wrap:anywhere;}
+.pap-tb tr.pap-cols th{background:#f1f4f9;color:#14213d;font-size:8.5px;font-weight:700;letter-spacing:.06em;padding:6px 6px;line-height:1.25;overflow-wrap:anywhere;border:0;box-shadow:inset 0 1.5px 0 #14213d,inset 0 -1.5px 0 #14213d;}
+.pap-tb tr{break-inside:avoid;page-break-inside:avoid;}
+.pap-tb tr.pap-t td{border-bottom:0;padding-top:3px;padding-bottom:3px;font-size:10.5px;font-weight:500;} .pap-tb td.pap-r{font-size:9px;font-weight:600;letter-spacing:.05em;color:#334155;}
+.pap-tb tr.pap-sub td{box-shadow:inset 0 1px 0 #94a3b8;font-weight:700;font-size:11px;padding-top:5px;} .pap-tb tr.pap-sub td.pap-r{font-size:9.5px;font-weight:700;color:#14213d;}
+.pap-tb tr.pap-fin td{vertical-align:middle;background:#eef2f8;border:0;box-shadow:inset 0 1.5px 0 #14213d,inset 0 -1.5px 0 #14213d;font-weight:700;color:#14213d;padding-top:6px;padding-bottom:6px;font-size:10.5px;} .pap-tb tr.pap-fin td.pap-r{font-size:11px;letter-spacing:.08em;} .pap-tb tr.pap-fin td.pap-n{font-size:12.5px;letter-spacing:.01em;}
+.pap-tb tr.pap-g1 td{background:#f1f4f9;font-weight:700;color:#14213d;font-size:10px;letter-spacing:.04em;text-transform:uppercase;border-bottom:1px solid #cbd5e1;padding-top:6px;padding-bottom:5px;} .pap-tb tr.pap-g1 td:first-child{text-align:left;}
+.pap-tb tr.pap-g2 td{font-size:9px;font-weight:600;color:#5b6b82;letter-spacing:.02em;padding-top:4px;padding-bottom:3px;} .pap-tb tr.pap-g2 td:first-child{text-align:left;}
+.pap-tb tr.pap-son-r td{border:0;padding:14px 0 0;text-align:left;font-size:9.5px;font-weight:600;color:#14213d;letter-spacing:.03em;line-height:1.5;}
+.pap-tr td{font-size:9.5px;} .pap-tr td.l{font-size:10px;} .pap-tr tr.pap-fin td{font-size:10px;} .pap-tr tr.pap-fin td.l{font-size:10.5px;letter-spacing:.06em;}   /* el resumen lleva 7 columnas de importes: cifras un punto más chicas para que quepan los 14 caracteres del total */
+@media print{.pap-tb thead{display:table-header-group;} .pap-tb tfoot{display:table-footer-group;}}
 @page{size:A3 landscape;margin:0;}
 @media print{
   html,body{background:#fff !important;}
@@ -2722,11 +2755,10 @@ document.addEventListener('DOMContentLoaded', function(){ try { var m = document
     <!-- ═══════════ PRESUPUESTO (venta / meta) ═══════════ -->
     <section class="pane" data-pane="presupuesto">
       <div class="vl-top">
-        <p class="api" style="margin:0">Frente: <span id="preFrentes"></span></p>
+        <p class="api" style="margin:0" id="preFrP">Frente: <span id="preFrentes"></span></p>
         <p class="api" style="margin:0">Ver:
           <button class="seg-btn" data-premodo="venta" title="Presupuesto contractual: solo lectura">🔒 Venta</button>
-          <button class="seg-btn" data-premodo="meta" title="Presupuesto meta: copia del APU que se ajusta sin tocar el contrato">🎯 Meta</button>
-        </p>
+          <button class="seg-btn" data-premodo="meta" title="Presupuesto meta: copia del APU que se ajusta sin tocar el contrato">🎯 Meta</button>        </p>
       </div>
       <div id="preCuerpo"><div class="rg-msg">Consultando el presupuesto…</div></div>
     </section>
@@ -4785,12 +4817,14 @@ function valCurvaOficial() {
   const baseE = totProg;   // los % (programados y ejecutados) son sobre el programado total
   let n = 0, aP = 0, aE = 0, sCtP = 0, sAdP = 0, sCtE = 0, sAdE = 0, filas = '';
   filas += `<tr class="ini"><td></td><td class="l">INICIO</td><td>0.00</td><td></td><td></td><td></td><td>0.00%</td><td>0.00%</td><td class="sep"></td><td></td><td></td><td></td><td>0.00%</td><td>0.00%</td></tr>`;
+  let suspPrev = null;   // suspensión justo antes del siguiente periodo: la hoja de Curva S la dibuja como una banda entre los dos puntos
+  const fdm = (f) => (f ? String(f).slice(8, 10) + '/' + String(f).slice(5, 7) + '/' + String(f).slice(0, 4) : '');
   lista.forEach(o => {
-    if (o.tipo === 'suspension') { filas += `<tr class="susp"><td></td><td class="l">${nomMes(o.ini)}</td><td>0.00</td><td></td><td></td><td></td><td></td><td>${PC(aP / totProg)}</td><td class="sep"></td><td></td><td></td><td></td><td></td><td>${PC(aE / baseE)}</td></tr>`; return; }
+    if (o.tipo === 'suspension') { suspPrev = { ini: fdm(o.ini), fin: fdm(o.fin) }; filas += `<tr class="susp"><td></td><td class="l">${nomMes(o.ini)}</td><td>0.00</td><td></td><td></td><td></td><td></td><td>${PC(aP / totProg)}</td><td class="sep"></td><td></td><td></td><td></td><td></td><td>${PC(aE / baseE)}</td></tr>`; return; }
     n++; const m = mesDe(o.fin), tP = o.tP; aP = r2(aP + tP); sCtP += o.ct2; sAdP += o.ad2;
     const e = ej[m], hayE = !!e && (+new Date(m) <= ultimoEj), tE = e ? e.ct + e.ad : 0; if (hayE) { aE = r2(aE + tE); sCtE += e.ct; sAdE += e.ad; }
     const etq = o.tipo === 'mes' ? nomMes(o.fin) : String(o.etq || nomMes(o.fin));
-    VL_CURVA.push({ etq, p: aP / totProg * 100, e: hayE ? aE / baseE * 100 : null });
+    VL_CURVA.push({ etq, p: aP / totProg * 100, e: hayE ? aE / baseE * 100 : null, susp: suspPrev }); suspPrev = null;
     const esCorte = hayE && +new Date(m) === ultimoEj;   // último mes con ejecutado: en la hoja impresa va resaltado
     filas += `<tr class="${propMes.has(m) ? 'prop' : ''}${esCorte ? ' corte' : ''}"><td class="c">${String(n).padStart(2, '0')}</td><td class="l">${esc(etq)}${propMes.has(m) ? ' <span class="vl-pill pr">propuesta</span>' : ''}${esCorte ? ' <span class="vcs-corte">CORTE</span>' : ''}</td>
       <td>${N2(o.ct2)}</td><td>${o.ad2 ? N2(o.ad2) : ''}</td><td>${N2(tP)}</td><td>${N2(aP)}</td><td>${PC(tP / totProg)}</td><td>${PC(aP / totProg)}</td>
@@ -4836,7 +4870,7 @@ async function valCurvaImprimir() {
   const tablaHoja = VL_CURVA_DOC.tabla.replace(/<colgroup>.*?<\/colgroup>/, `<colgroup>${anchos.map(w => `<col style="width:${w}px">`).join('')}</colgroup>`).replace(/>ADICIONAL<\/th>/g, `>${rotAd}</th>`);
   const html = `<div class="inf-hoja vld-hoja vcs-hoja"><section class="vld-pag ultima">
     <div class="vcs-enc"><div class="vld-doctit-fila">${valDocEncabezadoLogo()}<div class="vld-doctit"><h2>CURVA S</h2><div class="vld-docper">PROGRAMADO VS EJECUTADO${corte ? ' · AL ' + esc(String(corte).toUpperCase()) : ''}</div><div class="vld-docalc">${esc(TIPO_VAL[VAL.tipo] || '')}</div></div>${valDocEncabezadoDer()}</div><div class="vld-datos">${datosObra}</div></div>
-    <div class="vcs-box"><div class="vcs-cap">Curva S acumulada · % del presupuesto</div><div class="vcs-graf" id="vcsGraf"></div></div>
+    <div class="vcs-box"><div class="vcs-graf" id="vcsGraf"></div></div>
     <div class="vcs-box vcs-boxt"><div class="vcs-tabla">${tablaHoja}</div></div>
     <p class="vcs-nota">${esc(VL_CURVA_DOC.nota)} · Sin IGV · Generado por el Panel de Control de Obra.</p>
   </section></div>`;
@@ -4849,9 +4883,11 @@ async function valCurvaImprimir() {
   const el = ov.querySelector('#vcsGraf');
   try {
     await vlEcharts();
-    const W = 1494, H = 335, c = echarts.init(el, null, { renderer: 'svg', width: W, height: H });
+    const W = 1494, H = 380, c = echarts.init(el, null, { renderer: 'svg', width: W, height: H });
     const cats = ['Inicio'].concat(VL_CURVA.map(p => p.etq)), P = [0].concat(VL_CURVA.map(p => +p.p.toFixed(2))), E = [0].concat(VL_CURVA.map(p => (p.e == null ? null : +p.e.toFixed(2))));
     const corteI = ult ? VL_CURVA.indexOf(ult) + 1 : -1, ambar = '#d9972b', cP = '#3b74e0', cE = '#d62d2d';
+    const bandas = [];
+    VL_CURVA.forEach((p, k) => { if (p.susp) bandas.push([{ xAxis: cats[k], name: `SUSPENSIÓN\n${p.susp.ini.slice(0, 5)} – ${p.susp.fin}` }, { xAxis: cats[k + 1] }]); });
     const nomX = (v) => String(v).replace(/^(\d+ al \d+) /, '$1\n').replace(/ (\d\d)$/, '\n$1');
     // etiquetas en «píldoras» blancas, sin pisar las líneas: la curva que va arriba lleva su valor arriba-izquierda y la de abajo, abajo-derecha
     // (las curvas suben hacia la derecha, esos son los lados libres); en los meses con valores casi en cero solo se rotula la de arriba
@@ -4870,7 +4906,9 @@ async function valCurvaImprimir() {
         axisLabel: { color: '#334155', fontSize: 11, interval: 0, lineHeight: 14, formatter: (v, i) => (i === corteI ? `{c|${nomX(v)}}` : nomX(v)), rich: { c: { color: '#fff', backgroundColor: ambar, padding: [2, 5], borderRadius: 3, fontWeight: 'bold', fontSize: 11, lineHeight: 14 } } } },
       yAxis: { type: 'value', min: 0, max: 100, interval: 20, axisLabel: { color: '#334155', fontSize: 11, formatter: '{value}%' }, splitLine: { lineStyle: { color: '#e3e8ef' } } },
       series: [
-        { name: 'Programado', type: 'line', data: datos(P, E, cP, true), symbolSize: 7, z: 3, itemStyle: { color: cP, borderColor: '#fff', borderWidth: 1.5 }, lineStyle: { width: 3.2, color: cP },
+        { name: 'Programado', type: 'line', data: datos(P, E, cP, true), symbolSize: 7, z: 3,
+          // capa translúcida de la suspensión: va entre el último periodo antes y el primero después (en la tabla es la fila «Marzo 26»)
+          markArea: bandas.length ? { silent: true, itemStyle: { color: 'rgba(100,116,139,.15)', borderColor: 'rgba(100,116,139,.55)', borderWidth: 1, borderType: 'dashed' }, label: { position: 'insideTop', distance: 6, color: '#475569', fontSize: 10, fontWeight: 700, lineHeight: 13 }, data: bandas } : undefined, itemStyle: { color: cP, borderColor: '#fff', borderWidth: 1.5 }, lineStyle: { width: 3.2, color: cP },
           areaStyle: { color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: 'rgba(59,116,224,.12)' }, { offset: 1, color: 'rgba(59,116,224,0)' }] } },
           labelLayout: { hideOverlap: true } },
         { name: 'Ejecutado', type: 'line', data: datos(E, P, cE, false), symbolSize: 7, z: 4, itemStyle: { color: cE, borderColor: '#fff', borderWidth: 1.5 }, lineStyle: { width: 3.2, color: cE },
@@ -8261,6 +8299,8 @@ async function preCargar() {
 }
 function prePintar() {
   const box = $('#preCuerpo'); if (!box) return;
+  const enAdic = PRE.modo === 'venta' && PAD.sel !== 'c', frp = $('#preFrP'); if (frp) frp.style.display = enAdic ? 'none' : '';   // adicionales y resumen vigente no se separan por frente
+  if (enAdic) { document.querySelectorAll('[data-premodo]').forEach(b => b.classList.toggle('on', b.dataset.premodo === PRE.modo)); preAdiPintar(); return; }
   const d = preVista(); if (!d) return;
   $('#preFrentes').innerHTML = (COMPONENTES.length > 1 ? `<button class="seg-btn ${PRE.frente === 'todos' ? 'on' : ''}" data-prefr="todos" title="Suma de todos los frentes">Toda la obra</button> ` : '') + COMPONENTES.map(c => `<button class="seg-btn ${PRE.frente === c.id ? 'on' : ''}" data-prefr="${esc(c.id)}">${esc(String(c.nombre).replace(/^Puente\s+/i, ''))}</button>`).join(' ');
   document.querySelectorAll('[data-premodo]').forEach(b => b.classList.toggle('on', b.dataset.premodo === PRE.modo));
@@ -8288,7 +8328,8 @@ function prePintar() {
         <button type="button" class="icon-btn" data-pre-exp="0" title="Contraer" aria-label="Contraer"><svg viewBox="0 0 24 24"><path d="m7 15 5-5 5 5M7 20l5-5 5 5" transform="translate(0 -6)"/></svg></button></div></div>
       <div class="vl-tw"><table class="vl-tb pre-tb ${meta ? 'pre-tm' : 'pre-tv'}">${preTabla(d, meta)}</table></div></div>`;
   }
-  box.innerHTML = kp + cuerpo;
+  box.innerHTML = (PRE.modo === 'venta' ? padBarraHTML([]) : '') + kp + cuerpo;
+  if (PRE.modo === 'venta') padBarra();
 }
 function preEstadoHTML(m, adm) {
   const [txt, k] = PRE_EST[m.estado] || [m.estado, 'ar'], f = (s) => s ? new Date(s).toLocaleDateString('es-PE', { day: '2-digit', month: '2-digit', year: '2-digit' }) : '';
@@ -11711,6 +11752,29 @@ const ADI_EST = { solicitada: ['solicitada', 'pr'], autorizada: ['autorizada', '
 const adiN = (v) => Number(v || 0).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const adiN0 = (n) => String(n).padStart(2, '0');
 const adiCuenta = (r) => r.estado === 'aprobada' || r.estado === 'aprobada_parcial';
+// importes de un registro (costo directo, GG, utilidad, subtotal, IGV, total): GG y utilidad = los digitados en su registro; si no, los propios de sus partidas (línea base); si tampoco, los del contrato (estimado)
+function adiMonto(r) {
+  if (r.cd == null) return null;
+  const propio = r.gg_pct != null, real = propio || (r.completo && r.gg != null), r2 = (x) => Math.round((x + 1e-9) * 100) / 100,   // lo digitado se redondea a centavos, como en la valorización
+    gg = propio ? r2(r.cd * r.gg_pct) : real ? r.gg : r.cd * ADI.f.gg, ut = r.ut_pct != null ? r2(r.cd * r.ut_pct) : propio ? r2(r.cd * ADI.f.ut) : real ? r.ut : r.cd * ADI.f.ut, sub = r.cd + gg + ut, igv = ADI.f.igv;
+  // % NOMINALES (los digitados, los de las partidas del CAO o los del contrato): el % que se muestra no se deduce de los importes ya redondeados a centavos (daba 10.00000014 en vez de 10)
+  const pgg = propio ? r.gg_pct * 100 : real ? (r.cd ? gg / r.cd * 100 : 0) : ADI.f.gg * 100, put = r.ut_pct != null ? r.ut_pct * 100 : propio ? ADI.f.ut * 100 : real ? (r.cd ? ut / r.cd * 100 : 0) : ADI.f.ut * 100;
+  return { cd: r.cd, gg, ut, sub, igv: sub * igv, total: sub * (1 + igv), real, pgg, put };
+}
+// porcentaje con los decimales que hagan falta (10 → «10», 14.32881905 → «14.32881905»), máximo 8
+const padPct = (x) => Number(x || 0).toLocaleString('es-PE', { minimumFractionDigits: 0, maximumFractionDigits: 8 });
+// monto en letras (soles): «SON: CIENTO TREINTA Y TRES MIL OCHOCIENTOS SESENTA CON 06/100 SOLES»
+function padLetras(n) {
+  const U = ['', 'UN', 'DOS', 'TRES', 'CUATRO', 'CINCO', 'SEIS', 'SIETE', 'OCHO', 'NUEVE', 'DIEZ', 'ONCE', 'DOCE', 'TRECE', 'CATORCE', 'QUINCE', 'DIECISÉIS', 'DIECISIETE', 'DIECIOCHO', 'DIECINUEVE', 'VEINTE', 'VEINTIÚN', 'VEINTIDÓS', 'VEINTITRÉS', 'VEINTICUATRO', 'VEINTICINCO', 'VEINTISÉIS', 'VEINTISIETE', 'VEINTIOCHO', 'VEINTINUEVE'];
+  const D = ['', '', '', 'TREINTA', 'CUARENTA', 'CINCUENTA', 'SESENTA', 'SETENTA', 'OCHENTA', 'NOVENTA'], C = ['', 'CIENTO', 'DOSCIENTOS', 'TRESCIENTOS', 'CUATROCIENTOS', 'QUINIENTOS', 'SEISCIENTOS', 'SETECIENTOS', 'OCHOCIENTOS', 'NOVECIENTOS'];
+  const tres = (x) => { if (!x) return ''; if (x === 100) return 'CIEN'; const c = Math.floor(x / 100), r = x % 100, s = C[c]; return [s, r ? (r < 30 ? U[r] : D[Math.floor(r / 10)] + (r % 10 ? ' Y ' + U[r % 10] : '')) : ''].filter(Boolean).join(' '); };
+  let ent = Math.floor(Number(n) + 1e-9), cent = Math.round((Number(n) - ent) * 100); if (cent >= 100) { ent += 1; cent = 0; }
+  const mi = Math.floor(ent / 1e6), mm = Math.floor((ent % 1e6) / 1e3), rs = ent % 1e3;
+  const txt = [mi ? (mi === 1 ? 'UN MILLÓN' : tres(mi) + ' MILLONES') : '', mm ? (mm === 1 ? 'MIL' : tres(mm) + ' MIL') : '', tres(rs)].filter(Boolean).join(' ') || 'CERO';
+  return `SON: ${txt} CON ${String(cent).padStart(2, '0')}/100 SOLES`;
+}
+// siguiente correlativo libre de un tipo: cuenta los que salen de las líneas base Y los registrados a mano (la base solo veía estos últimos y repetía el N° 01)
+const adiSigNum = (tipo, filas) => Math.max(0, ...(filas || adiDerivar()).filter(r => r.tipo === tipo).map(r => Number(r.numero) || 0), ...ADI.reg.filter(r => r.tipo === tipo).map(r => Number(r.numero) || 0)) + 1;
 async function adiCargar(forzar) {
   const box = $('#adiPanel'); if (!box) return;
   if (typeof OBRA === 'undefined' || !OBRA || !OBRA.id) { box.innerHTML = '<div class="rg-msg">Leyendo la obra…</div>'; setTimeout(() => { if (document.documentElement.dataset.pane === 'adicionales') adiCargar(); }, 1200); return; }
@@ -11754,16 +11818,17 @@ function adiDerivar() {
     if (!m) return { ...d, id: null };
     const cd = m.monto_cd != null ? Number(m.monto_cd) : d.cd, k = d.cd ? cd / d.cd : 1;
     return { ...d, id: m.id, numero: m.numero, estado: m.estado, descripcion: m.descripcion || d.descripcion, causal: m.causal, base_legal: m.base_legal, resolucion: m.resolucion || d.resolucion, fecha_resolucion: m.fecha_resolucion || d.fecha_resolucion,
-      fecha_solicitud: m.fecha_solicitud, notas: m.notas, cd, gg: d.gg * k, ut: d.ut * k, digitado: m.monto_cd != null }; });
+      fecha_solicitud: m.fecha_solicitud, notas: m.notas, cd, gg: d.gg * k, ut: d.ut * k, digitado: m.monto_cd != null, gg_pct: m.gg_pct != null ? Number(m.gg_pct) : null, ut_pct: m.utilidad_pct != null ? Number(m.utilidad_pct) : null }; });
   ADI.reg.filter(r => !der.some(d => d.tipo === r.tipo && d.lb_numero === r.lb_numero)).forEach(r => filas.push({ tipo: r.tipo, numero: r.numero, lb_numero: r.lb_numero, estado: r.estado, id: r.id, descripcion: r.descripcion, causal: r.causal, base_legal: r.base_legal,
-    resolucion: r.resolucion, fecha_resolucion: r.fecha_resolucion, fecha_solicitud: r.fecha_solicitud, notas: r.notas, cd: r.monto_cd != null ? Number(r.monto_cd) : null, gg: null, ut: null, completo: false, digitado: true, suelta: true }));
+    resolucion: r.resolucion, fecha_resolucion: r.fecha_resolucion, fecha_solicitud: r.fecha_solicitud, notas: r.notas, cd: r.monto_cd != null ? Number(r.monto_cd) : null, gg: null, ut: null, completo: false, digitado: true, suelta: true, gg_pct: r.gg_pct != null ? Number(r.gg_pct) : null, ut_pct: r.utilidad_pct != null ? Number(r.utilidad_pct) : null }));
   return filas;
 }
 function adiPintar() {
   const box = $('#adiPanel'), adm = !!AUTH.admin, f2 = (s) => s ? plFmt(plD(s)) : '—', aprob = (l) => !l.estado || l.estado === 'aprobado', porLB = new Map(ADI.pre.map(p => [p.numero, p]));
   const filas = adiDerivar(), kc = 1 + ADI.f.gg + ADI.f.ut, igv = ADI.f.igv;
   // importes de cada registro: costo directo, GG propios, utilidad, sub total, IGV y total (si faltan los GG de las partidas, se estima con el contrato y se avisa)
-  const monto = (r) => { if (r.cd == null) return null; const real = r.completo && r.gg != null, gg = real ? r.gg : r.cd * ADI.f.gg, ut = real ? r.ut : r.cd * ADI.f.ut, sub = r.cd + gg + ut; return { cd: r.cd, gg, ut, sub, igv: sub * igv, total: sub * (1 + igv), real }; };
+  // GG y utilidad del adicional: los que digitaste en su registro; si no, los propios de sus partidas (línea base); si tampoco, los del contrato (estimado)
+  const monto = adiMonto;
   const cuentan = filas.filter(r => adiCuenta(r) && r.cd != null), suma = (tp, k) => cuentan.filter(r => r.tipo === tp).reduce((s, r) => s + monto(r)[k], 0);
   const adic = suma('adicional', 'cd'), dedu = suma('deductivo', 'cd'), adSub = suma('adicional', 'sub'), deSub = suma('deductivo', 'sub'), base0 = ADI.cd0 * (1 + ADI.f.gg + ADI.f.ut);
   const neto = adSub - deSub, pct = base0 ? neto / base0 * 100 : 0, uso = ADI.limite ? Math.min(100, Math.max(0, pct / ADI.limite * 100)) : 0;
@@ -11776,7 +11841,9 @@ function adiPintar() {
     <div class="vl-k"><small>Adicionales (subtotal)</small><b>+ S/ ${adiN(adSub)}</b><em>${nAd} partida${nAd === 1 ? '' : 's'} · costo directo S/ ${adiN(adic)}${estimado ? ' · GG estimados' : ' · con sus GG propios'}</em></div>
     <div class="vl-k"><small>Deductivos vinculados (subtotal)</small><b>− S/ ${adiN(deSub)}</b><em>${nDe} partida${nDe === 1 ? '' : 's'} · costo directo S/ ${adiN(dedu)}</em></div>
     <div class="vl-k"><small>Adicionales netos</small><b>${adiN(pct)} %</b><em>S/ ${adiN(neto)} · límite ${adiN(ADI.limite)} %${lim}</em><div class="adi-bar" title="${adiN(uso)} % del límite"><i style="width:${uso.toFixed(1)}%;background:${uso >= 90 ? '#dc2626' : uso >= 60 ? '#f59e0b' : '#10b981'}"></i></div></div></div>`;
-  const aviso = pct > ADI.limite ? `<p class="plz-nota al">⚠ Los adicionales netos (${adiN(pct)} %) superan el límite de ${adiN(ADI.limite)} %: revisa el trámite que corresponde.</p>` : (uso >= 80 ? `<p class="plz-nota al">⚠ Ya se usó el ${adiN(uso)} % del límite de adicionales.</p>` : '');
+  const repetidos = [...new Set(filas.filter((r, i) => filas.some((o, j) => j !== i && o.tipo === r.tipo && o.numero === r.numero)).map(r => `${r.tipo === 'adicional' ? 'Adicional' : 'Deductivo vinculado'} N° ${adiN0(r.numero)} (el siguiente libre es el ${adiN0(adiSigNum(r.tipo, filas))})`))];
+  const avisoRep = repetidos.length ? `<p class="plz-nota al">⚠ Hay dos registros con el mismo número: ${repetidos.join('; ')}. Con el lápiz corrige el N° del que registraste a mano.</p>` : '';
+  const aviso = avisoRep + (pct > ADI.limite ? `<p class="plz-nota al">⚠ Los adicionales netos (${adiN(pct)} %) superan el límite de ${adiN(ADI.limite)} %: revisa el trámite que corresponde.</p>` : (uso >= 80 ? `<p class="plz-nota al">⚠ Ya se usó el ${adiN(uso)} % del límite de adicionales.</p>` : ''));
   // conciliación: del costo directo de las líneas base a lo que programa la Curva S y a lo valorizado
   const cdCon = ADI.cd0 - dedu + mayo, tot = (v) => adiN(v), pc = (a, b) => b ? adiN(a / b * 100) + ' %' : '—', cs = ADI.cs, va = ADI.val, hayCs = cs.contrato > 0 || cs.adicional > 0;
   const dif = (a, b) => { const d = a - b; return Math.abs(d) < 0.5 ? '<span style="color:var(--green)">0.00 ✔</span>' : `<b style="color:#b45309">${d > 0 ? '+' : '−'} ${adiN(Math.abs(d))}</b>`; };
@@ -11808,12 +11875,12 @@ function adiPintar() {
     const v = [...g.values()]; return v.length ? { n: v.length, d: v.reduce((s, x) => s + x, 0) } : null; };
   const orden = filas.slice().sort((a, b) => a.tipo === b.tipo ? b.numero - a.numero : (a.tipo === 'adicional' ? -1 : 1));
   const filasReg = orden.map(r => {
-    const [etq, cls] = ADI_EST[r.estado] || [r.estado, 'pr'], mo = monto(r), dp = diasPlazo(r), signo = r.tipo === 'adicional' ? '+' : '−', pctGG = mo && mo.cd ? mo.gg / mo.cd * 100 : null;
+    const [etq, cls] = ADI_EST[r.estado] || [r.estado, 'pr'], mo = monto(r), dp = diasPlazo(r), signo = r.tipo === 'adicional' ? '+' : '−', pctGG = mo ? mo.pgg : null;
     const sub = [r.descripcion, r.causal, r.base_legal].filter(Boolean).map(esc).join(' · ');
-    return `<tr${r.estado === 'improcedente' ? ' style="opacity:.75"' : ''}><td class="l"><b style="color:${r.tipo === 'adicional' ? '#f26a1b' : '#0ea5a4'}">${r.tipo === 'adicional' ? 'Adicional' : 'Deductivo vinculado'} N° ${adiN0(r.numero)}</b>${r.suelta ? ' <span class="vl-pill pr">en trámite</span>' : ''}${sub ? `<span class="lb-sub">${sub}</span>` : ''}</td>
+    return `<tr${r.estado === 'improcedente' ? ' style="opacity:.75"' : ''}><td class="l"><b style="color:${r.tipo === 'adicional' ? '#f26a1b' : '#0ea5a4'}">${r.tipo === 'adicional' ? 'Adicional' : 'Deductivo vinculado'} N° ${adiN0(r.numero)}</b>${r.suelta ? (r.estado === 'solicitada' || r.estado === 'autorizada' ? ' <span class="vl-pill pr">en trámite</span>' : ' <span class="vl-pill pp" title="Ya está registrado y cuenta en los totales, pero todavía no llegó en ninguna línea base: cuando llegue en un CAO aprobado, este registro se une solo con él.">sin LB</span>') : ''}${sub ? `<span class="lb-sub">${sub}</span>` : ''}</td>
       <td><span class="vl-pill ${cls}">${etq}</span></td><td class="l">${esc(r.resolucion || '—')}${r.fecha_resolucion ? `<span class="lb-sub">${f2(r.fecha_resolucion)}</span>` : ''}</td>
       <td>${r.lb_numero == null ? '—' : 'LB' + r.lb_numero}</td>
-      <td>${mo ? `<b>${signo} ${adiN(mo.sub)}</b><span class="lb-sub">CD ${adiN(mo.cd)} · GG ${adiN(mo.gg)}${pctGG != null ? ' (' + adiN(pctGG) + ' %)' : ''} · Util. ${adiN(mo.ut)}${mo.real ? '' : ' · estimado'}</span>` : '—'}</td>
+      <td>${mo ? `<b>${signo} ${adiN(mo.sub)}</b><span class="lb-sub">CD ${adiN(mo.cd)} · GG ${adiN(mo.gg)}${pctGG != null ? ' (' + padPct(pctGG) + ' %)' : ''} · Util. ${adiN(mo.ut)} (${padPct(mo.put)} %)${mo.real ? '' : ' · estimado'}</span>` : '—'}</td>
       <td class="l">${dp ? `${dp.n} ampliación${dp.n === 1 ? '' : 'es'} de plazo · <b>+${dp.d} d</b>` : r.tipo === 'adicional' ? '<span class="lb-sub">sin ampliación ligada</span>' : ''}</td>
       <td class="c">${adm ? `<button type="button" class="icon-btn" data-adi-edit="${r.id || ''}" data-adi-tipo="${r.tipo}" data-adi-lb="${r.lb_numero == null ? '' : r.lb_numero}" data-adi-num="${r.numero}" title="Completar los datos legales (resolución, causal, estado…)" aria-label="Editar"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4Z"/></svg></button>${r.id ? `<button type="button" class="icon-btn" data-adi-del="${r.id}" title="Quitar los datos legales que completaste (el registro sigue saliendo de la línea base)" aria-label="Quitar"><svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button>` : ''}` : ''}</td></tr>`;
   }).join('');
@@ -11830,29 +11897,54 @@ function adiFormAbrir(id, pre) {
   let m = document.getElementById('adiForm');
   if (!m) { m = document.createElement('form'); m.id = 'adiForm'; m.className = 'pform la-form'; m.hidden = true; document.body.appendChild(m); }
   const v = (k, d) => esc(e && e[k] != null ? e[k] : (pre && pre[k] != null ? pre[k] : (d || ''))), op = (val, txt, sel) => `<option value="${val}"${sel ? ' selected' : ''}>${txt}</option>`, q = (s) => m.querySelector(s);
-  const tipo0 = e ? e.tipo : (pre && pre.tipo) || 'adicional', est0 = e ? e.estado : 'aprobada', lb0 = e ? e.lb_numero : (pre ? pre.lb_numero : null);
+  const tipo0 = e ? e.tipo : (pre && pre.tipo) || 'adicional', est0 = e ? e.estado : (pre && pre.estado) || 'aprobada', lb0 = e ? e.lb_numero : (pre ? pre.lb_numero : null);
+  const numAuto = !e && !(pre && pre.numero != null);   // registro nuevo sin número: se propone el siguiente libre (cuenta también los que vienen de las líneas base)
   m.innerHTML = `<h3 style="margin:0 0 4px;font-size:14px">${e ? 'Datos legales · ' + (e.tipo === 'adicional' ? 'Adicional' : 'Deductivo vinculado') + ' N° ' + adiN0(e.numero) : pre && pre.numero ? 'Datos legales · ' + (tipo0 === 'adicional' ? 'Adicional' : 'Deductivo vinculado') + ' N° ' + adiN0(pre.numero) : 'Adicional en trámite'}</h3><p class="hint" style="margin:0 0 10px">${pre && pre.lb_numero != null ? 'El registro y su monto ya salen de la línea base; aquí solo completas lo que ningún archivo trae.' : 'Para un adicional que todavía no está en ninguna línea base. Cuando llegue en un CAO aprobado, este registro se une solo con él.'}</p>
     <div class="row3"><div class="field"><label for="adTipo">Tipo</label><select id="adTipo">${op('adicional', 'Adicional', tipo0 === 'adicional')}${op('deductivo', 'Deductivo vinculado', tipo0 === 'deductivo')}</select></div>
-      <div class="field"><label for="adNum">N°</label><input id="adNum" type="number" min="1" max="99" value="${e ? e.numero : (pre && pre.numero != null ? pre.numero : '')}" placeholder="automático"></div>
+      <div class="field"><label for="adNum">N°</label><input id="adNum" type="number" min="1" max="99" value="${e ? e.numero : (pre && pre.numero != null ? pre.numero : adiSigNum(tipo0))}" placeholder="automático"></div>
       <div class="field"><label for="adEst">Estado</label><select id="adEst">${[['solicitada', 'Solicitada'], ['aprobada', 'Aprobada'], ['aprobada_parcial', 'Aprobada parcial'], ['improcedente', 'Improcedente']].map(([k, t]) => op(k, t, est0 === k)).join('')}</select></div></div>
     <div class="field"><label for="adDesc">Descripción</label><input id="adDesc" type="text" maxlength="160" value="${v('descripcion')}" placeholder="Ej. Prestación adicional de obra N° 01: defensa ribereña"></div>
     <div class="row2"><div class="field"><label for="adLb">Línea base que lo incorpora</label><select id="adLb">${op('', 'Ninguna todavía', lb0 == null)}${ADI.lbs.filter(l => l.numero > 0).map(l => op(l.numero, 'LB' + l.numero + (l.tipo_cambio ? ' · ' + esc(l.tipo_cambio) : ''), lb0 === l.numero)).join('')}</select></div>
-      <div class="field"><label for="adMonto">Monto costo directo S/ <span class="hint" style="font-weight:400" id="adAuto"></span></label><input id="adMonto" type="number" step="0.01" min="0" value="${e && e.monto_cd != null ? e.monto_cd : ''}" placeholder="de la línea base"></div></div>
+      <div class="field"><label for="adMonto">Monto costo directo S/ <span class="hint" style="font-weight:400" id="adAuto"></span></label><input id="adMonto" type="number" step="0.01" min="0" value="${e && e.monto_cd != null ? e.monto_cd : ''}" placeholder="sin GG ni IGV"></div></div>
+    <div class="row3"><div class="field"><label for="adGG">Gastos generales %</label><input id="adGG" type="number" step="any" min="0" max="99" value="${e && e.gg_pct != null ? +(Number(e.gg_pct) * 100).toFixed(8) : ''}" placeholder="${(ADI.f.gg * 100).toFixed(4)} · contrato"></div>
+      <div class="field"><label for="adUT">Utilidad %</label><input id="adUT" type="number" step="any" min="0" max="99" value="${e && e.utilidad_pct != null ? +(Number(e.utilidad_pct) * 100).toFixed(8) : ''}" placeholder="${(ADI.f.ut * 100).toFixed(4)} · contrato"></div>
+      <div class="field"><label>Subtotal (sin IGV)</label><div id="adSub" style="padding:7px 0;font-size:12.5px;line-height:1.35"></div></div></div>
     <div class="row2"><div class="field"><label for="adCausal">Causal</label><input id="adCausal" type="text" maxlength="160" value="${v('causal')}"></div><div class="field"><label for="adLegal">Base legal</label><input id="adLegal" type="text" maxlength="80" value="${v('base_legal')}" placeholder="Ej. Art. 205 RLCE"></div></div>
     <div class="row3"><div class="field"><label for="adFSol">Fecha de solicitud</label><input id="adFSol" type="date" value="${v('fecha_solicitud')}"></div><div class="field"><label for="adRes">Resolución</label><input id="adRes" type="text" maxlength="80" value="${v('resolucion')}"></div><div class="field"><label for="adFRes">Fecha de resolución</label><input id="adFRes" type="date" value="${v('fecha_resolucion')}"></div></div>
     <div class="field"><label for="adNotas">Notas</label><input id="adNotas" type="text" maxlength="200" value="${v('notas')}"></div>
     <div class="sug-acc"><button class="btn" type="submit">Guardar</button><button class="btn-sec" type="button" id="adCancel">Cancelar</button></div>`;
   const fondo = document.getElementById('lbFondo') || (() => { const x = document.createElement('div'); x.id = 'lbFondo'; x.hidden = true; document.body.appendChild(x); return x; })();
   const cerrar = () => { m.hidden = true; fondo.hidden = true; document.documentElement.classList.remove('la-modal'); };
-  const auto = () => { const n = q('#adLb').value, p = n === '' ? null : ADI.pre.find(x => x.numero === +n), tp = q('#adTipo').value; q('#adAuto').textContent = p ? `· calculado: S/ ${adiN(tp === 'adicional' ? p.adicional_cd : -p.deductivo_cd)}` : ''; };
-  q('#adLb').onchange = auto; q('#adTipo').onchange = auto; auto();
+  // con línea base el monto sale de sus partidas: se muestra ya escrito (para verlo) y solo se guarda como «corrección» si lo cambias
+  const auto = () => {
+    const n = q('#adLb').value, p = n === '' ? null : ADI.pre.find(x => x.numero === +n), tp = q('#adTipo').value, mon = q('#adMonto'), calc = p ? (tp === 'adicional' ? Number(p.adicional_cd) : -Number(p.deductivo_cd)) : null;
+    q('#adAuto').textContent = calc != null ? `· de la línea base${mon.dataset.auto ? '' : ': S/ ' + adiN(calc)}` : '';
+    if (calc != null && (mon.dataset.auto || mon.value === '')) { mon.value = calc.toFixed(2); mon.dataset.auto = calc.toFixed(2); }
+    else if (calc == null && mon.dataset.auto) { if (mon.value === mon.dataset.auto) mon.value = ''; delete mon.dataset.auto; }
+  };
+  q('#adLb').onchange = auto; q('#adTipo').onchange = () => { if (numAuto && q('#adNum').dataset.auto === '1') q('#adNum').value = adiSigNum(q('#adTipo').value); auto(); };
+  if (numAuto) q('#adNum').dataset.auto = '1'; q('#adNum').oninput = () => { delete q('#adNum').dataset.auto; };
+  q('#adMonto').oninput = () => { const mm = q('#adMonto'); if (mm.dataset.auto && mm.value !== mm.dataset.auto) delete mm.dataset.auto; };
+  // vista previa del subtotal con los GG y la utilidad de ESTE adicional (si los dejas vacíos: los de sus partidas en la línea base o, si no hay, los del contrato)
+  const prev = () => {
+    const cd = q('#adMonto').value === '' ? null : +q('#adMonto').value, box = q('#adSub'), ggv = q('#adGG').value, utv = q('#adUT').value, n = q('#adLb').value, p = n === '' ? null : ADI.pre.find(x => x.numero === +n), tp = q('#adTipo').value;
+    if (cd == null || isNaN(cd)) { box.innerHTML = '<span class="hint">Escribe el costo directo.</span>'; return; }
+    const calc = p ? (tp === 'adicional' ? Number(p.adicional_cd) : -Number(p.deductivo_cd)) : 0, kk = calc ? cd / calc : 0, lbGG = p && p.gg_completo !== false && p.gg_completo != null,
+      r2 = (x) => Math.round((x + 1e-9) * 100) / 100,
+      gg = ggv !== '' ? r2(cd * (+ggv / 100)) : lbGG ? (tp === 'adicional' ? Number(p.adicional_gg || 0) : -Number(p.deductivo_gg || 0)) * kk : cd * ADI.f.gg,
+      ut = utv !== '' ? r2(cd * (+utv / 100)) : (ggv === '' && lbGG) ? (tp === 'adicional' ? Number(p.adicional_ut || 0) : -Number(p.deductivo_ut || 0)) * kk : cd * ADI.f.ut, sub = cd + gg + ut;
+    box.innerHTML = `<b>S/ ${adiN(sub)}</b><br><span class="hint">GG ${adiN(gg)} (${ggv !== '' ? padPct(+ggv) : cd ? padPct(gg / cd * 100) : '0'} %) · Util. ${adiN(ut)} (${utv !== '' ? padPct(+utv) : cd ? padPct(ut / cd * 100) : '0'} %) · con IGV ${adiN(sub * (1 + ADI.f.igv))}${ggv === '' && !lbGG ? ' · GG del contrato' : ''}</span>`;
+  };
+  ['#adMonto', '#adGG', '#adUT'].forEach(s => q(s).addEventListener('input', prev)); q('#adLb').addEventListener('change', prev); q('#adTipo').addEventListener('change', prev);
+  auto(); prev();
   m.hidden = false; fondo.hidden = false; document.documentElement.classList.add('la-modal'); fondo.onclick = cerrar; q('#adCancel').onclick = cerrar;
   m.onsubmit = async (ev) => {
     ev.preventDefault(); const btn = q('button[type=submit]'); btn.disabled = true;
     try {
       await preRpc('prestacion_guardar', { p_id: e ? e.id : null, p_obra: OBRA.id, p_tipo: q('#adTipo').value, p_numero: q('#adNum').value ? +q('#adNum').value : null, p_descripcion: q('#adDesc').value || null, p_estado: q('#adEst').value,
         p_resolucion: q('#adRes').value || null, p_fecha_resolucion: q('#adFRes').value || null, p_fecha_solicitud: q('#adFSol').value || null, p_causal: q('#adCausal').value || null, p_base_legal: q('#adLegal').value || null,
-        p_lb: q('#adLb').value === '' ? null : +q('#adLb').value, p_monto_cd: q('#adMonto').value === '' ? null : +q('#adMonto').value, p_notas: q('#adNotas').value || null });
+        p_lb: q('#adLb').value === '' ? null : +q('#adLb').value, p_monto_cd: q('#adMonto').value === '' || q('#adMonto').dataset.auto ? null : +q('#adMonto').value, p_notas: q('#adNotas').value || null,
+        p_gg_pct: q('#adGG').value === '' ? null : Math.round(+q('#adGG').value * 1e8) / 1e10, p_ut_pct: q('#adUT').value === '' ? null : Math.round(+q('#adUT').value * 1e8) / 1e10 });
       cerrar(); toast('Registro guardado.', true, 'adi'); await adiCargar(true);
     } catch (er) { btn.disabled = false; toast(`No se pudo guardar: ${esc(er.message)}${/function|schema cache|404/i.test(er.message) ? ' · ¿falta correr adicionales_deductivos.sql?' : ''}`, false, 'adi'); }
   };
@@ -11879,7 +11971,7 @@ document.addEventListener('click', async (e) => {
   const ed = e.target.closest('[data-adi-edit]'); if (ed) {
     if (ed.dataset.adiEdit) { adiFormAbrir(ed.dataset.adiEdit, null); return; }
     const d = adiDerivar().find(x => x.tipo === ed.dataset.adiTipo && String(x.lb_numero) === ed.dataset.adiLb);
-    adiFormAbrir(null, d ? { tipo: d.tipo, lb_numero: d.lb_numero, numero: d.numero, descripcion: d.descripcion, resolucion: d.resolucion, fecha_resolucion: d.fecha_resolucion } : { tipo: ed.dataset.adiTipo, lb_numero: +ed.dataset.adiLb || null, numero: +ed.dataset.adiNum });
+    adiFormAbrir(null, d ? { tipo: d.tipo, lb_numero: d.lb_numero, numero: d.numero, estado: d.estado, descripcion: d.descripcion, resolucion: d.resolucion, fecha_resolucion: d.fecha_resolucion } : { tipo: ed.dataset.adiTipo, lb_numero: +ed.dataset.adiLb || null, numero: +ed.dataset.adiNum });
     return; }
   if (e.target.closest('[data-adi-limite]')) { adiLimiteAbrir(); return; }
   const de = e.target.closest('[data-adi-del]'); if (!de) return;
@@ -11887,6 +11979,139 @@ document.addEventListener('click', async (e) => {
   if (!(await confirmar(`Eliminar el registro de prestación «${r.tipo === 'adicional' ? 'Adicional' : 'Deductivo vinculado'} N° ${adiN0(r.numero)}». No cambia las líneas base.`))) return;
   try { await preRpc('prestacion_eliminar', { p_id: r.id }); toast('Registro eliminado.', true, 'adi'); await adiCargar(true); } catch (er) { toast(`No se pudo eliminar: ${esc(er.message)}`, false, 'adi'); }
 });
+
+// ═══ PRESUPUESTO DE VENTA: CONTRATO · ADICIONALES · RESUMEN VIGENTE (Presupuesto › Venta) ═══
+// Estructura (criterio PMO / gestión de contratos): el adicional aprobado ES parte del precio de venta vigente (contrato + adicionales − deductivos), así que vive dentro de «Venta»;
+// «Meta» es otro eje (costo interno). Se REGISTRA en Contrato › Adicionales y deductivos (datos legales, GG y utilidad propios) y sus partidas llegan con el Excel del CAO aprobado
+// (Contrato y líneas base); aquí solo se VE e IMPRIME (PDF A4 vertical): partidas de un adicional = las de concepto «adicional» que su línea base trae nuevas o cambiadas.
+const PAD = { sel: 'c', lbp: {}, nod: null, ver: 0 };   // sel: 'c' contrato · 'r' resumen vigente · número = adicional
+const padM = (n) => Number(n || 0).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+function adiContratoVigente() {   // contrato vigente = LB0 − deductivos vinculados aprobados + mayores metrados, con los GG y la utilidad del contrato
+  const filas = adiDerivar(), porLB = new Map(ADI.pre.map(p => [p.numero, p])), aprob = (l) => !l.estado || l.estado === 'aprobado';
+  const dedu = filas.filter(r => adiCuenta(r) && r.cd != null && r.tipo === 'deductivo').reduce((s, r) => s + adiMonto(r).cd, 0);
+  const mayo = ADI.lbs.filter(aprob).map(l => porLB.get(l.numero)).filter(Boolean).reduce((s, p) => s + Number(p.mayores_cd), 0);
+  const cd = ADI.cd0 - dedu + mayo, gg = cd * ADI.f.gg, ut = cd * ADI.f.ut;
+  return { cd, gg, ut, sub: cd + gg + ut, igv: (cd + gg + ut) * ADI.f.igv, total: (cd + gg + ut) * (1 + ADI.f.igv), dedu, mayo, pgg: ADI.f.gg * 100, put: ADI.f.ut * 100 };
+}
+async function padDatos() {   // adicionales + sus partidas (y las de la línea base anterior, para sacar lo nuevo o cambiado) + el árbol de nodos (frente, componente, código faseado)
+  if (!ADI.cargado) await adiCargar();
+  if (!PAD.nod) {
+    PAD.nod = { porClave: {}, porId: {} }; const ver = (RES_A.version || {}).id;
+    if (ver) try { (await getTodo(`/wbs_nodos?version_id=eq.${ver}&concepto=eq.adicional&select=id,padre_id,proyecto_id,codigo,codigo_esp,nombre,nivel,es_hoja`)).forEach(n => { PAD.nod.porId[n.id] = n; PAD.nod.porClave[`${n.proyecto_id}|${n.codigo}`] = n; }); } catch (e) { /* sin árbol: se usa el código del presupuesto */ }
+  }
+  const ads = adiDerivar().filter(r => r.tipo === 'adicional').sort((a, b) => a.numero - b.numero), ids = new Set();
+  ads.forEach(r => { if (r.lb_numero != null) [r.lb_numero, r.lb_numero - 1].forEach(n => { const l = ADI.lbs.find(x => x.numero === n); if (l && !PAD.lbp[l.id]) ids.add(l.id); }); });
+  if (ids.size) {
+    const rows = await getTodo(`/linea_base_partidas?version_id=in.(${[...ids].join(',')})&concepto=eq.adicional&select=version_id,codigo,nombre,unidad,metrado,precio_unitario,parcial_cd,proyecto_id,es_hito&order=codigo`);
+    ids.forEach(id => { PAD.lbp[id] = {}; }); rows.forEach(r => { PAD.lbp[r.version_id][r.codigo] = r; });
+  }
+  return ads;
+}
+const padFrente = (id) => { const p = ((RES_A && RES_A.proyectos) || []).find(x => x.id === id); return p ? String(p.nombre) : ''; };
+function padPartidas(r) {   // null = todavía no llegó en ninguna línea base
+  if (r.lb_numero == null) return null;
+  const l = ADI.lbs.find(x => x.numero === r.lb_numero), lp = ADI.lbs.find(x => x.numero === r.lb_numero - 1), A = (l && PAD.lbp[l.id]) || {}, B = (lp && PAD.lbp[lp.id]) || {}, orden = ((RES_A && RES_A.proyectos) || []).map(p => p.id);
+  return Object.values(A).filter(p => !p.es_hito).map(p => {
+    const b = B[p.codigo], pa = Number(p.parcial_cd || 0) - (b ? Number(b.parcial_cd || 0) : 0), nd = PAD.nod && PAD.nod.porClave[`${p.proyecto_id}|${p.codigo}`];
+    let comp = '', ruta = ''; if (nd) { const cad = []; let q = PAD.nod.porId[nd.padre_id]; while (q) { if (q.nivel >= 2) cad.unshift(q.nombre); q = PAD.nod.porId[q.padre_id]; } comp = cad.pop() || ''; ruta = cad.join(' › '); }
+    return { codigo: p.codigo, esp: (nd && nd.codigo_esp) || p.codigo, nombre: p.nombre, unidad: p.unidad, proyecto_id: p.proyecto_id, frente: padFrente(p.proyecto_id), fo: orden.indexOf(p.proyecto_id), comp, ruta,
+      metrado: b ? Number(p.metrado || 0) - Number(b.metrado || 0) : Number(p.metrado || 0), pu: Number(p.precio_unitario || 0), parcial: pa, nueva: !b };
+  }).filter(p => p.nueva || Math.abs(p.parcial) > 0.004).sort((a, b) => (a.fo - b.fo) || String(a.comp).localeCompare(b.comp, 'es') || String(a.codigo).localeCompare(String(b.codigo), 'es', { numeric: true }));
+}
+function padGrupos(ps) {   // frente › componente › partidas, con subtotales de costo directo
+  const fr = [];
+  ps.forEach(p => { let f = fr.find(x => x.id === p.proyecto_id); if (!f) fr.push(f = { id: p.proyecto_id, frente: p.frente, comps: [], cd: 0 });
+    let c = f.comps.find(x => x.comp === p.comp); if (!c) f.comps.push(c = { comp: p.comp, ruta: p.ruta, items: [], cd: 0 }); c.items.push(p); c.cd += p.parcial; f.cd += p.parcial; });
+  return fr;
+}
+function padEtq(r) { return `Adicional N° ${adiN0(r.numero)}`; }
+// filas de totales (costo directo → total con IGV) de un importe {cd, gg, ut, sub, igv, total, pgg, put}; `cols` = columnas de la tabla (la etiqueta ocupa todas menos la última)
+function padTotales(m, cols) {
+  const f = (lab, v, cls) => `<tr class="pap-t ${cls || ''}"><td colspan="${cols - 1}" class="pap-r">${lab}</td><td class="pap-n">${padM(v)}</td></tr>`;
+  return f('COSTO DIRECTO', m.cd) + f(`GASTOS GENERALES (${padPct(m.pgg)} %)`, m.gg) + f(`UTILIDAD (${padPct(m.put)} %)`, m.ut) + f('SUBTOTAL (sin IGV)', m.sub, 'pap-sub') + f(`IGV (${(ADI.f.igv * 100).toFixed(0)} %)`, m.igv) + f('TOTAL', m.total, 'pap-fin');
+}
+const PAD_IMP = '<svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><path d="M4.5 6V2.5h7V6M4.5 11.5h-2v-5h11v5h-2"/><rect x="4.5" y="9.5" width="7" height="4"/></svg>';
+function padBarraHTML(ads) {   // Contrato · Adicional N° k … · Resumen vigente
+  const b = (k, t) => `<button type="button" class="seg-btn ${PAD.sel === k ? 'on' : ''}" data-pap="${k}">${t}</button>`;
+  return `<div class="pap-chips" id="papBar">${b('c', 'Contrato')}${ads.map((r, i) => b(i, padEtq(r))).join('')}${b('r', 'Resumen vigente')}</div>`;
+}
+async function padBarra() {   // en la vista del contrato la barra se completa cuando llegan los adicionales
+  let ads; try { ads = await padDatos(); } catch (e) { return; }
+  const el = $('#papBar'); if (el && PRE.modo === 'venta') el.outerHTML = padBarraHTML(ads);
+}
+async function preAdiPintar() {
+  const box = $('#preCuerpo'); if (!box) return;
+  const v = ++PAD.ver; box.innerHTML = '<div class="rg-msg">Leyendo los adicionales…</div>';
+  let ads; try { ads = await padDatos(); } catch (e) { box.innerHTML = `<div class="rg-msg">No se pudieron leer los adicionales. <span class="mono" style="font-size:11px">${esc(e.message)}</span></div>`; return; }
+  if (v !== PAD.ver || PRE.modo !== 'venta' || PAD.sel === 'c') return;
+  if (PAD.sel !== 'r' && !ads[+PAD.sel]) PAD.sel = 'r';
+  const sel = PAD.sel, chips = padBarraHTML(ads);
+  let cuerpo;
+  if (sel === 'r') {
+    const c = adiContratoVigente(), ms = ads.filter(r => adiCuenta(r) && r.cd != null).map(r => ({ r, m: adiMonto(r) }));
+    const t = { cd: c.cd + ms.reduce((s, x) => s + x.m.cd, 0), gg: c.gg + ms.reduce((s, x) => s + x.m.gg, 0), ut: c.ut + ms.reduce((s, x) => s + x.m.ut, 0) }; t.sub = t.cd + t.gg + t.ut; t.igv = t.sub * ADI.f.igv; t.total = t.sub * (1 + ADI.f.igv);
+    const fila = (lab, sub, m, cls) => `<tr class="${cls || ''}"><td class="l">${lab}${sub ? `<span class="lb-sub">${sub}</span>` : ''}</td><td>${padM(m.cd)}</td><td>${padM(m.gg)}</td><td>${padM(m.ut)}</td><td><b>${padM(m.sub)}</b></td><td>${padM(m.igv)}</td><td>${padM(m.total)}</td></tr>`;
+    cuerpo = `<div class="vl-card pap-card"><div class="pap-cab"><div><h3>Presupuesto de venta vigente</h3><p class="hint">Contrato (línea base 0${c.dedu ? ' menos deductivos vinculados' : ''}${c.mayo ? ' más mayores metrados' : ''}) y cada adicional aprobado, con sus propios gastos generales y utilidad. Sin IGV hasta el subtotal.</p></div><button type="button" class="seg-btn pap-imp" data-pap-imp="r" title="Imprimir el resumen (A4)" aria-label="Imprimir">${PAD_IMP}</button></div>
+      <div class="vl-tw"><table class="vl-tb pap-res"><thead><tr><th class="l">Concepto</th><th>Costo directo</th><th>Gastos generales</th><th>Utilidad</th><th>Subtotal</th><th>IGV</th><th>Total</th></tr></thead><tbody>
+      ${fila('Contrato vigente', 'a precios unitarios', c)}${ms.map(({ r, m }) => fila(padEtq(r), r.resolucion ? esc(r.resolucion) : '', m)).join('')}${fila('Total', '', t, 'tot')}</tbody></table></div>
+      <p class="pap-son">${padLetras(t.total)}</p>
+      ${ads.some(r => !adiCuenta(r) || r.cd == null) ? '<p class="hint" style="margin:6px 0 0">No suman los adicionales sin aprobar o sin costo directo registrado.</p>' : ''}</div>`;
+  } else {
+    const r = ads[+sel], ps = padPartidas(r), m = adiMonto(r), [etq] = ADI_EST[r.estado] || [r.estado], gr = ps ? padGrupos(ps) : [];
+    const suma = (ps || []).reduce((s, p) => s + p.parcial, 0), difer = ps && m && Math.abs(suma - m.cd) > 0.5;
+    const resumen = gr.length ? `<div class="vl-tw"><table class="vl-tb pap-res pap-rf"><thead><tr><th class="l">Frente</th><th class="l">Componente</th><th>Partidas</th><th>Costo directo</th><th>% del adicional</th></tr></thead><tbody>
+      ${gr.map(f => f.comps.map((c, i) => `<tr>${i ? '<td></td>' : `<td class="l" rowspan="${f.comps.length}"><b>${esc(f.frente)}</b></td>`}<td class="l">${esc(c.comp || '—')}${c.ruta ? `<span class="lb-sub">${esc(c.ruta)}</span>` : ''}</td><td>${c.items.length}</td><td>${padM(c.cd)}</td><td>${suma ? padPct(Math.round(c.cd / suma * 10000) / 100) : 0} %</td></tr>`).join('')).join('')}
+      </tbody></table></div>` : '';
+    const tabla = ps ? `<div class="vl-tw"><table class="vl-tb pap-res"><thead><tr><th class="l">Código</th><th class="l">Descripción</th><th>Und.</th><th>Metrado</th><th>P.U. S/</th><th>Parcial S/</th></tr></thead><tbody>
+      ${gr.map(f => `<tr class="pap-g1"><td colspan="5">${esc(f.frente)}</td><td>${padM(f.cd)}</td></tr>` + f.comps.map(c => `<tr class="pap-g2"><td colspan="5">${esc([c.ruta, c.comp].filter(Boolean).join(' › ') || 'Sin componente')}</td><td>${padM(c.cd)}</td></tr>`
+        + c.items.map(p => `<tr><td class="l" title="Código del presupuesto: ${esc(p.codigo)}">${esc(p.esp)}</td><td class="l">${esc(p.nombre || '')}</td><td>${esc(p.unidad || '')}</td><td>${padM(p.metrado)}</td><td>${padM(p.pu)}</td><td>${padM(p.parcial)}</td></tr>`).join('')).join('')).join('') || '<tr><td colspan="6" class="l">Esta línea base no trae partidas de adicional nuevas.</td></tr>'}
+      ${m ? padTotales(m, 6) : ''}</tbody></table></div>${m ? `<p class="pap-son">${padLetras(m.total)}</p>` : ''}`
+      : `<p class="hint" style="margin:10px 0 0">Todavía no llegó en ninguna línea base, así que no hay partidas. Se llenan solas al cargar el Excel del CAO aprobado en <b>Contrato y líneas base</b>${m ? '. Mientras tanto se muestran sus totales:' : '; el costo directo y los porcentajes se registran con el lápiz en <b>Adicionales y deductivos</b>.'}</p>${m ? `<div class="vl-tw"><table class="vl-tb pap-res"><tbody>${padTotales(m, 2)}</tbody></table></div><p class="pap-son">${padLetras(m.total)}</p>` : ''}`;
+    cuerpo = `<div class="vl-card pap-card"><div class="pap-cab"><div><h3>${padEtq(r)} <span class="vl-pill ${(ADI_EST[r.estado] || [0, 'pr'])[1]}">${esc(etq)}</span></h3><p class="hint">${[r.descripcion, r.resolucion && 'Resolución ' + r.resolucion, r.lb_numero != null && 'LB' + r.lb_numero].filter(Boolean).map(esc).join(' · ') || 'Sin datos legales todavía'}</p></div>
+      <button type="button" class="seg-btn pap-imp" data-pap-imp="${sel}" title="Imprimir el presupuesto de este adicional (A4)" aria-label="Imprimir">${PAD_IMP}</button></div>
+      ${difer ? `<p class="plz-nota al">⚠ La suma de las partidas (${padM(suma)}) no coincide con el costo directo registrado (${padM(m.cd)}): se corrigió a mano en el lápiz de Adicionales y deductivos.</p>` : ''}${resumen}${tabla}</div>`;
+  }
+  box.innerHTML = chips + cuerpo;
+}
+document.addEventListener('click', (e) => {
+  const c = e.target.closest('[data-pap]'); if (c) { PAD.sel = c.dataset.pap === 'r' || c.dataset.pap === 'c' ? c.dataset.pap : +c.dataset.pap; if (PRE.modo === 'venta') prePintar(); return; }
+  const i = e.target.closest('[data-pap-imp]'); if (i) padImprimir(i.dataset.papImp === 'r' ? 'r' : +i.dataset.papImp);
+});
+async function padImprimir(sel) {
+  const ads = await padDatos(), ob = (RES_A && RES_A.obra) || {}, obraNombre = ob.nombre || tx0('#obraNombre');
+  const datosObra = [['ENTIDAD:', ob.doc_entidad || ob.cliente], ['OBRA:', ob.doc_obra || obraNombre], ['CONTRATISTA:', ob.doc_contratista || ob.entidad], ['SUPERVISIÓN:', ob.doc_supervision]]
+    .filter(x => x[1]).map(([k, v2]) => `<div class="vld-dato"><b>${esc(k)}</b><span>${esc(String(v2).toUpperCase())}</span></div>`).join('');
+  let titulo, sub, cols, cab, filas, totales, colg, total;
+  if (sel === 'r') {
+    colg = '<col style="width:40mm">' + '<col>'.repeat(6);
+    const c = adiContratoVigente(), ms = ads.filter(r => adiCuenta(r) && r.cd != null).map(r => ({ r, m: adiMonto(r) }));
+    const t = { cd: c.cd + ms.reduce((s, x) => s + x.m.cd, 0), gg: c.gg + ms.reduce((s, x) => s + x.m.gg, 0), ut: c.ut + ms.reduce((s, x) => s + x.m.ut, 0) }; t.sub = t.cd + t.gg + t.ut; t.igv = t.sub * ADI.f.igv; t.total = t.sub * (1 + ADI.f.igv);
+    titulo = 'PRESUPUESTO DE VENTA VIGENTE'; sub = 'CONTRATO Y ADICIONALES · MONTOS EN SOLES'; cols = 7; total = t.total;
+    cab = '<tr class="pap-cols"><th class="l">CONCEPTO</th><th>COSTO DIRECTO</th><th>GASTOS GENERALES</th><th>UTILIDAD</th><th>SUBTOTAL</th><th>IGV</th><th>TOTAL</th></tr>';
+    const fila = (lab, m, cls) => `<tr class="${cls || ''}"><td class="l">${lab}</td><td>${padM(m.cd)}</td><td>${padM(m.gg)}</td><td>${padM(m.ut)}</td><td>${padM(m.sub)}</td><td>${padM(m.igv)}</td><td>${padM(m.total)}</td></tr>`;
+    filas = fila('Contrato vigente', c) + ms.map(({ r, m }) => fila(padEtq(r) + (r.resolucion ? `<small>${esc(r.resolucion)}</small>` : ''), m)).join(''); totales = fila('TOTAL', t, 'pap-fin');
+  } else {
+    const r = ads[sel]; if (!r) return; const ps = padPartidas(r), m = adiMonto(r);
+    cols = 6; colg = '<col style="width:20mm"><col><col style="width:11mm"><col style="width:19mm"><col style="width:17mm"><col style="width:25mm">'; titulo = `PRESUPUESTO DEL ${padEtq(r).toUpperCase()}`; sub = [r.descripcion, r.resolucion && 'Resolución ' + r.resolucion, r.lb_numero != null && 'LB' + r.lb_numero].filter(Boolean).join(' · ').toUpperCase();
+    total = m ? m.total : 0;
+    cab = '<tr class="pap-cols"><th class="l">CÓDIGO</th><th class="l">DESCRIPCIÓN</th><th>UND.</th><th>METRADO</th><th>P.U. S/</th><th>PARCIAL S/</th></tr>';
+    filas = ps ? padGrupos(ps).map(f => `<tr class="pap-g1"><td colspan="5">${esc(f.frente)}</td><td>${padM(f.cd)}</td></tr>` + f.comps.map(c => `<tr class="pap-g2"><td colspan="5">${esc([c.ruta, c.comp].filter(Boolean).join(' › ') || 'Sin componente')}</td><td>${padM(c.cd)}</td></tr>`
+      + c.items.map(p => `<tr><td class="l pap-c">${esc(p.esp)}</td><td class="l pap-d">${esc(p.nombre || '')}</td><td>${esc(p.unidad || '')}</td><td>${padM(p.metrado)}</td><td>${padM(p.pu)}</td><td>${padM(p.parcial)}</td></tr>`).join('')).join('')).join('') : '';
+    if (!ps) { toast('Este adicional todavía no tiene partidas (llegan con el CAO aprobado): se imprimen solo sus totales.', false); if (!m) return; cab = ''; cols = 2; colg = '<col><col style="width:40mm">'; }
+    totales = m ? padTotales(m, cols) : '';
+  }
+  const son = `<tr class="pap-son-r"><td colspan="${cols}">${padLetras(total)}</td></tr>`;
+  const html = `<div class="inf-hoja vld-hoja pap-hoja"><table class="pap-tb${sel === 'r' ? ' pap-tr' : ''}"><colgroup>${colg}</colgroup><thead><tr class="pap-tit"><th colspan="${cols}"><div class="vld-doctit-fila">${valDocEncabezadoLogo()}<div class="vld-doctit"><h2>${esc(titulo)}</h2><div class="vld-docper">${esc(sub)}</div></div>${valDocEncabezadoDer()}</div><div class="vld-datos">${datosObra}</div></th></tr>${cab}</thead>
+    <tbody>${filas}${totales}${total ? son : ''}</tbody><tfoot><tr><td colspan="${cols}" style="height:29mm;padding:0;border:0"></td></tr></tfoot></table></div>`;
+  document.querySelector('#informe')?.remove(); document.getElementById('papPag')?.remove();
+  // el presupuesto va en A4 VERTICAL (la valorización y la Curva S siguen en A3 horizontal): se declara el tamaño de hoja solo mientras está abierto
+  const sPag = document.createElement('style'); sPag.id = 'papPag'; sPag.textContent = '@page{size:A4 portrait;margin:0}'; document.head.appendChild(sPag);
+  const ov = document.createElement('div'); ov.id = 'informe'; ov.dataset.base = '794'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-label', 'Presupuesto para imprimir');
+  ov.innerHTML = `<div class="inf-bar"><b>${esc(titulo)} · A4 vertical</b><span>En la ventana de impresión elige «Guardar como PDF», tamaño A4, vertical y márgenes «Ninguno».</span><button type="button" class="pri" id="infImprimir">🖨 Imprimir / Guardar PDF</button><button type="button" id="infCerrar">Cerrar</button></div><div class="inf-scroll">${html}</div>`;
+  document.body.appendChild(ov); document.body.classList.add('inf-abierto'); infZoom();
+  ov.querySelector('#infCerrar').addEventListener('click', cerrarInforme);
+  ov.querySelector('#infImprimir').addEventListener('click', () => { infTituloPrevio = document.title; document.title = `${titulo} - ${obraNombre}`; window.print(); });
+}
 
 // ═══ PLAZO CONTRACTUAL: registro de ampliaciones de plazo, suspensiones y desplazamientos (tabla plazo_eventos) ═══
 // Cada REGISTRO (p. ej. «Ampliación de plazo N° 03») es un grupo de filas: una por frente afectado, con SUS PROPIOS días (un adicional puede dar 20 días a Charanal, 10 a Bocana y 30 a Damas).
@@ -12682,7 +12907,7 @@ function infAjustar(hoja) {
   if (llenar()) return;
   for (const c of ['inf-c1', 'inf-c2', 'inf-c3', 'inf-c4']) { hoja.classList.add(c); if (llenar()) return; }
 }
-function infZoom() { const ov = document.querySelector('#informe'); if (!ov) return; const w = ov.querySelector('.inf-scroll').clientWidth - 56; ov.style.setProperty('--z', Math.min(1, Math.max(.2, w / 1588)).toFixed(3)); }
+function infZoom() { const ov = document.querySelector('#informe'); if (!ov) return; const w = ov.querySelector('.inf-scroll').clientWidth - 56; ov.style.setProperty('--z', Math.min(1, Math.max(.2, w / (+ov.dataset.base || 1588))).toFixed(3)); }   // base = ancho de la hoja en px (A3 horizontal 1588; A4 vertical 794)
 let infTituloPrevio = null;
 async function abrirInforme() {
   if (!DATA) { toast('Espera a que carguen los datos del Resumen.', false); return; }
@@ -12700,7 +12925,7 @@ async function abrirInforme() {
   ov.querySelector('#infImprimir').addEventListener('click', () => { infTituloPrevio = document.title; document.title = `Informe de avance - ${tx0('#obraNombre')} - ${tx0('#kpiMes').replace(/^Corte:\s*/, '').replace(/\s*\(Curva S real[^)]*\)/, '')}`; window.print(); });
 }
 const tx0 = (s) => ((document.querySelector(s) || {}).textContent || '').trim();
-function cerrarInforme() { document.querySelector('#informe')?.remove(); document.body.classList.remove('inf-abierto'); }
+function cerrarInforme() { document.querySelector('#informe')?.remove(); document.getElementById('papPag')?.remove(); document.body.classList.remove('inf-abierto'); }
 window.addEventListener('afterprint', () => { if (infTituloPrevio) { document.title = infTituloPrevio; infTituloPrevio = null; } });
 window.addEventListener('resize', infZoom);
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && document.body.classList.contains('inf-abierto')) cerrarInforme(); });
