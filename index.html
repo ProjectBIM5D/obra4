@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="build" content="20261027194004">
+<meta name="build" content="20261027225943">
 <script>/* auto-actualizar: compara el sello de esta copia con el del servidor y recarga una sola vez */
 (function(){try{if(!/^https?:/.test(location.protocol))return;var me=document.querySelector('meta[name=build]').content;if(me==='0')return;
 fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'}).then(function(r){return r.text()}).then(function(h){
@@ -782,12 +782,54 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .inf-firmas{display:flex;gap:26px;} .inf-firmas span{display:block;width:150px;padding-top:3px;border-top:1px solid var(--mut);text-align:center;font-size:10px;}
 /* Hoja A3 «Curva S»: encabezado como la valorización, curva y cuadro comparativo (colores de la pantalla, aplicados aquí porque el visor cuelga de <body>) */
 .vl-imp{display:inline-flex;align-items:center;justify-content:center;padding:5px 8px;}
+/* ═ Botones de opciones: sistema único. «.sg» = grupo segmentado (pastilla con fondo suave y botón activo elevado); «.seg-btn» suelto = botón con relieve.
+   Siempre en una sola línea (nowrap): si no caben en tablet, el grupo se desplaza en horizontal en vez de romper el texto. Títulos cortos + icono; el nombre completo va en el tooltip. ═ */
+.seg-btn,.src-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:32px;padding:0 13px;border-radius:10px;border:1px solid var(--line2);background:var(--card);color:var(--tx2);font-family:inherit;font-size:12px;font-weight:600;line-height:1;letter-spacing:.01em;white-space:nowrap;cursor:pointer;box-shadow:0 1px 2px rgba(20,32,63,.06);transition:background .15s,border-color .15s,color .15s,box-shadow .15s;}
+.seg-btn svg,.src-btn svg{width:14px;height:14px;flex:none;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
+.seg-btn:hover:not(.on):not(:disabled),.src-btn:hover:not(.on):not(:disabled){border-color:var(--blue);color:var(--blue-tx);background:var(--ic-blue-bg);}
+.seg-btn.on,.src-btn.on{background:linear-gradient(180deg,#4a88ee,#3a74dc);border-color:#3a74dc;color:#fff;box-shadow:0 4px 10px -4px rgba(58,116,220,.6);}
+.seg-btn:disabled{opacity:.45;cursor:default;}
+.sg{display:inline-flex;align-items:center;gap:2px;padding:3px;border-radius:12px;background:var(--input);border:1px solid var(--line);max-width:100%;overflow-x:auto;scrollbar-width:none;} .sg::-webkit-scrollbar{display:none;}
+.sg .seg-btn{flex:none;height:28px;padding:0 12px;border:0;border-radius:9px;background:transparent;box-shadow:none;color:var(--tx2);}
+.sg .seg-btn:hover:not(.on):not(:disabled){background:rgba(59,123,232,.10);color:var(--blue-tx);border:0;}
+.sg .seg-btn.on{background:var(--card);color:var(--blue-tx);box-shadow:0 1px 3px rgba(20,32,63,.16),0 0 0 1px rgba(59,123,232,.30);}
+.sg-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 12px;}
+@media (max-width:760px){.sg .seg-btn{padding:0 10px;} .sg-bar{gap:6px 8px;}}
+/* Navegación del Presupuesto en 3 niveles de peso distinto: pestañas (nivel 1) › texto liviano (nivel 2) › selector (nivel 3) */
+.pre-nav{margin:0 0 14px;}
+.pre-tabs{display:flex;gap:4px;border-bottom:1px solid var(--line2);}
+.pre-tab{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 16px;margin-bottom:-1px;border:0;border-bottom:2.5px solid transparent;background:none;color:var(--mut);font-family:inherit;font-size:14px;font-weight:600;white-space:nowrap;cursor:pointer;transition:color .15s,border-color .15s;}
+.pre-tab svg{width:16px;height:16px;flex:none;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
+.pre-tab:hover:not(.on){color:var(--tx);} .pre-tab.on{color:var(--blue-tx);border-bottom-color:var(--blue);}
+.pre-sub{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 14px;padding-top:10px;}
+.pre-chips{display:flex;align-items:center;gap:2px;max-width:100%;overflow-x:auto;scrollbar-width:none;} .pre-chips::-webkit-scrollbar{display:none;}
+.pre-chips .seg-btn{height:28px;padding:0 11px;border:0;border-radius:8px;background:transparent;box-shadow:none;color:var(--mut);font-size:12px;font-weight:600;}
+.pre-chips .seg-btn:hover:not(.on){background:rgba(59,123,232,.09);color:var(--blue-tx);border:0;}
+.pre-chips .seg-btn.on{background:rgba(59,123,232,.13);color:var(--blue-tx);box-shadow:none;border:0;}
+.pre-sel{position:relative;display:inline-flex;align-items:center;margin-left:auto;}
+.pre-sel>svg{position:absolute;left:10px;width:14px;height:14px;fill:none;stroke:var(--mut);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;pointer-events:none;}
+.pre-sel select{appearance:none;-webkit-appearance:none;height:30px;padding:0 28px 0 31px;border:1px solid var(--line2);border-radius:9px;background:var(--card) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'><path d='M3 4.5 6 7.5 9 4.5' fill='none' stroke='%235c6b85' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></svg>") no-repeat right 9px center/12px;color:var(--tx2);font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;max-width:100%;}
+.pre-sel select:hover,.pre-sel select:focus{border-color:var(--blue);outline:0;color:var(--blue-tx);}
+/* Presupuesto (venta/meta): tabla compacta, código en su columna, niveles con los colores de S10 y botones pequeños */
+.pre-tool .pre-tb-acc .icon-btn{width:26px;height:26px;padding:0;border-radius:7px;} .pre-tool .pre-tb-acc .icon-btn svg{width:14px;height:14px;}
+table.vl-tb.pre-tb td,table.vl-tb.pre-tb th{font-size:10.5px;padding:2px 6px;} table.vl-tb.pre-tb thead th{font-size:9px;padding:5px 6px;} table.vl-tb.pre-tb td:not(.l):not(.und){font-size:11px;} table.vl-tb.pre-tb tr.tot td{font-size:11px;padding:5px 6px;}
+table.vl-tb.pre-tb td.pre-cd{white-space:nowrap;width:1%;font-weight:600;color:var(--mut);font-variant-numeric:tabular-nums;font-size:10px;} table.vl-tb.pre-tb td.pre-nom{line-height:1.2;}
+.pre-tb .pre-chev{font-size:9px;width:11px;margin-right:3px;}
+/* nivel 1 (frente/puente): fila con fondo y contraste · desde el nivel 2 los resúmenes van solo con color de letra: rojo, azul, verde (como S10) */
+table.vl-tb.pre-tb tbody tr.pre-g.pre-n1 td{background:#dbe7fb;color:#17306b;font-weight:700;letter-spacing:.02em;} table.vl-tb.pre-tb tbody tr.pre-g.pre-n1 td.pre-cd{color:#3a5a9a;}
+table.vl-tb.pre-tb tbody tr.pre-g.pre-n2 td{color:#b91c1c;background:transparent;} table.vl-tb.pre-tb tbody tr.pre-g.pre-n3 td{color:#1d4ed8;background:transparent;} table.vl-tb.pre-tb tbody tr.pre-g.pre-n4 td{color:#15803d;background:transparent;}
+table.vl-tb.pre-tb tbody tr.pre-g.pre-n1 .pre-chev{color:#3a5a9a;}
+:root[data-theme="dark"] table.vl-tb.pre-tb tbody tr.pre-g.pre-n1 td{background:#263a66;color:#e6eeff;} :root[data-theme="dark"] table.vl-tb.pre-tb tbody tr.pre-g.pre-n1 td.pre-cd,:root[data-theme="dark"] table.vl-tb.pre-tb tbody tr.pre-g.pre-n1 .pre-chev{color:#9db6e8;} :root[data-theme="dark"] table.vl-tb.pre-tb tbody tr.pre-g.pre-n2 td{color:#fca5a5;background:transparent;} :root[data-theme="dark"] table.vl-tb.pre-tb tbody tr.pre-g.pre-n3 td{color:#93c5fd;background:transparent;} :root[data-theme="dark"] table.vl-tb.pre-tb tbody tr.pre-g.pre-n4 td{color:#86efac;background:transparent;}
 /* Presupuesto de adicionales: selector, tabla y hoja A3 (se repite cabecera y 29 mm libres abajo en cada hoja impresa) */
 .pap-chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px;}
 .pap-card{padding:12px 14px;} .pap-cab{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:8px;} .pap-cab h3{margin:0 0 2px;font-size:14px;} .pap-cab .hint{margin:0;font-size:11px;}
 .pap-imp{display:inline-flex;align-items:center;justify-content:center;padding:5px 8px;flex:none;}
 table.vl-tb.pap-res{font-size:11px;} table.vl-tb.pap-res th,table.vl-tb.pap-res td{padding:4px 8px;} table.vl-tb.pap-res thead th{background:#56637e;color:#fff;font-size:9.5px;letter-spacing:.07em;font-weight:700;padding:5px 8px;}
 table.vl-tb.pap-res td{font-variant-numeric:tabular-nums;} table.vl-tb.pap-res tr.pap-g1 td{background:#e9eef6;font-weight:700;color:#24345f;} table.vl-tb.pap-res tr.pap-g2 td{font-size:10.5px;color:var(--tx2);font-weight:600;background:#f6f8fc;} table.vl-tb.pap-res tr.pap-g1 td:first-child,table.vl-tb.pap-res tr.pap-g2 td:first-child{text-align:left;}
+table.vl-tb.pap-res{font-size:10.5px;} table.vl-tb.pap-res th,table.vl-tb.pap-res td{padding:3px 8px;} table.vl-tb.pap-res thead th{padding:4px 8px;}
+table.vl-tb.pap-res tr.pap-g1 td{background:#dbe7fb;color:#17306b;font-weight:700;} table.vl-tb.pap-res tr.pap-g2 td{background:transparent;color:#b91c1c;font-weight:700;font-size:10.5px;} table.vl-tb.pap-res tr.pap-g3 td{background:transparent;color:#1d4ed8;font-weight:700;}
+table.vl-tb.pap-res td.pap-cb{white-space:nowrap;width:1%;} table.vl-tb.pap-res tr.pap-g1 td.l,table.vl-tb.pap-res tr.pap-g2 td.l{text-align:left;}
+:root[data-theme="dark"] table.vl-tb.pap-res tr.pap-g1 td{background:#263a66;color:#e6eeff;} :root[data-theme="dark"] table.vl-tb.pap-res tr.pap-g2 td{background:transparent;color:#fca5a5;} :root[data-theme="dark"] table.vl-tb.pap-res tr.pap-g3 td{background:transparent;color:#93c5fd;}
 .pap-rf{margin-bottom:12px;} .pap-card .vl-tw{margin-top:8px;} .pap-son{margin:8px 0 0;font-size:11px;font-weight:600;color:var(--tx2);letter-spacing:.02em;}
 :root[data-theme="dark"] .pap-res tr.pap-g1 td{background:#1b2740;color:#e7ecf7;} :root[data-theme="dark"] .pap-res tr.pap-g2 td{background:#15203a;}
 .pap-res td.l .lb-sub{display:block;font-size:10px;font-weight:400;color:var(--mut);}
@@ -828,8 +870,17 @@ table.vl-tb.pap-res td{font-variant-numeric:tabular-nums;} table.vl-tb.pap-res t
 .pap-tb tr.pap-fin td{vertical-align:middle;background:#eef2f8;border:0;box-shadow:inset 0 1.5px 0 #14213d,inset 0 -1.5px 0 #14213d;font-weight:700;color:#14213d;padding-top:6px;padding-bottom:6px;font-size:10.5px;} .pap-tb tr.pap-fin td.pap-r{font-size:11px;letter-spacing:.08em;} .pap-tb tr.pap-fin td.pap-n{font-size:12.5px;letter-spacing:.01em;}
 .pap-tb tr.pap-g1 td{background:#f1f4f9;font-weight:700;color:#14213d;font-size:10px;letter-spacing:.04em;text-transform:uppercase;border-bottom:1px solid #cbd5e1;padding-top:6px;padding-bottom:5px;} .pap-tb tr.pap-g1 td:first-child{text-align:left;}
 .pap-tb tr.pap-g2 td{font-size:9px;font-weight:600;color:#5b6b82;letter-spacing:.02em;padding-top:4px;padding-bottom:3px;} .pap-tb tr.pap-g2 td:first-child{text-align:left;}
+.pap-tb tr.pap-g3 td{font-size:9px;font-weight:600;color:#475569;letter-spacing:.01em;padding-top:4px;padding-bottom:3px;background:#fafbfd;} .pap-tb tr.pap-g3 td:first-child{text-align:left;}
+.pap-tb td.l small{display:block;font-size:8px;color:#b45309;letter-spacing:.01em;margin-top:1px;}
+/* resúmenes por nivel con los colores de S10: 1.º rojo · 2.º azul · 3.º verde (4.º gris); tinte muy suave y texto en negrita; cuerpo compacto */
+.pap-tb{font-size:9.5px;line-height:1.3;} .pap-tb th,.pap-tb td{padding:2.5px 6px;}
+.pap-tb tr.pap-g1 td,.pap-tb tr.pap-g2 td,.pap-tb tr.pap-g3 td,.pap-tb tr.pap-g4 td{font-weight:700;font-size:9.5px;letter-spacing:.01em;text-transform:none;padding-top:3px;padding-bottom:3px;border-bottom:1px solid #e6eaf1;}
+.pap-tb tr.pap-g1 td{color:#17306b;background:#dbe7fb;text-transform:uppercase;font-size:10px;letter-spacing:.03em;border-bottom:0;} .pap-tb tr.pap-g2 td{color:#b91c1c;background:transparent;} .pap-tb tr.pap-g3 td{color:#1d4ed8;background:transparent;} .pap-tb tr.pap-g4 td{color:#15803d;background:transparent;}
+.pap-tb td.pap-cb{white-space:nowrap;letter-spacing:.02em;}
 .pap-tb tr.pap-son-r td{border:0;padding:14px 0 0;text-align:left;font-size:9.5px;font-weight:600;color:#14213d;letter-spacing:.03em;line-height:1.5;}
-.pap-tr td{font-size:9.5px;} .pap-tr td.l{font-size:10px;} .pap-tr tr.pap-fin td{font-size:10px;} .pap-tr tr.pap-fin td.l{font-size:10.5px;letter-spacing:.06em;}   /* el resumen lleva 7 columnas de importes: cifras un punto más chicas para que quepan los 14 caracteres del total */
+/* resumen vigente en vertical (concepto | monto): las etiquetas de subtotal, IGV y total van a la izquierda, junto al concepto */
+.pap-v td.pap-r,.pap-rv td.pap-r{text-align:left;} .pap-tb.pap-v td.l small{color:#5b6b82;} .pap-pc{font-weight:400;color:#5b6b82;font-size:.92em;} .pap-v tr.pap-g1 td{padding-top:5px;padding-bottom:5px;} .pap-v tr.pap-g1 + tr td{border-top:0;}
+.pap-rv{max-width:680px;} .pap-rv .pap-pc{color:var(--mut);}
 @media print{.pap-tb thead{display:table-header-group;} .pap-tb tfoot{display:table-footer-group;}}
 @page{size:A3 landscape;margin:0;}
 @media print{
@@ -1491,7 +1542,7 @@ h1,h3,.card .value,.hhr-pie b{letter-spacing:-.2px;}
 .pre-g{cursor:pointer;font-weight:700;} .pre-p{cursor:pointer;}
 .pre-tb tbody tr.pre-n1 td{background:rgba(20,28,94,.11);} .pre-tb tbody tr.pre-n2 td{background:rgba(20,28,94,.065);} .pre-tb tbody tr.pre-n3 td{background:rgba(20,28,94,.03);}
 .pre-tb tbody tr.pre-g:hover td,.pre-tb tbody tr.pre-p:hover td{background:rgba(242,106,27,.10);}
-.pre-tb tr.pre-mod td:nth-child(5){font-weight:800;} .pre-cam{color:var(--naranja,#f26a1b);font-weight:800;}
+.pre-tb tr.pre-mod td:nth-child(6){font-weight:800;} .pre-cam{color:var(--naranja,#f26a1b);font-weight:800;}
 .pre-pc{position:relative;min-width:104px;} .pre-pc i{position:absolute;left:8px;bottom:4px;height:3px;border-radius:2px;background:#f26a1b;opacity:.75;max-width:calc(100% - 16px);} .pre-pc span{position:relative;}
 .pre-tb tr.tot td{font-weight:800;}
 :root[data-theme="dark"] .pre-tb tbody tr.pre-n1 td{background:rgba(255,255,255,.09);} :root[data-theme="dark"] .pre-tb tbody tr.pre-n2 td{background:rgba(255,255,255,.055);} :root[data-theme="dark"] .pre-tb tbody tr.pre-n3 td{background:rgba(255,255,255,.028);}
@@ -2725,17 +2776,17 @@ document.addEventListener('DOMContentLoaded', function(){ try { var m = document
 
     <!-- ═══════════ VALORIZACIONES ═══════════ -->
     <section class="pane" data-pane="valorizaciones">
-      <div class="vl-top">
-        <p class="api" style="margin:0">Tipo:
-          <button class="seg-btn" data-vtipo="contrato">Contrato principal</button>
-          <button class="seg-btn" data-vtipo="adicional">Adicionales</button>
-          <button class="seg-btn" data-vtipo="mayores_metrados">Mayores metrados</button>
-        </p>
-        <p class="api" style="margin:0">Cifras:
-          <button class="seg-btn" data-vprop="0" title="Solo lo aprobado por el residente (cifras oficiales)">Solo aprobadas</button>
-          <button class="seg-btn" data-vprop="1" title="Suma también las valorizaciones en propuesta">Incluir propuestas</button>
-        </p>
-        <span class="hint" id="vlNota"></span>
+      <div class="sg-bar">
+        <div class="sg" role="group" aria-label="Tipo de valorización">
+          <button type="button" class="seg-btn" data-vtipo="contrato" title="Contrato principal">Contrato</button>
+          <button type="button" class="seg-btn" data-vtipo="adicional" title="Adicionales">Adicional</button>
+          <button type="button" class="seg-btn" data-vtipo="mayores_metrados" title="Mayores metrados">Mayores</button>
+        </div>
+        <div class="sg" role="group" aria-label="Cifras">
+          <button type="button" class="seg-btn" data-vprop="0" title="Solo lo aprobado por el residente (cifras oficiales)">Aprobadas</button>
+          <button type="button" class="seg-btn" data-vprop="1" title="Suma también las valorizaciones en propuesta">+ Propuestas</button>
+        </div>
+        <span class="hint" id="vlNota" style="margin-left:auto"></span>
       </div>
       <div id="vlCuerpo"><div class="rg-msg">Consultando las valorizaciones…</div></div>
     </section>
@@ -2754,11 +2805,16 @@ document.addEventListener('DOMContentLoaded', function(){ try { var m = document
 
     <!-- ═══════════ PRESUPUESTO (venta / meta) ═══════════ -->
     <section class="pane" data-pane="presupuesto">
-      <div class="vl-top">
-        <p class="api" style="margin:0" id="preFrP">Frente: <span id="preFrentes"></span></p>
-        <p class="api" style="margin:0">Ver:
-          <button class="seg-btn" data-premodo="venta" title="Presupuesto contractual: solo lectura">🔒 Venta</button>
-          <button class="seg-btn" data-premodo="meta" title="Presupuesto meta: copia del APU que se ajusta sin tocar el contrato">🎯 Meta</button>        </p>
+      <!-- tres niveles: 1) pestañas Venta | Meta · 2) alcance (solo Venta), texto liviano · 3) frente, un selector -->
+      <div class="pre-nav">
+        <div class="pre-tabs" role="tablist" aria-label="Presupuesto">
+          <button type="button" role="tab" class="pre-tab" data-premodo="venta" title="Venta: contrato vigente y adicionales (solo lectura)"><svg viewBox="0 0 16 16"><path d="M2.5 2.5h5.6l5.4 5.4-5.6 5.6-5.4-5.4V2.5Z"/><circle cx="5.6" cy="5.6" r=".9"/></svg>Venta</button>
+          <button type="button" role="tab" class="pre-tab" data-premodo="meta" title="Meta: copia del APU que se ajusta sin tocar el contrato"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.5"/><circle cx="8" cy="8" r="2.2"/></svg>Meta</button>
+        </div>
+        <div class="pre-sub">
+          <div class="pre-chips" id="preAlc" role="group" aria-label="Alcance"></div>
+          <label class="pre-sel" id="preFrWrap" title="Frente de obra"><svg viewBox="0 0 16 16"><path d="M2 13.5V6.5l6-4 6 4v7M5.5 13.5v-4h5v4"/></svg><select id="preFrSel" aria-label="Frente"></select></label>
+        </div>
       </div>
       <div id="preCuerpo"><div class="rg-msg">Consultando el presupuesto…</div></div>
     </section>
@@ -4958,7 +5014,7 @@ function vlGraficos() {
 function valPintar() {
   const box = $('#vlCuerpo'); if (!box || !VAL.ok) return;
   const tipos = new Set(VAL.vals.map(v => v.tipo));
-  document.querySelectorAll('[data-vtipo]').forEach(b => { b.classList.toggle('on', b.dataset.vtipo === VAL.tipo); b.disabled = !tipos.has(b.dataset.vtipo); b.title = tipos.has(b.dataset.vtipo) ? '' : 'Todavía no hay valorizaciones de este tipo'; });
+  document.querySelectorAll('[data-vtipo]').forEach(b => { b.classList.toggle('on', b.dataset.vtipo === VAL.tipo); b.disabled = !tipos.has(b.dataset.vtipo); b.title = tipos.has(b.dataset.vtipo) ? TIPO_VAL[b.dataset.vtipo] : 'Todavía no hay valorizaciones de este tipo'; });
   const vt = VAL.vals.filter(v => v.tipo === VAL.tipo);
   if (!vt.length) { box.innerHTML = '<div class="rg-msg">Todavía no hay valorizaciones cargadas.</div>'; $('#vlNota').textContent = ''; return; }
   const A = RES_A || { proyectos: [], progRows: [] }, frentesTodos = A.proyectos || [], frentes = VAL.verFrentes ? frentesTodos : [];
@@ -8299,15 +8355,16 @@ async function preCargar() {
 }
 function prePintar() {
   const box = $('#preCuerpo'); if (!box) return;
-  const enAdic = PRE.modo === 'venta' && PAD.sel !== 'c', frp = $('#preFrP'); if (frp) frp.style.display = enAdic ? 'none' : '';   // adicionales y resumen vigente no se separan por frente
-  if (enAdic) { document.querySelectorAll('[data-premodo]').forEach(b => b.classList.toggle('on', b.dataset.premodo === PRE.modo)); preAdiPintar(); return; }
+  const enAdic = PRE.modo === 'venta' && PAD.sel !== 'c', frp = $('#preFrWrap'), alc = $('#preAlc'); if (frp) frp.style.display = enAdic ? 'none' : '';   // adicionales y resumen vigente no se separan por frente
+  if (alc) { alc.style.display = PRE.modo === 'venta' ? '' : 'none'; if (PRE.modo === 'venta') alc.innerHTML = padBarraHTML(PAD.ads || []); }
+  if (enAdic) { document.querySelectorAll('[data-premodo]').forEach(b => { const on = b.dataset.premodo === PRE.modo; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); }); preAdiPintar(); return; }
   const d = preVista(); if (!d) return;
-  $('#preFrentes').innerHTML = (COMPONENTES.length > 1 ? `<button class="seg-btn ${PRE.frente === 'todos' ? 'on' : ''}" data-prefr="todos" title="Suma de todos los frentes">Toda la obra</button> ` : '') + COMPONENTES.map(c => `<button class="seg-btn ${PRE.frente === c.id ? 'on' : ''}" data-prefr="${esc(c.id)}">${esc(String(c.nombre).replace(/^Puente\s+/i, ''))}</button>`).join(' ');
-  document.querySelectorAll('[data-premodo]').forEach(b => b.classList.toggle('on', b.dataset.premodo === PRE.modo));
+  { const sel = $('#preFrSel'); if (sel) { sel.innerHTML = (COMPONENTES.length > 1 ? `<option value="todos">Toda la obra</option>` : '') + COMPONENTES.map(c => `<option value="${esc(c.id)}">${esc(c.nombre)}</option>`).join(''); sel.value = PRE.frente; } }
+  document.querySelectorAll('[data-premodo]').forEach(b => { const on = b.dataset.premodo === PRE.modo; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
   const adm = !!AUTH.admin, m = d.meta, meta = PRE.modo === 'meta', t = d.tot;
   const margen = t.con - t.m, hayM = (!!m || !!d.esTodos) && t.nm > 0, nMetas = d.esTodos ? d.frentes.filter(f => f.meta).length : 0;
   const kp = `<div class="vl-kp pre-kp">
-    <div class="vl-k"><small>Presupuesto venta</small><b>${fmt(t.v, 2)}</b><em>Costo directo del contrato · ${t.np} partidas</em></div>
+    <div class="vl-k"><small>Presupuesto venta</small><b>${fmt(t.v, 2)}</b><em>Costo directo vigente (neto de deductivos) · ${t.np} partidas</em></div>
     <div class="vl-k"><small>Presupuesto meta</small><b>${hayM ? fmt(t.m + (t.v - t.con), 2) : '—'}</b><em>${d.esTodos ? (nMetas ? `${nMetas} de ${d.frentes.length} frentes con meta · ${t.nm} de ${t.np} partidas` : 'Ningún frente tiene meta aún') : m ? `${PRE_EST[m.estado][0]} · ${t.nm} de ${t.np} partidas con APU meta` : 'Aún no creado'}</em></div>
     <div class="vl-k"><small>Margen meta</small><b class="${hayM ? (margen >= 0 ? 'pre-pos' : 'pre-neg') : ''}">${hayM ? fmt(margen, 2) : '—'}</b><em>${hayM ? `${preP(t.con ? margen / t.con : 0)} sobre la venta de esas partidas` : 'Venta − meta'}</em></div>
     <div class="vl-k"><small>Partidas ajustadas</small><b>${hayM ? t.nmod : '—'}</b><em>${hayM ? `de ${t.nm} con cambios en su APU` : 'Con cambios respecto a la venta'}</em></div></div>`;
@@ -8322,13 +8379,13 @@ function prePintar() {
   } else {
     cuerpo = (meta && m ? preEstadoHTML(m, adm) : '') + (meta && d.esTodos ? preFrentesHTML(d) + ggCardHTML(t.m + (t.v - t.con), adm) : '') + `<div class="vl-card pre-card">
       <div class="pre-tool"><div><h3>${meta ? 'Venta contra meta' : 'Presupuesto de venta'} · ${d.esTodos ? 'Toda la obra' : esc(String(d.proy.nombre))}</h3>
-        <p class="hint">${meta ? `Margen = venta − meta (positivo = ahorro). ${t.nm < t.np ? `${t.np - t.nm} partidas aún sin meta (—): en el total se cuentan a precio de venta. ` : ''}Toca una partida para ver y ${adm && m && m.estado === 'borrador' ? 'ajustar' : 'comparar'} su APU.` : 'Contrato principal a precios unitarios (costo directo). Es de solo lectura; toca una partida para ver su APU.'}</p></div>
-        <div class="pre-tb-acc">${meta ? `<button type="button" class="icon-btn ${PRE.soloMod ? 'on' : ''}" data-pre-solomod title="Mostrar solo las partidas ajustadas" aria-label="Solo ajustadas"><svg viewBox="0 0 24 24"><path d="M3 5h18l-7 8v6l-4 2v-8L3 5Z"/></svg></button>` : ''}
+        <p class="hint">${meta ? `Margen = venta − meta (positivo = ahorro). ${t.nm < t.np ? `${t.np - t.nm} partidas aún sin meta (—): en el total se cuentan a precio de venta. ` : ''}Toca una partida para ver y ${adm && m && m.estado === 'borrador' ? 'ajustar' : 'comparar'} su APU.` : 'Contrato principal vigente a precios unitarios (costo directo, ya neto de los deductivos vinculados). Es de solo lectura; toca una partida para ver su APU.'}</p></div>
+        <div class="pre-tb-acc">${meta ? '' : `<button type="button" class="icon-btn" data-pap-imp="c" title="Imprimir el presupuesto contractual vigente (A4)" aria-label="Imprimir"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><path d="M4.5 6V2.5h7V6M4.5 11.5h-2v-5h11v5h-2"/><rect x="4.5" y="9.5" width="7" height="4"/></svg></button>`}${meta ? `<button type="button" class="icon-btn ${PRE.soloMod ? 'on' : ''}" data-pre-solomod title="Mostrar solo las partidas ajustadas" aria-label="Solo ajustadas"><svg viewBox="0 0 24 24"><path d="M3 5h18l-7 8v6l-4 2v-8L3 5Z"/></svg></button>` : ''}
         <button type="button" class="icon-btn" data-pre-exp="1" title="Expandir todo" aria-label="Expandir todo"><svg viewBox="0 0 24 24"><path d="m7 9 5 5 5-5M7 4l5 5 5-5" transform="translate(0 4)"/></svg></button>
         <button type="button" class="icon-btn" data-pre-exp="0" title="Contraer" aria-label="Contraer"><svg viewBox="0 0 24 24"><path d="m7 15 5-5 5 5M7 20l5-5 5 5" transform="translate(0 -6)"/></svg></button></div></div>
       <div class="vl-tw"><table class="vl-tb pre-tb ${meta ? 'pre-tm' : 'pre-tv'}">${preTabla(d, meta)}</table></div></div>`;
   }
-  box.innerHTML = (PRE.modo === 'venta' ? padBarraHTML([]) : '') + kp + cuerpo;
+  box.innerHTML = kp + cuerpo;
   if (PRE.modo === 'venta') padBarra();
 }
 function preEstadoHTML(m, adm) {
@@ -8350,22 +8407,22 @@ function preTabla(d, meta) {
   (d.hijos.raiz || []).forEach(rec);
   const tv = d.tot.v || 1;
   const cab = meta
-    ? '<tr><th class="l">Partida</th><th class="und">Und</th><th>Metrado</th><th>P.U. venta</th><th>P.U. meta</th><th>Parcial venta</th><th>Parcial meta</th><th>Margen S/</th><th>Margen %</th></tr>'
-    : '<tr><th class="l">Partida</th><th class="und">Und</th><th>Metrado</th><th>P.U. S/</th><th>Parcial S/</th><th>% del total</th></tr>';
+    ? '<tr><th class="l">Código</th><th class="l">Partida</th><th class="und">Und</th><th>Metrado</th><th>P.U. venta</th><th>P.U. meta</th><th>Parcial venta</th><th>Parcial meta</th><th>Margen S/</th><th>Margen %</th></tr>'
+    : '<tr><th class="l">Código</th><th class="l">Partida</th><th class="und">Und</th><th>Metrado</th><th>P.U. S/</th><th>Parcial S/</th></tr>';
   const cuerpo = filas.map(n => {
-    const grupo = !!d.hijos[n.nodo_id], m = d.partidas[n.nodo_id], sang = Math.max(0, n.nivel - 1) * 14;
-    const nom = `<td class="l pre-nom" style="padding-left:${10 + sang}px">${grupo ? `<span class="pre-chev ${ab.has(n.nodo_id) || solo ? 'on' : ''}">▸</span>` : '<span class="pre-chev pre-hoja"></span>'}<span class="pre-cod">${esc(n.codigo)}</span> ${esc(n.nombre)}</td>`;
+    const grupo = !!d.hijos[n.nodo_id], m = d.partidas[n.nodo_id], sang = Math.max(0, n.nivel - 1) * 6;   // sangría mínima en el panel (en el PDF va sin sangría)
+    const nom = `<td class="l pre-cd">${esc(n.codigo)}</td><td class="l pre-nom" style="padding-left:${6 + sang}px">${grupo ? `<span class="pre-chev ${ab.has(n.nodo_id) || solo ? 'on' : ''}">▸</span>` : '<span class="pre-chev pre-hoja"></span>'}${esc(n.nombre)}</td>`;   // el código va en su propia columna; la sangría y el chevron solo acompañan al nombre
     const attr = grupo ? `data-pre-tog="${n.nodo_id}"` : `data-preapu="${n.nodo_id}"`, cls = `pre-n${Math.min(n.nivel, 4)} ${grupo ? 'pre-g' : 'pre-p' + (m && m.modificado ? ' pre-mod' : '')}`;
     if (!meta) {
-      return `<tr class="${cls}" ${attr}>${nom}<td class="c und">${grupo ? '' : esc(n.unidad || '')}</td><td>${grupo ? '' : preN(n.metrado, 2)}</td><td>${grupo ? '' : preN(n.pu_venta, 2)}</td><td>${preN(n._v, 2)}</td><td class="pre-pc"><i style="width:${Math.min(100, n._v / tv * 100)}%"></i><span>${preP(n._v / tv)}</span></td></tr>`;
+      return `<tr class="${cls}" ${attr}>${nom}<td class="c und">${grupo ? '' : esc(n.unidad || '')}</td><td>${grupo ? '' : preN(n.metrado, 2)}</td><td>${grupo ? '' : preN(n.pu_venta, 2)}</td><td>${preN(n._v, 2)}</td></tr>`;
     }
     const conM = grupo ? n._nm > 0 : !!m, dif = n._con - n._m, pct = n._con ? dif / n._con : 0, cd = !conM ? '' : (dif > 0.004 ? 'pre-pos' : dif < -0.004 ? 'pre-neg' : '');
     return `<tr class="${cls}" ${attr}>${nom}<td class="c und">${grupo ? '' : esc(n.unidad || '')}</td><td>${grupo ? '' : preN(n.metrado, 2)}</td><td>${grupo ? '' : preN(n.pu_venta, 2)}</td><td class="${!grupo && m && m.modificado ? 'pre-cam' : ''}">${grupo ? '' : (m ? preN(m.pu_meta, 2) : '—')}</td><td>${preN(n._v, 2)}</td><td>${conM ? preN(n._m, 2) : '—'}</td><td class="${cd}">${conM ? preN(dif, 2) : '—'}</td><td class="${cd}">${conM ? preP(pct) : '—'}</td></tr>`;
   }).join('');
   const t = d.tot;
   const pie = meta
-    ? `<tr class="tot"><td class="l">TOTAL COSTO DIRECTO</td><td></td><td></td><td></td><td></td><td>${preN(t.v, 2)}</td><td>${t.nm ? preN(t.m + (t.v - t.con), 2) : '—'}</td><td class="${t.con - t.m >= 0 ? 'pre-pos' : 'pre-neg'}">${t.nm ? preN(t.con - t.m, 2) : '—'}</td><td>${t.nm ? preP(t.con ? (t.con - t.m) / t.con : 0) : '—'}</td></tr>`
-    : `<tr class="tot"><td class="l">TOTAL COSTO DIRECTO</td><td></td><td></td><td></td><td>${preN(t.v, 2)}</td><td>100,0 %</td></tr>`;
+    ? `<tr class="tot"><td class="l" colspan="2">TOTAL COSTO DIRECTO</td><td></td><td></td><td></td><td></td><td>${preN(t.v, 2)}</td><td>${t.nm ? preN(t.m + (t.v - t.con), 2) : '—'}</td><td class="${t.con - t.m >= 0 ? 'pre-pos' : 'pre-neg'}">${t.nm ? preN(t.con - t.m, 2) : '—'}</td><td>${t.nm ? preP(t.con ? (t.con - t.m) / t.con : 0) : '—'}</td></tr>`
+    : `<tr class="tot"><td class="l" colspan="2">TOTAL COSTO DIRECTO</td><td></td><td></td><td></td><td>${preN(t.v, 2)}</td></tr>`;
   return `<thead>${cab}</thead><tbody>${cuerpo}${pie}</tbody>`;
 }
 // ── APU de una partida: venta (solo lectura) a la izquierda · meta (editable) a la derecha ──
@@ -8453,6 +8510,10 @@ async function preEjecutar(fn, args, ok, boton) {
   catch (e) { toast(`No se pudo guardar: ${esc(e.message)}`, false); if (PRE.dr) preDrawerPintar(); if (boton) boton.disabled = false; return false; }
 }
 // ── eventos ──
+document.addEventListener('change', (e) => {   // selector de frente
+  if (e.target.id !== 'preFrSel') return;
+  PRE.frente = e.target.value; preCerrarAPU(); preCargar(); window.scrollTo({ top: 0 });
+});
 document.addEventListener('click', async (e) => {
   const t = e.target;
   let b = t.closest('[data-prefr]');
@@ -12005,6 +12066,7 @@ async function padDatos() {   // adicionales + sus partidas (y las de la línea 
     const rows = await getTodo(`/linea_base_partidas?version_id=in.(${[...ids].join(',')})&concepto=eq.adicional&select=version_id,codigo,nombre,unidad,metrado,precio_unitario,parcial_cd,proyecto_id,es_hito&order=codigo`);
     ids.forEach(id => { PAD.lbp[id] = {}; }); rows.forEach(r => { PAD.lbp[r.version_id][r.codigo] = r; });
   }
+  PAD.ads = ads;
   return ads;
 }
 const padFrente = (id) => { const p = ((RES_A && RES_A.proyectos) || []).find(x => x.id === id); return p ? String(p.nombre) : ''; };
@@ -12013,31 +12075,49 @@ function padPartidas(r) {   // null = todavía no llegó en ninguna línea base
   const l = ADI.lbs.find(x => x.numero === r.lb_numero), lp = ADI.lbs.find(x => x.numero === r.lb_numero - 1), A = (l && PAD.lbp[l.id]) || {}, B = (lp && PAD.lbp[lp.id]) || {}, orden = ((RES_A && RES_A.proyectos) || []).map(p => p.id);
   return Object.values(A).filter(p => !p.es_hito).map(p => {
     const b = B[p.codigo], pa = Number(p.parcial_cd || 0) - (b ? Number(b.parcial_cd || 0) : 0), nd = PAD.nod && PAD.nod.porClave[`${p.proyecto_id}|${p.codigo}`];
-    let comp = '', ruta = ''; if (nd) { const cad = []; let q = PAD.nod.porId[nd.padre_id]; while (q) { if (q.nivel >= 2) cad.unshift(q.nombre); q = PAD.nod.porId[q.padre_id]; } comp = cad.pop() || ''; ruta = cad.join(' › '); }
-    return { codigo: p.codigo, esp: (nd && nd.codigo_esp) || p.codigo, nombre: p.nombre, unidad: p.unidad, proyecto_id: p.proyecto_id, frente: padFrente(p.proyecto_id), fo: orden.indexOf(p.proyecto_id), comp, ruta,
+    let comp = '', ruta = '', compCod = '', cadN = []; if (nd) { const cad = []; let q = PAD.nod.porId[nd.padre_id]; compCod = q ? q.codigo : ''; while (q) { if (q.nivel >= 2) { cad.unshift(q.nombre); cadN.unshift({ id: q.id, codigo: q.codigo, nombre: q.nombre, nivel: q.nivel }); } q = PAD.nod.porId[q.padre_id]; } comp = cad.pop() || ''; ruta = cad.join(' › '); }
+    return { codigo: p.codigo, esp: (nd && nd.codigo_esp) || p.codigo, nombre: p.nombre, unidad: p.unidad, proyecto_id: p.proyecto_id, frente: padFrente(p.proyecto_id), fo: orden.indexOf(p.proyecto_id), comp, ruta, compCod, cadN,
       metrado: b ? Number(p.metrado || 0) - Number(b.metrado || 0) : Number(p.metrado || 0), pu: Number(p.precio_unitario || 0), parcial: pa, nueva: !b };
   }).filter(p => p.nueva || Math.abs(p.parcial) > 0.004).sort((a, b) => (a.fo - b.fo) || String(a.comp).localeCompare(b.comp, 'es') || String(a.codigo).localeCompare(String(b.codigo), 'es', { numeric: true }));
 }
 function padGrupos(ps) {   // frente › componente › partidas, con subtotales de costo directo
   const fr = [];
-  ps.forEach(p => { let f = fr.find(x => x.id === p.proyecto_id); if (!f) fr.push(f = { id: p.proyecto_id, frente: p.frente, comps: [], cd: 0 });
-    let c = f.comps.find(x => x.comp === p.comp); if (!c) f.comps.push(c = { comp: p.comp, ruta: p.ruta, items: [], cd: 0 }); c.items.push(p); c.cd += p.parcial; f.cd += p.parcial; });
+  ps.forEach(p => { let f = fr.find(x => x.id === p.proyecto_id); if (!f) fr.push(f = { id: p.proyecto_id, frente: p.frente, comps: [], cd: 0, suma: {} });
+    let c = f.comps.find(x => x.comp === p.comp && x.cod === p.compCod); if (!c) f.comps.push(c = { comp: p.comp, ruta: p.ruta, cod: p.compCod, cad: p.cadN, items: [], cd: 0 }); c.items.push(p); c.cd += p.parcial; f.cd += p.parcial;
+    p.cadN.forEach(n => { f.suma[n.id] = (f.suma[n.id] || 0) + p.parcial; }); });
   return fr;
 }
+// frente y, debajo, un renglón por cada nivel de la jerarquía (accesos › obras de arte › alcantarilla), cada uno con su código y su subtotal, antes de las partidas (`fila` pinta cada partida)
+function padFilasF(f, fila) {
+  const hechos = new Set();
+  return padBanda('pap-g1', '', f.frente, f.cd) + f.comps.map(c => (c.cad && c.cad.length ? c.cad.map(n => hechos.has(n.id) ? '' : (hechos.add(n.id), padBanda('pap-g' + Math.min(n.nivel, 4), n.codigo, n.nombre, f.suma[n.id]))).join('') : padBanda('pap-g2', c.cod, c.comp || 'Sin componente', c.cd)) + c.items.map(fila).join('')).join('');
+}
 function padEtq(r) { return `Adicional N° ${adiN0(r.numero)}`; }
+// fila de resumen por nivel (frente, componente, título del presupuesto): el código va en SU columna, el nombre en la de descripción y el subtotal en la última; `lv` = sangría del nombre
+const padBanda = (cls, cod, txt, cd, lv) => `<tr class="${cls}"><td class="l pap-cb">${esc(cod || '')}</td><td class="l">${esc(txt || '')}</td><td></td><td></td><td></td><td>${padM(cd)}</td></tr>`;
 // filas de totales (costo directo → total con IGV) de un importe {cd, gg, ut, sub, igv, total, pgg, put}; `cols` = columnas de la tabla (la etiqueta ocupa todas menos la última)
-function padTotales(m, cols) {
+function padTotales(m, cols, desde) {   // desde = 3 salta costo directo, gastos generales y utilidad (el resumen vertical ya los detalla)
   const f = (lab, v, cls) => `<tr class="pap-t ${cls || ''}"><td colspan="${cols - 1}" class="pap-r">${lab}</td><td class="pap-n">${padM(v)}</td></tr>`;
-  return f('COSTO DIRECTO', m.cd) + f(`GASTOS GENERALES (${padPct(m.pgg)} %)`, m.gg) + f(`UTILIDAD (${padPct(m.put)} %)`, m.ut) + f('SUBTOTAL (sin IGV)', m.sub, 'pap-sub') + f(`IGV (${(ADI.f.igv * 100).toFixed(0)} %)`, m.igv) + f('TOTAL', m.total, 'pap-fin');
+  return [f('COSTO DIRECTO', m.cd), f(`GASTOS GENERALES (${padPct(m.pgg)} %)`, m.gg), f(`UTILIDAD (${padPct(m.put)} %)`, m.ut), f('SUBTOTAL (sin IGV)', m.sub, 'pap-sub'), f(`IGV (${(ADI.f.igv * 100).toFixed(0)} %)`, m.igv), f('TOTAL', m.total, 'pap-fin')].slice(desde || 0).join('');
+}
+// resumen VERTICAL del presupuesto vigente, en orden jerárquico: costo directo › gastos generales › utilidad (cada uno con el contrato y cada adicional), luego subtotal, IGV y total
+function padResumenV(c, ms, t, pdf) {
+  const grupo = (tit, k, pk) => {
+    const fila = (lab, sub, pct, v) => `<tr><td class="l">${esc(lab)}${pct != null ? ` <span class="pap-pc">(${padPct(pct)} %)</span>` : ''}${sub ? (pdf ? `<small>${esc(sub)}</small>` : `<span class="lb-sub">${esc(sub)}</span>`) : ''}</td><td>${padM(v)}</td></tr>`;
+    return `<tr class="pap-g1"><td class="l">${tit}</td><td>${padM(t[k])}</td></tr>`
+      + fila('Contrato vigente', pk ? '' : 'a precios unitarios', pk ? ADI.f[pk] * 100 : null, c[k])
+      + ms.map(({ r, m }) => fila(padEtq(r), r.resolucion || '', pk ? m[pk === 'gg' ? 'pgg' : 'put'] : null, m[k])).join('');
+  };
+  return grupo('COSTO DIRECTO', 'cd') + grupo('GASTOS GENERALES', 'gg', 'gg') + grupo('UTILIDAD', 'ut', 'ut') + padTotales(t, 2, 3);
 }
 const PAD_IMP = '<svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><path d="M4.5 6V2.5h7V6M4.5 11.5h-2v-5h11v5h-2"/><rect x="4.5" y="9.5" width="7" height="4"/></svg>';
-function padBarraHTML(ads) {   // Contrato · Adicional N° k … · Resumen vigente
-  const b = (k, t) => `<button type="button" class="seg-btn ${PAD.sel === k ? 'on' : ''}" data-pap="${k}">${t}</button>`;
-  return `<div class="pap-chips" id="papBar">${b('c', 'Contrato')}${ads.map((r, i) => b(i, padEtq(r))).join('')}${b('r', 'Resumen vigente')}</div>`;
+function padBarraHTML(ads) {   // grupo segmentado: Contrato · Ad. 01 … · Vigente (títulos cortos; el nombre completo va en el tooltip)
+  const b = (k, t, tt) => `<button type="button" class="seg-btn ${PAD.sel === k ? 'on' : ''}" data-pap="${k}" title="${esc(tt)}">${t}</button>`;
+  return b('c', 'Contrato', 'Presupuesto contractual vigente (neto de deductivos)') + ads.map((r, i) => b(i, 'Ad. ' + adiN0(r.numero), padEtq(r))).join('') + b('r', 'Vigente', 'Resumen: contrato + adicionales aprobados = presupuesto de venta vigente');
 }
-async function padBarra() {   // en la vista del contrato la barra se completa cuando llegan los adicionales
+async function padBarra() {   // el grupo se completa cuando llegan los adicionales
   let ads; try { ads = await padDatos(); } catch (e) { return; }
-  const el = $('#papBar'); if (el && PRE.modo === 'venta') el.outerHTML = padBarraHTML(ads);
+  const el = $('#preAlc'); if (el && PRE.modo === 'venta') el.innerHTML = padBarraHTML(ads);
 }
 async function preAdiPintar() {
   const box = $('#preCuerpo'); if (!box) return;
@@ -12045,63 +12125,74 @@ async function preAdiPintar() {
   let ads; try { ads = await padDatos(); } catch (e) { box.innerHTML = `<div class="rg-msg">No se pudieron leer los adicionales. <span class="mono" style="font-size:11px">${esc(e.message)}</span></div>`; return; }
   if (v !== PAD.ver || PRE.modo !== 'venta' || PAD.sel === 'c') return;
   if (PAD.sel !== 'r' && !ads[+PAD.sel]) PAD.sel = 'r';
-  const sel = PAD.sel, chips = padBarraHTML(ads);
+  const sel = PAD.sel; { const el = $('#preAlc'); if (el) el.innerHTML = padBarraHTML(ads); }
   let cuerpo;
   if (sel === 'r') {
     const c = adiContratoVigente(), ms = ads.filter(r => adiCuenta(r) && r.cd != null).map(r => ({ r, m: adiMonto(r) }));
     const t = { cd: c.cd + ms.reduce((s, x) => s + x.m.cd, 0), gg: c.gg + ms.reduce((s, x) => s + x.m.gg, 0), ut: c.ut + ms.reduce((s, x) => s + x.m.ut, 0) }; t.sub = t.cd + t.gg + t.ut; t.igv = t.sub * ADI.f.igv; t.total = t.sub * (1 + ADI.f.igv);
-    const fila = (lab, sub, m, cls) => `<tr class="${cls || ''}"><td class="l">${lab}${sub ? `<span class="lb-sub">${sub}</span>` : ''}</td><td>${padM(m.cd)}</td><td>${padM(m.gg)}</td><td>${padM(m.ut)}</td><td><b>${padM(m.sub)}</b></td><td>${padM(m.igv)}</td><td>${padM(m.total)}</td></tr>`;
     cuerpo = `<div class="vl-card pap-card"><div class="pap-cab"><div><h3>Presupuesto de venta vigente</h3><p class="hint">Contrato (línea base 0${c.dedu ? ' menos deductivos vinculados' : ''}${c.mayo ? ' más mayores metrados' : ''}) y cada adicional aprobado, con sus propios gastos generales y utilidad. Sin IGV hasta el subtotal.</p></div><button type="button" class="seg-btn pap-imp" data-pap-imp="r" title="Imprimir el resumen (A4)" aria-label="Imprimir">${PAD_IMP}</button></div>
-      <div class="vl-tw"><table class="vl-tb pap-res"><thead><tr><th class="l">Concepto</th><th>Costo directo</th><th>Gastos generales</th><th>Utilidad</th><th>Subtotal</th><th>IGV</th><th>Total</th></tr></thead><tbody>
-      ${fila('Contrato vigente', 'a precios unitarios', c)}${ms.map(({ r, m }) => fila(padEtq(r), r.resolucion ? esc(r.resolucion) : '', m)).join('')}${fila('Total', '', t, 'tot')}</tbody></table></div>
+      <div class="vl-tw pap-rv"><table class="vl-tb pap-res"><thead><tr><th class="l">Concepto</th><th>Monto S/</th></tr></thead><tbody>${padResumenV(c, ms, t)}</tbody></table></div>
       <p class="pap-son">${padLetras(t.total)}</p>
       ${ads.some(r => !adiCuenta(r) || r.cd == null) ? '<p class="hint" style="margin:6px 0 0">No suman los adicionales sin aprobar o sin costo directo registrado.</p>' : ''}</div>`;
   } else {
     const r = ads[+sel], ps = padPartidas(r), m = adiMonto(r), [etq] = ADI_EST[r.estado] || [r.estado], gr = ps ? padGrupos(ps) : [];
     const suma = (ps || []).reduce((s, p) => s + p.parcial, 0), difer = ps && m && Math.abs(suma - m.cd) > 0.5;
-    const resumen = gr.length ? `<div class="vl-tw"><table class="vl-tb pap-res pap-rf"><thead><tr><th class="l">Frente</th><th class="l">Componente</th><th>Partidas</th><th>Costo directo</th><th>% del adicional</th></tr></thead><tbody>
-      ${gr.map(f => f.comps.map((c, i) => `<tr>${i ? '<td></td>' : `<td class="l" rowspan="${f.comps.length}"><b>${esc(f.frente)}</b></td>`}<td class="l">${esc(c.comp || '—')}${c.ruta ? `<span class="lb-sub">${esc(c.ruta)}</span>` : ''}</td><td>${c.items.length}</td><td>${padM(c.cd)}</td><td>${suma ? padPct(Math.round(c.cd / suma * 10000) / 100) : 0} %</td></tr>`).join('')).join('')}
-      </tbody></table></div>` : '';
     const tabla = ps ? `<div class="vl-tw"><table class="vl-tb pap-res"><thead><tr><th class="l">Código</th><th class="l">Descripción</th><th>Und.</th><th>Metrado</th><th>P.U. S/</th><th>Parcial S/</th></tr></thead><tbody>
-      ${gr.map(f => `<tr class="pap-g1"><td colspan="5">${esc(f.frente)}</td><td>${padM(f.cd)}</td></tr>` + f.comps.map(c => `<tr class="pap-g2"><td colspan="5">${esc([c.ruta, c.comp].filter(Boolean).join(' › ') || 'Sin componente')}</td><td>${padM(c.cd)}</td></tr>`
-        + c.items.map(p => `<tr><td class="l" title="Código del presupuesto: ${esc(p.codigo)}">${esc(p.esp)}</td><td class="l">${esc(p.nombre || '')}</td><td>${esc(p.unidad || '')}</td><td>${padM(p.metrado)}</td><td>${padM(p.pu)}</td><td>${padM(p.parcial)}</td></tr>`).join('')).join('')).join('') || '<tr><td colspan="6" class="l">Esta línea base no trae partidas de adicional nuevas.</td></tr>'}
+      ${gr.map(f => padFilasF(f, p => `<tr><td class="l" title="Código del presupuesto: ${esc(p.codigo)}">${esc(p.esp)}</td><td class="l">${esc(p.nombre || '')}</td><td>${esc(p.unidad || '')}</td><td>${padM(p.metrado)}</td><td>${padM(p.pu)}</td><td>${padM(p.parcial)}</td></tr>`)).join('') || '<tr><td colspan="6" class="l">Esta línea base no trae partidas de adicional nuevas.</td></tr>'}
       ${m ? padTotales(m, 6) : ''}</tbody></table></div>${m ? `<p class="pap-son">${padLetras(m.total)}</p>` : ''}`
       : `<p class="hint" style="margin:10px 0 0">Todavía no llegó en ninguna línea base, así que no hay partidas. Se llenan solas al cargar el Excel del CAO aprobado en <b>Contrato y líneas base</b>${m ? '. Mientras tanto se muestran sus totales:' : '; el costo directo y los porcentajes se registran con el lápiz en <b>Adicionales y deductivos</b>.'}</p>${m ? `<div class="vl-tw"><table class="vl-tb pap-res"><tbody>${padTotales(m, 2)}</tbody></table></div><p class="pap-son">${padLetras(m.total)}</p>` : ''}`;
     cuerpo = `<div class="vl-card pap-card"><div class="pap-cab"><div><h3>${padEtq(r)} <span class="vl-pill ${(ADI_EST[r.estado] || [0, 'pr'])[1]}">${esc(etq)}</span></h3><p class="hint">${[r.descripcion, r.resolucion && 'Resolución ' + r.resolucion, r.lb_numero != null && 'LB' + r.lb_numero].filter(Boolean).map(esc).join(' · ') || 'Sin datos legales todavía'}</p></div>
       <button type="button" class="seg-btn pap-imp" data-pap-imp="${sel}" title="Imprimir el presupuesto de este adicional (A4)" aria-label="Imprimir">${PAD_IMP}</button></div>
-      ${difer ? `<p class="plz-nota al">⚠ La suma de las partidas (${padM(suma)}) no coincide con el costo directo registrado (${padM(m.cd)}): se corrigió a mano en el lápiz de Adicionales y deductivos.</p>` : ''}${resumen}${tabla}</div>`;
+      ${difer ? `<p class="plz-nota al">⚠ La suma de las partidas (${padM(suma)}) no coincide con el costo directo registrado (${padM(m.cd)}): se corrigió a mano en el lápiz de Adicionales y deductivos.</p>` : ''}${tabla}</div>`;
   }
-  box.innerHTML = chips + cuerpo;
+  box.innerHTML = cuerpo;
 }
 document.addEventListener('click', (e) => {
   const c = e.target.closest('[data-pap]'); if (c) { PAD.sel = c.dataset.pap === 'r' || c.dataset.pap === 'c' ? c.dataset.pap : +c.dataset.pap; if (PRE.modo === 'venta') prePintar(); return; }
-  const i = e.target.closest('[data-pap-imp]'); if (i) padImprimir(i.dataset.papImp === 'r' ? 'r' : +i.dataset.papImp);
+  const i = e.target.closest('[data-pap-imp]'); if (i) padImprimir(i.dataset.papImp === 'r' || i.dataset.papImp === 'c' ? i.dataset.papImp : +i.dataset.papImp);
 });
 async function padImprimir(sel) {
   const ads = await padDatos(), ob = (RES_A && RES_A.obra) || {}, obraNombre = ob.nombre || tx0('#obraNombre');
   const datosObra = [['ENTIDAD:', ob.doc_entidad || ob.cliente], ['OBRA:', ob.doc_obra || obraNombre], ['CONTRATISTA:', ob.doc_contratista || ob.entidad], ['SUPERVISIÓN:', ob.doc_supervision]]
     .filter(x => x[1]).map(([k, v2]) => `<div class="vld-dato"><b>${esc(k)}</b><span>${esc(String(v2).toUpperCase())}</span></div>`).join('');
   let titulo, sub, cols, cab, filas, totales, colg, total;
-  if (sel === 'r') {
-    colg = '<col style="width:40mm">' + '<col>'.repeat(6);
+  if (sel === 'c') {   // presupuesto contractual VIGENTE del frente elegido (o toda la obra): ya viene neto de deductivos (metrado = contractual − deductivo)
+    const ver = (RES_A.version || {}).id, pr = PRE.frente && PRE.frente !== 'todos' ? preProy(PRE.frente) : null, alc = pr ? pr.id : null; let nod;   // PRE.frente guarda el CÓDIGO del frente, no su id
+    try { nod = await getTodo(`/wbs_nodos?version_id=eq.${ver}&concepto=eq.contrato&select=id,padre_id,proyecto_id,codigo,codigo_esp,nombre,unidad,nivel,orden,es_hoja,metrado,metrado_contrato,metrado_deductivo,precio_unitario&order=orden`); }
+    catch (e) { toast(`No se pudo leer el presupuesto: ${esc(e.message)}`, false); return; }
+    if (alc) nod = nod.filter(n => n.proyecto_id === alc);
+    const ids = new Set(nod.map(n => n.id)), hijos = {}, raices = []; nod.forEach(n => { if (n.padre_id && ids.has(n.padre_id)) (hijos[n.padre_id] = hijos[n.padre_id] || []).push(n); else raices.push(n); });
+    const cdN = {}, calc = (n) => (cdN[n.id] = n.es_hoja ? Number(n.metrado || 0) * Number(n.precio_unitario || 0) : (hijos[n.id] || []).reduce((s, h) => s + calc(h), 0)); raices.forEach(calc);
+    const hoja = nod.filter(n => n.es_hoja), vig = hoja.reduce((s, n) => s + cdN[n.id], 0), orig = hoja.reduce((s, n) => s + Number(n.metrado_contrato != null ? n.metrado_contrato : n.metrado || 0) * Number(n.precio_unitario || 0), 0), dedu = Math.max(0, orig - vig);
+    const emit = (n) => { if (n.es_hoja) { const md = Number(n.metrado_deductivo || 0);
+        return `<tr><td class="l pap-c">${esc(n.codigo_esp || n.codigo)}</td><td class="l pap-d">${esc(n.nombre || '')}${md ? `<small>Metrado contractual ${padM(n.metrado_contrato)} − deductivo ${padM(md)}</small>` : ''}</td><td>${esc(n.unidad || '')}</td><td>${padM(n.metrado)}</td><td>${padM(n.precio_unitario)}</td><td>${padM(cdN[n.id])}</td></tr>`; }
+      const lv = Math.min(Number(n.nivel) || 1, 4);
+      return padBanda('pap-g' + lv, n.codigo, n.nombre, cdN[n.id], lv) + (hijos[n.id] || []).map(emit).join(''); };
+    const m = { cd: vig, gg: vig * ADI.f.gg, ut: vig * ADI.f.ut, pgg: ADI.f.gg * 100, put: ADI.f.ut * 100 }; m.sub = m.cd + m.gg + m.ut; m.igv = m.sub * ADI.f.igv; m.total = m.sub * (1 + ADI.f.igv);
+    cols = 6; colg = '<col style="width:18mm"><col><col style="width:10mm"><col style="width:20mm"><col style="width:20mm"><col style="width:29mm">'; total = m.total;
+    titulo = 'PRESUPUESTO CONTRACTUAL VIGENTE'; sub = `${alc ? padFrente(alc) : 'TODA LA OBRA'} · COSTO DIRECTO A PRECIOS UNITARIOS${dedu > 0.004 ? ' · NETO DE DEDUCTIVOS VINCULADOS' : ''}`.toUpperCase();
+    cab = '<tr class="pap-cols"><th class="l">CÓDIGO</th><th class="l">DESCRIPCIÓN</th><th>UND.</th><th>METRADO</th><th>P.U. S/</th><th>PARCIAL S/</th></tr>';
+    filas = raices.map(emit).join('');
+    const f = (lab, v) => `<tr class="pap-t"><td colspan="5" class="pap-r">${lab}</td><td class="pap-n">${padM(v)}</td></tr>`;
+    totales = (dedu > 0.004 ? f('COSTO DIRECTO CONTRACTUAL (LB0)', orig) + f('(−) DEDUCTIVOS VINCULADOS', -dedu) : '') + padTotales(m, 6).replace('>COSTO DIRECTO<', '>COSTO DIRECTO VIGENTE<');
+  } else if (sel === 'r') {
+    colg = '<col><col style="width:40mm">';
     const c = adiContratoVigente(), ms = ads.filter(r => adiCuenta(r) && r.cd != null).map(r => ({ r, m: adiMonto(r) }));
     const t = { cd: c.cd + ms.reduce((s, x) => s + x.m.cd, 0), gg: c.gg + ms.reduce((s, x) => s + x.m.gg, 0), ut: c.ut + ms.reduce((s, x) => s + x.m.ut, 0) }; t.sub = t.cd + t.gg + t.ut; t.igv = t.sub * ADI.f.igv; t.total = t.sub * (1 + ADI.f.igv);
-    titulo = 'PRESUPUESTO DE VENTA VIGENTE'; sub = 'CONTRATO Y ADICIONALES · MONTOS EN SOLES'; cols = 7; total = t.total;
-    cab = '<tr class="pap-cols"><th class="l">CONCEPTO</th><th>COSTO DIRECTO</th><th>GASTOS GENERALES</th><th>UTILIDAD</th><th>SUBTOTAL</th><th>IGV</th><th>TOTAL</th></tr>';
-    const fila = (lab, m, cls) => `<tr class="${cls || ''}"><td class="l">${lab}</td><td>${padM(m.cd)}</td><td>${padM(m.gg)}</td><td>${padM(m.ut)}</td><td>${padM(m.sub)}</td><td>${padM(m.igv)}</td><td>${padM(m.total)}</td></tr>`;
-    filas = fila('Contrato vigente', c) + ms.map(({ r, m }) => fila(padEtq(r) + (r.resolucion ? `<small>${esc(r.resolucion)}</small>` : ''), m)).join(''); totales = fila('TOTAL', t, 'pap-fin');
+    titulo = 'PRESUPUESTO DE VENTA VIGENTE'; sub = 'CONTRATO Y ADICIONALES · MONTOS EN SOLES'; cols = 2; total = t.total;
+    cab = '<tr class="pap-cols"><th class="l">CONCEPTO</th><th>MONTO S/</th></tr>';
+    filas = padResumenV(c, ms, t, true); totales = '';
   } else {
     const r = ads[sel]; if (!r) return; const ps = padPartidas(r), m = adiMonto(r);
-    cols = 6; colg = '<col style="width:20mm"><col><col style="width:11mm"><col style="width:19mm"><col style="width:17mm"><col style="width:25mm">'; titulo = `PRESUPUESTO DEL ${padEtq(r).toUpperCase()}`; sub = [r.descripcion, r.resolucion && 'Resolución ' + r.resolucion, r.lb_numero != null && 'LB' + r.lb_numero].filter(Boolean).join(' · ').toUpperCase();
+    cols = 6; colg = '<col style="width:18mm"><col><col style="width:10mm"><col style="width:20mm"><col style="width:20mm"><col style="width:29mm">'; titulo = `PRESUPUESTO DEL ${padEtq(r).toUpperCase()}`; sub = [r.descripcion, r.resolucion && 'Resolución ' + r.resolucion, r.lb_numero != null && 'LB' + r.lb_numero].filter(Boolean).join(' · ').toUpperCase();
     total = m ? m.total : 0;
     cab = '<tr class="pap-cols"><th class="l">CÓDIGO</th><th class="l">DESCRIPCIÓN</th><th>UND.</th><th>METRADO</th><th>P.U. S/</th><th>PARCIAL S/</th></tr>';
-    filas = ps ? padGrupos(ps).map(f => `<tr class="pap-g1"><td colspan="5">${esc(f.frente)}</td><td>${padM(f.cd)}</td></tr>` + f.comps.map(c => `<tr class="pap-g2"><td colspan="5">${esc([c.ruta, c.comp].filter(Boolean).join(' › ') || 'Sin componente')}</td><td>${padM(c.cd)}</td></tr>`
-      + c.items.map(p => `<tr><td class="l pap-c">${esc(p.esp)}</td><td class="l pap-d">${esc(p.nombre || '')}</td><td>${esc(p.unidad || '')}</td><td>${padM(p.metrado)}</td><td>${padM(p.pu)}</td><td>${padM(p.parcial)}</td></tr>`).join('')).join('')).join('') : '';
+    filas = ps ? padGrupos(ps).map(f => padFilasF(f, p => `<tr><td class="l pap-c">${esc(p.esp)}</td><td class="l pap-d">${esc(p.nombre || '')}</td><td>${esc(p.unidad || '')}</td><td>${padM(p.metrado)}</td><td>${padM(p.pu)}</td><td>${padM(p.parcial)}</td></tr>`)).join('') : '';
     if (!ps) { toast('Este adicional todavía no tiene partidas (llegan con el CAO aprobado): se imprimen solo sus totales.', false); if (!m) return; cab = ''; cols = 2; colg = '<col><col style="width:40mm">'; }
     totales = m ? padTotales(m, cols) : '';
   }
   const son = `<tr class="pap-son-r"><td colspan="${cols}">${padLetras(total)}</td></tr>`;
-  const html = `<div class="inf-hoja vld-hoja pap-hoja"><table class="pap-tb${sel === 'r' ? ' pap-tr' : ''}"><colgroup>${colg}</colgroup><thead><tr class="pap-tit"><th colspan="${cols}"><div class="vld-doctit-fila">${valDocEncabezadoLogo()}<div class="vld-doctit"><h2>${esc(titulo)}</h2><div class="vld-docper">${esc(sub)}</div></div>${valDocEncabezadoDer()}</div><div class="vld-datos">${datosObra}</div></th></tr>${cab}</thead>
+  const html = `<div class="inf-hoja vld-hoja pap-hoja"><table class="pap-tb${sel === 'r' ? ' pap-v' : ''}"><colgroup>${colg}</colgroup><thead><tr class="pap-tit"><th colspan="${cols}"><div class="vld-doctit-fila">${valDocEncabezadoLogo()}<div class="vld-doctit"><h2>${esc(titulo)}</h2><div class="vld-docper">${esc(sub)}</div></div>${valDocEncabezadoDer()}</div><div class="vld-datos">${datosObra}</div></th></tr>${cab}</thead>
     <tbody>${filas}${totales}${total ? son : ''}</tbody><tfoot><tr><td colspan="${cols}" style="height:29mm;padding:0;border:0"></td></tr></tfoot></table></div>`;
   document.querySelector('#informe')?.remove(); document.getElementById('papPag')?.remove();
   // el presupuesto va en A4 VERTICAL (la valorización y la Curva S siguen en A3 horizontal): se declara el tamaño de hoja solo mientras está abierto
