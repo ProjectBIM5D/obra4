@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="build" content="20261027225943">
+<meta name="build" content="20261030151218">
 <script>/* auto-actualizar: compara el sello de esta copia con el del servidor y recarga una sola vez */
 (function(){try{if(!/^https?:/.test(location.protocol))return;var me=document.querySelector('meta[name=build]').content;if(me==='0')return;
 fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'}).then(function(r){return r.text()}).then(function(h){
@@ -795,6 +795,16 @@ body.inf-abierto #informe{display:flex;flex-direction:column;position:fixed;inse
 .sg .seg-btn.on{background:var(--card);color:var(--blue-tx);box-shadow:0 1px 3px rgba(20,32,63,.16),0 0 0 1px rgba(59,123,232,.30);}
 .sg-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 12px;}
 @media (max-width:760px){.sg .seg-btn{padding:0 10px;} .sg-bar{gap:6px 8px;}}
+/* Flujo de caja: tarjetas y tablas compactas como Valorizaciones; el gráfico mide 300 px de alto */
+.pane[data-pane="flujocaja"] .vl-kp{gap:10px;margin-bottom:10px;} .pane[data-pane="flujocaja"] .vl-k{padding:8px 12px;} .pane[data-pane="flujocaja"] .vl-k small{font-size:9.5px;letter-spacing:.06em;}
+.pane[data-pane="flujocaja"] .vl-k b{font-size:16px;margin:1px 0;white-space:nowrap;font-weight:700;} .pane[data-pane="flujocaja"] .vl-k em{font-size:10.5px;}
+.pane[data-pane="flujocaja"] .vl-card{padding:10px 14px 12px;margin-bottom:10px;} .pane[data-pane="flujocaja"] .vl-card h3{font-size:13px;} .pane[data-pane="flujocaja"] .vl-card p.hint{font-size:11px;margin-bottom:4px;}
+.fc-cab{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;} .fc-bt{display:flex;gap:6px;flex:none;} .fc-graf{width:100%;height:300px;margin-top:4px;}
+table.vl-tb.fc-tb{font-size:10.5px;} table.vl-tb.fc-tb th,table.vl-tb.fc-tb td{padding:3px 8px;line-height:1.25;white-space:nowrap;} table.vl-tb.fc-tb thead th{background:#56637e;font-size:9.5px;letter-spacing:.07em;font-weight:700;padding:5px 8px;}
+table.vl-tb.fc-tb td{color:var(--tx2);font-weight:400;} table.vl-tb.fc-tb td b{font-weight:600;color:var(--tx);} table.vl-tb.fc-tb tr.tot td{background:#eef1f6;font-weight:600;color:var(--tx);} table.vl-tb.fc-tb td i{color:var(--mut);font-style:normal;}
+.fc-sub{display:block;font-size:9.5px;color:var(--mut);} .fc-ed{width:26px;height:26px;padding:0;border-radius:7px;} .fc-ed svg{width:14px;height:14px;}
+:root[data-theme="dark"] table.vl-tb.fc-tb tr.tot td{background:var(--input);}
+@media (max-width:560px){.fc-graf{height:240px;}}
 /* Navegación del Presupuesto en 3 niveles de peso distinto: pestañas (nivel 1) › texto liviano (nivel 2) › selector (nivel 3) */
 .pre-nav{margin:0 0 14px;}
 .pre-tabs{display:flex;gap:4px;border-bottom:1px solid var(--line2);}
@@ -2256,7 +2266,7 @@ select.usr-rol{font:inherit;font-size:12px;padding:5px 8px;border:1px solid var(
 .dif-hist{border-top:1px solid var(--line);padding-top:8px;margin:0 0 12px;font-size:12px;color:var(--tx2);} .dif-h{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:4px 0;} .dif-h .btn-sec{padding:3px 10px;font-size:11px;}
 @media (max-width:560px){.dif-kp{grid-template-columns:1fr 1fr;}}
 .lb-cmp{display:inline-flex;align-items:center;gap:8px;flex:0 0 auto;} .lb-cmp select{max-width:260px;}
-#lbFicha:not([hidden]),#plzForm:not([hidden]),#lbObs:not([hidden]),#adiForm:not([hidden]),#adiLim:not([hidden]),#metForm:not([hidden]),#ctvForm:not([hidden]),#evtForm:not([hidden]),#usrForm:not([hidden]),#obrNuevoForm:not([hidden]),#adiXls:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(620px,calc(100vw - 20px));max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
+#lbFicha:not([hidden]),#plzForm:not([hidden]),#lbObs:not([hidden]),#adiForm:not([hidden]),#adiLim:not([hidden]),#metForm:not([hidden]),#ctvForm:not([hidden]),#evtForm:not([hidden]),#usrForm:not([hidden]),#obrNuevoForm:not([hidden]),#adiXls:not([hidden]),#fcFormV:not([hidden]),#fcFormA:not([hidden]),#fcFormC:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(620px,calc(100vw - 20px));max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
 /* el Gantt en Contrato: sin la barra de selección de plan */
 #plEspacio[data-donde="plan"] #plVerP{display:none;}
 #plFotoDlg:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(560px,calc(100vw - 20px));margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
@@ -2562,6 +2572,7 @@ document.addEventListener('DOMContentLoaded', function(){ try { var m = document
         <div class="nav-gb">
           <button data-pane="presupuesto" title="Presupuesto de venta (contrato) y presupuesto meta (copia del APU ajustable)"><span class="ni">🧮</span><span class="nt">Presupuesto</span></button>
           <button data-pane="valorizaciones" title="Valorizaciones mensuales del contrato, adicionales y mayores metrados"><span class="ni">💰</span><span class="nt">Valorizaciones</span></button>
+          <button data-pane="flujocaja" title="Flujo de caja: facturación, detracciones, cobros, adelantos y egresos por mes"><span class="ni">🏦</span><span class="nt">Flujo de caja</span></button>
           <button type="button" class="prox" disabled title="Próximamente · costo real contra el presupuesto meta"><span class="ni">🧾</span><span class="nt">Costos reales</span><span class="nav-tag">pronto</span></button>
         </div>
       </div>
@@ -2818,6 +2829,9 @@ document.addEventListener('DOMContentLoaded', function(){ try { var m = document
       </div>
       <div id="preCuerpo"><div class="rg-msg">Consultando el presupuesto…</div></div>
     </section>
+
+    <!-- ═══════════ FLUJO DE CAJA Y COBRANZA ═══════════ -->
+    <section class="pane" data-pane="flujocaja"><div id="fcPanel"><div class="rg-msg">Leyendo la cobranza…</div></div></section>
 
     <!-- ═══════════ PLAN MASTER (cronograma meta) ═══════════ -->
     <section class="pane" data-pane="metrados"><div id="metPanel"></div></section>
@@ -3567,6 +3581,7 @@ document.querySelectorAll('#nav button[data-pane]').forEach(b => {
       ppc: ['PPC', 'Porcentaje de actividades completadas: trazabilidad semanal y causas de incumplimiento'],
       valorizaciones: ['Valorizaciones', 'Valor ganado: lo valorizado mes a mes (contrato, adicionales y mayores metrados)'],
       presupuesto: ['Presupuesto', 'Venta (contrato, solo lectura) y meta (copia del APU que se ajusta sin tocar el contrato)'],
+      flujocaja: ['Flujo de caja', 'Lo valorizado, facturado y cobrado: detracciones, adelantos y egresos por mes'],
       metrados: ['Mayores metrados', 'Registro de mayores metrados con su estado y resolución · el menor metrado, en una tarjeta'],
       adicionales: ['Adicionales y deductivos', 'Prestaciones adicionales y deductivos vinculados: lo que trajo cada línea base, su resolución y cuánto va del límite'],
       avance3d: ['Avance 3D', 'Avance de campo marcado en el modelo · concordancia con el parte diario, el plan semanal y lo valorizado'],
@@ -3599,6 +3614,7 @@ document.querySelectorAll('#nav button[data-pane]').forEach(b => {
     if (b.dataset.pane === 'elementos') bimCargar(true);
     if (b.dataset.pane === 'avance3d') a3Cargar(true);
     if (b.dataset.pane === 'presupuesto') preCargar();
+    if (b.dataset.pane === 'flujocaja') fcCargar();
     if (b.dataset.pane === 'parte' && !$('#parteLA').hidden) plaCargar();
     $('#side').classList.remove('open'); $('#overlay').classList.remove('on');
   });
@@ -12203,6 +12219,197 @@ async function padImprimir(sel) {
   ov.querySelector('#infCerrar').addEventListener('click', cerrarInforme);
   ov.querySelector('#infImprimir').addEventListener('click', () => { infTituloPrevio = document.title; document.title = `${titulo} - ${obraNombre}`; window.print(); });
 }
+
+// ═══ FLUJO DE CAJA Y COBRANZA (Costos › Flujo de caja) ═══
+// Ingresos = lo que paga la entidad por cada valorización aprobada (más los adelantos); egresos = costo real mensual (hoy referencial/simulado).
+// Por valorización: base = monto oficial + reajuste − amortización de adelantos − otros descuentos (sin IGV) · total = base × (1 + IGV) · detracción = total × % (cuenta de detracciones) · a cobrar = total − detracción.
+// El contrato se garantiza con carta fianza: no hay retención de fondo de garantía. Se registra en las tablas cobranza_* (db\flujo_caja.sql).
+const FC = { cargado: false, sinSql: false, vals: [], cob: new Map(), adel: [], cfg: { det: 0.04, plazo: 15 }, egr: [], igv: 0.18, ec: null, ro: null };
+const FC_MESES = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+const fcR2 = (x) => Math.round((Number(x) + 1e-9) * 100) / 100;
+const fcIso = (d) => d.toISOString().slice(0, 10);
+const fcHoy = () => new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+const fcSuma = (iso, n) => { const d = new Date(iso + 'T00:00:00Z'); d.setUTCDate(d.getUTCDate() + n); return fcIso(d); };
+const fcFinMes = (iso) => { const d = new Date(iso.slice(0, 7) + '-01T00:00:00Z'); d.setUTCMonth(d.getUTCMonth() + 1); d.setUTCDate(0); return fcIso(d); };
+const fcFecha = (iso) => iso ? `${iso.slice(8, 10)}/${iso.slice(5, 7)}/${iso.slice(2, 4)}` : '—';
+const fcMes = (ym) => `${FC_MESES[+ym.slice(5, 7) - 1]}-${ym.slice(2, 4)}`;
+const fcM = (x) => `S/ ${(Number(x || 0) / 1e6).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} M`;
+const FC_EST = { cobrada: ['Cobrada', 'ok'], facturada: ['Facturada', 'pr'], vencida: ['Vencida', 'no'], por_facturar: ['Por facturar', 'pp'], sin_registro: ['Sin registro', 'ar'] };
+
+async function fcCargar(forzar) {
+  const box = $('#fcPanel'); if (!box) return;
+  if (typeof OBRA === 'undefined' || !OBRA || !OBRA.id) { box.innerHTML = '<div class="rg-msg">Leyendo la obra…</div>'; setTimeout(() => { if (document.documentElement.dataset.pane === 'flujocaja') fcCargar(); }, 1200); return; }
+  if (!FC.cargado || forzar) box.innerHTML = '<div class="rg-msg">Leyendo la cobranza…</div>';
+  try {
+    if (!ADI.cargado) await adiCargar();
+    const [vals, cob, adel, cfg, egr] = await Promise.all([
+      get(`/valorizaciones?obra_id=eq.${OBRA.id}&estado=eq.aprobada&select=id,tipo,numero,mes,monto_oficial,aprobado_en&order=mes,tipo,numero`),
+      get('/cobranza_valorizacion?select=*').catch(() => null),
+      get(`/cobranza_adelantos?obra_id=eq.${OBRA.id}&select=*&order=fecha`).catch(() => null),
+      get(`/cobranza_config?obra_id=eq.${OBRA.id}&select=*`).catch(() => null),
+      getTodo(`/v_costo_real_mes?obra_id=eq.${OBRA.id}&select=mes,monto,monto_simulado`).catch(() => [])]);
+    FC.sinSql = cob === null || adel === null || cfg === null;
+    FC.vals = vals.filter(v => v.monto_oficial != null);
+    FC.cob = new Map((cob || []).map(c => [c.valorizacion_id, c])); FC.adel = adel || [];
+    FC.cfg = cfg && cfg[0] ? { det: Number(cfg[0].detraccion_pct), plazo: Number(cfg[0].plazo_pago_dias) } : { det: 0.04, plazo: 15 };
+    FC.igv = ADI.f && ADI.f.igv ? ADI.f.igv : 0.18; FC.egr = egr || [];
+    FC.cargado = true; fcPintar();
+  } catch (e) { box.innerHTML = msgCarga('Flujo de caja', e); }
+}
+
+// cálculo de una valorización: importes, estado y fecha esperada de cobro
+function fcCalc(v, c) {
+  c = c || {};
+  const val = Number(v.monto_oficial || 0), rj = Number(c.reajuste || 0), ad = Number(c.amort_directo || 0), am = Number(c.amort_materiales || 0), ot = Number(c.otros_desc || 0);
+  const base = fcR2(val + rj - ad - am - ot), igv = fcR2(base * FC.igv), total = fcR2(base + igv), det = fcR2(total * FC.cfg.det), cobrar = fcR2(total - det);
+  const hoy = fcHoy(), mes = String(v.mes).slice(0, 10), ref = c.factura_fecha ? String(c.factura_fecha).slice(0, 10) : fcFinMes(mes), esperada = c.pago_fecha ? String(c.pago_fecha).slice(0, 10) : fcSuma(ref, FC.cfg.plazo);
+  const reciente = mes >= fcSuma(hoy.slice(0, 7) + '-01', -62).slice(0, 10);   // las de hace más de dos meses sin ningún dato se consideran «sin registro», no «vencidas»
+  let est = c.pago_fecha ? 'cobrada' : c.factura_fecha ? (esperada < hoy ? 'vencida' : 'facturada') : (c.valorizacion_id || reciente ? 'por_facturar' : 'sin_registro');
+  const entro = est === 'cobrada' ? (c.pago_monto != null ? Number(c.pago_monto) : cobrar) : 0;
+  return { v, c, id: v.id, val, rj, ad, am, ot, base, igv, total, det, cobrar, est, mes, esperada, pago: c.pago_fecha ? String(c.pago_fecha).slice(0, 10) : null, entro, aj: rj - ad - am - ot };
+}
+const fcEtq = (v) => v.tipo === 'adicional' ? `Ad. ${adiN0(v.numero)}` : `Val. ${String(v.numero).padStart(2, '0')}`;
+
+function fcSerie(F) {
+  const m = {}, k = (ym) => m[ym] || (m[ym] = { cob: 0, ade: 0, pro: 0, egr: 0, sim: 0 }), hoyM = fcHoy().slice(0, 7);
+  F.forEach(r => {
+    if (r.est === 'cobrada') k(r.pago.slice(0, 7)).cob += r.entro;
+    else if (r.est !== 'sin_registro') { const ym = r.esperada.slice(0, 7); k(ym < hoyM ? hoyM : ym).pro += r.cobrar; }
+  });
+  FC.adel.forEach(a => { k(String(a.fecha).slice(0, 7)).ade += fcR2(Number(a.monto) * (1 + FC.igv)); });
+  FC.egr.forEach(e => { const x = k(String(e.mes).slice(0, 7)); x.egr += Number(e.monto || 0); x.sim += Number(e.monto_simulado || 0); });
+  k(hoyM);
+  const claves = Object.keys(m).sort(), out = [], ini = claves[0], fin = claves[claves.length - 1];
+  for (let y = +ini.slice(0, 4), mm = +ini.slice(5, 7); `${y}-${String(mm).padStart(2, '0')}` <= fin; mm++) { if (mm > 12) { mm = 1; y++; } const ym = `${y}-${String(mm).padStart(2, '0')}`; out.push({ ym, ...(m[ym] || { cob: 0, ade: 0, pro: 0, egr: 0, sim: 0 }) }); }
+  let acum = 0, real = 0; out.forEach(o => { acum += o.cob + o.ade + o.pro - o.egr; o.acum = acum; if (o.ym <= hoyM) { real += o.cob + o.ade - o.egr; o.real = real; } });
+  return out;
+}
+
+function fcPintar() {
+  const box = $('#fcPanel'); if (!box) return;
+  const adm = !!AUTH.admin, F = FC.vals.map(v => fcCalc(v, FC.cob.get(v.id)));
+  if (FC.sinSql) { box.innerHTML = '<div class="vl-card"><h3>Flujo de caja</h3><p class="hint">Falta crear las tablas de cobranza en esta base: correr <b>flujo_caja.sql</b>.</p></div>'; return; }
+  const sum = (a, f) => a.reduce((s, x) => s + f(x), 0), cobradas = F.filter(r => r.est === 'cobrada'), pend = F.filter(r => ['facturada', 'vencida', 'por_facturar'].includes(r.est)), venc = F.filter(r => r.est === 'vencida'), sinReg = F.filter(r => r.est === 'sin_registro');
+  const S = fcSerie(F), hoyM = fcHoy().slice(0, 7), real = [...S].reverse().find(o => o.real != null), simTot = sum(S, o => o.sim), egrTot = sum(S.filter(o => o.ym <= hoyM), o => o.egr);
+  const ade = { directo: sum(FC.adel.filter(a => a.tipo === 'directo'), a => Number(a.monto)), materiales: sum(FC.adel.filter(a => a.tipo === 'materiales'), a => Number(a.monto)) };
+  const am = { directo: sum(F, r => r.ad), materiales: sum(F, r => r.am) }, saldo = { directo: ade.directo - am.directo, materiales: ade.materiales - am.materiales };
+  const kp = (color, lab, val, sub, full, cls) => `<div class="vl-k" style="--kc:${color}"${full ? ` title="${esc(full)}"` : ''}><small>${lab}</small><b${cls ? ` class="${cls}"` : ''}>${val}</b><em>${sub}</em></div>`;
+  const kpis = `<div class="vl-kp">
+    ${kp('#3aa57b', 'Cobrado en banco', fcM(sum(cobradas, r => r.entro) + sum(FC.adel, a => fcR2(Number(a.monto) * (1 + FC.igv)))), `${cobradas.length} cobradas · adelantos incluidos · detracciones ${fcM(sum(F.filter(r => r.est !== 'por_facturar' && r.est !== 'sin_registro'), r => r.det))} en cuenta`, `Cobrado ${padM(sum(cobradas, r => r.entro))} + adelantos con IGV ${padM(sum(FC.adel, a => fcR2(Number(a.monto) * (1 + FC.igv))))}`)}
+    ${kp(venc.length ? '#d9534f' : '#4f86e0', 'Por cobrar', fcM(sum(pend, r => r.cobrar)), venc.length ? `${venc.length} vencida${venc.length === 1 ? '' : 's'} (${fcM(sum(venc, r => r.cobrar))}) · ${pend.length} en total` : `${pend.length} ${pend.length === 1 ? 'valorización' : 'valorizaciones'} en trámite`, `A cobrar en banco, ya descontada la detracción: ${padM(sum(pend, r => r.cobrar))}`)}
+    ${kp('#7561d6', 'Saldo de adelantos', fcM(saldo.directo + saldo.materiales), `Directo ${fcM(saldo.directo)} · Materiales ${fcM(saldo.materiales)}`, `Adelantos cobrados ${padM(ade.directo + ade.materiales)} − amortizado en las valorizaciones ${padM(am.directo + am.materiales)}`)}
+    ${kp(sinReg.length ? '#d9972b' : real && real.real < 0 ? '#d9534f' : '#2f9d6d', 'Caja acumulada', fcM(real ? real.real : 0), sinReg.length ? `incompleta: faltan ${sinReg.length} cobranzas por registrar` : `cobrado + adelantos − egresos${simTot > 0 ? ' · egresos referenciales' : ''}`, `Egresos acumulados ${padM(egrTot)} (costo real por mes, sin IGV${simTot > 0 ? '; incluye montos simulados' : ''})`)}</div>`;
+  const aviso = sinReg.length ? `<p class="plz-nota al" style="margin:0 0 10px">⚠ ${sinReg.length} ${sinReg.length === 1 ? 'valorización antigua' : 'valorizaciones antiguas'} sin datos de cobranza (${sinReg.map(r => fcEtq(r.v)).slice(0, 6).join(', ')}${sinReg.length > 6 ? '…' : ''}): no cuentan en «Por cobrar» hasta que registres su factura y su pago${adm ? ' con el lápiz' : ''}.</p>` : '';
+  const tot = (f) => sum(F, f);
+  const filas = F.map(r => {
+    const c = r.c, aj = r.aj ? `<span title="Reajuste ${padM(r.rj)} · amort. directo ${padM(r.ad)} · amort. materiales ${padM(r.am)} · otros ${padM(r.ot)}">${padM(r.aj)}</span>` : '—', e = FC_EST[r.est];
+    const cobro = r.pago ? fcFecha(r.pago) : r.est === 'sin_registro' ? '—' : `<i title="Fecha estimada: ${c.factura_fecha ? 'factura' : 'fin del mes valorizado'} + ${FC.cfg.plazo} días">est. ${fcFecha(r.esperada)}</i>`;
+    return `<tr><td class="l"><b>${fcEtq(r.v)}</b></td><td class="c">${fcMes(r.mes.slice(0, 7))}</td><td>${padM(r.val)}</td><td>${aj}</td><td>${padM(r.total)}</td><td>${padM(r.det)}</td><td><b>${padM(r.cobrar)}</b></td><td class="c">${c.factura_numero ? esc(c.factura_numero) : '—'}<small class="fc-sub">${fcFecha(c.factura_fecha ? String(c.factura_fecha).slice(0, 10) : null)}</small></td><td class="c">${cobro}</td><td class="c"><span class="vl-pill ${e[1]}">${e[0]}</span></td>${adm ? `<td class="c"><button type="button" class="icon-btn fc-ed" data-fc-val="${r.id}" title="Registrar factura y cobro" aria-label="Editar"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4Zm10-14 4 4"/></svg></button></td>` : ''}</tr>`;
+  }).join('');
+  const tabla = `<div class="vl-tw"><table class="vl-tb fc-tb"><thead><tr><th class="l">Val.</th><th>Mes</th><th>Valorizado</th><th>Ajustes</th><th>Total c/IGV</th><th>Detracción</th><th>A cobrar</th><th>Factura</th><th>Cobro</th><th>Estado</th>${adm ? '<th></th>' : ''}</tr></thead><tbody>${filas || '<tr><td colspan="11" class="l">Todavía no hay valorizaciones aprobadas.</td></tr>'}
+    <tr class="tot"><td class="l" colspan="2">Total</td><td>${padM(tot(r => r.val))}</td><td>${padM(tot(r => r.aj))}</td><td>${padM(tot(r => r.total))}</td><td>${padM(tot(r => r.det))}</td><td>${padM(tot(r => r.cobrar))}</td><td colspan="${adm ? 4 : 3}"></td></tr></tbody></table></div>`;
+  const adRows = FC.adel.map(a => `<tr><td class="l">${a.tipo === 'directo' ? 'Directo' : 'Materiales'}</td><td>${padM(a.monto)}</td><td class="c">${fcFecha(String(a.fecha).slice(0, 10))}</td><td class="l">${esc(a.nota || '')}</td>${adm ? `<td class="c"><button type="button" class="icon-btn fc-ed" data-fc-ade="${a.id}" title="Editar" aria-label="Editar"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4Zm10-14 4 4"/></svg></button><button type="button" class="icon-btn fc-ed" data-fc-ade-del="${a.id}" title="Quitar" aria-label="Quitar"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></td>` : ''}</tr>`).join('');
+  const adelantos = `<div class="vl-card"><div class="fc-cab"><div><h3>Adelantos</h3><p class="hint">Sin IGV. Se amortizan en cada valorización; el saldo es lo cobrado menos lo amortizado.</p></div>${adm ? `<div class="fc-bt"><button type="button" class="icon-btn" data-fc-ade-nuevo title="Registrar adelanto" aria-label="Registrar adelanto"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button></div>` : ''}</div>
+    <div class="vl-tw"><table class="vl-tb fc-tb"><thead><tr><th class="l">Tipo</th><th>Monto</th><th>Cobro</th><th class="l">Nota</th>${adm ? '<th></th>' : ''}</tr></thead><tbody>${adRows || `<tr><td colspan="5" class="l">Sin adelantos registrados${adm ? ': usa + para agregar el directo y el de materiales' : ''}.</td></tr>`}
+    ${FC.adel.length ? `<tr class="tot"><td class="l">Amortizado en valorizaciones</td><td>${padM(am.directo + am.materiales)}</td><td colspan="${adm ? 3 : 2}" class="l">Directo ${padM(am.directo)} · Materiales ${padM(am.materiales)}</td></tr><tr class="tot"><td class="l">Saldo por amortizar</td><td>${padM(saldo.directo + saldo.materiales)}</td><td colspan="${adm ? 3 : 2}" class="l">Directo ${padM(saldo.directo)} · Materiales ${padM(saldo.materiales)}</td></tr>` : ''}</tbody></table></div></div>`;
+  box.innerHTML = `${kpis}${aviso}
+    <div class="vl-card"><div class="fc-cab"><div><h3>Flujo de caja mensual</h3><p class="hint">Ingresos cobrados y por cobrar frente a los egresos del mes${simTot > 0 ? ' (egresos referenciales: aún no hay costo real registrado)' : ''}. Detracción: ${(FC.cfg.det * 100).toLocaleString('es-PE', { maximumFractionDigits: 2 })} % del total facturado · pago esperado a ${FC.cfg.plazo} días de la factura.</p></div>${adm ? `<div class="fc-bt"><button type="button" class="icon-btn" data-fc-cfg title="Detracción y plazo de pago" aria-label="Detracción y plazo de pago"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg></button></div>` : ''}</div>
+      <div id="fcGraf" class="fc-graf"></div></div>
+    <div class="vl-card"><h3>Cobranza por valorización</h3><p class="hint">Importes sin IGV hasta «Valorizado»; «Ajustes» = reajuste − amortizaciones − otros. Sin retención: el contrato se garantiza con carta fianza.</p>${tabla}</div>${adelantos}`;
+  fcGrafico(S, hoyM);
+}
+
+function fcGrafico(S, hoyM) {
+  const el = document.getElementById('fcGraf'); if (!el) return;
+  vlEcharts().then(() => {
+    if (!document.body.contains(el)) return;
+    if (FC.ro) { try { FC.ro.disconnect(); } catch (e) {} } if (FC.ec) { try { FC.ec.dispose(); } catch (e) {} }
+    const c = echarts.init(el, null, { renderer: 'svg' }), lab = S.map(o => fcMes(o.ym)), mil = (v) => (v / 1e6).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const serie = (name, key, color, extra) => ({ name, type: 'bar', stack: key === 'egr' ? 'out' : 'in', barMaxWidth: 22, data: S.map(o => o[key] ? +(o[key] / 1e6).toFixed(4) : null), itemStyle: { color }, ...extra });
+    c.setOption({
+      animation: false, grid: { left: 44, right: 14, top: 34, bottom: 24 },
+      legend: { top: 0, right: 0, itemWidth: 10, itemHeight: 8, icon: 'roundRect', textStyle: { fontSize: 10.5, color: '#5c6b85' } },
+      tooltip: { trigger: 'axis', confine: true, padding: [5, 8], textStyle: { fontSize: 11 }, axisPointer: { type: 'shadow' },
+        formatter: (p) => `<b>${p[0].axisValue}</b><br>` + p.filter(x => x.value != null).map(x => `${x.marker}${x.seriesName}: ${mil(x.value * 1e6)} M`).join('<br>') },
+      xAxis: { type: 'category', data: lab, axisLabel: { fontSize: 10, color: '#5c6b85' }, axisLine: { lineStyle: { color: '#d5deef' } }, axisTick: { show: false } },
+      yAxis: { type: 'value', axisLabel: { fontSize: 10, color: '#5c6b85', formatter: (v) => v + ' M' }, splitLine: { lineStyle: { color: '#e4e9f4' } } },
+      series: [serie('Cobrado', 'cob', '#3aa57b'), serie('Adelantos', 'ade', '#7561d6'), serie('Por cobrar', 'pro', '#dbe7fb', { itemStyle: { color: '#dbe7fb', borderColor: '#4f86e0', borderWidth: 1, borderType: 'dashed' } }), serie('Egresos', 'egr', '#d9972b'),
+        { name: 'Caja acumulada', type: 'line', smooth: false, showSymbol: false, lineStyle: { width: 2, color: '#1e2f5c' }, itemStyle: { color: '#1e2f5c' }, data: S.map(o => +(o.acum / 1e6).toFixed(4)),
+          markLine: { silent: true, symbol: 'none', lineStyle: { color: '#8592a8', type: 'dashed', width: 1 }, label: { fontSize: 10, color: '#5c6b85', formatter: 'Hoy' }, data: [{ xAxis: fcMes(hoyM) }] } }]
+    });
+    FC.ec = c; if (window.ResizeObserver) { FC.ro = new ResizeObserver(() => { try { if (el.clientWidth) c.resize(); } catch (e) {} }); FC.ro.observe(el); }
+  }).catch(() => { el.innerHTML = '<div class="rg-msg">No se pudo cargar el gráfico (sin conexión).</div>'; });
+}
+
+// ── formularios (administrador) ──
+function fcModal(id, html, alGuardar) {
+  let m = document.getElementById(id);
+  if (!m) { m = document.createElement('form'); m.id = id; m.className = 'pform la-form'; m.hidden = true; document.body.appendChild(m); }
+  m.innerHTML = html;
+  const fondo = document.getElementById('lbFondo') || (() => { const x = document.createElement('div'); x.id = 'lbFondo'; x.hidden = true; document.body.appendChild(x); return x; })();
+  const cerrar = () => { m.hidden = true; fondo.hidden = true; document.documentElement.classList.remove('la-modal'); };
+  m.hidden = false; fondo.hidden = false; document.documentElement.classList.add('la-modal'); fondo.onclick = cerrar;
+  const cancel = m.querySelector('[data-fc-cancel]'); if (cancel) cancel.onclick = cerrar;
+  m.onsubmit = async (ev) => { ev.preventDefault(); const btn = m.querySelector('button[type=submit]'); btn.disabled = true;
+    try { await alGuardar(m); cerrar(); await fcCargar(true); } catch (er) { btn.disabled = false; toast(`No se pudo guardar: ${esc(er.message)}${/function|schema cache|404/i.test(er.message) ? ' · ¿falta correr flujo_caja.sql?' : ''}`, false, 'fc'); } };
+  return { m, cerrar, q: (s) => m.querySelector(s) };
+}
+const fcNum = (s) => { const t = String(s ?? '').trim().replace(/\s/g, '').replace(',', '.'); return t === '' ? null : Number(t); };
+
+function fcFormVal(id) {
+  const v = FC.vals.find(x => x.id === id); if (!v) return;
+  const c = FC.cob.get(id) || {}, f = (k) => c[k] != null ? c[k] : '', d = (k) => c[k] ? String(c[k]).slice(0, 10) : '';
+  const { m, q, cerrar } = fcModal('fcFormV', `<h3 style="margin:0 0 4px;font-size:14px">Cobranza · ${esc(fcEtq(v))} · ${fcMes(String(v.mes).slice(0, 7))}</h3><p class="hint" style="margin:0 0 10px">Valorizado (sin IGV): <b>S/ ${padM(v.monto_oficial)}</b>. Registra lo que ocurrió con esta valorización; lo que dejes vacío se calcula.</p>
+    <div class="row3"><div class="field"><label for="fcRj">Reajuste S/</label><input id="fcRj" type="number" step="0.01" value="${f('reajuste')}" placeholder="0.00"></div>
+      <div class="field"><label for="fcAd">Amort. adelanto directo S/</label><input id="fcAd" type="number" step="0.01" min="0" value="${f('amort_directo')}" placeholder="0.00"></div>
+      <div class="field"><label for="fcAm">Amort. adel. materiales S/</label><input id="fcAm" type="number" step="0.01" min="0" value="${f('amort_materiales')}" placeholder="0.00"></div></div>
+    <div class="row3"><div class="field"><label for="fcOt">Otros descuentos S/</label><input id="fcOt" type="number" step="0.01" value="${f('otros_desc')}" placeholder="0.00"></div>
+      <div class="field"><label for="fcFN">Factura N°</label><input id="fcFN" type="text" maxlength="40" value="${esc(c.factura_numero || '')}" placeholder="F001-000123"></div>
+      <div class="field"><label for="fcFF">Fecha de factura</label><input id="fcFF" type="date" value="${d('factura_fecha')}"></div></div>
+    <div class="row3"><div class="field"><label for="fcPF">Fecha de cobro</label><input id="fcPF" type="date" value="${d('pago_fecha')}"></div>
+      <div class="field"><label for="fcPM">Monto que entró al banco S/</label><input id="fcPM" type="number" step="0.01" min="0" value="${f('pago_monto')}" placeholder="el calculado"></div>
+      <div class="field"><label>Resultado</label><div id="fcPrev" style="padding:7px 0;font-size:12px;line-height:1.4"></div></div></div>
+    <div class="field"><label for="fcNo">Nota</label><input id="fcNo" type="text" maxlength="200" value="${esc(c.nota || '')}"></div>
+    <div class="sug-acc"><button class="btn" type="submit">Guardar</button><button class="btn-sec" type="button" data-fc-cancel>Cancelar</button>${c.valorizacion_id ? '<button class="btn-sec" type="button" id="fcLimpiar" style="margin-left:auto">Borrar datos</button>' : ''}</div>`,
+    async (mm) => { const g = (s) => mm.querySelector(s).value;
+      await preRpc('cobranza_val_guardar', { p_valorizacion: id, p_reajuste: fcNum(g('#fcRj')), p_amort_directo: fcNum(g('#fcAd')), p_amort_materiales: fcNum(g('#fcAm')), p_otros: fcNum(g('#fcOt')),
+        p_factura_numero: g('#fcFN') || null, p_factura_fecha: g('#fcFF') || null, p_pago_fecha: g('#fcPF') || null, p_pago_monto: fcNum(g('#fcPM')), p_nota: g('#fcNo') || null });
+      toast('Cobranza guardada.', true, 'fc'); });
+  const prev = () => { const t = fcCalc(v, { reajuste: fcNum(q('#fcRj').value) || 0, amort_directo: fcNum(q('#fcAd').value) || 0, amort_materiales: fcNum(q('#fcAm').value) || 0, otros_desc: fcNum(q('#fcOt').value) || 0 });
+    q('#fcPrev').innerHTML = `Base <b>${padM(t.base)}</b> · IGV ${padM(t.igv)}<br>Total factura <b>${padM(t.total)}</b> · detracción ${padM(t.det)}<br>A cobrar <b>S/ ${padM(t.cobrar)}</b>`; };
+  ['#fcRj', '#fcAd', '#fcAm', '#fcOt'].forEach(s => q(s).addEventListener('input', prev)); prev();
+  const lim = q('#fcLimpiar'); if (lim) lim.onclick = async () => { if (!(await confirmar(`Borrar los datos de cobranza de ${fcEtq(v)}. No cambia la valorización.`))) return;
+    try { await preRpc('cobranza_val_limpiar', { p_valorizacion: id }); cerrar(); toast('Datos borrados.', true, 'fc'); await fcCargar(true); } catch (er) { toast(`No se pudo borrar: ${esc(er.message)}`, false, 'fc'); } };
+}
+function fcFormAde(id) {
+  const a = id ? FC.adel.find(x => x.id === id) : null;
+  fcModal('fcFormA', `<h3 style="margin:0 0 4px;font-size:14px">${a ? 'Editar adelanto' : 'Registrar adelanto'}</h3><p class="hint" style="margin:0 0 10px">Monto sin IGV, en la fecha en que se cobró. El IGV se suma solo al calcular la caja.</p>
+    <div class="row3"><div class="field"><label for="fcaT">Tipo</label><select id="fcaT"><option value="directo"${a && a.tipo === 'directo' ? ' selected' : ''}>Directo</option><option value="materiales"${a && a.tipo === 'materiales' ? ' selected' : ''}>Materiales</option></select></div>
+      <div class="field"><label for="fcaM">Monto S/ (sin IGV)</label><input id="fcaM" type="number" step="0.01" min="0.01" required value="${a ? a.monto : ''}"></div>
+      <div class="field"><label for="fcaF">Fecha de cobro</label><input id="fcaF" type="date" required value="${a ? String(a.fecha).slice(0, 10) : ''}"></div></div>
+    <div class="field"><label for="fcaN">Nota</label><input id="fcaN" type="text" maxlength="200" value="${esc(a ? a.nota || '' : '')}" placeholder="Ej. 10 % del monto contratado, carta fianza N° …"></div>
+    <div class="sug-acc"><button class="btn" type="submit">Guardar</button><button class="btn-sec" type="button" data-fc-cancel>Cancelar</button></div>`,
+    async (mm) => { const g = (s) => mm.querySelector(s).value; const mo = fcNum(g('#fcaM')); if (!(mo > 0)) throw new Error('Escribe el monto del adelanto.');
+      await preRpc('cobranza_adelanto_guardar', { p_id: id || null, p_obra: OBRA.id, p_tipo: g('#fcaT'), p_monto: mo, p_fecha: g('#fcaF'), p_nota: g('#fcaN') || null }); toast('Adelanto guardado.', true, 'fc'); });
+}
+function fcFormCfg() {
+  fcModal('fcFormC', `<h3 style="margin:0 0 4px;font-size:14px">Detracción y plazo de pago</h3><p class="hint" style="margin:0 0 10px">La detracción va a la cuenta de detracciones: no es caja libre. El plazo sirve para estimar cuándo entra el pago de lo facturado.</p>
+    <div class="row2"><div class="field"><label for="fccD">Detracción (%)</label><input id="fccD" type="number" step="any" min="0" max="99" value="${+(FC.cfg.det * 100).toFixed(4)}"></div>
+      <div class="field"><label for="fccP">Plazo de pago (días desde la factura)</label><input id="fccP" type="number" step="1" min="0" max="365" value="${FC.cfg.plazo}"></div></div>
+    <div class="sug-acc"><button class="btn" type="submit">Guardar</button><button class="btn-sec" type="button" data-fc-cancel>Cancelar</button></div>`,
+    async (mm) => { const d = fcNum(mm.querySelector('#fccD').value), p = fcNum(mm.querySelector('#fccP').value);
+      if (d == null || !(d >= 0 && d < 100)) throw new Error('La detracción va entre 0 y 100 %.'); if (p == null || !(p >= 0 && p <= 365)) throw new Error('El plazo va entre 0 y 365 días.');
+      await preRpc('cobranza_config_guardar', { p_obra: OBRA.id, p_detraccion: Math.round(d * 100) / 10000, p_plazo: Math.round(p) }); toast('Configuración guardada.', true, 'fc'); });
+}
+document.addEventListener('click', async (e) => {
+  let b;
+  if ((b = e.target.closest('[data-fc-val]'))) { fcFormVal(b.dataset.fcVal); return; }
+  if (e.target.closest('[data-fc-ade-nuevo]')) { fcFormAde(null); return; }
+  if ((b = e.target.closest('[data-fc-ade]'))) { fcFormAde(b.dataset.fcAde); return; }
+  if ((b = e.target.closest('[data-fc-ade-del]'))) { if (!(await confirmar('Quitar este adelanto del registro.'))) return;
+    try { await preRpc('cobranza_adelanto_eliminar', { p_id: b.dataset.fcAdeDel }); toast('Adelanto quitado.', true, 'fc'); await fcCargar(true); } catch (er) { toast(`No se pudo quitar: ${esc(er.message)}`, false, 'fc'); } return; }
+  if (e.target.closest('[data-fc-cfg]')) { fcFormCfg(); return; }
+});
 
 // ═══ PLAZO CONTRACTUAL: registro de ampliaciones de plazo, suspensiones y desplazamientos (tabla plazo_eventos) ═══
 // Cada REGISTRO (p. ej. «Ampliación de plazo N° 03») es un grupo de filas: una por frente afectado, con SUS PROPIOS días (un adicional puede dar 20 días a Charanal, 10 a Bocana y 30 a Damas).
