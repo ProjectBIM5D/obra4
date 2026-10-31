@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="build" content="20261030162741">
+<meta name="build" content="20261030175622">
 <script>/* auto-actualizar: compara el sello de esta copia con el del servidor y recarga una sola vez */
 (function(){try{if(!/^https?:/.test(location.protocol))return;var me=document.querySelector('meta[name=build]').content;if(me==='0')return;
 fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'}).then(function(r){return r.text()}).then(function(h){
@@ -805,6 +805,14 @@ table.vl-tb.fc-tb td{color:var(--tx2);font-weight:400;} table.vl-tb.fc-tb td b{f
 .fc-sub{display:block;font-size:9.5px;color:var(--mut);} .fc-ed{width:26px;height:26px;padding:0;border-radius:7px;} .fc-ed svg{width:14px;height:14px;}
 :root[data-theme="dark"] table.vl-tb.fc-tb tr.tot td{background:var(--input);}
 @media (max-width:560px){.fc-graf{height:240px;}}
+/* Partidas de control: tabla por frente, lista de asignación y vista previa de la importación */
+#pcImp:not([hidden]){width:min(900px,calc(100vw - 20px));}
+table.vl-tb.pc-tb{font-size:10.5px;} table.vl-tb.pc-tb th,table.vl-tb.pc-tb td{padding:3px 8px;line-height:1.25;} table.vl-tb.pc-tb thead th{background:#56637e;font-size:9.5px;letter-spacing:.07em;font-weight:700;padding:5px 8px;} table.vl-tb.pc-tb td{color:var(--tx2);font-weight:400;} table.vl-tb.pc-tb td b{font-weight:600;color:var(--tx);}
+table.vl-tb.pc-tb td.pc-cod{font-weight:600;color:var(--blue-tx);white-space:nowrap;} table.vl-tb.pc-tb tr.pc-banda td{background:#dbe7fb;color:#17306b;font-weight:700;} table.vl-tb.pc-tb tr.pc-banda .pc-bsub{font-weight:400;font-size:10px;opacity:.75;margin-left:6px;}
+table.vl-tb.pc-tb tr.pc-sin td{background:rgba(217,151,43,.10);color:#92580a;} table.vl-tb.pc-tb .pc-vacia{font-style:italic;} table.vl-tb.pc-tb .lb-sub{display:block;font-size:10px;font-weight:400;color:var(--mut);}
+:root[data-theme="dark"] table.vl-tb.pc-tb tr.pc-banda td{background:#263a66;color:#e6eeff;}
+.pc-asig{max-height:240px;overflow:auto;border:1px solid var(--line2);border-radius:10px;padding:4px;background:var(--card);} .pc-op{display:flex;align-items:center;gap:8px;padding:3px 6px;border-radius:7px;font-size:11.5px;cursor:pointer;} .pc-op:hover{background:var(--input);} .pc-op input{width:auto;flex:none;}
+.pc-opc{flex:none;min-width:64px;font-weight:600;color:var(--blue-tx);font-variant-numeric:tabular-nums;} .pc-opn{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;} .pc-opm{flex:none;color:var(--mut);font-variant-numeric:tabular-nums;} .pc-opo{flex:none;font-style:normal;font-size:10px;color:#92580a;background:rgba(217,151,43,.14);padding:0 6px;border-radius:999px;}
 /* Tipo de contrato: etiqueta bajo el nombre de la obra y pantallas propias de cada modelo */
 .ct-chip{display:inline-block;margin-top:5px;padding:1px 8px;border-radius:999px;font-size:9.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;background:rgba(255,255,255,.10);color:rgba(255,255,255,.78);border:1px solid rgba(255,255,255,.16);} .ct-chip:empty{display:none;} .ct-chip[data-t="nec"]{background:rgba(242,106,27,.16);color:#ffd2b3;border-color:rgba(242,106,27,.45);}
 html[data-contrato="tradicional"] [data-solo="nec"],html[data-contrato="nec"] [data-solo="tradicional"]{display:none !important;}
@@ -2271,7 +2279,7 @@ select.usr-rol{font:inherit;font-size:12px;padding:5px 8px;border:1px solid var(
 .dif-hist{border-top:1px solid var(--line);padding-top:8px;margin:0 0 12px;font-size:12px;color:var(--tx2);} .dif-h{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:4px 0;} .dif-h .btn-sec{padding:3px 10px;font-size:11px;}
 @media (max-width:560px){.dif-kp{grid-template-columns:1fr 1fr;}}
 .lb-cmp{display:inline-flex;align-items:center;gap:8px;flex:0 0 auto;} .lb-cmp select{max-width:260px;}
-#lbFicha:not([hidden]),#plzForm:not([hidden]),#lbObs:not([hidden]),#adiForm:not([hidden]),#adiLim:not([hidden]),#metForm:not([hidden]),#ctvForm:not([hidden]),#evtForm:not([hidden]),#usrForm:not([hidden]),#obrNuevoForm:not([hidden]),#adiXls:not([hidden]),#fcFormV:not([hidden]),#fcFormA:not([hidden]),#fcFormC:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(620px,calc(100vw - 20px));max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
+#lbFicha:not([hidden]),#plzForm:not([hidden]),#lbObs:not([hidden]),#adiForm:not([hidden]),#adiLim:not([hidden]),#metForm:not([hidden]),#ctvForm:not([hidden]),#evtForm:not([hidden]),#usrForm:not([hidden]),#obrNuevoForm:not([hidden]),#adiXls:not([hidden]),#fcFormV:not([hidden]),#fcFormA:not([hidden]),#fcFormC:not([hidden]),#pcForm:not([hidden]),#pcImp:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(620px,calc(100vw - 20px));max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
 /* el Gantt en Contrato: sin la barra de selección de plan */
 #plEspacio[data-donde="plan"] #plVerP{display:none;}
 #plFotoDlg:not([hidden]){position:fixed;z-index:120;left:50%;top:50%;transform:translate(-50%,-50%);width:min(560px,calc(100vw - 20px));margin:0;border-radius:16px;box-shadow:0 30px 80px rgba(2,6,23,.5);background:var(--card);border:1px solid var(--line2);}
@@ -2578,6 +2586,7 @@ document.addEventListener('DOMContentLoaded', function(){ try { var m = document
         <div class="nav-gb">
           <button data-pane="presupuesto" title="Presupuesto de venta (contrato) y presupuesto meta (copia del APU ajustable)"><span class="ni">🧮</span><span class="nt">Presupuesto</span></button>
           <button data-pane="valorizaciones" data-solo="tradicional" title="Valorizaciones mensuales del contrato, adicionales y mayores metrados"><span class="ni">💰</span><span class="nt">Valorizaciones</span></button>
+          <button data-pane="pcontrol" title="Partidas de control: las cuentas donde se carga el costo real. Se crean a mano, se importan de Excel o se proponen desde el presupuesto"><span class="ni">🗂️</span><span class="nt">Partidas de control</span></button>
           <button data-pane="flujocaja" data-solo="tradicional" title="Flujo de caja: facturación, detracciones, cobros, adelantos y egresos por mes"><span class="ni">🏦</span><span class="nt">Flujo de caja</span></button>
           <button type="button" class="prox" disabled data-solo="nec" title="NEC · costo definido (Defined Cost), Fee y precio por el trabajo hecho a la fecha (PWDD) por componente"><span class="ni">🧮</span><span class="nt">Costo definido</span><span class="nav-tag">pronto</span></button>
           <button type="button" class="prox" disabled data-solo="nec" title="NEC · Target Cost, forecast, painshare y gainshare"><span class="ni">🎯</span><span class="nt">Target y gainshare</span><span class="nav-tag">pronto</span></button>
@@ -2839,6 +2848,9 @@ document.addEventListener('DOMContentLoaded', function(){ try { var m = document
       </div>
       <div id="preCuerpo"><div class="rg-msg">Consultando el presupuesto…</div></div>
     </section>
+
+    <!-- ═══════════ PARTIDAS DE CONTROL ═══════════ -->
+    <section class="pane" data-pane="pcontrol"><div id="pcPanel"><div class="rg-msg">Leyendo las partidas de control…</div></div></section>
 
     <!-- ═══════════ FLUJO DE CAJA Y COBRANZA ═══════════ -->
     <section class="pane" data-pane="flujocaja"><div id="fcPanel"><div class="rg-msg">Leyendo la cobranza…</div></div></section>
@@ -3591,6 +3603,7 @@ document.querySelectorAll('#nav button[data-pane]').forEach(b => {
       ppc: ['PPC', 'Porcentaje de actividades completadas: trazabilidad semanal y causas de incumplimiento'],
       valorizaciones: ['Valorizaciones', 'Valor ganado: lo valorizado mes a mes (contrato, adicionales y mayores metrados)'],
       presupuesto: ['Presupuesto', 'Venta (contrato, solo lectura) y meta (copia del APU que se ajusta sin tocar el contrato)'],
+      pcontrol: ['Partidas de control', 'Las cuentas de control del costo: cada partida del presupuesto y cada capítulo de gastos generales pertenece a una sola'],
       flujocaja: ['Flujo de caja', 'Lo valorizado, facturado y cobrado: detracciones, adelantos y egresos por mes'],
       metrados: ['Mayores metrados', 'Registro de mayores metrados con su estado y resolución · el menor metrado, en una tarjeta'],
       adicionales: ['Adicionales y deductivos', 'Prestaciones adicionales y deductivos vinculados: lo que trajo cada línea base, su resolución y cuánto va del límite'],
@@ -3625,6 +3638,7 @@ document.querySelectorAll('#nav button[data-pane]').forEach(b => {
     if (b.dataset.pane === 'avance3d') a3Cargar(true);
     if (b.dataset.pane === 'presupuesto') preCargar();
     if (b.dataset.pane === 'flujocaja') fcCargar();
+    if (b.dataset.pane === 'pcontrol') pcCargar();
     if (b.dataset.pane === 'parte' && !$('#parteLA').hidden) plaCargar();
     $('#side').classList.remove('open'); $('#overlay').classList.remove('on');
   });
@@ -12429,6 +12443,248 @@ document.addEventListener('click', async (e) => {
   if ((b = e.target.closest('[data-fc-ade-del]'))) { if (!(await confirmar('Quitar este adelanto del registro.'))) return;
     try { await preRpc('cobranza_adelanto_eliminar', { p_id: b.dataset.fcAdeDel }); toast('Adelanto quitado.', true, 'fc'); await fcCargar(true); } catch (er) { toast(`No se pudo quitar: ${esc(er.message)}`, false, 'fc'); } return; }
   if (e.target.closest('[data-fc-cfg]')) { fcFormCfg(); return; }
+});
+
+// ═══ PARTIDAS DE CONTROL (Costos › Partidas de control) ═══
+// Cuentas de control del costo (ver documentacion\Estandar_control_de_costos_v0.1.md). Una partida de control agrupa partidas del presupuesto (por CÓDIGO, así sobrevive a una línea base nueva)
+// o capítulos de gastos generales. Directa = de un frente · indirecta = de toda la obra (gastos generales). Se crean a mano o se importan de Excel/CSV; la propuesta base sale del presupuesto.
+// Cada código del presupuesto y cada capítulo de GG pertenece a UNA sola partida: al asignarlo a otra se mueve. Tablas: partidas_control, partida_control_vinculos (db\control_costos.sql).
+const PC = { cargado: false, sinSql: false, pcs: [], vinc: [], nodos: [], gg: [], proy: [] };
+const pcM = (x) => Number(x || 0).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const pcMM = (x) => `S/ ${(Number(x || 0) / 1e6).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} M`;
+const pcTit = (s) => { s = String(s || '').trim().toLowerCase(); return s.charAt(0).toUpperCase() + s.slice(1); };
+const pcNorm = (s) => String(s ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+
+async function pcCargar(forzar) {
+  const box = $('#pcPanel'); if (!box) return;
+  if (typeof OBRA === 'undefined' || !OBRA || !OBRA.id) { box.innerHTML = '<div class="rg-msg">Leyendo la obra…</div>'; setTimeout(() => { if (document.documentElement.dataset.pane === 'pcontrol') pcCargar(); }, 1200); return; }
+  if (!PC.cargado || forzar) box.innerHTML = '<div class="rg-msg">Leyendo las partidas de control…</div>';
+  try {
+    const ver = (RES_A.version || {}).id;
+    const [pcs, vinc, nodos, gg] = await Promise.all([
+      get(`/partidas_control?obra_id=eq.${OBRA.id}&select=*&order=orden,codigo`).catch(() => null),
+      get(`/partida_control_vinculos?obra_id=eq.${OBRA.id}&select=*`).catch(() => null),
+      ver ? getTodo(`/wbs_nodos?version_id=eq.${ver}&concepto=eq.contrato&select=id,proyecto_id,padre_id,codigo,nivel,nombre,es_hoja,metrado,precio_unitario&order=orden`).catch(() => []) : Promise.resolve([]),
+      get(`/gg_meta_items?obra_id=eq.${OBRA.id}&select=grupo,capitulo,valor`).catch(() => [])]);
+    PC.sinSql = pcs === null || vinc === null;
+    PC.pcs = pcs || []; PC.vinc = vinc || []; PC.nodos = nodos; PC.gg = gg || [];
+    PC.proy = ((RES_A && RES_A.proyectos) || []).slice().sort(ordenFrentes);
+    PC.cargado = true; pcPintar();
+  } catch (e) { box.innerHTML = msgCarga('Partidas de control', e); }
+}
+
+// presupuesto de cada nodo (suma de sus partidas) y a qué partida de control pertenece cada partida del presupuesto (el vínculo más cercano hacia arriba)
+function pcCalc() {
+  const porId = new Map(PC.nodos.map(n => [n.id, n])), cd = new Map(), vk = new Map();
+  PC.vinc.filter(v => v.tipo === 'wbs').forEach(v => vk.set(`${v.proyecto_id}|${v.codigo_wbs}`, v.partida_control_id));
+  PC.nodos.filter(n => n.es_hoja).forEach(n => { const m = Number(n.metrado || 0) * Number(n.precio_unitario || 0); for (let x = n, k = 0; x && k < 12; x = porId.get(x.padre_id), k++) cd.set(x.id, (cd.get(x.id) || 0) + m); });
+  const tot = new Map(), sinAsig = new Map(); let total = 0, asignado = 0;
+  PC.nodos.filter(n => n.es_hoja).forEach(n => {
+    const m = Number(n.metrado || 0) * Number(n.precio_unitario || 0); total += m;
+    let pcId = null; for (let x = n, k = 0; x && k < 12 && !pcId; x = porId.get(x.padre_id), k++) pcId = vk.get(`${x.proyecto_id}|${x.codigo}`) || null;
+    if (pcId) { const t = tot.get(pcId) || { cd: 0, n: 0 }; t.cd += m; t.n++; tot.set(pcId, t); asignado += m; }
+    else { const t = sinAsig.get(n.proyecto_id) || { cd: 0, n: 0 }; t.cd += m; t.n++; sinAsig.set(n.proyecto_id, t); }
+  });
+  // gastos generales: vínculo por capítulo o por grupo completo
+  const gk = new Map(); PC.vinc.filter(v => v.tipo === 'gg').forEach(v => gk.set(`${v.gg_grupo}|${v.gg_capitulo || ''}`, v.partida_control_id));
+  const ggTot = new Map(); let ggSin = { cd: 0, n: 0 }, ggTotal = 0;
+  PC.gg.forEach(i => { const m = Number(i.valor || 0); ggTotal += m; const id = gk.get(`${i.grupo}|${i.capitulo || ''}`) || gk.get(`${i.grupo}|`); if (id) { const t = ggTot.get(id) || { cd: 0, n: 0 }; t.cd += m; t.n++; ggTot.set(id, t); } else { ggSin.cd += m; ggSin.n++; } });
+  return { porId, cd, tot, sinAsig, total, asignado, ggTot, ggSin, ggTotal };
+}
+const pcNombresVinc = (pc, C) => {
+  const v = PC.vinc.filter(x => x.partida_control_id === pc.id);
+  const nombres = v.map(x => x.tipo === 'wbs' ? ((PC.nodos.find(n => n.proyecto_id === x.proyecto_id && n.codigo === x.codigo_wbs) || {}).nombre || x.codigo_wbs) : (x.gg_capitulo ? String(x.gg_capitulo).replace(/^[\d.]+\s*/, '') : `Todo el grupo ${x.gg_grupo}`));
+  return nombres.length ? pcTit(nombres.slice(0, 3).join(' · ')) + (nombres.length > 3 ? ` · +${nombres.length - 3}` : '') : '';
+};
+
+function pcPintar() {
+  const box = $('#pcPanel'); if (!box) return;
+  if (PC.sinSql) { box.innerHTML = '<div class="vl-card"><h3>Partidas de control</h3><p class="hint">Falta crear las tablas en esta base: correr <b>control_costos.sql</b>.</p></div>'; return; }
+  const adm = !!AUTH.admin, C = pcCalc(), ico = (d) => `<svg viewBox="0 0 24 24"><path d="${d}"/></svg>`;
+  const act = PC.pcs.filter(p => p.activa), dir = act.filter(p => p.tipo === 'directa').length, ind = act.length - dir;
+  const cob = C.total ? C.asignado / C.total : 0, sinN = [...C.sinAsig.values()].reduce((s, x) => s + x.n, 0), sinM = [...C.sinAsig.values()].reduce((s, x) => s + x.cd, 0);
+  const kp = (color, lab, val, sub, barra) => `<div class="vl-k" style="--kc:${color}"><small>${lab}</small><b>${val}</b>${barra != null ? `<div class="bar"><i style="width:${Math.min(100, barra * 100).toFixed(1)}%"></i></div>` : ''}<em>${sub}</em></div>`;
+  const kpis = `<div class="vl-kp">
+    ${kp('#4f86e0', 'Partidas de control', act.length, `${dir} directas · ${ind} indirectas`)}
+    ${kp(cob >= 0.9999 ? '#2f9d6d' : '#d9972b', 'Presupuesto asignado', `${(cob * 100).toLocaleString('es-PE', { maximumFractionDigits: 1 })} %`, `${pcMM(C.asignado)} de ${pcMM(C.total)} de costo directo`, cob)}
+    ${kp(sinN || C.ggSin.n ? '#d9972b' : '#2f9d6d', 'Sin asignar', sinN ? `${sinN} partidas` : 'Todo asignado', sinN ? `${pcMM(sinM)} del presupuesto${C.ggSin.n ? ` · GG sin asignar ${pcMM(C.ggSin.cd)}` : ''}` : (C.ggSin.n ? `GG sin asignar ${pcMM(C.ggSin.cd)}` : 'toda partida pertenece a una partida de control'))}</div>`;
+  const barra = adm ? `<div class="fc-bt">
+      <button type="button" class="icon-btn" data-pc-nueva title="Nueva partida de control" aria-label="Nueva partida de control">${ico('M12 5v14M5 12h14')}</button>
+      <button type="button" class="icon-btn" data-pc-imp title="Importar desde Excel o CSV" aria-label="Importar desde Excel">${ico('M12 3v12m0 0-4-4m4 4 4-4M5 21h14')}</button>
+      <button type="button" class="icon-btn" data-pc-plantilla title="Descargar la plantilla de Excel (CSV)" aria-label="Descargar plantilla">${ico('M12 15V3m0 0L8 7m4-4 4 4M5 21h14')}</button>
+      <button type="button" class="icon-btn" data-pc-proponer title="Proponer partidas de control desde el presupuesto y los gastos generales" aria-label="Proponer">${ico('M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3Zm7 12 .9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9L19 15Z')}</button></div>` : '';
+  const fila = (p, t) => `<tr class="${p.activa ? '' : 'usr-off'}"><td class="l pc-cod">${esc(p.codigo)}</td><td class="l"><b>${esc(p.nombre)}</b>${pcNombresVinc(p, C) ? `<span class="lb-sub">${esc(pcNombresVinc(p, C))}</span>` : '<span class="lb-sub pc-vacia">sin partidas asignadas</span>'}</td><td class="l">${esc(p.responsable || '')}</td><td>${t ? t.n : 0}</td><td>${t ? pcM(t.cd) : '—'}</td><td>${t && C.total && p.tipo === 'directa' ? (t.cd / C.total * 100).toLocaleString('es-PE', { maximumFractionDigits: 1 }) + ' %' : ''}</td>${adm ? `<td class="c"><button type="button" class="icon-btn fc-ed" data-pc-ed="${p.id}" title="Editar" aria-label="Editar"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4Zm10-14 4 4"/></svg></button><button type="button" class="icon-btn fc-ed" data-pc-del="${p.id}" title="Eliminar" aria-label="Eliminar"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></td>` : ''}</tr>`;
+  const banda = (txt, sub, n) => `<tr class="pc-banda"><td class="l" colspan="3">${esc(txt)}${sub ? ` <span class="pc-bsub">${esc(sub)}</span>` : ''}</td><td>${n.n ?? ''}</td><td>${pcM(n.cd)}</td><td></td>${adm ? '<td></td>' : ''}</tr>`;
+  let cuerpo = '';
+  PC.proy.forEach(f => {
+    const mias = PC.pcs.filter(p => p.proyecto_id === f.id), sum = mias.reduce((s, p) => s + ((C.tot.get(p.id) || {}).cd || 0), 0), sn = C.sinAsig.get(f.id);
+    if (!mias.length && !sn) return;
+    cuerpo += banda(f.nombre, `${mias.length} partidas de control`, { cd: sum + (sn ? sn.cd : 0), n: (mias.reduce((s, p) => s + ((C.tot.get(p.id) || {}).n || 0), 0)) + (sn ? sn.n : 0) }) + mias.map(p => fila(p, C.tot.get(p.id))).join('')
+      + (sn ? `<tr class="pc-sin"><td class="l pc-cod">—</td><td class="l"><b>Sin asignar</b><span class="lb-sub">partidas del presupuesto que ninguna partida de control cubre</span></td><td></td><td>${sn.n}</td><td>${pcM(sn.cd)}</td><td>${C.total ? (sn.cd / C.total * 100).toLocaleString('es-PE', { maximumFractionDigits: 1 }) + ' %' : ''}</td>${adm ? '<td></td>' : ''}</tr>` : '');
+  });
+  const indir = PC.pcs.filter(p => !p.proyecto_id);
+  if (indir.length || C.ggSin.n) cuerpo += banda('Toda la obra · gastos generales y otros', `${indir.length} partidas de control`, { cd: indir.reduce((s, p) => s + ((C.ggTot.get(p.id) || {}).cd || 0), 0) + C.ggSin.cd, n: indir.reduce((s, p) => s + ((C.ggTot.get(p.id) || {}).n || 0), 0) + C.ggSin.n })
+    + indir.map(p => fila(p, C.ggTot.get(p.id))).join('') + (C.ggSin.n ? `<tr class="pc-sin"><td class="l pc-cod">—</td><td class="l"><b>Sin asignar</b><span class="lb-sub">capítulos de gastos generales sin partida de control</span></td><td></td><td>${C.ggSin.n}</td><td>${pcM(C.ggSin.cd)}</td><td></td>${adm ? '<td></td>' : ''}</tr>` : '');
+  const vacio = !PC.pcs.length ? `<p class="plz-nota al" style="margin:0 0 10px">Todavía no hay partidas de control.${adm ? ' Usa ✨ para proponerlas desde el presupuesto y los gastos generales, ＋ para crearlas a mano o ⬆ para importarlas de Excel.' : ''}</p>` : '';
+  box.innerHTML = `${kpis}${vacio}<div class="vl-card"><div class="fc-cab"><div><h3>Partidas de control</h3><p class="hint">Cada partida del presupuesto y cada capítulo de gastos generales pertenece a una sola partida de control; en ellas se cargará el costo real.${PC.nodos.length ? '' : ' (No se pudo leer el presupuesto de la línea base vigente.)'}</p></div>${barra}</div>
+    <div class="vl-tw"><table class="vl-tb pc-tb"><thead><tr><th class="l">Código</th><th class="l">Partida de control</th><th class="l">Responsable</th><th>Partidas</th><th>Presupuesto S/</th><th>% obra</th>${adm ? '<th></th>' : ''}</tr></thead><tbody>${cuerpo || `<tr><td colspan="${adm ? 7 : 6}" class="l">Sin partidas de control.</td></tr>`}</tbody></table></div></div>`;
+}
+
+// ── modal (mismo patrón de los demás formularios; su id va en la regla CSS que lo centra) ──
+function pcModal(id, html, alGuardar) {
+  let m = document.getElementById(id);
+  if (!m) { m = document.createElement('form'); m.id = id; m.className = 'pform la-form'; m.hidden = true; document.body.appendChild(m); }
+  m.innerHTML = html;
+  const fondo = document.getElementById('lbFondo') || (() => { const x = document.createElement('div'); x.id = 'lbFondo'; x.hidden = true; document.body.appendChild(x); return x; })();
+  const cerrar = () => { m.hidden = true; fondo.hidden = true; document.documentElement.classList.remove('la-modal'); };
+  m.hidden = false; fondo.hidden = false; document.documentElement.classList.add('la-modal'); fondo.onclick = cerrar;
+  const cancel = m.querySelector('[data-pc-cancel]'); if (cancel) cancel.onclick = cerrar;
+  m.onsubmit = async (ev) => { ev.preventDefault(); const btn = m.querySelector('button[type=submit]'); btn.disabled = true;
+    try { await alGuardar(m); cerrar(); await pcCargar(true); } catch (er) { btn.disabled = false; toast(`No se pudo guardar: ${esc(er.message)}${/function|schema cache|404/i.test(er.message) ? ' · ¿falta correr control_costos.sql?' : ''}`, false, 'pc'); } };
+  return { m, cerrar, q: (s) => m.querySelector(s) };
+}
+
+function pcForm(id) {
+  const e = id ? PC.pcs.find(x => x.id === id) : null, C = pcCalc();
+  const tipo0 = e ? e.tipo : 'directa', proy0 = e ? e.proyecto_id : ((PC.proy[0] || {}).id || ''), v = (k) => esc(e && e[k] != null ? e[k] : '');
+  const sigCod = () => { const n = PC.pcs.length + 1; return `PC-${String(n).padStart(2, '0')}`; };
+  const { m, q } = pcModal('pcForm', `<h3 style="margin:0 0 4px;font-size:14px">${e ? 'Editar partida de control' : 'Nueva partida de control'}</h3><p class="hint" style="margin:0 0 10px">Directa: agrupa partidas del presupuesto de un frente. Indirecta: gastos generales u otros costos de toda la obra. Lo que marques se mueve desde la partida de control donde estaba.</p>
+    <div class="row3"><div class="field"><label for="pcCod">Código</label><input id="pcCod" type="text" maxlength="30" value="${e ? v('codigo') : sigCod()}"></div>
+      <div class="field"><label for="pcTipo">Tipo</label><select id="pcTipo"><option value="directa"${tipo0 === 'directa' ? ' selected' : ''}>Directa (de un frente)</option><option value="indirecta"${tipo0 === 'indirecta' ? ' selected' : ''}>Indirecta (toda la obra)</option></select></div>
+      <div class="field" id="pcFrW"><label for="pcFr">Frente</label><select id="pcFr">${PC.proy.map(f => `<option value="${f.id}"${f.id === proy0 ? ' selected' : ''}>${esc(f.nombre)}</option>`).join('')}</select></div></div>
+    <div class="row2"><div class="field"><label for="pcNom">Nombre</label><input id="pcNom" type="text" maxlength="160" value="${v('nombre')}" placeholder="Ej. Subestructura"></div>
+      <div class="field"><label for="pcRes">Responsable</label><input id="pcRes" type="text" maxlength="120" value="${v('responsable')}" placeholder="Ingeniero a cargo"></div></div>
+    <div class="field"><label>Se compone de</label><div id="pcAsig" class="pc-asig"></div></div>
+    <div class="field"><label for="pcNota">Nota</label><input id="pcNota" type="text" maxlength="200" value="${v('nota')}"></div>
+    <div class="sug-acc"><button class="btn" type="submit">Guardar</button><button class="btn-sec" type="button" data-pc-cancel>Cancelar</button></div>`,
+    async (mm) => {
+      const g = (s) => mm.querySelector(s).value, tp = g('#pcTipo'), fr = g('#pcFr'), vinc = [...mm.querySelectorAll('#pcAsig input:checked')].map(i => tp === 'directa' ? { tipo: 'wbs', proyecto_id: fr, codigo: i.dataset.cod } : { tipo: 'gg', grupo: i.dataset.grupo, capitulo: i.dataset.cap });
+      await preRpc('pc_guardar', { p_obra: OBRA.id, p: { id: e ? e.id : undefined, codigo: g('#pcCod'), nombre: g('#pcNom'), tipo: tp, proyecto_id: tp === 'directa' ? fr : null, responsable: g('#pcRes'), nota: g('#pcNota'), vinc } });
+      toast('Partida de control guardada.', true, 'pc'); });
+  const pintarAsig = () => {
+    const tp = q('#pcTipo').value, fr = q('#pcFr').value; q('#pcFrW').style.display = tp === 'directa' ? '' : 'none';
+    const nombreDe = (pcId) => { const p = PC.pcs.find(x => x.id === pcId); return p ? p.codigo : ''; };
+    if (tp === 'directa') {
+      const propios = new Set(PC.vinc.filter(x => e && x.partida_control_id === e.id && x.tipo === 'wbs' && x.proyecto_id === fr).map(x => x.codigo_wbs)), otros = new Map(PC.vinc.filter(x => x.tipo === 'wbs' && x.proyecto_id === fr && (!e || x.partida_control_id !== e.id)).map(x => [x.codigo_wbs, x.partida_control_id]));
+      const gr = PC.nodos.filter(n => n.proyecto_id === fr && !n.es_hoja && n.nivel >= 2 && n.nivel <= 3).sort((a, b) => String(a.codigo).localeCompare(String(b.codigo), 'es', { numeric: true }));
+      q('#pcAsig').innerHTML = gr.length ? gr.map(n => `<label class="pc-op" style="padding-left:${(n.nivel - 2) * 18 + 6}px"><input type="checkbox" data-cod="${esc(n.codigo)}"${propios.has(n.codigo) ? ' checked' : ''}><span class="pc-opc">${esc(n.codigo)}</span><span class="pc-opn">${esc(pcTit(n.nombre))}</span><span class="pc-opm">${pcM(C.cd.get(n.id))}</span>${otros.has(n.codigo) ? `<em class="pc-opo">en ${esc(nombreDe(otros.get(n.codigo)))}</em>` : ''}</label>`).join('') : '<p class="hint">Este frente no tiene presupuesto cargado.</p>';
+    } else {
+      const propios = new Set(PC.vinc.filter(x => e && x.partida_control_id === e.id && x.tipo === 'gg').map(x => `${x.gg_grupo}|${x.gg_capitulo || ''}`)), otros = new Map(PC.vinc.filter(x => x.tipo === 'gg' && (!e || x.partida_control_id !== e.id)).map(x => [`${x.gg_grupo}|${x.gg_capitulo || ''}`, x.partida_control_id]));
+      const caps = new Map(); PC.gg.forEach(i => { const k = `${i.grupo}|${i.capitulo || ''}`; caps.set(k, { grupo: i.grupo, cap: i.capitulo || '', valor: (caps.get(k) || { valor: 0 }).valor + Number(i.valor || 0) }); });
+      const lista = [...caps.values()].sort((a, b) => a.grupo.localeCompare(b.grupo) || String(a.cap).localeCompare(String(b.cap), 'es', { numeric: true }));
+      q('#pcAsig').innerHTML = lista.length ? lista.map(c => { const k = `${c.grupo}|${c.cap}`; return `<label class="pc-op"><input type="checkbox" data-grupo="${esc(c.grupo)}" data-cap="${esc(c.cap)}"${propios.has(k) ? ' checked' : ''}><span class="pc-opc">${c.grupo === 'fijo' ? 'Fijo' : 'Variable'}</span><span class="pc-opn">${esc(pcTit(String(c.cap).replace(/^[\d.]+\s*/, '')))}</span><span class="pc-opm">${pcM(c.valor)}</span>${otros.has(k) ? `<em class="pc-opo">en ${esc(nombreDe(otros.get(k)))}</em>` : ''}</label>`; }).join('') : '<p class="hint">No hay gastos generales meta cargados; la partida de control se puede crear igual y vincular después.</p>';
+    }
+  };
+  q('#pcTipo').onchange = pintarAsig; q('#pcFr').onchange = pintarAsig; pintarAsig(); setTimeout(() => q('#pcNom').focus(), 30);
+}
+
+// ── propuesta base: desde el presupuesto (lo grande se separa, lo pequeño se agrupa) y desde los capítulos de gastos generales ──
+function pcProponer() {
+  const C = pcCalc(), items = [], tot = new Map();
+  PC.proy.forEach((f, fi) => {
+    const nod = PC.nodos.filter(n => n.proyecto_id === f.id), hijos = (id) => nod.filter(n => n.padre_id === id && !n.es_hoja).sort((a, b) => String(a.codigo).localeCompare(String(b.codigo), 'es', { numeric: true }));
+    const total = nod.filter(n => n.es_hoja).reduce((s, n) => s + Number(n.metrado || 0) * Number(n.precio_unitario || 0), 0); if (!total) return;
+    const cdn = (n) => C.cd.get(n.id) || 0; let k = 0;
+    const cod = () => `F${f.orden ?? fi + 1}-${String(++k).padStart(2, '0')}`;
+    nod.filter(n => n.nivel === 2).sort((a, b) => String(a.codigo).localeCompare(String(b.codigo), 'es', { numeric: true })).forEach(n2 => {
+      const hs = hijos(n2.id);
+      if (cdn(n2) / total >= 0.10 && hs.length > 1) {
+        const grandes = hs.filter(h => cdn(h) / total >= 0.03), chicos = hs.filter(h => cdn(h) / total < 0.03);
+        grandes.forEach(h => items.push({ codigo: cod(), nombre: `${pcTit(n2.nombre)} › ${pcTit(h.nombre)}`, tipo: 'directa', proyecto_id: f.id, vinc: [{ tipo: 'wbs', proyecto_id: f.id, codigo: h.codigo }] }));
+        if (chicos.length) items.push({ codigo: cod(), nombre: `${pcTit(n2.nombre)} › Otros`, tipo: 'directa', proyecto_id: f.id, vinc: chicos.map(h => ({ tipo: 'wbs', proyecto_id: f.id, codigo: h.codigo })) });
+      } else items.push({ codigo: cod(), nombre: pcTit(n2.nombre), tipo: 'directa', proyecto_id: f.id, vinc: [{ tipo: 'wbs', proyecto_id: f.id, codigo: n2.codigo }] });
+    });
+  });
+  // gastos generales: los capítulos del GG meta se agrupan por tema (se pueden cambiar a mano)
+  const caps = [...new Map(PC.gg.map(i => [`${i.grupo}|${i.capitulo || ''}`, { grupo: i.grupo, cap: i.capitulo || '' }])).values()], num = (c) => (String(c.cap).match(/^(\d+)\./) || [])[1];
+  const g = (nombre, filtro) => { const v = caps.filter(filtro); if (v.length) items.push({ codigo: `GG-${String(items.filter(x => x.tipo === 'indirecta').length + 1).padStart(2, '0')}`, nombre, tipo: 'indirecta', vinc: v.map(c => ({ tipo: 'gg', grupo: c.grupo, capitulo: c.cap })) }); };
+  g('Gastos generales fijos', c => c.grupo === 'fijo');
+  g('Personal de obra', c => c.grupo === 'variable' && num(c) === '1');
+  g('Seguros y gastos financieros', c => c.grupo === 'variable' && ['11', '12'].includes(num(c)));
+  g('Vehículos y equipos de apoyo', c => c.grupo === 'variable' && ['5', '6'].includes(num(c)));
+  g('Logística del personal', c => c.grupo === 'variable' && ['2', '3', '4'].includes(num(c)));
+  g('Control técnico y ambiental', c => c.grupo === 'variable' && ['7', '10'].includes(num(c)));
+  g('Oficina principal', c => c.grupo === 'variable' && ['8', '9'].includes(num(c)));
+  const usados = new Set(items.filter(x => x.tipo === 'indirecta').flatMap(x => x.vinc.map(v => `${v.grupo}|${v.capitulo}`)));
+  const resto = caps.filter(c => !usados.has(`${c.grupo}|${c.cap}`)); if (resto.length) items.push({ codigo: `GG-${String(items.filter(x => x.tipo === 'indirecta').length + 1).padStart(2, '0')}`, nombre: 'Otros gastos generales', tipo: 'indirecta', vinc: resto.map(c => ({ tipo: 'gg', grupo: c.grupo, capitulo: c.cap })) });
+  return items;
+}
+
+// ── Excel / CSV ──
+const PC_COLS = [['codigo', /^(codigo|cod)$/], ['nombre', /^(nombre|partida de control|partida)$/], ['tipo', /^tipo$/], ['frente', /^(frente|puente)$/], ['responsable', /^responsable$/], ['wbs', /^(partidas del presupuesto|presupuesto|codigos? del presupuesto|wbs)$/], ['gg', /^(gastos generales|gg)$/], ['nota', /^nota$/]];
+function pcCsv(txt) {   // CSV con coma o punto y coma, comillas dobles y saltos de línea dentro de comillas
+  txt = String(txt).replace(/^﻿/, ''); const sep = (txt.split('\n')[0].match(/;/g) || []).length > (txt.split('\n')[0].match(/,/g) || []).length ? ';' : ',';
+  const filas = []; let f = [], c = '', q = false;
+  for (let i = 0; i < txt.length; i++) { const ch = txt[i];
+    if (q) { if (ch === '"') { if (txt[i + 1] === '"') { c += '"'; i++; } else q = false; } else c += ch; }
+    else if (ch === '"') q = true; else if (ch === sep) { f.push(c); c = ''; } else if (ch === '\n') { f.push(c); filas.push(f); f = []; c = ''; } else if (ch !== '\r') c += ch; }
+  if (c !== '' || f.length) { f.push(c); filas.push(f); } return filas;
+}
+function pcPlantilla() {
+  const f0 = PC.proy[0], gr = f0 ? PC.nodos.filter(n => n.proyecto_id === f0.id && !n.es_hoja && n.nivel === 3).slice(0, 2).map(n => n.codigo) : ['03.02.01', '03.02.02'], cap = (PC.gg.find(i => i.grupo === 'variable') || {}).capitulo || '1.00.00 PERSONAL DE OBRA';
+  const filas = [['Código', 'Nombre', 'Tipo', 'Frente', 'Responsable', 'Partidas del presupuesto', 'Gastos generales', 'Nota'],
+    ['F1-01', 'Subestructura', 'Directa', f0 ? f0.codigo : 'charanal', 'Ing. de producción', gr.join('; '), '', 'Códigos del presupuesto separados por ; (un grupo entero o una partida)'],
+    ['GG-01', 'Gastos generales fijos', 'Indirecta', '', '', '', 'fijo', 'Grupo entero: fijo o variable'],
+    ['GG-02', 'Personal de obra', 'Indirecta', '', '', '', 'variable:' + String(cap).split(' ')[0], 'Un capítulo: grupo:código del capítulo (ej. variable:1.00.00)']];
+  const csv = '﻿' + filas.map(r => r.map(x => /[",;\n]/.test(x) ? `"${String(x).replace(/"/g, '""')}"` : x).join(',')).join('\r\n');
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' })); a.download = 'plantilla_partidas_control.csv'; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+async function pcLeerArchivo(file) {
+  let filas;
+  if (/\.csv$|\.txt$/i.test(file.name)) filas = pcCsv(await file.text());
+  else { const wb = await xlsxLeer(await file.arrayBuffer(), { cellDates: true }); const hoja = wb.SheetNames.find(n => wb.filas(n, { defval: '' }).slice(0, 8).some(r => r.some(c => pcNorm(c) === 'codigo'))) || wb.SheetNames[0]; filas = wb.filas(hoja, { defval: '' }); }
+  const hi = filas.findIndex(r => r.some(c => pcNorm(c) === 'codigo')); if (hi < 0) throw new Error('No encuentro la fila de títulos (debe tener la columna «Código»). Descarga la plantilla.');
+  const idx = {}; filas[hi].forEach((c, i) => { const n = pcNorm(c); const k = PC_COLS.find(([, re]) => re.test(n)); if (k && idx[k[0]] == null) idx[k[0]] = i; });
+  if (idx.codigo == null || idx.nombre == null) throw new Error('Faltan las columnas «Código» y «Nombre».');
+  return filas.slice(hi + 1).filter(r => r.some(c => String(c ?? '').trim() !== '')).map((r, i) => { const g = (k) => idx[k] == null ? '' : String(r[idx[k]] ?? '').trim(); return { fila: hi + 2 + i, codigo: g('codigo'), nombre: g('nombre'), tipo: g('tipo'), frente: g('frente'), responsable: g('responsable'), wbs: g('wbs'), gg: g('gg'), nota: g('nota'), tieneWbs: idx.wbs != null, tieneGg: idx.gg != null }; });
+}
+// valida cada fila contra los frentes, el presupuesto y los gastos generales cargados; devuelve {ok, item?, error?, ...}
+function pcValidar(filas) {
+  const cods = new Set(), nodosPor = new Map(); PC.proy.forEach(f => nodosPor.set(f.id, new Set(PC.nodos.filter(n => n.proyecto_id === f.id).map(n => n.codigo))));
+  const ggCaps = [...new Set(PC.gg.map(i => `${i.grupo}|${i.capitulo || ''}`))];
+  return filas.map(r => {
+    const e = []; const cod = r.codigo.trim(); if (!cod) e.push('falta el código'); if (cod && cods.has(cod.toUpperCase())) e.push('código repetido en el archivo'); cods.add(cod.toUpperCase()); if (!r.nombre) e.push('falta el nombre');
+    let tipo = pcNorm(r.tipo); tipo = tipo.startsWith('ind') ? 'indirecta' : tipo.startsWith('dir') ? 'directa' : (r.frente ? 'directa' : 'indirecta');
+    let fr = null; if (tipo === 'directa') { const t = pcNorm(r.frente); fr = PC.proy.find(f => pcNorm(f.codigo) === t || pcNorm(f.nombre) === t) || (t ? PC.proy.find(f => pcNorm(f.nombre).includes(t) || t.includes(pcNorm(f.codigo))) : null); if (!fr) e.push(r.frente ? `frente «${r.frente}» no existe` : 'falta el frente'); }
+    const item = { codigo: cod, nombre: r.nombre, tipo, proyecto_id: fr ? fr.id : null, responsable: r.responsable, nota: r.nota };
+    const partes = (s) => s.split(/[;\n]+/).map(x => x.trim()).filter(Boolean);
+    if (r.tieneWbs && r.wbs) { if (tipo !== 'directa') e.push('solo una partida directa lleva partidas del presupuesto'); else if (fr) { const s = nodosPor.get(fr.id); const lista = r.wbs.split(/[;,\n]+/).map(x => x.trim()).filter(Boolean); const mal = lista.filter(c => !s.has(c)); if (mal.length) e.push(`códigos que no existen en ${fr.nombre}: ${mal.slice(0, 4).join(', ')}`); item.vinc = lista.map(c => ({ tipo: 'wbs', proyecto_id: fr.id, codigo: c })); } }
+    if (r.tieneGg && r.gg) { if (tipo !== 'indirecta') e.push('solo una partida indirecta lleva gastos generales'); else { const v = []; partes(r.gg).forEach(tk => { const [g0, c0] = tk.split(':').map(x => x.trim()); const grupo = pcNorm(g0).startsWith('fij') ? 'fijo' : pcNorm(g0).startsWith('var') ? 'variable' : null;
+      if (!grupo) { e.push(`gasto general «${tk}»: usa fijo, variable o grupo:capítulo`); return; }
+      if (!c0) { ggCaps.filter(k => k.startsWith(grupo + '|')).forEach(k => v.push({ tipo: 'gg', grupo, capitulo: k.split('|')[1] })); return; }
+      const hit = ggCaps.filter(k => k.startsWith(grupo + '|') && (k.split('|')[1] === c0 || k.split('|')[1].startsWith(c0 + ' ') || pcNorm(k.split('|')[1]).includes(pcNorm(c0)))); if (!hit.length) e.push(`capítulo «${tk}» no existe en los gastos generales`); hit.forEach(k => v.push({ tipo: 'gg', grupo, capitulo: k.split('|')[1] })); });
+      if (v.length) item.vinc = v; } }
+    return { ...r, ok: !e.length, error: e.join('; '), item, tipo, frenteN: fr ? fr.nombre : '' };
+  });
+}
+function pcImportar() {
+  const { m, q, cerrar } = pcModal('pcImp', `<h3 style="margin:0 0 4px;font-size:14px">Importar partidas de control</h3><p class="hint" style="margin:0 0 10px">Excel (.xlsx) o CSV con las columnas: Código, Nombre, Tipo, Frente, Responsable, Partidas del presupuesto, Gastos generales, Nota. Las que ya existen (mismo código) se actualizan. <a href="#" data-pc-plantilla>Descargar plantilla</a>.</p>
+    <div class="field"><input id="pcArch" type="file" accept=".xlsx,.csv,.txt"></div><div id="pcVista" class="pc-vista"></div>
+    <div class="sug-acc"><button class="btn" type="submit" id="pcImpGo" disabled>Importar</button><button class="btn-sec" type="button" data-pc-cancel>Cancelar</button></div>`,
+    async () => { const items = (m._val || []).filter(r => r.ok).map(r => r.item); if (!items.length) throw new Error('No hay filas válidas para importar.'); const r = await preRpc('pc_importar', { p_obra: OBRA.id, p_items: items }); toast(`Importadas: ${r.creadas} nuevas, ${r.actualizadas} actualizadas.`, true, 'pc'); });
+  q('#pcArch').onchange = async (ev) => {
+    const f = ev.target.files[0]; if (!f) return; const vista = q('#pcVista'); vista.innerHTML = '<div class="rg-msg">Leyendo el archivo…</div>'; q('#pcImpGo').disabled = true;
+    try { const filas = await pcLeerArchivo(f), val = pcValidar(filas); m._val = val; const ok = val.filter(r => r.ok).length;
+      vista.innerHTML = `<p class="hint" style="margin:6px 0">${ok} de ${val.length} filas listas${val.length - ok ? ` · <b style="color:#b45309">${val.length - ok} con errores (no se importan)</b>` : ''}.</p><div class="vl-tw" style="max-height:260px;overflow:auto"><table class="vl-tb pc-tb"><thead><tr><th>Fila</th><th class="l">Código</th><th class="l">Nombre</th><th class="l">Tipo · frente</th><th>Vínculos</th><th class="l">Estado</th></tr></thead><tbody>${val.map(r => `<tr class="${r.ok ? '' : 'pc-sin'}"><td>${r.fila}</td><td class="l">${esc(r.codigo)}</td><td class="l">${esc(r.nombre)}</td><td class="l">${esc(r.tipo)}${r.frenteN ? ' · ' + esc(r.frenteN) : ''}</td><td>${r.item.vinc ? r.item.vinc.length : 0}</td><td class="l">${r.ok ? '<span class="vl-pill ok">lista</span>' : '<span class="vl-pill no">error</span> ' + esc(r.error)}</td></tr>`).join('')}</tbody></table></div>`;
+      q('#pcImpGo').disabled = !ok; q('#pcImpGo').textContent = ok ? `Importar ${ok}` : 'Importar';
+    } catch (er) { vista.innerHTML = `<p class="plz-nota al">${esc(er.message)}</p>`; m._val = []; }
+  };
+}
+
+document.addEventListener('click', async (e) => {
+  let b;
+  if (e.target.closest('[data-pc-nueva]')) { pcForm(null); return; }
+  if ((b = e.target.closest('[data-pc-ed]'))) { pcForm(b.dataset.pcEd); return; }
+  if (e.target.closest('[data-pc-imp]')) { pcImportar(); return; }
+  if (e.target.closest('[data-pc-plantilla]')) { e.preventDefault(); pcPlantilla(); return; }
+  if ((b = e.target.closest('[data-pc-del]'))) { const p = PC.pcs.find(x => x.id === b.dataset.pcDel); if (!p) return;
+    if (!(await confirmar(`Eliminar la partida de control «${p.codigo} · ${p.nombre}». Sus partidas quedan sin asignar.`))) return;
+    try { await preRpc('pc_eliminar', { p_id: p.id }); toast('Partida de control eliminada.', true, 'pc'); await pcCargar(true); } catch (er) { toast(`No se pudo eliminar: ${esc(er.message)}`, false, 'pc'); } return; }
+  if (e.target.closest('[data-pc-proponer]')) {
+    const items = pcProponer(); if (!items.length) { toast('No hay presupuesto ni gastos generales de los que proponer.', false, 'pc'); return; }
+    const ya = PC.pcs.length, nd = items.filter(x => x.tipo === 'directa').length;
+    if (!(await confirmar(`Se proponen ${items.length} partidas de control (${nd} directas por frente y ${items.length - nd} indirectas de gastos generales).${ya ? ` Ya hay ${ya}: las de igual código se actualizan y se agregan las demás.` : ''} Luego puedes editarlas, borrarlas o importar otras.`))) return;
+    try { const r = await preRpc('pc_importar', { p_obra: OBRA.id, p_items: items }); toast(`Propuesta aplicada: ${r.creadas} nuevas, ${r.actualizadas} actualizadas.`, true, 'pc'); await pcCargar(true); } catch (er) { toast(`No se pudo aplicar: ${esc(er.message)}${/function|schema cache|404/i.test(er.message) ? ' · ¿falta correr control_costos.sql?' : ''}`, false, 'pc'); } return; }
 });
 
 // ═══ PLAZO CONTRACTUAL: registro de ampliaciones de plazo, suspensiones y desplazamientos (tabla plazo_eventos) ═══
