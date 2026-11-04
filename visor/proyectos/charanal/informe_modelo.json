@@ -1,30 +1,31 @@
 {
  "frente": "charanal",
- "archivo": "modelo.frag",
- "generado": "2026-10-15T22:04:56.292Z",
- "elementos": 354,
- "armadura": 26073,
- "ocultos": 2,
+ "archivo": "charanal_v2.frag",
+ "generado": "2026-11-04T21:25:30.869Z",
+ "elementos": 554,
+ "armadura": 32389,
+ "ocultos": 0,
  "clases": {
-  "IFCMECHANICALFASTENER": 3740,
+  "IFCMECHANICALFASTENER": 4676,
   "IFCBEAM": 12,
-  "IFCREINFORCINGBAR": 22333,
-  "IFCFLOWSEGMENT": 32,
-  "IFCBUILDINGELEMENTPROXY": 218,
-  "IFCSLAB": 64,
-  "IFCPLATE": 28
+  "IFCREINFORCINGBAR": 27713,
+  "IFCBUILDINGELEMENTPROXY": 314,
+  "IFCSLAB": 68,
+  "IFCRAILING": 100,
+  "IFCPLATE": 28,
+  "IFCPIPESEGMENT": 32
  },
  "atributos": {
   "Partida": {
-   "con": 352,
-   "valores": 4,
+   "con": 432,
+   "valores": 6,
    "propiedad": [
     "partida"
    ]
   },
   "Elemento": {
-   "con": 316,
-   "valores": 16,
+   "con": 396,
+   "valores": 20,
    "propiedad": [
     "elemento"
    ]
@@ -44,21 +45,21 @@
    ]
   },
   "Familia": {
-   "con": 326,
-   "valores": 22,
+   "con": 526,
+   "valores": 30,
    "propiedad": [
     "familia"
    ]
   },
   "Tipo": {
-   "con": 354,
-   "valores": 26,
+   "con": 554,
+   "valores": 38,
    "propiedad": [
     "tipo"
    ]
   },
   "Nivel": {
-   "con": 354,
+   "con": 554,
    "valores": 6,
    "propiedad": [
     "nivel de referencia",
@@ -74,34 +75,36 @@
    ]
   },
   "Volumen": {
-   "con": 322,
-   "valores": 56,
+   "con": 422,
+   "valores": 71,
    "propiedad": [
     "volumen"
    ]
   },
   "Longitud": {
-   "con": 78,
-   "valores": 17,
+   "con": 186,
+   "valores": 25,
    "propiedad": [
     "longitud del sistema",
-    "longitud"
+    "longitud",
+    "length"
    ]
   }
  },
- "grupos": 36,
+ "grupos": 48,
  "eje": {
   "origin": [
-   -3.55,
+   -4.92,
    0,
-   -17.95
+   -19.54
   ],
-  "ux": 0.64493,
-  "uz": 0.76425,
-  "length": 115.59
+  "ux": 0.64489,
+  "uz": 0.76427,
+  "length": 119.73
  },
  "suelo": 9.59,
  "avisos": [
-  "38 elementos no traen «Elemento»."
+  "122 elementos no traen «Partida».",
+  "158 elementos no traen «Elemento»."
  ]
 }
