@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="build" content="20261030175622">
+<meta name="build" content="20261105131145">
 <script>/* auto-actualizar: compara el sello de esta copia con el del servidor y recarga una sola vez */
 (function(){try{if(!/^https?:/.test(location.protocol))return;var me=document.querySelector('meta[name=build]').content;if(me==='0')return;
 fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'}).then(function(r){return r.text()}).then(function(h){
@@ -11378,7 +11378,9 @@ const bimPlano = (s) => String(s == null ? '' : s).replace(/([a-zñáéíóú])(
 const bimRaiz = (w) => w.length > 4 && /[lrndjz]es$/.test(w) ? w.slice(0, -2) : (w.length > 3 && w.endsWith('s') ? w.slice(0, -1) : w);
 const bimTok = (s, dePartida) => [...new Set(bimPlano(s).split(/[^a-z0-9ø]+/).filter(Boolean).map(bimRaiz).filter(w => w.length >= 3 && !BIM_STOP.has(w) && !(dePartida && /\d/.test(w))))];
 function bimLev1(a, b) { if (Math.abs(a.length - b.length) > 1) return false; let i = 0, j = 0, d = 0; while (i < a.length && j < b.length) { if (a[i] === b[j]) { i++; j++; continue; } if (++d > 1) return false; if (a.length > b.length) i++; else if (b.length > a.length) j++; else { i++; j++; } } return d + (a.length - i) + (b.length - j) <= 1; }
-const bimIgual = (g, p) => g === p || (g.length > p.length && g.includes(p) && (p.length >= 4 || (p.length === 3 && g.length >= 8))) || (g.length >= 7 && p.length >= 7 && bimLev1(g, p));   // g: palabra del modelo · p: palabra de la partida
+const bimPref = (a, b) => { let i = 0; while (i < a.length && i < b.length && a[i] === b[i]) i++; return i; };
+// g: palabra del modelo · p: palabra de la partida. Igual, contenida, a una letra de distancia, o misma raíz larga (baranda ≈ barandilla; excavacion ≠ excavadora)
+const bimIgual = (g, p) => g === p || (g.length > p.length && g.includes(p) && (p.length >= 4 || (p.length === 3 && g.length >= 8))) || (g.length >= 7 && p.length >= 7 && bimLev1(g, p)) || (g.length >= 7 && p.length >= 7 && bimPref(g, p) >= Math.max(6, Math.min(g.length, p.length) - 3));
 const bimFc = (s) => { const m = /f\s*['’´`]?\s*c\s*=?\s*(\d{3})(?!\d)/i.exec(String(s || '')); return m ? parseInt(m[1], 10) : null; };
 const bimLike = (s) => String(s).replace(/([\\%_])/g, '\\$1');
 function bimCoincide(e, f) {   // igual que _modelo_coincide de la base
@@ -11396,9 +11398,11 @@ function bimProponer(E, nodos, nombreFrente) {
     const par = e.partida_modelo || null, el = e.elemento || null, f = {};
     if (par) f.par = par;
     if (el) { f.el = el; if (mezcla[(par || '') + '|' + el].size > 1 && e.clase_ifc) f.clase = e.clase_ifc; }
-    else if (e.familia) f.fam_like = bimLike(e.familia); else if (e.clase_ifc) f.clase = e.clase_ifc; else return;
+    else if (e.familia) { f.fam_like = bimLike(e.familia); if (e.tipo && !par) f.tipo_like = bimLike(e.tipo); }   // sin elemento ni partida, el tipo separa piezas de la misma familia (ej. losa de cimentación vs carpeta asfáltica)
+    else if (e.clase_ifc) f.clase = e.clase_ifc; else return;
     const k = JSON.stringify(f);
-    const g = G[k] = G[k] || { k, f, par, el, et: el || e.familia || e.clase_ifc, L: [], n: 0, vol: 0, area: 0, lon: 0, conLon: 0, fcs: new Set(), tEl: bimTok(el || e.familia || ''), tPar: bimTok(par || '') };
+    const g = G[k] = G[k] || { k, f, par, el, et: el || e.familia || e.clase_ifc, L: [], n: 0, vol: 0, area: 0, lon: 0, conLon: 0, fcs: new Set(), tEl: bimTok(el || e.familia || ''), tPar: bimTok(par || ''), tAux: new Set() };
+    bimTok(e.familia || '').concat(bimTok(e.tipo || '')).forEach(w => g.tAux.add(w));
     g.L.push(e); g.n++; g.area += Number(e.area_cara || 0); g.vol += Number(e.volumen || 0); if (Number(e.longitud) > 0) { g.lon += Number(e.longitud); g.conLon++; }
     g.fcs.add(bimFc(e.tipo) || bimFc(e.material) || 0);
   });
@@ -11498,8 +11502,37 @@ function bimProponer(E, nodos, nombreFrente) {
   const enProp = new Set(props.flatMap(x => x.gs.map(o => o.g)));
   grupos.filter(g => !enProp.has(g) && g.el).forEach(g => { const x = props.find(y => y.modo === 'volumen' && y.gs.some(o => o.g.par === g.par && o.g.el === g.el)) || props.find(y => y.modo && y.gs.some(o => o.g.par === g.par && o.g.el === g.el));
     if (x) props.push({ p: x.p, modo: 'unidad', gs: [{ g, fac: 0 }], revisar: false, acc: true, nota: 'Accesorio del mismo elemento: se pinta con él y no suma cantidad.' }); });
+  // ── C) piezas que siguen sin partida (un modelo nuevo trae familias que ninguna regla conoce)
+  //    · partida que se mide con el modelo (u, m, m3): nombre parecido Y la cantidad del modelo concilia con el metrado (±10 %); gana a las asignaciones «por rama», que son solo una suposición
+  //    · partida que NO se mide con el modelo (t-m, tnf·m, glb…): se asocia sin cantidad; si varias partidas pueden ser, queda «por decidir» (empates)
+  const MEDIBLE = /^(u|un|und|unid|unidad|pza|pieza|m|ml|m2|m3|kg)$/, debil = (x) => x.via === 'base' || x.via === 'cond';
+  const empates = [], tomado = new Set(props.filter(x => x.modo && x.gs.length && !debil(x)).flatMap(x => x.gs.map(o => o.g)));
+  const libres = grupos.filter(g => !tomado.has(g)), sinProp = hojas.filter(p => !props.some(x => x.p === p && x.modo && x.gs.length && !debil(x)));
+  const tokG = (g) => [...new Set([...g.tEl, ...g.tPar, ...g.tAux])], cobertura = (g, p) => { const T = tokG(g); return p.T.length ? p.T.filter(t => T.some(w => bimIgual(w, t))).length / p.T.length : 0; };
+  const candidatos = (p, min) => libres.filter(g => !tomado.has(g)).map(g => ({ g, c: cobertura(g, p) })).filter(x => x.c >= min);
+  const cantidadDe = (p, gs) => esUnd(p.u) ? gs.reduce((s, g) => s + g.n, 0) : p.u === 'm3' ? gs.reduce((s, g) => s + g.vol, 0) : esMl(p.u) && gs.every(g => g.conLon === g.n) ? gs.reduce((s, g) => s + g.lon, 0) : 0;
+  const aceptadas = [];
+  sinProp.filter(p => MEDIBLE.test(p.u)).forEach(p => {
+    const c = candidatos(p, 0.2); if (!c.length) return; const mx = Math.max(...c.map(x => x.c)), gs = c.filter(x => x.c === mx).map(x => x.g), q = cantidadDe(p, gs), dif = q > 0 ? Math.abs(q - p.m) / p.m : null;
+    if (dif != null && dif <= 0.1 && (mx >= 0.34 || dif <= 0.05) && (!esUnd(p.u) || mx >= 0.5)) aceptadas.push(   // por unidades, que coincida un número chico no prueba nada: pide que el nombre coincida en la mitad de sus palabras
+{ p, gs, dif, modo: esUnd(p.u) ? 'unidad' : p.u === 'm3' ? 'volumen' : 'longitud', q });
+    else if (q === 0 && !esUnd(p.u) && mx >= 0.67) aceptadas.push({ p, gs, dif: 1, modo: 'reparto_unidad', q: 0 });   // el modelo no trae la medida (ej. juntas sin longitud): el metrado se reparte entre las piezas
+  });
+  aceptadas.sort((a, b) => a.dif - b.dif).forEach(a => {
+    const gs = a.gs.filter(g => !tomado.has(g)); if (!gs.length) return; gs.forEach(g => tomado.add(g));
+    for (let i = props.length - 1; i >= 0; i--) if (props[i].p === a.p && debil(props[i])) props.splice(i, 1);
+    props.push({ p: a.p, via: 'nombre+cantidad', modo: a.modo, gs: gs.map(g => ({ g, fac: 1 })), revisar: a.modo === 'reparto_unidad' || a.dif > 0.02, nueva: true,
+      nota: a.modo === 'reparto_unidad' ? 'Nombre parecido; el modelo no trae la medida de estas piezas, así que el metrado se reparte entre ellas.' : `Nombre parecido y la cantidad concilia: el modelo suma ${d2(a.q)} ${a.p.n.unidad} contra ${d2(a.p.m)} del presupuesto (${pct(a.q, a.p.m)}).` });
+  });
+  const reclama = new Map();
+  sinProp.filter(p => !MEDIBLE.test(p.u)).forEach(p => candidatos(p, 0.3).forEach(x => { if (!reclama.has(x.g)) reclama.set(x.g, []); reclama.get(x.g).push(p); }));
+  reclama.forEach((L, g) => {
+    if (tomado.has(g)) return;
+    if (L.length === 1) { tomado.add(g); props.push({ p: L[0], via: 'proceso', modo: 'unidad', gs: [{ g, fac: 0 }], revisar: true, nueva: true, nota: `La partida se mide en ${L[0].n.unidad}, no por el material del modelo: las piezas se asocian a ella sin cantidad propia.` }); }
+    else empates.push({ g, cands: L.map(p => p.n) });
+  });
   // ── reglas: un filtro por partida del modelo (varios elementos en una sola regla cuando se puede)
-  const corto = (s) => { s = String(s || '').replace(/\s+/g, ' ').trim(); s = s.charAt(0) + s.slice(1).toLowerCase(); return s.length > 60 ? s.slice(0, 59) + '…' : s; };
+  const corto =(s) => { s = String(s || '').replace(/\s+/g, ' ').trim(); s = s.charAt(0) + s.slice(1).toLowerCase(); return s.length > 60 ? s.slice(0, 59) + '…' : s; };
   const reglas = []; let orden = 0;
   props.filter(x => x.modo && x.gs.length).sort((a, b) => (a.p.n.orden || 0) - (b.p.n.orden || 0)).forEach(x => {
     const cl = {}; x.gs.forEach(o => { const f = o.g.f, une = f.el && !f.clase && !f.fam_like, k = une ? 'u|' + (f.par || '') + '|' + o.fac : 's|' + o.g.k; (cl[k] = cl[k] || []).push(o); });
@@ -11509,7 +11542,7 @@ function bimProponer(E, nodos, nombreFrente) {
     partes.forEach((q, i) => { orden += 10; const fac = rep && partes.length > 1 ? Math.round(peso(q) / tot * 1e6) / 1e6 : q.fac;
       reglas.push({ orden, nombre: corto(x.p.n.nombre) + (partes.length > 1 ? ' · ' + corto(q.et).slice(0, 24) : ''), filtro: q.f, nodo_codigo: x.p.n.codigo, modo: x.modo, factor: fac, revisar: !!x.revisar, nota: 'Propuesta automática. ' + x.nota, nodo_id: x.p.n.id }); });
   });
-  return { reglas, grupos: grupos.length };
+  return { reglas, grupos: grupos.length, empates };
 }
 function bimSimular(E, nodos, reglas) {   // lo mismo que hará modelo_vinculos_aplicar: cantidad por partida y elementos enlazados
   const porCod = {}; nodos.forEach(n => { if (n.es_hoja) porCod[n.codigo] = n; });
@@ -11525,8 +11558,19 @@ function bimSimular(E, nodos, reglas) {   // lo mismo que hará modelo_vinculos_
         : r.modo === 'reparto_volumen' ? (vs > 0 ? m * r.factor * Number(e.volumen || 0) / vs : m * r.factor / L.length) : m * r.factor / L.length; }); });
   return { partidas: Object.values(par).sort((a, b) => (a.n.orden || 0) - (b.n.orden || 0)), enlazados: enl.size };
 }
+// Qué falta enlazar: con las reglas actuales (que el usuario ya revisó) se ve qué piezas del modelo quedan sin partida; de la propuesta solo se toman
+// las reglas de partidas que todavía no tienen ninguna y que enlazan alguna de esas piezas, más los empates que el sistema no puede decidir solo.
+function bimCompletar(E, nodos, prop, reglasAct) {
+  const porCod = {}; nodos.forEach(n => { if (n.es_hoja) porCod[n.codigo] = n; });
+  const act = reglasAct.filter(r => r.activa !== false && porCod[r.nodo_codigo]), enl = new Set();
+  if (act.length) E.forEach(e => { if (act.some(r => bimCoincide(e, r.filtro))) enl.add(e.guid); });
+  const conRegla = new Set(reglasAct.map(r => r.nodo_codigo)), libres = E.filter(e => !enl.has(e.guid));
+  const reglas = reglasAct.length ? prop.reglas.filter(r => !conRegla.has(r.nodo_codigo) && libres.some(e => bimCoincide(e, r.filtro))) : [];   // sin reglas todavía, la propuesta completa ya es la tabla principal
+  const empates = (prop.empates || []).map(x => ({ g: x.g, cands: x.cands, n: x.g.L.filter(e => !enl.has(e.guid)).length })).filter(x => x.n > 0);
+  return { reglas, empates, sinEnlazar: act.length ? libres.length : null };
+}
 // pantalla de carga: lee el inventario (el que publica el visor del frente o un archivo), muestra qué trae y qué reglas propone, y recién al aceptar lo guarda
-const BIM_CARGA = { inv: null, prop: null, sim: null, nodos: [], origen: '', otro: null };
+const BIM_CARGA ={ inv: null, prop: null, sim: null, nodos: [], origen: '', otro: null };
 async function bimCargaAbrir() {
   const proy = bimProy(); if (!proy || !AUTH.admin) return;
   let m = document.getElementById('bimCarga');
@@ -11542,8 +11586,16 @@ async function bimCargaAbrir() {
     else {
       const E = inv.items, ya = new Set(BIM.el.map(e => e.guid)), nu = E.filter(e => !ya.has(e.guid)).length, gs = new Set(E.map(e => e.guid)), fuera = BIM.el.filter(e => !gs.has(e.guid)).length;
       const S = C.sim, R = C.prop.reglas, rev = S.partidas.filter(o => o.revisar).length, hayR = BIM.reglas.length > 0;
-      const filas = S.partidas.map(o => { const d = bimDif({ es_reparto: o.reparto, metrado: o.n.metrado, cantidad_modelo: o.q });
-        return `<tr title="${esc(o.notas.join(' '))}"><th scope="row" class="l">${esc(o.n.codigo_esp || o.n.codigo)}</th><td class="l">${esc(o.n.nombre)}${o.revisar ? ' <span class="vg-pl mid">revisar</span>' : ''}</td><td>${esc(o.n.unidad || '')}</td><td>${bimN(o.n.metrado)}</td><td>${o.reparto ? '—' : bimN(o.q)}</td><td><span class="vg-pl ${d.c}">${d.t}</span></td><td>${o.el}</td></tr>`; }).join('');
+      const fila = o => { const d = bimDif({ es_reparto: o.reparto, metrado: o.n.metrado, cantidad_modelo: o.q });
+        return `<tr title="${esc(o.notas.join(' '))}"><th scope="row" class="l">${esc(o.n.codigo_esp || o.n.codigo)}</th><td class="l">${esc(o.n.nombre)}${o.revisar ? ' <span class="vg-pl mid">revisar</span>' : ''}</td><td>${esc(o.n.unidad || '')}</td><td>${bimN(o.n.metrado)}</td><td>${o.reparto ? '—' : bimN(o.q)}</td><td><span class="vg-pl ${d.c}">${d.t}</span></td><td>${o.el}</td></tr>`; };
+      const filas = S.partidas.map(fila).join('');
+      // piezas que ninguna regla actual conoce: reglas nuevas propuestas (nombre parecido + cantidad que concilia, o partidas que no se miden con el modelo) y los empates que decide el usuario
+      const K = C.comp, filasK = K && K.reglas.length ? bimSimular(E, C.nodos, K.reglas).partidas.map(fila).join('') : '';
+      const decide = K && K.empates.length ? `<div class="bc-dec" style="margin:8px 0 0"><p class="hint" style="margin:0 0 6px">El modelo no permite decidir a qué partida va cada grupo de piezas; elige (o déjalas sin partida):</p>${K.empates.map((x, i) => `<label class="adm-check" style="display:flex;gap:8px;align-items:center;margin:4px 0"><span style="flex:1"><b>${esc(x.g.et)}</b> · ${x.n != null ? x.n : x.g.n} piezas</span><select data-dec="${i}" class="sel" style="max-width:62%"><option value="">Dejar sin partida</option>${x.cands.map(c => `<option value="${esc(c.codigo)}">${esc(c.codigo_esp || c.codigo)} · ${esc(String(c.nombre).slice(0, 48))}</option>`).join('')}</select></label>`).join('')}</div>` : '';
+      const completar = !K || !(K.reglas.length || K.empates.length) ? '' : `<div class="bc-comp" style="margin:12px 0 0;padding:10px 12px;border:1px solid var(--line2);border-radius:12px">
+          ${K.reglas.length ? `<label class="adm-check" style="margin:0"><input type="checkbox" id="bcComp" checked> <b>Completar:</b> agregar ${K.reglas.length} reglas nuevas para las piezas sin partida${K.sinEnlazar != null ? ` (${K.sinEnlazar} sin enlazar)` : ''}${hayR ? '; tus reglas actuales no se tocan' : ''}.</label>
+          <div class="vg-twrap bc-tabla" style="margin-top:8px"><table class="vg-t bim-t"><thead><tr><th>Código</th><th class="l">Partida</th><th>Und</th><th>Presupuesto</th><th>Modelo</th><th>Diferencia</th><th>Elementos</th></tr></thead><tbody>${filasK}</tbody></table></div>` : ''}
+          ${decide}</div>`;
       m.innerHTML = `${cab}
         <div class="bc-res"><div><b>${E.length}</b><span>elementos · ${esc(C.origen)}</span></div><div><b>${nu}</b><span>nuevos${fuera ? ` · ${fuera} ya no están` : ''}</span></div><div><b>${S.enlazados} de ${E.length}</b><span>quedan enlazados</span></div><div><b>${S.partidas.length}</b><span>partidas · ${rev} por revisar</span></div></div>
         <div class="bim-chips" style="margin:0 0 10px" title="Atributos que trae el modelo y cuántos valores distintos tiene cada uno">${inv.campos.filter(c => c.con).map(c => `<span><b>${esc(c.t)}</b> ${c.con === E.length ? '' : c.con + ' elem. · '}${c.distintos} valores</span>`).join('')}</div>
@@ -11552,6 +11604,7 @@ async function bimCargaAbrir() {
         ${C.otro ? `<p class="bc-av">Este archivo es el mismo modelo que ya está cargado en <b>${esc(C.otro)}</b>. Cárgalo aquí solo si de verdad es el modelo de ${esc(corto)}.</p>` : ''}
         ${inv.sinGuid ? `<p class="hint" style="margin:0 0 8px">${inv.sinGuid} elementos del archivo no traen identificador (GUID) y no se cargan.</p>` : ''}
         ${R.length ? `<div class="vg-twrap bc-tabla"><table class="vg-t bim-t"><thead><tr><th>Código</th><th class="l">Partida propuesta</th><th>Und</th><th>Presupuesto</th><th>Modelo</th><th>Diferencia</th><th>Elementos</th></tr></thead><tbody>${filas}</tbody></table></div>` : '<p class="hint" style="margin:0 0 10px">No se encontró ninguna partida de este frente que corresponda a los elementos del modelo. Se carga el inventario y las reglas se crean a mano.</p>'}
+        ${completar}
         ${hayR ? `<label class="adm-check" style="margin:10px 0 0"><input type="checkbox" id="bcReemp"> Reemplazar las ${BIM.reglas.length} reglas actuales por esta propuesta (${R.length} reglas); borra también tu distribución manual del acero. Sin marcar, se conservan tus reglas y solo se actualiza el inventario.</label>` : `<p class="hint" style="margin:10px 0 0">Se crearán ${R.length} reglas. Las marcadas «revisar» son las que el modelo no permite decidir solo: después se confirman o corrigen en la vista Reglas.</p>`}
         <div class="sug-acc" style="margin-top:12px"><button class="btn" type="submit">Cargar y enlazar</button>${elegir}<button class="btn-sec" type="button" id="bcCancel">Cancelar</button></div>`;
     }
@@ -11563,6 +11616,7 @@ async function bimCargaAbrir() {
     if (!inv.items.length) throw new Error('el archivo no trae elementos con identificador (GUID).');
     const C = BIM_CARGA; C.inv = inv; C.origen = origen;
     C.prop = bimProponer(inv.items, C.nodos, proy.nombre); C.sim = bimSimular(inv.items, C.nodos, C.prop.reglas);
+    C.comp = bimCompletar(inv.items, C.nodos, C.prop, BIM.reglas);
     C.sinColumnas = inv.items.some(e => Number(e.acero_a615) > 0 || Number(e.acero_a706) > 0) && !(await get('/modelo_elementos?select=acero_a615&limit=1').then(() => true).catch(() => false));
     const otros = await getTodo(`/modelo_elementos?proyecto_id=neq.${proy.id}&select=guid,proyecto_id&order=proyecto_id,guid`).catch(() => []);
     const gs = new Set(inv.items.map(e => e.guid)), cuenta = {}; otros.forEach(o => { if (gs.has(o.guid)) cuenta[o.proyecto_id] = (cuenta[o.proyecto_id] || 0) + 1; });
@@ -11585,8 +11639,18 @@ async function bimCargaAbrir() {
           await preRpc('modelo_regla_guardar', { p_id: r.id, p_proyecto: proy.id, p_nombre: r.nombre, p_filtro: r.filtro, p_nodo_codigo: r.nodo_codigo, p_modo: a6 ? 'peso_a706' : 'peso_a615', p_factor: Number(r.factor), p_orden: r.orden, p_activa: r.activa, p_revisar: true, p_nota: r.nota });
         }
       }
-      const n = reemp && C.prop.reglas.length ? await preRpc('modelo_reglas_reemplazar', { p_proyecto: proy.id, p_reglas: C.prop.reglas.map(r => ({ orden: r.orden, nombre: r.nombre, filtro: r.filtro, nodo_codigo: r.nodo_codigo, modo: r.modo, factor: r.factor, revisar: r.revisar, nota: r.nota })) })
+      let n = reemp && C.prop.reglas.length ? await preRpc('modelo_reglas_reemplazar', { p_proyecto: proy.id, p_reglas: C.prop.reglas.map(r => ({ orden: r.orden, nombre: r.nombre, filtro: r.filtro, nodo_codigo: r.nodo_codigo, modo: r.modo, factor: r.factor, revisar: r.revisar, nota: r.nota })) })
         : await preRpc('modelo_vinculos_aplicar', { p_proyecto: proy.id });
+      // reglas que se suman: las «completar» (piezas sin partida) y lo que el usuario decidió en los empates; las ya existentes no se tocan
+      const K = C.comp, extras = [], cc = m.querySelector('#bcComp');
+      if (K && !reemp && cc && cc.checked) K.reglas.forEach(r => extras.push({ nombre: r.nombre, filtro: r.filtro, nodo_codigo: r.nodo_codigo, modo: r.modo, factor: r.factor, revisar: r.revisar, nota: r.nota }));
+      m.querySelectorAll('select[data-dec]').forEach(sl => { const x = K && K.empates[+sl.dataset.dec], nd = x && sl.value && C.nodos.find(q => q.codigo === sl.value); if (!nd) return;
+        extras.push({ nombre: (String(nd.nombre).charAt(0) + String(nd.nombre).slice(1).toLowerCase() + ' · ' + x.g.et).slice(0, 120), filtro: x.g.f, nodo_codigo: nd.codigo, modo: 'unidad', factor: 0, revisar: true, nota: 'Decidido al cargar el modelo. La partida no se mide con el material del modelo: las piezas se asocian a ella sin cantidad propia.' }); });
+      if (extras.length) {
+        let orden = Math.max(5000, ...BIM.reglas.map(r => Number(r.orden) || 0)) + 10;
+        for (const r of extras) { await preRpc('modelo_regla_guardar', { p_id: null, p_proyecto: proy.id, p_nombre: r.nombre, p_filtro: r.filtro, p_nodo_codigo: r.nodo_codigo, p_modo: r.modo, p_factor: r.factor, p_orden: orden, p_activa: true, p_revisar: !!r.revisar, p_nota: r.nota }); orden += 10; }
+        n = await preRpc('modelo_vinculos_aplicar', { p_proyecto: proy.id });
+      }
       cerrar(); toast(`Modelo cargado: ${C.inv.items.length} elementos · ${n} vínculos con partidas.`, true, 'bim'); BIM.vista = 'partidas'; await bimCargar(true);
     } catch (er) { btn.disabled = false; btn.textContent = 'Cargar y enlazar'; toast(`No se pudo cargar: ${esc(er.message)}${/function|schema cache|404/i.test(er.message) ? ' · ¿falta correr modelo_bim.sql?' : ''}`, false, 'bim'); }
   };
