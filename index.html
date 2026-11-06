@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="build" content="20261105222558">
+<meta name="build" content="20261106151608">
 <script>/* auto-actualizar: compara el sello de esta copia con el del servidor y recarga una sola vez */
 (function(){try{if(!/^https?:/.test(location.protocol))return;var me=document.querySelector('meta[name=build]').content;if(me==='0')return;
 fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'}).then(function(r){return r.text()}).then(function(h){
@@ -10910,14 +10910,18 @@ async function bimCargar(forzar) {
       BIM.frente = orden.find(id => BIM.conModelo.has(id)) || orden[0];
     }
     const f = BIM.frente;
-    const [el, reglas, vin, par, nodos, vp, cl] = await Promise.all([
+    const [el, reglas, vin, par, nodos, vp, cl, trat, col] = await Promise.all([
       getTodo(`/modelo_elementos?proyecto_id=eq.${f}&select=*&order=partida_modelo,elemento,ubicacion,codigo,local_id`).catch(() => []),
       get(`/modelo_reglas?proyecto_id=eq.${f}&select=*&order=orden,creado_en`).catch(() => []),
       getTodo(`/modelo_vinculos?select=elemento_id,nodo_id,regla_id,cantidad,modo,origen,modelo_elementos!inner(proyecto_id)&modelo_elementos.proyecto_id=eq.${f}&order=elemento_id,nodo_id`).catch(() => []),
       get(`/v_modelo_partida?proyecto_id=eq.${f}&select=*&order=codigo`).catch(() => []),
       getTodo(`/wbs_nodos?version_id=eq.${DATA.versionId}&proyecto_id=eq.${f}&es_hoja=eq.true&select=id,codigo,codigo_esp,nombre,unidad,metrado,precio_unitario,orden&order=orden`),
       getTodo(`/valorizacion_partidas?select=nodo_id,metrado,valorizaciones!inner(estado)&valorizaciones.estado=eq.aprobada&order=nodo_id,valorizacion_id`).catch(() => []),
-      get(`/modelo_partida_clase?proyecto_id=eq.${f}&select=nodo_codigo,clase`).catch(() => [])]);
+      get(`/modelo_partida_clase?proyecto_id=eq.${f}&select=nodo_codigo,clase`).catch(() => []),
+      get(`/modelo_tratamientos?proyecto_id=eq.${f}&select=*&order=orden,creado_en`).catch(() => null),
+      get(`/modelo_colores?proyecto_id=eq.${f}&select=*&order=orden,creado_en`).catch(() => null)]);   // null = falta correr modelo_tratamiento.sql
+    BIM.sinTrat = trat === null; BIM.trat = trat || [];
+    BIM.sinCol = col === null; BIM.col = col || [];
     BIM.clases = {}; cl.forEach(c => { BIM.clases[c.nodo_codigo] = c.clase; });
     BIM.el = el; BIM.reglas = reglas; BIM.vin = vin; BIM.par = par; BIM.nodos = nodos; BIM.asg = {}; BIM.tipos = null;
     BIM.N = {}; nodos.forEach(n => { BIM.N[n.id] = n; });
@@ -10925,6 +10929,11 @@ async function bimCargar(forzar) {
     BIM.cargado = true; bimPintar();
   } catch (e) { box.innerHTML = msgCarga('Modelo y partidas', e); }
 }
+// Tratamiento de los elementos: ¿se valorizan o no? (modelo_tratamiento.sql). «A cuenta del contratista» consume material pero no se paga; «adicional no aprobado» está ejecutado y por reclamar; «retrabajo» es pérdida.
+const BIM_TRAT = { valoriza: 'Se valoriza', contratista: 'A cuenta del contratista', adicional: 'Adicional no aprobado', retrabajo: 'Retrabajo o desperdicio' };
+const bimSinValor = (e) => !!e.tratamiento && e.tratamiento !== 'valoriza';
+// lo mismo que modelo_tratamiento_aplicar de la base: una regla posterior manda sobre la anterior (sirve para un inventario que todavía no está cargado)
+const bimTratDe = (e) => { let t = 'valoriza'; (BIM.trat || []).forEach(r => { if (r.activa !== false && bimCoincide(e, r.filtro || {})) t = r.tratamiento; }); return t; };
 const bimPct = (nid) => { const n = BIM.N[nid]; if (!n || !(Number(n.metrado) > 0)) return null; return Math.max(0, Math.min(1, (BIM.val[nid] || 0) / Number(n.metrado))); };
 function bimAvanceElemento(eid) {   // avance del elemento = promedio del avance de sus partidas, ponderado por el costo que le toca de cada una
   let num = 0, den = 0;
@@ -10942,12 +10951,12 @@ function bimPintar() {
     <div class="vg-g" style="flex:1 1 200px"><span class="vg-gl">Buscar</span><input id="bimQ" type="search" value="${esc(BIM.q)}" placeholder="Código, partida, elemento, tipo…" style="width:100%;height:38px;border-radius:11px;border:1px solid var(--line2);background:var(--card);padding:0 12px;font:inherit;font-size:12.5px"></div>` : ''}
     ${adm ? `<div class="vg-g"><span class="vg-gl">Modelo</span><button type="button" class="btn-sec bim-carga-btn" data-bim-carga title="Cargar o actualizar el modelo de este frente: lee su inventario, detecta sus atributos y propone el enlace con las partidas"><svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M5 20h14"/></svg>${hay ? 'Actualizar' : 'Cargar'}</button><button type="button" class="btn-sec bim-carga-btn" data-bim-subir title="Subir el paquete (.zip) que genera el Preparador de modelos a partir del IFC: deja el modelo listo para el visor y para Cargar"><svg viewBox="0 0 24 24"><path d="M12 15V3M7 8l5-5 5 5M4 15v5h16v-5"/></svg>Subir paquete</button><input type="file" id="bimPaqFile" accept=".zip,application/zip" hidden>${hay ? bimAceroBoton() : ''}</div>` : ''}</div>`;
   if (!hay) { box.innerHTML = `<div class="vg-wrap">${barra}<div class="vg-tcard"><h3 style="margin:0 0 6px">${esc(proy ? proy.nombre : '')}: todavía no hay modelo cargado</h3><p class="hint" style="margin:0">${BIM.sinSql ? 'Falta correr <code>modelo_bim.sql</code> en la base.' : adm ? 'Usa <b>Cargar</b>: se lee el inventario del modelo, se detectan sus atributos y se propone solo el enlace con las partidas de este frente. Es la misma lógica para cualquier modelo.' : 'Este frente todavía no tiene su modelo 3D cargado.'}</p></div></div>`; return; }
-  const conV = new Set(BIM.vin.map(v => v.elemento_id)), enl = E.filter(e => conV.has(e.id)).length;
+  const conV = new Set(BIM.vin.map(v => v.elemento_id)), enl = E.filter(e => conV.has(e.id)).length, nExc = E.filter(bimSinValor).length;
   const pref = new Set(BIM.par.map(p => p.codigo.split('.').slice(0, 2).join('.'))), delPuente = BIM.nodos.filter(n => pref.has(n.codigo.split('.').slice(0, 2).join('.')));
   const medidas = BIM.par.filter(p => !p.es_reparto && bimClase(p) !== 'calidad'), okN = medidas.filter(p => bimDif(p).c === 'ok').length, malN = medidas.filter(p => bimDif(p).c === 'bad').length, rev = BIM.reglas.filter(r => r.activa && r.revisar).length;
   const ic = (k) => VG_IC[k];
   const kp = `<div class="vg-cards bim-cards">
-    <article class="vgk pv"><header><span class="vgk-ic">${ic('pv')}</span><span class="vgk-l">Elementos del modelo</span></header><div class="vgk-v">${E.length}</div><div class="vgk-s"><b>${enl}</b> enlazados · ${E.length - enl} sin partida</div><div class="vgk-bar"><i style="width:${(enl / E.length * 100).toFixed(1)}%"></i></div></article>
+    <article class="vgk pv"><header><span class="vgk-ic">${ic('pv')}</span><span class="vgk-l">Elementos del modelo</span></header><div class="vgk-v">${E.length}</div><div class="vgk-s"><b>${enl}</b> enlazados · ${E.length - enl - nExc} sin partida${nExc ? ` · <b>${nExc}</b> sin valorizar` : ''}</div><div class="vgk-bar"><i style="width:${(enl / Math.max(1, E.length - nExc) * 100).toFixed(1)}%"></i></div></article>
     <article class="vgk ev"><header><span class="vgk-ic">${ic('ev')}</span><span class="vgk-l">Partidas enlazadas</span></header><div class="vgk-v">${BIM.par.length} de ${delPuente.length}</div><div class="vgk-s">partidas del puente con elementos del modelo</div><div class="vgk-bar"><i style="width:${delPuente.length ? (BIM.par.length / delPuente.length * 100).toFixed(1) : 0}%"></i></div></article>
     <article class="vgk ${malN ? 'bad' : 'ok'}"><header><span class="vgk-ic">${ic('spi')}</span><span class="vgk-l">Control modelo vs presupuesto</span></header><div class="vgk-v">${okN} de ${medidas.length}</div><div class="vgk-s">coinciden (±2 %) · <b>${malN}</b> con diferencia mayor a 10 %</div></article>
     <article class="vgk ${rev ? 'mid' : 'ok'}"><header><span class="vgk-ic">${ic('cpi')}</span><span class="vgk-l">Reglas por confirmar</span></header><div class="vgk-v">${rev}</div><div class="vgk-s">de ${BIM.reglas.filter(r => r.activa).length} activas: el modelo no distingue el caso</div></article></div>`;
@@ -10970,8 +10979,8 @@ function bimPintar() {
     const grupos = {}; E.forEach(e => { if (!pasa(e.codigo || '', e.elemento || '', e.partida_modelo || '', e.tipo || '', e.ubicacion || '', e.familia || '')) return; const k = [e.partida_modelo, e.elemento || e.familia || '—', e.ubicacion, e.tipo || '—'].join('|'); (grupos[k] = grupos[k] || []).push(e); });
     const filas = Object.entries(grupos).map(([k, L]) => {
       const [par, el, ub, tipo] = k.split('|'), ab = BIM.abiertos.has(k), vol = L.reduce((s, e) => s + Number(e.volumen || 0), 0), vs = porE[L[0].id] || [], avs = L.map(e => bimAvanceElemento(e.id)).filter(x => x != null), av = avs.length ? avs.reduce((s, x) => s + x, 0) / avs.length : null;
-      const det = ab ? `<tr class="bim-sub"><td colspan="8"><div class="bim-chips">${vs.map(v => { const n = BIM.N[v.nodo_id] || {}; return `<span title="${esc(n.nombre || '')}"><b>${esc(n.codigo_esp || n.codigo || '')}</b> ${esc(String(n.nombre || '').slice(0, 40))} · ${bimN(v.cantidad)} ${esc(n.unidad || '')} c/u · ${BIM_MODO[v.modo] || v.modo}</span>`; }).join('') || '<span>Sin partida enlazada.</span>'}</div>${L.length > 1 ? `<p class="hint" style="margin:6px 0 0">Códigos: ${L.map(e => esc(e.codigo || '#' + e.local_id)).slice(0, 60).join(', ')}${L.length > 60 ? '…' : ''}</p>` : ''}</td></tr>` : '';
-      return `<tr class="bim-row${ab ? ' on' : ''}" data-bim-grupo="${esc(k)}" tabindex="0"><th scope="row" class="l"><span class="ctv-tg${ab ? ' on' : ''}" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>${esc(par || '—')}</th><td class="l">${esc(el)}</td><td>${esc((ub || '').replace('Margen ', 'M. '))}</td><td class="l" title="${esc(tipo)}">${esc(tipo)}</td><td>${L.length}</td><td>${vol ? bimN(vol) : '—'}</td><td>${vs.length ? vs.length : '<span class="vg-pl bad">sin partida</span>'}</td><td class="bim-avc">${barraAv(av)}</td></tr>${det}`; }).join('');
+      const det = ab ? `<tr class="bim-sub"><td colspan="8"><div class="bim-chips">${vs.map(v => { const n = BIM.N[v.nodo_id] || {}; return `<span title="${esc(n.nombre || '')}"><b>${esc(n.codigo_esp || n.codigo || '')}</b> ${esc(String(n.nombre || '').slice(0, 40))} · ${bimN(v.cantidad)} ${esc(n.unidad || '')} c/u · ${BIM_MODO[v.modo] || v.modo}</span>`; }).join('') || (bimSinValor(L[0]) ? `<span class="vg-pl mid">${esc(BIM_TRAT[L[0].tratamiento] || L[0].tratamiento)}</span> <span>No tiene partida: consume material pero no se valoriza.</span>` : '<span>Sin partida enlazada.</span>')}</div>${L.length > 1 ? `<p class="hint" style="margin:6px 0 0">Códigos: ${L.map(e => esc(e.codigo || '#' + e.local_id)).slice(0, 60).join(', ')}${L.length > 60 ? '…' : ''}</p>` : ''}</td></tr>` : '';
+      return `<tr class="bim-row${ab ? ' on' : ''}" data-bim-grupo="${esc(k)}" tabindex="0"><th scope="row" class="l"><span class="ctv-tg${ab ? ' on' : ''}" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>${esc(par || '—')}</th><td class="l">${esc(el)}</td><td>${esc((ub || '').replace('Margen ', 'M. '))}</td><td class="l" title="${esc(tipo)}">${esc(tipo)}</td><td>${L.length}</td><td>${vol ? bimN(vol) : '—'}</td><td>${vs.length ? vs.length : bimSinValor(L[0]) ? `<span class="vg-pl mid" title="No tiene partida pagable: consume material pero no se valoriza">${esc(BIM_TRAT[L[0].tratamiento] || L[0].tratamiento)}</span>` : '<span class="vg-pl bad">sin partida</span>'}</td><td class="bim-avc">${barraAv(av)}</td></tr>${det}`; }).join('');
     cuerpo = `<section class="vg-tcard"><header><h3>Elementos del modelo</h3><span>Agrupados por partida del modelo, elemento, margen y tipo · toca una fila para ver sus partidas</span></header>
       <div class="vg-twrap" style="max-height:none"><table class="vg-t bim-t"><thead><tr><th class="l">Partida del modelo</th><th class="l">Elemento</th><th>Ubicación</th><th class="l">Tipo</th><th>Cantidad</th><th>Volumen m3</th><th>Partidas</th><th>Avance</th></tr></thead><tbody>${filas || '<tr><td colspan="8">Ningún elemento coincide con la búsqueda.</td></tr>'}</tbody></table></div></section>`;
   } else {
@@ -10980,10 +10989,10 @@ function bimPintar() {
     const filas = BIM.reglas.filter(r => pasa(r.nombre, r.nodo_codigo, (porCod[r.nodo_codigo] || {}).nombre || '', bimFiltroTxt(r.filtro || {}))).map(r => { const n = porCod[r.nodo_codigo] || {};
       return `<tr class="${r.activa ? '' : 'bim-off'}"><td>${r.orden}</td><td class="l"><b>${esc(r.nombre)}</b>${r.revisar ? ' <span class="vg-pl mid">revisar</span>' : ''}<span class="lb-sub">${esc(bimFiltroTxt(r.filtro || {}))}</span>${r.nota ? `<span class="lb-sub">${esc(r.nota)}</span>` : ''}</td><td class="l" title="${esc(n.nombre || '')}"><b>${esc(n.codigo_esp || r.nodo_codigo)}</b><span class="lb-sub">${esc(String(n.nombre || 'no está en el cronograma vigente').slice(0, 44))}</span></td><td>${BIM_MODO[r.modo] || r.modo}${Number(r.factor) !== 1 ? ' × ' + Number(r.factor) : ''}</td><td>${nPorR[r.id] || 0}</td>
         <td class="bim-ac">${adm ? `${r.revisar ? `<button type="button" class="icon-btn" data-bim-ok="${r.id}" title="Confirmar la regla (quitar «revisar»)" aria-label="Confirmar"><svg viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></button>` : ''}<button type="button" class="icon-btn" data-bim-edit="${r.id}" title="Editar" aria-label="Editar"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4Z"/></svg></button><button type="button" class="icon-btn" data-bim-del="${r.id}" title="Eliminar" aria-label="Eliminar"><svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button>` : ''}</td></tr>`; }).join('');
-    cuerpo = bimAsgHtml(adm, pasa) + `<details class="vg-how" style="margin-top:14px"><summary>Reglas avanzadas (filtros sobre los atributos del modelo)</summary><section class="vg-tcard"><header><h3>Reglas de enlace</h3><span>Un filtro sobre los atributos del modelo → una partida y cómo se obtiene su cantidad${adm ? ' · <button type="button" class="btn-sec pri" data-bim-nueva style="margin-left:8px">＋ Nueva regla</button>' : ''}</span></header>
+    cuerpo = bimAsgHtml(adm, pasa) + bimColHtml(adm) + bimTratHtml(adm) +`<details class="vg-how" style="margin-top:14px"><summary>Reglas avanzadas (filtros sobre los atributos del modelo)</summary><section class="vg-tcard"><header><h3>Reglas de enlace</h3><span>Un filtro sobre los atributos del modelo → una partida y cómo se obtiene su cantidad${adm ? ' · <button type="button" class="btn-sec pri" data-bim-nueva style="margin-left:8px">＋ Nueva regla</button>' : ''}</span></header>
       <div class="vg-twrap" style="max-height:none"><table class="vg-t bim-t"><thead><tr><th>Orden</th><th class="l">Regla</th><th class="l">Partida</th><th>Cantidad</th><th>Elementos</th><th></th></tr></thead><tbody>${filas || '<tr><td colspan="6">Sin reglas.</td></tr>'}</tbody></table></div></section></details>`;
   }
-  const sinP = E.filter(e => !conV.has(e.id));
+  const sinP = E.filter(e => !conV.has(e.id) && !bimSinValor(e));   // los que no se valorizan no son «pendientes»: tienen su propia sección
   const pie = sinP.length ? `<section class="vg-tcard"><header><h3>Elementos sin partida</h3><span>${sinP.length} elementos</span></header><div class="bim-chips">${sinP.slice(0, 40).map(e => `<span title="${esc(e.nombre || '')}"><b>${esc(e.codigo || e.elemento || '—')}</b> ${esc(e.partida_modelo || '')} · ${esc(e.tipo || e.familia || '')} · ${esc(e.ubicacion || '')}</span>`).join('')}</div></section>` : '';
   const foco = document.activeElement && document.activeElement.id === 'bimQ', pos = foco ? document.activeElement.selectionStart : 0;
   box.innerHTML = `<div class="vg-wrap">${barra}${kp}${cuerpo}${BIM.vista === 'partidas' ? pie : ''}<details class="vg-how"><summary>Cómo se enlaza</summary><p>El modelo no se toca. Cada elemento se identifica por su GUID, que no cambia al re-exportar. Las reglas filtran por los atributos que el modelo ya trae y asignan una partida. Si el modelo mide la partida (volumen, longitud, unidades) se compara contra el presupuesto; si no la mide (acero, encofrado, postensado) el metrado se reparte entre los elementos. El avance de cada elemento es el avance valorizado de sus partidas, ponderado por su costo: con eso se pintará el modelo.</p></details></div>`;
@@ -11270,6 +11279,104 @@ function bimRepartoAbrir(codigo) {
     } catch (er) { btn.disabled = false; toast(`No se pudo guardar: ${esc(er.message)}${/no válido|constraint|check/i.test(er.message) ? ' · ¿falta correr modelo_acero_grado.sql (o nube_pendientes.sql)?' : ''}`, false, 'bim'); }
   };
 }
+// ── Colores del modelo 3D (modelo_colores.sql): un filtro → un color; «fijo» lo mantiene también durante el avance ──
+const BIM_PALETA = ['#000000', '#2b2b2b', '#6b6b6b', '#b5b5b5', '#8b5a2b', '#c9a227', '#d8661b', '#c0392b', '#2e8b57', '#2f6db5', '#6a4aa5'];
+const bimColDe = (e) => { let r0 = null; (BIM.col || []).forEach(r => { if (r.activa !== false && bimCoincide(e, r.filtro || {})) r0 = r; }); return r0; };
+function bimColHtml(adm) {
+  if (BIM.sinCol) return `<details class="vg-how" style="margin-top:14px"><summary>Colores del modelo</summary><p class="hint" style="margin:8px 0">Falta correr <code>modelo_colores.sql</code> en la base (carpeta <code>db</code>).</p></details>`;
+  const filas = BIM.col.map(r => `<tr class="${r.activa ? '' : 'bim-off'}"><td>${r.orden}</td><td class="l"><b>${esc(r.nombre)}</b><span class="lb-sub">${esc(bimFiltroTxt(r.filtro || {}))}</span>${r.nota ? `<span class="lb-sub">${esc(r.nota)}</span>` : ''}</td>
+    <td class="l"><span style="display:inline-flex;align-items:center;gap:8px"><span style="width:22px;height:22px;border-radius:5px;border:1px solid rgba(128,128,128,.5);background:${esc(r.color)}"></span><code>${esc(r.color)}</code></span></td><td>${r.fijo ? 'Siempre' : 'Solo el original'}</td><td>${BIM.el.filter(e => bimCoincide(e, r.filtro || {})).length}</td>
+    <td class="bim-ac">${adm ? `<button type="button" class="icon-btn" data-bim-cedit="${r.id}" title="Editar" aria-label="Editar"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4Z"/></svg></button><button type="button" class="icon-btn" data-bim-cdel="${r.id}" title="Eliminar" aria-label="Eliminar"><svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button>` : ''}</td></tr>`).join('');
+  return `<details class="vg-how" style="margin-top:14px"${BIM.col.length ? ' open' : ''}><summary>Colores del modelo (${BIM.col.length})</summary><section class="vg-tcard"><header><h3>Paleta</h3><span>Pinta por filtro los elementos del visor 3D (por ejemplo, los pavimentos en negro). «Siempre» se ve en todo elemento construido, aunque el avance lo pinte de azul/verde; «Solo el original» reemplaza únicamente el color del modelo (elementos sin partida o con el modo «Material original»). Lo pendiente sigue en gris fantasma${adm ? ' · <button type="button" class="btn-sec pri" data-bim-cnueva style="margin-left:8px">＋ Nuevo color</button>' : ''}</span></header>
+    <div class="vg-twrap" style="max-height:none"><table class="vg-t bim-t"><thead><tr><th>Orden</th><th class="l">Regla</th><th class="l">Color</th><th>Se ve</th><th>Elementos</th><th></th></tr></thead><tbody>${filas || '<tr><td colspan="6">Sin reglas: el visor usa los colores originales del modelo.</td></tr>'}</tbody></table></div></section></details>`;
+}
+function bimColAbrir(id) {
+  const r = id ? BIM.col.find(x => x.id === id) : null; if (id && !r) return;
+  let m = document.getElementById('bimForm');
+  if (!m) { m = document.createElement('form'); m.id = 'bimForm'; m.className = 'pform la-form'; m.hidden = true; document.body.appendChild(m); }
+  const f = (r && r.filtro) || {}, q = (s) => m.querySelector(s), lista = (v) => Array.isArray(v) ? v.join(', ') : (v || ''), un = (k) => [...new Set(BIM.el.map(e => e[k]).filter(Boolean))].sort();
+  const dl = (id2, arr) => `<datalist id="${id2}">${arr.map(x => `<option value="${esc(x)}"></option>`).join('')}</datalist>`;
+  const c0 = r ? r.color : '#000000';
+  m.innerHTML = `<h3 style="margin:0 0 4px;font-size:14px">${r ? 'Editar color' : 'Nuevo color del modelo'}</h3><p class="hint" style="margin:0 0 10px">Los elementos que cumplan el filtro se pintan de este color en el visor. Una regla posterior (orden mayor) manda sobre la anterior. Pon al menos un filtro.</p>
+    <div class="row2"><div class="field"><label for="coNom">Nombre</label><input id="coNom" type="text" maxlength="80" value="${esc(r ? r.nombre : '')}" placeholder="Ej. Pavimento de accesos"></div>
+      <div class="field"><label for="coCol">Color</label><div style="display:flex;gap:8px;align-items:center"><input id="coCol" type="color" value="${esc(c0)}" style="width:54px;height:36px;padding:2px"><input id="coHex" type="text" maxlength="7" value="${esc(c0)}" style="width:96px"></div></div></div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin:0 0 10px">${BIM_PALETA.map(c => `<button type="button" data-co-sw="${c}" title="${c}" aria-label="${c}" style="width:26px;height:26px;border-radius:6px;border:1px solid rgba(128,128,128,.55);background:${c};cursor:pointer"></button>`).join('')}</div>
+    <div class="row3"><div class="field"><label for="coFP">Partida del modelo</label><input id="coFP" type="text" list="coFPL" value="${esc(lista(f.par))}">${dl('coFPL', un('partida_modelo'))}</div>
+      <div class="field"><label for="coFE">Elemento</label><input id="coFE" type="text" list="coFEL" value="${esc(lista(f.el))}">${dl('coFEL', un('elemento'))}</div>
+      <div class="field"><label for="coFU">Ubicación</label><select id="coFU"><option value="">Cualquiera</option>${un('ubicacion').map(x => `<option${f.ub === x ? ' selected' : ''}>${esc(x)}</option>`).join('')}</select></div></div>
+    <div class="row2"><div class="field"><label for="coFT">El tipo contiene</label><input id="coFT" type="text" value="${esc(String(f.tipo_like || '').replace(/%/g, ''))}" placeholder="Ej. Pave1"></div>
+      <div class="field"><label for="coFF">La familia contiene</label><input id="coFF" type="text" value="${esc(String(f.fam_like || '').replace(/%/g, ''))}"></div></div>
+    <div class="row2"><div class="field"><label for="coNota">Nota</label><input id="coNota" type="text" maxlength="200" value="${esc(r && r.nota ? r.nota : '')}"></div>
+      <div class="field"><label for="coOrd">Orden</label><input id="coOrd" type="number" step="1" value="${r ? r.orden : (BIM.col.reduce((x, y) => Math.max(x, y.orden), 0) + 1)}"></div></div>
+    <div style="display:flex;gap:18px;margin:2px 0 10px;flex-wrap:wrap"><label class="adm-check"><input type="checkbox" id="coAct" ${!r || r.activa ? 'checked' : ''}> Activa</label><label class="adm-check"><input type="checkbox" id="coFij" ${!r || r.fijo ? 'checked' : ''}> Siempre (también sobre el color de avance)</label></div>
+    <p class="hint" id="coCuenta" style="margin:0 0 10px"></p>
+    <div class="sug-acc"><button class="btn" type="submit">Guardar</button><button class="btn-sec" type="button" id="coCancel">Cancelar</button></div>`;
+  const fondo = document.getElementById('lbFondo') || (() => { const x = document.createElement('div'); x.id = 'lbFondo'; x.hidden = true; document.body.appendChild(x); return x; })();
+  const cerrar = () => { m.hidden = true; fondo.hidden = true; document.documentElement.classList.remove('la-modal'); };
+  const partes = (s) => String(s || '').split(',').map(x => x.trim()).filter(Boolean);
+  const filtro = () => { const o = {}, p = partes(q('#coFP').value), e = partes(q('#coFE').value); if (p.length) o.par = p.length === 1 ? p[0] : p; if (e.length) o.el = e.length === 1 ? e[0] : e; if (q('#coFU').value) o.ub = q('#coFU').value; if (q('#coFT').value.trim()) o.tipo_like = '%' + q('#coFT').value.trim() + '%'; if (q('#coFF').value.trim()) o.fam_like = '%' + q('#coFF').value.trim() + '%'; if (f.nivel) o.nivel = f.nivel; if (f.clase) o.clase = f.clase; return o; };
+  const contar = () => { const o = filtro(), L = Object.keys(o).length ? BIM.el.filter(e => bimCoincide(e, o)) : []; q('#coCuenta').textContent = Object.keys(o).length ? `Con este filtro: ${L.length} elemento${L.length === 1 ? '' : 's'}.` : 'Pon al menos un filtro.'; };
+  const poner = (c) => { q('#coCol').value = c; q('#coHex').value = c; };
+  m.hidden = false; fondo.hidden = false; document.documentElement.classList.add('la-modal'); fondo.onclick = cerrar; q('#coCancel').onclick = cerrar; m.oninput = (ev) => { if (ev.target.id === 'coCol') q('#coHex').value = ev.target.value; else if (ev.target.id === 'coHex' && /^#[0-9a-f]{6}$/i.test(ev.target.value)) q('#coCol').value = ev.target.value.toLowerCase(); contar(); }; m.onchange = contar; contar();
+  m.onclick = (ev) => { const b = ev.target.closest('[data-co-sw]'); if (b) poner(b.dataset.coSw); };
+  m.onsubmit = async (ev) => {
+    ev.preventDefault();
+    if (!q('#coNom').value.trim()) { toast('La regla necesita un nombre.', false, 'bim'); return; }
+    if (!/^#[0-9a-f]{6}$/i.test(q('#coHex').value)) { toast('El color debe tener la forma #RRGGBB.', false, 'bim'); return; }
+    if (!Object.keys(filtro()).length) { toast('Pon al menos un filtro: sin filtro se pintaría todo el modelo.', false, 'bim'); return; }
+    const btn = q('button[type=submit]'); btn.disabled = true;
+    try {
+      await preRpc('modelo_color_guardar', { p_id: r ? r.id : null, p_proyecto: BIM.frente, p_nombre: q('#coNom').value, p_filtro: filtro(), p_color: q('#coHex').value, p_fijo: q('#coFij').checked, p_nota: q('#coNota').value || null, p_orden: parseInt(q('#coOrd').value, 10) || 0, p_activa: q('#coAct').checked });
+      cerrar(); toast('Color guardado. El visor lo toma al abrir el modelo.', true, 'bim'); await bimCargar(true);
+    } catch (er) { btn.disabled = false; toast(`No se pudo guardar: ${esc(er.message)}${/function|schema cache|404/i.test(er.message) ? ' · ¿falta correr modelo_colores.sql?' : ''}`, false, 'bim'); }
+  };
+}
+// ── Tratamiento especial: elementos en la obra que no tienen partida pagable ──────────────────────────────────────
+function bimTratHtml(adm) {
+  if (BIM.sinTrat) return `<details class="vg-how" style="margin-top:14px"><summary>Elementos que no se valorizan</summary><p class="hint" style="margin:8px 0">Falta correr <code>modelo_tratamiento.sql</code> en la base (carpeta <code>db</code>).</p></details>`;
+  const nSin = BIM.el.filter(bimSinValor).length;
+  const filas = BIM.trat.map(r => `<tr class="${r.activa ? '' : 'bim-off'}"><td>${r.orden}</td><td class="l"><b>${esc(r.nombre)}</b><span class="lb-sub">${esc(bimFiltroTxt(r.filtro || {}))}</span>${r.nota ? `<span class="lb-sub">${esc(r.nota)}</span>` : ''}</td><td class="l"><span class="vg-pl mid">${esc(BIM_TRAT[r.tratamiento] || r.tratamiento)}</span></td><td>${BIM.el.filter(e => bimCoincide(e, r.filtro || {})).length}</td>
+    <td class="bim-ac">${adm ? `<button type="button" class="icon-btn" data-bim-tedit="${r.id}" title="Editar" aria-label="Editar"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4Z"/></svg></button><button type="button" class="icon-btn" data-bim-tdel="${r.id}" title="Eliminar" aria-label="Eliminar"><svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button>` : ''}</td></tr>`).join('');
+  return `<details class="vg-how" style="margin-top:14px"${BIM.trat.length ? ' open' : ''}><summary>Elementos que no se valorizan (${nSin})</summary><section class="vg-tcard"><header><h3>Tratamiento especial</h3><span>Están en la obra y consumen material, pero no tienen partida pagable: a cuenta del contratista, adicional no aprobado o retrabajo${adm ? ' · <button type="button" class="btn-sec pri" data-bim-tnueva style="margin-left:8px">＋ Nueva regla</button>' : ''}</span></header>
+    <div class="vg-twrap" style="max-height:none"><table class="vg-t bim-t"><thead><tr><th>Orden</th><th class="l">Regla</th><th class="l">Tratamiento</th><th>Elementos</th><th></th></tr></thead><tbody>${filas || '<tr><td colspan="5">Sin reglas: todos los elementos se valorizan.</td></tr>'}</tbody></table></div></section></details>`;
+}
+function bimTratAbrir(id) {
+  const r = id ? BIM.trat.find(x => x.id === id) : null; if (id && !r) return;
+  let m = document.getElementById('bimForm');
+  if (!m) { m = document.createElement('form'); m.id = 'bimForm'; m.className = 'pform la-form'; m.hidden = true; document.body.appendChild(m); }
+  const f = (r && r.filtro) || {}, q = (s) => m.querySelector(s), lista = (v) => Array.isArray(v) ? v.join(', ') : (v || ''), un = (k) => [...new Set(BIM.el.map(e => e[k]).filter(Boolean))].sort();
+  const dl = (id2, arr) => `<datalist id="${id2}">${arr.map(x => `<option value="${esc(x)}"></option>`).join('')}</datalist>`;
+  m.innerHTML = `<h3 style="margin:0 0 4px;font-size:14px">${r ? 'Editar regla de tratamiento' : 'Nueva regla de tratamiento'}</h3><p class="hint" style="margin:0 0 10px">Los elementos que cumplan el filtro quedan en el modelo (se ven y avanzan) pero <b>no se enlazan con partidas</b> ni cuentan como «sin partida». Pon al menos un filtro. En partida del modelo y elemento puedes poner varios separados por coma.</p>
+    <div class="row2"><div class="field"><label for="trNom">Nombre</label><input id="trNom" type="text" maxlength="80" value="${esc(r ? r.nombre : '')}" placeholder="Ej. Coronación y nivelador del MSR"></div>
+      <div class="field"><label for="trTr">Tratamiento</label><select id="trTr">${['contratista', 'adicional', 'retrabajo'].map(k => `<option value="${k}"${(r ? r.tratamiento : 'contratista') === k ? ' selected' : ''}>${BIM_TRAT[k]}</option>`).join('')}</select></div></div>
+    <div class="row3"><div class="field"><label for="trFP">Partida del modelo</label><input id="trFP" type="text" list="trFPL" value="${esc(lista(f.par))}">${dl('trFPL', un('partida_modelo'))}</div>
+      <div class="field"><label for="trFE">Elemento</label><input id="trFE" type="text" list="trFEL" value="${esc(lista(f.el))}">${dl('trFEL', un('elemento'))}</div>
+      <div class="field"><label for="trFU">Ubicación</label><select id="trFU"><option value="">Cualquiera</option>${un('ubicacion').map(x => `<option${f.ub === x ? ' selected' : ''}>${esc(x)}</option>`).join('')}</select></div></div>
+    <div class="row2"><div class="field"><label for="trFT">El tipo contiene</label><input id="trFT" type="text" value="${esc(String(f.tipo_like || '').replace(/%/g, ''))}" placeholder="Ej. COPING"></div>
+      <div class="field"><label for="trFF">La familia contiene</label><input id="trFF" type="text" value="${esc(String(f.fam_like || '').replace(/%/g, ''))}"></div></div>
+    <div class="row2"><div class="field"><label for="trNota">Nota</label><input id="trNota" type="text" maxlength="200" value="${esc(r && r.nota ? r.nota : '')}"></div>
+      <div class="field"><label for="trOrd">Orden</label><input id="trOrd" type="number" step="1" value="${r ? r.orden : (BIM.trat.reduce((x, y) => Math.max(x, y.orden), 0) + 1)}"></div></div>
+    <div style="display:flex;gap:18px;margin:2px 0 10px"><label class="adm-check"><input type="checkbox" id="trAct" ${!r || r.activa ? 'checked' : ''}> Activa</label></div>
+    <p class="hint" id="trCuenta" style="margin:0 0 10px"></p>
+    <div class="sug-acc"><button class="btn" type="submit">Guardar y aplicar</button><button class="btn-sec" type="button" id="trCancel">Cancelar</button></div>`;
+  const fondo = document.getElementById('lbFondo') || (() => { const x = document.createElement('div'); x.id = 'lbFondo'; x.hidden = true; document.body.appendChild(x); return x; })();
+  const cerrar = () => { m.hidden = true; fondo.hidden = true; document.documentElement.classList.remove('la-modal'); };
+  const partes = (s) => String(s || '').split(',').map(x => x.trim()).filter(Boolean);
+  const filtro = () => { const o = {}, p = partes(q('#trFP').value), e = partes(q('#trFE').value); if (p.length) o.par = p.length === 1 ? p[0] : p; if (e.length) o.el = e.length === 1 ? e[0] : e; if (q('#trFU').value) o.ub = q('#trFU').value; if (q('#trFT').value.trim()) o.tipo_like = '%' + q('#trFT').value.trim() + '%'; if (q('#trFF').value.trim()) o.fam_like = '%' + q('#trFF').value.trim() + '%'; if (f.nivel) o.nivel = f.nivel; if (f.clase) o.clase = f.clase; return o; };
+  const contar = () => { const o = filtro(), L = Object.keys(o).length ? BIM.el.filter(e => bimCoincide(e, o)) : [], vol = L.reduce((s, e) => s + Number(e.volumen || 0), 0); q('#trCuenta').textContent = Object.keys(o).length ? `Con este filtro: ${L.length} elemento${L.length === 1 ? '' : 's'} · ${bimN(vol)} m3 de volumen.` : 'Pon al menos un filtro.'; };
+  m.hidden = false; fondo.hidden = false; document.documentElement.classList.add('la-modal'); fondo.onclick = cerrar; q('#trCancel').onclick = cerrar; m.oninput = contar; m.onchange = contar; contar();
+  m.onsubmit = async (ev) => {
+    ev.preventDefault();
+    if (!q('#trNom').value.trim()) { toast('La regla necesita un nombre.', false, 'bim'); return; }
+    if (!Object.keys(filtro()).length) { toast('Pon al menos un filtro: sin filtro se marcarían todos los elementos.', false, 'bim'); return; }
+    const btn = q('button[type=submit]'); btn.disabled = true;
+    try {
+      await preRpc('modelo_tratamiento_guardar', { p_id: r ? r.id : null, p_proyecto: BIM.frente, p_nombre: q('#trNom').value, p_filtro: filtro(), p_tratamiento: q('#trTr').value, p_nota: q('#trNota').value || null, p_orden: parseInt(q('#trOrd').value, 10) || 0, p_activa: q('#trAct').checked });
+      await preRpc('modelo_tratamiento_aplicar', { p_proyecto: BIM.frente }); await preRpc('modelo_vinculos_aplicar', { p_proyecto: BIM.frente });
+      cerrar(); toast('Regla guardada. Esos elementos ya no cuentan como «sin partida».', true, 'bim'); await bimCargar(true);
+    } catch (er) { btn.disabled = false; toast(`No se pudo guardar: ${esc(er.message)}${/function|schema cache|404/i.test(er.message) ? ' · ¿falta correr modelo_tratamiento.sql?' : ''}`, false, 'bim'); }
+  };
+}
 function bimReglaAbrir(id) {
   const r = id ? BIM.reglas.find(x => x.id === id) : null; if (id && !r) return;
   let m = document.getElementById('bimForm');
@@ -11319,6 +11426,18 @@ document.addEventListener('click', async (e) => {
   if (e.target.closest('[data-bim-subir]')) { const f = document.getElementById('bimPaqFile'); if (f) { f.value = ''; f.click(); } return; }
   if (e.target.closest('[data-bim-acero]')) { bimAceroAbrir(); return; }
   if (e.target.closest('[data-bim-nueva]')) { bimReglaAbrir(null); return; }
+  if (e.target.closest('[data-bim-cnueva]')) { bimColAbrir(null); return; }
+  const ce = e.target.closest('[data-bim-cedit]'); if (ce) { bimColAbrir(ce.dataset.bimCedit); return; }
+  const cd = e.target.closest('[data-bim-cdel]');
+  if (cd) { const r = BIM.col.find(x => x.id === cd.dataset.bimCdel); if (!r || !(await confirmar(`Eliminar el color «${r.nombre}». Sus elementos vuelven al color original del modelo.`))) return;
+    try { await preRpc('modelo_color_eliminar', { p_id: r.id }); toast('Color eliminado.', true, 'bim'); await bimCargar(true); }
+    catch (er) { toast(`No se pudo eliminar: ${esc(er.message)}`, false, 'bim'); } return; }
+  if (e.target.closest('[data-bim-tnueva]')) { bimTratAbrir(null); return; }
+  const te = e.target.closest('[data-bim-tedit]'); if (te) { bimTratAbrir(te.dataset.bimTedit); return; }
+  const td = e.target.closest('[data-bim-tdel]');
+  if (td) { const r = BIM.trat.find(x => x.id === td.dataset.bimTdel); if (!r || !(await confirmar(`Eliminar la regla de tratamiento «${r.nombre}». Sus elementos vuelven a valorizarse y a necesitar partida.`))) return;
+    try { await preRpc('modelo_tratamiento_eliminar', { p_id: r.id }); await preRpc('modelo_tratamiento_aplicar', { p_proyecto: BIM.frente }); await preRpc('modelo_vinculos_aplicar', { p_proyecto: BIM.frente }); toast('Regla eliminada.', true, 'bim'); await bimCargar(true); }
+    catch (er) { toast(`No se pudo eliminar: ${esc(er.message)}`, false, 'bim'); } return; }
   const ed = e.target.closest('[data-bim-edit]'); if (ed) { bimReglaAbrir(ed.dataset.bimEdit); return; }
   const ok = e.target.closest('[data-bim-ok]');
   if (ok) { const r = BIM.reglas.find(x => x.id === ok.dataset.bimOk); if (!r) return;
@@ -11632,8 +11751,9 @@ async function bimCargaAbrir() {
     const inv = bimNormalizar(json, tareas);
     if (!inv.items.length) throw new Error('el archivo no trae elementos con identificador (GUID).');
     const C = BIM_CARGA; C.inv = inv; C.origen = origen;
-    C.prop = bimProponer(inv.items, C.nodos, proy.nombre); C.sim = bimSimular(inv.items, C.nodos, C.prop.reglas);
-    C.comp = bimCompletar(inv.items, C.nodos, C.prop, BIM.reglas);
+    const aValorizar = inv.items.filter(e => bimTratDe(e) === 'valoriza');   // lo que está marcado «no se valoriza» no se propone ni se completa
+    C.prop = bimProponer(aValorizar, C.nodos, proy.nombre); C.sim = bimSimular(aValorizar, C.nodos, C.prop.reglas);
+    C.comp = bimCompletar(aValorizar, C.nodos, C.prop, BIM.reglas);
     C.sinColumnas = inv.items.some(e => Number(e.acero_a615) > 0 || Number(e.acero_a706) > 0) && !(await get('/modelo_elementos?select=acero_a615&limit=1').then(() => true).catch(() => false));
     const otros = await getTodo(`/modelo_elementos?proyecto_id=neq.${proy.id}&select=guid,proyecto_id&order=proyecto_id,guid`).catch(() => []);
     const gs = new Set(inv.items.map(e => e.guid)), cuenta = {}; otros.forEach(o => { if (gs.has(o.guid)) cuenta[o.proyecto_id] = (cuenta[o.proyecto_id] || 0) + 1; });
