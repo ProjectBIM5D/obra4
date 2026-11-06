@@ -1,0 +1,16 @@
+{
+ "formato": 1,
+ "fuente": "Sentinel-2 L2A (Copernicus)",
+ "escena": "S2C_17MNQ_20250912_0_L2A",
+ "fecha": "2025-09-12",
+ "nubes": 0.0,
+ "resolucion_m": 10,
+ "S": 1430.0000000000002,
+ "tam": 2048,
+ "atribucion": "Contains modified Copernicus Sentinel data 2025",
+ "ndvi": {
+  "tam": 512,
+  "min": -0.2,
+  "max": 1.0
+ }
+}

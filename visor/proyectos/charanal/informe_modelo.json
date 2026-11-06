@@ -1,15 +1,15 @@
 {
  "frente": "charanal",
- "archivo": "charanal_v2.frag",
- "generado": "2026-11-04T21:25:30.869Z",
- "elementos": 554,
+ "archivo": "completo.frag",
+ "generado": "2026-11-06T21:30:28.281Z",
+ "elementos": 595,
  "armadura": 32389,
  "ocultos": 0,
  "clases": {
   "IFCMECHANICALFASTENER": 4676,
   "IFCBEAM": 12,
   "IFCREINFORCINGBAR": 27713,
-  "IFCBUILDINGELEMENTPROXY": 314,
+  "IFCBUILDINGELEMENTPROXY": 355,
   "IFCSLAB": 68,
   "IFCRAILING": 100,
   "IFCPLATE": 28,
@@ -17,50 +17,50 @@
  },
  "atributos": {
   "Partida": {
-   "con": 432,
-   "valores": 6,
+   "con": 473,
+   "valores": 15,
    "propiedad": [
     "partida"
    ]
   },
   "Elemento": {
-   "con": 396,
-   "valores": 20,
+   "con": 437,
+   "valores": 29,
    "propiedad": [
     "elemento"
    ]
   },
   "Ubicación": {
-   "con": 352,
-   "valores": 5,
+   "con": 393,
+   "valores": 10,
    "propiedad": [
     "ubicacion"
    ]
   },
   "Código": {
-   "con": 224,
-   "valores": 54,
+   "con": 265,
+   "valores": 71,
    "propiedad": [
     "codigo"
    ]
   },
   "Familia": {
-   "con": 526,
-   "valores": 30,
+   "con": 567,
+   "valores": 31,
    "propiedad": [
     "familia"
    ]
   },
   "Tipo": {
-   "con": 554,
-   "valores": 38,
+   "con": 595,
+   "valores": 47,
    "propiedad": [
     "tipo"
    ]
   },
   "Nivel": {
-   "con": 554,
-   "valores": 6,
+   "con": 595,
+   "valores": 7,
    "propiedad": [
     "nivel de referencia",
     "nivel"
@@ -75,15 +75,15 @@
    ]
   },
   "Volumen": {
-   "con": 422,
-   "valores": 71,
+   "con": 463,
+   "valores": 112,
    "propiedad": [
     "volumen"
    ]
   },
   "Longitud": {
-   "con": 186,
-   "valores": 25,
+   "con": 227,
+   "valores": 41,
    "propiedad": [
     "longitud del sistema",
     "longitud",
@@ -91,7 +91,7 @@
    ]
   }
  },
- "grupos": 48,
+ "grupos": 75,
  "eje": {
   "origin": [
    -4.92,

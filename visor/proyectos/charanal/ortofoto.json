@@ -1,0 +1,39 @@
+{
+ "formato": 1,
+ "fuente": "Ortofoto de dron (propia del proyecto)",
+ "fecha": "sep. 2025",
+ "atribucion": "Ortofoto de dron del proyecto · sep. 2025",
+ "origen": {
+  "lat": -5.123059,
+  "lon": -80.126205
+ },
+ "capas": [
+  {
+   "nombre": "general",
+   "archivo": "charanal_orto_general.webp",
+   "cx": 86.19,
+   "cz": 69.92,
+   "S": 490.06,
+   "px": 2048,
+   "cm_px": 47.9
+  },
+  {
+   "nombre": "medio",
+   "archivo": "charanal_orto_medio.webp",
+   "cx": 0.0,
+   "cz": 0.0,
+   "S": 250,
+   "px": 2048,
+   "cm_px": 24.4
+  },
+  {
+   "nombre": "cerca",
+   "archivo": "charanal_orto_cerca.webp",
+   "cx": 0.0,
+   "cz": 0.0,
+   "S": 110,
+   "px": 2048,
+   "cm_px": 10.7
+  }
+ ]
+}

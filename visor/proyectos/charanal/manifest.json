@@ -1,0 +1,72 @@
+{
+ "formato": 1,
+ "motor": "1.0.0",
+ "generado": "2026-11-06T21:30:28.470Z",
+ "frente": "charanal",
+ "nombre": "Puente Charanal",
+ "ifc": {
+  "archivo": "charanal_puente_accesos.ifc",
+  "mb": 287,
+  "esquema": "IFC4",
+  "aplicacion": "Autodesk Revit 26.1.0.35 (ESP) - IFC 26.1.0.35"
+ },
+ "resumen": {
+  "elementos": 595,
+  "armadura": 32389,
+  "grupos": 75,
+  "acero_a615_kg": 884097,
+  "acero_a706_kg": 770210,
+  "clases": {
+   "IFCMECHANICALFASTENER": 4676,
+   "IFCBEAM": 12,
+   "IFCREINFORCINGBAR": 27713,
+   "IFCBUILDINGELEMENTPROXY": 355,
+   "IFCSLAB": 68,
+   "IFCRAILING": 100,
+   "IFCPLATE": 28,
+   "IFCPIPESEGMENT": 32
+  },
+  "avisos": [
+   "Quedan 4.2 GB de memoria libre y se necesitan unos 4.2 GB: cierra otros programas (Revit, navegador) antes de seguir.",
+   "122 elementos no traen «Partida».",
+   "158 elementos no traen «Elemento»."
+  ]
+ },
+ "archivos": [
+  {
+   "nombre": "modelo.frag",
+   "bytes": 22688001,
+   "sha256": "072e8a1fdcf1aa74f6906cb8dc68644cb5267d161d792e31fcb1380f88ca0d9a"
+  },
+  {
+   "nombre": "modelo_ligero.frag",
+   "bytes": 1560550,
+   "sha256": "97bd7385dc4e058480a8a4b2dc03a135785c6727d14e033fcaaef8d64bbec9bd"
+  },
+  {
+   "nombre": "element_map.json",
+   "bytes": 506422,
+   "sha256": "a84902702237ebe3ead4826ad1665d72c5c263d2dc5f8bbee71e864930c1dbf3"
+  },
+  {
+   "nombre": "element_map_ligero.json",
+   "bytes": 10260,
+   "sha256": "64b0eeb5ac8288aff02304ef6771c6e7f66abe726f404fbefb5031a52dd541cd"
+  },
+  {
+   "nombre": "element_info_ligero.json",
+   "bytes": 203414,
+   "sha256": "b62a2ed4f00087c4ee277f4ddab3abf1c7a4edc16ea101ccbae15b38496ed745"
+  },
+  {
+   "nombre": "element_contactos.json",
+   "bytes": 45457,
+   "sha256": "2915360d2a59a9757fbff1029721475c635b1b20445666450620fc84a685bdb8"
+  },
+  {
+   "nombre": "informe_modelo.json",
+   "bytes": 1615,
+   "sha256": "262b11b2abbd6e564fb558991ff46a96cc1d0df500b660a44baa91dca1c277eb"
+  }
+ ]
+}
