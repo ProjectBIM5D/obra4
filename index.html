@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="build" content="20261106174007">
+<meta name="build" content="20261106174758">
 <script>/* auto-actualizar: compara el sello de esta copia con el del servidor y recarga una sola vez */
 (function(){try{if(!/^https?:/.test(location.protocol))return;var me=document.querySelector('meta[name=build]').content;if(me==='0')return;
 fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'}).then(function(r){return r.text()}).then(function(h){
@@ -2493,6 +2493,14 @@ select.usr-rol{font:inherit;font-size:12px;padding:5px 8px;border:1px solid var(
 
 /* el detalle de valorización no se anima al entrar: la animación se reiniciaba al cambiar «Cargando…» por la tabla y se veía como parpadeo */
 .vld-card{animation:none !important;}
+/* ═══ Gantt (Plan master / Contrato): frente en lista arriba; escala y «Ajustar» en la barra del propio Gantt ═══ */
+.pl-top{justify-content:flex-start;gap:10px 18px;} .pl-frsel{display:inline-flex;align-items:center;gap:8px;margin:0;font-size:11.5px;color:var(--mut);} .pl-frsel span{font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:9.5px;}
+.pl-frsel .pl-sel-t,.pl-top #plVer{height:32px;box-sizing:border-box;min-width:150px;padding:0 28px 0 11px;border:1px solid var(--line2);border-radius:9px;background:var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238a97b1' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 9px center/12px;color:var(--tx);font:inherit;font-size:12.5px;font-weight:700;cursor:pointer;-webkit-appearance:none;appearance:none;}
+.pl-esc{display:inline-flex;align-items:center;gap:2px;height:30px;box-sizing:border-box;padding:2px;border:1px solid var(--line2);border-radius:9px;background:var(--input);}
+.pl-zbtn{height:24px;min-width:0;padding:0 11px;border:0;border-radius:7px;background:transparent;color:var(--tx2);font:inherit;font-size:11.5px;font-weight:700;white-space:nowrap;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:background .15s,color .15s;}
+.pl-zbtn:hover{color:var(--tx);} .pl-zbtn.on{background:var(--card);color:var(--blue);box-shadow:0 1px 3px rgba(16,24,40,.14),inset 0 0 0 1px color-mix(in srgb,var(--blue) 28%,transparent);}
+.pl-zbtn.pl-fit{width:28px;padding:0;} .pl-zbtn svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round;}
+@media (max-width:700px){ .pl-esc{order:5;} }
 /* ═══ Modelo y partidas · diseño compacto (2026-11-06) ═══
    Controles de 32 px, una sola barra (lista de frente · vistas · búsqueda · iconos con tooltip), filas de 30 px, secciones secundarias en pestañas.
    Todo acotado a #bimPanel / .bim-t: no toca las tablas de Valorizaciones (.vg-t) ni otros paneles. Medido en 1500, 1100, 1024, 768 y 600 px. */
@@ -2953,14 +2961,9 @@ document.addEventListener('DOMContentLoaded', function(){ try { var m = document
       <div id="lbGanttSlot" style="margin-top:14px"><div class="lb-cab"><div><h3 style="margin:0 0 3px">Cronograma de la línea base</h3><p class="hint" style="margin:0">Solo lectura, tal como está en el Project de esa línea base: fechas, ruta crítica y vínculos. Elige otra en «Línea base». El plan de ejecución se trabaja en Planificación › Plan maestro.</p></div></div><div id="lbGanttBox"></div></div></section>
     <section class="pane" data-pane="plan">
       <div id="plEspacio" data-donde="plan">
-      <div class="vl-top">
-        <p class="api" style="margin:0">Frente: <span id="plFrentes"></span></p>
+      <div class="vl-top pl-top">
+        <label class="pl-frsel" id="plFrentes" title="Frente"><span>Frente</span><select id="plFrSel" class="pl-sel-t" aria-label="Frente"></select></label>
         <p class="api" style="margin:0" id="plVerP">Línea base: <select id="plVer" class="pl-sel-t" title="Línea base del contrato que se muestra (solo lectura)"></select></p>
-        <p class="api" style="margin:0">Escala:
-          <button class="seg-btn" data-plzoom="mes" title="Vista mensual">Mes</button>
-          <button class="seg-btn" data-plzoom="semana" title="Vista semanal">Semana</button>
-          <button class="seg-btn" data-plzoom="ajustar" title="Ajusta el gráfico para ver toda la obra en el ancho de la pantalla">⤢ Ajustar</button>
-        </p>
       </div>
       <div id="plCuerpo"><div class="rg-msg">Consultando el plan master…</div></div>
       </div>
@@ -8891,8 +8894,8 @@ function plPintar() {
   const box = $('#plCuerpo'); if (!box) return;
   const w0 = $('#plWrap'), guardado = w0 && !PL.reset ? [w0.scrollLeft, w0.scrollTop] : null; PL.reset = false;
   if (COMPONENTES.length === 1) PL.frente = COMPONENTES[0].id;
-  $('#plFrentes').innerHTML = (COMPONENTES.length > 1 ? `<button class="seg-btn ${PL.frente === 'todos' ? 'on' : ''}" data-plfr="todos">Toda la obra</button> ` : '') + COMPONENTES.map(c => `<button class="seg-btn ${PL.frente === c.id ? 'on' : ''}" data-plfr="${esc(c.id)}">${esc(String(c.nombre).replace(/^Puente\s+/i, ''))}</button>`).join(' ');
-  document.querySelectorAll('[data-plzoom]').forEach(b => b.classList.toggle('on', b.dataset.plzoom === PL.zoom));
+  // frente: lista desplegable (en lugar de una fila de botones)
+  { const fs = $('#plFrSel'); if (fs) { fs.innerHTML = (COMPONENTES.length > 1 ? `<option value="todos"${PL.frente === 'todos' ? ' selected' : ''}>Toda la obra</option>` : '') + COMPONENTES.map(c => `<option value="${esc(c.id)}"${PL.frente === c.id ? ' selected' : ''}>${esc(String(c.nombre).replace(/^Puente\s+/i, ''))}</option>`).join(''); $('#plFrentes').hidden = COMPONENTES.length <= 1; } }
   const adm = !!AUTH.admin, p = PL.plan, lbMode = PL.ver !== 'meta', lbv = lbMode ? PL.lbs.find(l => l.numero === PL.ver) : null, vigIdV = (RES_A.version || {}).id;
   const enContrato = (document.getElementById('plEspacio') || {}).dataset && document.getElementById('plEspacio').dataset.donde === 'contrato';
   $('#plVer').innerHTML = (enContrato ? '' : `<option value="meta" ${!lbMode ? 'selected' : ''}>Plan master · meta (editable)</option>`) + (enContrato ? PL.lbs : []).map(l => `<option value="${l.numero}" ${PL.ver === l.numero ? 'selected' : ''}>LB${l.numero}${l.cronograma_id === vigIdV ? ' · vigente' : ''}${l.estado && l.estado !== 'aprobado' ? ' · ' + l.estado : ''} · ${esc(String(l.tipo_cambio || l.nombre).slice(0, 30))} · solo lectura</option>`).join('');
@@ -8925,6 +8928,7 @@ function plPintar() {
   const sel = (PL.lbs.length && !lbMode) ? `<label class="pl-lbsel" title="Qué línea base se dibuja como línea gris bajo cada barra"><span>Comparar con</span><select id="plLb"><option value="">Ninguna</option>${PL.lbs.map(l => `<option value="${l.numero}" ${PL.lb === l.numero ? 'selected' : ''}>LB${l.numero}${l.cronograma_id === vigId ? ' · vigente' : ''}${l.estado && l.estado !== 'aprobado' ? ' · ' + l.estado : ''} — ${esc(String(l.tipo_cambio || l.nombre).slice(0, 34))}</option>`).join('')}</select></label>` : '';
   const ayuda = `${ed ? 'Arrastra una barra para moverla y su borde derecho para cambiar la duración; toca una tarea para editarla y armar vínculos. ' : ''}${lbMode ? 'Línea base del contrato (venta), solo lectura. ' : ''}Rojo = ruta crítica · azul = tarea · línea gris bajo la barra = ${lb ? lbn : 'línea base elegida'} · naranja = vínculo incumplido · ◆ = hito · tachado = deductivo total · franja gris = suspensión (no suma al plazo).`;
   const barra = `<div class="pl-tool"><h3>Gantt${PL.frente === 'todos' ? '' : ' · ' + esc(String((COMPONENTES.find(c => c.id === PL.frente) || {}).nombre || ''))}</h3><span class="pl-info" tabindex="0" title="${esc(ayuda)}">ⓘ</span><span class="pl-sp"></span>${sel}
+      <span class="pl-esc" role="group" aria-label="Escala del Gantt"><button type="button" class="pl-zbtn ${PL.zoom === 'mes' ? 'on' : ''}" data-plzoom="mes" title="Vista mensual">Mes</button><button type="button" class="pl-zbtn ${PL.zoom === 'semana' ? 'on' : ''}" data-plzoom="semana" title="Vista semanal">Semana</button><button type="button" class="pl-zbtn pl-fit ${PL.zoom === 'ajustar' ? 'on' : ''}" data-plzoom="ajustar" title="Ajustar: encaja todo el cronograma en el ancho de la pantalla" aria-label="Ajustar al ancho"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button></span>
       ${lbMode ? '' : '<button type="button" class="icon-btn" data-pl-versiones title="Versiones guardadas del plan master (fotos antes de cada cambio grande)" aria-label="Versiones del plan"><svg viewBox="0 0 24 24"><path d="M3 5h18v4H3zM5 9v10h14V9M10 13h4"/></svg></button>'}
       <button type="button" class="icon-btn ${PL.soloCrit ? 'on' : ''}" data-pl-crit title="Solo la ruta crítica" aria-label="Solo ruta crítica"><svg viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/></svg></button>
       ${lbMode ? '' : `<button type="button" class="icon-btn ${PL.origen ? 'on' : ''}" data-pl-orig title="Mostrar la línea base elegida (línea gris)" aria-label="Línea base"><svg viewBox="0 0 24 24"><path d="M4 8h16M4 16h10"/></svg></button>`}
@@ -9089,6 +9093,10 @@ async function plReprogramar(modo) {
   await plEjecutar('plan_tareas_guardar', { p_plan: PL.plan.id, p_cambios: mov }, `${mov.length} tareas reprogramadas.`);
 }
 // ── eventos ──
+document.addEventListener('change', (e) => {   // lista de frentes del Plan master
+  if (!e.target || e.target.id !== 'plFrSel' || !plActivo()) return;
+  PL.frente = e.target.value; PL.reset = true; plCerrarTarea(); PL.reset = true; plPintar();
+});
 document.addEventListener('click', async (e) => {
   const t = e.target; let b;
   if (!plActivo() && !t.closest('#plDr')) return;
