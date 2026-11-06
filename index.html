@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="build" content="20261105131145">
+<meta name="build" content="20261105222558">
 <script>/* auto-actualizar: compara el sello de esta copia con el del servidor y recarga una sola vez */
 (function(){try{if(!/^https?:/.test(location.protocol))return;var me=document.querySelector('meta[name=build]').content;if(me==='0')return;
 fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'}).then(function(r){return r.text()}).then(function(h){
@@ -10940,7 +10940,7 @@ function bimPintar() {
   const barra = `<div class="vg-bar"><div class="vg-g vg-g-fr"><span class="vg-gl">Frente</span><div class="vg-pills" role="group" aria-label="Frente">${frs.map(([id, t, ok]) => `<button type="button" class="${BIM.frente === id ? 'on' : ''}" data-bim-fr="${esc(id)}" title="${ok ? 'Modelo cargado' : 'Este frente todavía no tiene modelo cargado'}">${esc(t)}${ok ? '' : ' <small style="font-weight:600;opacity:.7">sin modelo</small>'}</button>`).join('')}</div></div>
     ${hay ? `<div class="vg-g"><span class="vg-gl">Ver</span><div class="vg-seg" role="group" aria-label="Vista">${[['partidas', 'Partidas'], ['elementos', 'Elementos'], ['reglas', 'Asignación']].map(([k, t]) => `<button type="button" class="${BIM.vista === k ? 'on' : ''}" data-bim-vista="${k}" style="height:32px">${t}</button>`).join('')}</div></div>
     <div class="vg-g" style="flex:1 1 200px"><span class="vg-gl">Buscar</span><input id="bimQ" type="search" value="${esc(BIM.q)}" placeholder="Código, partida, elemento, tipo…" style="width:100%;height:38px;border-radius:11px;border:1px solid var(--line2);background:var(--card);padding:0 12px;font:inherit;font-size:12.5px"></div>` : ''}
-    ${adm ? `<div class="vg-g"><span class="vg-gl">Modelo</span><button type="button" class="btn-sec bim-carga-btn" data-bim-carga title="Cargar o actualizar el modelo de este frente: lee su inventario, detecta sus atributos y propone el enlace con las partidas"><svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M5 20h14"/></svg>${hay ? 'Actualizar' : 'Cargar'}</button>${hay ? bimAceroBoton() : ''}</div>` : ''}</div>`;
+    ${adm ? `<div class="vg-g"><span class="vg-gl">Modelo</span><button type="button" class="btn-sec bim-carga-btn" data-bim-carga title="Cargar o actualizar el modelo de este frente: lee su inventario, detecta sus atributos y propone el enlace con las partidas"><svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M5 20h14"/></svg>${hay ? 'Actualizar' : 'Cargar'}</button><button type="button" class="btn-sec bim-carga-btn" data-bim-subir title="Subir el paquete (.zip) que genera el Preparador de modelos a partir del IFC: deja el modelo listo para el visor y para Cargar"><svg viewBox="0 0 24 24"><path d="M12 15V3M7 8l5-5 5 5M4 15v5h16v-5"/></svg>Subir paquete</button><input type="file" id="bimPaqFile" accept=".zip,application/zip" hidden>${hay ? bimAceroBoton() : ''}</div>` : ''}</div>`;
   if (!hay) { box.innerHTML = `<div class="vg-wrap">${barra}<div class="vg-tcard"><h3 style="margin:0 0 6px">${esc(proy ? proy.nombre : '')}: todavía no hay modelo cargado</h3><p class="hint" style="margin:0">${BIM.sinSql ? 'Falta correr <code>modelo_bim.sql</code> en la base.' : adm ? 'Usa <b>Cargar</b>: se lee el inventario del modelo, se detectan sus atributos y se propone solo el enlace con las partidas de este frente. Es la misma lógica para cualquier modelo.' : 'Este frente todavía no tiene su modelo 3D cargado.'}</p></div></div>`; return; }
   const conV = new Set(BIM.vin.map(v => v.elemento_id)), enl = E.filter(e => conV.has(e.id)).length;
   const pref = new Set(BIM.par.map(p => p.codigo.split('.').slice(0, 2).join('.'))), delPuente = BIM.nodos.filter(n => pref.has(n.codigo.split('.').slice(0, 2).join('.')));
@@ -11316,6 +11316,7 @@ document.addEventListener('click', async (e) => {
   const fr = e.target.closest('[data-bim-fr]'); if (fr) { BIM.frente = fr.dataset.bimFr; BIM.abiertos = new Set(); bimCargar(true); return; }
   const vs = e.target.closest('[data-bim-vista]'); if (vs) { BIM.vista = vs.dataset.bimVista; BIM.abiertos = new Set(); bimPintar(); return; }
   if (e.target.closest('[data-bim-carga]')) { bimCargaAbrir(); return; }
+  if (e.target.closest('[data-bim-subir]')) { const f = document.getElementById('bimPaqFile'); if (f) { f.value = ''; f.click(); } return; }
   if (e.target.closest('[data-bim-acero]')) { bimAceroAbrir(); return; }
   if (e.target.closest('[data-bim-nueva]')) { bimReglaAbrir(null); return; }
   const ed = e.target.closest('[data-bim-edit]'); if (ed) { bimReglaAbrir(ed.dataset.bimEdit); return; }
@@ -11571,6 +11572,22 @@ function bimCompletar(E, nodos, prop, reglasAct) {
 }
 // pantalla de carga: lee el inventario (el que publica el visor del frente o un archivo), muestra qué trae y qué reglas propone, y recién al aceptar lo guarda
 const BIM_CARGA ={ inv: null, prop: null, sim: null, nodos: [], origen: '', otro: null };
+// Subir el paquete del modelo (.zip del Preparador de modelos). El servidor local lo valida (formato, frente, huellas), guarda la versión anterior y lo deja en visor\proyectos\<frente>\
+async function bimSubirPaquete(file) {
+  const proy = bimProy(); if (!proy || !AUTH.admin || !file) return;
+  if (!/\.zip$/i.test(file.name)) { toast('El paquete es un archivo .zip: lo genera el Preparador de modelos a partir del IFC.', false, 'bim'); return; }
+  if (!(await confirmar(`¿Subir «${file.name}» (${(file.size / 1048576).toFixed(1)} MB) al frente ${proy.nombre}? Reemplaza el modelo publicado de este frente; el anterior queda guardado como versión.`))) return;
+  toast('Subiendo el paquete…', true, 'bim');
+  try {
+    const r = await fetch('/subir-paquete?frente=' + encodeURIComponent(proy.codigo), { method: 'POST', headers: { 'Content-Type': 'application/zip' }, body: file });
+    if (r.status === 404 || r.status === 405) throw new Error('este panel no recibe paquetes todavía (por ahora solo el panel local).');
+    const j = await r.json().catch(() => ({})); if (!r.ok || !j.ok) throw new Error(j.error || ('error ' + r.status));
+    const s = j.resumen || {};
+    toast(`Paquete cargado: ${s.elementos || '?'} elementos${s.acero_a615_kg != null ? ` · acero ${Math.round((s.acero_a615_kg + s.acero_a706_kg) / 1000).toLocaleString('es-PE')} t` : ''}${j.anterior ? ' · el modelo anterior quedó guardado' : ''}.`, true, 'bim');
+    await bimCargaAbrir();
+  } catch (er) { toast('No se pudo subir el paquete: ' + esc(er.message), false, 'bim'); }
+}
+document.addEventListener('change', (e) => { if (e.target && e.target.id === 'bimPaqFile') bimSubirPaquete(e.target.files && e.target.files[0]); });
 async function bimCargaAbrir() {
   const proy = bimProy(); if (!proy || !AUTH.admin) return;
   let m = document.getElementById('bimCarga');
