@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="build" content="20261106174758">
+<meta name="build" content="20261107081122">
 <script>/* auto-actualizar: compara el sello de esta copia con el del servidor y recarga una sola vez */
 (function(){try{if(!/^https?:/.test(location.protocol))return;var me=document.querySelector('meta[name=build]').content;if(me==='0')return;
 fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'}).then(function(r){return r.text()}).then(function(h){
@@ -2493,6 +2493,76 @@ select.usr-rol{font:inherit;font-size:12px;padding:5px 8px;border:1px solid var(
 
 /* el detalle de valorización no se anima al entrar: la animación se reiniciaba al cambiar «Cargando…» por la tabla y se veía como parpadeo */
 .vld-card{animation:none !important;}
+/* ═══ Inicio · portada corporativa (opción B, 2026-11-07): fondo sólido neutro, la foto de la obra solo en el banner «Obra activa», tarjetas planas sin transparencias ═══ */
+html[data-pane="inicio"] #side,html[data-pane="inicio"] #menuBtn,html[data-pane="inicio"] #overlay,html[data-pane="inicio"] .topbar{display:none !important;}
+html[data-pane="inicio"] #main{padding:0;max-width:none;margin:0;}
+#nav .nav-off{display:none !important;}
+.pane[data-pane="inicio"]{max-width:none;margin:0;}
+.stage{--bg0:#0F172A;--panel:#1E293B;--panel2:#162033;--line:rgba(255,255,255,.08);--ink:#F1F5F9;--ink2:#94A3B8;--acc:#F97316;
+  position:relative;display:flex;flex-direction:column;min-height:100vh;min-height:100dvh;color:var(--ink);background:radial-gradient(1100px 520px at 18% -8%,rgba(59,130,246,.10),transparent 70%),var(--bg0);}
+/* cabecera */
+.stage-top{display:flex;align-items:center;gap:16px;padding:18px clamp(16px,3vw,40px) 8px;width:100%;box-sizing:border-box;max-width:1640px;margin:0 auto;}
+.stage-brand{display:flex;align-items:center;gap:11px;flex:0 0 auto;} .sb-mark{display:grid;place-items:center;width:38px;height:38px;border-radius:11px;background:var(--acc);} .sb-mark svg{width:21px;height:21px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.sb-tx{display:grid;line-height:1.15;} .sb-tx b{font-size:19px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;} .sb-tx small{font-size:9.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--ink2);}
+.stage-ir{display:flex;align-items:center;gap:9px;flex:1 1 320px;max-width:560px;height:42px;box-sizing:border-box;margin:0 auto;padding:0 8px 0 14px;border-radius:12px;background:var(--panel);border:1px solid var(--line);color:var(--ink);transition:border-color .15s,box-shadow .15s;}
+.stage-ir svg{width:16px;height:16px;flex:none;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;color:var(--ink2);} .stage-ir input{flex:1;min-width:0;height:100%;border:0;background:transparent;color:var(--ink);font:inherit;font-size:13px;outline:none;} .stage-ir input::placeholder{color:#7C8AA3;}
+.stage-ir kbd{flex:none;padding:3px 7px;border-radius:7px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--ink2);font:inherit;font-size:10.5px;font-weight:700;letter-spacing:.03em;}
+.stage-ir:focus-within{border-color:#3B82F6;box-shadow:0 0 0 3px rgba(59,130,246,.22);} .stage-ir:focus-within kbd{display:none;}
+.stage-user{position:relative;flex:0 0 auto;margin-left:auto;}
+.su-btn{display:inline-flex;align-items:center;gap:9px;height:42px;padding:0 10px 0 5px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:inherit;cursor:pointer;transition:border-color .15s;} .su-btn:hover,.su-btn[aria-expanded="true"]{border-color:rgba(255,255,255,.22);}
+.su-av{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:#3B82F6;color:#fff;font-size:13px;font-weight:800;} .su-av svg{width:16px;height:16px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.su-nm{font-size:12px;font-weight:700;white-space:nowrap;} .su-ch{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;opacity:.7;}
+.su-menu{position:absolute;right:0;top:50px;z-index:30;min-width:236px;padding:6px;border-radius:14px;background:var(--panel);border:1px solid rgba(255,255,255,.12);box-shadow:0 24px 50px -16px rgba(0,0,0,.7);} .su-menu[hidden]{display:none;}
+.su-menu .su-cab{padding:10px 12px 8px;} .su-menu .su-cab b{display:block;font-size:13px;} .su-menu .su-cab small{font-size:11px;color:var(--ink2);}
+.su-it{display:flex;align-items:center;gap:11px;width:100%;height:38px;padding:0 12px;border:0;border-radius:9px;background:transparent;color:var(--ink);font:inherit;font-size:12.5px;font-weight:600;text-align:left;cursor:pointer;} .su-it:hover,.su-it:focus-visible{background:rgba(255,255,255,.07);outline:none;} .su-it svg{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.85;} .su-it.peligro{color:#FCA5A5;}
+.su-sep{height:1px;margin:5px 8px;background:var(--line);}
+/* cuerpo */
+.stage-body{display:grid;grid-template-columns:304px minmax(0,1fr);gap:20px;align-items:start;flex:1;width:100%;box-sizing:border-box;max-width:1640px;margin:0 auto;padding:12px clamp(16px,3vw,40px) 48px;}
+.stage-obras{display:flex;flex-direction:column;gap:10px;padding:14px;border-radius:18px;background:var(--panel);border:1px solid var(--line);}
+.stage-obras h3{display:flex;align-items:center;justify-content:space-between;margin:2px 4px 0;font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2);} .stage-obras h3 em{font-style:normal;min-width:20px;padding:0 6px;border-radius:999px;background:rgba(255,255,255,.08);color:var(--ink);font-size:10.5px;line-height:18px;text-align:center;}
+.ini-lista{display:flex;flex-direction:column;gap:9px;}
+.ini-ob{position:relative;display:grid;gap:4px;padding:13px 14px 12px 20px;text-align:left;border:1px solid var(--line);border-radius:13px;background:var(--panel2);color:var(--ink);font:inherit;cursor:pointer;transition:border-color .15s,background .15s;} .ini-ob:hover{border-color:rgba(255,255,255,.2);}
+.ini-ob.on{border-color:#3B82F6;background:rgba(59,130,246,.10);box-shadow:inset 0 0 0 1px rgba(59,130,246,.35);}
+.ini-ob b{font-size:13px;font-weight:800;line-height:1.28;} .ini-ob small{font-size:11px;color:var(--ink2);line-height:1.3;}
+.ini-sem{position:absolute;left:9px;top:17px;width:8px;height:8px;border-radius:50%;background:var(--c);box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 24%,transparent);}
+.ini-st{display:flex;gap:16px;margin-top:4px;} .ini-st em{font-style:normal;font-size:10.5px;color:var(--ink2);} .ini-st em b{display:inline;margin-right:3px;font-size:15px;font-weight:800;color:#fff;font-variant-numeric:tabular-nums;}
+.ini-frs{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;} .ini-frs i{padding:2px 9px;border-radius:999px;background:rgba(255,255,255,.07);color:var(--ink);font-style:normal;font-size:10.5px;font-weight:600;}
+.ini-ob.nueva{border-style:dashed;background:transparent;color:var(--ink2);cursor:not-allowed;padding-left:14px;} .ini-ob.nueva:hover{border-color:var(--line);} .ini-ob.nueva span{font-size:12.5px;font-weight:700;color:var(--ink);}
+.stage-main{display:flex;flex-direction:column;gap:18px;min-width:0;}
+/* banner «Obra activa»: aquí vive la foto, con un degradado solo a la izquierda para que el texto se lea */
+.stage-hero{position:relative;isolation:isolate;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;gap:8px;min-width:0;min-height:clamp(190px,27vh,260px);padding:26px 28px;border-radius:20px;border:1px solid var(--line);background:var(--panel);}
+.hero-bg{position:absolute;inset:0;z-index:-2;overflow:hidden;}
+.hero-bg img{opacity:0;transition:opacity 1s ease;position:absolute;inset:-4%;width:108%;height:108%;object-fit:cover;object-position:center 40%;animation:iniMov 52s ease-in-out infinite alternate;will-change:transform;} .hero-bg img.ok{opacity:1;}
+@keyframes iniMov{from{transform:scale(1) translate3d(0,0,0);}to{transform:scale(1.06) translate3d(-1.4%,-1%,0);}}
+.stage-hero::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(90deg,rgba(15,23,42,.94) 0%,rgba(15,23,42,.82) 34%,rgba(15,23,42,.30) 72%,rgba(15,23,42,.10) 100%),linear-gradient(0deg,rgba(15,23,42,.45),transparent 40%);}
+@media (prefers-reduced-motion:reduce){.hero-bg img{animation:none;inset:0;width:100%;height:100%;} .ini-t{animation:none !important;}}
+html.cel .hero-bg img{animation:none;inset:0;width:100%;height:100%;}   /* tabletas y celulares de GPU básica: imagen fija */
+.stage-hero small{font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#FDBA74;}
+.stage-hero h1{margin:0;max-width:30ch;font-size:clamp(22px,2.6vw,36px);font-weight:800;letter-spacing:-.02em;line-height:1.12;text-wrap:balance;color:#fff;}
+.stage-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;margin-top:8px;} .stage-chips{display:flex;flex-wrap:wrap;gap:8px;}
+.sc{display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 13px;border-radius:999px;background:rgba(15,23,42,.78);border:1px solid rgba(255,255,255,.16);color:var(--ink);font-size:12px;font-weight:600;white-space:nowrap;} .sc b{font-weight:800;color:#fff;font-variant-numeric:tabular-nums;} .sc i{width:8px;height:8px;border-radius:50%;background:var(--c);}
+.ini-cont{display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 16px;border:0;border-radius:999px;background:#F97316;color:#fff;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer;white-space:nowrap;transition:background .15s;} .ini-cont:hover{background:#EA580C;} .ini-cont[hidden]{display:none;}
+.ini-cont svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;}
+/* áreas: tarjetas planas, un solo tono de superficie */
+.ini-tiles{display:flex;flex-direction:column;gap:18px;}
+.ini-grupos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;align-items:start;} .ini-g{display:flex;flex-direction:column;gap:12px;min-width:0;}
+.ini-gh{margin:0;display:flex;align-items:center;gap:12px;font-size:10.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);} .ini-gh::after{content:"";flex:1;height:1px;background:var(--line);} .ini-gh span{display:inline;padding:0;background:none;border:0;color:inherit;}
+.ini-t{--c:#3B82F6;flex:0 0 auto;width:100%;box-sizing:border-box;min-height:88px;position:relative;display:flex;align-items:center;gap:16px;min-width:0;padding:16px 20px;text-align:left;border-radius:16px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:inherit;cursor:pointer;overflow:hidden;transition:transform .18s ease,border-color .18s ease,background .18s ease;animation:iniUp .5s ease both;animation-delay:calc(var(--i,0) * 45ms + 40ms);}
+@keyframes iniUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+.ini-t:hover,.ini-t:focus-visible{transform:translateY(-2px);border-color:color-mix(in srgb,var(--c) 70%,transparent);background:#223049;outline:none;}
+.ini-t.ancho{min-height:68px;padding:12px 20px;} .ini-t.ancho .ini-ti{width:42px;height:42px;border-radius:12px;} .ini-t.ancho .ini-ti svg{width:21px;height:21px;} .ini-t.ancho .ini-tx{grid-auto-flow:column;grid-template-columns:auto 1fr;align-items:baseline;justify-content:start;column-gap:14px;} .ini-t.ancho .ini-tx small{-webkit-line-clamp:1;}
+.ini-ti{flex:none;display:grid;place-items:center;width:48px;height:48px;border-radius:13px;background:color-mix(in srgb,var(--c) 16%,var(--panel));border:1px solid color-mix(in srgb,var(--c) 30%,transparent);color:var(--c);} .ini-ti svg{width:24px;height:24px;}
+.ini-tx{display:grid;gap:3px;min-width:0;flex:1;} .ini-tx b{font-size:15px;font-weight:800;letter-spacing:-.01em;color:#F8FAFC;} .ini-tx small{font-size:12px;line-height:1.4;color:var(--ink2);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.ini-n{position:absolute;right:14px;top:12px;display:grid;place-items:center;min-width:22px;height:22px;padding:0 7px;box-sizing:border-box;border-radius:999px;background:rgba(255,255,255,.08);color:var(--ink);font-style:normal;font-size:11px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1;} .ini-t.ancho .ini-n{top:50%;transform:translateY(-50%);}
+.ini-go{position:absolute;right:16px;bottom:14px;width:18px;height:18px;fill:none;stroke:var(--c);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;opacity:0;transform:translateX(-6px);transition:opacity .18s,transform .18s;} .ini-t:hover .ini-go,.ini-t:focus-visible .ini-go{opacity:1;transform:none;} .ini-t.ancho .ini-go{display:none;}
+@media (max-width:1180px){.ini-grupos{grid-template-columns:minmax(0,1fr);gap:16px;} .ini-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;} .ini-gh{grid-column:1 / -1;} .stage-body{grid-template-columns:minmax(0,1fr);} .stage-obras{flex-direction:row;flex-wrap:wrap;align-items:stretch;} .stage-obras h3{flex:1 1 100%;} .ini-lista{flex:1 1 100%;flex-direction:row;flex-wrap:wrap;} .ini-ob{flex:1 1 280px;} .stage-hero h1{max-width:none;}}
+@media (max-width:860px){.stage-top{flex-wrap:wrap;gap:12px;} .stage-ir{order:3;flex:1 1 100%;max-width:none;margin:0;} .stage-user{margin-left:auto;}}
+@media (max-width:560px){.su-nm,.stage-ir kbd{display:none;} .stage-hero{padding:20px 18px;} .ini-t{min-height:78px;padding:13px 16px;} .ini-ti{width:44px;height:44px;} .ini-ti svg{width:22px;height:22px;}}
+/* ruta «Inicio › Área» */
+.crumbs{display:flex;align-items:center;gap:6px;margin:0 0 4px;font-size:11.5px;} .crumbs[hidden]{display:none;}
+.cr-home{height:26px;padding:0 9px;border:1px solid var(--line2);border-radius:8px;background:var(--card);color:var(--tx2);font:inherit;font-size:11.5px;font-weight:700;cursor:pointer;} .cr-home:hover{border-color:var(--blue);color:var(--blue);}
+.cr-sep{color:var(--mut);}
+.cr-sel{height:26px;min-width:120px;padding:0 24px 0 9px;border:1px solid var(--line2);border-radius:8px;background:var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238a97b1' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 7px center/11px;color:var(--tx);font:inherit;font-size:11.5px;font-weight:800;cursor:pointer;-webkit-appearance:none;appearance:none;}
 /* ═══ Gantt (Plan master / Contrato): frente en lista arriba; escala y «Ajustar» en la barra del propio Gantt ═══ */
 .pl-top{justify-content:flex-start;gap:10px 18px;} .pl-frsel{display:inline-flex;align-items:center;gap:8px;margin:0;font-size:11.5px;color:var(--mut);} .pl-frsel span{font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:9.5px;}
 .pl-frsel .pl-sel-t,.pl-top #plVer{height:32px;box-sizing:border-box;min-width:150px;padding:0 28px 0 11px;border:1px solid var(--line2);border-radius:9px;background:var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238a97b1' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 9px center/12px;color:var(--tx);font:inherit;font-size:12.5px;font-weight:700;cursor:pointer;-webkit-appearance:none;appearance:none;}
@@ -2587,7 +2657,7 @@ table.bt-reg{table-layout:fixed;min-width:600px;} table.bt-reg th:nth-child(1){w
 @media (max-width:760px){ .as-sum{margin-left:0;width:100%;justify-content:space-between;} .as-t .as-bar select{flex:1 1 100%;} .as-t .as-sub>td:nth-child(2){padding-left:28px;} #bimPanel .vg-tcard>header span{text-align:left;max-width:none;} }
 </style>
 <script>
-document.documentElement.dataset.pane = 'resumen';
+document.documentElement.dataset.pane = 'inicio';
 // se aplica ANTES de pintar el body, para que no haya parpadeo del tema equivocado
 (function(){ try {
   var t = localStorage.getItem('obra-tema') || 'claro';
@@ -2655,7 +2725,8 @@ document.addEventListener('DOMContentLoaded', function(){ try { var m = document
       <span id="contratoChip" class="ct-chip" title="Tipo de contrato de la obra (se cambia en Administración › Obra)"></span>
     </div>
     <nav class="nav" id="nav">
-      <button data-pane="resumen" class="nav-top on" title="KPIs y avance general"><span class="ni">🏠</span><span class="nt">Dashboard</span></button>
+      <button data-pane="inicio" class="nav-top on" title="Inicio: obras y áreas del sistema"><span class="ni">🧭</span><span class="nt">Inicio</span></button>
+      <button data-pane="resumen" class="nav-top" title="KPIs y avance general"><span class="ni">🏠</span><span class="nt">Dashboard</span></button>
       <div class="nav-g" data-g="planificacion">
         <button type="button" class="nav-gh" data-grupo="planificacion" aria-expanded="true"><span class="ni">📅</span><span class="nt">Planificación</span><i class="nav-chev"></i></button>
         <div class="nav-gb">
@@ -2773,8 +2844,9 @@ document.addEventListener('DOMContentLoaded', function(){ try { var m = document
     <div class="topbar">
       <div>
         <button id="menuBtn">☰</button>
-        <h1 id="pageTitle">DASHBOARD - CONTROL DE OBRA</h1>
-        <p class="sub" id="pageSub">Cargando…</p>
+        <nav id="crumbs" class="crumbs" aria-label="Ruta" hidden><button type="button" id="crInicio" class="cr-home" title="Volver al Inicio">Inicio</button><span class="cr-sep" aria-hidden="true">›</span><select id="areaSel" class="cr-sel" aria-label="Área del sistema" title="Cambiar de área"></select></nav>
+        <h1 id="pageTitle">Inicio</h1>
+        <p class="sub" id="pageSub">Obras registradas y áreas del sistema</p>
       </div>
       <!-- pantalla completa (como el visor 3D): oculta la barra del navegador y gana espacio en tablet -->
       <div class="topbar-acc">
@@ -2787,8 +2859,34 @@ document.addEventListener('DOMContentLoaded', function(){ try { var m = document
     <div id="avisoGiro" role="note"><span>↻ Gira el celular para ver mejor la tabla</span><button type="button" id="avisoCerrar" aria-label="Cerrar aviso">✕</button></div>
     <div id="errBox"></div>
 
+    <!-- ═══════════ INICIO: obras a la izquierda, imagen con movimiento sutil y los íconos de las áreas ═══════════ -->
+        <section class="pane on" data-pane="inicio">
+      <div class="stage">
+        
+        <header class="stage-top">
+          <div class="stage-brand"><span class="sb-mark"><svg viewBox="0 0 24 24"><path d="M3 18h18M5 18V9l7-5 7 5v9M9 18v-5h6v5"/></svg></span><span class="sb-tx"><b id="iniMarca">Nexo</b><small id="iniLema">Project Management Platform</small></span></div>
+          <label class="stage-ir" title="Ir directo a una pantalla (Ctrl + K)"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="iniIr" list="iniIrL" type="search" placeholder="Ir a… plan maestro, presupuesto, modelo" aria-label="Ir a una pantalla" autocomplete="off"><kbd>Ctrl K</kbd><datalist id="iniIrL"></datalist></label>
+          <div class="stage-user">
+            <button type="button" id="iniUser" class="su-btn" aria-haspopup="menu" aria-expanded="false" title="Cuenta y opciones"><span class="su-av" id="iniAv"></span><span class="su-nm" id="iniRol"></span><svg class="su-ch" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+            <div id="iniMenu" class="su-menu" role="menu" hidden></div>
+          </div>
+        </header>
+        <div class="stage-body">
+          <aside class="stage-obras" aria-label="Obras registradas"><h3><span>Obras</span><em id="iniNObras">1</em></h3><div id="iniObras" class="ini-lista"></div></aside>
+          <div class="stage-main">
+            <div class="stage-hero"><div class="hero-bg" aria-hidden="true"><img id="iniImg" src="img/inicio.jpg" alt="" decoding="async" onload="this.classList.add('ok')" onerror="this.remove()"></div>
+              <small id="iniKick">Obra activa</small>
+              <h1 id="iniTit">—</h1>
+              <div class="stage-row"><div class="stage-chips" id="iniChips"></div><button type="button" id="iniCont" class="ini-cont" hidden></button></div>
+            </div>
+            <div id="iniTiles" class="ini-tiles" role="list"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ═══════════ RESUMEN ═══════════ -->
-    <section class="pane on" data-pane="resumen">
+    <section class="pane" data-pane="resumen">
       <div class="kpis">
         <div class="card kc-teal kpi3">
           <div class="k3-h"><span class="k3-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7V5.5A1.5 1.5 0 0 0 17.5 4H5a2 2 0 0 0 0 4h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6"/><path d="M16.5 14h.01"/></svg></span><div class="label">Presupuesto total <span class="igv">Sin IGV</span></div></div>
@@ -3578,6 +3676,7 @@ if (esCelular || esTablet) {
 // ── modo administrador: ventana de acceso y estado ──
 function authUI() {
   { const ga = document.getElementById('navAdm'); if (ga) ga.hidden = !AUTH.admin; }   // el grupo Administración solo lo ve el administrador
+  try { if (typeof inicioPintar === 'function') inicioPintar(); } catch (e) {}   // el Inicio muestra el ícono de Administración solo a quien lo ve
   $('#btnAdmin').innerHTML = AUTH.token ? '<span class="ft-i">🔓</span><span class="ft-t">Salir</span>' : '<span class="ft-i">🔑</span><span class="ft-t">Entrar</span>';
   $('#btnAdmin').title = AUTH.token ? `Sesión: ${AUTH.email} · ${AUTH.rol ? ROLES[AUTH.rol] || AUTH.rol : 'sin usuario registrado'}` : 'Iniciar sesión';
   $('#admEstado').innerHTML = AUTH.token ? (AUTH.admin ? '<b style="color:var(--amber)">🛡 Admin</b>' : (AUTH.rol ? `<b>👤 ${esc(ROLES[AUTH.rol] || AUTH.rol)}</b>` : 'Sesión sin usuario')) : 'Administrador';
@@ -3682,7 +3781,7 @@ document.querySelectorAll('#nav button[data-pane]').forEach(b => {
     document.querySelector(`.pane[data-pane="${b.dataset.pane}"]`).classList.add('on');
     document.documentElement.dataset.pane = b.dataset.pane;
     const nComp = COMPONENTES.length;
-    const titles = { resumen: ['DASHBOARD - CONTROL DE OBRA', `${nComp} frente${nComp===1?'':'s'} de trabajo en un solo lugar`],
+    const titles = { inicio: ['Inicio', 'Obras registradas y áreas del sistema'], resumen: ['DASHBOARD - CONTROL DE OBRA', `${nComp} frente${nComp===1?'':'s'} de trabajo en un solo lugar`],
       parte: ['Nuevo parte diario', 'Registra el avance ejecutado en obra'],
       materiales: ['Registro de materiales', 'Metas totales y avance mensual por frente'],
       lookahead: ['Look Ahead', 'Plan de 4 semanas · Last Planner: actividades ligadas al valorizado'],
@@ -3746,6 +3845,151 @@ document.querySelectorAll('#nav button[data-pane]').forEach(b => {
   document.querySelectorAll('#nav button[data-pane]').forEach(b => b.addEventListener('click', marcar));
   marcar();
 })();
+// ══ INICIO: obras, áreas y atajos ═══════════════════════════════════════════════════════════════════════════════
+// Las áreas (los íconos del centro) salen del PROPIO menú lateral: cada grupo `.nav-g` es un área. Agregar un grupo nuevo al menú (p. ej. «Pedidos») crea su ícono solo;
+// INI_META solo le pone descripción, color e ícono (si no está, usa uno neutro). Al entrar a un área el menú muestra solo ese grupo y arriba queda la ruta «Inicio › Área».
+const INI_IC = (d) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+const INI_META = {
+  resumen:       { desc: 'Avance, curva S, mapa y cronograma', color: '#3B82F6', ic: '<rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/>' },
+  planificacion: { desc: 'Plan maestro, Look Ahead y PPC', color: '#8B5CF6', g: 'ejecucion', ic: '<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14h4M8 17.5h7"/>' },
+  produccion:    { desc: 'Parte diario y avance en campo', color: '#F59E0B', g: 'ejecucion', ic: '<path d="M3 21h18M5 21V10l7-6 7 6v11M9 21v-6h6v6"/>' },
+  costos:        { desc: 'Presupuesto, valorizaciones y flujo de caja', color: '#10B981', g: 'costos', ic: '<circle cx="12" cy="12" r="9"/><path d="M14.5 9.3a3 3 0 0 0-2.5-1.3c-1.7 0-3 .9-3 2.2 0 3 6 1.4 6 4.4 0 1.3-1.3 2.4-3 2.4a3.4 3.4 0 0 1-3-1.4M12 6.5V8m0 8v1.5"/>' },
+  gestion:       { desc: 'Valor ganado e indicadores', color: '#6366F1', g: 'costos', ic: '<path d="M4 20V10M10 20V4M16 20v-7M2 20h20"/>' },
+  recursos:      { desc: 'Horas-hombre, materiales y equipos', color: '#14B8A6', g: 'ejecucion', ic: '<path d="M21 8 12 3 3 8l9 5 9-5ZM3 8v8l9 5 9-5V8M12 13v8"/>' },
+  contrato:      { desc: 'Líneas base, adicionales y plazo', color: '#94A3B8', g: 'costos', ic: '<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9l-6-6ZM14 3v6h6M8 13h8M8 17h6"/>' },
+  bim:           { desc: 'Modelo 3D, partidas y avance', color: '#0EA5E9', g: 'modelo', ic: '<path d="M12 2 3 7v10l9 5 9-5V7l-9-5ZM3 7l9 5 9-5M12 12v10"/>' },
+  admin:         { desc: 'Usuarios, roles y datos de la obra', color: '#A8B3C7', g: 'modelo', ic: '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/>' }
+};
+// NOMBRE DEL SISTEMA (provisional): se cambia aquí, en una sola línea. «nombre» es la marca grande y «lema» la línea pequeña de debajo.
+const INI_GRUPOS = [{ id: 'ejecucion', t: 'Planificar y ejecutar' }, { id: 'costos', t: 'Costos y control' }, { id: 'modelo', t: 'Modelo y sistema' }, { id: 'otros', t: 'Otros módulos' }];   // cómo se agrupan los íconos del Inicio (INI_META.g elige el grupo)
+const APP_MARCA = { nombre: 'PMO', lema: 'Project Management Platform', desc: 'Sistema integrado de gestión y control de proyectos de construcción' };
+const INI_DEF = { desc: '', color: '#64748b', ic: '<circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/>' };
+const iniVisible = (b) => getComputedStyle(b).display !== 'none';
+function iniAreas() {   // las áreas que el usuario puede ver (leídas del menú)
+  const out = [], top = document.querySelector('#nav .nav-top[data-pane="resumen"]');
+  if (top) out.push({ id: 'resumen', nombre: 'Resumen', n: 1, pronto: 0, pantallas: [{ pane: 'resumen', nombre: 'Dashboard' }] });
+  document.querySelectorAll('#nav .nav-g').forEach(g => {
+    if (g.hidden) return;
+    const bs = [...g.querySelectorAll('.nav-gb > button, .nav-gb > a')].filter(iniVisible), vivas = bs.filter(b => b.dataset.pane);
+    out.push({ id: g.dataset.g, nombre: (g.querySelector('.nav-gh .nt') || {}).textContent || g.dataset.g, n: bs.filter(b => !b.classList.contains('prox')).length, pronto: bs.filter(b => b.classList.contains('prox')).length,
+      pantallas: vivas.map(b => ({ pane: b.dataset.pane, nombre: (b.querySelector('.nt') || {}).textContent || b.dataset.pane })) });
+  });
+  return out;
+}
+const iniGet = (k) => { try { return localStorage.getItem('obra04.' + k); } catch (e) { return null; } };
+const iniSet = (k, v) => { try { localStorage.setItem('obra04.' + k, v); } catch (e) {} };
+function iniAbrir(area, pane) {   // entra a un área: a la última pantalla que usaste en ella, o a la primera
+  let b = null;
+  if (area === 'resumen') b = document.querySelector('#nav .nav-top[data-pane="resumen"]');
+  else { const g = document.querySelector(`#nav .nav-g[data-g="${area}"]`); if (!g) return;
+    const ok = (x) => x && iniVisible(x);
+    b = (pane && [...g.querySelectorAll('.nav-gb > button[data-pane]')].find(x => x.dataset.pane === pane && ok(x))) || [...g.querySelectorAll('.nav-gb > button[data-pane]:not(.prox)')].find(ok); }
+  if (b) b.click();
+}
+function inicioPintar() {
+  const box = document.getElementById('iniObras'); if (!box) return;
+  const g = (f, d) => { try { const v = f(); return v == null ? d : v; } catch (e) { return d; } };   // las variables globales pueden no existir todavía al primer pintado
+  const ob = g(() => OBRA, {}) || {}, nombre = ob.nombre || (document.getElementById('obraNombre') || {}).textContent || 'Obra', comps = g(() => COMPONENTES, []) || [], nFr = comps.length;
+  const frentes = comps.map(c => String(c.nombre).replace(/^Puente\s+/i, '')), esAdm = !!g(() => AUTH.admin, false);
+  const txt = (id) => ((document.getElementById(id) || {}).textContent || '').trim();
+  const av = (txt('kValorS').match(/[\d.,]+/) || [''])[0], spi = txt('kPct'), est = g(() => ESTADO_KPI.k, null);
+  const col = est === 'ok' ? '#10B981' : est === 'mid' ? '#F59E0B' : est ? '#EF4444' : '#94A3B8';
+  const tipo = g(() => CONTRATO_ETQ[contratoTipo()], ''), entidad = [ob.entidad, ob.cliente].filter(Boolean).join(' · ') || 'Red Vial Nacional';
+  const hayAv = av && av !== '—', haySpi = spi && spi !== '—';
+  box.innerHTML = `<button type="button" class="ini-ob on" data-ini-obra title="${esc(nombre)}"><i class="ini-sem" style="--c:${col}" title="${est ? 'Estado de plazo' : 'Sin datos todavía'}"></i><b>${esc(nombre)}</b><small>${esc(entidad)}</small>
+      <span class="ini-st"><em><b>${hayAv ? esc(av) + ' %' : '—'}</b>avance</em><em><b>${haySpi ? esc(spi) : '—'}</b>SPI</em></span>
+      ${frentes.length ? `<span class="ini-frs" title="Frentes de la obra">${frentes.map(f => `<i>${esc(f)}</i>`).join('')}</span>` : ''}</button>
+    ${esAdm ? '<button type="button" class="ini-ob nueva" disabled title="Próximamente · registrar otra obra del contrato o de la empresa"><span>＋ Nueva obra</span><small>próximamente</small></button>' : ''}`;
+  const set = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+  { const im = document.getElementById('iniImg'); if (im && im.complete && im.naturalWidth) im.classList.add('ok'); }
+  set('iniMarca', APP_MARCA.nombre); set('iniLema', APP_MARCA.lema); { const mb = document.querySelector('.stage-brand'); if (mb) mb.title = APP_MARCA.desc; } set('iniTit', nombre); set('iniNObras', '1');
+  const chips = document.getElementById('iniChips');
+  if (chips) chips.innerHTML = [hayAv ? `<span class="sc"><i style="--c:${col}"></i>Avance <b>${esc(av)} %</b></span>` : '', haySpi ? `<span class="sc"><i style="--c:${col}"></i>SPI <b>${esc(spi)}</b></span>` : '', nFr ? `<span class="sc"><b>${nFr}</b> frente${nFr === 1 ? '' : 's'}</span>` : '', tipo ? `<span class="sc">${esc(tipo)}</span>` : ''].join('');
+  const A = iniAreas(), tiles = document.getElementById('iniTiles');
+  const tile = (a, i, extra) => { const m = INI_META[a.id] || INI_DEF;
+    return `<button type="button" class="ini-t${extra || ''}" role="listitem" data-ini-area="${esc(a.id)}" style="--c:${m.color};--i:${i}" title="${esc(m.desc || a.nombre)}"><span class="ini-ti">${INI_IC(m.ic)}</span><span class="ini-tx"><b>${esc(a.nombre)}</b><small>${esc(m.desc)}</small></span><em class="ini-n" title="${a.n} ${a.n === 1 ? 'pantalla' : 'pantallas'}${a.pronto ? ' · ' + a.pronto + ' próximas' : ''}">${a.n}</em><svg class="ini-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>`; };
+  // organización tipo PMO: el Resumen va arriba como franja y el resto se agrupa por lo que hace cada área (el grupo sale de INI_META.g; un módulo nuevo sin grupo cae en «Otros módulos»)
+  const resumen = A.find(a => a.id === 'resumen'), resto = A.filter(a => a.id !== 'resumen'); let k = 0;
+  const grupos = INI_GRUPOS.map(gr => ({ ...gr, areas: resto.filter(a => ((INI_META[a.id] || INI_DEF).g || 'otros') === gr.id) })).filter(gr => gr.areas.length);
+  tiles.innerHTML = (resumen ? tile(resumen, k++, ' ancho') : '') + `<div class="ini-grupos">${grupos.map(gr => `<section class="ini-g" aria-label="${esc(gr.t)}"><h4 class="ini-gh"><span>${esc(gr.t)}</span></h4>${gr.areas.map(a => tile(a, k++)).join('')}</section>`).join('')}</div>`;
+  const dl = document.getElementById('iniIrL'); if (dl) dl.innerHTML = A.flatMap(a => a.pantallas.map(p => `<option value="${esc(p.nombre)} · ${esc(a.nombre)}"></option>`)).join('');
+  const ult = iniGet('ult'), cont = document.getElementById('iniCont');
+  if (cont) { const hit = ult && A.flatMap(a => a.pantallas.map(p => ({ a, p }))).find(x => x.p.pane === ult && x.p.pane !== 'inicio');
+    cont.hidden = !hit; if (hit) { cont.dataset.pane = hit.p.pane; cont.dataset.area = hit.a.id; cont.innerHTML = `Continuar en ${esc(hit.p.nombre)}<svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>`; } }
+  // usuario: iniciales y rol (el menú se arma al abrirlo)
+  const mail = g(() => AUTH.mail || AUTH.email || '', ''), rol = esAdm ? 'Administrador' : (g(() => ROLES[AUTH.rol] || AUTH.rol, '') || (mail ? 'Usuario' : 'Visitante'));
+  const avEl = document.getElementById('iniAv'); if (avEl) avEl.innerHTML = mail ? esc(mail.trim().charAt(0).toUpperCase()) : '<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>';
+  set('iniRol', rol);
+}
+function iniMenuUsuario() {   // las opciones reutilizan los botones de siempre (tema, instalar, sesión, pantalla completa): aquí solo se muestran bien
+  const m = document.getElementById('iniMenu'); if (!m) return;
+  const ic = (d) => `<svg viewBox="0 0 24 24">${d}</svg>`, byId = (id) => document.getElementById(id);
+  const tema = byId('btnTema'), inst = byId('btnInstalar'), ses = byId('btnAdmin'), sale = ses && /salir/i.test(ses.textContent);
+  const oscuro = tema && /oscuro/i.test(tema.title || '');   // el botón dice «Cambiar a tema oscuro» cuando el actual es el claro
+  const it = (id, icono, t, cls) => `<button type="button" role="menuitem" class="su-it ${cls || ''}" data-su="${id}">${icono}${t}</button>`;
+  m.innerHTML = `<div class="su-cab"><b>${esc((document.getElementById('iniRol') || {}).textContent || '')}</b><small>${esc(((document.getElementById('iniTit') || {}).textContent || '').match(/obra\s*\d+/i) ? (document.getElementById('iniTit').textContent.match(/obra\s*\d+/i)[0]) : ((document.getElementById('iniTit') || {}).textContent || ''))}</small></div><div class="su-sep"></div>`
+    + (tema ? it('btnTema', ic(oscuro ? '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/>' : '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>'), oscuro ? 'Cambiar a tema oscuro' : 'Cambiar a tema claro') : '')
+    + (inst && !inst.hidden ? it('btnInstalar', ic('<path d="M12 3v12m0 0-4-4m4 4 4-4M5 20h14"/>'), 'Instalar como aplicación') : '')
+    + it('btnFull', ic('<path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/>'), 'Pantalla completa')
+    + '<div class="su-sep"></div>' + (ses ? it('btnAdmin', ic(sale ? '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>' : '<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8.5 11V8a3.5 3.5 0 0 1 7 0v3"/>'), sale ? 'Cerrar sesión' : 'Iniciar sesión de administrador', sale ? 'peligro' : '') : '');
+}
+function iniControles() {   // (antes movía estos botones a la barra) ya no hace falta: se mantienen en el pie del menú y el menú de usuario del Inicio los usa por detrás
+  const row = document.querySelector('#iniAcc .ft-row'), foot = document.querySelector('.side-foot'); if (row && foot) foot.insertBefore(row, foot.firstChild);
+}
+(function () {   // menú de usuario, atajo Ctrl+K y efecto de luz en los íconos
+  const btn = () => document.getElementById('iniUser'), menu = () => document.getElementById('iniMenu');
+  const cerrar = () => { const m = menu(), b = btn(); if (m) m.hidden = true; if (b) b.setAttribute('aria-expanded', 'false'); };
+  document.addEventListener('click', (e) => {
+    const b = e.target.closest('#iniUser');
+    if (b) { const m = menu(); const abrir = m.hidden; if (abrir) iniMenuUsuario(); m.hidden = !abrir; b.setAttribute('aria-expanded', String(abrir)); return; }
+    const it = e.target.closest('[data-su]');
+    if (it) { const real = document.getElementById(it.dataset.su); cerrar(); if (real) setTimeout(() => real.click(), 30); return; }
+    if (!e.target.closest('#iniMenu')) cerrar();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') cerrar();
+    if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K') && document.documentElement.dataset.pane === 'inicio') { e.preventDefault(); const i = document.getElementById('iniIr'); if (i) i.focus(); }
+  });
+  document.addEventListener('pointermove', (e) => {
+    const t = e.target.closest && e.target.closest('.ini-t'); if (!t) return; const r = t.getBoundingClientRect();
+    t.style.setProperty('--mx', (e.clientX - r.left) + 'px'); t.style.setProperty('--my', (e.clientY - r.top) + 'px');
+  }, { passive: true });
+})();
+function iniCols() {   // columnas de los íconos según el ancho: se evita dejar una fila a medias (8 íconos → 4 columnas si caben, si no 3 y la última fila se estira)
+  const t = document.getElementById('iniTiles'); if (!t) return; const n = t.children.length, w = t.clientWidth || 800;
+  const max = Math.max(1, Math.min(5, Math.floor((w + 12) / (236 + 12)))); let c = max;
+  if (n % c !== 0) for (let k = max - 1; k >= 3; k--) if (n % k === 0) { c = k; break; }
+  t.style.setProperty('--cols', String(Math.min(c, Math.max(1, n))));
+}
+try { const t = document.getElementById('iniTiles'); if (t && window.ResizeObserver) new ResizeObserver(() => iniCols()).observe(t); } catch (e) {}
+function areaPoner(area, pane) {   // el menú muestra solo el área elegida (y el Inicio); la ruta de arriba permite volver o cambiar de área
+  document.documentElement.dataset.area = area || '';
+  document.querySelectorAll('#nav .nav-g').forEach(g => g.classList.toggle('nav-off', !!area && g.dataset.g !== area));
+  const dash = document.querySelector('#nav .nav-top[data-pane="resumen"]'); if (dash) dash.classList.toggle('nav-off', !!area && area !== 'resumen');
+  const cr = document.getElementById('crumbs'), sel = document.getElementById('areaSel'); if (!cr || !sel) return;
+  cr.hidden = !area || pane === 'inicio';
+  if (!cr.hidden) { const A = iniAreas(); sel.innerHTML = A.map(a => `<option value="${esc(a.id)}"${a.id === area ? ' selected' : ''}>${esc(a.nombre)}</option>`).join(''); }
+}
+document.querySelectorAll('#nav button[data-pane]').forEach(b => b.addEventListener('click', () => {
+  const pane = b.dataset.pane, g = b.closest('.nav-g'), area = pane === 'inicio' ? '' : (g ? g.dataset.g : pane === 'resumen' ? 'resumen' : '');
+  areaPoner(area, pane); iniControles(pane === 'inicio');
+  if (pane === 'inicio') inicioPintar(); else { iniSet('ult', pane); if (area) iniSet('ult.' + area, pane); }
+}));
+document.addEventListener('click', (e) => {
+  const t = e.target.closest('[data-ini-area]'); if (t) { iniAbrir(t.dataset.iniArea, iniGet('ult.' + t.dataset.iniArea)); return; }
+  const c = e.target.closest('#iniCont'); if (c) { iniAbrir(c.dataset.area, c.dataset.pane); return; }
+  if (e.target.closest('#crInicio')) { const b = document.querySelector('#nav button[data-pane="inicio"]'); if (b) b.click(); }
+});
+document.addEventListener('change', (e) => {
+  if (e.target && e.target.id === 'areaSel') iniAbrir(e.target.value, iniGet('ult.' + e.target.value));
+  if (e.target && e.target.id === 'iniIr') {   // «Ir a…»: abre la pantalla que escribiste o elegiste
+    const v = e.target.value.trim().toLowerCase(); if (!v) return;
+    const hit = iniAreas().flatMap(a => a.pantallas.map(p => ({ a, p }))).find(x => `${x.p.nombre} · ${x.a.nombre}`.toLowerCase() === v) || iniAreas().flatMap(a => a.pantallas.map(p => ({ a, p }))).find(x => x.p.nombre.toLowerCase().includes(v));
+    if (hit) { e.target.value = ''; iniAbrir(hit.a.id, hit.p.pane); }
+  }
+});
+try { iniControles(document.documentElement.dataset.pane === 'inicio'); } catch (e) { console.warn('Inicio (controles):', e); }
+try { inicioPintar(); } catch (e) { /* los datos de la obra llegan después: aplicarResumen vuelve a pintarlo */ }
 // ── confirmaciones dentro de la página: la ventana del navegador (confirm) saca de la pantalla completa; esta no ──
 function confirmarInfo(m) {
   if (/^Eliminar el registro de prestaci/i.test(m)) return { titulo: 'Eliminar registro', si: 'Eliminar', peligro: true };
@@ -4795,6 +5039,7 @@ function renderKpisYTabla(partidas, avanceRows, progRows, periodo) {
     if (ic) { ic.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">${sube ? '<path d="m22 7-8.5 8.5-5-5L2 17M16 7h6v6"/>' : '<path d="m22 17-8.5-8.5-5 5L2 7M16 17h6v-6"/>'}</svg>`; ic.title = sube ? `Valorizado ${Math.abs(gapK).toFixed(1)} pts ${gapK > 0 ? 'por debajo' : 'por encima'} del programado: al día` : `Valorizado ${Math.abs(gapK).toFixed(1)} pts por debajo del programado`; }
     try { kpiMinis(porComponente, periodo); } catch (e) {}
     try { kpiAvance({ presu, valor, prog, col }); } catch (e) { console.error(e); } }   // en meta (en plazo o adelantado) → verde; atrasado o crítico → naranja
+  try { if (typeof inicioPintar === 'function') inicioPintar(); } catch (e) {}   // la tarjeta de la obra en el Inicio toma estas cifras
 
 }
 
